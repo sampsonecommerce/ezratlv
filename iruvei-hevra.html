@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אירועי חברה בעזרא | חלל בר פרטי בפלורנטין</title>
+  <meta name="description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
+  <link rel="canonical" href="https://www.ezratlv.com/iruvei-hevra" />
+  <meta name="geo.region" content="IL-TA" />
+  <meta name="geo.placename" content="פלורנטין, תל אביב" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="אירועי חברה בעזרא | חלל בר פרטי בפלורנטין" />
+  <meta property="og:description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --bg:          #0f0d0b;
+      --bg-soft:     #15110d;
+      --cream:       #f0ebe0;
+      --cream-dim:   rgba(240, 235, 224, 0.7);
+      --cream-faint: rgba(240, 235, 224, 0.45);
+      --gold:        #c49a3c;
+      --gold-light:  #f5d98a;
+      --gold-soft:   rgba(196, 154, 60, 0.18);
+      --jade:        #5fb0a0;
+      --jade-light:  #8fd9c9;
+      --jade-soft:   rgba(95, 176, 160, 0.18);
+      --line:        rgba(196, 154, 60, 0.28);
+
+      --font-serif: 'Cormorant Garamond', 'Heebo', serif;
+      --font-body:  'Inter', 'Heebo', system-ui, sans-serif;
+
+      --section-pad:      clamp(2.5rem, 6vh, 4.5rem);
+      --section-pad-half: clamp(1.25rem, 3vh, 2.25rem);
+      --maxw:  1200px;
+      --ease:  cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, .serif {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: clamp(1.25rem, 5vw, 3rem);
+    }
+    .center { text-align: center; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    .nav {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 1.4rem clamp(1.25rem, 5vw, 3rem);
+      background: #000;
+      transition: padding 0.4s var(--ease), border-color 0.5s var(--ease);
+      border-block-end: 1px solid transparent;
+    }
+    .nav.scrolled {
+      padding-block: 1rem;
+      border-block-end: 1px solid rgba(196, 154, 60, 0.14);
+    }
+    .nav__logo { display: flex; align-items: center; justify-self: start; }
+    .nav__logo img { height: 22px; width: auto; display: block; }
+    .nav__links {
+      display: flex;
+      gap: clamp(1.2rem, 2.5vw, 2.2rem);
+      align-items: center;
+      justify-self: center;
+    }
+    .nav__actions { display: flex; align-items: center; gap: 0.85rem; justify-self: end; }
+
+    .nav__links a {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--cream-dim);
+      position: relative;
+      transition: color 0.3s var(--ease);
+    }
+    .nav__links a::after {
+      content: '';
+      position: absolute;
+      inset-block-end: -6px;
+      inset-inline-start: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.35s var(--ease);
+    }
+    .nav__links a:hover { color: var(--cream); }
+    .nav__links a:hover::after { width: 100%; }
+
+    .nav__cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--bg) !important;
+      overflow: hidden;
+      border: 1.5px solid transparent;
+      background: linear-gradient(110deg, var(--gold) 0%, #e8c065 40%, #f5d98a 50%, #e8c065 60%, var(--gold) 100%);
+      background-size: 250% 100%;
+      animation: navShimmer 2.8s ease-in-out infinite;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .nav__cta::after { display: none !important; }
+    .nav__cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(196,154,60,0.45); }
+    @keyframes navShimmer {
+      0%   { background-position: 100% 50%; }
+      50%  { background-position:   0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .nav__corp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--gold) !important;
+      border: 1.5px solid var(--gold);
+      background: transparent;
+      transition: color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
+      animation: corpPulse 3s ease-in-out infinite;
+    }
+    .nav__corp::after { display: none !important; }
+    .nav__corp:hover { color: var(--bg) !important; background: var(--gold); transform: translateY(-1px); }
+    @keyframes corpPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,154,60,0); }
+      50%       { box-shadow: 0 0 14px 1px rgba(196,154,60,0.4); }
+    }
+
+    /* hide mobile-only elements on desktop */
+    .nav__burger      { display: none; }
+    .nav__menu, .nav__scrim { display: none; }
+
+    @media (max-width: 720px) {
+      .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; }
+      .nav.scrolled { padding-block: 0.7rem; }
+      .nav__links, .nav__actions { display: none; }
+
+      /* top bar: logo (right) · hamburger (left) */
+      .nav__logo { order: 1; }
+      .nav__logo img { height: 24px; }
+
+      .nav__burger {
+        order: 3;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+      .nav__burger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--cream);
+        transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+      }
+      .nav[data-menu="open"] .nav__burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav[data-menu="open"] .nav__burger span:nth-child(2) { opacity: 0; }
+      .nav[data-menu="open"] .nav__burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      /* dropdown menu under the bar */
+      .nav__menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        inset-block-start: 100%;
+        inset-inline: 0;
+        background: #0b0a08;
+        border-block-end: 1px solid rgba(196, 154, 60, 0.18);
+        padding: 0.4rem clamp(1.25rem, 5vw, 2rem) 1.6rem;
+        box-shadow: 0 24px 40px -16px rgba(0, 0, 0, 0.7);
+        max-height: calc(100svh - 100%);
+        overflow-y: auto;
+        transform: translateY(-12px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s linear 0.3s;
+      }
+      .nav[data-menu="open"] .nav__menu {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+      }
+      .nav__menu-link {
+        display: flex;
+        align-items: center;
+        min-height: 52px;
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--cream);
+        border-block-end: 1px solid rgba(196, 154, 60, 0.08);
+        transition: color 0.25s var(--ease), padding-inline-start 0.25s var(--ease);
+      }
+      .nav__menu-link:hover,
+      .nav__menu-link:focus-visible { color: var(--gold); padding-inline-start: 0.35rem; outline: none; }
+
+      .nav__menu-ctas { display: flex; flex-direction: column; gap: 0.7rem; margin-block-start: 1.2rem; }
+      .nav__menu-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 50px;
+        border-radius: 50px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .nav__menu-cta--corp { color: var(--gold); border: 1.5px solid var(--gold); background: var(--gold-soft); }
+      .nav__menu-cta--book {
+        color: var(--bg);
+        background: linear-gradient(110deg, var(--gold), #f5d98a);
+        box-shadow: 0 8px 22px rgba(196, 154, 60, 0.3);
+      }
+
+      /* full-page scrim below the bar */
+      .nav__scrim {
+        display: block;
+        position: absolute;
+        inset-block-start: 100%;
+        inset-inline: 0;
+        height: 100svh;
+        background: rgba(0, 0, 0, 0.5);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s var(--ease), visibility 0s linear 0.3s;
+      }
+      .nav[data-menu="open"] .nav__scrim {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s var(--ease);
+      }
+    }
+
+    /* ============================================================
+       BUTTONS & GLOBALS
+    ============================================================ */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 0.95rem 2.2rem;
+      border-radius: 50px;
+      transition: all 0.4s var(--ease);
+      cursor: pointer;
+      text-align: center;
+      border: none;
+    }
+    .btn--outline { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+    .btn--outline:hover { background: var(--gold); color: var(--bg); }
+    .btn--fill { background: var(--gold); color: var(--bg); border: 1px solid var(--gold); font-weight: 600; }
+    .btn--fill:hover { background: #d4ab50; border-color: #d4ab50; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(196,154,60,0.35); }
+
+    section { padding-block: var(--section-pad); }
+    .section-soft { background: var(--bg-soft); }
+
+    .label {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .divider { height: 1px; background: var(--line); width: 0; transition: width 1.1s var(--ease); margin-block: 1.6rem; }
+    .divider.in { width: 100%; }
+    .divider--center { margin-inline: auto; max-width: 120px; }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); will-change: opacity, transform; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .divider { transition: none; width: 100%; }
+      * { animation: none !important; }
+      .conn__fill { width: 100% !important; transition: none; }
+      .conn__head { opacity: 0 !important; }
+      .step__num  { background: var(--accent, var(--gold)); color: var(--bg); border-color: var(--accent, var(--gold)); }
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero { min-height: 100svh; display: flex; align-items: flex-end; position: relative; padding-block-end: clamp(4.5rem, 13vh, 9rem); overflow: hidden; background: var(--bg); }
+    .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.6) 78%, #0f0d0b 100%),
+        radial-gradient(120% 80% at 80% 100%, rgba(196,154,60,0.16) 0%, transparent 60%);
+    }
+    .hero__inner { position: relative; z-index: 2; max-width: 880px; display: flex; flex-direction: column; align-items: flex-start; }
+    .hero h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); font-weight: 600; margin-block-end: 1.5rem; max-width: 20ch; line-height: 1.08; text-shadow: 0 2px 30px rgba(0,0,0,0.4); }
+    .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(24px); animation: wordIn 0.8s var(--ease) forwards; }
+    @keyframes wordIn { to { opacity: 1; transform: translateY(0); } }
+    .hero__sub { font-size: clamp(1.05rem, 1.4vw, 1.2rem); font-weight: 300; color: var(--cream-dim); max-width: 52ch; margin-block-end: 2.6rem; line-height: 1.65; opacity: 0; animation: fadeUp 0.9s var(--ease) 1.1s forwards; }
+    .hero__cta { opacity: 0; animation: fadeUp 0.9s var(--ease) 1.35s forwards; display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+    .hero__cta .btn--fill { font-size: 1rem; padding: 1.05rem 2.6rem; box-shadow: 0 10px 34px rgba(196,154,60,0.32); }
+    .hero__cta-note { font-size: 0.9rem; color: var(--cream-faint); display: inline-flex; align-items: center; gap: 0.5rem; }
+    .hero__cta-note svg { color: var(--gold); flex-shrink: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero__scroll {
+      position: absolute;
+      inset-block-end: 1.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeUp 1s var(--ease) 1.8s forwards, pulse 2.4s ease-in-out 2.6s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.85; }
+      50%       { transform: translateX(-50%) translateY(8px); opacity: 0.4; }
+    }
+
+    /* ============================================================
+       SECTION 2: SOLUTION (feature-row)
+    ============================================================ */
+    .sec-head { text-align: center; margin-block-end: clamp(2.5rem, 6vh, 4rem); }
+    .sec-head h2 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); margin-block: 1.2rem 1.4rem; }
+    .sec-head p { color: var(--cream-dim); font-size: 1.05rem; max-width: 60ch; margin-inline: auto; }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 6vw, 5rem);
+      align-items: center;
+    }
+    .feature-row__text h3 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-block: 1rem 1.5rem; }
+    .feature-row__text p { color: var(--cream-dim); max-width: 46ch; font-size: 1.05rem; line-height: 1.7; margin-block-end: 1.5rem; }
+
+    .benefit-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-block-start: 2.2rem; }
+    .benefit-card {
+      background: rgba(196,154,60,0.06);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .benefit-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .benefit-card__title { font-weight: 600; color: var(--cream); margin-block-end: 0.4rem; font-size: 0.9rem; }
+    .benefit-card__body  { font-size: 0.84rem; color: var(--cream-dim); line-height: 1.6; }
+
+    .feature-img { aspect-ratio: 3 / 4; border-radius: 3px; object-fit: cover; width: 100%; height: 100%; }
+
+    @media (max-width: 820px) {
+      .feature-row { grid-template-columns: 1fr; }
+      .feature-img { aspect-ratio: 4 / 3; }
+      .benefit-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       SECTION 3: VIBE (concept)
+    ============================================================ */
+    .vibe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.4vw, 1.8rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); }
+    .vibe-card {
+      position: relative;
+      background:
+        linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%),
+        #16110c;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: clamp(1.8rem, 2.6vw, 2.4rem) clamp(1.6rem, 2.4vw, 2rem) clamp(2rem, 3vw, 2.4rem);
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+    }
+    .vibe-card::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      height: 2px;
+      background: linear-gradient(to left, transparent, var(--gold), #f5d98a, var(--gold), transparent);
+      opacity: 0.55;
+      transition: opacity 0.45s var(--ease);
+    }
+    .vibe-card::after {
+      content: '';
+      position: absolute;
+      inset-block-start: -40%;
+      inset-inline-end: -30%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(circle, rgba(196,154,60,0.22), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .vibe-card:hover { transform: translateY(-6px); border-color: rgba(196,154,60,0.55); box-shadow: 0 24px 50px -20px rgba(0,0,0,0.7); }
+    .vibe-card:hover::before { opacity: 1; }
+    .vibe-card:hover::after  { opacity: 1; }
+    .vibe-card__index {
+      font-family: 'Pliant', var(--font-serif);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      direction: ltr;
+      unicode-bidi: embed;
+      opacity: 0.8;
+    }
+    .vibe-card__icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-block: 1.1rem 1.3rem;
+      background: linear-gradient(145deg, rgba(196,154,60,0.18), rgba(196,154,60,0.04));
+      border: 1px solid rgba(196,154,60,0.3);
+      color: var(--gold);
+      transition: transform 0.45s var(--ease);
+    }
+    .vibe-card:hover .vibe-card__icon { transform: scale(1.08) rotate(-3deg); }
+    .vibe-card__icon svg { width: 26px; height: 26px; }
+    .vibe-card__title { font-size: clamp(1.55rem, 2.1vw, 1.9rem); font-weight: 600; color: var(--cream); margin-block-end: 0.85rem; font-family: var(--font-serif); line-height: 1.1; }
+    .vibe-card__body  { font-size: 1rem; color: var(--cream-dim); line-height: 1.7; }
+
+    @media (max-width: 820px) { .vibe-grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+
+    /* ============================================================
+       SECTION 4: STATS & LOCATION
+    ============================================================ */
+    .stat-band {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      max-width: 860px;
+      margin: 0 auto 3.5rem;
+    }
+    .stat-cell { position: relative; padding: 0.4rem 1.2rem; transition: transform 0.3s var(--ease); }
+    .stat-cell + .stat-cell::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block: 14%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--line), transparent);
+    }
+    .stat-cell .stat__num {
+      font-family: 'Pliant', var(--font-serif);
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+    .stat-cell .stat__label { font-size: 0.95rem; color: var(--cream-dim); margin-block-start: 0.6rem; letter-spacing: 0.02em; }
+    .stat-cell:hover { transform: translateY(-3px); }
+
+    @media (max-width: 600px) {
+      .stat-band { grid-template-columns: 1fr; gap: 2rem; margin-block-end: 2.6rem; }
+      .stat-cell + .stat-cell::before { display: none; }
+    }
+
+    .pills-row { display: flex; flex-wrap: wrap; gap: 0.9rem 1rem; margin-block-end: 3rem; justify-content: center; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.55rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--cream);
+      background: rgba(196,154,60,0.07);
+    }
+    .map-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 3rem;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      line-height: 0;
+    }
+
+    /* ---- Framed stats block (title → numbers → pills → map) ---- */
+    @property --frame-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+    .stats-frame {
+      position: relative;
+      border-radius: 28px;
+      padding: clamp(2.6rem, 6vw, 4.6rem) clamp(1.4rem, 5vw, 3.6rem);
+      margin-block-end: clamp(2.4rem, 5vw, 3.2rem);
+      background:
+        radial-gradient(130% 70% at 50% 0%, rgba(196,154,60,0.10), transparent 58%),
+        linear-gradient(180deg, rgba(196,154,60,0.045), rgba(15,13,11,0.28));
+      border: 1px solid rgba(196,154,60,0.2);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    /* rotating light that runs along the edges */
+    .stats-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(from var(--frame-angle),
+        transparent 0deg, transparent 58deg,
+        var(--gold) 92deg, var(--gold-light) 112deg, var(--gold) 132deg,
+        transparent 168deg, transparent 238deg,
+        rgba(245,217,138,0.7) 272deg, var(--gold) 292deg, transparent 326deg,
+        transparent 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      animation: frameRun 8s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes frameRun { to { --frame-angle: 360deg; } }
+
+    /* decorative corner brackets */
+    .stats-frame__corner {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--gold);
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(196,154,60,0.45));
+    }
+    .stats-frame__corner--tl { top: 15px; left: 15px;  border-right: 0; border-bottom: 0; border-top-left-radius: 9px; }
+    .stats-frame__corner--tr { top: 15px; right: 15px; border-left: 0;  border-bottom: 0; border-top-right-radius: 9px; }
+    .stats-frame__corner--bl { bottom: 15px; left: 15px;  border-right: 0; border-top: 0; border-bottom-left-radius: 9px; }
+    .stats-frame__corner--br { bottom: 15px; right: 15px; border-left: 0;  border-top: 0; border-bottom-right-radius: 9px; }
+
+    .stats-frame > .sec-head,
+    .stats-frame > .stat-band,
+    .stats-frame > .pills-row { position: relative; z-index: 1; }
+    .stats-frame > .map-container { position: relative; z-index: 1; margin-block-end: 0; }
+    .stats-frame > .sec-head { margin-block-end: clamp(2rem, 4vh, 3rem); }
+
+    @media (max-width: 600px) {
+      .stats-frame { border-radius: 20px; }
+      .stats-frame__corner { width: 16px; height: 16px; top: 11px; bottom: 11px; left: 11px; right: 11px; }
+    }
+
+    /* ============================================================
+       SECTION 5: PACKAGES
+    ============================================================ */
+    .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2vw, 1.6rem); margin-block-end: 1.6rem; align-items: stretch; }
+    @media (max-width: 950px) { .packages { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+
+    .package-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: clamp(1.9rem, 2.4vw, 2.4rem) clamp(1.6rem, 2.2vw, 2rem);
+      text-align: start;
+      position: relative;
+      transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+      background: linear-gradient(180deg, rgba(196,154,60,0.045), rgba(15,13,11,0.2));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .package-card:hover { border-color: rgba(196,154,60,0.5); transform: translateY(-5px); box-shadow: 0 22px 48px -22px rgba(0,0,0,0.7); }
+    .package-card--featured {
+      border-color: rgba(196,154,60,0.6);
+      background: linear-gradient(180deg, #211a12, #15100b);
+      box-shadow: 0 0 0 1px rgba(196,154,60,0.25), 0 26px 56px -26px rgba(196,154,60,0.4);
+    }
+    .package-card--featured::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      height: 3px;
+      background: linear-gradient(to left, transparent, var(--gold), #f5d98a, var(--gold), transparent);
+    }
+    .package-card__badge {
+      position: absolute;
+      inset-block-start: 1.2rem;
+      inset-inline-end: 1.4rem;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: linear-gradient(110deg, var(--gold), #f5d98a);
+      padding: 0.35rem 0.8rem;
+      border-radius: 50px;
+    }
+    .package-card__name { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-block-end: 0.7rem; }
+    .package-card__title { font-family: var(--font-serif); font-size: clamp(1.55rem, 2.4vw, 2rem); font-weight: 600; margin-block-end: 1.4rem; line-height: 1.12; color: var(--cream); }
+    .package-card__list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-block-end: 2rem; flex: 1; }
+    .package-card__list li { display: flex; align-items: flex-start; gap: 0.7rem; font-size: 0.93rem; color: var(--cream-dim); line-height: 1.5; }
+    .package-card__list li svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      padding: 4px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      color: var(--gold);
+      margin-block-start: 0.05rem;
+    }
+    .package-card .btn { width: 100%; }
+
+    .package-card--premium {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: clamp(2rem, 4vw, 3rem);
+      align-items: center;
+      background:
+        radial-gradient(120% 140% at 100% 0%, rgba(196,154,60,0.16), transparent 55%),
+        linear-gradient(135deg, #211a12, #100c09);
+      border-color: rgba(196,154,60,0.55);
+      padding: clamp(2.2rem, 4vw, 3.2rem);
+      border-radius: 22px;
+    }
+    .package-card--premium::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      height: 3px;
+      background: linear-gradient(to left, transparent, var(--gold), #f5d98a, var(--gold), transparent);
+    }
+    .package-card--premium:hover { transform: none; box-shadow: 0 0 0 1px rgba(196,154,60,0.3), 0 30px 60px -30px rgba(0,0,0,0.8); }
+    @media (max-width: 950px) {
+      .package-card--premium { grid-template-columns: 1fr; padding: 2.2rem 1.8rem; }
+    }
+
+    /* ============================================================
+       SECTION 6: GALLERY
+    ============================================================ */
+    .gallery__showcase { position: relative; }
+    .gallery__row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.6rem, 1.4vw, 1.1rem);
+    }
+    .gallery__row--top { margin-block-end: clamp(0.6rem, 1.4vw, 1.1rem); }
+    .gallery__row img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      transition: transform 0.45s var(--ease), filter 0.45s var(--ease);
+      cursor: pointer;
+    }
+    .gallery__row--top img { aspect-ratio: 1 / 1; }
+    .gallery__row--top img:hover { transform: scale(1.025); filter: brightness(1.08); }
+
+    /* bottom teaser row — cropped + faded into shadow, click to expand */
+    .gallery__teaser {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery__teaser .gallery__row img {
+      height: clamp(120px, 19vw, 190px);
+      aspect-ratio: auto;
+      object-position: center 28%;
+      border-radius: 14px;
+    }
+    .gallery__fade {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-block-end: clamp(1.1rem, 2.5vw, 1.8rem);
+      background: linear-gradient(to bottom,
+        rgba(21,17,13,0) 0%,
+        rgba(21,17,13,0.5) 45%,
+        rgba(21,17,13,0.92) 88%,
+        var(--bg-soft) 100%);
+      transition: background 0.4s var(--ease);
+    }
+    .gallery__teaser:hover .gallery__row img { transform: scale(1.03); }
+
+    .gallery__more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      border: 1px solid transparent;
+      background: linear-gradient(110deg, var(--gold), #f5d98a);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(196,154,60,0.35);
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+    .gallery__teaser:hover .gallery__more { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(196,154,60,0.5); }
+    .gallery__more svg { transition: transform 0.35s var(--ease); }
+    .gallery__teaser:hover .gallery__more svg { transform: translateX(-4px); }
+    @media (max-width: 600px) {
+      .gallery__teaser .gallery__row img { height: clamp(88px, 26vw, 130px); }
+    }
+
+    /* Modal */
+    .gallery-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(10, 8, 6, 0.98);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .gallery-modal.open { opacity: 1; }
+    .gallery-modal[hidden] { display: none; }
+    .gallery-modal__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1.25rem, 5vw, 3rem);
+      border-block-end: 1px solid rgba(196, 154, 60, 0.18);
+      background: rgba(0, 0, 0, 0.6);
+    }
+    .gallery-modal__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: 50px;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .gallery-modal__back:hover { background: var(--gold); color: var(--bg); }
+    .gallery-modal__title { font-family: var(--font-serif); font-size: clamp(1.1rem, 2vw, 1.5rem); color: var(--cream); }
+    .gallery-modal__scroll { flex: 1; overflow-y: auto; padding: clamp(1.25rem, 4vw, 3rem); }
+    .gallery-modal__grid { column-count: 3; column-gap: clamp(0.75rem, 1.5vw, 1.2rem); max-width: 1200px; margin-inline: auto; }
+    .gallery-modal__grid img { width: 100%; margin-block-end: clamp(0.75rem, 1.5vw, 1.2rem); border-radius: 14px; break-inside: avoid; transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); cursor: zoom-in; }
+    .gallery-modal__grid img:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6); }
+    @media (max-width: 820px) { .gallery-modal__grid { column-count: 2; } }
+    @media (max-width: 600px) { .gallery-modal__grid { column-count: 1; } .gallery-modal__title { display: none; } }
+
+    /* ============================================================
+       SECTION 7: PROCESS (7 steps)
+    ============================================================ */
+    .process-track { display: flex; flex-direction: column; gap: clamp(2.6rem, 5vw, 4.2rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); }
+    .process-side__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      padding: 0.4rem 1.05rem;
+      border-radius: 50px;
+      margin-block-end: clamp(1.6rem, 3vw, 2.4rem);
+    }
+    .process-side__tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+    .process-side--you .process-side__tag { color: var(--gold); background: var(--gold-soft); border: 1px solid rgba(196,154,60,0.4); }
+    .process-side--us  .process-side__tag { color: var(--jade); background: var(--jade-soft); border: 1px solid rgba(95,176,160,0.45); }
+
+    .steps {
+      display: grid;
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+      position: relative;
+    }
+    .steps--you { grid-template-columns: repeat(4, 1fr); --accent: var(--gold); --accent-light: var(--gold-light); --accent-soft: var(--gold-soft); --accent-glow: rgba(196,154,60,0.5); }
+    .steps--us  { grid-template-columns: repeat(3, 1fr); --accent: var(--jade); --accent-light: var(--jade-light); --accent-soft: var(--jade-soft); --accent-glow: rgba(95,176,160,0.5); }
+
+    .step { position: relative; text-align: center; }
+    .step__num {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline: auto;
+      margin-block-end: 1.4rem;
+      font-family: 'Pliant', var(--font-serif);
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--accent);
+      position: relative;
+      z-index: 2;
+      transition: background 0.5s var(--ease), color 0.5s var(--ease), box-shadow 0.5s var(--ease), transform 0.5s var(--ease);
+    }
+    .step.lit .step__num {
+      background: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 0 0 4px var(--accent-soft), 0 0 24px var(--accent-glow);
+      transform: scale(1.1);
+    }
+    .step h3 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; color: var(--cream); margin-block-end: 0.5rem; }
+    .step p  { font-size: 0.88rem; color: var(--cream-dim); line-height: 1.6; }
+
+    /* Connectors — animated line with a brighter, larger glowing head */
+    .conn {
+      position: absolute;
+      height: 2px;
+      margin-block-start: -1px;
+      background: rgba(240, 235, 224, 0.1);
+      border-radius: 2px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .conn__fill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      border-radius: 2px;
+      background: linear-gradient(to left, var(--accent), var(--accent-light));
+      transition: width 1.1s cubic-bezier(0.45, 0, 0.25, 1);
+    }
+    .conn__head {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 4px 1px #fff, 0 0 14px 4px var(--accent-glow);
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+    .conn.fill .conn__fill { width: 100%; }
+    .conn.fill .conn__head { opacity: 1; }
+    .steps.reset-instant .conn__fill,
+    .steps.reset-instant .conn__head,
+    .steps.reset-instant .step__num { transition: none !important; }
+
+    @media (max-width: 820px) {
+      .steps--you, .steps--us { grid-template-columns: repeat(2, 1fr); row-gap: 2.4rem; }
+      .conn  { display: none; }
+    }
+
+    /* ============================================================
+       SECTION 8: CONTACT / CTA
+    ============================================================ */
+    .contact { text-align: center; }
+    .contact h2 { font-size: clamp(2.4rem, 5vw, 3.8rem); margin-block: 1.4rem 1.4rem; }
+    .contact__sub { color: var(--cream-dim); max-width: 50ch; margin-inline: auto; margin-block-end: 2.8rem; font-size: 1.08rem; }
+    .contact__btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-block-end: 2.6rem; }
+    .contact__social { direction: ltr; display: flex; justify-content: center; align-items: center; gap: 1.6rem; margin-block: 2.6rem 2rem; }
+    .contact__note { color: var(--cream-faint); font-size: 0.95rem; margin-block-start: 1rem; }
+
+    .social-icon {
+      display: inline-flex;
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .social-icon svg { width: 30px; height: 30px; display: block; }
+    .social-icon:hover { transform: translateY(-4px) scale(1.05); }
+    .social-icon--ig   { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+    .social-icon--ig:hover   { box-shadow: 0 8px 22px rgba(214, 36, 159, 0.45); }
+    .social-icon--wa   { background: #25D366; }
+    .social-icon--wa:hover   { box-shadow: 0 8px 22px rgba(37, 211, 102, 0.45); }
+    .social-icon--mail { background: #EA4335; }
+    .social-icon--mail:hover { box-shadow: 0 8px 22px rgba(234, 67, 53, 0.45); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      text-align: center;
+      padding-block: 4.5rem 3rem;
+      color: var(--cream-faint);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+      line-height: 2;
+    }
+    .footer__meta { font-size: 0.92rem; }
+    .footer a { color: var(--gold); transition: opacity 0.3s; }
+    .footer a:hover { opacity: 0.75; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav class="nav" id="nav">
+    <!-- mobile: hamburger (right) -->
+    <button class="nav__burger" id="navBurger" type="button" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <a href="index.html" class="nav__logo"><img src="images/logo.png" alt="עזרא" /></a>
+
+    <!-- desktop: center links -->
+    <div class="nav__links">
+      <a href="#solution">הפתרון שלנו</a>
+      <a href="#concept">האוכל והבר</a>
+      <a href="#stats">עזרא במספרים</a>
+      <a href="#packages">מסלולים</a>
+      <a href="#gallery">גלריה</a>
+    </div>
+
+    <!-- desktop: actions -->
+    <div class="nav__actions">
+      <a class="nav__corp" href="index.html">אירועים פרטיים</a>
+      <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+    </div>
+
+    <!-- mobile: dropdown menu + scrim -->
+    <div class="nav__scrim" id="navScrim"></div>
+    <div class="nav__menu" id="navMenu">
+      <a class="nav__menu-link" href="#solution">הפתרון שלנו</a>
+      <a class="nav__menu-link" href="#concept">האוכל והבר</a>
+      <a class="nav__menu-link" href="#stats">עזרא במספרים</a>
+      <a class="nav__menu-link" href="#packages">מסלולים</a>
+      <a class="nav__menu-link" href="#gallery">גלריה</a>
+      <div class="nav__menu-ctas">
+        <a class="nav__menu-cta nav__menu-cta--corp" href="index.html">אירועים פרטיים</a>
+        <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <header class="hero" id="hero">
+    <video class="hero__video" autoplay muted loop playsinline>
+      <source src="videos/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero__inner wrap">
+      <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
+      <p class="hero__sub">חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה — אנחנו מנהלים את האוכל, האלכוהול והאווירה, ואתם/ן פשוט מגיעים/ות לחגוג</p>
+      <div class="hero__cta">
+        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <span class="hero__cta-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          מענה תוך 24 שעות
+        </span>
+      </div>
+    </div>
+    <a href="#solution" class="hero__scroll" aria-label="גלול למטה">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </a>
+  </header>
+
+  <!-- ============================================================
+       SOLUTION
+  ============================================================ -->
+  <section class="section-soft" id="solution">
+    <div class="wrap">
+      <div class="feature-row">
+        <div class="feature-row__text reveal">
+          <span class="label">הפתרון שלנו</span>
+          <h3>להרים אירוע מושקע לצוות, בראש שקט לגמרי</h3>
+          <div class="divider"></div>
+          <p>הגיע הזמן להעביר אלינו את המעמסה — אנחנו כאן כדי לנהל הכל מקצה לקצה ולתת לכם/ן שקט נפשי מלא</p>
+
+          <div class="benefit-cards">
+            <div class="benefit-card">
+              <div class="benefit-card__title">מרחב בלעדי לצוות</div>
+              <div class="benefit-card__body">החלל כולו שלכם — לא אולם ולא מסעדה, בר פרטי שפועל רק בשבילכם הלילה הזה</div>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card__title">ניהול מקצה לקצה</div>
+              <div class="benefit-card__body">אוכל, אלכוהול, מוזיקה ותאורה — הכל בידיים שלנו, ואתם רק מגיעים לחגוג</div>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card__title">ודאות תקציבית</div>
+              <div class="benefit-card__body">מחיר סופי מראש, בלי הפתעות בסוף הערב — יודעים מה מקבלים ויודעים כמה משלמים</div>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card__title">גמישות מלאה</div>
+              <div class="benefit-card__body">מ-20 עד 50 איש, כל יום בשבוע, עם תפריט שמותאם לצוות ולתקציב שלכם/ן</div>
+            </div>
+          </div>
+
+          <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin-block-start: 2rem; display: inline-block;">לבדיקת זמינות</a>
+        </div>
+        <img src="images/BAR.jpg" alt="הבר של עזרא" class="feature-img reveal" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VIBE / CONCEPT
+  ============================================================ -->
+  <section id="concept">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">הווייב</span>
+        <h2>תנועה חופשית ומינגלינג</h2>
+        <div class="divider divider--center"></div>
+      </div>
+
+      <div class="vibe-grid">
+        <div class="vibe-card reveal">
+          <span class="vibe-card__index">01</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="vibe-card__title">האווירה</div>
+          <div class="vibe-card__body">חלל שנבנה למינגלינג טבעי — מוזיקה טובה, בר פתוח ותנועה זורמת שמשאירה את האנרגיות גבוהות כל הערב</div>
+        </div>
+        <div class="vibe-card reveal">
+          <span class="vibe-card__index">02</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M4 4h16l-1 7a7 7 0 0 1-14 0L4 4Z"/><path d="M20 7h1a2 2 0 0 1 0 4h-1"/></svg>
+          </div>
+          <div class="vibe-card__title">החוויה</div>
+          <div class="vibe-card__body">אוכל מעולה מחכה על הבר כבופה עשיר וקליל — כל אחד ואחת לוקחים צלחת ומשקה, וזזים ונהנים</div>
+        </div>
+        <div class="vibe-card reveal">
+          <span class="vibe-card__index">03</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
+          </div>
+          <div class="vibe-card__title">התפריט</div>
+          <div class="vibe-card__body">מנות חלביות וצמחוניות מחומרי גלם טריים — יחד ניצור חוויה קולינרית שסוגרת פינה לכולם/ן</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATS & LOCATION
+  ============================================================ -->
+  <section class="section-soft" id="stats">
+    <div class="wrap center">
+      <div class="stats-frame reveal">
+        <span class="stats-frame__corner stats-frame__corner--tl"></span>
+        <span class="stats-frame__corner stats-frame__corner--tr"></span>
+        <span class="stats-frame__corner stats-frame__corner--bl"></span>
+        <span class="stats-frame__corner stats-frame__corner--br"></span>
+
+        <div class="sec-head">
+          <span class="label">עזרא במספרים</span>
+          <h2>הניסיון עושה את ההבדל</h2>
+        </div>
+
+        <div class="stat-band">
+          <div class="stat-cell">
+            <div class="stat__num">800+</div>
+            <div class="stat__label">אירועים</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat__num">40,000+</div>
+            <div class="stat__label">אורחים</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat__num">3+</div>
+            <div class="stat__label">שנים בשטח</div>
+          </div>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill">פריים לוקיישן בתל אביב</span>
+          <span class="pill">מרחק קצר מהרכבת הקלה</span>
+          <span class="pill">גישה מרכזית לאוטובוסים</span>
+        </div>
+
+        <div class="map-container">
+          <iframe
+            src="https://maps.google.com/maps?q=%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&hl=iw&z=17&t=m&output=embed"
+            width="100%"
+            height="350"
+            style="border:0; filter: grayscale(100%) invert(90%) contrast(1.2);"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="מפת מיקום עזרא תל אביב — אברבנאל 38, פלורנטין"
+          ></iframe>
+        </div>
+      </div>
+
+      <a class="btn btn--outline reveal" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PACKAGES
+  ============================================================ -->
+  <section id="packages">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">מסלולים</span>
+        <h2>חבילות שקופות, ערך מקסימלי</h2>
+        <div class="divider divider--center"></div>
+        <p>בחרו את המסלול שעונה על הצרכים שלכם/ן</p>
+      </div>
+
+      <div class="packages">
+        <!-- Happy Hour -->
+        <div class="package-card reveal">
+          <div class="package-card__name">חבילה בסיסית</div>
+          <div class="package-card__title">Happy Hour</div>
+          <ul class="package-card__list">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 שעות בחלל פרטי בלעדי</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה נשנושים קליל וטרי על הבר</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר חופשי: 2 סוגי בירות ויין איכותי</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מערכת סאונד, תאורה ומנהל אירוע</li>
+          </ul>
+          <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        </div>
+
+        <!-- גיבוש מחלקה -->
+        <div class="package-card package-card--featured reveal">
+          <span class="package-card__badge">הכי פופולרי</span>
+          <div class="package-card__name">חבילה רגילה</div>
+          <div class="package-card__title">גיבוש מחלקה</div>
+          <ul class="package-card__list">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 שעות בחלל פרטי</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה עשיר הכולל מנות חמות וקרות</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר משודרג עם 5 סוגי אלכוהול חופשי</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> פלייליסט מותאם אישית</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
+          </ul>
+          <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        </div>
+
+        <!-- מסיבת חברה -->
+        <div class="package-card reveal">
+          <div class="package-card__name">חבילה גדולה</div>
+          <div class="package-card__title">מסיבת חברה</div>
+          <ul class="package-card__list">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 שעות בחלל פרטי מורחב</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה פרימיום עשיר במיוחד</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר קוקטיילים חופשי עם מיקסולוגים</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> דיג'יי מקצועי לאורך כל האירוע</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> עיצוב חלל אישי וקוקטייל פתיחה</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
+          </ul>
+          <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        </div>
+
+        <!-- Premium full-width -->
+        <div class="package-card package-card--premium reveal">
+          <div>
+            <div class="package-card__name">מסלול פרימיום</div>
+            <div class="package-card__title">חוויה בהתאמה אישית מלאה</div>
+          </div>
+          <div>
+            <p style="color: var(--cream-dim); line-height: 1.65; margin-block-end: 1.5rem; font-size: 1rem;">
+              הפקה מאפס למאה. אנחנו בונים יחד איתכם/ן חוויה ייחודית לחלוטין — אצלנו בחלל, אצלכם/ן במשרד, או בכל לוקיישן שתבחרו. אנחנו מביאים את הצוות, הבר והאוכל, ומתפעלים את האירוע כולו כדי שתוכלו להגיע כאורחי VIP.
+            </p>
+            <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="width: fit-content;">לתיאום שיחת אפיון</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="center reveal">
+        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GALLERY
+  ============================================================ -->
+  <section class="section-soft" id="gallery">
+    <div class="wrap center">
+      <div class="sec-head reveal">
+        <span class="label">גלריה</span>
+        <h2>הצצה לאירועים שלנו</h2>
+        <p>רגעים של גיבוש, אוכל טוב וצוותים שבאים ליהנות</p>
+      </div>
+
+      <div class="gallery__showcase reveal">
+        <div class="gallery__row gallery__row--top">
+          <img src="images/BAR.jpg" alt="הבר של עזרא" />
+          <img src="images/COCKTAIL 1.jpg" alt="קוקטייל בקלוז-אפ" />
+          <img src="images/FOOD ENVIRONMENT.jpg" alt="בופה באמצע האירוע" />
+        </div>
+        <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="פתחו את הגלריה המלאה">
+          <div class="gallery__row">
+            <img src="images/FOOD FROM ABOVE.JPG" alt="מטעמי השולחן ממעוף" />
+            <img src="images/FOOD CLOSE UP.jpg" alt="אוכל קלוז-אפ" />
+            <img src="images/COCKTAIL 3.jpg" alt="קוקטייל" />
+          </div>
+          <div class="gallery__fade">
+            <span class="gallery__more">
+              <span>לכל הרגעים</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Modal -->
+  <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="גלריית תמונות — עזרא" hidden>
+    <div class="gallery-modal__bar">
+      <button class="gallery-modal__back" id="galleryClose" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span>חזרה לאתר</span>
+      </button>
+      <span class="gallery-modal__title">רגעים של גיבוש</span>
+    </div>
+    <div class="gallery-modal__scroll">
+      <div class="gallery-modal__grid">
+        <img src="images/BAR.jpg" alt="הבר של עזרא" loading="lazy" />
+        <img src="images/COCKTAIL 1.jpg" alt="קוקטייל 1" loading="lazy" />
+        <img src="images/MOMENT 1.jpg" alt="רגע מהאירוע" loading="lazy" />
+        <img src="images/FOOD ENVIRONMENT.jpg" alt="בופה באמצע האירוע" loading="lazy" />
+        <img src="images/MAKING COCKTAILS.jpg" alt="הכנת קוקטיילים" loading="lazy" />
+        <img src="images/COCKTAIL 2.jpg" alt="קוקטייל 2" loading="lazy" />
+        <img src="images/FOOD FROM ABOVE.JPG" alt="מטעמי השולחן ממעוף" loading="lazy" />
+        <img src="images/MOMENT 2.jpg" alt="רגע מהאירוע" loading="lazy" />
+        <img src="images/COCKTAIL 3.jpg" alt="קוקטייל 3" loading="lazy" />
+        <img src="images/FOOD CLOSE UP.jpg" alt="אוכל קלוז-אפ" loading="lazy" />
+        <img src="images/LOGO OUTSIDE.jpg" alt="הכניסה לעזרא" loading="lazy" />
+        <img src="images/IMG_6775.JPG" alt="אווירה באירוע" loading="lazy" />
+        <img src="images/IMAGE 1.jpg" alt="רגע מהערב" loading="lazy" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PROCESS (7 steps)
+  ============================================================ -->
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">איך מתחילים</span>
+        <h2>שבעה שלבים פשוטים</h2>
+        <div class="divider divider--center"></div>
+        <p>תהליך קצר ומהיר — מהרשמה עד חגיגה</p>
+      </div>
+
+      <div class="process-track">
+        <!-- YOUR SIDE — steps 1-4 -->
+        <div class="process-side process-side--you reveal">
+          <span class="process-side__tag">הצד שלך</span>
+          <div class="steps steps--you">
+            <!-- 3 connectors between steps 1-4 -->
+            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
+            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
+            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
+
+            <div class="step">
+              <div class="step__num">1</div>
+              <h3>בוחרים מתי חוגגים</h3>
+              <p>בחירת יום ושעה מתוך הלוח שלנו</p>
+            </div>
+            <div class="step">
+              <div class="step__num">2</div>
+              <h3>כמות אנשים</h3>
+              <p>מסמנים כמה אורחים ומקבלים הצעת מחיר מיד</p>
+            </div>
+            <div class="step">
+              <div class="step__num">3</div>
+              <h3>אישור למייל</h3>
+              <p>מאשרים פרטים — החוזה נשלח אליכם/ן</p>
+            </div>
+            <div class="step">
+              <div class="step__num">4</div>
+              <h3>סגירת קצוות</h3>
+              <p>חותמים/ות בקליק ומסדירים תשלום</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUR SIDE — steps 5-7 -->
+        <div class="process-side process-side--us reveal">
+          <span class="process-side__tag">הצד שלנו</span>
+          <div class="steps steps--us">
+            <!-- 2 connectors between steps 5-7 -->
+            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
+            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
+
+            <div class="step">
+              <div class="step__num">5</div>
+              <h3>אנחנו מתכוננים לאירוע שלכם/ן</h3>
+              <p>הצוות שלנו מארגן את החלל, הבר והאוכל במיוחד עבורכם/ן</p>
+            </div>
+            <div class="step">
+              <div class="step__num">6</div>
+              <h3>אתם/ן חוגגים/ות</h3>
+              <p>מגיעים להנות יחד עם כל הצוות, לשם שינוי</p>
+            </div>
+            <div class="step">
+              <div class="step__num">7</div>
+              <h3>זכרונות</h3>
+              <p>העובדים/ות יוצאים/ות מרוצים/ות — ואתם מקבלים/ות את השבחים</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA / CONTACT
+  ============================================================ -->
+  <section class="section-soft contact" id="contact">
+    <div class="wrap center">
+      <span class="label reveal">שלב אחרון</span>
+      <h2 class="reveal">שנסגור לכם/ן תאריך?</h2>
+      <p class="contact__sub reveal">שלחו לנו הודעה עם כמות אנשים ותאריך משוער — ונחזור אליכם/ן עם מחיר מפורט</p>
+
+      <div class="contact__btns reveal">
+        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      </div>
+
+      <div class="contact__social reveal">
+        <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="אינסטגרם">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a class="social-icon social-icon--wa" href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="וואטסאפ">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a class="social-icon social-icon--mail" href="mailto:eylam@ezratlv.com" aria-label="שלחו מייל">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+
+      <p class="contact__note reveal">עובדים 24/7 — אפשר גם בצהריים</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <span class="footer__meta">אברבנאל 38, פלורנטין, תל אביב&nbsp;·&nbsp;@ezratlv</span><br />
+    עזרא תל אביב © 2026 — כל הזכויות שמורות
+  </footer>
+
+  <script>
+    /* ---- NAV scroll ---- */
+    const nav = document.getElementById('nav');
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ---- Mobile hamburger menu ---- */
+    (function () {
+      const burger = document.getElementById('navBurger');
+      const menu   = document.getElementById('navMenu');
+      const scrim  = document.getElementById('navScrim');
+      if (!nav || !burger || !menu) return;
+
+      const setOpen = (open) => {
+        nav.setAttribute('data-menu', open ? 'open' : 'closed');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'סגירת תפריט' : 'פתיחת תפריט');
+        document.body.style.overflow = open ? 'hidden' : '';
+      };
+
+      burger.addEventListener('click', () => setOpen(nav.getAttribute('data-menu') !== 'open'));
+      if (scrim) scrim.addEventListener('click', () => setOpen(false));
+      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.getAttribute('data-menu') === 'open') { setOpen(false); burger.focus(); }
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 720 && nav.getAttribute('data-menu') === 'open') setOpen(false);
+      }, { passive: true });
+    })();
+
+    /* ---- Hero word-by-word animation ---- */
+    const headline = document.getElementById('heroHeadline');
+    if (headline) {
+      const text = headline.textContent.trim();
+      headline.innerHTML = text.split(' ')
+        .map((w, i) => `<span class="word" style="animation-delay:${0.15 + i * 0.09}s">${w}</span>`)
+        .join(' ');
+    }
+
+    /* ---- Scroll reveal (IntersectionObserver) ---- */
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal, .divider').forEach(el => io.observe(el));
+
+    /* ---- Gallery modal ---- */
+    (function () {
+      const modal   = document.getElementById('galleryModal');
+      const moreBtn = document.getElementById('galleryMoreBtn');
+      const closeBtn = document.getElementById('galleryClose');
+      if (!modal || !moreBtn || !closeBtn) return;
+
+      let lastFocused = null;
+      const open = () => {
+        lastFocused = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => modal.classList.add('open'));
+        closeBtn.focus();
+      };
+      const close = () => {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
+        modal.addEventListener('transitionend', done);
+        setTimeout(() => { if (!modal.classList.contains('open')) modal.hidden = true; }, 400);
+        if (lastFocused) lastFocused.focus();
+      };
+
+      moreBtn.addEventListener('click', open);
+      moreBtn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      });
+      document.querySelectorAll('.gallery__row--top img').forEach(img => img.addEventListener('click', open));
+      closeBtn.addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal || e.target.classList.contains('gallery-modal__scroll')) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+    })();
+
+    /* ---- Process flow animation — two sides, each with its own colored line ---- */
+    const procTrack = document.querySelector('.process-track');
+    if (procTrack) {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const rows = [...procTrack.querySelectorAll('.steps')].map(stepsEl => ({
+        stepsEl,
+        stepEls: [...stepsEl.querySelectorAll('.step')],
+        conns:   [...stepsEl.querySelectorAll('.conn')],
+      }));
+
+      const SEG  = 1100;   // ms to fill one connector (matches CSS width transition)
+      const STEP = 320;    // delay before next circle lights after fill arrives
+      const GAP  = 480;    // pause between the two sides
+      const HOLD = 1700;   // pause at the end before the loop restarts
+
+      function layoutRow(row) {
+        const sr   = row.stepsEl.getBoundingClientRect();
+        const circ = row.stepEls.map(s => s.querySelector('.step__num').getBoundingClientRect());
+        for (let i = 0; i < row.conns.length; i++) {
+          const a = circ[i], b = circ[i + 1];
+          if (!a || !b) continue;
+          const aCx = a.left + a.width / 2 - sr.left;
+          const bCx = b.left + b.width / 2 - sr.left;
+          const r   = a.width / 2;
+          const x0  = Math.min(aCx, bCx) + r;
+          const x1  = Math.max(aCx, bCx) - r;
+          const cy  = a.top + a.height / 2 - sr.top;
+          row.conns[i].style.left  = x0 + 'px';
+          row.conns[i].style.width = Math.max(0, x1 - x0) + 'px';
+          row.conns[i].style.top   = cy + 'px';
+        }
+      }
+      const layoutAll = () => { if (!matchMedia('(max-width: 820px)').matches) rows.forEach(layoutRow); };
+
+      let timers = [];
+      const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+      const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+      function resetInstant() {
+        rows.forEach(r => {
+          r.stepsEl.classList.add('reset-instant');
+          r.stepEls.forEach(s => s.classList.remove('lit'));
+          r.conns.forEach(c => c.classList.remove('fill'));
+        });
+        void procTrack.offsetWidth;
+        requestAnimationFrame(() => requestAnimationFrame(() =>
+          rows.forEach(r => r.stepsEl.classList.remove('reset-instant'))
+        ));
+      }
+
+      function runCycle() {
+        layoutAll();
+        resetInstant();
+        let cursor = 220;
+
+        rows.forEach((row, ri) => {
+          at(cursor, () => row.stepEls[0].classList.add('lit'));
+          cursor += STEP;
+          row.conns.forEach((c, i) => {
+            const fillAt = cursor;
+            at(fillAt, () => c.classList.add('fill'));
+            const litAt = fillAt + SEG;
+            at(litAt, () => row.stepEls[i + 1].classList.add('lit'));
+            cursor = litAt + STEP;
+          });
+          if (ri < rows.length - 1) cursor += GAP;
+        });
+
+        at(cursor + HOLD, runCycle);
+      }
+
+      if (reduce) {
+        rows.forEach(r => {
+          r.stepEls.forEach(s => s.classList.add('lit'));
+          r.conns.forEach(c => c.classList.add('fill'));
+        });
+        layoutAll();
+      } else {
+        // robust layout on first paint — fixes the line sitting below the dots on load
+        layoutAll();
+        window.addEventListener('load', layoutAll);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutAll);
+        if ('ResizeObserver' in window) {
+          const ro = new ResizeObserver(() => layoutAll());
+          rows.forEach(r => ro.observe(r.stepsEl));
+        }
+
+        let running = false;
+        const flowIO = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !running) {
+              running = true;
+              requestAnimationFrame(() => requestAnimationFrame(() => { layoutAll(); runCycle(); }));
+            } else if (!e.isIntersecting && running) {
+              running = false; clearTimers();
+              rows.forEach(r => {
+                r.stepEls.forEach(s => s.classList.remove('lit'));
+                r.conns.forEach(c => c.classList.remove('fill'));
+              });
+            }
+          });
+        }, { threshold: 0.25 });
+        flowIO.observe(procTrack);
+
+        let rAf;
+        window.addEventListener('resize', () => {
+          cancelAnimationFrame(rAf);
+          rAf = requestAnimationFrame(layoutAll);
+        }, { passive: true });
+      }
+    }
+  </script>
+</body>
+</html>
