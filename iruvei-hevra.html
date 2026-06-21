@@ -2225,13 +2225,13 @@
             </svg>
             <!-- ice cubes (each with a tiny person glyph) are generated + managed by JS -->
           </div>
-          <div class="glass-count"><b id="bookGuestsOut">30</b> אורחים</div>
+          <div class="glass-count"><b id="bookGuestsOut">20</b> אורחים</div>
 
-          <input type="range" id="bookRange" class="book-range" min="20" max="50" step="1" value="30" aria-label="כמות אורחים" />
+          <input type="range" id="bookRange" class="book-range" min="20" max="50" step="1" value="20" aria-label="כמות אורחים" />
 
           <div class="book-manual">
             <label for="bookGuests">מספר מדויק</label>
-            <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="30" aria-label="כמות אורחים מדויקת" />
+            <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="20" aria-label="כמות אורחים מדויקת" />
             <span>אורחים</span>
           </div>
 
@@ -2487,7 +2487,7 @@
         return taken;
       }
 
-      const state = { plan: 'gibush', date: null, slot: null, guests: 30 };
+      const state = { plan: 'gibush', date: null, slot: null, guests: 20 };
 
       const steps = [...modal.querySelectorAll('.book-step')];
       const dots  = [...modal.querySelectorAll('.book-steps__dot')];
@@ -2673,7 +2673,7 @@
         totalEl.textContent = fmt(plan.perHead * gg);
         summary2.innerHTML = summaryText();
       }
-      let prevGuests = 30;
+      let prevGuests = 20;
       function setGuests(v) {
         let n = parseInt(v, 10); if (isNaN(n)) n = PLANS[state.plan].minGuests;
         n = Math.min(RANGE_MAX, Math.max(0, n));
@@ -2716,7 +2716,7 @@
         lastFocused = document.activeElement;
         if (plan && PLANS[plan]) state.plan = plan;
         state.date = null; state.slot = null;
-        guestsInput.value = 30; guestsRange.value = 30; prevGuests = 30;
+        guestsInput.value = 20; guestsRange.value = 20; prevGuests = 20;
         setPlan(state.plan);
         view = new Date(today.getFullYear(), today.getMonth(), 1);
         renderCal();
