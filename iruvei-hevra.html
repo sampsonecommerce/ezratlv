@@ -1653,11 +1653,13 @@
       -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
               mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
     }
-    .rev-track { display: flex; gap: 1.1rem; width: max-content; padding-inline: 0.55rem; animation: revScroll 52s linear infinite; }
+    /* no gap here: each card carries its own trailing margin so the two duplicated
+       halves are exactly equal width -> translateX(-50%) wraps seamlessly */
+    .rev-track { display: flex; width: max-content; animation: revScroll 52s linear infinite; }
     .rev-marquee:hover .rev-track { animation-play-state: paused; }
     @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .rev-card {
-      flex: 0 0 300px; max-width: 300px;
+      flex: 0 0 300px; max-width: 300px; margin-inline-end: 1.1rem;
       background: linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%), #16110c;
       border: 1px solid rgba(196,154,60,0.22); border-radius: 16px;
       padding: 1.3rem 1.3rem 1.2rem; position: relative; isolation: isolate;
