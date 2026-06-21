@@ -1554,44 +1554,14 @@
     .book-price__label { font-size: 0.85rem; color: var(--cream-faint); margin-block-start: 0.2rem; }
     .book-price__label b { color: var(--gold); }
 
-    /* interactive guest graph: a bar that rises as you slide */
-    /* "fill the glass" - guests raise the liquid; ice cubes (with a tiny person
-       glyph) bob in the drink and a new cube drops in from the top on each rise. */
-    .glass-wrap { position: relative; width: 135px; height: 180px; margin: 0.2rem auto 0; }
+    /* interactive guest graph: a champagne coupe that fills as you slide */
+    /* more guests → the gold rises in the bowl and more bubbles stream up. */
+    .glass-wrap { position: relative; width: 150px; height: 188px; margin: 0.2rem auto 0; }
     .glass-svg { width: 100%; height: 100%; display: block; overflow: visible; }
-    #bookLiquid, #bookLiquidTop { transition: y 0.4s var(--ease); }
+    #bookLiquid    { transition: y 0.45s var(--ease); }
+    #bookLiquidTop { transition: cy 0.45s var(--ease), rx 0.45s var(--ease); }
     .glass-count { text-align: center; color: var(--cream); font-size: 0.88rem; margin-block: 0.3rem 0.2rem; }
     .glass-count b { font-family: 'Pliant', var(--font-serif); font-size: 1.35rem; color: var(--gold-light); margin-inline-end: 0.2rem; }
-
-    .ice {
-      position: absolute;
-      border-radius: 5px;
-      display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(202,226,240,0.55));
-      border: 1px solid rgba(255,255,255,0.7);
-      box-shadow: inset 0 0 4px rgba(255,255,255,0.6), 0 1px 3px rgba(0,0,0,0.25);
-      color: rgba(45,70,95,0.62);
-      opacity: 0;
-      transform: scale(0);
-      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-      will-change: transform, opacity;
-    }
-    .ice svg { width: 55%; height: 55%; }
-    /* settled in the glass - stays put, with a gentle bob */
-    .ice.is-in { opacity: 1; transform: none; animation: iceBob 3.4s ease-in-out infinite; }
-    /* the moment a fresh cube drops in from the top (then it stays) */
-    .ice.is-dropping { opacity: 1; animation: iceFall 0.7s cubic-bezier(0.34, 1.1, 0.5, 1) forwards; }
-    @keyframes iceFall {
-      0%   { transform: translateY(-120px) rotate(-35deg); opacity: 0; }
-      25%  { opacity: 1; }
-      78%  { transform: translateY(0) rotate(10deg); }
-      90%  { transform: translateY(-5px) rotate(-6deg); }
-      100% { transform: translateY(0) rotate(0); opacity: 1; }
-    }
-    @keyframes iceBob {
-      0%,100% { transform: translateY(0) rotate(-4deg); }
-      50%     { transform: translateY(-2.5px) rotate(4deg); }
-    }
 
     .book-range {
       width: 100%;
@@ -2208,22 +2178,38 @@
           </div>
 
           <div class="glass-wrap" id="bookGlassWrap">
-            <svg class="glass-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg class="glass-svg" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
-                <clipPath id="glassClip"><path d="M33,24 L87,24 L80,148 Q80,151 77,151 L43,151 Q40,151 40,148 Z"/></clipPath>
+                <clipPath id="glassClip"><path d="M16,30 C26,90 114,90 124,30 C108,42 32,42 16,30 Z"/></clipPath>
                 <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ecbf5f"/>
-                  <stop offset="1" stop-color="#b9842f"/>
+                  <stop offset="0" stop-color="#f6dd97"/>
+                  <stop offset="1" stop-color="#bd8a30"/>
+                </linearGradient>
+                <linearGradient id="coupeGlass" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0"   stop-color="#ffffff" stop-opacity="0.13"/>
+                  <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.02"/>
+                  <stop offset="1"   stop-color="#ffffff" stop-opacity="0.15"/>
                 </linearGradient>
               </defs>
+              <!-- cast shadow + stem + foot -->
+              <ellipse cx="70" cy="172" rx="30" ry="4" fill="rgba(0,0,0,0.28)"/>
+              <rect x="67" y="78" width="6" height="80" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.5)" stroke-width="1.2"/>
+              <ellipse cx="70" cy="162" rx="30" ry="7" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.55)" stroke-width="1.6"/>
+              <!-- bowl body (behind liquid) -->
+              <path d="M16,30 C26,90 114,90 124,30" fill="url(#coupeGlass)"/>
+              <!-- liquid + bubbles, clipped to the bowl interior -->
               <g clip-path="url(#glassClip)">
-                <rect id="bookLiquid" x="28" y="118" width="64" height="180" fill="url(#liquidGrad)"/>
-                <rect id="bookLiquidTop" x="28" y="116" width="64" height="2.5" fill="rgba(255,255,255,0.4)"/>
+                <rect id="bookLiquid" x="14" y="50" width="112" height="90" fill="url(#liquidGrad)"/>
+                <ellipse id="bookLiquidTop" cx="70" cy="50" rx="40" ry="5" fill="#f9e6ad"/>
+                <g id="bookBubbles"></g>
               </g>
-              <path d="M30,20 L90,20 L82,149 Q82,154 77,154 L43,154 Q38,154 38,149 Z" fill="none" stroke="rgba(240,235,224,0.55)" stroke-width="2.4" stroke-linejoin="round"/>
-              <ellipse cx="60" cy="20" rx="30" ry="4" fill="none" stroke="rgba(240,235,224,0.55)" stroke-width="2.4"/>
+              <!-- bowl outline + rim (over liquid) -->
+              <path d="M16,30 C26,90 114,90 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
+              <ellipse cx="70" cy="30" rx="54" ry="10" fill="rgba(255,255,255,0.03)" stroke="rgba(240,235,224,0.6)" stroke-width="2.2"/>
+              <!-- 3D specular highlight on the bowl -->
+              <path d="M30,37 C28,53 36,67 52,75" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"/>
             </svg>
-            <!-- ice cubes (each with a tiny person glyph) are generated + managed by JS -->
+            <!-- rising bubbles are generated + animated by JS -->
           </div>
           <div class="glass-count"><b id="bookGuestsOut">20</b> אורחים</div>
 
@@ -2514,8 +2500,13 @@
       const liquidTopEl = document.getElementById('bookLiquidTop');
       const glassWrap   = document.getElementById('bookGlassWrap');
       const RANGE_MIN = 20, RANGE_MAX = 50;
-      // glass interior in SVG units: liquid top travels between these as guests rise
-      const LIQ_LOW = 138, LIQ_HIGH = 34;
+      // coupe interior in SVG units: the liquid surface travels between these as guests rise
+      // (LOW = base pour at 20 guests, HIGH = nearly full at 50)
+      const LIQ_LOW = 60, LIQ_HIGH = 34;
+      // bowl geometry for sizing the elliptical surface + keeping bubbles inside
+      const BOWL_RIM_Y = 30, BOWL_BOT_Y = 75, BOWL_HALF = 54;
+      const halfWidth = y => Math.max(0, BOWL_HALF * (BOWL_BOT_Y - y) / (BOWL_BOT_Y - BOWL_RIM_Y));
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const perHeadEl = document.getElementById('bookPerHead');
       const totalEl   = document.getElementById('bookTotal');
       const next2  = document.getElementById('bookNext2');
@@ -2540,7 +2531,7 @@
           dot.classList.toggle('is-done', dn < n);
         });
         if (scroll) scroll.scrollTop = 0;
-        if (n === 2) renderPrice();
+        if (n === 2) { renderPrice(); startBubbles(); } else { stopBubbles(); }
       }
 
       // ── Calendar
@@ -2609,52 +2600,61 @@
       }
       planBtns.forEach(b => b.addEventListener('click', () => setPlan(b.dataset.plan)));
 
-      // ── Ice cubes accumulate as guests grow - varied sizes packed in the glass,
-      //    each dropped cube STAYS once it settles (filled bottom-up).
-      // packed bottom-to-top (descending t); kept inside x∈[47,88] so cubes never
-      // poke past the glass walls (the glass is narrowest at the base).
-      const ICE_SLOTS = [
-        { l: 48, t: 142, s: 19 }, { l: 69, t: 144, s: 17 },
-        { l: 47, t: 126, s: 15 }, { l: 63, t: 124, s: 16 }, { l: 80, t: 128, s: 8 },
-        { l: 48, t: 110, s: 14 }, { l: 63, t: 108, s: 15 }, { l: 79, t: 111, s: 9 },
-        { l: 47, t: 95,  s: 13 }, { l: 61, t: 93,  s: 15 }, { l: 77, t: 96,  s: 10 },
-        { l: 48, t: 80,  s: 12 }, { l: 61, t: 78,  s: 14 }, { l: 76, t: 81,  s: 11 },
-        { l: 49, t: 65,  s: 11 }, { l: 61, t: 63,  s: 13 }, { l: 75, t: 66,  s: 11 },
-        { l: 52, t: 50,  s: 12 }, { l: 66, t: 49,  s: 12 }
-      ];
-      const ICE_GLYPH = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0z"/></svg>';
-      const iceCubes = ICE_SLOTS.map((sl, i) => {
-        const c = document.createElement('span');
-        c.className = 'ice';
-        c.style.cssText = `left:${sl.l}px;top:${sl.t}px;width:${sl.s}px;height:${sl.s}px;z-index:${10 + i}`;
-        c.innerHTML = ICE_GLYPH;
-        glassWrap.appendChild(c);
-        return c;
-      });
-      let shownCubes = 0;
-      // fill the glass with ice up to a little under the liquid surface (px)
-      const cubeCountForSurface = (surfacePx) =>
-        Math.max(2, Math.min(ICE_SLOTS.length, ICE_SLOTS.filter(s => s.t >= surfacePx + 3).length));
-      function setCubeCount(n, animate) {
-        n = Math.min(ICE_SLOTS.length, Math.max(0, n));
-        if (n > shownCubes) {
-          for (let i = shownCubes; i < n; i++) {
-            const c = iceCubes[i];
-            if (animate) {
-              c.classList.remove('is-in');
-              c.classList.add('is-dropping');
-              c.addEventListener('animationend', function done() {
-                c.classList.remove('is-dropping'); c.classList.add('is-in');
-                c.removeEventListener('animationend', done);
-              });
-            } else {
-              c.classList.remove('is-dropping'); c.classList.add('is-in');
-            }
+      // ── Rising bubbles: a pool of SVG circles that stream up through the gold
+      //    and pop at the surface. More guests = more active bubbles (denser fizz).
+      const SVGNS = 'http://www.w3.org/2000/svg';
+      const bubblesGroup = document.getElementById('bookBubbles');
+      const BUBBLE_POOL = 20;
+      let liqSurfaceY = LIQ_LOW;   // current liquid top (SVG units), set by renderPrice
+      let bubbleTarget = 3;        // how many bubbles are active right now
+      const bubbles = [];
+      for (let i = 0; i < BUBBLE_POOL; i++) {
+        const c = document.createElementNS(SVGNS, 'circle');
+        c.setAttribute('fill', '#fbeec0');
+        c.style.display = 'none';
+        bubblesGroup.appendChild(c);
+        bubbles.push({ el: c, x: 70, y: BOWL_BOT_Y, vy: 0.4, r: 1, drift: 0.4, ph: 0, active: false });
+      }
+      function seedBubble(b) {
+        b.y  = BOWL_BOT_Y - 1 - Math.random() * 4;
+        b.x  = 70 + (Math.random() - 0.5) * halfWidth(b.y) * 1.1;
+        b.vy = 0.22 + Math.random() * 0.45;
+        b.r  = 0.7 + Math.random() * 1.2;
+        b.drift = 0.3 + Math.random() * 0.6;
+        b.ph = Math.random() * Math.PI * 2;
+        b.active = true;
+      }
+      let bubbleRAF = null;
+      function bubbleFrame() {
+        const top = liqSurfaceY + 2;
+        const span = Math.max(1, BOWL_BOT_Y - top);
+        for (let i = 0; i < BUBBLE_POOL; i++) {
+          const b = bubbles[i];
+          if (i < bubbleTarget) {
+            if (!b.active) seedBubble(b);
+            b.y  -= b.vy;
+            b.ph += 0.07;
+            if (b.y <= top) { seedBubble(b); continue; }
+            const prog = (BOWL_BOT_Y - b.y) / span;        // 0 at base → 1 at surface
+            let op = 0.85;
+            if (prog < 0.2)      op = (prog / 0.2) * 0.85;  // fade in off the base
+            else if (prog > 0.7) op = ((1 - prog) / 0.3) * 0.85; // fade out into the surface
+            b.el.setAttribute('cx', (b.x + Math.sin(b.ph) * b.drift).toFixed(1));
+            b.el.setAttribute('cy', b.y.toFixed(1));
+            b.el.setAttribute('r', b.r.toFixed(1));
+            b.el.style.opacity = Math.max(0, op).toFixed(2);
+            b.el.style.display = '';
+          } else if (b.active || b.el.style.display !== 'none') {
+            b.el.style.display = 'none';
+            b.active = false;
           }
-        } else if (n < shownCubes) {
-          for (let i = n; i < shownCubes; i++) iceCubes[i].classList.remove('is-in', 'is-dropping');
         }
-        shownCubes = n;
+        bubbleRAF = requestAnimationFrame(bubbleFrame);
+      }
+      function startBubbles() { if (!reduceMotion && bubbleRAF == null) bubbleRAF = requestAnimationFrame(bubbleFrame); }
+      function stopBubbles() {
+        if (bubbleRAF != null) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
+        bubbles.forEach(b => { b.el.style.display = 'none'; b.active = false; });
       }
 
       // ── Calculator (step 2): more guests → higher liquid + more ice that stays.
@@ -2666,9 +2666,11 @@
         guestsOut.textContent = gg;
         const f = (gg - RANGE_MIN) / (RANGE_MAX - RANGE_MIN);
         const liqY = LIQ_LOW - f * (LIQ_LOW - LIQ_HIGH);
+        liqSurfaceY = liqY;
         liquidEl.setAttribute('y', liqY);
-        liquidTopEl.setAttribute('y', liqY - 2);
-        setCubeCount(cubeCountForSurface(liqY * 1.125), animateCubes);
+        liquidTopEl.setAttribute('cy', liqY);
+        liquidTopEl.setAttribute('rx', (halfWidth(liqY) + 2).toFixed(1));
+        bubbleTarget = Math.round(3 + f * 13);   // 3 bubbles at 20 guests → 16 at 50
         perHeadEl.textContent = fmt(plan.perHead);
         totalEl.textContent = fmt(plan.perHead * gg);
         summary2.innerHTML = summaryText();
@@ -2730,6 +2732,7 @@
         closeBtn.focus();
       }
       function close() {
+        stopBubbles();
         modal.classList.remove('open');
         document.body.style.overflow = '';
         const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
