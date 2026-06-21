@@ -1560,6 +1560,15 @@
     .glass-svg { width: 100%; height: 100%; display: block; overflow: visible; }
     #bookLiquid    { transition: y 0.45s var(--ease); }
     #bookLiquidTop { transition: cy 0.45s var(--ease), rx 0.45s var(--ease); }
+    /* the gold "pour" stream that flashes in while the coupe fills on entry */
+    #bookPour { opacity: 0; }
+    #bookPour.is-pouring { animation: pourStream 0.95s ease-out; }
+    @keyframes pourStream {
+      0%   { opacity: 0; }
+      18%  { opacity: 0.9; }
+      68%  { opacity: 0.85; }
+      100% { opacity: 0; }
+    }
     .glass-count { text-align: center; color: var(--cream); font-size: 0.88rem; margin-block: 0.3rem 0.2rem; }
     .glass-count b { font-family: 'Pliant', var(--font-serif); font-size: 1.35rem; color: var(--gold-light); margin-inline-end: 0.2rem; }
 
@@ -2200,14 +2209,13 @@
               <!-- liquid + bubbles, clipped to the bowl interior -->
               <g clip-path="url(#glassClip)">
                 <rect id="bookLiquid" x="14" y="50" width="112" height="90" fill="url(#liquidGrad)"/>
+                <rect id="bookPour" x="67" y="24" width="6" height="40" rx="3" fill="#f3d589"/>
                 <ellipse id="bookLiquidTop" cx="70" cy="50" rx="40" ry="5" fill="#f9e6ad"/>
                 <g id="bookBubbles"></g>
               </g>
               <!-- bowl outline + rim (over liquid) -->
               <path d="M16,30 A54,45 0 0 0 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
               <ellipse cx="70" cy="30" rx="54" ry="10" fill="rgba(255,255,255,0.03)" stroke="rgba(240,235,224,0.6)" stroke-width="2.2"/>
-              <!-- 3D specular highlight on the bowl -->
-              <path d="M26,35 C22,51 31,67 50,75" fill="none" stroke="#ffffff" stroke-opacity="0.42" stroke-width="2.4" stroke-linecap="round"/>
             </svg>
             <!-- rising bubbles are generated + animated by JS -->
           </div>
@@ -2499,6 +2507,7 @@
       const liquidEl    = document.getElementById('bookLiquid');
       const liquidTopEl = document.getElementById('bookLiquidTop');
       const glassWrap   = document.getElementById('bookGlassWrap');
+      const pourEl      = document.getElementById('bookPour');
       const RANGE_MIN = 20, RANGE_MAX = 50;
       // coupe interior in SVG units: the liquid surface travels between these as guests rise
       // (LOW = base pour at 20 guests, HIGH = nearly full at 50)
@@ -2532,7 +2541,7 @@
           dot.classList.toggle('is-done', dn < n);
         });
         if (scroll) scroll.scrollTop = 0;
-        if (n === 2) { renderPrice(); startBubbles(); } else { stopBubbles(); }
+        if (n === 2) { renderPrice(); animateFill(); } else { stopBubbles(); }
       }
 
       // ── Calendar
@@ -2656,6 +2665,41 @@
       function stopBubbles() {
         if (bubbleRAF != null) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
         bubbles.forEach(b => { b.el.style.display = 'none'; b.active = false; });
+      }
+
+      // ── Entrance: pour the gold in and let the coupe fill up to the chosen level,
+      //    then the bubbles kick in. (renderPrice has already set liqSurfaceY.)
+      function animateFill() {
+        if (reduceMotion) { startBubbles(); return; }
+        const target   = liqSurfaceY;
+        const targetRx = (halfWidth(target) - 1.5).toFixed(1);
+        // start from an empty coupe (no transition)
+        liquidEl.style.transition = 'none';
+        liquidTopEl.style.transition = 'none';
+        liquidEl.setAttribute('y', BOWL_BOT_Y);
+        liquidTopEl.setAttribute('cy', BOWL_BOT_Y);
+        liquidTopEl.setAttribute('rx', '3');
+        // flash the pour stream from the rim down toward the surface
+        pourEl.setAttribute('y', 24);
+        pourEl.setAttribute('height', Math.max(6, target - 24).toFixed(1));
+        pourEl.classList.remove('is-pouring');
+        try { pourEl.getBBox(); } catch (e) {}   // force reflow so the animation restarts
+        pourEl.classList.add('is-pouring');
+        // next frames: rise to the chosen level with a soft pour ease
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const ease = 'cubic-bezier(0.22,0.7,0.3,1)';
+          liquidEl.style.transition = 'y 0.85s ' + ease;
+          liquidTopEl.style.transition = 'cy 0.85s ' + ease + ', rx 0.85s ' + ease;
+          liquidEl.setAttribute('y', target);
+          liquidTopEl.setAttribute('cy', target);
+          liquidTopEl.setAttribute('rx', targetRx);
+        }));
+        // restore the snappy default transition for slider drags, then fizz
+        setTimeout(() => {
+          liquidEl.style.transition = '';
+          liquidTopEl.style.transition = '';
+          startBubbles();
+        }, 880);
       }
 
       // ── Calculator (step 2): more guests → higher liquid + more ice that stays.
