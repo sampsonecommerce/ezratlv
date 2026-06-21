@@ -1458,7 +1458,24 @@
     .book-steps__dot.is-active { background: var(--gold); border-color: var(--gold); color: var(--bg); }
     .book-steps__dot.is-done { border-color: var(--gold); color: var(--gold); }
 
-    .book-scroll { overflow-y: auto; padding: clamp(1rem, 3vw, 1.5rem); }
+    .book-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: clamp(1rem, 3vw, 1.5rem); }
+
+    /* persistent "rather talk to us" shortcut - shown on the early steps,
+       jumps straight to the details form so we can call them back */
+    .book-cta-foot {
+      border-block-start: 1px solid var(--line);
+      padding: 0.85rem clamp(1rem, 3vw, 1.5rem);
+      background: rgba(16,12,8,0.55);
+    }
+    .book-cta-foot[hidden] { display: none; }
+    .book-talk-btn {
+      width: 100%; text-align: center; cursor: pointer;
+      padding: 0.7rem 1rem; border-radius: 11px;
+      border: 1px dashed rgba(196,154,60,0.5); background: transparent;
+      color: var(--gold-light); font-family: var(--font-body); font-size: 0.85rem; font-weight: 500;
+      transition: border-color 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease);
+    }
+    .book-talk-btn:hover { border-color: var(--gold); background: rgba(196,154,60,0.08); color: var(--gold); }
     .book-step[hidden] { display: none; }
     .book-step__title { font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 1.9rem); color: var(--cream); text-align: center; margin-block-end: 0.4rem; }
     .book-step__sub { color: var(--cream-dim); font-size: 0.9rem; text-align: center; margin-block-end: 1rem; }
@@ -2383,6 +2400,10 @@
           </div>
         </div>
       </div>
+
+      <div class="book-cta-foot" id="bookTalkFoot" hidden>
+        <button type="button" class="book-talk-btn" id="bookTalkBtn">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+      </div>
     </div>
   </div>
 
@@ -2621,10 +2642,17 @@
       const doneSummary = document.getElementById('bookDoneSummary');
       const doneClose   = document.getElementById('bookDoneClose');
       const scroll = modal.querySelector('.book-scroll');
+      const talkFoot = document.getElementById('bookTalkFoot');
+      const talkBtn  = document.getElementById('bookTalkBtn');
 
       const fmt = n => CURRENCY + Math.round(n).toLocaleString('en-US');
       const humanDate = d => (d.getDay() === 6 ? 'שבת' : 'יום ' + DOW[d.getDay()]) + ', ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
-      const summaryText = () => '<span>' + PLANS[state.plan].label + '</span> · <b>' + (state.date ? humanDate(state.date) : '') + '</b> · <b>' + (state.slot || '') + '</b>';
+      const summaryText = () => {
+        const parts = ['<span>' + PLANS[state.plan].label + '</span>'];
+        if (state.date) parts.push('<b>' + humanDate(state.date) + '</b>');
+        if (state.slot) parts.push('<b>' + state.slot + '</b>');
+        return parts.join(' · ');
+      };
 
       // ── Step navigation
       let step = 1;
@@ -2639,6 +2667,8 @@
         });
         if (scroll) scroll.scrollTop = 0;
         if (n === 2) { renderPrice(); animateFill(); } else { stopBubbles(); }
+        // the "rather talk to us" shortcut only makes sense on the early steps
+        if (talkFoot) talkFoot.hidden = !(n === 1 || n === 2);
       }
 
       // ── Calendar
@@ -2850,7 +2880,7 @@
         document.getElementById('bookDoneMsg').textContent = wantsCall
           ? 'קיבלנו את הפרטים. מנהל המכירות שלנו יחזור אליכם בהקדם לשיחה, ורק אחריה נשלח את ההצעה והחוזה - בלי התחייבות לחתום עכשיו.'
           : 'קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.';
-        doneSummary.textContent = plan.label + ' · ' + humanDate(state.date) + ' · ' + state.slot;
+        doneSummary.textContent = [plan.label, state.date ? humanDate(state.date) : null, state.slot || null].filter(Boolean).join(' · ');
         goto(4);
       });
 
@@ -2888,6 +2918,14 @@
       backBtn.addEventListener('click', () => { if (step > 1) goto(step - 1); });
       closeBtn.addEventListener('click', close);
       doneClose.addEventListener('click', close);
+      // shortcut: skip straight to the details form, flagged as "wants a call"
+      if (talkBtn) talkBtn.addEventListener('click', () => {
+        const cb = document.getElementById('bfWantsCall');
+        if (cb) cb.checked = true;
+        summary3.innerHTML = summaryText();
+        goto(3);
+        setTimeout(() => { const f = document.getElementById('bfName'); if (f) f.focus(); }, 60);
+      });
       modal.addEventListener('click', e => { if (e.target === modal) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
 
