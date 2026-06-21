@@ -1441,6 +1441,13 @@
       animation-play-state: paused;
     }
     .benefit-pill:hover svg { stroke: #fff; }
+
+    /* center all CTAs on mobile (rather than start/right alignment); keep the
+       intentionally full-width ones full-width */
+    @media (max-width: 820px) {
+      .btn { display: block; width: fit-content; margin-inline: auto; }
+      .contact__btns .btn { width: 100%; }
+    }
   </style>
   <script type="application/ld+json">
   {
