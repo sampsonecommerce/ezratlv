@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>אירועי חברה בעזרא | חלל בר פרטי בפלורנטין</title>
-  <meta name="description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
-  <link rel="canonical" href="https://www.ezratlv.com/iruvei-hevra" />
+  <title>Company Events at Ezra | Private Bar Space in Florentin, TLV</title>
+  <meta name="description" content="A company event with a young vibe and zero hassle. A private bar space in Florentin for team nights and department events." />
+  <link rel="canonical" href="https://www.ezratlv.com/en/iruvei-hevra" />
   <link rel="alternate" hreflang="he" href="https://www.ezratlv.com/iruvei-hevra" />
   <link rel="alternate" hreflang="en" href="https://www.ezratlv.com/en/iruvei-hevra" />
   <link rel="alternate" hreflang="x-default" href="https://www.ezratlv.com/iruvei-hevra" />
@@ -14,12 +14,14 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="geo.region" content="IL-TA" />
-  <meta name="geo.placename" content="פלורנטין, תל אביב" />
+  <meta name="geo.placename" content="Florentin, Tel Aviv" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="אירועי חברה בעזרא | חלל בר פרטי בפלורנטין" />
-  <meta property="og:description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
+  <meta property="og:title" content="Company Events at Ezra | Private Bar Space in Florentin, TLV" />
+  <meta property="og:description" content="A company event with a young vibe and zero hassle. A private bar space in Florentin for team nights and department events." />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="he_IL" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1152,8 +1154,8 @@
       cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
     }
     .gallery-lightbox__nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-    .gallery-lightbox__nav--prev { right: clamp(0.6rem, 2.5vw, 2rem); }
-    .gallery-lightbox__nav--next { left: clamp(0.6rem, 2.5vw, 2rem); }
+    .gallery-lightbox__nav--prev { left: clamp(0.6rem, 2.5vw, 2rem); }
+    .gallery-lightbox__nav--next { right: clamp(0.6rem, 2.5vw, 2rem); }
     @media (max-width: 560px) { .gallery-lightbox__nav { width: 40px; height: 40px; } }
     @media (prefers-reduced-motion: reduce) {
       .gallery-lightbox, .gallery-lightbox img, .gallery-lightbox__close, .gallery-lightbox__nav { transition: none; }
@@ -1211,7 +1213,7 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    /* the "המעבר אלינו" tag only appears once the bridge lights up */
+    /* the "Over to us" tag only appears once the bridge lights up */
     .step--bridge.lit .step__bridge-tag { opacity: 1; transform: translateY(0); }
 
     .step { position: relative; text-align: center; }
@@ -1342,16 +1344,16 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      right: 0;
+      left: 0;
       width: 0;
       border-radius: 2px;
-      background: linear-gradient(to left, var(--accent), var(--accent-light));
+      background: linear-gradient(to right, var(--accent), var(--accent-light));
       transition: width 1.7s cubic-bezier(0.45, 0, 0.25, 1);
     }
     .conn__head {
       position: absolute;
       top: 50%;
-      left: 0;
+      right: 0;
       width: 12px;
       height: 12px;
       border-radius: 50%;
@@ -1747,7 +1749,7 @@
     @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
     .rev-card {
       flex: 0 0 300px; max-width: 300px; margin-inline-end: 1.1rem;
-      direction: rtl; text-align: right;
+      direction: ltr; text-align: left;
       background: linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%), #16110c;
       border: 1px solid rgba(196,154,60,0.22); border-radius: 16px;
       padding: 1.3rem 1.3rem 1.2rem; position: relative; isolation: isolate;
@@ -1788,40 +1790,40 @@
   ============================================================ -->
   <nav class="nav" id="nav">
     <!-- mobile: hamburger (right) -->
-    <button class="nav__burger" id="navBurger" type="button" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="navMenu">
+    <button class="nav__burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
       <span></span><span></span><span></span>
     </button>
 
-    <a href="index.html" class="nav__logo"><img src="images/logo.png" alt="עזרא" /></a>
+    <a href="/en/" class="nav__logo"><img src="images/logo.png" alt="Ezra" /></a>
 
     <!-- desktop: center links -->
     <div class="nav__links">
-      <a href="#solution">הפתרון שלנו</a>
-      <a href="#concept">האוכל והבר</a>
-      <a href="#stats">עזרא במספרים</a>
-      <a href="#packages">מסלולים</a>
-      <a href="#gallery">גלריה</a>
+      <a href="#solution">What we do</a>
+      <a href="#concept">Food & bar</a>
+      <a href="#stats">Ezra by the numbers</a>
+      <a href="#packages">Packages</a>
+      <a href="#gallery">Gallery</a>
     </div>
 
     <!-- desktop: actions -->
     <div class="nav__actions">
-      <a class="nav__lang" href="/en/iruvei-hevra" aria-label="Switch to English" hreflang="en">EN</a>
-      <a class="nav__corp" href="index.html">אירועים פרטיים</a>
-      <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="nav__lang" href="/iruvei-hevra" aria-label="עבור לעברית" hreflang="he">עב</a>
+      <a class="nav__corp" href="/en/">Private events</a>
+      <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
 
     <!-- mobile: dropdown menu + scrim -->
     <div class="nav__scrim" id="navScrim"></div>
     <div class="nav__menu" id="navMenu">
-      <a class="nav__menu-link" href="#solution">הפתרון שלנו</a>
-      <a class="nav__menu-link" href="#concept">האוכל והבר</a>
-      <a class="nav__menu-link" href="#stats">עזרא במספרים</a>
-      <a class="nav__menu-link" href="#packages">מסלולים</a>
-      <a class="nav__menu-link" href="#gallery">גלריה</a>
-      <a class="nav__menu-link" href="/en/iruvei-hevra" hreflang="en">English</a>
+      <a class="nav__menu-link" href="#solution">What we do</a>
+      <a class="nav__menu-link" href="#concept">Food & bar</a>
+      <a class="nav__menu-link" href="#stats">Ezra by the numbers</a>
+      <a class="nav__menu-link" href="#packages">Packages</a>
+      <a class="nav__menu-link" href="#gallery">Gallery</a>
+      <a class="nav__menu-link" href="/iruvei-hevra" hreflang="he">עברית</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--corp" href="index.html">אירועים פרטיים</a>
-        <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="nav__menu-cta nav__menu-cta--corp" href="/en/">Private events</a>
+        <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
     </div>
   </nav>
@@ -1834,17 +1836,17 @@
       <source src="videos/hero.mp4" type="video/mp4" />
     </video>
     <div class="hero__inner wrap">
-      <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
-      <p class="hero__sub">חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה - אנחנו מנהלים את האוכל, האלכוהול והאווירה, ואתם פשוט מגיעים לחגוג</p>
+      <h1 id="heroHeadline">A company event with a young vibe — and zero hassle</h1>
+      <p class="hero__sub">A private bar space in Florentin for team nights and department events. We handle the food, the drinks and the vibe — you just show up and celebrate.</p>
       <div class="hero__cta">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
         <span class="hero__cta-note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          מענה תוך 24 שעות
+          Reply within 24 hours
         </span>
       </div>
     </div>
-    <a href="#solution" class="hero__scroll" aria-label="גלול למטה">
+    <a href="#solution" class="hero__scroll" aria-label="Scroll down">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 5v14M5 12l7 7 7-7"/>
       </svg>
@@ -1858,33 +1860,33 @@
     <div class="wrap">
       <div class="feature-row">
         <div class="feature-row__text reveal">
-          <span class="label">הפתרון שלנו</span>
-          <h3>להרים אירוע מושקע לצוות, בראש שקט לגמרי</h3>
+          <span class="label">What we do</span>
+          <h3>Throw your team a standout event — completely stress-free</h3>
           <div class="divider"></div>
-          <p>הגיע הזמן להעביר אלינו את המעמסה - אנחנו כאן כדי לנהל הכל מקצה לקצה ולתת לכם שקט נפשי מלא</p>
+          <p>Time to hand off the load. We run the whole thing end to end and give you total peace of mind.</p>
 
           <div class="benefit-cards">
             <div class="benefit-card">
-              <div class="benefit-card__title">מרחב בלעדי לצוות</div>
-              <div class="benefit-card__body">החלל כולו שלכם - לא אולם ולא מסעדה, בר פרטי שפועל רק בשבילכם הלילה הזה</div>
+              <div class="benefit-card__title">A space that’s all yours</div>
+              <div class="benefit-card__body">The whole place is yours — not a hall, not a restaurant. A private bar open just for you that night.</div>
             </div>
             <div class="benefit-card">
-              <div class="benefit-card__title">ניהול מקצה לקצה</div>
-              <div class="benefit-card__body">אוכל, אלכוהול, מוזיקה ותאורה - הכל בידיים שלנו, ואתם רק מגיעים לחגוג</div>
+              <div class="benefit-card__title">End-to-end management</div>
+              <div class="benefit-card__body">Food, drinks, music and lighting — all on us. You just come to celebrate.</div>
             </div>
             <div class="benefit-card">
-              <div class="benefit-card__title">ודאות תקציבית</div>
-              <div class="benefit-card__body">מחיר סופי מראש, בלי הפתעות בסוף הערב - יודעים מה מקבלים ויודעים כמה משלמים</div>
+              <div class="benefit-card__title">Budget certainty</div>
+              <div class="benefit-card__body">A final price up front, no surprises at the end of the night. You know what you get and what you pay.</div>
             </div>
             <div class="benefit-card">
-              <div class="benefit-card__title">גמישות מלאה</div>
-              <div class="benefit-card__body">מ-20 עד 50 איש, כל יום בשבוע, עם תפריט שמותאם לצוות ולתקציב שלכם</div>
+              <div class="benefit-card__title">Total flexibility</div>
+              <div class="benefit-card__body">From 20 to 50 guests, any day of the week, with a menu tailored to your team and budget.</div>
             </div>
           </div>
 
-          <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin: 2rem auto 0; display: block; width: fit-content;">לבדיקת זמינות</a>
+          <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin: 2rem auto 0; display: block; width: fit-content;">Check availability</a>
         </div>
-        <img src="images/BAR.jpg" alt="הבר של עזרא" class="feature-img reveal" />
+        <img src="images/BAR.jpg" alt="The bar at Ezra" class="feature-img reveal" />
       </div>
     </div>
   </section>
@@ -1895,8 +1897,8 @@
   <section id="concept">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="label">הווייב</span>
-        <h2>תנועה חופשית ומינגלינג</h2>
+        <span class="label">The vibe</span>
+        <h2>Free-flowing and full of mingling</h2>
         <div class="divider divider--center"></div>
       </div>
 
@@ -1906,24 +1908,24 @@
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
-          <div class="vibe-card__title">האווירה</div>
-          <div class="vibe-card__body">חלל שנבנה למינגלינג טבעי - מוזיקה טובה, בר פתוח ותנועה זורמת שמשאירה את האנרגיות גבוהות כל הערב</div>
+          <div class="vibe-card__title">The atmosphere</div>
+          <div class="vibe-card__body">A space built for natural mingling — good music, an open bar and easy flow that keeps the energy high all night.</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/vibe-cocktail.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M4 4h16l-1 7a7 7 0 0 1-14 0L4 4Z"/><path d="M20 7h1a2 2 0 0 1 0 4h-1"/></svg>
           </div>
-          <div class="vibe-card__title">החוויה</div>
-          <div class="vibe-card__body">אוכל מעולה מחכה על הבר כבופה עשיר וקליל - כל אחד ואחת לוקחים צלחת ומשקה, וזזים ונהנים</div>
+          <div class="vibe-card__title">The experience</div>
+          <div class="vibe-card__body">Great food waits at the bar as a rich, easy buffet — everyone grabs a plate and a drink, moves around and enjoys.</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/vibe-food.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
           </div>
-          <div class="vibe-card__title">התפריט</div>
-          <div class="vibe-card__body">מנות חלביות וצמחוניות מחומרי גלם טריים - יחד ניצור חוויה קולינרית שסוגרת פינה לכולם</div>
+          <div class="vibe-card__title">The menu</div>
+          <div class="vibe-card__body">Dairy and vegetarian dishes from fresh ingredients — together we’ll create a culinary experience that hits the spot for everyone.</div>
         </div>
       </div>
     </div>
@@ -1941,29 +1943,29 @@
         <span class="stats-frame__corner stats-frame__corner--br"></span>
 
         <div class="sec-head">
-          <span class="label">עזרא במספרים</span>
-          <h2>הניסיון עושה את ההבדל</h2>
+          <span class="label">Ezra by the numbers</span>
+          <h2>Experience makes the difference</h2>
         </div>
 
         <div class="stat-band">
           <div class="stat-cell">
             <div class="stat__num">800+</div>
-            <div class="stat__label">אירועים</div>
+            <div class="stat__label">Events</div>
           </div>
           <div class="stat-cell">
             <div class="stat__num">40,000+</div>
-            <div class="stat__label">אורחים</div>
+            <div class="stat__label">Guests</div>
           </div>
           <div class="stat-cell">
             <div class="stat__num">3+</div>
-            <div class="stat__label">שנים בשטח</div>
+            <div class="stat__label">Years running</div>
           </div>
         </div>
 
         <div class="pills-row">
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>פריים לוקיישן בתל אביב</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>מרחק קצר מהרכבת הקלה</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>גישה מרכזית לאוטובוסים</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Prime Tel Aviv location</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Short walk from the light rail</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Central bus access</span>
         </div>
 
         <div class="map-container">
@@ -1975,12 +1977,12 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
+            title="Ezra Tel Aviv location map - 38 Abarbanel, Florentin"
           ></iframe>
         </div>
       </div>
 
-      <a class="btn btn--outline reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="btn btn--outline reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
   </section>
 
@@ -1990,79 +1992,79 @@
   <section id="packages">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="label">מסלולים</span>
-        <h2>חבילות שקופות, ערך מקסימלי</h2>
+        <span class="label">Packages</span>
+        <h2>Transparent packages, maximum value</h2>
         <div class="divider divider--center"></div>
-        <p>בחרו את המסלול שעונה על הצרכים שלכם</p>
+        <p>Pick the package that fits your needs</p>
       </div>
 
       <div class="packages">
         <!-- Happy Hour -->
         <div class="package-card reveal">
-          <div class="package-card__name">חבילה בסיסית</div>
+          <div class="package-card__name">Basic package</div>
           <div class="package-card__title">Happy Hour</div>
           <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 שעות בחלל פרטי בלעדי</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה נשנושים קליל וטרי על הבר</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר חופשי: 2 סוגי בירות ויין איכותי</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מערכת סאונד, תאורה ומנהל אירוע</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 3 hours in an exclusive private space</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A light, fresh snack buffet at the bar</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open bar: 2 beers and quality wine</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Sound system, lighting and an event manager</li>
           </ul>
-          <button type="button" class="btn btn--outline js-book" data-plan="happyhour">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--outline js-book" data-plan="happyhour">Check availability</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪275</strong>
+            Per person <strong>₪275</strong>
           </div>
         </div>
 
-        <!-- גיבוש מחלקה -->
+        <!-- Team Bonding -->
         <div class="package-card package-card--featured reveal">
-          <span class="package-card__badge">הכי פופולרי</span>
-          <div class="package-card__name">חבילה רגילה</div>
-          <div class="package-card__title">גיבוש מחלקה</div>
+          <span class="package-card__badge">Most popular</span>
+          <div class="package-card__name">Standard package</div>
+          <div class="package-card__title">Team Bonding</div>
           <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 שעות בחלל פרטי</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה עשיר הכולל מנות חמות וקרות</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר משודרג עם 5 סוגי אלכוהול חופשי</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> פלייליסט מותאם אישית</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 hours in a private space</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A rich buffet with hot and cold dishes</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Upgraded open bar with 5 types of alcohol</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A custom playlist</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A dedicated event manager</li>
           </ul>
-          <button type="button" class="btn btn--fill js-book" data-plan="gibush">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--fill js-book" data-plan="gibush">Check availability</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪330</strong>
+            Per person <strong>₪330</strong>
           </div>
         </div>
 
-        <!-- מסיבת חברה -->
+        <!-- Company Party -->
         <div class="package-card reveal">
-          <div class="package-card__name">חבילה גדולה</div>
-          <div class="package-card__title">מסיבת חברה</div>
+          <div class="package-card__name">Large package</div>
+          <div class="package-card__title">Company Party</div>
           <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 שעות בחלל פרטי מורחב</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה פרימיום עשיר במיוחד</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר קוקטיילים חופשי עם מיקסולוגים</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> דיג'יי מקצועי לאורך כל האירוע</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> עיצוב חלל אישי וקוקטייל פתיחה</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 hours in an expanded private space</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> An extra-rich premium buffet</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open cocktail bar with mixologists</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A professional DJ throughout the event</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Custom space styling and a welcome cocktail</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> A dedicated event manager</li>
           </ul>
-          <button type="button" class="btn btn--outline js-book" data-plan="mesiba">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--outline js-book" data-plan="mesiba">Check availability</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪450</strong>
+            Per person <strong>₪450</strong>
           </div>
         </div>
 
         <!-- Premium full-width -->
         <div class="package-card package-card--premium reveal">
           <div>
-            <div class="package-card__name">מסלול פרימיום</div>
-            <div class="package-card__title">חוויה בהתאמה אישית מלאה</div>
+            <div class="package-card__name">Premium package</div>
+            <div class="package-card__title">A fully customized experience</div>
           </div>
           <div>
             <p style="color: var(--cream-dim); line-height: 1.65; margin-block-end: 1.5rem; font-size: 1rem;">
-              הפקה מאפס למאה. אנחנו בונים יחד איתכם חוויה ייחודית לחלוטין - אצלנו בחלל, אצלכם במשרד, או בכל לוקיישן שתבחרו. אנחנו מביאים את הצוות, הבר והאוכל, ומתפעלים את האירוע כולו כדי שתוכלו להגיע כאורחי VIP.
+              Production from the ground up. We build a one-of-a-kind experience with you — at our space, at your office, or any location you choose. We bring the team, the bar and the food, and run the whole event so you can show up as VIP guests.
             </p>
-            <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="width: fit-content;">לתיאום שיחת אפיון</a>
+            <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="width: fit-content;">Schedule a discovery call</a>
           </div>
         </div>
       </div>
@@ -2075,26 +2077,26 @@
   <section class="section-soft" id="gallery">
     <div class="wrap center">
       <div class="sec-head reveal">
-        <span class="label">גלריה</span>
-        <h2>הצצה לאירועים שלנו</h2>
-        <p>רגעים של גיבוש, אוכל טוב וצוותים שבאים ליהנות</p>
+        <span class="label">Gallery</span>
+        <h2>A peek at our events</h2>
+        <p>Moments of bonding, good food and teams that come to enjoy</p>
       </div>
 
       <div class="gallery__showcase reveal">
         <div class="gallery__row gallery__row--top">
-          <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" />
-          <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" />
-          <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" />
+          <img src="images/gallery/g01.jpg" alt="A moment from an event at Ezra" />
+          <img src="images/gallery/g02.jpg" alt="A moment from an event at Ezra" />
+          <img src="images/gallery/g03.jpg" alt="A moment from an event at Ezra" />
         </div>
-        <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="פתחו את הגלריה המלאה">
+        <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="Open the full gallery">
           <div class="gallery__row">
-            <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" />
-            <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" />
-            <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" />
+            <img src="images/gallery/g04.jpg" alt="A moment from an event at Ezra" />
+            <img src="images/gallery/g05.jpg" alt="A moment from an event at Ezra" />
+            <img src="images/gallery/g06.jpg" alt="A moment from an event at Ezra" />
           </div>
           <div class="gallery__fade">
             <span class="gallery__more">
-              <span>לכל הרגעים</span>
+              <span>See all moments</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
             </span>
           </div>
@@ -2104,44 +2106,44 @@
   </section>
 
   <!-- Gallery Modal -->
-  <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="גלריית תמונות - עזרא" hidden>
+  <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="Photo gallery - Ezra" hidden>
     <div class="gallery-modal__panel">
     <div class="gallery-modal__bar">
       <button class="gallery-modal__back" id="galleryClose" type="button">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        <span>חזרה לאתר</span>
+        <span>Back to site</span>
       </button>
-      <span class="gallery-modal__title">רגעים של גיבוש</span>
+      <span class="gallery-modal__title">Team moments</span>
     </div>
     <div class="gallery-modal__scroll">
       <div class="gallery-modal__grid">
-        <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g07.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g08.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g09.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g10.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g11.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g12.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g01.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g02.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g03.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g04.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g05.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g06.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g07.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g08.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g09.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g10.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g11.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g12.jpg" alt="A moment from an event at Ezra" loading="lazy" />
       </div>
     </div>
     </div>
   </div>
 
   <!-- Gallery lightbox (single enlarged photo) -->
-  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="תצוגת תמונה" hidden>
-    <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="סגירה">
+  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Image view" hidden>
+    <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="Close">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
-    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryLbPrev" type="button" aria-label="התמונה הקודמת">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
-    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryLbNext" type="button" aria-label="התמונה הבאה">
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryLbPrev" type="button" aria-label="Previous image">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryLbNext" type="button" aria-label="Next image">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </button>
     <img id="galleryLightboxImg" src="" alt="" />
   </div>
@@ -2152,16 +2154,16 @@
   <section id="process">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="label">איך מתחילים</span>
-        <h2>שישה שלבים פשוטים</h2>
+        <span class="label">How it works</span>
+        <h2>Six simple steps</h2>
         <div class="divider divider--center"></div>
-        <p>תהליך קצר ומהיר - מהרשמה עד חגיגה</p>
+        <p>A short, fast process — from booking to celebrating</p>
       </div>
 
       <div class="process-track">
         <!-- YOUR SIDE -steps 1-4 -->
         <div class="process-side process-side--you reveal">
-          <span class="process-side__tag">הצד שלך</span>
+          <span class="process-side__tag">Your side</span>
           <div class="steps steps--you">
             <!-- 2 connectors between steps 1-3 -->
             <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
@@ -2169,26 +2171,26 @@
 
             <div class="step">
               <div class="step__num"><span class="step__n">1</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="9" cy="14" r="1.3"/><circle cx="15" cy="14" r="1.3"/><path d="M7 18.5c.3-1.1 1-1.7 2-1.7M17 18.5c-.3-1.1-1-1.7-2-1.7"/></svg></span></div>
-              <h3>בוחרים מתי חוגגים ואת כמות האנשים</h3>
-              <p>סוגרים את כל התהליך על המקום ומקבלים הצעת מחיר מיד</p>
+              <h3>Pick your date and guest count</h3>
+              <p>Complete the whole thing on the spot and get a quote instantly</p>
             </div>
             <div class="step">
               <div class="step__num"><span class="step__n">2</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17c2.5-.5 3.5-9 5-9s1 6.5 2.5 6.5S12 9 13.5 9s1.2 4 3 4 2.5-1.3 3.5-1.5"/><path d="M3 21h18"/></svg></span></div>
-              <h3>אישור למייל וחתימת חוזה</h3>
-              <p>החוזה נשלח אליכם מיידית</p>
+              <h3>Email confirmation & contract signing</h3>
+              <p>The contract is sent to you immediately</p>
             </div>
             <div class="step step--bridge">
               <div class="step__num"><span class="step__n">3</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span></div>
-              <h3>סגירת קצוות</h3>
-              <p>שיחה עם מנהלת המכירות להסדרת פרטים אחרונים ותשלום</p>
-              <span class="step__bridge-tag">המעבר אלינו</span>
+              <h3>Tying up loose ends</h3>
+              <p>A call with our sales manager to settle final details and payment</p>
+              <span class="step__bridge-tag">Over to us</span>
             </div>
           </div>
         </div>
 
         <!-- OUR SIDE -steps 5-7 -->
         <div class="process-side process-side--us reveal">
-          <span class="process-side__tag">הצד שלנו</span>
+          <span class="process-side__tag">Our side</span>
           <div class="steps steps--us">
             <!-- 2 connectors between steps 5-7 -->
             <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
@@ -2196,18 +2198,18 @@
 
             <div class="step">
               <div class="step__num"><span class="step__n">4</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.2L18 9l-4.5 1.8L12 15l-1.5-4.2L6 9l4.5-1.8z"/><path d="M19 14.5l.7 1.9 1.9.6-1.9.8L19 20l-.7-2-1.9-.8 1.9-.6z"/></svg></span></div>
-              <h3>אנחנו מתכוננים לאירוע שלכם</h3>
-              <p>הצוות שלנו מארגן את החלל, הבר והאוכל במיוחד עבורכם</p>
+              <h3>We get ready for your event</h3>
+              <p>Our team sets up the space, the bar and the food just for you</p>
             </div>
             <div class="step step--party">
               <div class="step__num"><span class="step__n">5</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12 1.5 1.5 0 0 1-1.45 1.63h-.38a1.74 1.74 0 0 0-1.76 1.44L14 10"/></svg></span></div>
-              <h3>אתם חוגגים</h3>
-              <p>הפעם תורכם רק להנות עם הצוות, תשאירו לנו את כל הדאגות</p>
+              <h3>You celebrate</h3>
+              <p>This time your only job is to enjoy with your team — leave all the worries to us</p>
             </div>
             <div class="step step--happy">
               <div class="step__num"><span class="step__n">6</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 13.5 7.2 9.7a1.5 1.5 0 0 1 2.1-2.1l3.2 3.2"/><path d="M13.5 12 9.4 7.9a1.5 1.5 0 0 1 2.1-2.1l4.1 4.1"/><path d="M8.6 16.4c-1.8-1.8-2.8-3.7-3.1-5a1.4 1.4 0 0 1 2.3-1.3"/><path d="M16 10.2a1.5 1.5 0 0 1 2.2 2.1l-2.7 2.7c-1.9 1.9-4.4 2.3-6.4 1"/><path d="M18.5 5 20 3.5M20 8.5h2M16.5 3l.4-1.5"/></svg></span></div>
-              <h3>יוצרים זכרונות</h3>
-              <p>רגעים שהצוות לא ישכח, ומחמאות שאתם לא תפסיקו לקבל ביום שאחרי</p>
+              <h3>You make memories</h3>
+              <p>Moments your team won’t forget, and compliments you’ll keep getting the day after</p>
             </div>
           </div>
         </div>
@@ -2221,18 +2223,18 @@
   <section class="section-soft" id="reviews">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="label">המלצות</span>
-        <h2>מה אומרים עלינו</h2>
+        <span class="label">Reviews</span>
+        <h2>What people say about us</h2>
         <div class="divider divider--center"></div>
         <div class="rev-stars-lead">
-          <span class="rev-stars" aria-label="חמישה כוכבים">
+          <span class="rev-stars" aria-label="Five stars">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
           </span>
-          <span class="rev-lead-text">ביקורות אמיתיות מ‑Google</span>
+          <span class="rev-lead-text">Real reviews from Google</span>
         </div>
       </div>
     </div>
@@ -2240,7 +2242,7 @@
       <div class="rev-track" id="revTrack"></div>
     </div>
     <div class="wrap center">
-      <a class="btn btn--outline reveal" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>לקריאת הביקורות ב‑Google</a>
+      <a class="btn btn--outline reveal" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>Read the reviews on Google</a>
     </div>
   </section>
 
@@ -2251,27 +2253,27 @@
     <!-- REPLACE: drop the bottom-section background image here (set the url). -->
     <div class="contact__bg" style="background-image: url('images/contact-bg.jpg');"></div>
     <div class="wrap center">
-      <span class="label reveal">שלב אחרון</span>
-      <h2 class="reveal">שנסגור לכם תאריך?</h2>
-      <p class="contact__sub reveal">שלחו לנו הודעה עם כמות אנשים ותאריך משוער - ונחזור אליכם עם מחיר מפורט</p>
+      <span class="label reveal">Last step</span>
+      <h2 class="reveal">Shall we lock in your date?</h2>
+      <p class="contact__sub reveal">Send us a message with your guest count and an approximate date — and we’ll get back to you with a detailed quote</p>
 
       <div class="contact__btns reveal">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
 
       <div class="contact__social reveal">
-        <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="אינסטגרם">
+        <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
-        <a class="social-icon social-icon--wa" href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="וואטסאפ">
+        <a class="social-icon social-icon--wa" href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </a>
-        <a class="social-icon social-icon--mail" href="mailto:eylam@ezratlv.com" aria-label="שלחו מייל">
+        <a class="social-icon social-icon--mail" href="mailto:eylam@ezratlv.com" aria-label="Send an email">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </a>
       </div>
 
-      <p class="contact__note reveal">עובדים 24/7 - אפשר גם בצהריים</p>
+      <p class="contact__note reveal">Available 24/7 — afternoons too</p>
     </div>
   </section>
 
@@ -2279,17 +2281,17 @@
        FOOTER
   ============================================================ -->
   <footer class="footer">
-    <span class="footer__meta">אברבנאל 38, פלורנטין, תל אביב&nbsp;·&nbsp;@ezratlv</span><br />
-    עזרא תל אביב © 2026 - כל הזכויות שמורות
+    <span class="footer__meta">38 Abarbanel, Florentin, Tel Aviv&nbsp;·&nbsp;@ezratlv</span><br />
+    Ezra Tel Aviv © 2026 - All rights reserved
   </footer>
 
   <!-- ============================================================
        BOOKING WIZARD MODAL
   ============================================================ -->
-  <div class="book-modal" id="bookModal" role="dialog" aria-modal="true" aria-label="הזמנת אירוע" hidden>
+  <div class="book-modal" id="bookModal" role="dialog" aria-modal="true" aria-label="Book an event" hidden>
     <div class="book-modal__panel">
       <div class="book-bar">
-        <button class="book-bar__btn book-bar__btn--back" id="bookBack" type="button" aria-label="חזרה" hidden>
+        <button class="book-bar__btn book-bar__btn--back" id="bookBack" type="button" aria-label="Back" hidden>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <div class="book-steps" id="bookStepsNav">
@@ -2299,7 +2301,7 @@
           <span class="book-steps__line"></span>
           <span class="book-steps__dot" data-dot="3">3</span>
         </div>
-        <button class="book-bar__btn book-bar__btn--close" id="bookClose" type="button" aria-label="סגירה">
+        <button class="book-bar__btn book-bar__btn--close" id="bookClose" type="button" aria-label="Close">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>
       </div>
@@ -2309,57 +2311,57 @@
         <div class="book-step" data-step="1">
           <!-- 1a · date -->
           <div class="book-sub" id="bookDateView">
-            <h3 class="book-step__title">בחרו תאריך</h3>
-            <p class="book-step__sub">בחרו מסלול ואז יום פנוי</p>
+            <h3 class="book-step__title">Choose a date</h3>
+            <p class="book-step__sub">Pick a package, then an available day</p>
 
             <div class="book-plans" id="bookPlans">
-              <button class="book-plan" type="button" data-plan="happyhour">Happy Hour <small>3 שעות</small></button>
-              <button class="book-plan" type="button" data-plan="gibush">גיבוש מחלקה <small>5 שעות</small></button>
-              <button class="book-plan" type="button" data-plan="mesiba">מסיבת חברה <small>5 שעות</small></button>
+              <button class="book-plan" type="button" data-plan="happyhour">Happy Hour <small>3 hours</small></button>
+              <button class="book-plan" type="button" data-plan="gibush">Team Bonding <small>5 hours</small></button>
+              <button class="book-plan" type="button" data-plan="mesiba">Company Party <small>5 hours</small></button>
             </div>
 
             <div class="cal" id="bookCal">
               <div class="cal__head">
-                <button class="cal__nav" id="bookCalPrev" type="button" aria-label="חודש קודם">
+                <button class="cal__nav" id="bookCalPrev" type="button" aria-label="Previous month">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
                 <span class="cal__month" id="bookCalMonth"></span>
-                <button class="cal__nav" id="bookCalNext" type="button" aria-label="חודש הבא">
+                <button class="cal__nav" id="bookCalNext" type="button" aria-label="Next month">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
               </div>
               <div class="cal__grid" id="bookCalGrid"></div>
               <div class="cal__legend">
-                <span><i class="cal__dot cal__dot--free"></i> פנוי</span>
-                <span><i class="cal__dot cal__dot--booked"></i> תפוס</span>
+                <span><i class="cal__dot cal__dot--free"></i> Available</span>
+                <span><i class="cal__dot cal__dot--booked"></i> Booked</span>
               </div>
             </div>
           </div>
 
           <!-- 1b · time slot -->
           <div class="book-sub" id="bookSlotView" hidden>
-            <h3 class="book-step__title">בחרו שעה</h3>
+            <h3 class="book-step__title">Choose a time</h3>
             <button class="book-back-link" id="bookChangeDate" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-              שינוי תאריך
+              Change date
             </button>
             <div class="book-chosen" id="bookChosenDate"></div>
             <div class="book-slots__head" id="bookSlotsHead"></div>
             <div class="book-slots__grid" id="bookSlotsGrid"></div>
-            <button class="btn btn--fill book-next" id="bookNext1" type="button" disabled>המשך</button>
+            <button class="btn btn--fill book-next" id="bookNext1" type="button" disabled>Continue</button>
           </div>
         </div>
 
         <!-- STEP 2 - interactive price graph -->
         <div class="book-step" data-step="2" hidden>
-          <h3 class="book-step__title">כמה אנשים בערך?</h3>
-          <p class="book-step__sub">גררו את הסליידר או הקלידו מספר - ההערכה מתעדכנת בזמן אמת</p>
+          <h3 class="book-step__title">Roughly how many people?</h3>
+          <p class="book-step__sub">Drag the slider or type a number — the estimate updates in real time</p>
 
           <div class="book-summary" id="bookSummary2"></div>
 
           <div class="book-price" aria-live="polite">
             <div class="book-price__total" id="bookTotal"> - </div>
-            <div class="book-price__label">סה״כ משוער · <b id="bookPerHead"> - </b> לראש</div>
+            <div class="book-price__label">Estimated total · <b id="bookPerHead"> - </b> per person</div>
           </div>
 
           <div class="glass-wrap" id="bookGlassWrap">
@@ -2394,63 +2396,63 @@
             </svg>
             <!-- rising bubbles are generated + animated by JS -->
           </div>
-          <div class="glass-count"><b id="bookGuestsOut">20</b> אורחים</div>
+          <div class="glass-count"><b id="bookGuestsOut">20</b> guests</div>
 
-          <input type="range" id="bookRange" class="book-range" min="20" max="50" step="1" value="20" aria-label="כמות אורחים" />
+          <input type="range" id="bookRange" class="book-range" min="20" max="50" step="1" value="20" aria-label="Number of guests" />
 
           <div class="book-manual">
-            <label for="bookGuests">מספר מדויק</label>
-            <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="20" aria-label="כמות אורחים מדויקת" />
-            <span>אורחים</span>
+            <label for="bookGuests">Exact number</label>
+            <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="20" aria-label="Exact number of guests" />
+            <span>guests</span>
           </div>
 
-          <button class="btn btn--fill book-next" id="bookNext2" type="button">המשך לפרטים</button>
+          <button class="btn btn--fill book-next" id="bookNext2" type="button">Continue to details</button>
         </div>
 
         <!-- STEP 3 - details form -->
         <div class="book-step" data-step="3" hidden>
-          <h3 class="book-step__title">הפרטים שלכם</h3>
-          <p class="book-step__sub">נשלח אליכם הצעה וחוזה לחתימה דיגיטלית</p>
+          <h3 class="book-step__title">Your details</h3>
+          <p class="book-step__sub">We’ll send you a quote and a contract for digital signing</p>
 
           <div class="book-summary" id="bookSummary3"></div>
 
           <form class="book-form" id="bookForm" style="margin-block-start:1.2rem;">
             <div class="book-field--row">
               <div class="book-field">
-                <label for="bfName">שם מלא</label>
+                <label for="bfName">Full name</label>
                 <input id="bfName" name="name" type="text" autocomplete="name" required />
               </div>
               <div class="book-field">
-                <label for="bfCompany">חברה</label>
+                <label for="bfCompany">Company</label>
                 <input id="bfCompany" name="company" type="text" autocomplete="organization" />
               </div>
             </div>
             <div class="book-field--row">
               <div class="book-field">
-                <label for="bfPhone">טלפון</label>
+                <label for="bfPhone">Phone</label>
                 <input id="bfPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
               </div>
               <div class="book-field">
-                <label for="bfEmail">אימייל</label>
+                <label for="bfEmail">Email</label>
                 <input id="bfEmail" name="email" type="email" inputmode="email" autocomplete="email" required />
               </div>
             </div>
             <div class="book-field">
-              <label for="bfAddress">כתובת</label>
+              <label for="bfAddress">Address</label>
               <input id="bfAddress" name="address" type="text" autocomplete="street-address" />
             </div>
             <div class="book-field">
-              <label for="bfNotes">משהו שכדאי שנדע? (לא חובה)</label>
+              <label for="bfNotes">Anything we should know? (optional)</label>
               <textarea id="bfNotes" name="notes" rows="2"></textarea>
             </div>
             <label class="book-check" for="bfWantsCall">
               <input type="checkbox" id="bfWantsCall" name="wantsCall" />
               <span class="book-check__text">
-                <b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>
-                <span>סמנו ונחזור אליכם לתיאום שיחה - בלי לחתום עכשיו</span>
+                <b>I’d like to talk to the sales manager before signing</b>
+                <span>Check this and we’ll reach out to schedule a call — no signing now</span>
               </span>
             </label>
-            <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
+            <button class="btn btn--fill book-next" id="bookSubmit" type="submit">Send request</button>
           </form>
         </div>
 
@@ -2460,16 +2462,16 @@
             <div class="book-done__icon">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h3 id="bookDoneTitle">הבקשה נשלחה!</h3>
-            <p id="bookDoneMsg">קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.</p>
+            <h3 id="bookDoneTitle">Request sent!</h3>
+            <p id="bookDoneMsg">We’ve got your details. A quote and contract for digital signing are on their way, and once you sign, our sales manager will reach out to finalize.</p>
             <p id="bookDoneSummary" style="color:var(--gold);"></p>
-            <button class="btn btn--outline book-next" id="bookDoneClose" type="button" style="max-width:240px; margin-inline:auto; margin-block-start:1.4rem;">סגירה</button>
+            <button class="btn btn--outline book-next" id="bookDoneClose" type="button" style="max-width:240px; margin-inline:auto; margin-block-start:1.4rem;">Close</button>
           </div>
         </div>
       </div>
 
       <div class="book-cta-foot" id="bookTalkFoot" hidden>
-        <button type="button" class="book-talk-btn" id="bookTalkBtn">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+        <button type="button" class="book-talk-btn" id="bookTalkBtn">Prefer to talk before booking? Leave your details and we’ll get back to you</button>
       </div>
     </div>
   </div>
@@ -2491,7 +2493,7 @@
       const setOpen = (open) => {
         nav.setAttribute('data-menu', open ? 'open' : 'closed');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger.setAttribute('aria-label', open ? 'סגירת תפריט' : 'פתיחת תפריט');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         document.body.style.overflow = open ? 'hidden' : '';
       };
 
@@ -2670,8 +2672,8 @@
       document.addEventListener('keydown', e => {
         if (lightbox && !lightbox.hidden) {
           if (e.key === 'Escape')     { closeLightbox(); return; }
-          if (e.key === 'ArrowLeft')  { lbStep(1);  return; }   // RTL: left = next
-          if (e.key === 'ArrowRight') { lbStep(-1); return; }
+          if (e.key === 'ArrowLeft')  { lbStep(-1); return; }   // LTR: left = previous
+          if (e.key === 'ArrowRight') { lbStep(1);  return; }
           return;
         }
         if (e.key === 'Escape' && !modal.hidden) close();
@@ -2687,8 +2689,8 @@
       //    Update perHead / hours here; the calculator and time slots follow.
       const PLANS = {
         happyhour: { label: 'Happy Hour',  hours: 3, perHead: 275, minGuests: 20 },
-        gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, minGuests: 20 },
-        mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, minGuests: 20 },
+        gibush:    { label: 'Team Bonding', hours: 5, perHead: 330, minGuests: 20 },
+        mesiba:    { label: 'Company Party',  hours: 5, perHead: 450, minGuests: 20 },
       };
       const SLOTS = {
         3: ['09:00–12:00', '13:00–16:00', '17:00–20:00', '21:00–00:00'],
@@ -2696,8 +2698,8 @@
       };
       const CURRENCY = '₪';
 
-      const MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-      const DOW = ['א','ב','ג','ד','ה','ו','ש'];
+      const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       const today = new Date(); today.setHours(0, 0, 0, 0);
       const pad = n => String(n).padStart(2, '0');
       const key = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
@@ -2759,7 +2761,7 @@
       const talkBtn  = document.getElementById('bookTalkBtn');
 
       const fmt = n => CURRENCY + Math.round(n).toLocaleString('en-US');
-      const humanDate = d => (d.getDay() === 6 ? 'שבת' : 'יום ' + DOW[d.getDay()]) + ', ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
+      const humanDate = d => DOW[d.getDay()] + ', ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
       const summaryText = () => {
         const parts = ['<span>' + PLANS[state.plan].label + '</span>'];
         if (state.date) parts.push('<b>' + humanDate(state.date) + '</b>');
@@ -2800,8 +2802,8 @@
           const d = new Date(view.getFullYear(), view.getMonth(), day);
           const cell = document.createElement('button'); cell.type = 'button'; cell.className = 'cal__day'; cell.textContent = day;
           if (d < today) { cell.classList.add('is-past'); cell.disabled = true; }
-          else if (BOOKED.includes(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - תפוס'); }
-          else { cell.setAttribute('aria-label', day + ' - פנוי'); cell.addEventListener('click', () => pickDate(d, cell)); }
+          else if (BOOKED.includes(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - Booked'); }
+          else { cell.setAttribute('aria-label', day + ' - Available'); cell.addEventListener('click', () => pickDate(d, cell)); }
           if (state.date && key(d) === key(state.date)) cell.classList.add('is-selected');
           gridEl.appendChild(cell);
         }
@@ -2825,11 +2827,11 @@
         const list = SLOTS[plan.hours] || [];
         const taken = takenSlots(key(state.date), list.length);
         chosenEl.innerHTML = '<b>' + humanDate(state.date) + '</b>';
-        slotsHead.textContent = 'חלונות של ' + plan.hours + ' שעות';
+        slotsHead.textContent = plan.hours + '-hour time slots';
         slotsGrid.innerHTML = '';
         list.forEach((label, i) => {
           const b = document.createElement('button'); b.type = 'button'; b.className = 'slot'; b.textContent = label;
-          if (taken.has(i)) { b.classList.add('is-taken'); b.disabled = true; b.setAttribute('aria-label', label + ' - תפוס'); }
+          if (taken.has(i)) { b.classList.add('is-taken'); b.disabled = true; b.setAttribute('aria-label', label + ' - Booked'); }
           else b.addEventListener('click', () => {
             state.slot = label;
             slotsGrid.querySelectorAll('.slot.is-selected').forEach(s => s.classList.remove('is-selected'));
@@ -2991,8 +2993,8 @@
         console.log('[booking request]', data);
         // tailor the confirmation to whether they asked for a call first
         document.getElementById('bookDoneMsg').textContent = wantsCall
-          ? 'קיבלנו את הפרטים. מנהל המכירות שלנו יחזור אליכם בהקדם לשיחה, ורק אחריה נשלח את ההצעה והחוזה - בלי התחייבות לחתום עכשיו.'
-          : 'קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.';
+          ? 'We’ve got your details. Our sales manager will reach out soon for a call, and only after that we’ll send the quote and contract — no commitment to sign now.'
+          : 'We’ve got your details. A quote and contract for digital signing are on their way, and once you sign, our sales manager will reach out to finalize.';
         doneSummary.textContent = [plan.label, state.date ? humanDate(state.date) : null, state.slot || null].filter(Boolean).join(' · ');
         goto(4);
       });
@@ -3246,12 +3248,12 @@
     ============================================================ */
     (function () {
       const REVIEWS = [
-        { name: "Melissa Menashe", role: "יום הולדת",  stars: 5, text: "מקום מושלם! חגגתי שם יום הולדת עם 30 חברים בערך, אווירה מהממת, נוח, יפה, יש מקום לרקוד ולעמדת דיג'יי. הבעלים שירותיים, אמינים והפכו את החוויה למושלמת. תודה!! ממליצה ממש" },
-        { name: "Liem Shayo",      role: "לקוח קבוע",   stars: 5, text: "תמיד נותנים אווירה מדהימה ושירות מעולה, עסק משפחתי שרואים שמושקעת בו הרבה נשמה!" },
-        { name: "Uri Kosman",      role: "אירוע פרטי",  stars: 5, text: "מקום שמייצר בדיוק את החוויה שמצפים לה מאירוע פרטי מתאים לאופי שלך, קוקטיילים ברמה גבוהה מאוד שקשה למצוא בארץ, אוכל שפשוט חוויה ובכללי מקום שפשוט עושה כיף וחוויה שזוכרים" },
-        { name: "Noam Avraham",    role: "אירוע פרטי",  stars: 5, text: "מקום שהוא כולו חוויה ושמחה. בנצי ורום מארחים יוצאי דופן וענו על כל בקשותיי. מומלץ מאוד" },
-        { name: "ניר פרוסט",       role: "לקוח חוזר",   stars: 5, text: "עשיתי מספר אירועים אצל רום, וזה פשוט המקום המושלם. הצוות חברתי וכיפי, האוכל מעולה, האווירה טובה ומייצרת משהו מיוחד. אל תחשבו פעמיים." },
-        { name: "Ella Tagar",      role: "יום הולדת",   stars: 5, text: "סגרתי אירוע פרטי ליום הולדת, נתחיל קודם כל מעילם המושלמת שדאגה לכל פרט בהכנות. לא הפסקתי לשגע אותה והיא לא התייאשה ממני, פירטה לי הכל לפרטי פרטים ודאגה תמיד לוודא שאנחנו באותו ראש! הגענו מוקדם לסדר וישר קיבלו אותנו בפנים חמות. המקום היה בול בגודל, הפיצות היו לא נורמליות והאוכל בכללי היה מדהים. אפילו שנה אחרי האירוע, כל פעם שעברתי שם ישר זיהו אותי ונתנו תחושה של בית. מתה כבר לחזור לעוד אירועים!!!" }
+        { name: "Melissa Menashe", role: "Birthday",  stars: 5, text: "Perfect place! I celebrated a birthday there with about 30 friends — amazing atmosphere, comfortable, beautiful, room to dance and a DJ booth. The owners are attentive, trustworthy, and made the whole experience perfect. Thank you!! Highly recommend." },
+        { name: "Liem Shayo",      role: "Regular",   stars: 5, text: "Always an amazing atmosphere and excellent service — a family business you can tell has a lot of soul invested in it!" },
+        { name: "Uri Kosman",      role: "Private event",  stars: 5, text: "A place that creates exactly the experience you’d hope for from a private event, tailored to your style. Cocktails at a really high level that are hard to find in this country, food that’s simply an experience, and overall a place that’s just fun and a memory you keep." },
+        { name: "Noam Avraham",    role: "Private event",  stars: 5, text: "A place that’s pure experience and joy. Bentzi and Rom are exceptional hosts and met every request. Highly recommended." },
+        { name: "Nir Frost",       role: "Returning client",   stars: 5, text: "I’ve done several events at Rom’s place, and it’s simply the perfect spot. The team is friendly and fun, the food is excellent, the atmosphere is great and creates something special. Don’t think twice." },
+        { name: "Ella Tagar",      role: "Birthday",   stars: 5, text: "I booked a private birthday event. First of all — Eilam was perfect, she took care of every detail in the prep. I never stopped pestering her and she never got fed up, walked me through everything in full detail and always made sure we were on the same page! We arrived early to set up and were welcomed warmly right away. The place was exactly the right size, the pizzas were unreal and the food overall was amazing. Even a year after the event, every time I passed by they recognized me and made me feel at home. Can’t wait to come back for more events!!!" }
       ];
 
       const track = document.getElementById('revTrack');
@@ -3264,13 +3266,13 @@
       function card(r) {
         const n = Math.max(1, Math.min(5, r.stars || 5));
         return '<article class="rev-card">' +
-          '<span class="rev-card__stars" aria-label="' + n + ' כוכבים">' + STAR.repeat(n) + '</span>' +
+          '<span class="rev-card__stars" aria-label="' + n + ' stars">' + STAR.repeat(n) + '</span>' +
           '<p class="rev-card__text">' + esc(r.text) + '</p>' +
           '<div class="rev-card__person">' +
             '<span class="rev-card__avatar" aria-hidden="true">' + esc(initial(r.name)) + '</span>' +
             '<div><div class="rev-card__name">' + esc(r.name) + '</div>' +
             '<div class="rev-card__role">' + esc(r.role) + '</div></div>' +
-            '<span class="rev-card__g" aria-label="ביקורת מ-Google">G</span>' +
+            '<span class="rev-card__g" aria-label="Review from Google">G</span>' +
           '</div></article>';
       }
 
