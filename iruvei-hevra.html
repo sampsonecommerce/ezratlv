@@ -1719,7 +1719,6 @@
     /* no gap here: each card carries its own trailing margin so the two duplicated
        halves are exactly equal width -> translateX(-50%) wraps seamlessly */
     .rev-track { display: flex; width: max-content; animation: revScroll 52s linear infinite; }
-    .rev-marquee:hover .rev-track { animation-play-state: paused; }
     @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
     .rev-card {
       flex: 0 0 300px; max-width: 300px; margin-inline-end: 1.1rem;
