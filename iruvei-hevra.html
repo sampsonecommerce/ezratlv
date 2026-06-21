@@ -2180,7 +2180,7 @@
           <div class="glass-wrap" id="bookGlassWrap">
             <svg class="glass-svg" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
-                <clipPath id="glassClip"><path d="M16,30 C26,90 114,90 124,30 C108,42 32,42 16,30 Z"/></clipPath>
+                <clipPath id="glassClip"><path d="M16,30 A54,45 0 0 1 124,30 Z"/></clipPath>
                 <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stop-color="#f6dd97"/>
                   <stop offset="1" stop-color="#bd8a30"/>
@@ -2196,7 +2196,7 @@
               <rect x="67" y="78" width="6" height="80" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.5)" stroke-width="1.2"/>
               <ellipse cx="70" cy="162" rx="30" ry="7" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.55)" stroke-width="1.6"/>
               <!-- bowl body (behind liquid) -->
-              <path d="M16,30 C26,90 114,90 124,30" fill="url(#coupeGlass)"/>
+              <path d="M16,30 A54,45 0 0 1 124,30 Z" fill="url(#coupeGlass)"/>
               <!-- liquid + bubbles, clipped to the bowl interior -->
               <g clip-path="url(#glassClip)">
                 <rect id="bookLiquid" x="14" y="50" width="112" height="90" fill="url(#liquidGrad)"/>
@@ -2204,10 +2204,10 @@
                 <g id="bookBubbles"></g>
               </g>
               <!-- bowl outline + rim (over liquid) -->
-              <path d="M16,30 C26,90 114,90 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M16,30 A54,45 0 0 1 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
               <ellipse cx="70" cy="30" rx="54" ry="10" fill="rgba(255,255,255,0.03)" stroke="rgba(240,235,224,0.6)" stroke-width="2.2"/>
               <!-- 3D specular highlight on the bowl -->
-              <path d="M30,37 C28,53 36,67 52,75" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M26,35 C22,51 31,67 50,75" fill="none" stroke="#ffffff" stroke-opacity="0.42" stroke-width="2.4" stroke-linecap="round"/>
             </svg>
             <!-- rising bubbles are generated + animated by JS -->
           </div>
@@ -2502,10 +2502,11 @@
       const RANGE_MIN = 20, RANGE_MAX = 50;
       // coupe interior in SVG units: the liquid surface travels between these as guests rise
       // (LOW = base pour at 20 guests, HIGH = nearly full at 50)
-      const LIQ_LOW = 60, LIQ_HIGH = 34;
-      // bowl geometry for sizing the elliptical surface + keeping bubbles inside
-      const BOWL_RIM_Y = 30, BOWL_BOT_Y = 75, BOWL_HALF = 54;
-      const halfWidth = y => Math.max(0, BOWL_HALF * (BOWL_BOT_Y - y) / (BOWL_BOT_Y - BOWL_RIM_Y));
+      const LIQ_LOW = 63, LIQ_HIGH = 37;
+      // bowl is a half-ellipse; exact width at any depth keeps the surface + bubbles inside the walls
+      const BOWL_TOP_Y = 30, BOWL_RX = 54, BOWL_RY = 45;
+      const BOWL_BOT_Y = BOWL_TOP_Y + BOWL_RY;
+      const halfWidth = y => { const t = (y - BOWL_TOP_Y) / BOWL_RY; return t >= 1 ? 0 : BOWL_RX * Math.sqrt(Math.max(0, 1 - t * t)); };
       const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const perHeadEl = document.getElementById('bookPerHead');
       const totalEl   = document.getElementById('bookTotal');
@@ -2617,7 +2618,7 @@
       }
       function seedBubble(b) {
         b.y  = BOWL_BOT_Y - 1 - Math.random() * 4;
-        b.x  = 70 + (Math.random() - 0.5) * halfWidth(b.y) * 1.1;
+        b.x  = 70 + (Math.random() - 0.5) * halfWidth(b.y) * 0.8;
         b.vy = 0.22 + Math.random() * 0.45;
         b.r  = 0.7 + Math.random() * 1.2;
         b.drift = 0.3 + Math.random() * 0.6;
@@ -2669,7 +2670,7 @@
         liqSurfaceY = liqY;
         liquidEl.setAttribute('y', liqY);
         liquidTopEl.setAttribute('cy', liqY);
-        liquidTopEl.setAttribute('rx', (halfWidth(liqY) + 2).toFixed(1));
+        liquidTopEl.setAttribute('rx', (halfWidth(liqY) - 1.5).toFixed(1));
         bubbleTarget = Math.round(3 + f * 13);   // 3 bubbles at 20 guests → 16 at 50
         perHeadEl.textContent = fmt(plan.perHead);
         totalEl.textContent = fmt(plan.perHead * gg);
