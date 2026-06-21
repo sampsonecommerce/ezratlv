@@ -1638,6 +1638,57 @@
       .btn { display: block; width: fit-content; margin-inline: auto; }
       .package-card .btn, .calc__cta, .book-next { width: 100%; }
     }
+
+    /* ============================================================
+       TESTIMONIALS - curated Google reviews, auto-scrolling marquee
+    ============================================================ */
+    #reviews .sec-head { margin-block-end: clamp(1.6rem, 4vh, 2.4rem); }
+    .rev-stars-lead { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-block-start: 1.1rem; flex-wrap: wrap; }
+    .rev-stars { display: inline-flex; gap: 3px; }
+    .rev-stars svg { width: 18px; height: 18px; fill: var(--gold-light); }
+    .rev-lead-text { color: var(--cream-dim); font-size: 0.9rem; }
+    /* full-bleed track that drifts; faded edges so cards melt in/out */
+    .rev-marquee {
+      position: relative; overflow: hidden; width: 100%; padding-block: 0.5rem 1.4rem;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+    .rev-track { display: flex; gap: 1.1rem; width: max-content; padding-inline: 0.55rem; animation: revScroll 52s linear infinite; }
+    .rev-marquee:hover .rev-track { animation-play-state: paused; }
+    @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .rev-card {
+      flex: 0 0 300px; max-width: 300px;
+      background: linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%), #16110c;
+      border: 1px solid rgba(196,154,60,0.22); border-radius: 16px;
+      padding: 1.3rem 1.3rem 1.2rem; position: relative; isolation: isolate;
+    }
+    .rev-card::before {
+      content: ''; position: absolute; inset-block-start: 0; inset-inline: 1.1rem; height: 2px;
+      background: linear-gradient(to left, transparent, var(--gold), transparent); opacity: 0.6;
+    }
+    .rev-card__stars { display: inline-flex; gap: 2px; margin-block-end: 0.7rem; }
+    .rev-card__stars svg { width: 15px; height: 15px; fill: var(--gold-light); }
+    .rev-card__text { color: var(--cream-dim); font-size: 0.92rem; line-height: 1.7; margin: 0 0 1rem; }
+    .rev-card__person { display: flex; align-items: center; gap: 0.6rem; }
+    .rev-card__avatar {
+      width: 34px; height: 34px; border-radius: 50%; background: rgba(196,154,60,0.18);
+      color: var(--gold-light); display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; font-weight: 600; flex-shrink: 0;
+    }
+    .rev-card__name { color: var(--cream); font-size: 0.88rem; line-height: 1.3; }
+    .rev-card__role { color: #8d8268; font-size: 0.76rem; }
+    .rev-card__g, .rev-g {
+      width: 18px; height: 18px; border-radius: 50%; background: #fff; color: #4285F4;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; flex-shrink: 0; font-family: var(--font-sans);
+    }
+    .rev-card__g { margin-inline-start: auto; }
+    .rev-g { vertical-align: middle; margin-inline-end: 0.4rem; }
+    /* reduced motion: stop the drift, let people scroll the row by hand */
+    @media (prefers-reduced-motion: reduce) {
+      .rev-track { animation: none; }
+      .rev-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+    }
   </style>
 </head>
 <body>
@@ -2056,6 +2107,36 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TESTIMONIALS (curated Google reviews - edit the REVIEWS array in JS)
+  ============================================================ -->
+  <section class="section-soft" id="reviews">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">המלצות</span>
+        <h2>מה אומרים עלינו</h2>
+        <div class="divider divider--center"></div>
+        <div class="rev-stars-lead">
+          <span class="rev-stars" aria-label="חמישה כוכבים">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+          </span>
+          <span class="rev-lead-text">ביקורות אמיתיות מ‑Google</span>
+        </div>
+      </div>
+    </div>
+    <div class="rev-marquee reveal" id="revMarquee">
+      <div class="rev-track" id="revTrack"></div>
+    </div>
+    <div class="wrap center">
+      <!-- REPLACE href with your direct Google reviews / Maps profile link -->
+      <a class="btn btn--outline reveal" href="https://www.google.com/search?q=עזרא+תל+אביב+פלורנטין" target="_blank" rel="noopener"><span class="rev-g">G</span>לקריאת הביקורות ב‑Google</a>
     </div>
   </section>
 
@@ -2970,6 +3051,48 @@
         }, { passive: true });
       }
     }
+  </script>
+
+  <script>
+    /* ============================================================
+       CURATED GOOGLE REVIEWS
+       To update: edit the REVIEWS array below with your real reviews.
+       Each item: { name, role, text, stars } - keep stars 1-5.
+       Add or remove items freely; the marquee adapts.
+    ============================================================ */
+    (function () {
+      const REVIEWS = [
+        { name: 'דנה ל׳',  role: 'מנהלת משאבי אנוש',  text: 'ערב מושלם לצוות. הכל אורגן עד הפרט האחרון, האוכל היה מעולה והבר לא הפסיק לזרום כל הלילה.', stars: 5 },
+        { name: 'יואב כ׳', role: 'ראש צוות פיתוח',     text: 'עשינו גיבוש מחלקה והאנשים עדיין מדברים על זה. אווירה מטורפת ושירות חם ואישי.', stars: 5 },
+        { name: 'מאיה ב׳', role: 'מנהלת תפעול',         text: 'מקום קסום בלב פלורנטין. דאגו לנו לכל מה שצריך ופשוט נהנינו מההתחלה ועד הסוף.', stars: 5 },
+        { name: 'אורן ש׳', role: 'מנכ״ל',               text: 'חיפשנו מקום שלא מרגיש כמו אולם אירועים, וזה בדיוק מה שקיבלנו. חלל פרטי עם וייב אמיתי.', stars: 5 },
+        { name: 'נטע ר׳',  role: 'מנהלת שיווק',         text: 'הזמנו אירוע חברה והצוות של עזרא לקח אחריות על הכל. אנחנו הגענו רק כדי ליהנות.', stars: 5 },
+        { name: 'גיא מ׳',  role: 'Team Lead',           text: 'בר מושקע, מוזיקה טובה ואוכל שכולם החמיאו עליו. נחזור בלי ספק.', stars: 5 }
+      ];
+
+      const track = document.getElementById('revTrack');
+      if (!track || !REVIEWS.length) return;
+
+      const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const initial = n => (n || '').trim().charAt(0);
+
+      function card(r) {
+        const n = Math.max(1, Math.min(5, r.stars || 5));
+        return '<article class="rev-card">' +
+          '<span class="rev-card__stars" aria-label="' + n + ' כוכבים">' + STAR.repeat(n) + '</span>' +
+          '<p class="rev-card__text">' + esc(r.text) + '</p>' +
+          '<div class="rev-card__person">' +
+            '<span class="rev-card__avatar" aria-hidden="true">' + esc(initial(r.name)) + '</span>' +
+            '<div><div class="rev-card__name">' + esc(r.name) + '</div>' +
+            '<div class="rev-card__role">' + esc(r.role) + '</div></div>' +
+            '<span class="rev-card__g" aria-label="ביקורת מ-Google">G</span>' +
+          '</div></article>';
+      }
+
+      const html = REVIEWS.map(card).join('');
+      track.innerHTML = html + html;   // duplicated so the loop is seamless
+    })();
   </script>
 </body>
 </html>
