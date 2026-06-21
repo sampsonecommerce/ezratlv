@@ -481,6 +481,81 @@
       margin-block-start: 2.4rem;
     }
 
+    /* ── Culinary numbered cards (ported from iruvei-hevra vibe cards) ── */
+    .vibe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.4vw, 1.8rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); text-align: start; }
+    .vibe-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%), #16110c;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: clamp(1.8rem, 2.6vw, 2.4rem) clamp(1.6rem, 2.4vw, 2rem) clamp(2rem, 3vw, 2.4rem);
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+    }
+    .vibe-card::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline: 0;
+      height: 2px;
+      background: linear-gradient(to left, transparent, var(--gold), #f5d98a, var(--gold), transparent);
+      opacity: 0.55;
+      transition: opacity 0.45s var(--ease);
+    }
+    .vibe-card:hover { transform: translateY(-6px); border-color: rgba(196,154,60,0.55); box-shadow: 0 24px 50px -20px rgba(0,0,0,0.7); }
+    .vibe-card:hover::before { opacity: 1; }
+    .vibe-card__index {
+      font-family: 'Pliant', var(--font-serif);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      direction: ltr;
+      unicode-bidi: embed;
+      opacity: 0.85;
+    }
+    .vibe-card__icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-block: 1.1rem 1.3rem;
+      background: linear-gradient(145deg, rgba(196,154,60,0.18), rgba(196,154,60,0.04));
+      border: 1px solid rgba(196,154,60,0.3);
+      color: var(--gold);
+      transition: transform 0.45s var(--ease);
+    }
+    .vibe-card:hover .vibe-card__icon { transform: scale(1.08) rotate(-3deg); }
+    .vibe-card__icon svg { width: 26px; height: 26px; }
+    .vibe-card__title { font-size: clamp(1.55rem, 2.1vw, 1.9rem); font-weight: 600; color: var(--cream); margin-block-end: 0.85rem; font-family: var(--font-serif); line-height: 1.1; }
+    .vibe-card__body  { font-size: 1rem; color: var(--cream-dim); line-height: 1.7; }
+    .vibe-card__media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+      transform: scale(1.02);
+      transition: transform 0.6s var(--ease);
+      pointer-events: none;
+    }
+    .vibe-card__media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(165deg, rgba(18,13,9,0.5) 0%, rgba(18,13,9,0.62) 60%, rgba(18,13,9,0.74) 100%);
+      transition: background 0.5s var(--ease);
+    }
+    .vibe-card:hover .vibe-card__media { transform: scale(1.08); }
+    .vibe-card:hover .vibe-card__media::after { background: linear-gradient(165deg, rgba(18,13,9,0.4) 0%, rgba(18,13,9,0.5) 60%, rgba(18,13,9,0.62) 100%); }
+    .vibe-card__title, .vibe-card__body { text-shadow: 0 1px 10px rgba(0,0,0,0.65); }
+    .vibe-card__index, .vibe-card__icon, .vibe-card__title, .vibe-card__body { position: relative; z-index: 1; }
+    @media (max-width: 820px) { .vibe-grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+
     /* ============================================================
        BAR (asymmetric)
     ============================================================ */
@@ -517,25 +592,40 @@
     .bar__cards {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      align-items: stretch;          /* both cards take the same height */
       gap: 1.2rem;
       margin-block: 0.5rem 2rem;
     }
     .bar-card {
       background: #1e1812;
+      border: 1px solid var(--line);
       border-block-start: 2px solid var(--gold);
-      border-radius: 3px;
-      padding: 1.8rem 1.6rem;
+      border-radius: 12px;
+      padding: 2rem 1.6rem;
+      text-align: center;
+      /* top-aligned identical rows → titles share one line, bodies share one line */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.25), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
     }
+    .bar-card:hover { border-color: rgba(196,154,60,0.6); box-shadow: 0 26px 50px -22px rgba(0,0,0,0.75), 0 0 32px -12px rgba(196,154,60,0.45); }
     .bar-card .label { margin-block-end: 0.9rem; }
     .bar-card__title {
       font-size: clamp(1.5rem, 2.4vw, 1.9rem);
       font-weight: 600;
-      margin-block-end: 1rem;
+      margin-block-end: 0.9rem;
+      white-space: nowrap;           /* keep titles to one line so both align */
     }
     .bar-card__body {
       color: var(--cream-dim);
       font-size: 0.98rem;
       line-height: 1.65;
+      max-width: 26ch;
+      margin-inline: auto;
     }
     .bar__includes {
       text-align: center;
@@ -617,7 +707,7 @@
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0;
       padding: 0.55rem 1.1rem;
       border: 1px solid var(--line);
       border-radius: 100px;
@@ -625,7 +715,23 @@
       font-weight: 400;
       color: var(--cream);
       background: rgba(196,154,60,0.07);
+      transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
     }
+    .pill__check {
+      width: 0; height: 18px; flex-shrink: 0;
+      color: var(--gold);
+      opacity: 0; transform: scale(0.4); margin-inline-end: 0;
+      transition: opacity 0.4s var(--ease), transform 0.45s var(--ease), width 0.4s var(--ease), margin-inline-end 0.4s var(--ease);
+    }
+    .pill.is-checked { border-color: rgba(196,154,60,0.5); background: rgba(196,154,60,0.13); }
+    .pill.is-checked .pill__check { width: 18px; opacity: 1; transform: scale(1); margin-inline-end: 0.5rem; }
+    @keyframes statPop {
+      0%   { transform: scale(1) translateY(0);       filter: drop-shadow(0 0 0 transparent); }
+      35%  { transform: scale(1.3) translateY(-10px);  filter: drop-shadow(0 0 14px rgba(196,154,60,0.6)); }
+      70%  { transform: scale(1.06) translateY(0); }
+      100% { transform: scale(1) translateY(0);       filter: drop-shadow(0 0 0 transparent); }
+    }
+    .stat-cell.pop .stat__num { animation: statPop 1.4s var(--ease); }
     .map-container {
       width: 100%;
       max-width: 1000px;
@@ -702,13 +808,14 @@
        GALLERY
     ============================================================ */
     /* ---- gallery preview: 3 full + 3 cropped/fading teaser (ported from iruvei-hevra) ---- */
-    .gallery__showcase { position: relative; }
+    /* smaller, capped width to match iruvei-hevra */
+    .gallery__showcase { position: relative; max-width: 820px; margin-inline: auto; }
     .gallery__row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: clamp(0.6rem, 1.4vw, 1.1rem);
+      gap: clamp(0.55rem, 1.2vw, 0.9rem);
     }
-    .gallery__row--top { margin-block-end: clamp(0.6rem, 1.4vw, 1.1rem); }
+    .gallery__row--top { margin-block-end: clamp(0.55rem, 1.2vw, 0.9rem); }
     .gallery__row img {
       width: 100%;
       object-fit: cover;
@@ -769,21 +876,37 @@
       .gallery__teaser .gallery__row img { height: clamp(88px, 26vw, 130px); }
     }
 
-    /* ---- full-screen gallery modal ---- */
+    /* ---- gallery modal: floating panel over the blurred, still-visible page ---- */
     .gallery-modal {
       position: fixed;
       inset: 0;
       z-index: 1000;
-      background: rgba(10, 8, 6, 0.98);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       display: flex;
-      flex-direction: column;
+      padding: clamp(1rem, 4vw, 3.5rem);
+      background: rgba(8, 6, 4, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
       transition: opacity 0.35s var(--ease);
     }
     .gallery-modal.open { opacity: 1; }
     .gallery-modal[hidden] { display: none; }
+    .gallery-modal__panel {
+      margin: auto;
+      width: 100%;
+      max-width: 1080px;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: rgba(15, 13, 11, 0.94);
+      border: 1px solid rgba(196, 154, 60, 0.25);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+      transform: scale(0.98);
+      transition: transform 0.35s var(--ease);
+    }
+    .gallery-modal.open .gallery-modal__panel { transform: scale(1); }
     .gallery-modal__bar {
       display: flex;
       align-items: center;
@@ -822,17 +945,15 @@
       overflow-y: auto;
       padding: clamp(1.25rem, 4vw, 3rem);
     }
-    /* masonry-style columns gallery */
+    /* masonry-style columns gallery — smaller, tidier thumbnails */
     .gallery-modal__grid {
-      column-count: 3;
-      column-gap: clamp(0.75rem, 1.5vw, 1.2rem);
-      max-width: 1200px;
-      margin-inline: auto;
+      column-count: 4;
+      column-gap: clamp(0.8rem, 1.5vw, 1.3rem);
     }
     .gallery-modal__grid img {
       width: 100%;
-      margin-block-end: clamp(0.75rem, 1.5vw, 1.2rem);
-      border-radius: 14px;
+      margin-block-end: clamp(0.8rem, 1.5vw, 1.3rem);
+      border-radius: 12px;
       break-inside: avoid;
       display: block;
       cursor: zoom-in;
@@ -851,7 +972,27 @@
     /* ============================================================
        CONTACT
     ============================================================ */
-    .contact { text-align: center; }
+    .contact { text-align: center; position: relative; overflow: hidden; }
+    /* hero-style background image (drop a file in the inline url below) */
+    .contact__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    /* light overlay + soft vignette keeps the photo visible; text-shadow protects copy */
+    .contact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(120% 90% at 50% 48%, rgba(15,13,11,0.28) 0%, rgba(15,13,11,0.55) 80%),
+        linear-gradient(to bottom, rgba(15,13,11,0.5) 0%, rgba(15,13,11,0.36) 50%, rgba(15,13,11,0.6) 100%);
+    }
+    .contact > .wrap { position: relative; z-index: 2; }
+    .contact h2, .contact .label, .contact__sub, .contact__meta { text-shadow: 0 2px 14px rgba(0,0,0,0.75); }
     .contact h2 {
       font-size: clamp(2.4rem, 5vw, 3.8rem);
       margin-block: 1.4rem 1.4rem;
@@ -930,8 +1071,9 @@
       .two-col, .bar { grid-template-columns: 1fr; }
       .concept__img, .bar__img { aspect-ratio: 4 / 3; order: -1; }
       .stats { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
-      .gallery-modal__grid { column-count: 2; }
     }
+    @media (max-width: 1024px) { .gallery-modal__grid { column-count: 3; } }
+    @media (max-width: 700px)  { .gallery-modal__grid { column-count: 2; } }
     @media (max-width: 600px) {
       .grid-3 { grid-template-columns: 1fr; }
       .bar__cards { grid-template-columns: 1fr; }
@@ -1279,21 +1421,24 @@
       color: var(--cream);
       background: rgba(196,154,60,0.07);
       cursor: default;
+      animation: pillFloat 4s ease-in-out infinite;
+      will-change: transform;
       transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
-                  box-shadow 0.3s var(--ease), transform 0.3s var(--ease),
-                  color 0.3s var(--ease);
+                  box-shadow 0.3s var(--ease), color 0.3s var(--ease);
     }
+    /* gentle idle bob — the staggered animation-delays in the markup keep them out of sync */
+    @keyframes pillFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     .benefit-pill svg {
       flex-shrink: 0;
       transition: stroke 0.3s var(--ease);
     }
     /* hover: pill lights up, icon turns white */
     .benefit-pill:hover {
-      background: rgba(196,154,60,0.2);
+      background: rgba(196,154,60,0.22);
       border-color: var(--gold);
-      box-shadow: 0 0 16px rgba(196,154,60,0.3);
-      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(196,154,60,0.4);
       color: #fff;
+      animation-play-state: paused;
     }
     .benefit-pill:hover svg { stroke: #fff; }
   </style>
@@ -1499,31 +1644,35 @@
       <span class="label reveal">אוכל</span>
       <h2 class="reveal">קולינריה מדויקת</h2>
       <div class="divider divider--center"></div>
-      <p class="food__sub reveal">
-        תפריט עדכני המורכב מחומרי גלם טריים. מנות שיתופיות היוצאות מהטאבון למרכז השולחן
-        או מוגשות בעמדות בופה מעוצבות, ומותאמות באופן מושלם לליווי אלכוהול.
-      </p>
-
-      <div class="grid-3 reveal">
-        <!-- REPLACE food-img-1:
-             Best photo = a wide overhead shot of a full spread on the table —
-             multiple dishes arranged together, colorful, abundant. The "feast" shot. -->
-        <img src="images/FOOD FROM ABOVE.JPG" alt="מטעמי השולחן המלא — מבט על" style="aspect-ratio: 1 / 1; border-radius: 3px; object-fit: cover; width: 100%; height: 100%;" />
-
-        <!-- REPLACE food-img-2:
-             Best photo = a close-up of one beautiful dish — a bruschetta,
-             a salad, or a tabun bread. Something that makes you hungry. -->
-        <img src="images/FOOD CLOSE UP.jpg" alt="קלוז-אפ מנה אחת — ברוסקטה / סלט" style="aspect-ratio: 1 / 1; border-radius: 3px; object-fit: cover; width: 100%; height: 100%;" />
-
-        <!-- REPLACE food-img-3:
-             Best photo = the buffet setup mid-event — dishes arranged aesthetically
-             on the counter/table, maybe with hands reaching in. Lively, not static. -->
-        <img src="images/FOOD ENVIRONMENT.jpg" alt="בופה באמצע האירוע — חי ותוסס" style="aspect-ratio: 1 / 1; border-radius: 3px; object-fit: cover; width: 100%; height: 100%;" />
+      <div class="vibe-grid">
+        <div class="vibe-card reveal">
+          <div class="vibe-card__media" style="background-image: url('images/FOOD FROM ABOVE.JPG');"></div>
+          <span class="vibe-card__index">01</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18M4 18a8 8 0 0 1 16 0M12 8V5M10.5 5h3"/></svg>
+          </div>
+          <div class="vibe-card__title">הבופה</div>
+          <div class="vibe-card__body">שפע קולינרי מעוצב, צבעוני ומזמין</div>
+        </div>
+        <div class="vibe-card reveal">
+          <div class="vibe-card__media" style="background-image: url('images/FOOD CLOSE UP.jpg');"></div>
+          <span class="vibe-card__index">02</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3v5"/></svg>
+          </div>
+          <div class="vibe-card__title">המנות</div>
+          <div class="vibe-card__body">חומרי גלם טריים לביס מושלם ומדויק</div>
+        </div>
+        <div class="vibe-card reveal">
+          <div class="vibe-card__media" style="background-image: url('images/FOOD ENVIRONMENT.jpg');"></div>
+          <span class="vibe-card__index">03</span>
+          <div class="vibe-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </div>
+          <div class="vibe-card__title">החוויה והתפריט</div>
+          <div class="vibe-card__body">תפריט עשיר שסוגר פינה לכל אורח</div>
+        </div>
       </div>
-
-      <p class="food__note reveal">
-        התפריט שלנו גמיש וניתן להתאמה מלאה להעדפות אישיות, לרבות תפריט טבעוני, צמחוני והתאמות מיוחדות לאלרגיות.
-      </p>
     </div>
   </section>
 
@@ -1692,9 +1841,9 @@
         </div>
 
         <div class="pills-row">
-          <span class="pill">פריים לוקיישן בתל אביב</span>
-          <span class="pill">מרחק קצר מהרכבת הקלה</span>
-          <span class="pill">גישה מרכזית לאוטובוסים</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>פריים לוקיישן בתל אביב</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>מרחק קצר מהרכבת הקלה</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>גישה מרכזית לאוטובוסים</span>
         </div>
 
         <div class="map-container">
@@ -1753,6 +1902,7 @@
        GALLERY MODAL (full-screen)
   ============================================================ -->
   <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="גלריית תמונות — עזרא" hidden>
+    <div class="gallery-modal__panel">
     <div class="gallery-modal__bar">
       <button class="gallery-modal__back" id="galleryClose" type="button">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1777,12 +1927,15 @@
         <img src="images/IMAGE 1.jpg" alt="רגע מהערב" loading="lazy" />
       </div>
     </div>
+    </div>
   </div>
 
   <!-- ============================================================
        8. CONTACT / CTA
   ============================================================ -->
   <section id="contact" class="contact">
+    <!-- REPLACE: drop the bottom-section background image here (set the url). -->
+    <div class="contact__bg" style="background-image: url('images/contact-bg.jpg');"></div>
     <div class="wrap">
       <span class="label reveal">יצירת קשר</span>
       <h2 class="reveal">האירוע שלכם מתחיל כאן</h2>
@@ -1883,6 +2036,52 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
 
     document.querySelectorAll('.reveal, .divider').forEach((el) => io.observe(el));
+
+    /* ---------- Bar cards: pointer-tilt physics (cursor-following 3D) ---------- */
+    (function () {
+      const cards = document.querySelectorAll('.bar-card');
+      if (!cards.length || matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(hover: none)').matches) return;
+      cards.forEach((card) => {
+        let raf = null;
+        card.addEventListener('pointerenter', () => {
+          card.style.transition = 'transform 0.12s ease-out, box-shadow 0.45s var(--ease), border-color 0.45s var(--ease)';
+        });
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          if (raf) cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            card.style.transform = `perspective(720px) rotateX(${(-py * 8).toFixed(2)}deg) rotateY(${(px * 10).toFixed(2)}deg) translateY(-8px) scale(1.02)`;
+          });
+        });
+        card.addEventListener('pointerleave', () => {
+          if (raf) cancelAnimationFrame(raf);
+          card.style.transition = '';     // back to the springy CSS transition
+          card.style.transform = '';      // springs home
+        });
+      });
+    })();
+
+    /* ---------- Stats: sequential number pop, then pill check-marks ---------- */
+    (function () {
+      const band = document.querySelector('.stat-band');
+      if (!band) return;
+      const cells = [...band.querySelectorAll('.stat-cell')];
+      const pills = [...document.querySelectorAll('.pills-row .pill')];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const statsIO = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          statsIO.unobserve(e.target);
+          if (reduce) { pills.forEach((p) => p.classList.add('is-checked')); return; }
+          cells.forEach((cell, i) => setTimeout(() => cell.classList.add('pop'), 400 + i * 1200));
+          const afterNums = 400 + cells.length * 1200 + 350;
+          pills.forEach((pill, i) => setTimeout(() => pill.classList.add('is-checked'), afterNums + i * 480));
+        });
+      }, { threshold: 0.4 });
+      statsIO.observe(band);
+    })();
 
     /* ---------- Gallery modal: open full-screen gallery / back to site ---------- */
     (function () {
