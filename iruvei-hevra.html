@@ -1619,6 +1619,21 @@
     .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
 
+    /* optional "talk to our sales manager first" toggle */
+    .book-check {
+      display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer;
+      padding: 0.85rem 1rem; border-radius: 12px;
+      border: 1px solid var(--line); background: rgba(196,154,60,0.05);
+      transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
+    }
+    .book-check:hover { border-color: rgba(196,154,60,0.4); }
+    .book-check:has(input:checked) { border-color: var(--gold); background: rgba(196,154,60,0.11); }
+    .book-check input { width: 19px; height: 19px; margin-block-start: 1px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
+    .book-check__text { display: flex; flex-direction: column; gap: 0.15rem; }
+    .book-check__text b { color: var(--cream); font-size: 0.9rem; font-weight: 600; }
+    .book-check__text span { color: var(--cream-dim); font-size: 0.8rem; line-height: 1.5; }
+    .book-check:has(input:checked) .book-check__text b { color: var(--gold-light); }
+
     /* confirmation */
     .book-done { text-align: center; padding-block: 1.5rem; }
     .book-done__icon {
@@ -2344,6 +2359,13 @@
               <label for="bfNotes">משהו שכדאי שנדע? (לא חובה)</label>
               <textarea id="bfNotes" name="notes" rows="2"></textarea>
             </div>
+            <label class="book-check" for="bfWantsCall">
+              <input type="checkbox" id="bfWantsCall" name="wantsCall" />
+              <span class="book-check__text">
+                <b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>
+                <span>סמנו ונחזור אליכם לתיאום שיחה - בלי לחתום עכשיו</span>
+              </span>
+            </label>
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
           </form>
         </div>
@@ -2354,8 +2376,8 @@
             <div class="book-done__icon">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h3>הבקשה נשלחה!</h3>
-            <p>קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.</p>
+            <h3 id="bookDoneTitle">הבקשה נשלחה!</h3>
+            <p id="bookDoneMsg">קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.</p>
             <p id="bookDoneSummary" style="color:var(--gold);"></p>
             <button class="btn btn--outline book-next" id="bookDoneClose" type="button" style="max-width:240px; margin-inline:auto; margin-block-start:1.4rem;">סגירה</button>
           </div>
@@ -2810,6 +2832,7 @@
         e.preventDefault();
         const plan = PLANS[state.plan];
         // TODO(backend): POST this to Monday - the automation generates + sends the contract.
+        const wantsCall = document.getElementById('bfWantsCall').checked;
         const data = {
           plan: plan.label, hours: plan.hours,
           date: state.date ? key(state.date) : '', slot: state.slot,
@@ -2820,8 +2843,13 @@
           email:   document.getElementById('bfEmail').value,
           address: document.getElementById('bfAddress').value,
           notes:   document.getElementById('bfNotes').value,
+          wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
         };
         console.log('[booking request]', data);
+        // tailor the confirmation to whether they asked for a call first
+        document.getElementById('bookDoneMsg').textContent = wantsCall
+          ? 'קיבלנו את הפרטים. מנהל המכירות שלנו יחזור אליכם בהקדם לשיחה, ורק אחריה נשלח את ההצעה והחוזה - בלי התחייבות לחתום עכשיו.'
+          : 'קיבלנו את הפרטים. נשלחה אליכם הצעה וחוזה לחתימה דיגיטלית, וברגע שתחתמו מנהלת המכירות שלנו תיצור קשר לסגירה.';
         doneSummary.textContent = plan.label + ' · ' + humanDate(state.date) + ' · ' + state.slot;
         goto(4);
       });
