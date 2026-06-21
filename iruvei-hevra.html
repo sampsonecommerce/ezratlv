@@ -492,15 +492,25 @@
       direction: ltr;
       unicode-bidi: embed;
       opacity: 0.8;
+      display: block;
+      /* warm gold ember glow that gently breathes - draws the eye to the step number */
+      text-shadow: 0 0 12px rgba(245,217,138,0.5), 0 0 26px rgba(196,154,60,0.32);
+      animation: indexGlow 3s ease-in-out infinite;
+    }
+    @keyframes indexGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(245,217,138,0.42), 0 0 20px rgba(196,154,60,0.25); opacity: 0.78; }
+      50%      { text-shadow: 0 0 20px rgba(245,217,138,0.78), 0 0 38px rgba(196,154,60,0.5);  opacity: 1; }
     }
     .vibe-card__icon {
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      display: flex;
+      display: inline-flex;
+      vertical-align: middle;
       align-items: center;
       justify-content: center;
-      margin: 1.1rem auto 1.3rem;
+      margin-block: 1.3rem;
+      margin-inline-end: 0.9rem;
       background: linear-gradient(145deg, rgba(196,154,60,0.18), rgba(196,154,60,0.04));
       border: 1px solid rgba(196,154,60,0.3);
       color: var(--gold);
@@ -508,7 +518,7 @@
     }
     .vibe-card:hover .vibe-card__icon { transform: scale(1.08) rotate(-3deg); }
     .vibe-card__icon svg { width: 26px; height: 26px; }
-    .vibe-card__title { font-size: clamp(1.55rem, 2.1vw, 1.9rem); font-weight: 600; color: var(--cream); margin-block-end: 0.85rem; font-family: var(--font-serif); line-height: 1.1; }
+    .vibe-card__title { display: inline-block; vertical-align: middle; font-size: clamp(1.55rem, 2.1vw, 1.9rem); font-weight: 600; color: var(--cream); margin: 0; font-family: var(--font-serif); line-height: 1.1; text-align: start; }
     .vibe-card__body  { font-size: 1rem; color: var(--cream-dim); line-height: 1.7; }
     /* atmosphere photo background - a different image per card, dimmed for legibility */
     .vibe-card__media {
