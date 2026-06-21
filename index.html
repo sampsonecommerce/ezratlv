@@ -1012,8 +1012,20 @@
       cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
     }
     .gallery-lightbox__close:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); transform: rotate(90deg); }
+    /* prev / next arrows to move between photos without exiting */
+    .gallery-lightbox__nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px; border-radius: 50%; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.45); border: 1px solid rgba(240,235,224,0.3); color: var(--cream);
+      cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
+    }
+    .gallery-lightbox__nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .gallery-lightbox__nav--prev { right: clamp(0.6rem, 2.5vw, 2rem); }
+    .gallery-lightbox__nav--next { left: clamp(0.6rem, 2.5vw, 2rem); }
+    @media (max-width: 560px) { .gallery-lightbox__nav { width: 40px; height: 40px; } }
     @media (prefers-reduced-motion: reduce) {
-      .gallery-lightbox, .gallery-lightbox img, .gallery-lightbox__close { transition: none; }
+      .gallery-lightbox, .gallery-lightbox img, .gallery-lightbox__close, .gallery-lightbox__nav { transition: none; }
     }
 
     /* ============================================================
@@ -1989,6 +2001,12 @@
     <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="סגירה">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryLbPrev" type="button" aria-label="התמונה הקודמת">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryLbNext" type="button" aria-label="התמונה הבאה">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
     <img id="galleryLightboxImg" src="" alt="" />
   </div>
 
@@ -2178,15 +2196,24 @@
       closeBtn.addEventListener('click', close);
       modal.addEventListener('click', (e) => { if (e.target === modal || e.target.classList.contains('gallery-modal__scroll')) close(); });
 
-      // ── Lightbox: click a grid photo to view it bigger; X / backdrop / Esc returns
+      // ── Lightbox: click a grid photo to view it bigger; arrows step through; X / backdrop / Esc returns
       const lightbox = document.getElementById('galleryLightbox');
       const lbImg    = document.getElementById('galleryLightboxImg');
       const lbClose  = document.getElementById('galleryLightboxClose');
-      let lbLastFocused = null;
-      const openLightbox = (src, alt) => {
+      const lbPrev   = document.getElementById('galleryLbPrev');
+      const lbNext   = document.getElementById('galleryLbNext');
+      const gridImgs = [...modal.querySelectorAll('.gallery-modal__grid img')];
+      let lbLastFocused = null, lbIndex = 0;
+      const showLbImage = () => {
+        const img = gridImgs[lbIndex];
+        if (!img) return;
+        lbImg.src = img.currentSrc || img.src;
+        lbImg.alt = img.alt || '';
+      };
+      const openLightbox = (i) => {
         if (!lightbox) return;
         lbLastFocused = document.activeElement;
-        lbImg.src = src; lbImg.alt = alt || '';
+        lbIndex = i; showLbImage();
         lightbox.hidden = false;
         requestAnimationFrame(() => lightbox.classList.add('open'));
         lbClose.focus();
@@ -2199,16 +2226,21 @@
         setTimeout(() => { if (!lightbox.classList.contains('open')) { lightbox.hidden = true; lbImg.src = ''; } }, 400);
         if (lbLastFocused) lbLastFocused.focus();
       };
-      modal.querySelectorAll('.gallery-modal__grid img').forEach((img) => {
-        img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
-      });
+      const lbStep = (d) => { if (!gridImgs.length) return; lbIndex = (lbIndex + d + gridImgs.length) % gridImgs.length; showLbImage(); };
+      gridImgs.forEach((img, i) => img.addEventListener('click', () => openLightbox(i)));
       if (lbClose) lbClose.addEventListener('click', closeLightbox);
+      if (lbPrev)  lbPrev.addEventListener('click', () => lbStep(-1));
+      if (lbNext)  lbNext.addEventListener('click', () => lbStep(1));
       if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key !== 'Escape') return;
-        if (lightbox && !lightbox.hidden) { closeLightbox(); return; }  // close the photo first
-        if (!modal.hidden) close();
+        if (lightbox && !lightbox.hidden) {
+          if (e.key === 'Escape')     { closeLightbox(); return; }
+          if (e.key === 'ArrowLeft')  { lbStep(1);  return; }   // RTL: left = next
+          if (e.key === 'ArrowRight') { lbStep(-1); return; }
+          return;
+        }
+        if (e.key === 'Escape' && !modal.hidden) close();
       });
     })();
 
