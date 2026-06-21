@@ -988,6 +988,34 @@
       .gallery__more, .gallery__more svg, .gallery-modal__back svg { transition: none; }
     }
 
+    /* lightbox: click a photo to view it bigger, X (or backdrop/Esc) to return */
+    .gallery-lightbox {
+      position: fixed; inset: 0; z-index: 1200;
+      display: flex; align-items: center; justify-content: center;
+      padding: clamp(1rem, 4vw, 3rem);
+      background: rgba(6,4,3,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      opacity: 0; transition: opacity 0.3s var(--ease);
+    }
+    .gallery-lightbox.open { opacity: 1; }
+    .gallery-lightbox[hidden] { display: none; }
+    .gallery-lightbox img {
+      max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      transform: scale(0.94); transition: transform 0.35s var(--ease);
+    }
+    .gallery-lightbox.open img { transform: scale(1); }
+    .gallery-lightbox__close {
+      position: absolute; top: clamp(0.8rem, 2vw, 1.4rem); inset-inline-end: clamp(0.8rem, 2vw, 1.4rem);
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.45); border: 1px solid rgba(240,235,224,0.3); color: var(--cream);
+      cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+    .gallery-lightbox__close:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); transform: rotate(90deg); }
+    @media (prefers-reduced-motion: reduce) {
+      .gallery-lightbox, .gallery-lightbox img, .gallery-lightbox__close { transition: none; }
+    }
+
     /* ============================================================
        CONTACT
     ============================================================ */
@@ -1956,6 +1984,14 @@
     </div>
   </div>
 
+  <!-- Gallery lightbox (single enlarged photo) -->
+  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="תצוגת תמונה" hidden>
+    <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="סגירה">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <img id="galleryLightboxImg" src="" alt="" />
+  </div>
+
   <!-- ============================================================
        8. CONTACT / CTA
   ============================================================ -->
@@ -2141,7 +2177,39 @@
       document.querySelectorAll('.gallery__row--top img').forEach((img) => img.addEventListener('click', open));
       closeBtn.addEventListener('click', close);
       modal.addEventListener('click', (e) => { if (e.target === modal || e.target.classList.contains('gallery-modal__scroll')) close(); });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
+
+      // ── Lightbox: click a grid photo to view it bigger; X / backdrop / Esc returns
+      const lightbox = document.getElementById('galleryLightbox');
+      const lbImg    = document.getElementById('galleryLightboxImg');
+      const lbClose  = document.getElementById('galleryLightboxClose');
+      let lbLastFocused = null;
+      const openLightbox = (src, alt) => {
+        if (!lightbox) return;
+        lbLastFocused = document.activeElement;
+        lbImg.src = src; lbImg.alt = alt || '';
+        lightbox.hidden = false;
+        requestAnimationFrame(() => lightbox.classList.add('open'));
+        lbClose.focus();
+      };
+      const closeLightbox = () => {
+        if (!lightbox) return;
+        lightbox.classList.remove('open');
+        const done = () => { lightbox.hidden = true; lbImg.src = ''; lightbox.removeEventListener('transitionend', done); };
+        lightbox.addEventListener('transitionend', done);
+        setTimeout(() => { if (!lightbox.classList.contains('open')) { lightbox.hidden = true; lbImg.src = ''; } }, 400);
+        if (lbLastFocused) lbLastFocused.focus();
+      };
+      modal.querySelectorAll('.gallery-modal__grid img').forEach((img) => {
+        img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
+      });
+      if (lbClose) lbClose.addEventListener('click', closeLightbox);
+      if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (lightbox && !lightbox.hidden) { closeLightbox(); return; }  // close the photo first
+        if (!modal.hidden) close();
+      });
     })();
 
     /* ---------- Tabbed menu ---------- */
