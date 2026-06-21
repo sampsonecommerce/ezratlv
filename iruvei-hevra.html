@@ -1099,12 +1099,12 @@
     /* Masonry keeps each photo's natural proportions; generous, matched gaps
        (column-gap == img margin-block-end) give even breathing room all round. */
     /* smaller, tidier masonry - more columns = smaller thumbnails */
-    .gallery-modal__grid { column-count: 4; column-gap: clamp(0.8rem, 1.5vw, 1.3rem); }
-    .gallery-modal__grid img { width: 100%; height: auto; margin-block-end: clamp(0.8rem, 1.5vw, 1.3rem); border-radius: 12px; break-inside: avoid; transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); cursor: zoom-in; }
+    /* clean 3-column grid of perfect squares (12 photos = 3 x 4) */
+    .gallery-modal__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.7rem, 1.4vw, 1.2rem); max-width: 1000px; margin-inline: auto; }
+    .gallery-modal__grid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 12px; transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); cursor: zoom-in; }
     .gallery-modal__grid img:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6); }
-    @media (max-width: 1024px) { .gallery-modal__grid { column-count: 3; } }
-    @media (max-width: 700px)  { .gallery-modal__grid { column-count: 2; } }
-    @media (max-width: 440px)  { .gallery-modal__grid { column-count: 1; } .gallery-modal__title { display: none; } }
+    @media (max-width: 600px) { .gallery-modal__grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 440px) { .gallery-modal__title { display: none; } }
 
     /* ============================================================
        SECTION 7: PROCESS (7 steps)
@@ -2028,15 +2028,15 @@
 
       <div class="gallery__showcase reveal">
         <div class="gallery__row gallery__row--top">
-          <img src="images/BAR.jpg" alt="הבר של עזרא" />
-          <img src="images/COCKTAIL 1.jpg" alt="קוקטייל בקלוז-אפ" />
-          <img src="images/FOOD ENVIRONMENT.jpg" alt="בופה באמצע האירוע" />
+          <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" />
+          <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" />
+          <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" />
         </div>
         <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="פתחו את הגלריה המלאה">
           <div class="gallery__row">
-            <img src="images/FOOD FROM ABOVE.JPG" alt="מטעמי השולחן ממעוף" />
-            <img src="images/FOOD CLOSE UP.jpg" alt="אוכל קלוז-אפ" />
-            <img src="images/COCKTAIL 3.jpg" alt="קוקטייל" />
+            <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" />
+            <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" />
+            <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" />
           </div>
           <div class="gallery__fade">
             <span class="gallery__more">
@@ -2061,19 +2061,18 @@
     </div>
     <div class="gallery-modal__scroll">
       <div class="gallery-modal__grid">
-        <img src="images/BAR.jpg" alt="הבר של עזרא" loading="lazy" />
-        <img src="images/COCKTAIL 1.jpg" alt="קוקטייל 1" loading="lazy" />
-        <img src="images/MOMENT 1.jpg" alt="רגע מהאירוע" loading="lazy" />
-        <img src="images/FOOD ENVIRONMENT.jpg" alt="בופה באמצע האירוע" loading="lazy" />
-        <img src="images/MAKING COCKTAILS.jpg" alt="הכנת קוקטיילים" loading="lazy" />
-        <img src="images/COCKTAIL 2.jpg" alt="קוקטייל 2" loading="lazy" />
-        <img src="images/FOOD FROM ABOVE.JPG" alt="מטעמי השולחן ממעוף" loading="lazy" />
-        <img src="images/MOMENT 2.jpg" alt="רגע מהאירוע" loading="lazy" />
-        <img src="images/COCKTAIL 3.jpg" alt="קוקטייל 3" loading="lazy" />
-        <img src="images/FOOD CLOSE UP.jpg" alt="אוכל קלוז-אפ" loading="lazy" />
-        <img src="images/LOGO OUTSIDE.jpg" alt="הכניסה לעזרא" loading="lazy" />
-        <img src="images/IMG_6775.JPG" alt="אווירה באירוע" loading="lazy" />
-        <img src="images/IMAGE 1.jpg" alt="רגע מהערב" loading="lazy" />
+        <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g07.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g08.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g09.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g10.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g11.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g12.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
       </div>
     </div>
     </div>
