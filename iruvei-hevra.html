@@ -492,10 +492,11 @@
       direction: ltr;
       unicode-bidi: embed;
       opacity: 0.8;
-      /* pinned to the top-right corner of the card (inline-start = right in RTL) */
+      /* pinned to the top-right corner - physical top/right because the element's
+         own direction:ltr would otherwise flip the logical inset to the left */
       position: absolute;
-      inset-block-start: clamp(1.1rem, 2vw, 1.5rem);
-      inset-inline-start: clamp(1.4rem, 2.2vw, 1.8rem);
+      top: clamp(0.9rem, 1.8vw, 1.3rem);
+      right: clamp(1.2rem, 2.2vw, 1.7rem);
       z-index: 2;
       /* warm gold ember glow that gently breathes - draws the eye to the step number */
       text-shadow: 0 0 12px rgba(245,217,138,0.5), 0 0 26px rgba(196,154,60,0.32);
