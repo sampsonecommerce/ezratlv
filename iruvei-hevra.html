@@ -3909,10 +3909,13 @@
       function open(plan) {
         lastFocused = document.activeElement;
         const saved = readSaved();
+        let restoredSlot = null, restoredStep = 1;
         if (saved) {
           state.plan = (saved.plan && PLANS[saved.plan]) ? saved.plan : state.plan;
-          state.slot = saved.slot || null; state.menu = saved.menu || null;
+          state.menu = saved.menu || null;
           state.guests = saved.guests || 20; state.addons = saved.addons || {};
+          restoredSlot = saved.slot || null;
+          restoredStep = Math.min(saved.step || 1, 7);
           state.date = null;
           if (saved.date) { const d = new Date(saved.date); if (!isNaN(d.getTime())) { d.setHours(0,0,0,0); state.date = d; } }
           guestsInput.value = state.guests; guestsRange.value = Math.min(Math.max(state.guests, RANGE_MIN), RANGE_MAX); prevGuests = state.guests;
@@ -3920,18 +3923,23 @@
           saveOn = true; if (saveChk) saveChk.checked = true;
         } else {
           if (plan && PLANS[plan]) state.plan = plan;
-          state.date = null; state.slot = null; state.menu = null; state.addons = {};
+          state.date = null; state.menu = null; state.addons = {};
           if (foodNotes) foodNotes.value = '';
           guestsInput.value = 20; guestsRange.value = 20; prevGuests = 20;
           if (form) form.reset();
           saveOn = false; if (saveChk) saveChk.checked = false;
         }
-        setPlan(state.plan);
-        if (state.date) renderSlots();
         view = state.date ? new Date(state.date.getFullYear(), state.date.getMonth(), 1) : new Date(today.getFullYear(), today.getMonth(), 1);
+        setPlan(state.plan);            // builds the slot graph if a date is set — but clears state.slot
         renderCal();
+        // setPlan wiped the slot; put the saved one back and re-highlight it on the graph
+        state.slot = restoredSlot;
+        if (state.date && state.slot) {
+          const b = slotsGraph.querySelector('.dn-bar[data-label="' + state.slot + '"]:not(.is-taken)');
+          if (b) selectSlot(b);
+        }
         next1.disabled = !(state.date && state.slot);
-        goto(saved && saved.step ? Math.min(saved.step, 7) : 1);
+        goto(restoredStep);
         modal.hidden = false;
         document.body.style.overflow = 'hidden';
         requestAnimationFrame(() => modal.classList.add('open'));
