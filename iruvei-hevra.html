@@ -795,11 +795,14 @@
       color: var(--gold);
       margin-block-start: 0.05rem;
     }
-    /* one-line positioning under the title + gold-emphasised value deltas in the bullets */
-    .package-card__concept { font-size: 0.85rem; color: var(--cream-dim); line-height: 1.55; margin-block: -0.7rem 1.3rem; }
-    .package-card__list b { color: var(--gold-light); font-weight: 600; }
-    /* featured (middle) tier: filled-gold checks so the upgrade reads as "more" at a glance */
-    .package-card--featured .package-card__list li svg { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--bg); }
+    /* one-line experience hook under the title + icon comparison rows (shared rows
+       across tiers let the eye scan the escalation without a spec table) */
+    .package-card__concept { font-size: 0.85rem; color: var(--cream-dim); line-height: 1.55; margin-block: -0.7rem 0; min-height: 2.7em; }
+    .package-card__rows { display: flex; flex-direction: column; gap: 0.7rem; flex: 1; margin-block: 1rem 1.8rem; padding-block-start: 1rem; border-block-start: 1px solid var(--line); }
+    .package-card__row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.86rem; color: var(--cream-dim); line-height: 1.4; }
+    .package-card__row svg { flex-shrink: 0; width: 17px; height: 17px; color: var(--gold); }
+    .package-card--featured .package-card__rows { border-block-start-color: rgba(196,154,60,0.2); }
+    .package-card--featured .package-card__row { color: var(--cream); }
     .package-card .btn { width: 100%; }
     /* per-head price chip under the CTA - deliberately smaller than the button */
     .package-card__price {
@@ -2156,13 +2159,13 @@
         <div class="package-card reveal">
           <div class="package-card__name">חבילה בסיסית</div>
           <div class="package-card__title">Happy Hour</div>
-          <p class="package-card__concept">ערב קליל ומשוחרר - נשנושים, סלטים ובר פתוח באווירה נינוחה. הבסיס המושלם לאירוע צוות נעים.</p>
-          <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <b>3 שעות</b> בחלל פרטי ובלעדי</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה נשנושים קליל - שרינג, סלטים וכריכים</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר פתוח: יין איכותי ו-<b>2 סוגי בירה</b></li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מערכת סאונד, תאורה ומנהל אירוע צמוד</li>
-          </ul>
+          <p class="package-card__concept">ערב קליל ומשוחרר עם נשנושים ובר פתוח.</p>
+          <div class="package-card__rows">
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span>3 שעות</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 11v10"/><path d="M17 3c-1.5 1-2 3-2 6 0 1.5 1 2 2 2v10"/></svg><span>בופה נשנושים קליל</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>יין ו-2 בירות</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>פלייליסט + מערכת סאונד</span></div>
+          </div>
           <button type="button" class="btn btn--outline js-book" data-plan="happyhour">לבדיקת זמינות</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -2175,14 +2178,13 @@
           <span class="package-card__badge">הכי פופולרי</span>
           <div class="package-card__name">חבילה רגילה</div>
           <div class="package-card__title">גיבוש מחלקה</div>
-          <p class="package-card__concept">כל מה שבחבילה הבסיסית, ועוד הרבה יותר - אוכל עשיר, בר מלא ויותר זמן לחגוג. הבחירה המשתלמת.</p>
-          <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <b>5 שעות</b> בחלל פרטי - שעתיים יותר לחגוג</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה <b>עשיר ומגוון</b> - מבחר רחב של מנות, פיצות מהטאבון ותוספות חמות</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר <b>מלא</b>: יין ובירות, ועוד <b>6 סוגי אלכוהול ו-8 מיקסים</b> לקוקטיילים אישיים</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> עמדת שתייה משודרגת ופלייליסט מותאם אישית</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
-          </ul>
+          <p class="package-card__concept">אוכל ובר נדיבים יותר, לאירוע צוות שלם.</p>
+          <div class="package-card__rows">
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span>5 שעות</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 11v10"/><path d="M17 3c-1.5 1-2 3-2 6 0 1.5 1 2 2 2v10"/></svg><span>בופה עשיר ומגוון</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>בר מלא · 6 אלכוהול + 8 ערבובים</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>פלייליסט מותאם אישית</span></div>
+          </div>
           <button type="button" class="btn btn--fill js-book" data-plan="gibush">לבדיקת זמינות</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -2194,14 +2196,13 @@
         <div class="package-card reveal">
           <div class="package-card__name">חבילה גדולה</div>
           <div class="package-card__title">מסיבת חברה</div>
-          <ul class="package-card__list">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 שעות בחלל פרטי מורחב</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בופה פרימיום עשיר במיוחד</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> בר קוקטיילים חופשי עם מיקסולוגים</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> דיג'יי מקצועי לאורך כל האירוע</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> עיצוב חלל אישי וקוקטייל פתיחה</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> מנהל אירוע צמוד</li>
-          </ul>
+          <p class="package-card__concept">שפע אוכל, בר קוקטיילים וחוויית אירוע מלאה.</p>
+          <div class="package-card__rows">
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span>5 שעות</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 11v10"/><path d="M17 3c-1.5 1-2 3-2 6 0 1.5 1 2 2 2v10"/></svg><span>בופה פרימיום</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>בר קוקטיילים מלא ופתוח</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>דיג'יי מהצוות שלנו</span></div>
+          </div>
           <button type="button" class="btn btn--outline js-book" data-plan="mesiba">לבדיקת זמינות</button>
           <div class="package-card__price">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
