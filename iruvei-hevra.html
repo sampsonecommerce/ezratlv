@@ -804,32 +804,23 @@
     .package-card--featured .package-card__rows { border-block-start-color: rgba(196,154,60,0.2); }
     .package-card--featured .package-card__row { color: var(--cream); }
     .package-card .btn { width: 100%; }
-    /* per-head price chip under the CTA - deliberately smaller than the button */
-    .package-card__price {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      width: fit-content;
-      margin: 0.75rem auto 0;
-      padding: 0.38rem 0.8rem;
-      border-radius: 50px;
-      background: rgba(196,154,60,0.08);
-      border: 1px solid var(--line);
-      color: var(--cream-dim);
-      font-size: 0.78rem;
+    /* per-head price under the CTA - evening headline + smaller morning (no-alcohol) price */
+    .package-card__price { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; margin-block-start: 0.85rem; }
+    .package-card__price-main {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      padding: 0.38rem 0.95rem; border-radius: 50px;
+      background: rgba(196,154,60,0.08); border: 1px solid var(--line);
+      color: var(--cream-dim); font-size: 0.78rem;
     }
-    .package-card__price svg { width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
-    .package-card__price strong {
-      font-family: 'Pliant', var(--font-serif);
-      font-weight: 700;
-      color: var(--gold);
-      font-size: 0.98rem;
-      direction: ltr;
-      unicode-bidi: embed;
-      margin-inline-start: 0.1rem;
+    .package-card__price-sep { color: rgba(240,235,224,0.25); }
+    .package-card__price-eve strong, .package-card__price-day strong {
+      font-family: 'Pliant', var(--font-serif); font-weight: 700; direction: ltr; unicode-bidi: embed; margin-inline-start: 0.12rem;
     }
-    .package-card--featured .package-card__price { background: rgba(196,154,60,0.14); border-color: rgba(196,154,60,0.45); }
+    .package-card__price-eve strong { color: var(--gold); font-size: 1rem; }
+    .package-card__price-day { color: #8d8268; }
+    .package-card__price-day strong { color: #b9986a; font-size: 0.88rem; }
+    .package-card__price-cap { font-size: 0.68rem; color: #8d8268; }
+    .package-card--featured .package-card__price-main { background: rgba(196,154,60,0.14); border-color: rgba(196,154,60,0.45); }
 
     .package-card--premium {
       grid-column: 1 / -1;
@@ -2168,8 +2159,12 @@
           </div>
           <button type="button" class="btn btn--outline js-book" data-plan="happyhour">לבדיקת זמינות</button>
           <div class="package-card__price">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪275</strong>
+            <span class="package-card__price-main">
+              <span class="package-card__price-eve">ערב <strong>₪275</strong></span>
+              <span class="package-card__price-sep">·</span>
+              <span class="package-card__price-day">בוקר <strong>₪180</strong></span>
+            </span>
+            <span class="package-card__price-cap">מחיר לראש · בוקר ללא אלכוהול</span>
           </div>
         </div>
 
@@ -2187,8 +2182,12 @@
           </div>
           <button type="button" class="btn btn--fill js-book" data-plan="gibush">לבדיקת זמינות</button>
           <div class="package-card__price">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪330</strong>
+            <span class="package-card__price-main">
+              <span class="package-card__price-eve">ערב <strong>₪330</strong></span>
+              <span class="package-card__price-sep">·</span>
+              <span class="package-card__price-day">בוקר <strong>₪240</strong></span>
+            </span>
+            <span class="package-card__price-cap">מחיר לראש · בוקר ללא אלכוהול</span>
           </div>
         </div>
 
@@ -2205,8 +2204,12 @@
           </div>
           <button type="button" class="btn btn--outline js-book" data-plan="mesiba">לבדיקת זמינות</button>
           <div class="package-card__price">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            מחיר לראש <strong>₪450</strong>
+            <span class="package-card__price-main">
+              <span class="package-card__price-eve">ערב <strong>₪450</strong></span>
+              <span class="package-card__price-sep">·</span>
+              <span class="package-card__price-day">בוקר <strong>₪320</strong></span>
+            </span>
+            <span class="package-card__price-cap">מחיר לראש · בוקר ללא אלכוהול</span>
           </div>
         </div>
 
