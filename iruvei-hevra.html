@@ -2790,11 +2790,15 @@
 
       // ── Plans drive everything: per-head price + event length (hours).
       //    Update perHead / hours here; the calculator and time slots follow.
+      //    perHead = evening price; dayPerHead = morning (no-alcohol) price - lower.
+      //    (placeholder day prices - tune freely.)
       const PLANS = {
-        happyhour: { label: 'Happy Hour',  hours: 3, perHead: 275, minGuests: 20 },
-        gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, minGuests: 20 },
-        mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, minGuests: 20 },
+        happyhour: { label: 'Happy Hour',  hours: 3, perHead: 275, dayPerHead: 180, minGuests: 20 },
+        gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, dayPerHead: 240, minGuests: 20 },
+        mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, dayPerHead: 320, minGuests: 20 },
       };
+      // per-head depends on package + time of day (morning is cheaper - no alcohol)
+      const perHeadFor = (plan, menu) => menu === 'day' ? (plan.dayPerHead || plan.perHead) : plan.perHead;
       const SLOTS = {
         3: ['09:00–12:00', '13:00–16:00', '17:00–20:00', '21:00–00:00'],
         5: ['09:00–14:00', '15:00–20:00', '21:00–02:00'],
@@ -3125,8 +3129,9 @@
         liquidTopEl.setAttribute('cy', liqY);
         liquidTopEl.setAttribute('rx', (halfWidth(liqY) - 1.5).toFixed(1));
         bubbleTarget = Math.round(3 + f * 13);   // 3 bubbles at 20 guests → 16 at 50
-        perHeadEl.textContent = fmt(plan.perHead);
-        totalEl.textContent = fmt(plan.perHead * gg);
+        const ph = perHeadFor(plan, state.menu);
+        perHeadEl.textContent = fmt(ph);
+        totalEl.textContent = fmt(ph * gg);
         summary2.innerHTML = summaryText();
       }
       let prevGuests = 20;
@@ -3152,10 +3157,11 @@
         const plan = PLANS[state.plan];
         // TODO(backend): POST this to Monday - the automation generates + sends the contract.
         const wantsCall = document.getElementById('bfWantsCall').checked;
+        const ph = perHeadFor(plan, state.menu);
         const data = {
           plan: plan.label, hours: plan.hours,
           date: state.date ? key(state.date) : '', slot: state.slot,
-          guests: state.guests, estTotal: plan.perHead * state.guests,
+          guests: state.guests, perHead: ph, estTotal: ph * state.guests,
           name:    document.getElementById('bfName').value,
           company: document.getElementById('bfCompany').value,
           phone:   document.getElementById('bfPhone').value,
@@ -3180,7 +3186,7 @@
         setTxt('rcptGuests', state.guests + ' אורחים');
         setTxt('rcptDate', state.date ? humanDate(state.date) : '—');
         setTxt('rcptTime', state.slot || '—');
-        setTxt('rcptTotal', fmt(plan.perHead * state.guests));
+        setTxt('rcptTotal', fmt(ph * state.guests));
         setTxt('rcptMenu', state.menu === 'evening' ? 'תפריט ערב' : 'תפריט יום');
         const dishesEl = document.getElementById('rcptDishes');
         if (dishesEl) dishesEl.innerHTML = menuFor(state.plan, state.menu).map(c => '<span class="chip">' + c.t + '</span>').join('');
