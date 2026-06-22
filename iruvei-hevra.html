@@ -1577,15 +1577,6 @@
     .book-save:hover .book-save__note, .book-save input:checked ~ .book-save__note { opacity: 1; color: var(--gold-light); }
     .book-save input:focus-visible + .book-save__box { outline: 2px solid var(--gold); outline-offset: 2px; }
 
-    /* "are you sure you want to close?" confirmation overlay */
-    .book-confirm { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(8, 6, 4, 0.72); backdrop-filter: blur(2px); }
-    .book-confirm__card { max-width: 340px; text-align: center; background: linear-gradient(170deg, #221a10, #161009); border: 1px solid rgba(196,154,60,0.3); border-radius: 18px; padding: 1.6rem 1.4rem; box-shadow: 0 24px 60px rgba(0,0,0,0.6); }
-    .book-confirm__icon { width: 54px; height: 54px; margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ef5350; background: rgba(239,83,80,0.14); border: 1px solid rgba(239,83,80,0.5); }
-    .book-confirm__icon svg { width: 28px; height: 28px; }
-    .book-confirm__msg { font-family: var(--font-serif); font-size: 1.2rem; color: var(--cream); margin: 0 0 0.4rem; }
-    .book-confirm__sub { font-size: 0.8rem; color: var(--cream-dim); margin: 0 0 1.2rem; line-height: 1.5; }
-    .book-confirm__actions { display: flex; gap: 0.6rem; }
-    .book-confirm__actions .btn { flex: 1; width: auto; margin: 0; }
 
     .book-bar {
       display: grid;
@@ -2940,20 +2931,6 @@
       <div class="book-cta-foot" id="bookTalkFoot" hidden>
         <button type="button" class="book-talk-btn" id="bookTalkBtn">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
       </div>
-
-      <div class="book-confirm" id="bookConfirm" hidden>
-        <div class="book-confirm__card">
-          <div class="book-confirm__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-          </div>
-          <p class="book-confirm__msg">האם אתם בטוחים שאתם רוצים לסגור את החלון?</p>
-          <p class="book-confirm__sub">כל הפרטים שמילאתם יישמרו רק אם סימנתם "שמירה".</p>
-          <div class="book-confirm__actions">
-            <button type="button" class="btn btn--outline" id="bookConfirmStay">המשך עריכה</button>
-            <button type="button" class="btn btn--fill" id="bookConfirmClose">סגירת החלון</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -3908,7 +3885,6 @@
       const SAVE_KEY = 'ezraBookingProgress';
       const saveEl  = document.getElementById('bookSave');
       const saveChk = document.getElementById('bookSaveChk');
-      const confirmEl = document.getElementById('bookConfirm');
       let saveOn = false;
       function collectFields() {
         const f = {};
@@ -3962,7 +3938,6 @@
         closeBtn.focus();
       }
       function close() {
-        if (confirmEl) confirmEl.hidden = true;
         stopBubbles();
         modal.classList.remove('open');
         document.body.style.overflow = '';
@@ -3971,14 +3946,10 @@
         setTimeout(() => { if (!modal.classList.contains('open')) modal.hidden = true; }, 400);
         if (lastFocused) lastFocused.focus();
       }
-      // protect against accidental close once they've started — ask first
-      const hasProgress = () => step > 1 || !!state.date || !!state.slot;
-      function tryClose() { if (confirmEl && hasProgress() && step !== 7) confirmEl.hidden = false; else close(); }
-
       prevBtn.addEventListener('click', () => { view.setMonth(view.getMonth() - 1); renderCal(); });
       nextBtn.addEventListener('click', () => { view.setMonth(view.getMonth() + 1); renderCal(); });
       backBtn.addEventListener('click', () => { if (step > 1) goto(step - 1); });
-      closeBtn.addEventListener('click', tryClose);
+      closeBtn.addEventListener('click', close);
       doneClose.addEventListener('click', close);
       // shortcut: skip straight to the details form, flagged as "wants a call"
       if (talkBtn) talkBtn.addEventListener('click', () => {
@@ -3988,17 +3959,8 @@
         goto(6);
         setTimeout(() => { const f = document.getElementById('bfName'); if (f) f.focus(); }, 60);
       });
-      modal.addEventListener('click', e => { if (e.target === modal) tryClose(); });
-      document.addEventListener('keydown', e => {
-        if (modal.hidden) return;
-        if (e.key !== 'Escape') return;
-        if (confirmEl && !confirmEl.hidden) { confirmEl.hidden = true; return; }
-        tryClose();
-      });
-      const confirmStay = document.getElementById('bookConfirmStay');
-      const confirmCloseBtn = document.getElementById('bookConfirmClose');
-      if (confirmStay) confirmStay.addEventListener('click', () => { if (confirmEl) confirmEl.hidden = true; });
-      if (confirmCloseBtn) confirmCloseBtn.addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
 
       // .js-book triggers: a plan-card button (data-plan) opens the wizard at that plan;
       // a generic CTA has no plan, so send them to the plans section to choose one first.
