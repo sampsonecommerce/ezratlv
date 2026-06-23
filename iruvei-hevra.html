@@ -453,113 +453,53 @@
     /* ============================================================
        SECTION 3: VIBE (concept)
     ============================================================ */
+    @property --vc-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
     .vibe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.4vw, 1.8rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); }
     .vibe-card {
       position: relative;
-      background:
-        linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%),
-        #16110c;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center;
+      min-height: clamp(300px, 34vw, 380px);
+      background: linear-gradient(170deg, #1c160e 0%, #120d08 100%);
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: clamp(1.8rem, 2.6vw, 2.4rem) clamp(1.6rem, 2.4vw, 2rem) clamp(2rem, 3vw, 2.4rem);
-      overflow: hidden;
-      isolation: isolate;
-      text-align: center;
-      transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+      border-radius: 20px;
+      padding: clamp(2.4rem, 4vw, 3.2rem) clamp(1.6rem, 2.4vw, 2.1rem) clamp(2.2rem, 3.5vw, 2.8rem);
+      overflow: hidden; isolation: isolate;
+      transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.4s var(--ease);
     }
+    /* flowing gold gradient border that rotates slowly and brightens on hover */
     .vibe-card::before {
-      content: '';
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline: 0;
-      height: 2px;
-      background: linear-gradient(to left, transparent, var(--gold), #f5d98a, var(--gold), transparent);
-      opacity: 0.55;
-      transition: opacity 0.45s var(--ease);
+      content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 2; pointer-events: none;
+      background: conic-gradient(from var(--vc-angle), transparent 0deg, rgba(196,154,60,0) 55deg, var(--gold) 90deg, #f5d98a 112deg, var(--gold) 134deg, rgba(196,154,60,0) 170deg, transparent 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      opacity: 0.55; animation: vcSpin 7s linear infinite; transition: opacity 0.4s var(--ease);
     }
-    .vibe-card::after {
-      content: '';
-      position: absolute;
-      inset-block-start: -40%;
-      inset-inline-end: -30%;
-      width: 70%;
-      height: 70%;
-      background: radial-gradient(circle, rgba(196,154,60,0.22), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.5s var(--ease);
-      z-index: -1;
-      pointer-events: none;
-    }
-    .vibe-card:hover { transform: translateY(-6px); border-color: rgba(196,154,60,0.55); box-shadow: 0 24px 50px -20px rgba(0,0,0,0.7); }
     .vibe-card:hover::before { opacity: 1; }
-    .vibe-card:hover::after  { opacity: 1; }
-    .vibe-card__index {
-      font-family: 'Pliant', var(--font-serif);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      direction: ltr;
-      unicode-bidi: embed;
-      opacity: 0.8;
-      /* pinned to the top-right corner - physical top/right because the element's
-         own direction:ltr would otherwise flip the logical inset to the left */
-      position: absolute;
-      top: clamp(0.9rem, 1.8vw, 1.3rem);
-      right: clamp(1.2rem, 2.2vw, 1.7rem);
-      z-index: 2;
-      /* warm gold ember glow that gently breathes - draws the eye to the step number */
-      text-shadow: 0 0 12px rgba(245,217,138,0.5), 0 0 26px rgba(196,154,60,0.32);
-      animation: indexGlow 3s ease-in-out infinite;
+    @keyframes vcSpin { to { --vc-angle: 360deg; } }
+    /* soft top glow that blooms on hover */
+    .vibe-card::after {
+      content: ''; position: absolute; inset-block-start: -30%; inset-inline: 0; height: 65%; z-index: 0; pointer-events: none;
+      background: radial-gradient(60% 100% at 50% 0%, rgba(196,154,60,0.22), transparent 70%);
+      opacity: 0; transition: opacity 0.45s var(--ease);
     }
-    @keyframes indexGlow {
-      0%, 100% { text-shadow: 0 0 10px rgba(245,217,138,0.42), 0 0 20px rgba(196,154,60,0.25); opacity: 0.78; }
-      50%      { text-shadow: 0 0 20px rgba(245,217,138,0.78), 0 0 38px rgba(196,154,60,0.5);  opacity: 1; }
-    }
+    .vibe-card:hover { transform: translateY(-8px); border-color: rgba(196,154,60,0.5); box-shadow: 0 30px 60px -28px rgba(0,0,0,0.75); }
+    .vibe-card:hover::after { opacity: 1; }
     .vibe-card__icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: inline-flex;
-      vertical-align: middle;
-      align-items: center;
-      justify-content: center;
-      margin-block: 1.3rem;
-      margin-inline-end: 0.9rem;
-      background: linear-gradient(145deg, rgba(196,154,60,0.18), rgba(196,154,60,0.04));
-      border: 1px solid rgba(196,154,60,0.3);
-      color: var(--gold);
-      transition: transform 0.45s var(--ease);
+      position: relative; z-index: 1;
+      width: 66px; height: 66px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center; margin: 0 0 1.5rem;
+      background: radial-gradient(circle at 50% 35%, rgba(196,154,60,0.24), rgba(196,154,60,0.05));
+      border: 1px solid rgba(196,154,60,0.4); color: var(--gold);
+      box-shadow: 0 0 0 6px rgba(196,154,60,0.05);
+      transition: transform 0.35s var(--ease), box-shadow 0.4s var(--ease);
     }
-    .vibe-card:hover .vibe-card__icon { transform: scale(1.08) rotate(-3deg); }
-    .vibe-card__icon svg { width: 26px; height: 26px; }
-    .vibe-card__title { display: inline-block; vertical-align: middle; font-size: clamp(1.55rem, 2.1vw, 1.9rem); font-weight: 600; color: var(--cream); margin: 0; font-family: var(--font-serif); line-height: 1.1; text-align: start; }
-    .vibe-card__body  { font-size: 1rem; color: var(--cream-dim); line-height: 1.7; }
-    /* atmosphere photo background - a different image per card, dimmed for legibility */
-    .vibe-card__media {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 1;
-      transform: scale(1.02);
-      transition: transform 0.6s var(--ease);
-      pointer-events: none;
-    }
-    .vibe-card__media::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(165deg, rgba(18,13,9,0.5) 0%, rgba(18,13,9,0.62) 60%, rgba(18,13,9,0.72) 100%);
-      transition: background 0.5s var(--ease);
-    }
-    .vibe-card:hover .vibe-card__media { transform: scale(1.08); }
-    .vibe-card:hover .vibe-card__media::after { background: linear-gradient(165deg, rgba(18,13,9,0.4) 0%, rgba(18,13,9,0.5) 60%, rgba(18,13,9,0.6) 100%); }
-    .vibe-card__title, .vibe-card__body { text-shadow: 0 1px 10px rgba(0,0,0,0.65); }
-    .vibe-card__index, .vibe-card__icon, .vibe-card__title, .vibe-card__body { position: relative; z-index: 1; }
+    .vibe-card:hover .vibe-card__icon { transform: scale(1.08); box-shadow: 0 0 26px -4px rgba(245,217,138,0.5), 0 0 0 6px rgba(196,154,60,0.09); }
+    .vibe-card__icon svg { width: 30px; height: 30px; }
+    .vibe-card__title { position: relative; z-index: 1; font-size: clamp(1.5rem, 2.1vw, 1.95rem); font-weight: 600; color: var(--cream); margin: 0 0 0.9rem; font-family: var(--font-serif); line-height: 1.15; }
+    .vibe-card__body  { position: relative; z-index: 1; font-size: 1rem; color: var(--cream-dim); line-height: 1.7; max-width: 32ch; }
 
-    @media (max-width: 820px) { .vibe-grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+    @media (prefers-reduced-motion: reduce) { .vibe-card::before { animation: none; } }
+    @media (max-width: 820px) { .vibe-grid { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; } }
 
     /* ============================================================
        SECTION 4: STATS & LOCATION
@@ -899,7 +839,7 @@
       box-shadow: 0 0 0 1px rgba(196,154,60,0.12), 0 24px 60px -40px rgba(0,0,0,0.7);
       transition: background-color 0.55s var(--ease);
     }
-    #menu.is-day .cmenu-box { background-color: #f3ead4; }
+    #menu.is-day .cmenu-box { background-color: #faf6ea; }
     #menu.is-day .menu-tablist { border-block-end-color: rgba(0,0,0,0.14); }
     #menu.is-day .menu-tab { color: #7a6647; }
     #menu.is-day .menu-tab:hover { color: #2c2113; }
@@ -911,9 +851,10 @@
     #menu.is-day .cmenu-note { color: #6f5f44; }
     #menu.is-day .cmenu-note svg { color: #b07d12; }
 
-    #menu .menu-grid--cmenu { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3rem; }
-    #menu .menu-category { margin-block-end: 1.8rem; }
-    #menu .menu-category--full { grid-column: 1 / -1; padding-block-start: 1.6rem; border-block-start: 1px solid var(--line); }
+    /* masonry-style packing: categories flow into 2 columns, short ones fill the gaps */
+    #menu .menu-grid--cmenu { columns: 2; column-gap: 3rem; }
+    #menu .menu-category { break-inside: avoid; margin-block-end: 1.8rem; }
+    #menu .menu-category:last-child { margin-block-end: 0; }
     #menu .menu-category__title {
       font-size: 0.7rem; font-weight: 600; letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase;
       padding-block-end: 0.75rem; margin-block-end: 0.2rem; border-block-end: 1px solid var(--line);
@@ -924,8 +865,7 @@
     #menu .menu-item__name { font-size: 0.95rem; font-weight: 500; color: var(--cream); line-height: 1.3; }
     #menu .menu-item__desc { font-size: 0.78rem; color: var(--cream-faint); line-height: 1.5; margin-block-start: 0.15rem; }
     @media (max-width: 640px) {
-      #menu .menu-grid--cmenu { grid-template-columns: 1fr; }
-      #menu .menu-category--full { padding-block-start: 1.2rem; }
+      #menu .menu-grid--cmenu { columns: 1; }
     }
 
     .package-card--premium {
@@ -2217,7 +2157,7 @@
     <!-- desktop: actions -->
     <div class="nav__actions">
       <a class="nav__corp" href="index.html">אירועים פרטיים</a>
-      <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
 
     <!-- mobile: dropdown menu + scrim -->
@@ -2231,7 +2171,7 @@
       <a class="nav__menu-link" href="#gallery">גלריה</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="index.html">אירועים פרטיים</a>
-        <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
       </div>
     </div>
   </nav>
@@ -2247,7 +2187,7 @@
       <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
       <p class="hero__sub">חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה - אנחנו מנהלים את האוכל, האלכוהול והאווירה, ואתם פשוט מגיעים לחגוג</p>
       <div class="hero__cta">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
         <span class="hero__cta-note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           מענה תוך 24 שעות
@@ -2292,7 +2232,7 @@
             </div>
           </div>
 
-          <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin: 2rem auto 0; display: block; width: fit-content;">לבדיקת זמינות</a>
+          <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin: 2rem auto 0; display: block; width: fit-content;">לבחירת חבילה</a>
         </div>
         <img src="images/BAR.jpg" alt="הבר של עזרא" class="feature-img reveal" />
       </div>
@@ -2312,7 +2252,6 @@
 
       <div class="vibe-grid">
         <div class="vibe-card reveal">
-          <div class="vibe-card__media" style="background-image: url('images/vibe-people.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
@@ -2320,7 +2259,6 @@
           <div class="vibe-card__body">חלל אירועים פרטי שנועד לתת אווירה חמה, צעירה ומקצועית שמאפשרת לכלל האורחים להתחבר וליצור חוויה בלתי נשכחת ביחד</div>
         </div>
         <div class="vibe-card reveal">
-          <div class="vibe-card__media" style="background-image: url('images/vibe-cocktail.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
           </div>
@@ -2328,7 +2266,6 @@
           <div class="vibe-card__body">תהליך קצר ומהיר שנסגר כאן באתר, על ידי בחירת אחת מארבע החבילות שלנו. הכל שקוף, בלי אותיות קטנות</div>
         </div>
         <div class="vibe-card reveal">
-          <div class="vibe-card__media" style="background-image: url('images/vibe-food.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
           </div>
@@ -2338,7 +2275,7 @@
       </div>
 
       <div class="section-cta reveal">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות וקבלת הצעה</a>
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
       </div>
     </div>
   </section>
@@ -2414,7 +2351,7 @@
 
   <section class="section-cta-band">
     <div class="wrap section-cta reveal">
-      <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות וקבלת הצעה</a>
+      <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
   </section>
 
@@ -2486,7 +2423,7 @@
         </div>
       </div>
 
-      <a class="btn btn--fill reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="btn btn--fill reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
   </section>
 
@@ -2498,7 +2435,7 @@
       <div class="sec-head reveal">
         <span class="label">התפריט</span>
         <h2>מה עולה על השולחן</h2>
-        <p class="menu-sec__sub">כמות המנות בתפריטים מותאמות לפי כמות האורחים. הכמות המדויקת של המנות לאירוע שלכם תוצג בחישוב אוטומטי לאחר בחירת החבילה.</p>
+        <p class="menu-sec__sub">כמות המנות בתפריטים מותאמות לפי כמות האורחים. הכמות המדויקת של המנות לאירוע שלכם תוצג בחישוב אוטומטי לאחר בחירת החבילה</p>
       </div>
 
       <div class="cmenu-box reveal">
@@ -2551,7 +2488,7 @@
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>יין ו-2 בירות</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>פלייליסט + מערכת סאונד</span></div>
           </div>
-          <button type="button" class="btn btn--outline js-book" data-plan="happyhour">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--outline js-book" data-plan="happyhour">לבחירת חבילה</button>
           <div class="package-card__price">
             <span class="package-card__price-main"><strong>₪275</strong></span>
             <span class="package-card__price-cap">מחיר לראש</span>
@@ -2570,7 +2507,7 @@
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>בר מלא · 6 אלכוהול + 8 ערבובים</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>פלייליסט מותאם אישית</span></div>
           </div>
-          <button type="button" class="btn btn--fill js-book" data-plan="gibush">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--fill js-book" data-plan="gibush">לבחירת חבילה</button>
           <div class="package-card__price">
             <span class="package-card__price-main"><strong>₪330</strong></span>
             <span class="package-card__price-cap">מחיר לראש</span>
@@ -2592,7 +2529,7 @@
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>בר קוקטיילים מלא ופתוח</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>דיג'יי מהמבחר שלנו</span></div>
           </div>
-          <button type="button" class="btn btn--outline js-book" data-plan="mesiba">לבדיקת זמינות</button>
+          <button type="button" class="btn btn--outline js-book" data-plan="mesiba">לבחירת חבילה</button>
           <div class="package-card__price">
             <span class="package-card__price-main"><strong>₪450</strong></span>
             <span class="package-card__price-cap">מחיר לראש</span>
@@ -2705,7 +2642,7 @@
       <p class="contact__sub reveal">שלחו לנו הודעה עם כמות אנשים ותאריך משוער - ונחזור אליכם עם מחיר מפורט</p>
 
       <div class="contact__btns reveal">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
       </div>
 
       <div class="contact__social reveal">
