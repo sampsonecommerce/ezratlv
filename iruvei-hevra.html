@@ -831,6 +831,11 @@
        FOOD & ALCOHOL MENU section
     ============================================================ */
     .menu-sec__lead { max-width: 56ch; margin: 0.9rem auto 0; color: var(--cream-dim); font-size: 1rem; line-height: 1.7; }
+    .menu-sec__sub { max-width: 60ch; margin: 0.9rem auto 0; color: var(--cream-dim); font-size: 0.95rem; line-height: 1.7; }
+    /* standalone section CTAs */
+    .section-cta { text-align: center; margin-block-start: clamp(2.5rem, 5vw, 3.6rem); }
+    .section-cta-band { padding-block: clamp(2rem, 5vh, 3.4rem); }
+    .section-cta-band .section-cta { margin-block-start: 0; }
     .fmenu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2.5vw, 1.6rem); max-width: 1040px; margin-inline: auto; }
     .fmenu-cat {
       background: rgba(196,154,60,0.045); border: 1px solid var(--line);
@@ -871,9 +876,40 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
     /* day / evening sub-toggle */
-    .cmenu-sub { display: flex; gap: 0.3rem; max-width: 300px; margin: 0 auto 2.4rem; background: rgba(0,0,0,0.22); border: 1px solid var(--line); border-radius: 11px; padding: 4px; }
-    .cmenu-sub__btn { flex: 1; padding: 0.55rem; border: 0; border-radius: 8px; background: transparent; color: var(--cream-dim); font-family: var(--font-body); font-size: 0.9rem; cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease); }
-    .cmenu-sub__btn.is-active { background: rgba(196,154,60,0.18); color: var(--gold-light); font-weight: 600; }
+    /* day/evening toggle — same look as the closing-process choice, kept small */
+    .cmenu-sub { display: flex; gap: 0.4rem; max-width: 320px; margin: 0 auto 2.4rem; }
+    .cmenu-sub__btn {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.55rem 0.6rem; border-radius: 11px; border: 1.5px solid var(--line); background: rgba(255,255,255,0.02);
+      color: var(--cream-dim); font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; cursor: pointer;
+      transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.25s var(--ease), background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    .cmenu-sub__btn svg { width: 16px; height: 16px; flex: none; }
+    .cmenu-sub__btn:hover { transform: translateY(-1px); }
+    .cmenu-sub__btn--day.is-active { background: linear-gradient(150deg, #f6e3b4, #e9bf72); border-color: #f0d089; color: #4a360f; box-shadow: 0 6px 16px -8px rgba(233,191,114,0.7); }
+    .cmenu-sub__btn--eve.is-active { background: linear-gradient(150deg, #2a2d63, #16183a); border-color: #5b5fa0; color: #f3e6c0; box-shadow: 0 6px 16px -8px rgba(40,44,110,0.85); }
+    .cmenu-sub__btn--eve.is-active svg { color: var(--gold-light); }
+
+    /* sandwiches note (i icon) under the tray category title */
+    .cmenu-note { display: flex; align-items: flex-start; gap: 0.4rem; margin-block: 0.1rem 0.7rem; color: var(--cream-dim); font-size: 0.76rem; line-height: 1.5; }
+    .cmenu-note svg { width: 14px; height: 14px; color: var(--gold); flex: none; margin-block-start: 2px; }
+
+    /* day mode: the menu section turns light to make the day/night switch obvious */
+    #menu { transition: background-color 0.55s var(--ease); }
+    #menu.is-day { background-color: #f3ead4; }
+    #menu.is-day .sec-head .label { color: #b07d12; }
+    #menu.is-day h2, #menu.is-day .menu-sec__sub { color: #2c2113; }
+    #menu.is-day .menu-tablist { border-block-end-color: rgba(0,0,0,0.14); }
+    #menu.is-day .menu-tab { color: #7a6647; }
+    #menu.is-day .menu-tab:hover { color: #2c2113; }
+    #menu.is-day .menu-tab[aria-selected="true"] { color: #9a6f10; border-block-end-color: #9a6f10; }
+    #menu.is-day .menu-category__title { color: #9a6f10; border-block-end-color: rgba(0,0,0,0.16); }
+    #menu.is-day .menu-item { border-block-end-color: rgba(0,0,0,0.08); }
+    #menu.is-day .menu-item__name { color: #2c2113; }
+    #menu.is-day .menu-item__desc { color: #6f5f44; }
+    #menu.is-day .cmenu-note { color: #6f5f44; }
+    #menu.is-day .cmenu-note svg { color: #b07d12; }
+    #menu.is-day .cmenu-sub__btn { border-color: rgba(0,0,0,0.18); background: rgba(0,0,0,0.03); color: #7a6647; }
 
     #menu .menu-grid--cmenu { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3rem; }
     #menu .menu-category { margin-block-end: 1.8rem; }
@@ -2281,15 +2317,15 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
           <div class="vibe-card__title">האווירה</div>
-          <div class="vibe-card__body">חלל שנבנה למינגלינג טבעי - מוזיקה טובה, בר פתוח ותנועה זורמת שמשאירה את האנרגיות גבוהות כל הערב</div>
+          <div class="vibe-card__body">חלל אירועים פרטי שנועד לתת אווירה חמה, צעירה ומקצועית שמאפשרת לכלל האורחים להתחבר וליצור חוויה בלתי נשכחת ביחד</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/vibe-cocktail.jpg');"></div>
           <div class="vibe-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M4 4h16l-1 7a7 7 0 0 1-14 0L4 4Z"/><path d="M20 7h1a2 2 0 0 1 0 4h-1"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
           </div>
-          <div class="vibe-card__title">החוויה</div>
-          <div class="vibe-card__body">אוכל מעולה מחכה על הבר כבופה עשיר וקליל - כל אחד ואחת לוקחים צלחת ומשקה, וזזים ונהנים</div>
+          <div class="vibe-card__title">אישור מיידי</div>
+          <div class="vibe-card__body">תהליך קצר ומהיר שנסגר כאן באתר, על ידי בחירת אחת מארבע החבילות שלנו. הכל שקוף, בלי אותיות קטנות</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/vibe-food.jpg');"></div>
@@ -2297,8 +2333,12 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
           </div>
           <div class="vibe-card__title">התפריט</div>
-          <div class="vibe-card__body">מנות חלביות וצמחוניות מחומרי גלם טריים - יחד ניצור חוויה קולינרית שסוגרת פינה לכולם</div>
+          <div class="vibe-card__body">מנות חלביות וצמחוניות מחומרי גלם טריים - מבחר תפריטים מגוון שמתאים לכל אירוע</div>
         </div>
+      </div>
+
+      <div class="section-cta reveal">
+        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות וקבלת הצעה</a>
       </div>
     </div>
   </section>
@@ -2372,6 +2412,12 @@
     </div>
   </section>
 
+  <section class="section-cta-band">
+    <div class="wrap section-cta reveal">
+      <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות וקבלת הצעה</a>
+    </div>
+  </section>
+
   <!-- ============================================================
        STATS & LOCATION
   ============================================================ -->
@@ -2440,7 +2486,7 @@
         </div>
       </div>
 
-      <a class="btn btn--outline reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="btn btn--fill reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
     </div>
   </section>
 
@@ -2452,6 +2498,7 @@
       <div class="sec-head reveal">
         <span class="label">התפריט</span>
         <h2>מה עולה על השולחן</h2>
+        <p class="menu-sec__sub">כמות המנות בתפריטים מותאמות לפי כמות האורחים. הכמות המדויקת של המנות לאירוע שלכם תוצג בחישוב אוטומטי לאחר בחירת החבילה.</p>
       </div>
 
       <div class="menu-tablist" role="tablist" aria-label="תפריט לפי חבילה" id="cmenuTabs">
@@ -2461,8 +2508,14 @@
       </div>
 
       <div class="cmenu-sub" id="cmenuSub">
-        <button class="cmenu-sub__btn" type="button" data-menu="day">תפריט יום</button>
-        <button class="cmenu-sub__btn" type="button" data-menu="evening">תפריט ערב</button>
+        <button class="cmenu-sub__btn cmenu-sub__btn--day" type="button" data-menu="day">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          תפריט יום
+        </button>
+        <button class="cmenu-sub__btn cmenu-sub__btn--eve" type="button" data-menu="evening">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>
+          תפריט ערב
+        </button>
       </div>
 
       <div class="menu-tabpanel" role="tabpanel">
@@ -3268,45 +3321,45 @@
         happyhour: {
           day: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות"] },
-            { t: "סלטים", items: ["סלט ירוק / קיסר", "סלט עגבניות"] },
-            { t: "כריכים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני"] },
-            { t: "שתייה קלה", items: ["עמדת קפה/תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] }
+            { t: "סלטים", items: ["סלט ירוק / קיסר", "סלט קפרזה"] },
+            { t: "מגשי כריכים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני"] },
+            { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] }
           ],
           evening: [
             { t: "פתיחה ושרינג", items: ["צלחת זיתים", "צלחת לחמים", "פוקאצ'ה מתבלים"] },
-            { t: "סלטים", items: ["סלט ירוק או קיסר", "סלט עגבניות"] },
-            { t: "מהטאבון (פיצות)", items: ["מרגריטה + תוספת אחת על כל מגש"] },
+            { t: "סלטים", items: ["סלט ירוק או קיסר", "סלט קפרזה"] },
+            { t: "מהטאבון (פיצות)", items: ["מרגריטה"] },
             { t: "בר חופשי", items: ["2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)"] }
           ]
         },
         gibush: {
           day: [
-            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "צלחת חריפים", "צלחת זיתים"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט עגבניות", "סלט שורשים"] },
-            { t: "כריכים ופוקאצ'ות", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית"] },
-            { t: "שתייה קלה", items: ["עמדת קפה/תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] },
+            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "צלחת זיתים"] },
+            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "מגשי כריכים ופוקאצ'ות", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית"] },
+            { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] },
             { t: "אלכוהול שמתאים ליום", items: ["מימוזה", "אפרול שפריץ", "אספרסו מרטיני"] }
           ],
           evening: [
-            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "צלחת חריפים", "צלחת זיתים"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט עגבניות", "סלט שורשים"] },
+            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "צלחת זיתים"] },
+            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מהטאבון (פיצות)", items: ["מרגריטה", "פומדוריני", "בזיל", "פונגי", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית"] },
-            { t: "בר חופשי", items: ["2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה/אדום)", "6 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי)", "8 ערבובים (קולה, טוניק, לימונדה, סודה, ראשן, ספרייט, אשכוליות ותפוזים)"] }
+            { t: "בר חופשי", items: ["2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "6 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי)", "8 ערבובים (קולה, טוניק, לימונדה, סודה, ראשן, ספרייט, אשכוליות ותפוזים)"] }
           ]
         },
         mesiba: {
           day: [
-            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "צלחת חריפים", "כרוב חמים מהטאבון", "סביצ'ה"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט עגבניות", "סלט שורשים"] },
-            { t: "כריכים, פוקאצ'ות ומאפים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "כריך סלמון", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית", "מגש בורקסים", "מגש מאפים מתוקים"] },
-            { t: "שתייה קלה", items: ["עמדת קפה/תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה", "בקבוקי שתייה אישיים קרים"] },
+            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "כרוב חמים מהטאבון", "סביצ'ה"] },
+            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "מגשי כריכים, פוקאצ'ות ומאפים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "כריך סלמון", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית", "מגש בורקסים", "מגש מאפים מתוקים"] },
+            { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה", "בקבוקי שתייה אישיים קרים"] },
             { t: "אלכוהול שמתאים ליום", items: ["מימוזה", "אפרול שפריץ", "אספרסו מרטיני", "סנגריה קרה"] }
           ],
           evening: [
-            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "צלחת חריפים", "כרוב חמים מהטאבון", "קרודו (סביצ'ה אלגנטי)"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט עגבניות", "סלט שורשים"] },
+            { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "כרוב חמים מהטאבון", "קרודו (סביצ'ה אלגנטי)"] },
+            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מהטאבון (פיצות ופוקאצ'ות)", items: ["פיצה גבינה כחולה וריבת צ'ילי", "פרסקה", "בזיל", "פונגי", "פוקאצ'ה חמאת שום", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות", "חציל קלוי בטחינה שחורה"] },
-            { t: "בר קוקטיילים", items: ["בר קוקטיילים חופשי עם מיקסולוג צמוד (אלכוהול פרימיום)", "2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה/אדום)", "7 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי, טקילה)", "8 ערבובים"] }
+            { t: "בר קוקטיילים", items: ["בר קוקטיילים חופשי עם מיקסולוג צמוד (אלכוהול פרימיום)", "2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "7 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי, טקילה)", "8 ערבובים"] }
           ]
         }
       };
@@ -3315,24 +3368,55 @@
 
       // per-dish ingredient detail — shown on tap in the menu step (keys match the item strings above)
       const DISH_DESC = {
+        // openers
+        "צלחת לחמים": "לחמי מחמצת, חמאה רכה ומלח גס.",
+        "פוקאצ'ה ומתבלים": "פוקאצ'ה חמה מהטאבון עם מטבלים משתנים.",
+        "פוקאצ'ה מתבלים": "פוקאצ'ה חמה מהטאבון עם מטבלים משתנים.",
+        "צלחת זיתים": "תערובת זיתים בתיבול שום, שמן זית ולימון.",
         "צלחת גבינות": "שלושה סוגי גבינות קשות וחצי-קשות, קרקרים, קוקוט חמאה, ריבה ואגוזים. הדרגה (בסיסית / עשירה / פרימיום) נקבעת לפי איכות וסוג הגבינות.",
         "צלחת גבינות עשירה": "שלושה סוגי גבינות קשות וחצי-קשות, קרקרים, קוקוט חמאה, ריבה ואגוזים. הדרגה (בסיסית / עשירה / פרימיום) נקבעת לפי איכות וסוג הגבינות.",
         "צלחת גבינות פרימיום": "שלושה סוגי גבינות קשות וחצי-קשות, קרקרים, קוקוט חמאה, ריבה ואגוזים. הדרגה (בסיסית / עשירה / פרימיום) נקבעת לפי איכות וסוג הגבינות.",
+        "צלחת קלויים": "פלפלים קלויים בתנור, גבינת ברינזה, עלי זעתר, שמן זית ומלח גס.",
+        "חריפים של סופי": "סחוג ירוק, פלפל חריף, מטבל עגבניות ושמן זית.",
+        "כרוב חמים מהטאבון": "כרוב צלוי בטאבון על קרם פרש, שמן זית, טימין ופרמזן.",
         "חציל קלוי בטחינה שחורה": "חציל שלם קלוי בטאבון, זילוף עשיר של טחינה שחורה, גבינת פטה, עשבי תיבול ושמן זית. אפשר גם בגרסה טבעונית.",
         "סביצ'ה": "קוביות דג ים טרי, בצל סגול, צ'ילי, עשבי תיבול, שמן זית ומיץ לימון סחוט, על מצע קרם פרש או יוגורט ופרי העונה.",
-        "קרודו (סביצ'ה אלגנטי)": "קוביות דג ים טרי, בצל סגול, צ'ילי, עשבי תיבול, שמן זית ומיץ לימון סחוט, על מצע קרם פרש או יוגורט ופרי העונה.",
+        "קרודו": "קוביות דג ים טרי, בצל סגול, צ'ילי, עשבי תיבול, שמן זית ומיץ לימון סחוט, על מצע קרם פרש או יוגורט ופרי העונה.",
+        // salads
         "סלט שורשים": "גזר, קולורבי, סלק טרי וצנון חתוכים דק, תיבול אסייתי, שומשום קלוי ואגוזים.",
+        "סלט קפרזה": "עגבניות שרי, עלי בזיליקום, מוצרלה פרסקה ובלסמי.",
+        // pizzas / focaccia
+        "מרגריטה": "רוטב עגבניות, מוצרלה, בזיליקום, פרמזן ושמן זית.",
+        "פומדוריני": "רוטב עגבניות, מוצרלה, בזיליקום, שרי מיובשות וקונפי שום.",
+        "בזיל": "רוטב עגבניות, מוצרלה, נגיעות פסטו, זיתי קלמטה ופרמזן.",
+        "פונגי": "רוטב עגבניות, מוצרלה, פטריות פורטובלו צלויות ושמן כמהין.",
+        "פרסקה": "מוצרלה טרייה, עלי רוקט, שרי ובצל מתובל בלימון ובלסמי.",
         "פיצה גבינה כחולה וריבת צ'ילי": "רוטב עגבניות, מוצרלה, נגיעות גבינה כחולה עשירה וזילוף של ריבת צ'ילי מתוקה-חריפה.",
         "פוקאצ'ה חמאת שום": "מאפה שמרים ארוך מהטאבון, משוח בשפע חמאת שום, עשבי תיבול ומלח גס.",
         "פוקאצ'ה אנטיפסטי": "מאפה טאבון עם ירקות קלויים (קישואים, חצילים, פלפלים), שמן זית ורוזמרין.",
-        "פוקאצ'ה גבינות / בלקנית": "מאפה טאבון עם גבינת פטה/ברינזה, זיתי קלמטה, בצל סגול וזעתר.",
-        "פוקאצ'ה גבינות": "מאפה טאבון עם גבינת פטה/ברינזה, זיתי קלמטה, בצל סגול וזעתר.",
-        "סלט ביצים": "סלט ביצים קלאסי (מיונז, בצל ירוק, מלח ופלפל) עם עלי חסה ובצל שאלוט. מוגש בלחמנייה אישית.",
-        "כריך סלמון": "גבינת שמנת, דג סלמון, עגבנייה ועירית. מוגש בלחמנייה אישית.",
-        "גבינה": "גבינת שמנת, גבינת גאודה, מלפפון טרי, עגבנייה ורוקט. מוגש בלחמנייה אישית.",
-        "טונה / טבעוני": "טונה (מיונז, חרדל, מלפפון חמוץ ושאלוט, עם עגבנייה וחסה) או טבעוני (ממרח טחינה או פסטו וירקות אנטיפסטי קלויים). מוגש בלחמנייה אישית.",
+        "פוקאצ'ה גבינות / בלקנית": "מאפה טאבון עם גבינת פטה / ברינזה, זיתי קלמטה, בצל סגול וזעתר.",
+        "פוקאצ'ה גבינות": "מאפה טאבון עם גבינת פטה / ברינזה, זיתי קלמטה, בצל סגול וזעתר.",
+        // sandwich trays (the "10 mini-bites per tray" note covers the serving style)
+        "סלט ביצים": "סלט ביצים קלאסי (מיונז, בצל ירוק, מלח ופלפל) עם עלי חסה ובצל שאלוט.",
+        "גבינה": "גבינת שמנת, גבינת גאודה, מלפפון טרי, עגבנייה ורוקט.",
+        "טונה / טבעוני": "טונה (מיונז, חרדל, מלפפון חמוץ ושאלוט, עם עגבנייה וחסה) או טבעוני (ממרח טחינה או פסטו וירקות אנטיפסטי קלויים).",
+        "כריך סלמון": "גבינת שמנת, דג סלמון, עגבנייה ועירית.",
+        "מגש בורקסים": "מבחר בורקסים — גבינה, תרד, ביצים ופיצה.",
+        "מגש מאפים מתוקים": "מבחר מאפים מתוקים — שוקולד, קינמון וגבינה.",
+        // cocktails get a description; soft drinks stay name-only
+        "מימוזה": "מיץ תפוזים ויין מבעבע.",
+        "אפרול שפריץ": "אפרול, יין מבעבע וסודה.",
+        "אספרסו מרטיני": "וודקה, ליקר קפה, אספרסו וביטרס קקאו.",
+        "סנגריה קרה": "יין אדום ופירות עונתיים.",
       };
-      const descFor = item => DISH_DESC[item] || '';
+      // split a "name (explanation)" item; description = mapped desc → the parenthesis → none
+      const splitDish = item => {
+        const m = item.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+        const name = m ? m[1].trim() : item;
+        const paren = m ? m[2].trim() : '';
+        return { name: name, desc: DISH_DESC[name] || DISH_DESC[item] || paren };
+      };
+      const descFor = item => splitDish(item).desc;
       const slotIsEvening = s => parseInt((s || '').slice(0, 2), 10) >= 17;
 
       const menuToggle = document.getElementById('bookMenuToggle');
@@ -3552,21 +3636,25 @@
       const cmenuSub  = document.getElementById('cmenuSub');
       const cmenuGrid = document.getElementById('cmenuGrid');
       let cmPkg = 'happyhour', cmMenu = 'evening';
+      const SANDWICH_NOTE = '<div class="cmenu-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>כל הכריכים מוגשים בלחמניות ביס אישיות, במגשים של 10 יח׳.</span></div>';
       function renderCmenu() {
         if (!cmenuGrid) return;
         const secs = menuFor(cmPkg, cmMenu);
         cmenuGrid.innerHTML = secs.map(c => {
-          const drink = /בר|אלכוהול|שתייה/.test(c.t);
+          const isSandwich = /כריכים/.test(c.t);
           const items = c.items.map(it => {
-            const d = descFor(it);
-            return '<div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">' + it + '</div>' +
-              (d ? '<div class="menu-item__desc">' + d + '</div>' : '') + '</div></div>';
+            const nd = splitDish(it);
+            return '<div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">' + nd.name + '</div>' +
+              (nd.desc ? '<div class="menu-item__desc">' + nd.desc + '</div>' : '') + '</div></div>';
           }).join('');
-          return '<div class="menu-category' + (drink ? ' menu-category--full' : '') + '">' +
-            '<div class="menu-category__title">' + c.t + '</div>' + items + '</div>';
+          return '<div class="menu-category">' +
+            '<div class="menu-category__title">' + c.t + '</div>' +
+            (isSandwich ? SANDWICH_NOTE : '') + items + '</div>';
         }).join('');
         if (cmenuTabs) cmenuTabs.querySelectorAll('.menu-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pkg === cmPkg)));
         if (cmenuSub)  cmenuSub.querySelectorAll('.cmenu-sub__btn').forEach(b => b.classList.toggle('is-active', b.dataset.menu === cmMenu));
+        const sec = document.getElementById('menu');
+        if (sec) sec.classList.toggle('is-day', cmMenu === 'day');
       }
       if (cmenuTabs) cmenuTabs.addEventListener('click', e => { const b = e.target.closest('.menu-tab'); if (!b) return; cmPkg = b.dataset.pkg; renderCmenu(); });
       if (cmenuSub)  cmenuSub.addEventListener('click', e => { const b = e.target.closest('.cmenu-sub__btn'); if (!b) return; cmMenu = b.dataset.menu; renderCmenu(); });
