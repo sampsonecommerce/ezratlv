@@ -15,3 +15,14 @@
   from = "/api/submit-lead"
   to = "/.netlify/functions/submit-lead"
   status = 200
+
+# Old company-page URL -> new one, so any existing links don't 404.
+[[redirects]]
+  from = "/iruvei-hevra"
+  to = "/company-events"
+  status = 301
+
+[[redirects]]
+  from = "/iruvei-hevra.html"
+  to = "/company-events"
+  status = 301

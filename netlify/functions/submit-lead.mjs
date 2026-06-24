@@ -134,7 +134,7 @@ async function sendMetaCapi(d, ip, ua) {
     event_time: Math.floor(Date.now() / 1000),
     event_id: d.eventId || undefined,
     action_source: "website",
-    event_source_url: d.pageUrl || "https://www.ezratlv.com/iruvei-hevra.html",
+    event_source_url: d.pageUrl || "https://www.ezratlv.com/company-events.html",
     user_data,
     custom_data: { value: Number(d.estTotal) || 0, currency: "ILS" },
   };
