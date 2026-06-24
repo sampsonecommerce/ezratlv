@@ -1683,6 +1683,18 @@
     .prog-line { flex: 1; max-width: 22px; height: 2px; border-radius: 2px; background: rgba(196,154,60,0.2); transition: background 0.4s var(--ease); }
     .prog-line.is-on { background: var(--gold); }
 
+    /* mobile: drop the step circles to their own row so the Save toggle isn't buried under them */
+    @media (max-width: 560px) {
+      .book-bar {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "start close" "prog prog";
+        row-gap: 0.55rem;
+      }
+      .book-bar__start      { grid-area: start; }
+      .book-bar__btn--close { grid-area: close; justify-self: end; }
+      .book-progress        { grid-area: prog; justify-self: center; width: min(280px, 82vw); }
+    }
+
     /* add-ons (step 4) */
     .addons { display: flex; flex-direction: column; gap: 0.55rem; }
     .addon {
@@ -3072,6 +3084,14 @@
               </span>
             </label>
 
+            <label class="book-check book-check--sm" for="bfConsent">
+              <input type="checkbox" id="bfConsent" name="consent" />
+              <span class="book-check__text">
+                <b>אישור קבלת דיוור</b>
+                <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
+              </span>
+            </label>
+
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
           </form>
         </div>
@@ -4234,6 +4254,7 @@
           menu:    state.menu,                                  // 'day' | 'evening'
           foodNotes: foodNotes ? foodNotes.value : '',
           wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
+          consent: document.getElementById('bfConsent').checked,  // marketing consent (opt-in)
         };
         console.log('[booking request]', data);
         // campaign attribution from the URL (utm_campaign=flash20 / june10, etc.)

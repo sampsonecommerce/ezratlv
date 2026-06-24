@@ -37,6 +37,7 @@ export default async (req) => {
     d.notes ? `הערות: ${d.notes}` : "",
     d.foodNotes ? `הערות לאוכל: ${d.foodNotes}` : "",
     d.wantsCall ? "★ הלקוח ביקש לשוחח עם מנהל המכירות לפני חתימה" : "",
+    `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
   ].filter(Boolean).join("\n");
 
   const cols = {
