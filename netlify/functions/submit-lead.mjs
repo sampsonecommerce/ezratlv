@@ -33,7 +33,8 @@ export default async (req) => {
     return json({ ok: true, stub: true }, 200);
   }
 
-  const isCustom = d.leadType === "custom";   // bespoke "שיחת אפיון" lead vs the full booking flow
+  const isCustom = d.leadType === "custom";    // bespoke "שיחת אפיון" lead (company page)
+  const isPrivate = d.leadType === "private";  // private/birthday lead from the on-site popup
   const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
   const ils = (n) => (n == null ? "" : n + " ₪");
   const notes = isCustom ? [
@@ -45,6 +46,15 @@ export default async (req) => {
     d.company ? `חברה: ${d.company}` : "",
     d.notes ? `פרטים: ${d.notes}` : "",
     "★ הלקוח ביקש שיחת אפיון - יש לחזור אליו",
+    `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
+  ].filter(Boolean).join("\n") : isPrivate ? [
+    "סוג פנייה: אירוע פרטי (טופס אתר)",
+    `סוג האירוע: ${d.eventType || "-"}`,
+    `תאריך: ${d.date || "-"}    שעה: ${d.eventTime || "-"}`,
+    `אורחים: ${d.guests ?? "-"}`,
+    (Array.isArray(d.ageRanges) && d.ageRanges.length) ? `טווח גילאים: ${d.ageRanges.join(", ")}` : "",
+    d.callbackTime ? `זמן נוח לחזרה: ${d.callbackTime}` : "",
+    d.notes ? `הערות: ${d.notes}` : "",
     `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
   ].filter(Boolean).join("\n") : [
     `מסלול: ${d.plan || ""}${d.hours ? ` (${d.hours} שעות)` : ""}`,
@@ -64,7 +74,7 @@ export default async (req) => {
   const cols = {
     emailj9eufer1:         { email: d.email || "", text: d.email || "" },
     phone0zyibnut:         { phone: String(d.phone || ""), countryShortName: "IL" },
-    single_selecta6erdt9:  { label: "אירוע חברה" },          // Event type
+    single_selecta6erdt9:  { label: d.eventType || "אירוע חברה" }, // Event type (private form sends its own)
     number0kzol2wl:        String(d.guests ?? ""),           // Estimated guests
     numeric_mm1qj01x:      String(d.guests ?? ""),           // Guest Count
     short_textoant7hbw:    d.utm_campaign || "",             // Campaign Name
@@ -72,13 +82,17 @@ export default async (req) => {
     color_mm18ym70:        { label: "New Lead" },            // Status
     long_textlwbyhlq0:     { text: notes },                  // Additional notes
   };
-  // Booking-flow-only fields: skip them for a שיחת אפיון lead (no menu/price/date yet).
-  if (d.menu) cols.single_select943s5p9 = { label: timeLabel };           // Time of event (ערב/צהריים)
+  // Time of event: booking flow derives it from the menu (day/evening); the private form
+  // sends an explicit label (בוקר/צהריים/ערב/גמיש). Skip entirely for שיחת אפיון leads.
+  const timeOfEvent = d.menu ? timeLabel : (d.eventTime || "");
+  if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
   if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal); // Total Price
   if (d.date) cols.date5bab58wj = { date: d.date };          // Requested event date (YYYY-MM-DD)
-  // Consultation callback window -> the board's dedicated "Best time to call" column.
-  // d.callbackTime carries the exact existing label, so it maps without creating new labels.
-  if (isCustom && d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
+  // Callback window -> the board's dedicated "Best time to call" column. The forms send the
+  // exact existing labels, so they map without creating new labels.
+  if (d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
+  // Age range(s) of attendees -> the board's multi-select dropdown (private form only).
+  if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
 
   // Exact time slot from the site (e.g. "17:00-20:00") -> dedicated time columns.
   // single_select943s5p9 (Time of event) stays a coarse bucket (ערב/צהריים) for filtering.

@@ -2424,6 +2424,243 @@
       track.innerHTML = html + html + html;   // tripled: -33.333% wraps seamlessly + keeps wide screens full
     })();
   </script>
+  <!-- ============================================================
+       PRIVATE-EVENT LEAD POPUP (replaces the wkf.ms WorkForm)
+  ============================================================ -->
+  <style>
+    .book-modal { position: fixed; inset: 0; z-index: 1100; display: flex; padding: clamp(0.75rem, 3vw, 2.5rem); background: rgba(8,6,4,0.55); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.35s var(--ease); }
+    .book-modal.open { opacity: 1; }
+    .book-modal[hidden] { display: none; }
+    .book-modal__panel { position: relative; margin: auto; width: 100%; max-width: 540px; max-height: 100%; display: flex; flex-direction: column; background: linear-gradient(170deg, #1b150f, #120e0a); border: 1px solid rgba(196,154,60,0.25); border-radius: 24px; overflow: hidden; box-shadow: 0 30px 90px rgba(0,0,0,0.65); transform: scale(0.97); transition: transform 0.35s var(--ease); }
+    .book-modal.open .book-modal__panel { transform: scale(1); }
+
+    .book-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .book-field label { font-size: 0.82rem; color: var(--cream-dim); font-weight: 500; }
+    .book-field input, .book-field textarea { width: 100%; padding: 0.75rem 0.9rem; border-radius: 11px; border: 1px solid var(--line); background: rgba(0,0,0,0.25); color: var(--cream); font-family: var(--font-body); font-size: 0.95rem; transition: border-color 0.25s var(--ease); }
+    .book-field input:focus, .book-field textarea:focus { outline: none; border-color: var(--gold); }
+    .book-field input[type="date"] { color-scheme: dark; }
+    .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
+
+    .cf-panel { max-width: 520px; }
+    .cf-close { position: absolute; top: 14px; left: 14px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--cream-dim); cursor: pointer; transition: all 0.2s var(--ease); }
+    .cf-close:hover { color: var(--cream); border-color: var(--gold); }
+    .cf-close svg { width: 17px; height: 17px; }
+    .cf-scroll { overflow-y: auto; padding: clamp(1.6rem, 5vw, 2.4rem); }
+    .cf-head { margin-block-end: 1.4rem; }
+    .cf-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 4.5vw, 2rem); color: var(--cream); margin: 0.5rem 0 0.5rem; line-height: 1.15; }
+    .cf-sub { color: var(--cream-dim); line-height: 1.6; font-size: 0.95rem; margin: 0; }
+    .cf-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cf-pill { padding: 0.6rem 1rem; min-height: 44px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--cream-dim); font: inherit; font-size: 0.86rem; cursor: pointer; transition: all 0.2s var(--ease); }
+    .cf-pill:hover { border-color: var(--gold); color: var(--cream); }
+    .cf-pill.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 600; }
+    #privateForm .book-field { margin-block-end: 1rem; }
+    .cf-hint { font-size: 0.72rem; color: var(--cream-faint); font-weight: 400; }
+    .cf-done { text-align: center; padding: 1.5rem 0.5rem 1rem; }
+    .cf-done__icon { width: 60px; height: 60px; margin: 0 auto 1.1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+    .cf-done__icon svg { width: 28px; height: 28px; }
+    .cf-done h3 { font-family: var(--font-serif); font-size: 1.6rem; color: var(--cream); margin: 0 0 0.5rem; }
+    .cf-done p { color: var(--cream-dim); line-height: 1.6; margin: 0 0 1.5rem; }
+
+    .book-check { display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer; padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid var(--line); background: rgba(196,154,60,0.05); transition: border-color 0.25s var(--ease), background 0.25s var(--ease); }
+    .book-check:hover { border-color: rgba(196,154,60,0.4); }
+    .book-check:has(input:checked) { border-color: var(--gold); background: rgba(196,154,60,0.11); }
+    .book-check input { width: 19px; height: 19px; margin-block-start: 1px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
+    .book-check__text { display: flex; flex-direction: column; gap: 0.15rem; }
+    .book-check__text b { color: var(--cream); font-size: 0.9rem; font-weight: 600; }
+    .book-check__text span { color: var(--cream-dim); font-size: 0.8rem; line-height: 1.5; }
+    .book-check:has(input:checked) .book-check__text b { color: var(--gold-light); }
+    .book-check--sm { gap: 0.5rem; padding: 0; border: 0; border-radius: 0; background: transparent; margin-block-start: 0.6rem; }
+    .book-check--sm:hover, .book-check--sm:has(input:checked) { border-color: transparent; background: transparent; }
+    .book-check--sm input { width: 15px; height: 15px; }
+    .book-check--sm .book-check__text { gap: 0.1rem; }
+    .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
+    .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
+    .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
+    .book-terms a:hover { color: var(--gold-light); }
+  </style>
+
+  <div class="book-modal" id="privateModal" role="dialog" aria-modal="true" aria-label="בדיקת זמינות לאירוע פרטי" hidden>
+    <div class="book-modal__panel cf-panel">
+      <button class="cf-close" id="privateClose" type="button" aria-label="סגירה">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="cf-scroll">
+        <div class="cf-head">
+          <span class="label">בדיקת זמינות</span>
+          <h3 class="cf-title">נשמח לחגוג איתכם</h3>
+          <p class="cf-sub">השאירו פרטים ונחזור אליכם לבדוק זמינות לתאריך שלכם ולבנות הצעה שמתאימה בדיוק לאירוע.</p>
+        </div>
+
+        <form class="book-form" id="privateForm">
+          <div class="book-field--row">
+            <div class="book-field"><label for="pfName">שם מלא</label><input id="pfName" type="text" autocomplete="name" required /></div>
+            <div class="book-field"><label for="pfPhone">טלפון</label><input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
+          </div>
+          <div class="book-field--row">
+            <div class="book-field"><label for="pfEmail">אימייל</label><input id="pfEmail" type="email" inputmode="email" autocomplete="email" required /></div>
+            <div class="book-field"><label for="pfGuests">מספר אורחים</label><input id="pfGuests" type="number" inputmode="numeric" min="1" placeholder="לדוגמה 30" required /></div>
+          </div>
+
+          <div class="book-field">
+            <label>סוג האירוע</label>
+            <div class="cf-pills" id="cfpType" role="group" aria-label="סוג האירוע">
+              <button type="button" class="cf-pill active" data-val="יום הולדת">יום הולדת</button>
+              <button type="button" class="cf-pill" data-val="מסיבת רווקים/ רווקות">רווקים/רווקות</button>
+              <button type="button" class="cf-pill" data-val="אירוסין">אירוסין</button>
+              <button type="button" class="cf-pill" data-val="מסיבת פרידה">מסיבת פרידה</button>
+              <button type="button" class="cf-pill" data-val="מסיבה">מסיבה</button>
+              <button type="button" class="cf-pill" data-val="אחר">אחר</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label for="pfDate">תאריך האירוע המבוקש</label>
+            <input id="pfDate" type="date" required />
+          </div>
+
+          <div class="book-field">
+            <label>שעת האירוע</label>
+            <div class="cf-pills" id="cfpTime" role="group" aria-label="שעת האירוע">
+              <button type="button" class="cf-pill" data-val="בוקר">בוקר</button>
+              <button type="button" class="cf-pill" data-val="צהריים">צהריים</button>
+              <button type="button" class="cf-pill" data-val="ערב">ערב</button>
+              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
+            <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
+              <button type="button" class="cf-pill" data-val="מתחת ל 18">מתחת ל-18</button>
+              <button type="button" class="cf-pill" data-val="18-21">18-21</button>
+              <button type="button" class="cf-pill" data-val="22-26">22-26</button>
+              <button type="button" class="cf-pill" data-val="27- 30">27-30</button>
+              <button type="button" class="cf-pill" data-val="30 - 40">30-40</button>
+              <button type="button" class="cf-pill" data-val="40 - 50">40-50</button>
+              <button type="button" class="cf-pill" data-val="50 - 60">50-60</button>
+              <button type="button" class="cf-pill" data-val="60 +">60+</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label>מתי נוח שנחזור אליכם?</label>
+            <div class="cf-pills" id="cfpCall" role="group" aria-label="זמן נוח לחזרה">
+              <button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">בוקר · 9:00-12:00</button>
+              <button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">צהריים · 12:00-17:00</button>
+              <button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">גמיש / בכל זמן</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label for="pfNotes">משהו שחשוב שנדע? (לא חובה)</label>
+            <textarea id="pfNotes" rows="2" placeholder="אופי האירוע, בקשות מיוחדות, צרכים תזונתיים..."></textarea>
+          </div>
+
+          <label class="book-check book-check--sm" for="pfConsent">
+            <input type="checkbox" id="pfConsent" />
+            <span class="book-check__text">
+              <b>אישור קבלת דיוור</b>
+              <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
+            </span>
+          </label>
+
+          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%;">שליחת הבקשה</button>
+          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+        </form>
+
+        <div class="cf-done" id="privateDone" hidden>
+          <div class="cf-done__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <h3>קיבלנו, תודה!</h3>
+          <p>נחזור אליכם בהקדם לבדוק זמינות ולתאם את כל הפרטים.</p>
+          <button type="button" class="btn btn--outline" id="privateDoneClose">סגירה</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const modal = document.getElementById('privateModal');
+      if (!modal) return;
+      const form = document.getElementById('privateForm');
+      const done = document.getElementById('privateDone');
+      let lastFocus = null;
+
+      function open() {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        void modal.offsetWidth;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        const first = document.getElementById('pfName');
+        if (first) setTimeout(() => first.focus(), 80);
+      }
+      function close() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(() => { modal.hidden = true; }, 350);
+        if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
+      }
+
+      // Every old "לבדיקת זמינות" CTA (the wkf.ms links) now opens this popup.
+      document.querySelectorAll('a[href^="https://wkf.ms"]').forEach(el =>
+        el.addEventListener('click', e => { e.preventDefault(); open(); }));
+      document.getElementById('privateClose').addEventListener('click', close);
+      const dClose = document.getElementById('privateDoneClose');
+      if (dClose) dClose.addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+
+      // pill groups: single-select by default, multi-select when data-multi is set
+      modal.querySelectorAll('.cf-pills').forEach(group => {
+        const multi = group.hasAttribute('data-multi');
+        group.addEventListener('click', e => {
+          const btn = e.target.closest('.cf-pill');
+          if (!btn) return;
+          if (multi) { btn.classList.toggle('active'); }
+          else { group.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('active')); btn.classList.add('active'); }
+        });
+      });
+      const pillValue  = (id) => { const a = document.querySelector('#' + id + ' .cf-pill.active'); return a ? a.dataset.val : ''; };
+      const pillValues = (id) => Array.from(document.querySelectorAll('#' + id + ' .cf-pill.active')).map(p => p.dataset.val);
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const guests = document.getElementById('pfGuests').value.trim();
+        const data = {
+          leadType: 'private',
+          name:    document.getElementById('pfName').value.trim(),
+          phone:   document.getElementById('pfPhone').value.trim(),
+          email:   document.getElementById('pfEmail').value.trim(),
+          guests:  guests ? Number(guests) : '',
+          eventType:    pillValue('cfpType'),
+          date:    document.getElementById('pfDate').value,     // YYYY-MM-DD
+          eventTime:    pillValue('cfpTime'),
+          ageRanges:    pillValues('cfpAge'),
+          callbackTime: pillValue('cfpCall'),
+          notes:   document.getElementById('pfNotes').value.trim(),
+          consent: document.getElementById('pfConsent').checked,
+        };
+        const _utm = new URLSearchParams(location.search);
+        data.utm_campaign = _utm.get('utm_campaign') || 'private_form';
+        data.utm_source   = _utm.get('utm_source') || 'website';
+        const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
+        const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+        data.eventId = eventId;
+        data.pageUrl = location.href;
+        data.fbp = _cookie('_fbp');
+        data.fbc = _cookie('_fbc');
+        fetch('/api/submit-lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).catch(() => {});
+        if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+        form.hidden = true;
+        if (done) done.hidden = false;
+      });
+    })();
+  </script>
+
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
 </body>
