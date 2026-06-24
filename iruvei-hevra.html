@@ -1963,12 +1963,12 @@
       display: flex; align-items: center; justify-content: center;
     }
     .dn-bar__t { white-space: nowrap; }
-    /* mobile: bars get narrow, so stack start over end and drop the icon/dash to fit cleanly */
+    /* mobile: bars get narrow, so drop the icon and shrink the time so "09:00-12:00" fits on one line with the dash */
     @media (max-width: 560px) {
       .dn-bar__icon { display: none; }
-      .dn-bar__inner { gap: 0; padding-inline: 0.1rem; }
-      .dn-bar__time { flex-direction: column; line-height: 1.05; font-size: 0.62rem; }
-      .dn-bar__sep { display: none; }
+      .dn-bar__inner { gap: 0; padding-inline: 0.06rem; }
+      .dn-bar__time { font-size: 0.58rem; letter-spacing: 0; }
+      .dn-bar__sep { margin-inline: 1px; }
     }
     .dn-bar:hover:not(.is-taken):not(.is-selected) .dn-bar__fill { background: rgba(255,255,255,0.24); }
     .dn-bar:hover:not(.is-taken) { transform: translateY(-2px); }
