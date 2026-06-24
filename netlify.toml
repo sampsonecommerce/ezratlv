@@ -1,0 +1,17 @@
+# Netlify config for the Ezra TLV static site + serverless functions.
+# Static multi-page HTML, no build step. Functions live in netlify/functions.
+
+[build]
+  publish = "."
+  command = ""
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Clean URL for the lead-submit function: the site POSTs to /api/submit-lead
+# instead of the raw /.netlify/functions/ path.
+[[redirects]]
+  from = "/api/submit-lead"
+  to = "/.netlify/functions/submit-lead"
+  status = 200
