@@ -10,7 +10,8 @@
 import { createHash } from "node:crypto";
 
 const BOARD_ID = "5092854682";        // Events Form
-const NEW_LEADS_GROUP = "group_mm18zcww";
+const NEW_LEADS_GROUP = "group_mm18zcww";       // booking-flow leads (full quote -> contract automation)
+const CUSTOM_LEADS_GROUP = "group_mm4m7apf";    // שיחות אפיון (אתר) — bespoke callback requests, no contract yet
 const META_PIXEL_ID = "2174553826420246";
 
 export default async (req) => {
@@ -75,6 +76,9 @@ export default async (req) => {
   if (d.menu) cols.single_select943s5p9 = { label: timeLabel };           // Time of event (ערב/צהריים)
   if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal); // Total Price
   if (d.date) cols.date5bab58wj = { date: d.date };          // Requested event date (YYYY-MM-DD)
+  // Consultation callback window -> the board's dedicated "Best time to call" column.
+  // d.callbackTime carries the exact existing label, so it maps without creating new labels.
+  if (isCustom && d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
 
   // Exact time slot from the site (e.g. "17:00-20:00") -> dedicated time columns.
   // single_select943s5p9 (Time of event) stays a coarse bucket (ערב/צהריים) for filtering.
@@ -91,7 +95,7 @@ export default async (req) => {
   }`;
   const variables = {
     board: BOARD_ID,
-    group: NEW_LEADS_GROUP,
+    group: isCustom ? CUSTOM_LEADS_GROUP : NEW_LEADS_GROUP,
     name: (isCustom ? "שיחת אפיון · " : "") + String(d.name || "ליד מהאתר").slice(0, 230),
     cols: JSON.stringify(cols),
   };
