@@ -2169,6 +2169,40 @@
     .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
 
+    /* ---- Custom-event consultation modal (שיחת אפיון) ---- */
+    .cf-panel { max-width: 500px; }
+    .cf-close {
+      position: absolute; top: 14px; left: 14px; z-index: 2;
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--line);
+      color: var(--cream-dim); cursor: pointer; transition: all 0.2s var(--ease);
+    }
+    .cf-close:hover { color: var(--cream); border-color: var(--gold); }
+    .cf-close svg { width: 17px; height: 17px; }
+    .cf-scroll { overflow-y: auto; padding: clamp(1.6rem, 5vw, 2.4rem); }
+    .cf-head { margin-block-end: 1.4rem; }
+    .cf-title { font-family: var(--serif); font-size: clamp(1.5rem, 4.5vw, 2rem); color: var(--cream); margin: 0.5rem 0 0.5rem; line-height: 1.15; }
+    .cf-sub { color: var(--cream-dim); line-height: 1.6; font-size: 0.95rem; margin: 0; }
+    .cf-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cf-pill {
+      padding: 0.6rem 1rem; min-height: 44px; border-radius: 999px;
+      border: 1px solid var(--line); background: transparent; color: var(--cream-dim);
+      font: inherit; font-size: 0.86rem; cursor: pointer; transition: all 0.2s var(--ease);
+    }
+    .cf-pill:hover { border-color: var(--gold); color: var(--cream); }
+    .cf-pill.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 600; }
+    #customForm .book-field { margin-block-end: 1rem; }
+    .cf-done { text-align: center; padding: 1.5rem 0.5rem 1rem; }
+    .cf-done__icon {
+      width: 60px; height: 60px; margin: 0 auto 1.1rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.35);
+    }
+    .cf-done__icon svg { width: 28px; height: 28px; }
+    .cf-done h3 { font-family: var(--serif); font-size: 1.6rem; color: var(--cream); margin: 0 0 0.5rem; }
+    .cf-done p { color: var(--cream-dim); line-height: 1.6; margin: 0 0 1.5rem; }
+
     /* optional "talk to our sales manager first" toggle */
     .book-check {
       display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer;
@@ -2762,7 +2796,7 @@
             <p style="color: var(--cream-dim); line-height: 1.65; margin-block-end: 1.5rem; font-size: 1rem;">
               הפקה מאפס למאה. אנחנו בונים יחד איתכם חוויה ייחודית לחלוטין - אצלנו בחלל, אצלכם במשרד, או בכל לוקיישן שתבחרו. אנחנו מביאים את הצוות, הבר והאוכל, ומתפעלים את האירוע כולו כדי שתוכלו להגיע כאורחי VIP.
             </p>
-            <a class="btn btn--outline" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="width: fit-content;">לתיאום שיחת אפיון</a>
+            <button type="button" class="btn btn--outline js-custom" style="width: fit-content;">לתיאום שיחת אפיון</button>
           </div>
         </div>
       </div>
@@ -3156,6 +3190,101 @@
 
       <div class="book-cta-foot" id="bookTalkFoot" hidden>
         <button type="button" class="book-talk-btn" id="bookTalkBtn">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CUSTOM-EVENT CONSULTATION MODAL · שיחת אפיון (מסלול מותאם אישית)
+  ============================================================ -->
+  <div class="book-modal" id="customModal" role="dialog" aria-modal="true" aria-label="תיאום שיחת אפיון" hidden>
+    <div class="book-modal__panel cf-panel">
+      <button class="cf-close" id="customClose" type="button" aria-label="סגירה">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="cf-scroll">
+        <div class="cf-head">
+          <span class="label">מסלול מותאם אישית</span>
+          <h3 class="cf-title">בואו נתכנן משהו משלכם</h3>
+          <p class="cf-sub">השאירו פרטים ונחזור אליכם לשיחת אפיון קצרה. נבין מה אתם מדמיינים ונבנה הצעה מדויקת.</p>
+        </div>
+
+        <form class="book-form" id="customForm">
+          <div class="book-field--row">
+            <div class="book-field">
+              <label for="cfName">שם מלא</label>
+              <input id="cfName" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="book-field">
+              <label for="cfCompany">חברה</label>
+              <input id="cfCompany" name="company" type="text" autocomplete="organization" />
+            </div>
+          </div>
+          <div class="book-field--row">
+            <div class="book-field">
+              <label for="cfPhone">טלפון</label>
+              <input id="cfPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+            </div>
+            <div class="book-field">
+              <label for="cfEmail">אימייל</label>
+              <input id="cfEmail" name="email" type="email" inputmode="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="book-field--row">
+            <div class="book-field">
+              <label for="cfGuests">כמה משתתפים?</label>
+              <input id="cfGuests" name="guests" type="number" inputmode="numeric" min="1" placeholder="לדוגמה 35" />
+            </div>
+            <div class="book-field">
+              <label for="cfDate">מתי בערך?</label>
+              <input id="cfDate" name="when" type="text" placeholder="תאריך או טווח" />
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label>איפה האירוע?</label>
+            <div class="cf-pills" id="cfLocation" role="group" aria-label="מיקום האירוע">
+              <button type="button" class="cf-pill" data-val="אצלנו בעזרא">אצלנו בעזרא</button>
+              <button type="button" class="cf-pill" data-val="אצלכם / במשרד">אצלכם / במשרד</button>
+              <button type="button" class="cf-pill" data-val="לוקיישן אחר">לוקיישן אחר</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label>מתי נוח שנחזור אליכם?</label>
+            <div class="cf-pills" id="cfCallback" role="group" aria-label="זמן נוח לחזרה">
+              <button type="button" class="cf-pill" data-val="בוקר">בוקר</button>
+              <button type="button" class="cf-pill" data-val="צהריים">צהריים</button>
+              <button type="button" class="cf-pill" data-val="אחר הצהריים">אחר הצהריים</button>
+              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+            </div>
+          </div>
+
+          <div class="book-field">
+            <label for="cfNotes">ספרו לנו על האירוע (לא חובה)</label>
+            <textarea id="cfNotes" name="notes" rows="2" placeholder="אופי האירוע, רעיונות, מה חשוב לכם..."></textarea>
+          </div>
+
+          <label class="book-check book-check--sm" for="cfConsent">
+            <input type="checkbox" id="cfConsent" name="consent" />
+            <span class="book-check__text">
+              <b>אישור קבלת דיוור</b>
+              <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
+            </span>
+          </label>
+
+          <button class="btn btn--fill" id="customSubmit" type="submit" style="width: 100%;">שליחת הפנייה</button>
+          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+        </form>
+
+        <div class="cf-done" id="customDone" hidden>
+          <div class="cf-done__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <h3>קיבלנו, תודה!</h3>
+          <p>נחזור אליכם בזמן שבחרתם לשיחת אפיון קצרה.</p>
+          <button type="button" class="btn btn--outline" id="customDoneClose">סגירה</button>
+        </div>
       </div>
     </div>
   </div>
@@ -4429,6 +4558,102 @@
           else if (packagesSection) { packagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
           else { open(); }
         });
+      });
+    })();
+
+    /* ---- Custom-event consultation modal (שיחת אפיון) ---- */
+    (function () {
+      const modal = document.getElementById('customModal');
+      if (!modal) return;
+      const form = document.getElementById('customForm');
+      const done = document.getElementById('customDone');
+      let lastFocus = null;
+
+      function open() {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        void modal.offsetWidth;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        const first = document.getElementById('cfName');
+        if (first) setTimeout(() => first.focus(), 80);
+      }
+      function close() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(() => { modal.hidden = true; }, 350);
+        if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
+      }
+
+      document.querySelectorAll('.js-custom').forEach(el =>
+        el.addEventListener('click', e => { e.preventDefault(); open(); }));
+      document.getElementById('customClose').addEventListener('click', close);
+      const dClose = document.getElementById('customDoneClose');
+      if (dClose) dClose.addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+
+      // single-select pill groups
+      modal.querySelectorAll('.cf-pills').forEach(group => {
+        group.addEventListener('click', e => {
+          const btn = e.target.closest('.cf-pill');
+          if (!btn) return;
+          group.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+      const pillValue = (groupId) => {
+        const a = document.querySelector('#' + groupId + ' .cf-pill.active');
+        return a ? a.dataset.val : '';
+      };
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const loc    = pillValue('cfLocation');
+        const cb     = pillValue('cfCallback');
+        const guests = document.getElementById('cfGuests').value.trim();
+        const when   = document.getElementById('cfDate').value.trim();
+        const extra  = document.getElementById('cfNotes').value.trim();
+        const notes = [
+          'סוג פנייה: שיחת אפיון (מסלול מותאם אישית)',
+          loc ? ('מיקום מבוקש: ' + loc) : '',
+          cb ? ('זמן נוח לחזרה: ' + cb) : '',
+          when ? ('מתי בערך: ' + when) : '',
+          extra ? ('פרטים: ' + extra) : '',
+        ].filter(Boolean).join('\n');
+
+        const data = {
+          plan: 'מסלול מותאם אישית · שיחת אפיון',
+          name:    document.getElementById('cfName').value.trim(),
+          company: document.getElementById('cfCompany').value.trim(),
+          phone:   document.getElementById('cfPhone').value.trim(),
+          email:   document.getElementById('cfEmail').value.trim(),
+          guests:  guests ? Number(guests) : '',
+          notes:   notes,
+          callbackTime:  cb,
+          eventLocation: loc,
+          wantsCall: true,   // a consultation request is always a callback lead
+          consent:   document.getElementById('cfConsent').checked,
+        };
+        // campaign attribution + Meta dedup, mirroring the main booking form
+        const _utm = new URLSearchParams(location.search);
+        data.utm_campaign = _utm.get('utm_campaign') || '';
+        data.utm_source   = _utm.get('utm_source') || '';
+        const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
+        const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+        data.eventId = eventId;
+        data.pageUrl = location.href;
+        data.fbp = _cookie('_fbp');
+        data.fbc = _cookie('_fbc');
+        fetch('/api/submit-lead', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        }).catch(() => {});
+        if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+
+        form.hidden = true;
+        if (done) done.hidden = false;
       });
     })();
 
