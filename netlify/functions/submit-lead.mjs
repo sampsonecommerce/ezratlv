@@ -7,14 +7,23 @@
 // (Site config -> Environment variables). It is never in the repo. The browser
 // only calls /api/submit-lead and never sees the token.
 
+import { createHash } from "node:crypto";
+
 const BOARD_ID = "5092854682";        // Events Form
 const NEW_LEADS_GROUP = "group_mm18zcww";
+const META_PIXEL_ID = "2174553826420246";
 
 export default async (req) => {
   if (req.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
 
   let d;
   try { d = await req.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400); }
+
+  // Meta Conversions API: server-side Lead event, deduped with the browser pixel via event_id.
+  // Runs independently of Monday so it fires even while the Monday token is paused.
+  const ip = req.headers.get("x-nf-client-connection-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim();
+  const ua = req.headers.get("user-agent") || "";
+  await sendMetaCapi(d, ip, ua).catch((e) => console.error("CAPI failed:", e));
 
   const TOKEN = process.env.MONDAY_TOKEN;
   if (!TOKEN) {
@@ -95,4 +104,47 @@ export default async (req) => {
 
 function json(obj, status) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json" } });
+}
+
+const sha256 = (s) => createHash("sha256").update(String(s)).digest("hex");
+
+// Server-side Meta Conversions API "Lead" event. Hashes PII (SHA-256), includes the
+// browser cookies + IP/UA for matching, and reuses the browser event_id for dedup.
+async function sendMetaCapi(d, ip, ua) {
+  const TOKEN = process.env.META_CAPI_TOKEN;
+  if (!TOKEN) return; // CAPI not configured
+
+  const user_data = {};
+  if (d.email) user_data.em = [sha256(String(d.email).trim().toLowerCase())];
+  let phone = String(d.phone || "").replace(/\D/g, "");
+  if (phone.startsWith("0")) phone = "972" + phone.slice(1); // IL local -> E.164 digits
+  if (phone) user_data.ph = [sha256(phone)];
+  if (d.name) {
+    const parts = String(d.name).trim().split(/\s+/);
+    user_data.fn = [sha256(parts[0].toLowerCase())];
+    if (parts.length > 1) user_data.ln = [sha256(parts.slice(1).join(" ").toLowerCase())];
+  }
+  if (d.fbp) user_data.fbp = d.fbp;
+  if (d.fbc) user_data.fbc = d.fbc;
+  if (ip) user_data.client_ip_address = ip;
+  if (ua) user_data.client_user_agent = ua;
+
+  const event = {
+    event_name: "Lead",
+    event_time: Math.floor(Date.now() / 1000),
+    event_id: d.eventId || undefined,
+    action_source: "website",
+    event_source_url: d.pageUrl || "https://www.ezratlv.com/iruvei-hevra.html",
+    user_data,
+    custom_data: { value: Number(d.estTotal) || 0, currency: "ILS" },
+  };
+
+  const url = `https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(TOKEN)}`;
+  const r = await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ data: [event] }),
+  });
+  const out = await r.json().catch(() => ({}));
+  if (out.error) console.error("Meta CAPI error:", JSON.stringify(out.error));
 }
