@@ -2657,6 +2657,16 @@
     })();
   </script>
 
+  <!-- Keep ESC for closing our own popups/menus; stop it from opening the accessibility widget.
+       Registered after all our keydown handlers (which run first) and before the widget loads. -->
+  <script>
+    (function () {
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) e.stopImmediatePropagation();
+      }, false);
+    })();
+  </script>
+
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
 </body>
