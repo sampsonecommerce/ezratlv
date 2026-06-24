@@ -2532,14 +2532,10 @@
           <div class="book-field">
             <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
             <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
-              <button type="button" class="cf-pill" data-val="מתחת ל 18">מתחת ל-18</button>
-              <button type="button" class="cf-pill" data-val="18-21">18-21</button>
-              <button type="button" class="cf-pill" data-val="22-26">22-26</button>
-              <button type="button" class="cf-pill" data-val="27- 30">27-30</button>
-              <button type="button" class="cf-pill" data-val="30 - 40">30-40</button>
-              <button type="button" class="cf-pill" data-val="40 - 50">40-50</button>
-              <button type="button" class="cf-pill" data-val="50 - 60">50-60</button>
-              <button type="button" class="cf-pill" data-val="60 +">60+</button>
+              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21">עד 21</button>
+              <button type="button" class="cf-pill" data-val="22-26,27- 30">22-30</button>
+              <button type="button" class="cf-pill" data-val="30 - 40,40 - 50">31-50</button>
+              <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
             </div>
           </div>
 
@@ -2565,7 +2561,7 @@
             </span>
           </label>
 
-          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%;">שליחת הבקשה</button>
+          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">שליחת הבקשה</button>
           <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
         </form>
 
@@ -2639,7 +2635,7 @@
           eventType:    pillValue('cfpType'),
           date:    document.getElementById('pfDate').value,     // YYYY-MM-DD
           eventTime:    pillValue('cfpTime'),
-          ageRanges:    pillValues('cfpAge'),
+          ageRanges:    pillValues('cfpAge').flatMap(v => v.split(',')),   // each bucket expands to its exact board labels
           callbackTime: pillValue('cfpCall'),
           notes:   document.getElementById('pfNotes').value.trim(),
           consent: document.getElementById('pfConsent').checked,
