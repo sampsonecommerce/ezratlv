@@ -2158,10 +2158,17 @@
     .book-check__text b { color: var(--cream); font-size: 0.9rem; font-weight: 600; }
     .book-check__text span { color: var(--cream-dim); font-size: 0.8rem; line-height: 1.5; }
     .book-check:has(input:checked) .book-check__text b { color: var(--gold-light); }
-    /* compact, understated variant at the bottom of the form */
-    .book-check--sm { gap: 0.55rem; padding: 0.55rem 0.7rem; border-radius: 10px; background: transparent; margin-block-start: 1rem; }
-    .book-check--sm input { width: 16px; height: 16px; }
-    .book-check--sm .book-check__text b { font-size: 0.82rem; font-weight: 500; }
+    /* compact, borderless variant at the bottom of the form (no card box) */
+    .book-check--sm { gap: 0.5rem; padding: 0; border: 0; border-radius: 0; background: transparent; margin-block-start: 0.6rem; }
+    .book-check--sm:hover, .book-check--sm:has(input:checked) { border-color: transparent; background: transparent; }
+    .book-check--sm input { width: 15px; height: 15px; }
+    .book-check--sm .book-check__text { gap: 0.1rem; }
+    .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
+    .book-check--sm .book-check__text span { font-size: 0.72rem; line-height: 1.45; }
+    /* terms + privacy agreement notice under the submit button */
+    .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
+    .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
+    .book-terms a:hover { color: var(--gold-light); }
     .book-check--sm .book-check__text span { font-size: 0.72rem; }
 
     /* confirmation */
@@ -3093,6 +3100,7 @@
             </label>
 
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
+            <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
           </form>
         </div>
 
