@@ -4212,7 +4212,6 @@
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const plan = PLANS[state.plan];
-        // TODO(backend): POST this to Monday - the automation generates + sends the contract.
         const wantsCall = document.getElementById('bfWantsCall').checked;
         const ph = perHeadFor(plan);
         const gg = state.guests;
@@ -4225,6 +4224,7 @@
           date: state.date ? key(state.date) : '', slot: state.slot,
           guests: gg, perHead: ph, base: base, addonsTotal: addOns, estTotal: total,
           addons: sel.map(a => a.id),
+          addonLabels: sel.map(a => a.label),
           name:    document.getElementById('bfName').value,
           company: document.getElementById('bfCompany').value,
           phone:   document.getElementById('bfPhone').value,
@@ -4236,6 +4236,16 @@
           wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
         };
         console.log('[booking request]', data);
+        // campaign attribution from the URL (utm_campaign=flash20 / june10, etc.)
+        const _utm = new URLSearchParams(location.search);
+        data.utm_campaign = _utm.get('utm_campaign') || '';
+        data.utm_source   = _utm.get('utm_source') || '';
+        // send to Monday via the Netlify function; the board automation generates + emails the contract
+        fetch('/api/submit-lead', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        }).catch(() => {});
         // confirmation copy is static in the markup (order received → contract emailed → 24h callback)
         // populate the digital receipt with the real (multiplied) amounts
         const dRef = state.date || today;
