@@ -1689,6 +1689,9 @@
       background: conic-gradient(var(--gold) var(--p), rgba(196,154,60,0.2) 0);
       transition: --p 0.45s var(--ease);
     }
+    /* a fully-completed dot uses a solid gold ring so the conic-gradient seam
+       at 12 o'clock doesn't leave a tiny dark notch at the top */
+    .prog-dot.is-full::before { background: var(--gold); }
     .prog-dot::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--bg-modal, #17120b); }
     .prog-dot__num {
       position: relative; z-index: 1; font-family: 'Pliant', var(--font-body); font-size: 0.78rem;
