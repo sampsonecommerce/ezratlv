@@ -4614,31 +4614,27 @@
         const guests = document.getElementById('cfGuests').value.trim();
         const when   = document.getElementById('cfDate').value.trim();
         const extra  = document.getElementById('cfNotes').value.trim();
-        const notes = [
-          'סוג פנייה: שיחת אפיון (מסלול מותאם אישית)',
-          loc ? ('מיקום מבוקש: ' + loc) : '',
-          cb ? ('זמן נוח לחזרה: ' + cb) : '',
-          when ? ('מתי בערך: ' + when) : '',
-          extra ? ('פרטים: ' + extra) : '',
-        ].filter(Boolean).join('\n');
 
         const data = {
+          leadType: 'custom',                          // distinguishes this from the booking flow
           plan: 'מסלול מותאם אישית · שיחת אפיון',
           name:    document.getElementById('cfName').value.trim(),
           company: document.getElementById('cfCompany').value.trim(),
           phone:   document.getElementById('cfPhone').value.trim(),
           email:   document.getElementById('cfEmail').value.trim(),
           guests:  guests ? Number(guests) : '',
-          notes:   notes,
+          eventDate:     when,                         // free-text "מתי בערך"
           callbackTime:  cb,
           eventLocation: loc,
+          notes:   extra,                              // just the free-text box; server builds the rest
           wantsCall: true,   // a consultation request is always a callback lead
           consent:   document.getElementById('cfConsent').checked,
         };
-        // campaign attribution + Meta dedup, mirroring the main booking form
+        // attribution + Meta dedup. Keep the ad's UTMs from the URL; if none,
+        // tag this form's own path so organic consultation leads stay trackable.
         const _utm = new URLSearchParams(location.search);
-        data.utm_campaign = _utm.get('utm_campaign') || '';
-        data.utm_source   = _utm.get('utm_source') || '';
+        data.utm_campaign = _utm.get('utm_campaign') || 'custom_consultation';
+        data.utm_source   = _utm.get('utm_source') || 'website';
         const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
         const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
         data.eventId = eventId;

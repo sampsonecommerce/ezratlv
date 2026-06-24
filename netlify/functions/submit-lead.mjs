@@ -32,9 +32,20 @@ export default async (req) => {
     return json({ ok: true, stub: true }, 200);
   }
 
+  const isCustom = d.leadType === "custom";   // bespoke "שיחת אפיון" lead vs the full booking flow
   const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
   const ils = (n) => (n == null ? "" : n + " ₪");
-  const notes = [
+  const notes = isCustom ? [
+    "סוג פנייה: שיחת אפיון (מסלול מותאם אישית)",
+    d.eventLocation ? `מיקום מבוקש: ${d.eventLocation}` : "",
+    d.callbackTime ? `זמן נוח לחזרה: ${d.callbackTime}` : "",
+    d.eventDate ? `מתי בערך: ${d.eventDate}` : "",
+    `אורחים: ${d.guests ?? "-"}`,
+    d.company ? `חברה: ${d.company}` : "",
+    d.notes ? `פרטים: ${d.notes}` : "",
+    "★ הלקוח ביקש שיחת אפיון - יש לחזור אליו",
+    `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
+  ].filter(Boolean).join("\n") : [
     `מסלול: ${d.plan || ""}${d.hours ? ` (${d.hours} שעות)` : ""}`,
     `תפריט: ${d.menu === "evening" ? "ערב" : "יום"}`,
     `תאריך: ${d.date || "-"}    שעה: ${d.slot || "-"}`,
@@ -53,15 +64,16 @@ export default async (req) => {
     emailj9eufer1:         { email: d.email || "", text: d.email || "" },
     phone0zyibnut:         { phone: String(d.phone || ""), countryShortName: "IL" },
     single_selecta6erdt9:  { label: "אירוע חברה" },          // Event type
-    single_select943s5p9:  { label: timeLabel },             // Time of event
     number0kzol2wl:        String(d.guests ?? ""),           // Estimated guests
     numeric_mm1qj01x:      String(d.guests ?? ""),           // Guest Count
-    numeric_mm3rxrb4:      String(d.estTotal ?? ""),         // Total Price (Numbers)
     short_textoant7hbw:    d.utm_campaign || "",             // Campaign Name
     short_textgjnrhjdi:    d.utm_source || "",               // Traffic Source
     color_mm18ym70:        { label: "New Lead" },            // Status
     long_textlwbyhlq0:     { text: notes },                  // Additional notes
   };
+  // Booking-flow-only fields: skip them for a שיחת אפיון lead (no menu/price/date yet).
+  if (d.menu) cols.single_select943s5p9 = { label: timeLabel };           // Time of event (ערב/צהריים)
+  if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal); // Total Price
   if (d.date) cols.date5bab58wj = { date: d.date };          // Requested event date (YYYY-MM-DD)
 
   // Exact time slot from the site (e.g. "17:00-20:00") -> dedicated time columns.
@@ -80,7 +92,7 @@ export default async (req) => {
   const variables = {
     board: BOARD_ID,
     group: NEW_LEADS_GROUP,
-    name: String(d.name || "ליד מהאתר").slice(0, 250),
+    name: (isCustom ? "שיחת אפיון · " : "") + String(d.name || "ליד מהאתר").slice(0, 230),
     cols: JSON.stringify(cols),
   };
 
