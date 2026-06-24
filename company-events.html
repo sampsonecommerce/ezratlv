@@ -3869,6 +3869,18 @@
         /כרוב|סביצ|קרודו/.test(n) ? 'premium' :
         /גבינ/.test(n) ? 'cheese' :
         /קלוי/.test(n) ? 'roasted' : 'bread';
+      // Split a category's total across its dishes so every box shows a real breakdown
+      // (not one row repeating the total). Rows always sum to `total`. When there are more
+      // dishes than units, dishes are grouped into `total` rows so no line shows 0.
+      function distributeRows(names, total, unit) {
+        const n = names.length;
+        if (!n) return [];
+        const rows = Math.max(1, Math.min(total, n));
+        const buckets = Array.from({ length: rows }, () => []);
+        names.forEach((nm, i) => buckets[Math.floor(i * rows / n)].push(nm));
+        const base = Math.floor(total / rows), rem = total - base * rows;
+        return buckets.map((b, i) => ({ name: b.join(', '), qty: base + (i < rem ? 1 : 0), unit }));
+      }
       // returns { isBar, qtyLabel (left side), breakdown:[{name, qty, unit}] }
       function categoryPortions(catLabel, names, g) {
         if (isBarCat(catLabel)) return { isBar:true, qtyLabel:'ללא הגבלה', breakdown: names.map(n => ({ name:n, qty:null, unit:'' })) };
@@ -3885,13 +3897,13 @@
         if (/כריכ/.test(catLabel)) {
           const pa = names.filter(n => /מאפ|בורק/.test(n)), sa = names.filter(n => !/מאפ|בורק/.test(n));
           const bd = []; let tot = 0;
-          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push({ name: sa.join(', '), qty:q, unit:'מגשים' }); }
-          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push({ name: pa.join(', '), qty:q, unit:'מגשים' }); }
+          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push(...distributeRows(sa, q, 'מגשים')); }
+          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push(...distributeRows(pa, q, 'מגשים')); }
           return { isBar:false, qtyLabel: tot + ' מגשים', breakdown: bd };
         }
         const c = /טאבון|פיצ/.test(catLabel) ? PORTION.taboon : PORTION.salad;
         const q = Math.max(1, portionRnd(g * c.mult));
-        return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: [{ name: names.join(', '), qty:q, unit:c.unit }] };
+        return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: distributeRows(names, q, c.unit) };
       }
       // word-saving: collapse a shared leading "vessel" word, separate food types with |
       const VESSEL = /^(צלחת|צלחות|קערית|קעריות|קערות|מגש|מגשי|פלטת|פלטה|סלסלת|סלסלות|עמדת|סלט|סלטי)$/;
