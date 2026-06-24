@@ -54,6 +54,16 @@ export default async (req) => {
   };
   if (d.date) cols.date5bab58wj = { date: d.date };          // Requested event date (YYYY-MM-DD)
 
+  // Exact time slot from the site (e.g. "17:00-20:00") -> dedicated time columns.
+  // single_select943s5p9 (Time of event) stays a coarse bucket (ערב/צהריים) for filtering.
+  const slot = String(d.slot || "");
+  const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
+  const [startStr, endStr] = slot.split("-");
+  const startHM = parseHM(startStr), endHM = parseHM(endStr);
+  if (slot)    cols.text_mm2km76j = slot;       // Start-End (text)
+  if (startHM) cols.hour_mm1q610q = startHM;     // Start Time
+  if (endHM)   cols.hour_mm1qa44s = endHM;       // End Time
+
   const query = `mutation ($board: ID!, $group: String, $name: String!, $cols: JSON!) {
     create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
   }`;
