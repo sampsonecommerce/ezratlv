@@ -116,9 +116,8 @@
       inset-block-start: 0;
       inset-inline: 0;
       z-index: 100;
-      /* 3-zone layout: logo (right) · section links (center) · actions (left) */
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      /* logo (right) · section links (center) · actions (left) */
+      display: flex;
       align-items: center;
       padding: 1.4rem clamp(1.25rem, 5vw, 3rem);
       background: #000;
@@ -132,27 +131,29 @@
     .nav__logo {
       display: flex;
       align-items: center;
-      justify-self: start;   /* RTL start = right edge */
     }
     .nav__logo img {
       height: 22px;
       width: auto;
       display: block;
     }
+    /* links fill the space between logo and actions and center within it,
+       so the gap stays balanced no matter how wide each side is */
     .nav__links {
+      flex: 1;
       display: flex;
-      gap: clamp(1.5rem, 3vw, 2.8rem);
+      justify-content: center;
+      gap: clamp(1.2rem, 2.5vw, 2.2rem);
       align-items: center;
-      justify-self: center;
+      white-space: nowrap;
     }
     .nav__actions {
       display: flex;
       align-items: center;
       gap: 0.85rem;
-      justify-self: end;     /* RTL end = left edge */
     }
     .nav__links a {
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 400;
       color: var(--cream-dim);
       position: relative;
@@ -1660,10 +1661,11 @@
 
     <!-- desktop: center links -->
     <div class="nav__links">
-      <a href="#concept">החוויה</a>
-      <a href="#food">אוכל</a>
-      <a href="#bar">בר</a>
+      <a href="#concept">החוויה בעזרא</a>
+      <a href="#food">האוכל</a>
+      <a href="#bar">הבר</a>
       <a href="#menu">תפריט</a>
+      <a href="#gallery">גלריה</a>
     </div>
 
     <!-- desktop: actions -->
@@ -1675,10 +1677,11 @@
     <!-- mobile: dropdown menu + scrim -->
     <div class="nav__scrim" id="navScrim"></div>
     <div class="nav__menu" id="navMenu">
-      <a class="nav__menu-link" href="#concept">החוויה</a>
-      <a class="nav__menu-link" href="#food">אוכל</a>
-      <a class="nav__menu-link" href="#bar">בר</a>
+      <a class="nav__menu-link" href="#concept">החוויה בעזרא</a>
+      <a class="nav__menu-link" href="#food">האוכל</a>
+      <a class="nav__menu-link" href="#bar">הבר</a>
       <a class="nav__menu-link" href="#menu">תפריט</a>
+      <a class="nav__menu-link" href="#gallery">גלריה</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="iruvei-hevra.html">אירועי חברה</a>
         <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
@@ -1836,19 +1839,19 @@
             <span class="label">מסלול א׳</span>
             <h3 class="bar-card__title">בר פתוח</h3>
             <p class="bar-card__body">
-              תפריט אלכוהול עשיר וללא הגבלה, המשתלב כחלק ממעטפת האירוח הכוללת של הערב.
+              תפריט אלכוהול עשיר וללא הגבלה, המשתלב כחלק ממעטפת האירוח הכוללת של הערב
             </p>
           </div>
           <div class="bar-card">
             <span class="label">מסלול ב׳</span>
             <h3 class="bar-card__title">התאמה אישית</h3>
             <p class="bar-card__body">
-              בניית תפריט משקאות מדויק לאופי האירוע שלכם, עם גמישות מלאה לאורחים במהלך הערב.
+              בניית תפריט משקאות מדויק לאופי האירוע שלכם, עם גמישות מלאה לאורחים במהלך הערב
             </p>
           </div>
         </div>
 
-        <p class="bar__includes">התפריט כולל קוקטיילים, יינות, בירות ומשקאות קלים.</p>
+        <p class="bar__includes">התפריט כולל קוקטיילים, יינות, בירות ומשקאות קלים</p>
 
         <a class="btn btn--outline bar__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
       </div>

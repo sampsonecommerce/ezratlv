@@ -86,8 +86,7 @@
       inset-block-start: 0;
       inset-inline: 0;
       z-index: 100;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
       align-items: center;
       padding: 1.4rem clamp(1.25rem, 5vw, 3rem);
       background: #000;
@@ -98,15 +97,19 @@
       padding-block: 1rem;
       border-block-end: 1px solid rgba(196, 154, 60, 0.14);
     }
-    .nav__logo { display: flex; align-items: center; justify-self: start; }
+    .nav__logo { display: flex; align-items: center; }
     .nav__logo img { height: 22px; width: auto; display: block; }
+    /* links fill the space between logo and actions and center within it,
+       so the gap stays balanced no matter how wide each side is */
     .nav__links {
+      flex: 1;
       display: flex;
+      justify-content: center;
       gap: clamp(1.2rem, 2.5vw, 2.2rem);
       align-items: center;
-      justify-self: center;
+      white-space: nowrap;
     }
-    .nav__actions { display: flex; align-items: center; gap: 0.85rem; justify-self: end; }
+    .nav__actions { display: flex; align-items: center; gap: 0.85rem; }
 
     .nav__links a {
       font-size: 0.88rem;
@@ -499,6 +502,36 @@
     .vibe-card__body  { position: relative; z-index: 1; font-size: 1rem; color: var(--cream-dim); line-height: 1.7; max-width: 32ch; }
 
     @media (prefers-reduced-motion: reduce) { .vibe-card::before { animation: none; } }
+
+    /* cards start hidden; mobile = simple staggered fade-in */
+    .vibe-card { opacity: 0; }
+    .vibe-grid.in .vibe-card { opacity: 1; transition: opacity 0.6s var(--ease); }
+    .vibe-grid.in .vibe-card:nth-child(2) { transition-delay: 0.1s; }
+    .vibe-grid.in .vibe-card:nth-child(3) { transition-delay: 0.2s; }
+    /* desktop: cards appear as a stacked deck, then "fly" out fast into an open-hand fan */
+    @media (min-width: 821px) {
+      .vibe-card { will-change: transform, opacity; }
+      .vibe-grid.in .vibe-card { transition: none; }
+      .vibe-grid.in .vibe-card:nth-child(1) { z-index: 1; animation: vibeDeal1 1.05s cubic-bezier(0.2,0.85,0.25,1) 0.02s both; }
+      .vibe-grid.in .vibe-card:nth-child(2) { z-index: 3; animation: vibeDeal2 1.05s cubic-bezier(0.2,0.85,0.25,1) 0.14s both; }
+      .vibe-grid.in .vibe-card:nth-child(3) { z-index: 2; animation: vibeDeal3 1.05s cubic-bezier(0.2,0.85,0.25,1) 0.26s both; }
+      @keyframes vibeDeal1 {
+        0%   { opacity: 0; transform: translate(-116%, 20px) rotate(-8deg) scale(0.9); }
+        16%  { opacity: 1; transform: translate(-116%, 20px) rotate(-8deg) scale(0.9); }
+        100% { opacity: 1; transform: rotate(2deg) translateY(8px); }
+      }
+      @keyframes vibeDeal2 {
+        0%   { opacity: 0; transform: translateY(12px) scale(0.92); }
+        16%  { opacity: 1; transform: translateY(12px) scale(0.92); }
+        100% { opacity: 1; transform: none; }
+      }
+      @keyframes vibeDeal3 {
+        0%   { opacity: 0; transform: translate(116%, 20px) rotate(8deg) scale(0.9); }
+        16%  { opacity: 1; transform: translate(116%, 20px) rotate(8deg) scale(0.9); }
+        100% { opacity: 1; transform: rotate(-2deg) translateY(8px); }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) { .vibe-card { opacity: 1 !important; transform: none !important; animation: none !important; } }
     @media (max-width: 820px) { .vibe-grid { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; } }
 
     /* ============================================================
@@ -721,7 +754,7 @@
       padding: 0.35rem 0.8rem;
       border-radius: 50px;
     }
-    /* premium tag — same shape as "most popular" but a darker jewel tone with a star */
+    /* premium tag - same shape as "most popular" but a darker jewel tone with a star */
     .package-card__badge--premium {
       display: inline-flex; align-items: center; gap: 0.3rem;
       color: var(--gold-light);
@@ -798,7 +831,7 @@
       .fmenu-cat--wide .fmenu-bar .fmenu-dish:nth-last-child(2) { border-block-end: 1px solid rgba(240,235,224,0.07); }
     }
 
-    /* per-package menu — same design/structure as the private-events menu (scoped to #menu) */
+    /* per-package menu - same design/structure as the private-events menu (scoped to #menu) */
     #menu .menu-tablist {
       display: flex; justify-content: center; border-block-end: 1px solid var(--line);
       margin-block-end: 1.4rem; gap: 0; flex-wrap: wrap;
@@ -815,23 +848,33 @@
     #menu .menu-tabpanel { animation: fadeIn 0.25s var(--ease); }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-    /* day/evening toggle — always coloured: day = gold, evening = blue (no switch animation) */
-    .cmenu-sub { display: flex; gap: 0.4rem; max-width: 320px; margin: 0 auto 2.2rem; }
+    /* day/evening toggle - iOS-style segmented slider; the coloured thumb slides between day (gold) and evening (blue) */
+    .cmenu-sub { position: relative; display: grid; grid-template-columns: 1fr 1fr; max-width: 320px; margin: 0 auto 2.2rem; padding: 5px; border-radius: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(196,154,60,0.25); }
+    .cmenu-sub__thumb {
+      position: absolute; inset-block: 5px; inline-size: calc(50% - 5px); inset-inline-start: 5px; border-radius: 9px;
+      background: linear-gradient(150deg, #f6e3b4, #e9bf72); box-shadow: 0 3px 10px rgba(0,0,0,0.28);
+      transition: inset-inline-start 0.34s cubic-bezier(0.34,1.28,0.52,1), background 0.34s var(--ease);
+    }
+    .cmenu-sub[data-menu="evening"] .cmenu-sub__thumb { inset-inline-start: 50%; background: linear-gradient(150deg, #2a2d63, #16183a); }
     .cmenu-sub__btn {
-      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-      padding: 0.55rem 0.6rem; border-radius: 11px; border: 1.5px solid transparent; cursor: pointer;
-      font-family: var(--font-body); font-size: 0.88rem; font-weight: 600;
+      position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.5rem 0.6rem; border: 0; background: transparent; cursor: pointer;
+      font-family: var(--font-body); font-size: 0.88rem; font-weight: 600; color: var(--cream-dim);
+      transition: color 0.28s var(--ease);
     }
     .cmenu-sub__btn svg { width: 16px; height: 16px; flex: none; }
-    .cmenu-sub__btn--day { background: linear-gradient(150deg, #f6e3b4, #e9bf72); border-color: #f0d089; color: #4a360f; }
-    .cmenu-sub__btn--eve { background: linear-gradient(150deg, #2a2d63, #16183a); border-color: #5b5fa0; color: #f3e6c0; }
-    .cmenu-sub__btn--eve svg { color: var(--gold-light); }
+    .cmenu-sub[data-menu="day"] .cmenu-sub__btn--day { color: #4a360f; }
+    .cmenu-sub[data-menu="evening"] .cmenu-sub__btn--eve { color: #f3e6c0; }
+    #menu.is-day .cmenu-sub { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+    #menu.is-day .cmenu-sub__btn { color: #6f5f44; }
+    #menu.is-day .cmenu-sub[data-menu="day"] .cmenu-sub__btn--day { color: #4a360f; }
+    @media (prefers-reduced-motion: reduce) { .cmenu-sub__thumb { transition: none; } }
 
     /* sandwiches note (i icon) under the tray category title */
     .cmenu-note { display: flex; align-items: flex-start; gap: 0.4rem; margin-block: 0.1rem 0.7rem; color: var(--cream-dim); font-size: 0.76rem; line-height: 1.5; }
     .cmenu-note svg { width: 14px; height: 14px; color: var(--gold); flex: none; margin-block-start: 2px; }
 
-    /* framed menu box — only this box changes colour between day (light) and evening (dark) */
+    /* framed menu box - only this box changes colour between day (light) and evening (dark) */
     .cmenu-box {
       max-width: 1040px; margin-inline: auto; padding: clamp(1.4rem, 3vw, 2.4rem) clamp(1.2rem, 3vw, 2.2rem) clamp(1.2rem, 3vw, 2rem);
       border-radius: 20px; border: 1px solid rgba(196,154,60,0.5);
@@ -851,21 +894,30 @@
     #menu.is-day .cmenu-note { color: #6f5f44; }
     #menu.is-day .cmenu-note svg { color: #b07d12; }
 
-    /* masonry-style packing: categories flow into 2 columns, short ones fill the gaps */
-    #menu .menu-grid--cmenu { columns: 2; column-gap: 3rem; }
-    #menu .menu-category { break-inside: avoid; margin-block-end: 1.8rem; }
+    /* compact packing: categories stack full-width; each category's dishes flow multi-column so it stays short + even */
+    #menu .menu-grid--cmenu { display: block; }
+    #menu .menu-category { margin-block-end: 1.6rem; }
     #menu .menu-category:last-child { margin-block-end: 0; }
     #menu .menu-category__title {
       font-size: 0.7rem; font-weight: 600; letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase;
-      padding-block-end: 0.75rem; margin-block-end: 0.2rem; border-block-end: 1px solid var(--line);
+      padding-block-end: 0.6rem; margin-block-end: 0.2rem; border-block-end: 1px solid var(--line);
     }
-    #menu .menu-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.7rem; padding-block: 0.65rem; border-block-end: 1px solid rgba(196,154,60,0.08); }
-    #menu .menu-item:last-child { border-block-end: none; }
+    #menu .menu-items { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 2.4rem; }
+    #menu .menu-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.7rem; padding-block: 0.55rem; border-block-end: 1px solid rgba(196,154,60,0.08); }
     #menu .menu-item__info { flex: 1; min-width: 0; }
     #menu .menu-item__name { font-size: 0.95rem; font-weight: 500; color: var(--cream); line-height: 1.3; }
     #menu .menu-item__desc { font-size: 0.78rem; color: var(--cream-faint); line-height: 1.5; margin-block-start: 0.15rem; }
-    @media (max-width: 640px) {
-      #menu .menu-grid--cmenu { columns: 1; }
+    /* evening bar: each line reads as its own subtitle with the ( ) note as subtext - no separate frame, blends into the menu */
+    #menu .menu-item--sub { display: block; }
+    #menu .menu-item--sub .menu-item__name { font-size: 1rem; font-weight: 600; color: var(--gold-light); }
+    #menu .menu-item--sub .menu-item__desc { font-size: 0.8rem; color: var(--cream-dim); margin-block-start: 0.25rem; }
+    /* wider screens: food categories pack 3-up; the bar stays a tidy 2x2 */
+    @media (min-width: 860px) {
+      #menu .menu-items { grid-template-columns: repeat(3, 1fr); }
+      #menu .menu-category--bar .menu-items { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
+    }
+    @media (max-width: 560px) {
+      #menu .menu-items { grid-template-columns: 1fr; }
     }
 
     .package-card--premium {
@@ -1562,6 +1614,20 @@
       opacity: 0; transform: translateY(-3px); pointer-events: none; transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
     }
     .book-save:hover .book-save__note, .book-save input:focus-visible ~ .book-save__note { opacity: 1; transform: translateY(0); }
+    /* "saved successfully" confirmation — a small box that drops below the save toggle (no longer cut off) */
+    .book-saved {
+      position: absolute; inset-block-start: calc(100% + 0.5rem); inset-inline-start: 0; z-index: 30;
+      display: inline-flex; align-items: center; gap: 0.32rem; white-space: nowrap;
+      padding: 0.34rem 0.65rem; border-radius: 10px;
+      background: rgba(28,66,49,0.95); border: 1px solid rgba(90,215,158,0.45);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+      color: #6fe0aa; font-size: 0.76rem; font-weight: 600;
+      opacity: 0; transform: translateY(-5px) scale(0.96); transform-origin: top right; pointer-events: none;
+      transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+    .book-saved svg { width: 13px; height: 13px; flex: none; }
+    .book-saved.show { opacity: 1; transform: translateY(0) scale(1); }
+    @media (prefers-reduced-motion: reduce) { .book-saved { transition: none; } }
 
 
     .book-bar {
@@ -1589,11 +1655,27 @@
     .book-bar__btn--close { grid-column: 3; justify-self: end; }
     .book-bar__btn[hidden] { display: none; }
 
-    /* step progress — compact "step X of 8" + slim bar */
-    .book-progress { grid-column: 2; justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; width: min(220px, 60vw); }
-    .book-progress__label { font-size: 0.72rem; letter-spacing: 0.04em; color: var(--cream-dim); }
-    .book-progress__track { width: 100%; height: 4px; border-radius: 4px; background: rgba(196,154,60,0.18); overflow: hidden; }
-    .book-progress__fill { display: block; height: 100%; width: 12.5%; border-radius: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 0.4s var(--ease); }
+    /* step progress - four numbered circles; each booking step fills half a circle (2 steps = full) */
+    @property --p { syntax: '<percentage>'; initial-value: 0%; inherits: true; }
+    .book-progress { grid-column: 2; justify-self: center; display: flex; align-items: center; justify-content: center; gap: 0.35rem; width: min(220px, 60vw); }
+    .prog-dot {
+      position: relative; flex: none; width: 27px; height: 27px; border-radius: 50%;
+      display: grid; place-items: center; --p: 0%;
+    }
+    .prog-dot::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: conic-gradient(var(--gold) var(--p), rgba(196,154,60,0.2) 0);
+      transition: --p 0.45s var(--ease);
+    }
+    .prog-dot::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--bg-modal, #17120b); }
+    .prog-dot__num {
+      position: relative; z-index: 1; font-family: 'Pliant', var(--font-body); font-size: 0.78rem;
+      color: var(--cream-dim); transition: color 0.3s var(--ease);
+    }
+    .prog-dot.is-half .prog-dot__num { color: var(--gold-light); }
+    .prog-dot.is-full .prog-dot__num { color: var(--gold-light); }
+    .prog-line { flex: 1; max-width: 22px; height: 2px; border-radius: 2px; background: rgba(196,154,60,0.2); transition: background 0.4s var(--ease); }
+    .prog-line.is-on { background: var(--gold); }
 
     /* add-ons (step 4) */
     .addons { display: flex; flex-direction: column; gap: 0.55rem; }
@@ -1619,38 +1701,84 @@
     .addon__label { font-weight: 600; color: var(--cream); font-size: 0.95rem; }
     .addon__price { font-family: var(--font-body); font-size: 0.85rem; color: var(--gold-light); white-space: nowrap; }
     .addon__desc { color: var(--cream-dim); font-size: 0.8rem; line-height: 1.45; margin-block-start: 0.2rem; text-align: start; }
+    .addon__grow { color: var(--gold-light); font-weight: 500; }
 
-    /* dual graphs (step 6) — coupe + platter sit close, share one caption below */
-    .graphs-row { display: flex; direction: ltr; gap: clamp(0.1rem, 2vw, 0.6rem); justify-content: center; align-items: flex-end; margin-block: 0.4rem 0; }
-    .graph-cell { display: flex; flex-direction: column; align-items: center; }
-    .graph-cell .glass-wrap { width: clamp(100px, 32vw, 128px); height: auto; aspect-ratio: 150 / 188; margin: 0 auto; }
-    .food-svg { width: clamp(100px, 32vw, 128px); aspect-ratio: 140 / 180; display: block; overflow: visible; }
-    .graphs-caption { text-align: center; margin-block: 0.1rem 0.3rem; }
-    .graphs-caption .glass-count { margin: 0; }
-    /* food glyphs drop onto the platter */
-    .food-token { opacity: 0; transform: translateY(-11px); transition: opacity 0.35s var(--ease), transform 0.45s var(--ease); }
-    .food-token.is-on { opacity: 1; transform: translateY(0); }
+    /* min-order caption (small) sitting above the details box */
+    .calc-mincap { text-align: center; font-size: 0.72rem; letter-spacing: 0.02em; color: var(--cream-faint); margin: 0.55rem 0 0.4rem; }
+    /* details box: full width; each field stacked (value on top, grey label under), tight to save height */
+    .calc-details { padding: 0.5rem 0.85rem; border-radius: 12px; background: rgba(196,154,60,0.08); border: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem 0.9rem; }
+    .cd-row { display: flex; flex-direction: column; gap: 0; min-width: 0; text-align: start; }
+    .cd-v { color: var(--cream); font-weight: 600; font-size: 0.84rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cd-k { color: var(--cream-faint); font-size: 0.68rem; line-height: 1.2; white-space: nowrap; }
+    @media (max-width: 520px) { .calc-details { grid-template-columns: repeat(2, 1fr); } }
 
-    /* editable guest count under the two animations */
+    /* framed card: full-width value pills, then the slider, then guest count + price */
+    .calc-zone { display: flex; flex-direction: column; gap: 0.6rem; margin-block: 0.6rem 0.5rem; padding: 0.75rem 0.7rem 1rem; border: 1px solid rgba(196,154,60,0.22); border-radius: 16px; background: rgba(0,0,0,0.18); }
+    .calc-zone .book-range { width: 100%; margin-block: 0.55rem 0.45rem; }
+    .calc-zone .calc-value__line { margin: 0; }
+    .calc-zone .calc-menu { margin: 0 auto; }
+    .calc-zone__pills { display: flex; flex-direction: column; gap: 0.4rem; }
+    .food-token { opacity: 0; }   /* platter removed; kept so the JS no-op stays harmless */
+
+    /* value pills (golden) + the add-ons pill (indigo, to set it apart) */
+    .vpill { border-radius: 12px; overflow: hidden; }
+    .vpill--food { background: linear-gradient(150deg, var(--gold-light), var(--gold)); }
+    .vpill--addon { background: linear-gradient(150deg, #2a2d63, #16183a); }
+    .vpill__head { width: 100%; display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0.6rem; background: none; border: 0; cursor: pointer; text-align: start; font-family: var(--font-body); }
+    /* title runs inline with the items ("Title: a, b | c"); long ones wrap a line before the amount */
+    .vpill__main { flex: 1; min-width: 0; font-size: 0.76rem; line-height: 1.5; }
+    .vpill__cat { font-weight: 700; font-size: 0.82rem; color: #2a1d05; }
+    .vpill__cat svg { width: 14px; height: 14px; vertical-align: -2px; margin-inline-end: 0.25rem; }
+    .vpill__items { color: #4a360f; }
+    .vpill__qty { flex: none; margin-block-start: 1px; font-weight: 700; font-size: 0.74rem; color: #2a1d05; white-space: nowrap; }
+    .vpill__chev { flex: none; margin-block-start: 3px; width: 14px; height: 14px; color: #4a360f; transition: transform 0.25s var(--ease); }
+    .vpill[data-open="true"] .vpill__chev { transform: rotate(180deg); }
+    .vpill--addon .vpill__cat { color: #f4ecd3; }
+    .vpill--addon .vpill__items { color: #c7c2e0; }
+    .vpill--addon .vpill__qty { color: #f4ecd3; }
+    .vpill--addon .vpill__chev { color: #c7c2e0; }
+    .vpill__detail { padding: 0 0.7rem 0.6rem; }
+    .vpill__detail-inner { background: rgba(0,0,0,0.13); border-radius: 8px; padding: 0.45rem 0.65rem; display: flex; flex-direction: column; gap: 0.22rem; }
+    .vpill__drow { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.74rem; color: #3a2a08; }
+    .vpill__drow b { font-weight: 700; white-space: nowrap; }
+    .vpill--addon .vpill__detail-inner { background: rgba(255,255,255,0.07); }
+    .vpill--addon .vpill__drow { color: #e6e0f3; }
+
+    /* guest count + total line (under the coupe/pills zone) */
+    /* 3-col grid keeps the coupe pinned dead-center; the numbers grow outward so nothing jumps as the price changes */
+    .calc-value__line { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 0.9rem; margin-block: 0.3rem 0.2rem; }
+    .calc-value__line .guest-edit { justify-self: end; }
+    .calc-value__total { justify-self: start; font-family: 'Pliant', var(--font-serif); font-weight: 700; font-size: 1.7rem; color: var(--gold-light); direction: ltr; }
+    /* small coupe sits between the guest count and the price as a glowing separator */
+    .calc-value__coupe { position: relative; justify-self: center; display: flex; align-items: center; justify-content: center; }
+    .calc-value__coupe::before { content: ''; position: absolute; inset: -55% -35%; z-index: 0; pointer-events: none;
+      background: radial-gradient(50% 46% at 50% 48%, rgba(245,217,138,0.42), rgba(245,217,138,0.10) 52%, transparent 72%); }
+    .calc-value__coupe .glass-wrap { position: relative; z-index: 1; width: clamp(42px, 11vw, 54px); height: auto; aspect-ratio: 150 / 188; margin: 0; }
     .guest-edit { display: inline-flex; align-items: baseline; gap: 0.35rem; color: var(--cream); font-size: 0.95rem; }
     .guest-edit input {
-      width: 2.8em; text-align: center; background: rgba(196,154,60,0.1); border: 1px solid var(--line);
-      border-radius: 9px; padding: 0.15rem 0.2rem; color: var(--gold-light);
+      width: 2.6em; text-align: center; background: rgba(196,154,60,0.1); border: 1px solid var(--line);
+      border-radius: 9px; padding: 0.1rem 0.2rem; color: var(--gold-light);
       font-family: 'Pliant', var(--font-serif); font-size: 1.5rem; font-weight: 700;
     }
     .guest-edit input::-webkit-outer-spin-button, .guest-edit input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .guest-edit input:focus { outline: none; border-color: var(--gold); }
+    @media (max-width: 420px) {
+      .vpill__items { font-size: 0.7rem; }
+    }
 
-    /* day/evening toggle on the calculator */
-    .calc-menu { display: flex; gap: 0.3rem; max-width: 300px; margin: 0 auto 0.2rem; background: rgba(0,0,0,0.25); border: 1px solid var(--line); border-radius: 11px; padding: 4px; }
-    .calc-menu__btn { flex: 1; padding: 0.5rem; border: 0; border-radius: 8px; background: transparent; color: var(--cream-dim); font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease); }
-    .calc-menu__btn.is-active { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--bg); font-weight: 600; }
-
-    /* live food-amount tags from the package */
-    .food-amounts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-block: 0.3rem 1.1rem; }
-    .food-tag { display: inline-flex; align-items: baseline; gap: 0.3rem; font-size: 0.78rem; color: var(--cream-dim); background: rgba(196,154,60,0.08); border: 1px solid var(--line); border-radius: 20px; padding: 0.25rem 0.7rem; }
-    .food-tag b { font-family: 'Pliant', var(--font-serif); color: var(--gold-light); font-size: 0.9rem; }
-    .food-tag--add { background: rgba(196,154,60,0.16); border-color: rgba(196,154,60,0.45); }
+    /* day/evening toggle on the calculator - iOS-style slider; thumb slides between day (gold) and evening (blue) */
+    .calc-menu { position: relative; display: grid; grid-template-columns: 1fr 1fr; max-width: 300px; margin: 0.7rem auto 0.2rem; padding: 5px; border-radius: 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--line); }
+    .calc-menu__thumb {
+      position: absolute; inset-block: 5px; inline-size: calc(50% - 5px); inset-inline-start: 5px; border-radius: 8px;
+      background: linear-gradient(150deg, #f6e3b4, #e9bf72); box-shadow: 0 3px 9px rgba(0,0,0,0.3);
+      transition: inset-inline-start 0.34s cubic-bezier(0.34,1.28,0.52,1), background 0.34s var(--ease);
+    }
+    .calc-menu[data-menu="evening"] .calc-menu__thumb { inset-inline-start: 50%; background: linear-gradient(150deg, #2a2d63, #16183a); }
+    .calc-menu__btn { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.45rem 0.6rem; border: 0; background: transparent; cursor: pointer; font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; color: var(--cream-dim); transition: color 0.28s var(--ease); }
+    .calc-menu__btn svg { width: 15px; height: 15px; }
+    .calc-menu[data-menu="day"] .calc-menu__btn--day { color: #4a360f; }
+    .calc-menu[data-menu="evening"] .calc-menu__btn--eve { color: #f3e6c0; }
+    @media (prefers-reduced-motion: reduce) { .calc-menu__thumb { transition: none; } }
 
     /* receipt: collapsible dish detail + sub rows */
     .receipt__row--sub .receipt__k { font-size: 0.8rem; color: var(--cream-faint); }
@@ -1671,7 +1799,7 @@
     .book-receipt-preview .receipt { margin-block-start: 0.6rem; }
 
     @media (prefers-reduced-motion: reduce) {
-      .food-token, .book-progress__fill, .receipt__chev { transition: none; }
+      .food-token, .prog-dot::before, .prog-line, .prog-dot__num, .receipt__chev { transition: none; }
     }
 
     .book-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: clamp(1rem, 3vw, 1.5rem); }
@@ -1745,12 +1873,12 @@
       padding: 1.1rem 1rem 1rem;
       isolation: isolate;
     }
-    /* deep near-black panel — the day→night feel comes from the sun/moon + glow, not a sky */
+    /* deep near-black panel - the day→night feel comes from the sun/moon + glow, not a sky */
     .dn-graph::before {
       content: ''; position: absolute; inset: 0; z-index: -2;
       background: linear-gradient(180deg, #15110b 0%, #0a0805 100%);
     }
-    /* ambient glow behind the celestial — warm by day, cool by night */
+    /* ambient glow behind the celestial - warm by day, cool by night */
     .dn-graph::after {
       content: ''; position: absolute; inset: 0; z-index: -1;
       background: radial-gradient(160px 110px at 50% 22px, var(--glow-color, rgba(255,206,120,0.55)), transparent 72%);
@@ -1777,10 +1905,10 @@
     .dn-graph[data-mood="night"] .dn-celestial__sun  { opacity: 0; }
     .dn-graph[data-mood="night"] .dn-celestial__moon { opacity: 1; }
 
-    /* slots on a real time-of-day axis — small icon pills, equal height; time shows on hover/select */
-    .dn-bars { position: relative; height: 60px; margin-block-start: 0.2rem; }
+    /* slots on a real time-of-day axis - equal height; time sits inside the box, icon to its left */
+    .dn-bars { position: relative; height: 44px; margin-block-start: 0.2rem; }
     .dn-bar {
-      position: absolute; bottom: 22px; height: 34px;
+      position: absolute; bottom: 6px; height: 34px;
       display: flex; align-items: center; justify-content: center;
       background: none; border: 0; cursor: pointer; padding: 0; color: #fff;
       transition: transform 0.2s var(--ease);
@@ -1790,14 +1918,15 @@
       background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3);
       transition: background 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
-    .dn-bar__icon { position: relative; width: 17px; height: 17px; color: rgba(255,255,255,0.92); }
-    .dn-bar__time {
-      position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-      font-family: 'Pliant', var(--font-body); font-size: 0.74rem; letter-spacing: 0.02em; color: #fff;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.6); white-space: nowrap; direction: ltr;
-      opacity: 0; transition: opacity 0.2s var(--ease); pointer-events: none;
+    .dn-bar__inner {
+      position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+      gap: 0.34rem; padding-inline: 0.3rem; min-width: 0; direction: ltr;
     }
-    .dn-bar:hover .dn-bar__time, .dn-bar.is-selected .dn-bar__time { opacity: 1; }
+    .dn-bar__icon { flex: none; width: 16px; height: 16px; color: rgba(255,255,255,0.92); }
+    .dn-bar__time {
+      font-family: 'Pliant', var(--font-body); font-size: 0.74rem; letter-spacing: 0.02em; color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45); white-space: nowrap; direction: ltr;
+    }
     .dn-bar:hover:not(.is-taken):not(.is-selected) .dn-bar__fill { background: rgba(255,255,255,0.24); }
     .dn-bar:hover:not(.is-taken) { transform: translateY(-2px); }
     .dn-bar.is-selected .dn-bar__fill {
@@ -1805,13 +1934,14 @@
       border-color: var(--gold-light); box-shadow: 0 0 18px 2px rgba(245,217,138,0.6);
     }
     .dn-bar.is-selected .dn-bar__icon { color: var(--bg); }
+    .dn-bar.is-selected .dn-bar__time { color: var(--bg); text-shadow: none; }
     .dn-bar.is-taken { cursor: not-allowed; }
     .dn-bar.is-taken .dn-bar__fill {
       background: repeating-linear-gradient(135deg, rgba(0,0,0,0.24), rgba(0,0,0,0.24) 4px, transparent 4px, transparent 8px);
       border-style: dashed;
     }
     .dn-bar.is-taken .dn-bar__time { text-decoration: line-through; }
-    /* am/pm time ruler */
+    /* 24h time ruler */
     .dn-ruler { position: relative; direction: ltr; height: 26px; margin-block-start: 0.5rem; }
     .dn-tick { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;
       color: rgba(255,255,255,0.5); font-size: 0.6rem; font-family: 'Pliant', var(--font-body); white-space: nowrap; }
@@ -1836,29 +1966,12 @@
     .book-next { width: 100%; margin-block-start: 1.1rem; }
     .book-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    /* wizard calculator result */
-    .book-price { text-align: center; margin-block: 1rem 1.2rem; }
-    .book-price__perhead { font-size: 0.95rem; color: var(--cream-dim); margin-block-end: 0.3rem; }
-    .book-price__perhead b { color: var(--cream); font-family: 'Pliant', var(--font-serif); }
-    .book-price__total {
-      font-family: 'Pliant', var(--font-serif); font-weight: 700;
-      font-size: clamp(2.4rem, 7vw, 3.2rem); color: var(--gold); line-height: 1.05;
-      direction: ltr; unicode-bidi: embed;
-      transition: transform 0.2s var(--ease);
-    }
-    .book-price__label { font-size: 0.85rem; color: var(--cream-faint); margin-block-start: 0.2rem; }
-    .book-price__label b { color: var(--gold); }
-
     /* interactive guest graph: a champagne coupe that fills as you slide */
     /* more guests → the gold rises in the bowl and more bubbles stream up. */
-    .glass-wrap { position: relative; width: 150px; height: 188px; margin: 0.2rem auto 0; }
+    .glass-wrap { position: relative; width: clamp(112px, 30vw, 140px); aspect-ratio: 150 / 188; margin: 0.2rem auto 0; }
     .glass-svg { width: 100%; height: 100%; display: block; overflow: visible; }
     #bookLiquid    { transition: y 0.45s var(--ease); }
     #bookLiquidTop { transition: cy 0.45s var(--ease), rx 0.45s var(--ease); }
-    .glass-count { text-align: center; color: var(--cream); font-size: 0.88rem; margin-block: 0.3rem 0.2rem; }
-    .glass-count b { font-family: 'Pliant', var(--font-serif); font-size: 1.35rem; color: var(--gold-light); margin-inline-end: 0.2rem; }
-    .glass-mult { text-align: center; color: var(--cream-dim); font-size: 0.8rem; margin-block: 0.1rem 0.3rem; }
-    .glass-mult b { color: var(--gold-light); font-family: 'Pliant', var(--font-serif); }
 
     .book-range {
       width: 100%;
@@ -1900,7 +2013,7 @@
 
     /* info form */
     /* food / menu step */
-    /* day / evening choice — two distinct option cards in day vs night colors */
+    /* day / evening choice - two distinct option cards in day vs night colors */
     .menu-choice__ask { text-align: center; color: var(--cream-faint); font-size: 0.8rem; margin: 0 0 0.6rem; }
     .menu-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; max-width: 420px; margin: 0 auto; }
     .menu-choice__opt {
@@ -1950,6 +2063,28 @@
       background: linear-gradient(160deg, rgba(196,154,60,0.16), rgba(196,154,60,0.04));
       border-color: rgba(196,154,60,0.4);
     }
+    /* day menu = golden boxes; evening menu keeps the default dark boxes */
+    .menu-view.is-day .menu-card {
+      background: linear-gradient(160deg, rgba(245,217,138,0.2), rgba(196,154,60,0.07));
+      border-color: rgba(196,154,60,0.45);
+    }
+    .menu-view.is-day .menu-card--hero {
+      background: linear-gradient(160deg, rgba(245,217,138,0.28), rgba(196,154,60,0.12));
+      border-color: rgba(196,154,60,0.55);
+    }
+    /* evening menu = blue/moon theme (matching the תפריט ערב button) for both food boxes and the bar box */
+    .menu-view:not(.is-day) .menu-card:not(.menu-card--hero) {
+      background: linear-gradient(160deg, rgba(64,68,142,0.5), rgba(26,28,66,0.72));
+      border-color: rgba(122,128,214,0.42);
+    }
+    .menu-view:not(.is-day) .menu-card--hero {
+      background: linear-gradient(160deg, rgba(74,79,158,0.55), rgba(30,33,76,0.78));
+      border-color: rgba(130,136,224,0.5);
+    }
+    /* bar box: each line shows its ( ) detail underneath, like the on-page menu */
+    .menu-dish--desc { flex-direction: column; align-items: center; gap: 0.1rem; text-align: center; }
+    .menu-dish--desc .menu-dish__nm { color: var(--gold-light); font-weight: 600; font-size: 0.85rem; line-height: 1.3; }
+    .menu-dish--desc .menu-dish__ds { color: var(--cream-faint); font-size: 0.74rem; line-height: 1.4; }
     .menu-card__t {
       display: flex; align-items: center; justify-content: center; gap: 0.45rem;
       color: var(--gold-light); font-weight: 600; font-size: 0.9rem; margin-block-end: 0.6rem;
@@ -2005,6 +2140,11 @@
     .book-check__text b { color: var(--cream); font-size: 0.9rem; font-weight: 600; }
     .book-check__text span { color: var(--cream-dim); font-size: 0.8rem; line-height: 1.5; }
     .book-check:has(input:checked) .book-check__text b { color: var(--gold-light); }
+    /* compact, understated variant at the bottom of the form */
+    .book-check--sm { gap: 0.55rem; padding: 0.55rem 0.7rem; border-radius: 10px; background: transparent; margin-block-start: 1rem; }
+    .book-check--sm input { width: 16px; height: 16px; }
+    .book-check--sm .book-check__text b { font-size: 0.82rem; font-weight: 500; }
+    .book-check--sm .book-check__text span { font-size: 0.72rem; }
 
     /* confirmation */
     .book-done { text-align: center; padding-block: 1.5rem; }
@@ -2037,6 +2177,32 @@
     }
     @media (prefers-reduced-motion: reduce) { .book-done__icon.pop { animation: none; } }
 
+    /* final step: "take me to my email" green CTA + mail-app menu */
+    .book-done__mailnote { text-align: center; font-size: 0.84rem; color: var(--cream-dim); margin: 1.5rem auto 0.65rem; }
+    .book-mailcta { position: relative; max-width: 300px; margin: 0 auto; }
+    .book-mailbtn {
+      width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+      padding: 0.85rem 1.4rem; border: 0; border-radius: 50px; cursor: pointer;
+      font-family: var(--font-body); font-size: 1rem; font-weight: 700; color: #05311d;
+      background: linear-gradient(135deg, #5ad79e, #2fae74);
+      box-shadow: 0 6px 22px rgba(47,174,116,0.4);
+      animation: mailPulse 2.4s ease-in-out infinite;
+      transition: transform 0.2s var(--ease);
+    }
+    .book-mailbtn svg { width: 20px; height: 20px; }
+    .book-mailbtn:hover { transform: translateY(-2px); }
+    @keyframes mailPulse { 0%, 100% { box-shadow: 0 6px 20px rgba(47,174,116,0.32); } 50% { box-shadow: 0 8px 32px rgba(90,215,158,0.6); } }
+    @media (prefers-reduced-motion: reduce) { .book-mailbtn { animation: none; } }
+    .book-mailmenu {
+      position: absolute; inset-inline: 0; inset-block-start: calc(100% + 0.5rem); z-index: 5;
+      display: flex; flex-direction: column; gap: 0.3rem; padding: 0.5rem;
+      background: #15110a; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 44px rgba(0,0,0,0.55);
+    }
+    .book-mailmenu[hidden] { display: none; }
+    .book-mailmenu a { display: flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.8rem; border-radius: 10px; color: var(--cream); font-size: 0.92rem; font-weight: 500; }
+    .book-mailmenu a svg { width: 17px; height: 17px; color: var(--gold); flex: none; }
+    .book-mailmenu a:hover { background: rgba(196,154,60,0.12); }
+
     /* digital receipt on the confirmation step */
     .receipt {
       position: relative; text-align: start;
@@ -2063,6 +2229,7 @@
     .receipt__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
     .receipt .chip { font-size: 0.76rem; color: var(--cream-dim); background: rgba(196,154,60,0.1); border-radius: 7px; padding: 0.25rem 0.6rem; }
     .receipt .chip--ghost { color: #857b66; background: transparent; border: 1px dashed rgba(240,235,224,0.2); }
+    .receipt__addhead { font-size: 0.82rem; font-weight: 600; color: var(--gold-light); margin-block: 0.55rem 0.35rem; }
     .receipt__total { display: flex; justify-content: space-between; align-items: baseline; padding-block-start: 0.9rem; }
     .receipt__sum { font-family: 'Pliant', var(--font-serif); font-weight: 700; font-size: 1.5rem; color: var(--gold-light); direction: ltr; }
     .receipt__fine { font-size: 0.7rem; color: #857b66; margin-block-start: 0.4rem; line-height: 1.5; }
@@ -2147,10 +2314,9 @@
     <!-- desktop: center links -->
     <div class="nav__links">
       <a href="#solution">הפתרון שלנו</a>
-      <a href="#concept">האוכל והבר</a>
       <a href="#stats">עזרא במספרים</a>
       <a href="#menu">תפריט</a>
-      <a href="#packages">מסלולים</a>
+      <a href="#packages">חבילות</a>
       <a href="#gallery">גלריה</a>
     </div>
 
@@ -2164,10 +2330,9 @@
     <div class="nav__scrim" id="navScrim"></div>
     <div class="nav__menu" id="navMenu">
       <a class="nav__menu-link" href="#solution">הפתרון שלנו</a>
-      <a class="nav__menu-link" href="#concept">האוכל והבר</a>
       <a class="nav__menu-link" href="#stats">עזרא במספרים</a>
       <a class="nav__menu-link" href="#menu">תפריט</a>
-      <a class="nav__menu-link" href="#packages">מסלולים</a>
+      <a class="nav__menu-link" href="#packages">חבילות</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="index.html">אירועים פרטיים</a>
@@ -2251,21 +2416,21 @@
       </div>
 
       <div class="vibe-grid">
-        <div class="vibe-card reveal">
+        <div class="vibe-card">
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
           <div class="vibe-card__title">האווירה</div>
           <div class="vibe-card__body">חלל אירועים פרטי שנועד לתת אווירה חמה, צעירה ומקצועית שמאפשרת לכלל האורחים להתחבר וליצור חוויה בלתי נשכחת ביחד</div>
         </div>
-        <div class="vibe-card reveal">
+        <div class="vibe-card">
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
           </div>
           <div class="vibe-card__title">אישור מיידי</div>
           <div class="vibe-card__body">תהליך קצר ומהיר שנסגר כאן באתר, על ידי בחירת אחת מארבע החבילות שלנו. הכל שקוף, בלי אותיות קטנות</div>
         </div>
-        <div class="vibe-card reveal">
+        <div class="vibe-card">
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
           </div>
@@ -2445,7 +2610,8 @@
           <button class="menu-tab" type="button" role="tab" data-pkg="mesiba" aria-selected="false">חבילת פרימיום</button>
         </div>
 
-        <div class="cmenu-sub" id="cmenuSub">
+        <div class="cmenu-sub" id="cmenuSub" data-menu="evening">
+          <span class="cmenu-sub__thumb" aria-hidden="true"></span>
           <button class="cmenu-sub__btn cmenu-sub__btn--day" type="button" data-menu="day">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
             תפריט יום
@@ -2677,18 +2843,26 @@
       <div class="book-bar">
         <div class="book-bar__start">
           <button class="book-bar__btn book-bar__btn--back" id="bookBack" type="button" aria-label="חזרה" hidden>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
           </button>
           <label class="book-save" id="bookSave" hidden>
             <input type="checkbox" id="bookSaveChk" />
             <span class="book-save__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
             <span class="book-save__label">שמירה</span>
             <span class="book-save__note">ניתן לשמור פה בכל שלב ולהמשיך אחר כך</span>
+            <span class="book-saved" id="bookSaved" aria-live="polite">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>נשמר בהצלחה</span>
+            </span>
           </label>
         </div>
-        <div class="book-progress" id="bookProgress">
-          <span class="book-progress__label" id="bookProgressLabel">שלב 1 מתוך 4</span>
-          <span class="book-progress__track"><span class="book-progress__fill" id="bookProgressFill"></span></span>
+        <div class="book-progress" id="bookProgress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="התקדמות בתהליך">
+          <span class="prog-dot" data-c="1"><span class="prog-dot__num">1</span></span>
+          <span class="prog-line" data-l="1"></span>
+          <span class="prog-dot" data-c="2"><span class="prog-dot__num">2</span></span>
+          <span class="prog-line" data-l="2"></span>
+          <span class="prog-dot" data-c="3"><span class="prog-dot__num">3</span></span>
+          <span class="prog-line" data-l="3"></span>
+          <span class="prog-dot" data-c="4"><span class="prog-dot__num">4</span></span>
         </div>
         <button class="book-bar__btn book-bar__btn--close" id="bookClose" type="button" aria-label="סגירה">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -2773,89 +2947,67 @@
         <!-- STEP 4 · add-ons -->
         <div class="book-step" data-step="4" hidden>
           <h3 class="book-step__title">תוספות לאירוע</h3>
-          <p class="book-step__sub">סמנו מה להוסיף — אפשר גם להמשיך בלי</p>
+          <p class="book-step__sub">סמנו מה להוסיף - אפשר גם להמשיך בלי</p>
           <div class="addons" id="bookAddons"></div>
           <button class="btn btn--fill book-next" id="bookNextAddons" type="button" style="margin-block-start: 1.3rem;">המשך</button>
         </div>
 
         <!-- STEP 5 · graphs + guests -->
         <div class="book-step" data-step="5" hidden>
-          <h3 class="book-step__title">כמה אנשים בערך?</h3>
-          <p class="book-step__sub">גררו את הסליידר או הקלידו מספר - האוכל, הבר וההערכה מתעדכנים יחד</p>
+          <h3 class="book-step__title">כמות אנשים</h3>
+          <p class="book-step__sub">גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p>
 
-          <div class="book-summary" id="bookSummary2"></div>
+          <div class="calc-mincap">מינימום הזמנה - 20 אורחים</div>
 
-          <div class="book-price" aria-live="polite">
-            <div class="book-price__total" id="bookTotal"> - </div>
-            <div class="book-price__label">סה״כ משוער · <b id="bookPerHead"> - </b> לראש</div>
-          </div>
+          <div class="calc-details" id="bookDetails"></div>
 
-          <div class="calc-menu" id="calcMenuToggle">
-            <button type="button" class="calc-menu__btn" data-menu="day">תפריט יום</button>
-            <button type="button" class="calc-menu__btn" data-menu="evening">תפריט ערב</button>
+          <div class="calc-zone">
+          <div class="calc-menu" id="calcMenuToggle" data-menu="day">
+            <span class="calc-menu__thumb" aria-hidden="true"></span>
+            <button type="button" class="calc-menu__btn calc-menu__btn--day" data-menu="day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>תפריט יום</button>
+            <button type="button" class="calc-menu__btn calc-menu__btn--eve" data-menu="evening"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>תפריט ערב</button>
           </div>
-
-          <div class="graphs-row">
-           <div class="graph-cell">
-          <div class="glass-wrap" id="bookGlassWrap">
-            <svg class="glass-svg" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <clipPath id="glassClip"><path d="M16,30 A54,45 0 0 0 124,30 Z"/></clipPath>
-                <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#f6dd97"/>
-                  <stop offset="1" stop-color="#bd8a30"/>
-                </linearGradient>
-                <linearGradient id="coupeGlass" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0"   stop-color="#ffffff" stop-opacity="0.13"/>
-                  <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.02"/>
-                  <stop offset="1"   stop-color="#ffffff" stop-opacity="0.15"/>
-                </linearGradient>
-              </defs>
-              <!-- cast shadow + stem + foot -->
-              <ellipse cx="70" cy="172" rx="30" ry="4" fill="rgba(0,0,0,0.28)"/>
-              <rect x="67" y="78" width="6" height="80" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.5)" stroke-width="1.2"/>
-              <ellipse cx="70" cy="162" rx="30" ry="7" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.55)" stroke-width="1.6"/>
-              <!-- bowl body (behind liquid) -->
-              <path d="M16,30 A54,45 0 0 0 124,30 Z" fill="url(#coupeGlass)"/>
-              <!-- liquid + bubbles, clipped to the bowl interior -->
-              <g clip-path="url(#glassClip)">
-                <rect id="bookLiquid" x="14" y="50" width="112" height="90" fill="url(#liquidGrad)"/>
-                <ellipse id="bookLiquidTop" cx="70" cy="50" rx="40" ry="5" fill="#f9e6ad"/>
-                <g id="bookBubbles"></g>
-              </g>
-              <!-- bowl outline + rim (over liquid) -->
-              <path d="M16,30 A54,45 0 0 0 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
-              <ellipse cx="70" cy="30" rx="54" ry="10" fill="rgba(255,255,255,0.03)" stroke="rgba(240,235,224,0.6)" stroke-width="2.2"/>
-            </svg>
-            <!-- rising bubbles are generated + animated by JS -->
-          </div>
-           </div>
-           <div class="graph-cell">
-             <svg class="food-svg" id="bookFoodSvg" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-               <defs>
-                 <radialGradient id="platterGrad" cx="50%" cy="42%" r="62%">
-                   <stop offset="0" stop-color="#2c2616"/><stop offset="1" stop-color="#191509"/>
-                 </radialGradient>
-               </defs>
-               <ellipse cx="70" cy="150" rx="48" ry="9" fill="rgba(0,0,0,0.26)"/>
-               <ellipse cx="70" cy="98" rx="62" ry="44" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.5)" stroke-width="2"/>
-               <ellipse cx="70" cy="98" rx="53" ry="37" fill="url(#platterGrad)" stroke="rgba(196,154,60,0.3)" stroke-width="1"/>
-               <g id="bookFoodTokens"></g>
-             </svg>
-           </div>
-          </div>
-
-          <div class="graphs-caption">
-            <div class="guest-edit">
-              <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="20" aria-label="מספר אורחים" />
-              <span>אורחים</span>
-            </div>
-            <div class="glass-mult" id="bookFoodMult"></div>
-          </div>
+          <div class="calc-zone__pills" id="bookFoodAmounts"></div>
 
           <input type="range" id="bookRange" class="book-range" min="20" max="50" step="1" value="20" aria-label="כמות אורחים" />
 
-          <div class="food-amounts" id="bookFoodAmounts"></div>
+          <div class="calc-value__line">
+            <span class="guest-edit">
+              <input id="bookGuests" type="number" inputmode="numeric" min="20" max="50" value="20" aria-label="מספר אורחים" />
+              <span>אורחים</span>
+            </span>
+            <span class="calc-value__coupe" aria-hidden="true">
+              <div class="glass-wrap" id="bookGlassWrap">
+                <svg class="glass-svg" viewBox="0 0 140 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <defs>
+                    <clipPath id="glassClip"><path d="M16,30 A54,45 0 0 0 124,30 Z"/></clipPath>
+                    <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#f6dd97"/>
+                      <stop offset="1" stop-color="#bd8a30"/>
+                    </linearGradient>
+                    <linearGradient id="coupeGlass" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0"   stop-color="#ffffff" stop-opacity="0.13"/>
+                      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.02"/>
+                      <stop offset="1"   stop-color="#ffffff" stop-opacity="0.15"/>
+                    </linearGradient>
+                  </defs>
+                  <ellipse cx="70" cy="172" rx="30" ry="4" fill="rgba(0,0,0,0.28)"/>
+                  <rect x="67" y="78" width="6" height="80" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.5)" stroke-width="1.2"/>
+                  <ellipse cx="70" cy="162" rx="30" ry="7" fill="url(#coupeGlass)" stroke="rgba(240,235,224,0.55)" stroke-width="1.6"/>
+                  <path d="M16,30 A54,45 0 0 0 124,30 Z" fill="url(#coupeGlass)"/>
+                  <g clip-path="url(#glassClip)">
+                    <rect id="bookLiquid" x="14" y="50" width="112" height="90" fill="url(#liquidGrad)"/>
+                    <ellipse id="bookLiquidTop" cx="70" cy="50" rx="40" ry="5" fill="#f9e6ad"/>
+                    <g id="bookBubbles"></g>
+                  </g>
+                  <path d="M16,30 A54,45 0 0 0 124,30" fill="none" stroke="rgba(240,235,224,0.6)" stroke-width="2.2" stroke-linejoin="round"/>
+                  <ellipse cx="70" cy="30" rx="54" ry="10" fill="rgba(255,255,255,0.03)" stroke="rgba(240,235,224,0.6)" stroke-width="2.2"/>
+                </svg>
+              </div>
+            </span>
+            <span class="calc-value__total" id="bookTotal" aria-live="polite"> - </span>
+          </div>
+          </div>
 
           <button class="btn btn--fill book-next" id="bookNext2" type="button">המשך לפרטים</button>
         </div>
@@ -2896,18 +3048,18 @@
               <label for="bfNotes">משהו שכדאי שנדע? (לא חובה)</label>
               <textarea id="bfNotes" name="notes" rows="2"></textarea>
             </div>
-            <label class="book-check" for="bfWantsCall">
+            <div class="book-receipt-preview">
+              <div class="book-receipt-preview__t">סיכום ההזמנה שלכם</div>
+              <div class="receipt" id="detailsReceipt"></div>
+            </div>
+
+            <label class="book-check book-check--sm" for="bfWantsCall">
               <input type="checkbox" id="bfWantsCall" name="wantsCall" />
               <span class="book-check__text">
                 <b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>
                 <span>סמנו ונחזור אליכם לתיאום שיחה - בלי לחתום עכשיו</span>
               </span>
             </label>
-
-            <div class="book-receipt-preview">
-              <div class="book-receipt-preview__t">סיכום ההזמנה שלכם</div>
-              <div class="receipt" id="detailsReceipt"></div>
-            </div>
 
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
           </form>
@@ -2919,15 +3071,26 @@
             <div class="book-done__icon" id="bookDoneIcon">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h3 id="bookDoneTitle">ההזמנה שלכם התקבלה.</h3>
-            <p class="book-done__hero">חוזה נשלח אליכם במייל.</p>
+            <h3 id="bookDoneTitle">ההזמנה שלכם התקבלה</h3>
+            <p class="book-done__hero">חוזה נשלח אליכם במייל</p>
             <p id="bookDoneMsg">ברגע שתחתמו על החוזה שנשלח לכם במייל, נחזור אליכם בתוך 24 שעות לאשר פרטים ולגבות מקדמה.</p>
             <div class="book-done__note">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
               <span>שימו לב, החוזה שנשלח תקף ל-12 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span>
             </div>
             <div class="receipt" id="finalReceipt"></div>
-            <button class="btn btn--outline book-next" id="bookDoneClose" type="button" style="max-width:240px; margin-inline:auto; margin-block-start:1.4rem;">סגירה</button>
+            <p class="book-done__mailnote">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>
+            <div class="book-mailcta" id="bookMailCta">
+              <button class="book-mailbtn" type="button" id="bookMailBtn" aria-haspopup="true" aria-expanded="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                קח אותי למייל
+              </button>
+              <div class="book-mailmenu" id="bookMailMenu" hidden>
+                <a href="https://mail.google.com/mail/u/0/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Gmail</a>
+                <a href="https://outlook.live.com/mail/0/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Outlook</a>
+                <a href="message://" id="bookMailDefault"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>אפליקציית המייל</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2985,6 +3148,7 @@
       { threshold: 0.12 }
     );
     document.querySelectorAll('.reveal, .divider').forEach(el => io.observe(el));
+    { const vibeGrid = document.querySelector('.vibe-grid'); if (vibeGrid) io.observe(vibeGrid); }  // deals the 3 cards out of a stack
 
     /* ---- Benefit cards: one soft light orbits the group, brightening each card
             as it passes (smooth, continuous - no jumps). ---- */
@@ -3156,13 +3320,13 @@
         gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, minGuests: 20, tier: 2 },
         mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, minGuests: 20, tier: 3 },
       };
-      // one per-head price per package — same for day or evening; only what's included differs
+      // one per-head price per package - same for day or evening; only what's included differs
       const perHeadFor = (plan) => plan.perHead;
 
       // ── Add-ons (step 4). unit: flat = fixed, head = per guest, tray = one per ~10 guests
       const ADDONS = [
-        { id: 'fruit',    label: 'מגש פירות העונה',        price: 180, unit: 'tray', desc: 'מגש אחד לכל 10 סועדים — הכמות גדלה אוטומטית לפי מספר האורחים. פירות טריים חתוכים לפי העונה.', cap: '180 ₪ למגש' },
-        { id: 'soft',     label: 'שתייה קלה ומוגזת',       price: 25,  unit: 'head', desc: 'תוספת לערב — לחבילה בסיסית ורגילה',        cap: '25 ₪ לאדם', plans: ['happyhour', 'gibush'], menu: 'evening' },
+        { id: 'fruit',    label: 'מגש פירות העונה',        price: 180, unit: 'tray', desc: 'מגש אחד לכל 10 סועדים, פירות טריים חתוכים לפי העונה. <span class="addon__grow">הכמות גדלה אוטומטית לפי מספר האורחים</span>', cap: '180 ₪ למגש' },
+        { id: 'soft',     label: 'שתייה קלה ומוגזת',       price: 25,  unit: 'head', desc: 'תוספת לערב - לחבילה בסיסית ורגילה. <span class="addon__grow">הכמות גדלה אוטומטית לפי מספר האורחים</span>', cap: '25 ₪ לאדם', plans: ['happyhour', 'gibush'], menu: 'evening' },
         { id: 'balloons', label: 'בלונים',                 price: 200, unit: 'flat', desc: 'עיצוב וסידור בלונים למקום',                cap: '200 ₪' },
         { id: 'mic',      label: 'מיקרופון',               price: 250, unit: 'flat', desc: 'לנאומים, מצגות או ברכות',                  cap: '250 ₪' },
         { id: 'karaoke',  label: 'מערכת קריוקי',           price: 350, unit: 'flat', desc: 'כולל מסך/מקרן וחיבור למערכת השמע',         cap: '350 ₪' },
@@ -3178,8 +3342,8 @@
       const addonsTotal = guests => selectedAddons().reduce((s, a) => s + addonUnitPrice(a, guests), 0);
 
       const SLOTS = {
-        3: ['09:00–12:00', '13:00–16:00', '17:00–20:00', '21:00–00:00'],
-        5: ['09:00–14:00', '15:00–20:00', '21:00–02:00'],
+        3: ['09:00-12:00', '13:00-16:00', '17:00-20:00', '21:00-00:00'],
+        5: ['09:00-14:00', '15:00-20:00', '21:00-02:00'],
       };
       const CURRENCY = '₪';
 
@@ -3204,8 +3368,9 @@
 
       const steps = [...modal.querySelectorAll('.book-step')];
       const TOTAL_STEPS = 8;
-      const progressLabel = document.getElementById('bookProgressLabel');
-      const progressFill  = document.getElementById('bookProgressFill');
+      const progressEl    = document.getElementById('bookProgress');
+      const progDots  = progressEl ? [...progressEl.querySelectorAll('.prog-dot')] : [];
+      const progLines = progressEl ? [...progressEl.querySelectorAll('.prog-line')] : [];
       const backBtn  = document.getElementById('bookBack');
       const closeBtn = document.getElementById('bookClose');
       const planBtns = [...document.getElementById('bookPlans').querySelectorAll('.book-plan')];
@@ -3220,12 +3385,10 @@
       const ICON_SUN     = '<svg class="dn-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
       const ICON_MOON    = '<svg class="dn-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
       const next1    = document.getElementById('bookNext1');
-      const summary2 = document.getElementById('bookSummary2');
       const summary3 = document.getElementById('bookSummary3');
       const guestsInput = document.getElementById('bookGuests');
       const guestsRange = document.getElementById('bookRange');
       const guestsOut   = document.getElementById('bookGuestsOut');
-      const foodMultEl  = document.getElementById('bookFoodMult');
       const liquidEl    = document.getElementById('bookLiquid');
       const liquidTopEl = document.getElementById('bookLiquidTop');
       const glassWrap   = document.getElementById('bookGlassWrap');
@@ -3238,7 +3401,6 @@
       const BOWL_BOT_Y = BOWL_TOP_Y + BOWL_RY;
       const halfWidth = y => { const t = (y - BOWL_TOP_Y) / BOWL_RY; return t >= 1 ? 0 : BOWL_RX * Math.sqrt(Math.max(0, 1 - t * t)); };
       const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const perHeadEl = document.getElementById('bookPerHead');
       const totalEl   = document.getElementById('bookTotal');
       const next2  = document.getElementById('bookNext2');
       const form   = document.getElementById('bookForm');
@@ -3298,14 +3460,14 @@
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "כרוב חמים מהטאבון", "קרודו (סביצ'ה אלגנטי)"] },
             { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מהטאבון (פיצות ופוקאצ'ות)", items: ["פיצה גבינה כחולה וריבת צ'ילי", "פרסקה", "בזיל", "פונגי", "פוקאצ'ה חמאת שום", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות", "חציל קלוי בטחינה שחורה"] },
-            { t: "בר קוקטיילים", items: ["בר קוקטיילים חופשי עם מיקסולוג צמוד (אלכוהול פרימיום)", "2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "7 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי, טקילה)", "8 ערבובים"] }
+            { t: "בר קוקטיילים", items: ["בר קוקטיילים חופשי עם מיקסולוג צמוד (אלכוהול פרימיום)", "2 בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "7 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי, טקילה)", "8 ערבובים (קולה, טוניק, לימונדה, סודה, ראשן, ספרייט, אשכוליות ותפוזים)"] }
           ]
         }
       };
       const MENU_PLACEHOLDER = [{ t: "התפריט המלא בקרוב", items: ["תפריט היום והערב של החבילה הזו יפורטו יחד מולכם."] }];
       const menuFor = (plan, menu) => (MENUS[plan] && MENUS[plan][menu]) || MENU_PLACEHOLDER;
 
-      // per-dish ingredient detail — shown on tap in the menu step (keys match the item strings above)
+      // per-dish ingredient detail - shown on tap in the menu step (keys match the item strings above)
       const DISH_DESC = {
         // openers
         "צלחת לחמים": "לחמי מחמצת, חמאה רכה ומלח גס.",
@@ -3340,8 +3502,8 @@
         "גבינה": "גבינת שמנת, גבינת גאודה, מלפפון טרי, עגבנייה ורוקט.",
         "טונה / טבעוני": "טונה (מיונז, חרדל, מלפפון חמוץ ושאלוט, עם עגבנייה וחסה) או טבעוני (ממרח טחינה או פסטו וירקות אנטיפסטי קלויים).",
         "כריך סלמון": "גבינת שמנת, דג סלמון, עגבנייה ועירית.",
-        "מגש בורקסים": "מבחר בורקסים — גבינה, תרד, ביצים ופיצה.",
-        "מגש מאפים מתוקים": "מבחר מאפים מתוקים — שוקולד, קינמון וגבינה.",
+        "מגש בורקסים": "מבחר בורקסים - גבינה, תרד, ביצים ופיצה.",
+        "מגש מאפים מתוקים": "מבחר מאפים מתוקים - שוקולד, קינמון וגבינה.",
         // cocktails get a description; soft drinks stay name-only
         "מימוזה": "מיץ תפוזים ויין מבעבע.",
         "אפרול שפריץ": "אפרול, יין מבעבע וסודה.",
@@ -3365,10 +3527,16 @@
 
       const DISH_MARK = '<svg class="menu-dish__mark" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.55 4.45L12 6l-4.45 1.55L6 12 4.45 7.55 0 6l4.45-1.55z"/></svg>';
       const dishRow  = txt => '<div class="menu-dish">' + DISH_MARK + '<span>' + txt + '</span></div>';
-      const cardHTML = (sec, extraCls) =>
+      // food cards = titles only (clean); the bar card passes withDesc to show the ( ) detail under each line
+      const cardHTML = (sec, extraCls, withDesc) =>
         '<div class="menu-card' + (extraCls || '') + '">' +
           '<div class="menu-card__t">' + sec.t + '</div>' +
-          '<div class="menu-dishes">' + sec.items.map(dishRow).join('') + '</div>' +
+          '<div class="menu-dishes">' + sec.items.map(it => {
+            const nd = splitDish(it);
+            return withDesc
+              ? '<div class="menu-dish menu-dish--desc"><span class="menu-dish__nm">' + nd.name + '</span>' + (nd.desc ? '<span class="menu-dish__ds">' + nd.desc + '</span>' : '') + '</div>'
+              : dishRow(nd.name);
+          }).join('') + '</div>' +
         '</div>';
 
       function renderMenu() {
@@ -3381,9 +3549,10 @@
         const drinks = secs.filter(isDrink);                   // drinks/bar → feature box(es) below
         const foodHTML = food.length ? '<div class="menu-grid">' + food.map(s => cardHTML(s)).join('') + '</div>' : '';
         const drinksHTML = drinks.length === 1
-          ? cardHTML(drinks[0], ' menu-card--hero menu-card--wide')
-          : '<div class="menu-drinks">' + drinks.map(d => cardHTML(d, ' menu-card--hero')).join('') + '</div>';
+          ? cardHTML(drinks[0], ' menu-card--hero menu-card--wide', true)
+          : '<div class="menu-drinks">' + drinks.map(d => cardHTML(d, ' menu-card--hero', true)).join('') + '</div>';
         menuView.innerHTML = foodHTML + drinksHTML;
+        menuView.classList.toggle('is-day', state.menu === 'day');   // day = golden boxes, evening = dark
       }
       if (menuToggle) menuToggle.addEventListener('click', e => {
         const b = e.target.closest('.menu-choice__opt');
@@ -3432,12 +3601,12 @@
         b.setAttribute('aria-pressed', !!state.addons[id]);
       });
 
-      // ── Confirm receipt (step 5) — choices only, no price yet
+      // ── Confirm receipt (step 5) - choices only, no price yet
       function renderConfirm() {
         const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
         set('cfPlan', PLANS[state.plan].label);
-        set('cfDate', state.date ? humanDate(state.date) : '—');
-        set('cfTime', state.slot || '—');
+        set('cfDate', state.date ? humanDate(state.date) : '-');
+        set('cfTime', state.slot || '-');
         set('cfMenu', state.menu === 'evening' ? 'תפריט ערב' : 'תפריט יום');
         const dishesEl = document.getElementById('cfDishes');
         if (dishesEl) dishesEl.innerHTML = menuFor(state.plan, state.menu).map(c => '<span class="chip">' + c.t + '</span>').join('');
@@ -3448,7 +3617,7 @@
           : '<span class="chip chip--ghost">ללא תוספות</span>';
       }
 
-      // ── Food platter graph (step 6) — fills with dish tokens; +1 set menu per 10 guests
+      // ── Food platter graph (step 6) - fills with dish tokens; +1 set menu per 10 guests
       const FOOD_MAX_SETS = 5, TOKENS_PER_SET = 5, FOOD_MAX = FOOD_MAX_SETS * TOKENS_PER_SET;
       // little food glyphs that drop onto the platter (cheese, salad, bruschetta, fruit, pizza, olives, grapes)
       const FOOD_ICONS = [
@@ -3485,24 +3654,140 @@
           t.classList.toggle('is-on', on);
         });
       }
-      // live "what the package serves" tags — qty per dish = round(guests / 10), incl. fruit trays
-      function renderFoodAmounts(guests) {
-        if (!foodAmountsEl) return;
-        const qty = Math.max(1, Math.round(guests / 10));
-        const secs = menuFor(state.plan, state.menu);
-        const tags = [];
-        if (state.addons['fruit'] && addonApplies(ADDONS.find(a => a.id === 'fruit')))
-          tags.push('<span class="food-tag food-tag--add"><b>' + qty + '</b> מגשי פירות</span>');
-        secs.forEach(s => {
-          if (/בר|אלכוהול|שתייה/.test(s.t)) return;     // food only, skip drinks
-          s.items.forEach(it => tags.push('<span class="food-tag"><b>' + qty + '</b> ' + it + '</span>'));
+      // category glyph for the value list (stroke icons, match the site's icon language)
+      const FOOD_CAT_ICON = name => {
+        const I = p => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
+        if (/בר|אלכוהול|קוקטייל/.test(name)) return I('<path d="M5 3h14l-7 9z"/><path d="M12 12v7"/><path d="M8 21h8"/>');
+        if (/שתייה|קפה|תה/.test(name))       return I('<path d="M4 8h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 3v2M11 3v2"/>');
+        if (/כריכ|מגש|בורק|מאפ/.test(name))   return I('<path d="M4 11a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1H4z"/><path d="M4 12v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>');
+        if (/טאבון|פיצ/.test(name))           return I('<path d="M12 3 3 20l9-2 9 2z"/><circle cx="11" cy="11" r="1"/><circle cx="13" cy="15" r="1"/>');
+        if (/סלט/.test(name))                 return I('<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 11a3 3 0 0 1 6 0"/><path d="M12 3v4"/>');
+        if (/פיר/.test(name))                 return I('<path d="M12 7c-3 0-5 2-5 6 0 4 3 7 5 7s5-3 5-7c0-4-2-6-5-6z"/><path d="M12 7c0-2 1-3 3-4"/>');
+        return I('<path d="M12 3v18M3 12h18"/>');
+      };
+      // ── Portion math (spec doc): total per category = round(guests * multiplier); no decimals shown
+      const PORTION = {
+        taboon:{mult:0.3,unit:'מגשים'}, salad:{mult:0.25,unit:'קערות'}, sandwich:{mult:0.2,unit:'מגשים'},
+        pastry:{mult:0.1,unit:'מגשים'}, bread:{mult:0.15,unit:'סלסלות'}, cheese:{mult:0.1,unit:'פלטות'},
+        roasted:{mult:0.1,unit:'צלחות'}, nibble:{mult:0.3,unit:'קעריות',perType:true}, premium:{mult:0.15,unit:'צלחות',perType:true},
+      };
+      const isBarCat = t => /בר|אלכוהול|קוקטייל|שתייה|קפה|תה/.test(t);
+      const portionRnd = x => Math.round(x);
+      // classify a dish inside the opening/sharing category by keyword
+      const openingType = n =>
+        /חריפ|חריף|זית/.test(n) ? 'nibble' :
+        /כרוב|סביצ|קרודו/.test(n) ? 'premium' :
+        /גבינ/.test(n) ? 'cheese' :
+        /קלוי/.test(n) ? 'roasted' : 'bread';
+      // returns { isBar, qtyLabel (left side), breakdown:[{name, qty, unit}] }
+      function categoryPortions(catLabel, names, g) {
+        if (isBarCat(catLabel)) return { isBar:true, qtyLabel:'ללא הגבלה', breakdown: names.map(n => ({ name:n, qty:null, unit:'' })) };
+        if (/פתיחה|שרינג/.test(catLabel)) {
+          const by = {}; names.forEach(n => { const t = openingType(n); (by[t] = by[t] || []).push(n); });
+          const bd = []; let tot = 0;
+          ['bread','cheese','roasted','nibble','premium'].forEach(t => {
+            const ds = by[t]; if (!ds) return; const c = PORTION[t];
+            if (c.perType) ds.forEach(n => { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push({ name:n, qty:q, unit:c.unit }); });
+            else { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push({ name: ds.join(', '), qty:q, unit:c.unit }); }
+          });
+          return { isBar:false, qtyLabel: tot + ' הגשות', breakdown: bd };
+        }
+        if (/כריכ/.test(catLabel)) {
+          const pa = names.filter(n => /מאפ|בורק/.test(n)), sa = names.filter(n => !/מאפ|בורק/.test(n));
+          const bd = []; let tot = 0;
+          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push({ name: sa.join(', '), qty:q, unit:'מגשים' }); }
+          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push({ name: pa.join(', '), qty:q, unit:'מגשים' }); }
+          return { isBar:false, qtyLabel: tot + ' מגשים', breakdown: bd };
+        }
+        const c = /טאבון|פיצ/.test(catLabel) ? PORTION.taboon : PORTION.salad;
+        const q = Math.max(1, portionRnd(g * c.mult));
+        return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: [{ name: names.join(', '), qty:q, unit:c.unit }] };
+      }
+      // word-saving: collapse a shared leading "vessel" word, separate food types with |
+      const VESSEL = /^(צלחת|צלחות|קערית|קעריות|קערות|מגש|מגשי|פלטת|פלטה|סלסלת|סלסלות|עמדת|סלט|סלטי)$/;
+      function compactItems(names) {
+        const groups = []; const idx = {};
+        names.forEach(n => {
+          const sp = n.split(' '), head = sp[0], tail = sp.slice(1).join(' ');
+          if (VESSEL.test(head) && tail) {
+            if (idx[head] == null) { idx[head] = groups.length; groups.push({ head, tails: [] }); }
+            groups[idx[head]].tails.push(tail);
+          } else groups.push({ head: n, tails: null });
         });
-        foodAmountsEl.innerHTML = tags.join('');
+        return groups.map(g => g.tails ? g.head + ' ' + g.tails.join(', ') : g.head).join(' | ');
+      }
+      function compactTaboon(names) {
+        const pi = [], fo = [];
+        names.forEach(n => { if (/פוקאצ/.test(n)) fo.push(n.replace(/^פוקאצ['׳]?ה\s*/, '')); else pi.push(n); });
+        const parts = [];
+        if (pi.length) parts.push('פיצה ' + pi.join(', '));
+        if (fo.length) parts.push('פוקאצ׳ה ' + fo.join(', '));
+        return parts.join(' | ');
+      }
+      const CHEV_SVG = '<svg class="vpill__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+      function pillHTML(cat, itemsLine, p, isAddon) {
+        const detail = p.breakdown.length
+          ? p.breakdown.map(b => '<div class="vpill__drow"><span>' + b.name + '</span><b>' + (b.qty != null ? b.qty + ' ' + b.unit : (isAddon ? 'נכלל' : 'כלול')) + '</b></div>').join('')
+          : '<div class="vpill__drow"><span>טרם נבחרו</span></div>';
+        return '<div class="vpill ' + (isAddon ? 'vpill--addon' : 'vpill--food') + '" data-open="false">' +
+          '<button class="vpill__head" type="button" aria-expanded="false">' +
+            '<span class="vpill__main"><span class="vpill__cat">' + FOOD_CAT_ICON(cat) + cat + ':</span> ' +
+            '<span class="vpill__items">' + itemsLine + '</span></span>' +
+            '<span class="vpill__qty">' + p.qtyLabel + '</span>' + CHEV_SVG +
+          '</button>' +
+          '<div class="vpill__detail" hidden><div class="vpill__detail-inner">' + detail + '</div></div>' +
+        '</div>';
+      }
+      // 5 pills: food/alcohol categories (drinks merged into one bar pill) + an add-ons pill
+      let lastPillsKey = '';
+      function renderFoodPills(guests) {
+        if (!foodAmountsEl) return;
+        const secs = menuFor(state.plan, state.menu);
+        const food = secs.filter(s => !isBarCat(s.t));
+        const drinks = secs.filter(s => isBarCat(s.t));
+        const pills = [];
+        food.forEach(s => {
+          const names = s.items.map(it => splitDish(it).name);
+          const p = categoryPortions(s.t, names, guests);
+          const items = /טאבון|פיצ/.test(s.t) ? compactTaboon(names) : compactItems(names);
+          pills.push(pillHTML(s.t, items, p, false));
+        });
+        if (drinks.length) {
+          const names = drinks.reduce((a, s) => a.concat(s.items.map(it => splitDish(it).name)), []);
+          const label = drinks.length === 1 ? drinks[0].t : 'בר ושתייה';
+          pills.push(pillHTML(label, compactItems(names), { isBar:true, qtyLabel:'ללא הגבלה', breakdown: names.map(n => ({ name:n, qty:null, unit:'' })) }, false));
+        }
+        const sel = selectedAddons();
+        const adBreak = sel.map(a => ({
+          name: a.label,
+          qty: a.unit === 'tray' ? Math.max(1, Math.ceil(guests / 10)) : a.unit === 'head' ? guests : null,
+          unit: a.unit === 'tray' ? 'מגשים' : a.unit === 'head' ? 'מנות' : '',
+        }));
+        pills.push(pillHTML('תוספות', sel.length ? sel.map(a => a.label).join(' · ') : 'לא נבחרו תוספות',
+          { isBar:false, qtyLabel: sel.length ? (sel.length === 1 ? 'תוספת אחת' : sel.length + ' תוספות') : 'ללא', breakdown: adBreak }, true));
+        const html = pills.join('');
+        if (html === lastPillsKey) return;   // nothing visible changed → skip rebuild (keeps the pop animation from restarting mid-drag)
+        lastPillsKey = html;
+        foodAmountsEl.innerHTML = html;       // fresh nodes replay the qty-pop + settle animation on each real change
+      }
+      // 4-field details box (plan · date · time · per-head)
+      function renderDetails() {
+        const el = document.getElementById('bookDetails');
+        if (!el) return;
+        const plan = PLANS[state.plan];
+        const shortDate = d => pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + pad(d.getFullYear() % 100);
+        const rows = [
+          ['מסלול', plan.label],
+          ['תאריך', state.date ? shortDate(state.date) : '-'],
+          ['שעה', state.slot || '-'],
+          ['מחיר לראש', fmt(perHeadFor(plan))],
+        ];
+        el.innerHTML = rows.map(r => '<div class="cd-row"><span class="cd-v">' + r[1] + '</span><span class="cd-k">' + r[0] + '</span></div>').join('');
       }
       // keep the day/evening toggle on the calculator in sync with state.menu
       function syncCalcMenu() {
         if (!calcMenuEl) return;
-        calcMenuEl.querySelectorAll('.calc-menu__btn').forEach(b => b.classList.toggle('is-active', b.dataset.menu === state.menu));
+        calcMenuEl.dataset.menu = state.menu || 'day';   // drives the sliding thumb
       }
       if (calcMenuEl) calcMenuEl.addEventListener('click', e => {
         const b = e.target.closest('.calc-menu__btn');
@@ -3517,36 +3802,42 @@
         const plan = PLANS[state.plan];
         const ph = perHeadFor(plan), gg = state.guests;
         const base = ph * gg, addOns = addonsTotal(gg), total = base + addOns;
-        const qty = Math.max(1, Math.round(gg / 10));
         const sel = selectedAddons();
         const menuData = menuFor(state.plan, state.menu);
         const row = (k, v) => '<div class="receipt__row"><span class="receipt__k">' + k + '</span><span class="receipt__dots"></span><span class="receipt__v">' + v + '</span></div>';
         const subRow = (k, v) => '<div class="receipt__row receipt__row--sub"><span class="receipt__k">' + k + '</span><span class="receipt__dots"></span><span class="receipt__v">' + v + '</span></div>';
-        const dishChips = menuData.map(c => '<span class="chip">' + c.t + '</span>').join('');
+        // menu detail shown directly (no chips, no collapsible); dish titles only
         const detail = menuData.map(c => {
-          const drink = /בר|אלכוהול|שתייה/.test(c.t);
-          return '<div class="rcpt-cat"><div class="rcpt-cat__t">' + c.t + '</div>' +
-            c.items.map(it => '<div class="rcpt-dish">' + (drink ? '• ' : '<b>' + qty + '</b> ') + it + '</div>').join('') + '</div>';
+          const names = c.items.map(it => splitDish(it).name);
+          const p = categoryPortions(c.t, names, gg);
+          const rows = p.isBar
+            ? names.map(n => '<div class="rcpt-dish">• ' + n + '</div>').join('')
+            : p.breakdown.map(b => '<div class="rcpt-dish"><b>' + (b.qty != null ? b.qty + ' ' + b.unit : 'כלול') + '</b> ' + b.name + '</div>').join('');
+          return '<div class="rcpt-cat"><div class="rcpt-cat__t">' + c.t + '</div>' + rows + '</div>';
         }).join('');
-        const addChips = sel.length
-          ? sel.map(a => '<span class="chip">' + a.label + (a.unit === 'tray' ? ' · ' + qty : '') + '</span>').join('')
-          : '<span class="chip chip--ghost">ללא תוספות</span>';
+        // each add-on on its own line with its own price; show the multiplication where it applies
+        const addonLine = a => {
+          const u = addonUnitPrice(a, gg);
+          let v;
+          if (a.unit === 'tray') { const t = Math.max(1, Math.ceil(gg / 10)); v = t + '×' + fmt(a.price) + ' = ' + fmt(u); }
+          else if (a.unit === 'head') { v = gg + '×' + fmt(a.price) + ' = ' + fmt(u); }
+          else { v = fmt(u); }
+          return subRow(a.label, v);
+        };
         return '<span class="receipt__bar"></span>' +
           '<div class="receipt__head"><span class="receipt__brand">עזרא תל אביב</span><span class="receipt__ref">' + (ref ? '#' + ref : 'סיכום ההזמנה') + '</span></div>' +
           '<div class="receipt__perf"></div>' +
           row('מסלול', plan.label) + row('מספר אורחים', gg + ' אורחים') +
-          row('תאריך', state.date ? humanDate(state.date) : '—') + row('חלון זמן', state.slot || '—') +
+          row('תאריך', state.date ? humanDate(state.date) : '-') + row('חלון זמן', state.slot || '-') +
           '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">התפריט שלכם</span><span class="receipt__v">' + (state.menu === 'evening' ? 'תפריט ערב' : 'תפריט יום') + '</span></div>' +
-            '<div class="receipt__chips">' + dishChips + '</div>' +
-            '<button class="receipt__toggle" type="button" aria-expanded="false"><svg class="receipt__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span>לחצו לצפייה בפירוט המנות והכמויות</span></button>' +
-            '<div class="receipt__detail" hidden>' + detail + '</div>' +
+            '<div class="receipt__detail">' + detail + '</div>' +
           '</div>' +
-          '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">תוספות</span></div><div class="receipt__chips">' + addChips + '</div></div>' +
           '<div class="receipt__perf"></div>' +
-          subRow('חבילה · ' + fmt(ph) + ' לראש', fmt(base)) +
-          (addOns ? subRow('תוספות', fmt(addOns)) : '') +
-          '<div class="receipt__total"><span class="receipt__k">סה״כ משוער</span><span class="receipt__sum">' + fmt(total) + '</span></div>' +
-          '<div class="receipt__fine">הערכה לא סופית · המחיר ייסגר מול מנהל המכירות</div>';
+          subRow(plan.label + ' · ' + gg + ' × ' + fmt(ph), fmt(base)) +
+          (sel.length
+            ? '<div class="receipt__addhead">תוספות</div>' + sel.map(addonLine).join('')
+            : subRow('תוספות', 'ללא')) +
+          '<div class="receipt__total"><span class="receipt__k">מחיר סופי</span><span class="receipt__sum">' + fmt(total) + '</span></div>';
       }
       function renderDetailsReceipt() {
         const el = document.getElementById('detailsReceipt');
@@ -3562,6 +3853,17 @@
         if (detail) detail.hidden = open;
         const lbl = t.querySelector('span');
         if (lbl) lbl.textContent = open ? 'לחצו לצפייה בפירוט המנות והכמויות' : 'הסתרת הפירוט';
+      });
+      // expand/collapse a value pill to reveal the per-dish amounts
+      modal.addEventListener('click', e => {
+        const head = e.target.closest('.vpill__head');
+        if (!head) return;
+        const pill = head.closest('.vpill');
+        const det = pill.querySelector('.vpill__detail');
+        const open = pill.dataset.open === 'true';
+        pill.dataset.open = String(!open);
+        head.setAttribute('aria-expanded', String(!open));
+        if (det) det.hidden = open;
       });
       function animateFood() {
         if (!foodTokensEl) return;
@@ -3581,17 +3883,23 @@
         const secs = menuFor(cmPkg, cmMenu);
         cmenuGrid.innerHTML = secs.map(c => {
           const isSandwich = /כריכים/.test(c.t);
-          const items = c.items.map(it => {
+          // evening bar box → present each line as a clear subtitle with the ( ) note as subtext beneath
+          const isBar = cmMenu === 'evening' && /בר|אלכוהול|שתייה/.test(c.t);
+          // longest dish first (top-right in the RTL grid), down to the shortest
+          const dishLen = it => { const nd = splitDish(it); return (nd.name + (nd.desc || '')).length; };
+          const sorted = c.items.slice().sort((a, b) => dishLen(b) - dishLen(a));
+          const items = sorted.map(it => {
             const nd = splitDish(it);
-            return '<div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">' + nd.name + '</div>' +
+            return '<div class="menu-item' + (isBar ? ' menu-item--sub' : '') + '"><div class="menu-item__info"><div class="menu-item__name">' + nd.name + '</div>' +
               (nd.desc ? '<div class="menu-item__desc">' + nd.desc + '</div>' : '') + '</div></div>';
           }).join('');
-          return '<div class="menu-category">' +
+          return '<div class="menu-category' + (isBar ? ' menu-category--bar' : '') + '">' +
             '<div class="menu-category__title">' + c.t + '</div>' +
-            (isSandwich ? SANDWICH_NOTE : '') + items + '</div>';
+            (isSandwich ? SANDWICH_NOTE : '') +
+            '<div class="menu-items">' + items + '</div></div>';
         }).join('');
         if (cmenuTabs) cmenuTabs.querySelectorAll('.menu-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pkg === cmPkg)));
-        if (cmenuSub)  cmenuSub.querySelectorAll('.cmenu-sub__btn').forEach(b => b.classList.toggle('is-active', b.dataset.menu === cmMenu));
+        if (cmenuSub)  cmenuSub.dataset.menu = cmMenu;   // drives the sliding thumb (day = gold/right, evening = blue/left)
         const sec = document.getElementById('menu');
         if (sec) sec.classList.toggle('is-day', cmMenu === 'day');
       }
@@ -3601,16 +3909,29 @@
 
       // ── Step navigation (8 steps)
       let step = 1;
-      // 7 panels collapse into 4 displayed groups up top (8 dots looked like too much)
+      // 7 panels collapse into 4 numbered circles up top; each step fills half a circle (2 steps = full)
       const STEP_GROUP = { 1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4 };
+      const GROUP_LAST = { 1: 2, 2: 4, 3: 5, 4: 7 };   // last panel in each group → that circle goes full
       const GROUP_TOTAL = 4;
+      function setProgress(n) {
+        const g = STEP_GROUP[n] || 1;
+        progDots.forEach((dot, i) => {
+          const c = i + 1;
+          let p = 0;
+          if (g > c) p = 100;
+          else if (g === c) p = (n === GROUP_LAST[g]) ? 100 : 50;
+          dot.style.setProperty('--p', p + '%');
+          dot.classList.toggle('is-half', p === 50);
+          dot.classList.toggle('is-full', p === 100);
+        });
+        progLines.forEach((ln, i) => ln.classList.toggle('is-on', g > (i + 1)));
+        if (progressEl) progressEl.setAttribute('aria-valuenow', g);
+      }
       function goto(n) {
         step = n;
         steps.forEach(s => { s.hidden = (+s.dataset.step !== n); });
         backBtn.hidden = (n === 1 || n === 7);
-        const g = STEP_GROUP[n] || 1;
-        if (progressLabel) progressLabel.textContent = 'שלב ' + g + ' מתוך ' + GROUP_TOTAL;
-        if (progressFill)  progressFill.style.width = (g / GROUP_TOTAL * 100) + '%';
+        setProgress(n);
         if (scroll) scroll.scrollTop = 0;
         if (n === 3) renderMenu();                                   // food / menu
         if (n === 4) renderAddons();                                 // add-ons
@@ -3667,11 +3988,11 @@
         cel.style.left = (frac * 100) + '%';
         cel.style.transform = 'translateY(' + (-(50 * Math.sin(Math.PI * frac))).toFixed(1) + 'px)';
       }
-      // parse "09:00–14:00" → [startHour, endHour] (end rolls past midnight: 02:00 → 26)
-      const parseSlot = s => { const a = s.split('–'); const sh = parseInt(a[0], 10); let eh = parseInt(a[1], 10); if (eh <= sh) eh += 24; return [sh, eh]; };
+      // parse "09:00-14:00" → [startHour, endHour] (end rolls past midnight: 02:00 → 26)
+      const parseSlot = s => { const a = s.split('-'); const sh = parseInt(a[0], 10); let eh = parseInt(a[1], 10); if (eh <= sh) eh += 24; return [sh, eh]; };
       const fmtHour = h => pad(((h % 24) + 24) % 24) + ':00';
-      // 24h hour → am/pm label (noon = 12pm, midnight = 12am)
-      const ampmHour = h => { const hh = ((h % 24) + 24) % 24; let d = hh % 12; if (d === 0) d = 12; return d + (hh < 12 ? 'am' : 'pm'); };
+      // 24h axis tick label (e.g. 09, 12, 21, 00); the box itself shows the full slot label (e.g. 09:00-14:00)
+      const hour24 = h => pad(((h % 24) + 24) % 24) + ':00';
 
       function renderSlots() {
         const plan = PLANS[state.plan];
@@ -3697,19 +4018,20 @@
             ' data-label="' + label + '" data-center="' + center.toFixed(4) + '" title="' + label + '"' +
             ' style="left:' + left.toFixed(2) + '%;width:' + width.toFixed(2) + '%"' +
             (isTaken ? ' disabled aria-label="' + label + ' - תפוס"' : '') + '>' +
-            '<span class="dn-bar__fill"></span>' + slotIconFor(sh) +
-            '<span class="dn-bar__time">' + label + '</span>' +
+            '<span class="dn-bar__fill"></span>' +
+            '<span class="dn-bar__inner">' + slotIconFor(sh) +
+              '<span class="dn-bar__time">' + label + '</span></span>' +
             '</button>';
         }).join('');
 
-        // am/pm time ruler — ticks every 3h, always incl. noon (12pm) + both ends
+        // 24h time ruler - ticks every 3h, always incl. noon + both ends
         const ticks = [];
         for (let h = Math.ceil(axisStart); h <= axisEnd; h++) {
           if (!(h % 3 === 0 || h === 12 || h === axisStart || h === axisEnd)) continue;
           const pos = (h - axisStart) / span * 100;
           if (!ticks.some(t => Math.abs(t.pos - pos) < 5)) ticks.push({ h, pos });
         }
-        const ruler = ticks.map(t => '<span class="dn-tick" style="left:' + t.pos.toFixed(2) + '%"><i></i>' + ampmHour(t.h) + '</span>').join('');
+        const ruler = ticks.map(t => '<span class="dn-tick" style="left:' + t.pos.toFixed(2) + '%"><i></i>' + hour24(t.h) + '</span>').join('');
 
         slotsGraph.innerHTML =
           '<div class="dn-arc"><span class="dn-celestial" id="dnCelestial">' +
@@ -3840,11 +4162,9 @@
         const gg = Math.min(RANGE_MAX, Math.max(plan.minGuests, g));
         state.guests = gg;
         if (guestsOut) guestsOut.textContent = gg;
-        if (foodMultEl) {
-          foodMultEl.innerHTML = 'הכמויות בתפריט מותאמות ל-<b>' + gg + '</b> אורחים';
-        }
         syncCalcMenu();
-        renderFoodAmounts(gg);
+        renderDetails();
+        renderFoodPills(gg);
         const f = (gg - RANGE_MIN) / (RANGE_MAX - RANGE_MIN);
         const liqY = LIQ_LOW - f * (LIQ_LOW - LIQ_HIGH);
         liqSurfaceY = liqY;
@@ -3854,9 +4174,7 @@
         bubbleTarget = Math.round(3 + f * 13);   // 3 bubbles at 20 guests → 16 at 50
         renderFood(gg, animateCubes);             // food platter fills in sync
         const ph = perHeadFor(plan);
-        perHeadEl.textContent = fmt(ph);
         totalEl.textContent = fmt(ph * gg + addonsTotal(gg));
-        summary2.innerHTML = summaryText();
       }
       let prevGuests = 20;
       function setGuests(v) {
@@ -3910,7 +4228,7 @@
         const ref = 'EZ-' + pad(dRef.getDate()) + pad(dRef.getMonth() + 1) + '-' + Math.random().toString(36).slice(2, 5).toUpperCase();
         const finalEl = document.getElementById('finalReceipt');
         if (finalEl) finalEl.innerHTML = receiptInnerHTML(ref);
-        clearProgress(); saveOn = false;   // booked — no draft to resume
+        clearProgress(); saveOn = false;   // booked - no draft to resume
         goto(7);
         // festive finish: pop the checkmark + confetti burst
         const iconEl = document.getElementById('bookDoneIcon');
@@ -3939,7 +4257,15 @@
       }
       function clearProgress() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
       function readSaved() { try { return JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); } catch (e) { return null; } }
-      if (saveChk) saveChk.addEventListener('change', () => { saveOn = saveChk.checked; if (saveOn) saveProgress(); else clearProgress(); });
+      const savedToast = document.getElementById('bookSaved');
+      let savedTimer;
+      function flashSaved() {
+        if (!savedToast) return;
+        savedToast.classList.add('show');
+        clearTimeout(savedTimer);
+        savedTimer = setTimeout(() => savedToast.classList.remove('show'), 1900);
+      }
+      if (saveChk) saveChk.addEventListener('change', () => { saveOn = saveChk.checked; if (saveOn) { saveProgress(); flashSaved(); } else clearProgress(); });
       modal.addEventListener('input', () => { if (saveOn) saveProgress(); });
       modal.addEventListener('click', () => { if (saveOn) saveProgress(); });
 
@@ -3969,7 +4295,7 @@
           saveOn = false; if (saveChk) saveChk.checked = false;
         }
         view = state.date ? new Date(state.date.getFullYear(), state.date.getMonth(), 1) : new Date(today.getFullYear(), today.getMonth(), 1);
-        setPlan(state.plan);            // builds the slot graph if a date is set — but clears state.slot
+        setPlan(state.plan);            // builds the slot graph if a date is set - but clears state.slot
         renderCal();
         // setPlan wiped the slot; put the saved one back and re-highlight it on the graph
         state.slot = restoredSlot;
@@ -3997,7 +4323,17 @@
       nextBtn.addEventListener('click', () => { view.setMonth(view.getMonth() + 1); renderCal(); });
       backBtn.addEventListener('click', () => { if (step > 1) goto(step - 1); });
       closeBtn.addEventListener('click', close);
-      doneClose.addEventListener('click', close);
+      if (doneClose) doneClose.addEventListener('click', close);
+      // final step: "take me to my email" → small menu of mail apps
+      const mailBtn = document.getElementById('bookMailBtn');
+      const mailMenu = document.getElementById('bookMailMenu');
+      if (mailBtn && mailMenu) {
+        mailBtn.addEventListener('click', () => {
+          const open = !mailMenu.hidden;
+          mailMenu.hidden = open;
+          mailBtn.setAttribute('aria-expanded', String(!open));
+        });
+      }
       // shortcut: skip straight to the details form, flagged as "wants a call"
       if (talkBtn) talkBtn.addEventListener('click', () => {
         const cb = document.getElementById('bfWantsCall');

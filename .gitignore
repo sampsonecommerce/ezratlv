@@ -1,2 +1,19 @@
 .DS_Store
 /gallery/
+
+# local backups / scratch folders
+Back up*/
+untitled folder/
+
+# marketing ad pipeline (not part of the live site)
+ad-A-band.html
+ad-B-editorial.html
+ad-C-seal.html
+ad-square-*.html
+ad-exports/
+images/ad-*.jpg
+
+# secrets / local env (for the Cloudflare Function)
+.env
+.env.*
+.dev.vars
