@@ -1,0 +1,81 @@
+/* Shared styling for Ezra TLV legal pages (privacy, terms, accessibility).
+   Matches the main site design tokens. Plain, readable, brand-consistent. */
+:root{
+  --bg:#0f0d0b; --bg-soft:#15110d; --cream:#f0ebe0;
+  --cream-dim:rgba(240,235,224,.72); --cream-faint:rgba(240,235,224,.45);
+  --gold:#c49a3c; --gold-light:#f5d98a; --gold-soft:rgba(196,154,60,.18);
+  --line:rgba(196,154,60,.28);
+  --font-serif:'Cormorant Garamond','Heebo',serif;
+  --font-body:'Inter','Heebo',system-ui,sans-serif;
+  --ease:cubic-bezier(0.22,0.61,0.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:var(--font-body);font-weight:300;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* top bar */
+.legal-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem clamp(1.25rem,5vw,3rem);
+  border-block-end:1px solid var(--line);
+  position:sticky;top:0;z-index:10;
+  background:rgba(15,13,11,.92);backdrop-filter:blur(8px);
+}
+.legal-nav__logo img{height:22px;width:auto;display:block;}
+.legal-nav__back{
+  color:var(--cream-dim);font-size:.9rem;text-decoration:none;
+  transition:color .3s var(--ease);
+}
+.legal-nav__back:hover{color:var(--gold-light);}
+
+/* content */
+.legal{
+  max-width:46rem;margin-inline:auto;
+  padding:clamp(2.5rem,7vh,5rem) clamp(1.25rem,5vw,2rem) 4rem;
+}
+.legal__kicker{
+  color:var(--gold);font-size:.78rem;letter-spacing:.16em;
+  text-transform:uppercase;margin-block-end:.8rem;
+}
+.legal h1{
+  font-family:var(--font-serif);font-weight:500;
+  font-size:clamp(2.1rem,5vw,3rem);line-height:1.08;
+  color:var(--cream);letter-spacing:-.01em;margin-block-end:.6rem;
+}
+.legal__updated{
+  color:var(--cream-faint);font-size:.85rem;
+  margin-block-end:2.4rem;padding-block-end:1.6rem;
+  border-block-end:1px solid var(--line);
+}
+.legal h2{
+  font-family:var(--font-body);font-weight:600;font-size:1.18rem;
+  color:var(--gold-light);margin-block:2.2rem .7rem;
+}
+.legal h2:first-of-type{margin-block-start:0;}
+.legal p,.legal li{color:var(--cream-dim);font-size:1rem;margin-block-end:.7rem;}
+.legal ul{padding-inline-start:1.25rem;margin-block-end:.7rem;}
+.legal li{margin-block-end:.4rem;}
+.legal strong{color:var(--cream);font-weight:500;}
+.legal a{color:var(--gold);text-decoration:none;border-block-end:1px solid var(--gold-soft);transition:color .3s var(--ease);}
+.legal a:hover{color:var(--gold-light);}
+.legal__note{
+  margin-block-start:2.5rem;padding:1rem 1.2rem;
+  border:1px solid var(--line);border-radius:10px;background:var(--bg-soft);
+  color:var(--cream-faint);font-size:.85rem;line-height:1.6;
+}
+
+/* footer */
+.legal-foot{
+  border-block-start:1px solid var(--line);text-align:center;
+  padding:2.2rem 1.25rem 3rem;color:var(--cream-faint);
+  font-size:.82rem;letter-spacing:.04em;
+}
+.legal-foot__links{
+  display:flex;gap:1.3rem;justify-content:center;flex-wrap:wrap;margin-block-end:1rem;
+}
+.legal-foot__links a{color:var(--cream-dim);text-decoration:none;transition:color .3s var(--ease);}
+.legal-foot__links a:hover{color:var(--gold-light);}
