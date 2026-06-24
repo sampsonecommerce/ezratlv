@@ -1960,6 +1960,15 @@
     .dn-bar__time {
       font-family: 'Pliant', var(--font-body); font-size: 0.74rem; letter-spacing: 0.02em; color: #fff;
       text-shadow: 0 1px 2px rgba(0,0,0,0.45); white-space: nowrap; direction: ltr;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dn-bar__t { white-space: nowrap; }
+    /* mobile: bars get narrow, so stack start over end and drop the icon/dash to fit cleanly */
+    @media (max-width: 560px) {
+      .dn-bar__icon { display: none; }
+      .dn-bar__inner { gap: 0; padding-inline: 0.1rem; }
+      .dn-bar__time { flex-direction: column; line-height: 1.05; font-size: 0.62rem; }
+      .dn-bar__sep { display: none; }
     }
     .dn-bar:hover:not(.is-taken):not(.is-selected) .dn-bar__fill { background: rgba(255,255,255,0.24); }
     .dn-bar:hover:not(.is-taken) { transform: translateY(-2px); }
@@ -2223,7 +2232,7 @@
     .book-mailcta { position: relative; max-width: 300px; margin: 0 auto; }
     .book-mailbtn {
       width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
-      padding: 0.85rem 1.4rem; border: 0; border-radius: 50px; cursor: pointer;
+      padding: 0.85rem 1.4rem; border: 0; border-radius: 50px; cursor: pointer; text-decoration: none;
       font-family: var(--font-body); font-size: 1rem; font-weight: 700; color: #05311d;
       background: linear-gradient(135deg, #5ad79e, #2fae74);
       box-shadow: 0 6px 22px rgba(47,174,116,0.4);
@@ -3136,15 +3145,10 @@
             <div class="receipt" id="finalReceipt"></div>
             <p class="book-done__mailnote">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>
             <div class="book-mailcta" id="bookMailCta">
-              <button class="book-mailbtn" type="button" id="bookMailBtn" aria-haspopup="true" aria-expanded="false">
+              <a class="book-mailbtn" href="mailto:" aria-label="פתיחת אפליקציית המייל">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
                 קח אותי למייל
-              </button>
-              <div class="book-mailmenu" id="bookMailMenu" hidden>
-                <a href="https://mail.google.com/mail/u/0/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Gmail</a>
-                <a href="https://outlook.live.com/mail/0/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Outlook</a>
-                <a href="message://" id="bookMailDefault"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>אפליקציית המייל</a>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -4068,6 +4072,7 @@
 
         const bars = list.map((label, i) => {
           const [sh, eh] = parsed[i];
+          const [ls, le] = label.split('-');
           const left = (sh - axisStart) / span * 100;
           const width = (eh - sh) / span * 100;
           const center = ((sh + eh) / 2 - axisStart) / span;
@@ -4078,7 +4083,7 @@
             (isTaken ? ' disabled aria-label="' + label + ' - תפוס"' : '') + '>' +
             '<span class="dn-bar__fill"></span>' +
             '<span class="dn-bar__inner">' + slotIconFor(sh) +
-              '<span class="dn-bar__time">' + label + '</span></span>' +
+              '<span class="dn-bar__time"><span class="dn-bar__t">' + ls + '</span><span class="dn-bar__sep">-</span><span class="dn-bar__t">' + (le || '') + '</span></span></span>' +
             '</button>';
         }).join('');
 
@@ -4402,16 +4407,7 @@
       backBtn.addEventListener('click', () => { if (step > 1) goto(step - 1); });
       closeBtn.addEventListener('click', close);
       if (doneClose) doneClose.addEventListener('click', close);
-      // final step: "take me to my email" → small menu of mail apps
-      const mailBtn = document.getElementById('bookMailBtn');
-      const mailMenu = document.getElementById('bookMailMenu');
-      if (mailBtn && mailMenu) {
-        mailBtn.addEventListener('click', () => {
-          const open = !mailMenu.hidden;
-          mailMenu.hidden = open;
-          mailBtn.setAttribute('aria-expanded', String(!open));
-        });
-      }
+      // final step: "קח אותי למייל" is a plain mailto: link → opens the default mail app / lets the OS prompt the user to choose
       // shortcut: skip straight to the details form, flagged as "wants a call"
       if (talkBtn) talkBtn.addEventListener('click', () => {
         const cb = document.getElementById('bfWantsCall');
