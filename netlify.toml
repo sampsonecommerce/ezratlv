@@ -26,3 +26,22 @@
   from = "/iruvei-hevra.html"
   to = "/company-events"
   status = 301
+
+# Old Wix URLs Google still has indexed (the Hebrew site lived under /he, e.g.
+# the homepage at /he) -> send them to the new homepage instead of a 404.
+[[redirects]]
+  from = "/he"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/he/*"
+  to = "/"
+  status = 301
+
+# Safety net: any other stale legacy path that no longer exists falls back to the
+# homepage rather than a 404. Real files and the rules above are matched first.
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 301
