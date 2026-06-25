@@ -1667,6 +1667,9 @@
     ]
   }
   </script>
+  <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
+       During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
+  <script>window.EZRA_LEAD_ENDPOINT = "";</script>
 </head>
 <body>
 
@@ -2649,7 +2652,7 @@
         data.pageUrl = location.href;
         data.fbp = _cookie('_fbp');
         data.fbc = _cookie('_fbc');
-        fetch('/api/submit-lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).catch(() => {});
+        fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).catch(() => {});
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
         form.hidden = true;
         if (done) done.hidden = false;

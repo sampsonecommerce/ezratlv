@@ -2436,6 +2436,9 @@
       .rev-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
     }
   </style>
+  <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
+       During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
+  <script>window.EZRA_LEAD_ENDPOINT = "";</script>
 </head>
 <body>
 
@@ -4566,7 +4569,7 @@
         data.fbp = _cookie('_fbp');
         data.fbc = _cookie('_fbc');
         // send to the Netlify function (Monday lead + server-side Meta CAPI)
-        fetch('/api/submit-lead', {
+        fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify(data),
@@ -4709,7 +4712,7 @@
         const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
         const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
         data.eventId = eventId; data.pageUrl = location.href; data.fbp = _cookie('_fbp'); data.fbc = _cookie('_fbc');
-        fetch('/api/submit-lead', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
+        fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
       }
       const showOverlay = (el) => { el.hidden = false; void el.offsetWidth; el.classList.add('open'); };
@@ -4868,7 +4871,7 @@
         data.pageUrl = location.href;
         data.fbp = _cookie('_fbp');
         data.fbc = _cookie('_fbc');
-        fetch('/api/submit-lead', {
+        fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify(data),
