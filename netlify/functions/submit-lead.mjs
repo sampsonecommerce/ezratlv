@@ -26,6 +26,14 @@ export default async (req) => {
   const ua = req.headers.get("user-agent") || "";
   await sendMetaCapi(d, ip, ua).catch((e) => console.error("CAPI failed:", e));
 
+  // Incomplete / "rather talk to us" leads (booking flow dropouts who asked to be contacted)
+  // are PARKED from Monday until the dedicated company-events board exists. For now we just
+  // capture them in the logs + Meta. TODO: write these to the future company-events board.
+  if (d.leadType === "incomplete") {
+    console.log("submit-lead incomplete lead (Monday parked):", JSON.stringify(d));
+    return json({ ok: true, parked: true }, 200);
+  }
+
   const TOKEN = process.env.MONDAY_TOKEN;
   if (!TOKEN) {
     // Token not set yet: no-op so the site keeps working, but log the payload.
@@ -93,6 +101,8 @@ export default async (req) => {
   if (d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
   // Age range(s) of attendees -> the board's multi-select dropdown (private form only).
   if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
+  // Marketing consent -> the "Marketing Approval" checkbox column (checked = accepted dיוור).
+  if (d.consent) cols.boolean_mm4nqth1 = { checked: "true" };
 
   // Exact time slot from the site (e.g. "17:00-20:00") -> dedicated time columns.
   // single_select943s5p9 (Time of event) stays a coarse bucket (ערב/צהריים) for filtering.

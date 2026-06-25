@@ -728,6 +728,18 @@
     /* ============================================================
        SECTION 5: PACKAGES
     ============================================================ */
+    /* blurred photo behind the 3 package cards (hero/footer treatment). Swap the url() to change. */
+    #packages { position: relative; isolation: isolate; overflow: hidden; }
+    #packages::before {
+      content: ''; position: absolute; inset: -40px; z-index: 0;
+      background: url('images/BAR.jpg') center/cover no-repeat;
+      filter: blur(16px) brightness(0.5); transform: scale(1.06);
+    }
+    #packages::after {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(to bottom, var(--bg) 0%, rgba(15,13,11,0.74) 20%, rgba(15,13,11,0.74) 80%, var(--bg) 100%);
+    }
+    #packages > .wrap { position: relative; z-index: 1; }
     .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2vw, 1.6rem); margin-block-end: 1.6rem; align-items: stretch; }
     @media (max-width: 950px) { .packages { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
 
@@ -1741,7 +1753,27 @@
     .addon__grow { color: var(--gold-light); font-weight: 500; }
 
     /* min-order caption (small) sitting above the details box */
-    .calc-mincap { text-align: center; font-size: 0.72rem; letter-spacing: 0.02em; color: var(--cream-faint); margin: 0.55rem 0 0.4rem; }
+    /* minimum-order note: an (i) icon. Desktop shows the note inline; mobile shows just the
+       icon and reveals the note as a popover on tap (so it doesn't eat vertical space). */
+    .calc-mininfo { display: flex; align-items: center; justify-content: center; gap: 0.4rem; position: relative; margin: 0.5rem 0 0.35rem; }
+    .calc-mininfo__btn {
+      display: inline-flex; align-items: center; justify-content: center; flex: none;
+      width: 20px; height: 20px; padding: 0; border-radius: 50%;
+      background: transparent; border: none; color: var(--gold); cursor: pointer;
+    }
+    .calc-mininfo__btn svg { width: 16px; height: 16px; }
+    .calc-mininfo__note { font-size: 0.72rem; letter-spacing: 0.02em; color: var(--cream-faint); }
+    @media (max-width: 600px) {
+      .calc-mininfo { justify-content: flex-end; margin: 0 0 0.15rem; }
+      .calc-mininfo__note {
+        position: absolute; inset-inline-end: 0; inset-block-start: calc(100% + 4px); z-index: 5;
+        background: #211a10; border: 1px solid var(--line); border-radius: 9px;
+        padding: 0.45rem 0.7rem; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        opacity: 0; visibility: hidden; transform: translateY(-3px); transition: all 0.18s var(--ease); pointer-events: none;
+      }
+      .calc-mininfo[data-open="true"] .calc-mininfo__note { opacity: 1; visibility: visible; transform: translateY(0); }
+    }
+    @media (min-width: 601px) { .calc-mininfo__btn { cursor: default; } }
     /* details box: full width; each field stacked (value on top, grey label under), tight to save height */
     .calc-details { padding: 0.5rem 0.85rem; border-radius: 12px; background: rgba(196,154,60,0.08); border: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem 0.9rem; }
     .cd-row { display: flex; flex-direction: column; gap: 0; min-width: 0; text-align: start; }
@@ -2174,6 +2206,10 @@
 
     /* ---- Custom-event consultation modal (שיחת אפיון) ---- */
     .cf-panel { max-width: 500px; }
+    .cf-panel--sm { max-width: 380px; }
+    /* contact form + leave-confirm stack above the booking modal */
+    .book-modal--top { z-index: 1300; }
+    .book-modal--top2 { z-index: 1400; }
     .cf-close {
       position: absolute; top: 14px; left: 14px; z-index: 2;
       width: 38px; height: 38px; border-radius: 50%;
@@ -2266,6 +2302,16 @@
 
     /* final step: "take me to my email" green CTA + mail-app menu */
     .book-done__mailnote { text-align: center; font-size: 0.84rem; color: var(--cream-dim); margin: 1.5rem auto 0.65rem; }
+    .book-done__mailnote--sub { font-size: 0.76rem; color: var(--cream-faint); margin: -0.35rem auto 0.65rem; }
+    .book-dlbtn {
+      display: inline-flex; align-items: center; gap: 0.5rem; margin: 1.1rem auto 0;
+      padding: 0.6rem 1.3rem; border-radius: 999px; cursor: pointer;
+      background: transparent; border: 1px solid var(--gold); color: var(--gold-light);
+      font-family: inherit; font-size: 0.9rem; font-weight: 500; transition: all 0.2s var(--ease);
+    }
+    .book-dlbtn:hover { background: rgba(196,154,60,0.1); }
+    .book-dlbtn svg { width: 18px; height: 18px; }
+    .book-dlbtn.is-busy { opacity: 0.6; pointer-events: none; }
     .book-mailcta { position: relative; max-width: 300px; margin: 0 auto; }
     .book-mailbtn {
       width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
@@ -2348,7 +2394,7 @@
     /* no gap here: each card carries its own trailing margin so the two duplicated
        halves are exactly equal width -> translateX(-50%) wraps seamlessly */
     .rev-track { display: flex; width: max-content; animation: revScroll 52s linear infinite; }
-    @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
+    @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .rev-card {
       flex: 0 0 300px; max-width: 300px; margin-inline-end: 1.1rem;
       direction: rtl; text-align: right;
@@ -3049,7 +3095,12 @@
           <h3 class="book-step__title">כמות אנשים</h3>
           <p class="book-step__sub">גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p>
 
-          <div class="calc-mincap">מינימום הזמנה - 20 אורחים</div>
+          <div class="calc-mininfo" id="calcMinInfo">
+            <button type="button" class="calc-mininfo__btn" aria-label="מינימום הזמנה" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            </button>
+            <span class="calc-mininfo__note" role="note">מינימום הזמנה - 20 אורחים</span>
+          </div>
 
           <div class="calc-details" id="bookDetails"></div>
 
@@ -3149,12 +3200,12 @@
               <input type="checkbox" id="bfWantsCall" name="wantsCall" />
               <span class="book-check__text">
                 <b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>
-                <span>סמנו ונחזור אליכם לתיאום שיחה - בלי לחתום עכשיו</span>
+                <span>שימו לב: סימון האפשרות יוציא אתכם מתהליך ההזמנה. נשמור את הפרטים שמילאתם ונחזור אליכם לשיחה אישית.</span>
               </span>
             </label>
 
             <label class="book-check book-check--sm" for="bfConsent">
-              <input type="checkbox" id="bfConsent" name="consent" />
+              <input type="checkbox" id="bfConsent" name="consent" required />
               <span class="book-check__text">
                 <b>אישור קבלת דיוור</b>
                 <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
@@ -3180,7 +3231,12 @@
               <span>שימו לב, החוזה שנשלח תקף ל-12 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span>
             </div>
             <div class="receipt" id="finalReceipt"></div>
+            <button type="button" class="book-dlbtn" id="bookDownload">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+              להורדה
+            </button>
             <p class="book-done__mailnote">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>
+            <p class="book-done__mailnote book-done__mailnote--sub">ייתכן שייקח כמה רגעים עד שהמייל יגיע אליכם.</p>
             <div class="book-mailcta" id="bookMailCta">
               <a class="book-mailbtn" href="mailto:" aria-label="פתיחת אפליקציית המייל">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
@@ -3193,6 +3249,56 @@
 
       <div class="book-cta-foot" id="bookTalkFoot" hidden>
         <button type="button" class="book-talk-btn" id="bookTalkBtn">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       "RATHER TALK TO US" CONTACT FORM (incomplete / callback lead)
+  ============================================================ -->
+  <div class="book-modal book-modal--top" id="talkModal" role="dialog" aria-modal="true" aria-label="השארת פרטים ליצירת קשר" hidden>
+    <div class="book-modal__panel cf-panel">
+      <button class="cf-close" id="talkClose" type="button" aria-label="סגירה">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="cf-scroll">
+        <div class="cf-head">
+          <span class="label">נחזור אליכם</span>
+          <h3 class="cf-title">השאירו פרטים ונדבר</h3>
+          <p class="cf-sub">נשמור את מה שכבר מילאתם וניצור איתכם קשר להמשך. ההזמנה לא תושלם עכשיו.</p>
+        </div>
+        <form class="book-form" id="talkForm">
+          <div class="book-field--row">
+            <div class="book-field"><label for="tkName">שם מלא</label><input id="tkName" type="text" autocomplete="name" required /></div>
+            <div class="book-field"><label for="tkPhone">טלפון</label><input id="tkPhone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
+          </div>
+          <div class="book-field--row">
+            <div class="book-field"><label for="tkEmail">אימייל</label><input id="tkEmail" type="email" inputmode="email" autocomplete="email" required /></div>
+            <div class="book-field"><label for="tkCompany">חברה</label><input id="tkCompany" type="text" autocomplete="organization" /></div>
+          </div>
+          <div class="book-field"><label for="tkNote">הערה (לא חובה)</label><textarea id="tkNote" rows="2"></textarea></div>
+          <button class="btn btn--fill" id="talkSubmit" type="submit" style="width: 100%;">שליחה</button>
+        </form>
+        <div class="cf-done" id="talkDone" hidden>
+          <div class="cf-done__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3>קיבלנו, תודה!</h3>
+          <p>נחזור אליכם בהקדם.</p>
+          <button type="button" class="btn btn--outline" id="talkDoneClose">סגירה</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- leave-the-process confirmation (shown when ticking "talk to sales" on the receipt step) -->
+  <div class="book-modal book-modal--top2" id="leaveConfirm" role="dialog" aria-modal="true" aria-label="אישור יציאה מהתהליך" hidden>
+    <div class="book-modal__panel cf-panel cf-panel--sm">
+      <div class="cf-scroll" style="text-align: center;">
+        <h3 class="cf-title" style="font-size: 1.4rem;">לצאת מתהליך ההזמנה?</h3>
+        <p class="cf-sub">תועברו לטופס קצר ונחזור אליכם. ההזמנה לא תושלם עכשיו.</p>
+        <div style="display: flex; gap: 0.6rem; margin-block-start: 1.4rem;">
+          <button class="btn btn--fill" id="leaveYes" style="flex: 1;">כן, השאירו פרטים</button>
+          <button class="btn btn--outline" id="leaveNo" style="flex: 1;">ביטול</button>
+        </div>
       </div>
     </div>
   </div>
@@ -3506,9 +3612,9 @@
       //    perHead = evening price; dayPerHead = morning (no-alcohol) price - lower.
       //    (placeholder day prices - tune freely.)
       const PLANS = {
-        happyhour: { label: 'Happy Hour',  hours: 3, perHead: 275, minGuests: 20, tier: 1 },
-        gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, minGuests: 20, tier: 2 },
-        mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, minGuests: 20, tier: 3 },
+        happyhour: { label: 'Happy Hour',  hours: 3, perHead: 275, minGuests: 20, tier: 1, music: 'פלייליסט + מערכת סאונד', barTier: 'רגילה' },
+        gibush:    { label: 'גיבוש מחלקה', hours: 5, perHead: 330, minGuests: 20, tier: 2, music: 'פלייליסט מותאם אישית', barTier: 'מורחבת' },
+        mesiba:    { label: 'מסיבת חברה',  hours: 5, perHead: 450, minGuests: 20, tier: 3, music: "דיג'יי מהמבחר שלנו", barTier: 'פרימיום' },
       };
       // one per-head price per package - same for day or evening; only what's included differs
       const perHeadFor = (plan) => plan.perHead;
@@ -3860,9 +3966,10 @@
       };
       // ── Portion math (spec doc): total per category = round(guests * multiplier); no decimals shown
       const PORTION = {
-        taboon:{mult:0.3,unit:'מגשים'}, salad:{mult:0.25,unit:'קערות'}, sandwich:{mult:0.2,unit:'מגשים'},
-        pastry:{mult:0.1,unit:'מגשים'}, bread:{mult:0.15,unit:'סלסלות'}, cheese:{mult:0.1,unit:'פלטות'},
-        roasted:{mult:0.1,unit:'צלחות'}, nibble:{mult:0.3,unit:'קעריות',perType:true}, premium:{mult:0.15,unit:'צלחות',perType:true},
+        // units: pizzas / sandwiches / pastries are served on trays (מגשים); everything else is מנות
+        taboon:{mult:0.3,unit:'מגשים'}, salad:{mult:0.25,unit:'מנות'}, sandwich:{mult:0.2,unit:'מגשים'},
+        pastry:{mult:0.1,unit:'מגשים'}, bread:{mult:0.15,unit:'מנות'}, cheese:{mult:0.1,unit:'מנות'},
+        roasted:{mult:0.1,unit:'מנות'}, nibble:{mult:0.3,unit:'מנות',perType:true}, premium:{mult:0.15,unit:'מנות',perType:true},
       };
       const isBarCat = t => /בר|אלכוהול|קוקטייל|שתייה|קפה|תה/.test(t);
       const portionRnd = x => Math.round(x);
@@ -3872,17 +3979,14 @@
         /כרוב|סביצ|קרודו/.test(n) ? 'premium' :
         /גבינ/.test(n) ? 'cheese' :
         /קלוי/.test(n) ? 'roasted' : 'bread';
-      // Split a category's total across its dishes so every box shows a real breakdown
-      // (not one row repeating the total). Rows always sum to `total`. When there are more
-      // dishes than units, dishes are grouped into `total` rows so no line shows 0.
-      function distributeRows(names, total, unit) {
+      // One breakdown row PER dish (a comma between dishes means they're separate items, so
+      // they never share a line). The category total is split across its dishes; if there are
+      // more dishes than units, the overflow dishes show "כלול" (qty null) so no line reads 0.
+      function perDishRows(names, total, unit) {
         const n = names.length;
         if (!n) return [];
-        const rows = Math.max(1, Math.min(total, n));
-        const buckets = Array.from({ length: rows }, () => []);
-        names.forEach((nm, i) => buckets[Math.floor(i * rows / n)].push(nm));
-        const base = Math.floor(total / rows), rem = total - base * rows;
-        return buckets.map((b, i) => ({ name: b.join(', '), qty: base + (i < rem ? 1 : 0), unit }));
+        const base = Math.floor(total / n), rem = total - base * n;
+        return names.map((nm, i) => { const q = base + (i < rem ? 1 : 0); return { name: nm, qty: q > 0 ? q : null, unit }; });
       }
       // returns { isBar, qtyLabel (left side), breakdown:[{name, qty, unit}] }
       function categoryPortions(catLabel, names, g) {
@@ -3893,20 +3997,20 @@
           ['bread','cheese','roasted','nibble','premium'].forEach(t => {
             const ds = by[t]; if (!ds) return; const c = PORTION[t];
             if (c.perType) ds.forEach(n => { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push({ name:n, qty:q, unit:c.unit }); });
-            else { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push({ name: ds.join(', '), qty:q, unit:c.unit }); }
+            else { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push(...perDishRows(ds, q, c.unit)); }
           });
-          return { isBar:false, qtyLabel: tot + ' הגשות', breakdown: bd };
+          return { isBar:false, qtyLabel: tot + ' מנות', breakdown: bd };
         }
         if (/כריכ/.test(catLabel)) {
           const pa = names.filter(n => /מאפ|בורק/.test(n)), sa = names.filter(n => !/מאפ|בורק/.test(n));
           const bd = []; let tot = 0;
-          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push(...distributeRows(sa, q, 'מגשים')); }
-          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push(...distributeRows(pa, q, 'מגשים')); }
+          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push(...perDishRows(sa, q, 'מגשים')); }
+          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push(...perDishRows(pa, q, 'מגשים')); }
           return { isBar:false, qtyLabel: tot + ' מגשים', breakdown: bd };
         }
         const c = /טאבון|פיצ/.test(catLabel) ? PORTION.taboon : PORTION.salad;
         const q = Math.max(1, portionRnd(g * c.mult));
-        return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: distributeRows(names, q, c.unit) };
+        return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: perDishRows(names, q, c.unit) };
       }
       // word-saving: collapse a shared leading "vessel" word, separate food types with |
       const VESSEL = /^(צלחת|צלחות|קערית|קעריות|קערות|מגש|מגשי|פלטת|פלטה|סלסלת|סלסלות|עמדת|סלט|סלטי)$/;
@@ -4001,6 +4105,18 @@
         renderPrice();
       });
 
+      // minimum-order (i) note: tap to toggle on mobile (desktop shows it inline)
+      const minInfoEl = document.getElementById('calcMinInfo');
+      if (minInfoEl) {
+        const minBtn = minInfoEl.querySelector('.calc-mininfo__btn');
+        minBtn.addEventListener('click', () => {
+          const open = minInfoEl.dataset.open === 'true';
+          minInfoEl.dataset.open = String(!open);
+          minBtn.setAttribute('aria-expanded', String(!open));
+        });
+        document.addEventListener('click', e => { if (!minInfoEl.contains(e.target)) minInfoEl.dataset.open = 'false'; });
+      }
+
       // ── Digital receipt (used both as a preview under the details form and on the final step).
       //    Food detail shows real quantities (qty per dish = round(guests / 10)).
       function receiptInnerHTML(ref) {
@@ -4036,6 +4152,9 @@
           row('תאריך', state.date ? humanDate(state.date) : '-') + row('חלון זמן', state.slot || '-') +
           '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">התפריט שלכם</span><span class="receipt__v">' + (state.menu === 'evening' ? 'תפריט ערב' : 'תפריט יום') + '</span></div>' +
             '<div class="receipt__detail">' + detail + '</div>' +
+          '</div>' +
+          '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">כלול בחבילה</span></div>' +
+            subRow('מוזיקה', plan.music) + subRow('בר', plan.barTier) +
           '</div>' +
           '<div class="receipt__perf"></div>' +
           subRow(plan.label + ' · ' + gg + ' × ' + fmt(ph), fmt(base)) +
@@ -4143,7 +4262,7 @@
         if (n === 5) { renderPrice(); animateFill(); animateFood(); } else { stopBubbles(); }  // dual graphs
         if (n === 6 && typeof renderDetailsReceipt === 'function') renderDetailsReceipt();  // receipt preview under the form
         // the "rather talk to us" shortcut only makes sense on the early steps
-        if (talkFoot) talkFoot.hidden = !(n === 1 || n === 2 || n === 3 || n === 4);
+        if (talkFoot) talkFoot.hidden = !(n >= 1 && n <= 5);   // available on every step before the receipt
         // save-and-continue toggle appears once they've started (not on the final step)
         if (typeof saveEl !== 'undefined' && saveEl) saveEl.hidden = !(n >= 2 && n <= 6);
         if (typeof saveOn !== 'undefined' && saveOn) saveProgress();
@@ -4552,12 +4671,100 @@
       if (doneClose) doneClose.addEventListener('click', close);
       // final step: "קח אותי למייל" is a plain mailto: link → opens the default mail app / lets the OS prompt the user to choose
       // shortcut: skip straight to the details form, flagged as "wants a call"
-      if (talkBtn) talkBtn.addEventListener('click', () => {
-        const cb = document.getElementById('bfWantsCall');
-        if (cb) cb.checked = true;
-        summary3.innerHTML = summaryText();
-        goto(6);
-        setTimeout(() => { const f = document.getElementById('bfName'); if (f) f.focus(); }, 60);
+      // ── "Rather talk to us" → capture an incomplete/callback lead with whatever's filled so far.
+      // NOTE: the Monday write for these is parked until the separate company-events board exists;
+      // the function currently logs them (leadType:"incomplete") and fires the Meta lead event.
+      const STEP_NAMES = { 1:'בחירת תאריך', 2:'בחירת שעה', 3:'בחירת תפריט', 4:'תוספות', 5:'כמות אנשים', 6:'מילוי פרטים', 7:'אישור' };
+      const talkModal = document.getElementById('talkModal');
+      const talkForm  = document.getElementById('talkForm');
+      const talkDone  = document.getElementById('talkDone');
+      const leaveConfirm = document.getElementById('leaveConfirm');
+
+      function gatherBookingState() {
+        const plan = PLANS[state.plan];
+        const sel = (typeof selectedAddons === 'function') ? selectedAddons() : [];
+        return {
+          plan: plan ? plan.label : '',
+          date: state.date ? key(state.date) : '',
+          slot: state.slot || '',
+          menu: state.menu || '',
+          guests: state.guests,
+          addons: sel.map(a => a.id),
+          addonLabels: sel.map(a => a.label),
+        };
+      }
+      function sendIncompleteLead(contact) {
+        const data = Object.assign({ leadType: 'incomplete' }, gatherBookingState(), contact);
+        data.pausedStep = step;
+        data.pausedStepLabel = (STEP_NAMES[step] || ('שלב ' + step)) + ' (' + step + '/7)';
+        const _utm = new URLSearchParams(location.search);
+        data.utm_campaign = _utm.get('utm_campaign') || '';
+        data.utm_source   = _utm.get('utm_source') || '';
+        const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
+        const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+        data.eventId = eventId; data.pageUrl = location.href; data.fbp = _cookie('_fbp'); data.fbc = _cookie('_fbc');
+        fetch('/api/submit-lead', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
+        if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+      }
+      const showOverlay = (el) => { el.hidden = false; void el.offsetWidth; el.classList.add('open'); };
+      const hideOverlay = (el) => { el.classList.remove('open'); setTimeout(() => { if (!el.classList.contains('open')) el.hidden = true; }, 350); };
+
+      function openTalk(prefill, alreadySent) {
+        const setv = (id, v) => { const e = document.getElementById(id); if (e) e.value = v || ''; };
+        if (prefill) { setv('tkName', prefill.name); setv('tkPhone', prefill.phone); setv('tkEmail', prefill.email); setv('tkCompany', prefill.company); setv('tkNote', prefill.notes); }
+        talkForm.hidden = !!alreadySent;
+        talkDone.hidden = !alreadySent;
+        showOverlay(talkModal);
+        if (!alreadySent) setTimeout(() => { const f = document.getElementById('tkName'); if (f && !f.value) f.focus(); }, 80);
+      }
+      if (talkBtn) talkBtn.addEventListener('click', () => openTalk(null, false));
+      const talkCloseBtn = document.getElementById('talkClose');
+      if (talkCloseBtn) talkCloseBtn.addEventListener('click', () => hideOverlay(talkModal));
+      const talkDoneCloseBtn = document.getElementById('talkDoneClose');
+      if (talkDoneCloseBtn) talkDoneCloseBtn.addEventListener('click', () => hideOverlay(talkModal));
+      if (talkModal) talkModal.addEventListener('click', e => { if (e.target === talkModal) hideOverlay(talkModal); });
+      if (talkForm) talkForm.addEventListener('submit', e => {
+        e.preventDefault();
+        sendIncompleteLead({
+          name:    document.getElementById('tkName').value.trim(),
+          phone:   document.getElementById('tkPhone').value.trim(),
+          email:   document.getElementById('tkEmail').value.trim(),
+          company: document.getElementById('tkCompany').value.trim(),
+          notes:   document.getElementById('tkNote').value.trim(),
+        });
+        talkForm.hidden = true; talkDone.hidden = false;
+      });
+
+      // receipt step: ticking "talk to sales" asks to leave the process, then captures the lead
+      const wantsCb = document.getElementById('bfWantsCall');
+      if (wantsCb && leaveConfirm) {
+        wantsCb.addEventListener('change', () => { if (wantsCb.checked) showOverlay(leaveConfirm); });
+        const lNo = document.getElementById('leaveNo'), lYes = document.getElementById('leaveYes');
+        if (lNo) lNo.addEventListener('click', () => { wantsCb.checked = false; hideOverlay(leaveConfirm); });
+        if (lYes) lYes.addEventListener('click', () => {
+          hideOverlay(leaveConfirm);
+          const contact = {
+            name:    document.getElementById('bfName').value.trim(),
+            phone:   document.getElementById('bfPhone').value.trim(),
+            email:   document.getElementById('bfEmail').value.trim(),
+            company: document.getElementById('bfCompany').value.trim(),
+            notes:   document.getElementById('bfNotes').value.trim(),
+          };
+          if (contact.name && contact.phone && contact.email) { sendIncompleteLead(contact); openTalk(null, true); }
+          else { openTalk(contact, false); }
+        });
+      }
+
+      // final step: download the receipt as an image (excludes the green mail button)
+      const dlBtn = document.getElementById('bookDownload');
+      if (dlBtn) dlBtn.addEventListener('click', () => {
+        const target = document.getElementById('finalReceipt');
+        if (!target || typeof html2canvas === 'undefined') return;
+        dlBtn.classList.add('is-busy');
+        html2canvas(target, { backgroundColor: '#1a140e', scale: 2, useCORS: true })
+          .then(canvas => { const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'ezra-order.png'; a.click(); })
+          .catch(() => {})
+          .then(() => dlBtn.classList.remove('is-busy'));
       });
       modal.addEventListener('click', e => { if (e.target === modal) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
@@ -4893,10 +5100,23 @@
           '</div></article>';
       }
 
-      const html = REVIEWS.map(card).join('');
-      track.innerHTML = html + html + html;   // tripled: -33.333% wraps seamlessly + keeps wide screens full
+      // Build one logical set, then repeat it until it spans the marquee width so the strip is
+      // always full edge-to-edge (no dead space on wide screens). Duplicate that grown set once
+      // for a seamless -50% loop, and scale the duration to keep a constant scroll speed.
+      const oneSet = REVIEWS.map(card).join('');
+      track.innerHTML = oneSet;
+      const marqueeW = (track.parentElement && track.parentElement.clientWidth) || window.innerWidth;
+      let reps = 1, guard = 0;
+      while (track.scrollWidth < marqueeW + 80 && guard < 20) { reps++; track.innerHTML = oneSet.repeat(reps); guard++; }
+      const grown = track.innerHTML;
+      track.innerHTML = grown + grown;                 // two copies → seamless -50% loop
+      const setLen = track.scrollWidth / 2;
+      track.style.animationDuration = Math.max(24, Math.round(setLen / 70)) + 's';   // ~70px/sec
     })();
   </script>
+  <!-- html2canvas: used to render the final receipt to an image for download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+
   <!-- Keep ESC for closing our own popups/menus; stop it from opening the accessibility widget.
        Registered after all our keydown handlers (which run first) and before the widget loads. -->
   <script>
