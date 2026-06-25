@@ -2305,15 +2305,17 @@
     /* final step: "take me to my email" green CTA + mail-app menu */
     .book-done__mailnote { text-align: center; font-size: 0.84rem; color: var(--cream-dim); margin: 1.5rem auto 0.65rem; }
     .book-done__mailnote--sub { font-size: 0.76rem; color: var(--cream-faint); margin: -0.35rem auto 0.65rem; }
-    .book-dlbtn {
-      display: inline-flex; align-items: center; gap: 0.5rem; margin: 1.1rem auto 0;
-      padding: 0.6rem 1.3rem; border-radius: 999px; cursor: pointer;
-      background: transparent; border: 1px solid var(--gold); color: var(--gold-light);
-      font-family: inherit; font-size: 0.9rem; font-weight: 500; transition: all 0.2s var(--ease);
+    /* download button in the top bar (replaces the save toggle on the thank-you step) */
+    .book-bar__dl {
+      display: inline-flex; align-items: center; gap: 0.45rem; cursor: pointer;
+      padding: 0.5rem 1.1rem; border-radius: 999px; white-space: nowrap;
+      background: var(--gold); border: 1px solid var(--gold); color: var(--bg);
+      font-family: inherit; font-size: 0.92rem; font-weight: 600; transition: all 0.2s var(--ease);
     }
-    .book-dlbtn:hover { background: rgba(196,154,60,0.1); }
-    .book-dlbtn svg { width: 18px; height: 18px; }
-    .book-dlbtn.is-busy { opacity: 0.6; pointer-events: none; }
+    .book-bar__dl:hover { background: var(--gold-light); border-color: var(--gold-light); }
+    .book-bar__dl svg { width: 18px; height: 18px; }
+    .book-bar__dl.is-busy { opacity: 0.6; pointer-events: none; }
+    .book-bar__dl[hidden] { display: none; }
     .book-mailcta { position: relative; max-width: 300px; margin: 0 auto; }
     .book-mailbtn {
       width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
@@ -2994,6 +2996,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>נשמר בהצלחה</span>
             </span>
           </label>
+          <button type="button" class="book-bar__dl" id="bookDownload" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+            להורדה
+          </button>
         </div>
         <div class="book-progress" id="bookProgress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="התקדמות בתהליך">
           <span class="prog-dot" data-c="1"><span class="prog-dot__num">1</span></span>
@@ -3233,10 +3239,6 @@
               <span>שימו לב, החוזה שנשלח תקף ל-12 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span>
             </div>
             <div class="receipt" id="finalReceipt"></div>
-            <button type="button" class="book-dlbtn" id="bookDownload">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
-              להורדה
-            </button>
             <p class="book-done__mailnote">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>
             <p class="book-done__mailnote book-done__mailnote--sub">ייתכן שייקח כמה רגעים עד שהמייל יגיע אליכם.</p>
             <div class="book-mailcta" id="bookMailCta">
@@ -4267,6 +4269,7 @@
         if (talkFoot) talkFoot.hidden = !(n >= 1 && n <= 5);   // available on every step before the receipt
         // save-and-continue toggle appears once they've started (not on the final step)
         if (typeof saveEl !== 'undefined' && saveEl) saveEl.hidden = !(n >= 2 && n <= 6);
+        const dlEl = document.getElementById('bookDownload'); if (dlEl) dlEl.hidden = (n !== 7);   // download replaces save on the thank-you step
         if (typeof saveOn !== 'undefined' && saveOn) saveProgress();
       }
 
