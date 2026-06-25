@@ -1764,9 +1764,11 @@
     .calc-mininfo__btn svg { width: 16px; height: 16px; }
     .calc-mininfo__note { font-size: 0.72rem; letter-spacing: 0.02em; color: var(--cream-faint); }
     @media (max-width: 600px) {
-      .calc-mininfo { justify-content: flex-end; margin: 0 0 0.15rem; }
+      /* pin the (i) to the top-left, beside the step title, so it adds no vertical height */
+      .book-step[data-step="5"] { position: relative; }
+      .calc-mininfo { position: absolute; top: 0; left: 0; margin: 0; justify-content: flex-start; z-index: 7; }
       .calc-mininfo__note {
-        position: absolute; inset-inline-end: 0; inset-block-start: calc(100% + 4px); z-index: 5;
+        position: absolute; left: 0; right: auto; inset-block-start: calc(100% + 4px); z-index: 8;
         background: #211a10; border: 1px solid var(--line); border-radius: 9px;
         padding: 0.45rem 0.7rem; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         opacity: 0; visibility: hidden; transform: translateY(-3px); transition: all 0.18s var(--ease); pointer-events: none;
