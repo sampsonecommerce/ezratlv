@@ -728,18 +728,18 @@
     /* ============================================================
        SECTION 5: PACKAGES
     ============================================================ */
-    /* blurred photo behind the 3 package cards (hero/footer treatment). Swap the url() to change. */
-    #packages { position: relative; isolation: isolate; overflow: hidden; }
-    #packages::before {
+    /* blurred photo behind the 3 concept cards (hero/footer treatment). Swap the url() to change. */
+    #concept { position: relative; isolation: isolate; overflow: hidden; }
+    #concept::before {
       content: ''; position: absolute; inset: -40px; z-index: 0;
       background: url('images/FOOD FROM ABOVE.JPG') center/cover no-repeat;
       filter: blur(16px) brightness(0.5); transform: scale(1.06);
     }
-    #packages::after {
+    #concept::after {
       content: ''; position: absolute; inset: 0; z-index: 0;
       background: linear-gradient(to bottom, var(--bg) 0%, rgba(15,13,11,0.74) 20%, rgba(15,13,11,0.74) 80%, var(--bg) 100%);
     }
-    #packages > .wrap { position: relative; z-index: 1; }
+    #concept > .wrap { position: relative; z-index: 1; }
     .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2vw, 1.6rem); margin-block-end: 1.6rem; align-items: stretch; }
     @media (max-width: 950px) { .packages { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
 
