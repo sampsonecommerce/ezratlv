@@ -4154,11 +4154,9 @@
           '<div class="receipt__perf"></div>' +
           row('מסלול', plan.label) + row('מספר אורחים', gg + ' אורחים') +
           row('תאריך', state.date ? humanDate(state.date) : '-') + row('חלון זמן', state.slot || '-') +
+          row('מוזיקה', plan.music) + row('בר', plan.barTier) +
           '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">התפריט שלכם</span><span class="receipt__v">' + (state.menu === 'evening' ? 'תפריט ערב' : 'תפריט יום') + '</span></div>' +
             '<div class="receipt__detail">' + detail + '</div>' +
-          '</div>' +
-          '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">כלול בחבילה</span></div>' +
-            subRow('מוזיקה', plan.music) + subRow('בר', plan.barTier) +
           '</div>' +
           '<div class="receipt__perf"></div>' +
           subRow(plan.label + ' · ' + gg + ' × ' + fmt(ph), fmt(base)) +
