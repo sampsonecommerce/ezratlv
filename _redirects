@@ -1,0 +1,9 @@
+# Cloudflare Pages redirects (Netlify uses netlify.toml; Cloudflare reads this file).
+# /api/submit-lead is handled automatically by functions/api/submit-lead.js, so it's not here.
+# Static assets and Functions take precedence, so the catch-all only hits non-existent paths.
+
+/iruvei-hevra        /company-events   301
+/iruvei-hevra.html   /company-events   301
+/he                  /                 301
+/he/*                /                 301
+/*                   /                 301
