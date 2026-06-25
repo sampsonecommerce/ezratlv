@@ -1631,6 +1631,7 @@
     /* top-bar right group: back button + compact save toggle */
     .book-bar__start { display: flex; align-items: center; gap: 0.6rem; justify-self: start; min-width: 0; }
     .book-save { position: relative; display: inline-flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+    .book-save[hidden] { display: none; }   /* the display rule above otherwise defeats [hidden] */
     .book-save input { position: absolute; opacity: 0; width: 0; height: 0; }
     .book-save__box { width: 16px; height: 16px; flex: none; border-radius: 4px; border: 1.5px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--bg); transition: all 0.2s var(--ease); }
     .book-save__box svg { width: 10px; height: 10px; opacity: 0; transition: opacity 0.2s var(--ease); }
@@ -1692,6 +1693,7 @@
     /* step progress - four numbered circles; each booking step fills half a circle (2 steps = full) */
     @property --p { syntax: '<percentage>'; initial-value: 0%; inherits: true; }
     .book-progress { grid-column: 2; justify-self: center; display: flex; align-items: center; justify-content: center; gap: 0.35rem; width: min(220px, 60vw); }
+    .book-progress[hidden] { display: none; }   /* hidden on the thank-you step so the download pill has room */
     .prog-dot {
       position: relative; flex: none; width: 27px; height: 27px; border-radius: 50%;
       display: grid; place-items: center; --p: 0%;
@@ -4268,6 +4270,7 @@
         // save-and-continue toggle appears once they've started (not on the final step)
         if (typeof saveEl !== 'undefined' && saveEl) saveEl.hidden = !(n >= 2 && n <= 6);
         const dlEl = document.getElementById('bookDownload'); if (dlEl) dlEl.hidden = (n !== 7);   // download replaces save on the thank-you step
+        if (progressEl) progressEl.hidden = (n === 7);   // drop the step tracker on the thank-you step
         if (typeof saveOn !== 'undefined' && saveOn) saveProgress();
       }
 
