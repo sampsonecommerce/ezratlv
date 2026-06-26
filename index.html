@@ -2535,9 +2535,10 @@
           <div class="book-field">
             <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
             <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
-              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21">עד 21</button>
-              <button type="button" class="cf-pill" data-val="22-26,27- 30">22-30</button>
-              <button type="button" class="cf-pill" data-val="30 - 40,40 - 50">31-50</button>
+              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">עד 24</button>
+              <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
+              <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
+              <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
               <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
             </div>
           </div>
@@ -2564,6 +2565,7 @@
             </span>
           </label>
 
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">שליחת הבקשה</button>
           <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
         </form>
@@ -2642,6 +2644,7 @@
           callbackTime: pillValue('cfpCall'),
           notes:   document.getElementById('pfNotes').value.trim(),
           consent: document.getElementById('pfConsent').checked,
+          hp:      document.getElementById('pfHp').value,   // honeypot
         };
         const _utm = new URLSearchParams(location.search);
         data.utm_campaign = _utm.get('utm_campaign') || 'private_form';

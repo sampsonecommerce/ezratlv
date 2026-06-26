@@ -13,6 +13,9 @@ export async function onRequestPost({ request, env }) {
   let d;
   try { d = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400); }
 
+  // honeypot: real users never fill the hidden field; bots do -> drop silently
+  if (d.hp) return json({ ok: true, dropped: true }, 200);
+
   // Meta CAPI: server-side Lead event, deduped with the browser pixel via event_id.
   const ip = request.headers.get("CF-Connecting-IP") || (request.headers.get("x-forwarded-for") || "").split(",")[0].trim();
   const ua = request.headers.get("user-agent") || "";

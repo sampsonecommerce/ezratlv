@@ -3225,6 +3225,7 @@
               </span>
             </label>
 
+            <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="bfHp" tabindex="-1" autocomplete="off" /></div>
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">שליחת הבקשה</button>
             <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
           </form>
@@ -3286,6 +3287,7 @@
             <div class="book-field"><label for="tkCompany">חברה</label><input id="tkCompany" type="text" autocomplete="organization" /></div>
           </div>
           <div class="book-field"><label for="tkNote">הערה (לא חובה)</label><textarea id="tkNote" rows="2"></textarea></div>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="tkHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="talkSubmit" type="submit" style="width: 100%;">שליחה</button>
         </form>
         <div class="cf-done" id="talkDone" hidden>
@@ -3390,6 +3392,7 @@
             </span>
           </label>
 
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="cfHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="customSubmit" type="submit" style="width: 100%;">שליחת הפנייה</button>
           <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
         </form>
@@ -4555,6 +4558,7 @@
           foodNotes: foodNotes ? foodNotes.value : '',
           wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
           consent: document.getElementById('bfConsent').checked,  // marketing consent (opt-in)
+          hp: document.getElementById('bfHp').value,               // honeypot (bots fill this)
         };
         console.log('[booking request]', data);
         // campaign attribution from the URL (utm_campaign=flash20 / june10, etc.)
@@ -4740,6 +4744,7 @@
           email:   document.getElementById('tkEmail').value.trim(),
           company: document.getElementById('tkCompany').value.trim(),
           notes:   document.getElementById('tkNote').value.trim(),
+          hp:      document.getElementById('tkHp').value,   // honeypot
         });
         talkForm.hidden = true; talkDone.hidden = false;
       });
@@ -4859,6 +4864,7 @@
           notes:   extra,                              // just the free-text box; server builds the rest
           wantsCall: true,   // a consultation request is always a callback lead
           consent:   document.getElementById('cfConsent').checked,
+          hp:        document.getElementById('cfHp').value,   // honeypot
         };
         // attribution + Meta dedup. Keep the ad's UTMs from the URL; if none,
         // tag this form's own path so organic consultation leads stay trackable.

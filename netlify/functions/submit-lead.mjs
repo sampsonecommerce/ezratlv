@@ -20,6 +20,9 @@ export default async (req) => {
   let d;
   try { d = await req.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400); }
 
+  // honeypot: real users never fill the hidden field; bots do -> drop silently
+  if (d.hp) return json({ ok: true, dropped: true }, 200);
+
   // Meta Conversions API: server-side Lead event, deduped with the browser pixel via event_id.
   // Runs independently of Monday so it fires even while the Monday token is paused.
   const ip = req.headers.get("x-nf-client-connection-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim();
