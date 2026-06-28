@@ -19,6 +19,17 @@
   <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2174553826420246&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
+
+  <!-- Google tag (gtag.js) - GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B8RHLY5VJK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B8RHLY5VJK');
+  </script>
+  <!-- End Google tag -->
+
   <title>אירועי חברה בעזרא | חלל בר פרטי בפלורנטין</title>
   <meta name="description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
   <link rel="canonical" href="https://www.ezratlv.com/company-events" />
@@ -4601,6 +4612,7 @@
         }).catch(() => {});
         // Meta Pixel: lead conversion on "שליחת הבקשה" (same eventID -> deduped with the server event)
         if (window.fbq) fbq('track', 'Lead', { value: data.estTotal || 0, currency: 'ILS' }, { eventID: eventId });
+        if (window.gtag) gtag('event', 'generate_lead', { value: data.estTotal || 0, currency: 'ILS', transaction_id: eventId });
         // confirmation copy is static in the markup (order received → contract emailed → 24h callback)
         // populate the digital receipt with the real (multiplied) amounts
         const dRef = state.date || today;
@@ -4739,6 +4751,7 @@
         data.eventId = eventId; data.pageUrl = location.href; data.fbp = _cookie('_fbp'); data.fbc = _cookie('_fbc');
         fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+        if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
       }
       const showOverlay = (el) => { el.hidden = false; void el.offsetWidth; el.classList.add('open'); };
       const hideOverlay = (el) => { el.classList.remove('open'); setTimeout(() => { if (!el.classList.contains('open')) el.hidden = true; }, 350); };
@@ -4904,6 +4917,7 @@
           body: JSON.stringify(data),
         }).catch(() => {});
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+        if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
 
         form.hidden = true;
         if (done) done.hidden = false;
