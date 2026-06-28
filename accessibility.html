@@ -47,5 +47,21 @@
     </div>
     עזרא תל אביב © 2026 · כל הזכויות שמורות
   </footer>
+  <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
+  <script>
+    (function () {
+      if (!(location.protocol === 'file:' || /\.html$/i.test(location.pathname))) return;
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a'); if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || a.target === '_blank' || /^(https?:|mailto:|tel:|#|javascript:)/i.test(href)) return;
+        var clean = href.replace(/^\//, '').split('#')[0].split('?')[0];
+        if (clean === '') { e.preventDefault(); location.href = 'index.html'; return; }
+        if (/\.[a-z0-9]+$/i.test(clean)) return;
+        e.preventDefault();
+        location.href = clean + '.html';
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -178,6 +178,13 @@
     }
     .nav__cta::after { display: none !important; }
     .nav__cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(196,154,60,0.45); }
+    /* language toggle (HE/EN) */
+    .nav__lang { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.03em; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 50px;
+      padding: 0.38rem 0.72rem; line-height: 1; transition: color 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .nav__lang:hover { color: var(--cream); border-color: rgba(196,154,60,0.5); }
+    .nav__lang::after { display: none !important; }
+    .nav__lang svg { width: 14px; height: 14px; }
     @keyframes navShimmer {
       0%   { background-position: 100% 50%; }
       50%  { background-position:   0% 50%; }
@@ -489,11 +496,14 @@
       position: relative;
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center;
       min-height: clamp(300px, 34vw, 380px);
-      background: linear-gradient(170deg, #1c160e 0%, #120d08 100%);
-      border: 1px solid var(--line);
+      background: rgba(18,13,8,0.34);
+      -webkit-backdrop-filter: blur(7px) saturate(1.05);
+      backdrop-filter: blur(7px) saturate(1.05);
+      border: 1px solid rgba(196,154,60,0.28);
       border-radius: 20px;
       padding: clamp(2.4rem, 4vw, 3.2rem) clamp(1.6rem, 2.4vw, 2.1rem) clamp(2.2rem, 3.5vw, 2.8rem);
       overflow: hidden; isolation: isolate;
+      box-shadow: 0 18px 44px -26px rgba(0,0,0,0.85), 0 0 30px -12px rgba(245,217,138,0.28);
       transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.4s var(--ease);
     }
     /* flowing gold gradient border that rotates slowly and brightens on hover */
@@ -502,7 +512,7 @@
       background: conic-gradient(from var(--vc-angle), transparent 0deg, rgba(196,154,60,0) 55deg, var(--gold) 90deg, #f5d98a 112deg, var(--gold) 134deg, rgba(196,154,60,0) 170deg, transparent 360deg);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude;
-      opacity: 0.55; animation: vcSpin 7s linear infinite; transition: opacity 0.4s var(--ease);
+      opacity: 0.72; animation: vcSpin 7s linear infinite; transition: opacity 0.4s var(--ease);
     }
     .vibe-card:hover::before { opacity: 1; }
     @keyframes vcSpin { to { --vc-angle: 360deg; } }
@@ -750,12 +760,12 @@
     #concept { position: relative; isolation: isolate; overflow: hidden; }
     #concept::before {
       content: ''; position: absolute; inset: -40px; z-index: 0;
-      background: url('images/FOOD FROM ABOVE.JPG') center/cover no-repeat;
-      filter: blur(6px) brightness(0.72); transform: scale(1.04);
+      background: url('images/bar photo for 3 cards.jpg') center/cover no-repeat;
+      filter: blur(5px) brightness(0.5); transform: scale(1.04);
     }
     #concept::after {
       content: ''; position: absolute; inset: 0; z-index: 0;
-      background: linear-gradient(to bottom, var(--bg) 0%, rgba(15,13,11,0.5) 22%, rgba(15,13,11,0.5) 78%, var(--bg) 100%);
+      background: linear-gradient(to bottom, var(--bg) 0%, rgba(15,13,11,0.62) 22%, rgba(15,13,11,0.6) 78%, var(--bg) 100%);
     }
     #concept > .wrap { position: relative; z-index: 1; }
     .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2vw, 1.6rem); margin-block-end: 1.6rem; align-items: stretch; }
@@ -800,15 +810,16 @@
       padding: 0.35rem 0.8rem;
       border-radius: 50px;
     }
-    /* premium tag - same shape as "most popular" but a darker jewel tone with a star */
+    /* premium tag - polished silver: brushed-metal gradient with a bright specular sheen */
     .package-card__badge--premium {
       display: inline-flex; align-items: center; gap: 0.3rem;
-      color: var(--gold-light);
-      background: linear-gradient(110deg, #2a2113, #4a3a1c);
-      border: 1px solid rgba(245,217,138,0.55);
-      box-shadow: 0 0 14px -4px rgba(245,217,138,0.6);
+      color: #2b2c30;
+      background: linear-gradient(110deg, #8d9096 0%, #d7d9dd 26%, #ffffff 48%, #b9bcc1 62%, #7f8288 84%, #c2c4c9 100%);
+      border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 0 16px -3px rgba(214,217,222,0.75), 0 2px 6px -2px rgba(0,0,0,0.45);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.45);
     }
-    .package-card__badge--premium svg { width: 11px; height: 11px; }
+    .package-card__badge--premium svg { width: 11px; height: 11px; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)); }
     .package-card__name { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-block-end: 0.7rem; }
     .package-card__title { font-family: var(--font-serif); font-size: clamp(1.55rem, 2.4vw, 2rem); font-weight: 600; margin-block-end: 1.4rem; line-height: 1.12; color: var(--cream); }
     .package-card__list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-block-end: 2rem; flex: 1; }
@@ -1331,7 +1342,7 @@
     /* ============================================================
        SECTION 7: PROCESS (7 steps)
     ============================================================ */
-    .process-track { display: flex; flex-direction: column; gap: clamp(2.6rem, 5vw, 4.2rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); }
+    .process-track { display: flex; flex-direction: column; gap: clamp(2.6rem, 5vw, 4.2rem); margin-block-start: clamp(2.5rem, 5vw, 3.6rem); position: relative; }
     .process-side__tag {
       display: inline-flex;
       align-items: center;
@@ -1541,6 +1552,36 @@
       .conn  { display: none; }
     }
 
+    /* Mobile "ping-pong": a white glowing ball that flies from each completed step to the
+       next, standing in for the desktop connector line (which is hidden on small screens).
+       Positioned inside .process-track; JS moves it via transform synced to the step timing. */
+    .flow-ball {
+      position: absolute; top: 0; left: 0; z-index: 3;
+      width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 32%, #fff 0%, #fff6df 50%, rgba(245,217,138,0.7) 100%);
+      transform: translate(0, 0); opacity: 0; pointer-events: none;
+      display: none; will-change: transform;
+      animation: flowGlow 1.2s ease-in-out infinite;
+    }
+    @keyframes flowGlow {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(255,255,255,0.95), 0 0 20px 6px #f5d98a, 0 0 34px 10px rgba(245,217,138,0.45); }
+      50%      { box-shadow: 0 0 13px 3px #fff, 0 0 30px 10px #f5d98a, 0 0 54px 16px rgba(245,217,138,0.6); }
+    }
+    @media (max-width: 820px) { .flow-ball { display: block; } }
+    @media (prefers-reduced-motion: reduce) { .flow-ball { display: none !important; } }
+    /* mobile: when the ball reaches a circle it "pours" its light in - the circle flares bright,
+       then settles to its lit glow (party/happy keep their own richer animations) */
+    @media (max-width: 820px) {
+      .step.lit .step__num { animation: stepGlowBurst 0.55s ease-out; }
+      .step--party.lit .step__num, .step--happy.lit .step__num { animation: none; }
+    }
+    @keyframes stepGlowBurst {
+      0%   { transform: scale(1.5); box-shadow: 0 0 0 3px #fff, 0 0 0 8px var(--accent-soft), 0 0 40px 14px var(--accent-glow); }
+      55%  { transform: scale(1.02); }
+      100% { transform: scale(1.1); box-shadow: 0 0 0 4px var(--accent-soft), 0 0 24px var(--accent-glow); }
+    }
+    @media (prefers-reduced-motion: reduce) { .step.lit .step__num { animation: none; } }
+
     /* ============================================================
        SECTION 8: CONTACT / CTA
     ============================================================ */
@@ -1632,7 +1673,7 @@
       position: relative;
       margin: auto;
       width: 100%;
-      max-width: 540px;
+      max-width: 840px;
       max-height: 100%;
       display: flex;
       flex-direction: column;
@@ -1893,7 +1934,32 @@
       .food-token, .prog-dot::before, .prog-line, .prog-dot__num, .receipt__chev { transition: none; }
     }
 
-    .book-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: clamp(1rem, 3vw, 1.5rem); }
+    .book-scroll {
+      flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: clamp(1rem, 3vw, 1.5rem);
+      /* RTL UI puts the native vertical scrollbar on the left; flip the track to ltr so it
+         sits on the right (the Hebrew reading-origin side), then keep the content rtl.
+         english.html overrides this to `direction: rtl` so the bar lands on the left. */
+      direction: ltr;
+      scrollbar-gutter: stable;            /* reserve the track so the form never reflows */
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;   /* hidden until hover (Firefox) */
+      transition: scrollbar-color 0.3s var(--ease);
+    }
+    .book-scroll > * { direction: rtl; }
+    .book-scroll:hover, .book-scroll:focus-within { scrollbar-color: rgba(196,154,60,0.7) transparent; }
+    /* WebKit: slim, branded, fades in on hover only */
+    .book-scroll::-webkit-scrollbar { width: 9px; }
+    .book-scroll::-webkit-scrollbar-track { background: transparent; }
+    .book-scroll::-webkit-scrollbar-thumb {
+      border-radius: 50px; border: 3px solid transparent; background-clip: padding-box;
+      background-color: transparent; transition: background-color 0.3s var(--ease);
+    }
+    .book-scroll:hover::-webkit-scrollbar-thumb,
+    .book-scroll:focus-within::-webkit-scrollbar-thumb { background-color: rgba(196,154,60,0.75); }
+    .book-scroll::-webkit-scrollbar-thumb:hover { background-color: var(--gold-light); }
+    /* wider booking panel on desktop: add side breathing room so the single-column steps
+       don't stretch edge-to-edge (keeps a comfortable line length) */
+    @media (min-width: 720px) { .book-scroll { padding-inline: clamp(1.75rem, 3.5vw, 2.75rem); } }
 
     /* persistent "rather talk to us" shortcut - shown on the early steps,
        jumps straight to the details form so we can call them back */
@@ -2139,17 +2205,25 @@
     .menu-choice__opt--eve.is-active .menu-choice__icon { color: var(--gold-light); }
 
     .menu-note { text-align: center; color: var(--cream-dim); font-size: 0.78rem; margin: 0.9rem auto 0; max-width: 42ch; line-height: 1.5; }
+    /* one frame around all the notes; the notes sit inside it (2 columns on desktop) */
     .menu-scale {
-      display: flex; align-items: flex-start; gap: 0.5rem;
-      margin: 0.9rem auto 0; max-width: 48ch; padding: 0.6rem 0.85rem;
-      border-radius: 10px; background: rgba(196,154,60,0.08); border: 1px solid var(--line);
-      color: var(--cream-dim); font-size: 0.78rem; line-height: 1.55; text-align: start;
+      display: grid; grid-template-columns: 1fr; gap: 0.7rem 1.6rem;
+      margin: 0.5rem auto 0.7rem; max-width: 48ch; text-align: start;
+      padding: 0.9rem 1.05rem; border-radius: 12px;
+      background: rgba(196,154,60,0.08); border: 1px solid var(--line);
     }
-    .menu-scale svg { width: 16px; height: 16px; color: var(--gold); flex: none; margin-block-start: 2px; }
+    @media (min-width: 720px) {
+      .menu-scale { grid-template-columns: 1fr 1fr; max-width: 66ch; padding: 1.15rem 1.35rem; }
+      /* dietary frame showing a single note (evening menu) → compact: one column, no empty half */
+      #menuScale:has(#menuNoteVegan[hidden]) { grid-template-columns: 1fr; max-width: 52ch; padding: 0.9rem 1.1rem; }
+    }
+    .menu-scale__item {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      color: var(--cream-dim); font-size: 0.78rem; line-height: 1.55;
+    }
+    .menu-scale__item[hidden] { display: none; }
+    .menu-scale__item svg { width: 16px; height: 16px; color: var(--gold); flex: none; margin-block-start: 2px; }
     .menu-scale b { color: var(--gold-light); white-space: nowrap; }
-    .menu-scale__list { margin: 0; padding-inline-start: 1.1rem; list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
-    .menu-scale__list li { position: relative; }
-    .menu-scale__list li::before { content: ''; position: absolute; inset-inline-start: -0.9rem; inset-block-start: 0.5em; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
 
     /* menu grid: 3 equal food boxes in a row + a wide drinks/bar box beneath */
     .menu-view { margin-block-start: 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
@@ -2210,6 +2284,10 @@
     }
 
     .book-form { display: grid; gap: 0.9rem; }
+    /* the display:grid above otherwise defeats [hidden]; force the form (and header) to
+       actually hide so the thank-you screen replaces them instead of stacking below */
+    .book-form[hidden] { display: none !important; }
+    .cf-head[hidden] { display: none !important; }
     .book-field { display: flex; flex-direction: column; gap: 0.35rem; }
     .book-field label { font-size: 0.82rem; color: var(--cream-dim); font-weight: 500; }
     .book-field input, .book-field textarea {
@@ -2227,6 +2305,26 @@
     @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
 
     /* ---- Custom-event consultation modal (שיחת אפיון) ---- */
+    /* date picker: a button that toggles an inline availability calendar */
+    .cf-datebtn {
+      width: 100%; display: flex; align-items: center; gap: 0.55rem;
+      padding: 0.7rem 0.9rem; border-radius: 10px;
+      border: 1px solid var(--line); background: rgba(196,154,60,0.06);
+      color: var(--cream); font: inherit; font-size: 0.95rem; cursor: pointer; text-align: start;
+      transition: border-color 0.2s var(--ease);
+    }
+    .cf-datebtn:hover { border-color: rgba(196,154,60,0.5); }
+    .cf-datebtn.is-empty { color: var(--cream-faint); }
+    .cf-datebtn svg { width: 17px; height: 17px; color: var(--gold); flex: none; }
+    .cf-cal { margin-block-start: 0.6rem; }
+    .cf-cal[hidden] { display: none; }
+    .cf-cal .cal { max-width: 100%; padding: 1rem; border-radius: 14px; }
+    .cf-cal .cal__head { margin-block-end: 0.9rem; }
+    .cf-cal .cal__nav { width: 36px; height: 36px; border-radius: 9px; }
+    .cf-cal .cal__month { font-size: 1.2rem; }
+    .cf-cal .cal__grid { gap: 0.25rem; }
+    .cf-cal .cal__day { font-size: 0.82rem; border-radius: 8px; }
+    .cf-cal .cal__legend { margin-block-start: 0.8rem; font-size: 0.74rem; gap: 1rem; }
     .cf-panel { max-width: 500px; }
     .cf-panel--sm { max-width: 380px; }
     /* contact form + leave-confirm stack above the booking modal */
@@ -2254,14 +2352,36 @@
     .cf-pill:hover { border-color: var(--gold); color: var(--cream); }
     .cf-pill.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 600; }
     #customForm .book-field { margin-block-end: 1rem; }
-    .cf-done { text-align: center; padding: 1.5rem 0.5rem 1rem; }
+    .cf-done { text-align: center; padding: 2.6rem 0.5rem 1.4rem; }
+    .cf-done:not([hidden]) { animation: cfDoneIn 0.5s var(--ease) both; }
+    @keyframes cfDoneIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
     .cf-done__icon {
-      width: 60px; height: 60px; margin: 0 auto 1.1rem; border-radius: 50%;
+      position: relative; width: 84px; height: 84px; margin: 0 auto 1.5rem; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.35);
+      background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4);
+      animation: cfIconPop 0.55s cubic-bezier(.22,1.3,.36,1) both;
     }
-    .cf-done__icon svg { width: 28px; height: 28px; }
-    .cf-done h3 { font-family: var(--serif); font-size: 1.6rem; color: var(--cream); margin: 0 0 0.5rem; }
+    @keyframes cfIconPop { 0% { transform: scale(0); opacity: 0; } 55% { transform: scale(1.14); } 75% { transform: scale(0.95); } 100% { transform: scale(1); opacity: 1; } }
+    /* expanding ring that pulses out once when the screen appears */
+    .cf-done__icon::after {
+      content: ''; position: absolute; inset: -1px; border-radius: 50%;
+      border: 2px solid rgba(74, 222, 128, 0.55);
+      animation: cfRing 0.9s 0.25s var(--ease) both;
+    }
+    @keyframes cfRing { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.6); opacity: 0; } }
+    .cf-done__icon svg { width: 40px; height: 40px; }
+    /* draw the checkmark stroke after the circle has popped in */
+    .cf-done__icon svg path {
+      stroke-dasharray: 34; stroke-dashoffset: 34;
+      animation: cfCheckDraw 0.45s 0.34s var(--ease) forwards;
+    }
+    @keyframes cfCheckDraw { to { stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cf-done:not([hidden]), .cf-done__icon, .cf-done__icon::after, .cf-done__icon svg path { animation: none; }
+      .cf-done__icon svg path { stroke-dashoffset: 0; }
+      .cf-done__icon::after { opacity: 0; }
+    }
+    .cf-done h3 { font-family: var(--serif); font-size: 1.7rem; color: var(--cream); margin: 0 0 0.5rem; }
     .cf-done p { color: var(--cream-dim); line-height: 1.6; margin: 0 0 1.5rem; }
 
     /* optional "talk to our sales manager first" toggle */
@@ -2457,6 +2577,7 @@
   <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
        During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
   <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
+  <script>window.EZRA_AVAILABILITY_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
 </head>
 <body>
 
@@ -2482,6 +2603,10 @@
 
     <!-- desktop: actions -->
     <div class="nav__actions">
+      <a class="nav__lang" href="english" hreflang="en" aria-label="Switch to English">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+        EN
+      </a>
       <a class="nav__corp" href="/">אירועים פרטיים</a>
       <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
@@ -2494,6 +2619,7 @@
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#packages">חבילות</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
+      <a class="nav__menu-link" href="english" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="/">אירועים פרטיים</a>
         <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
@@ -3112,16 +3238,29 @@
               <span class="menu-choice__hint">פיצות ומנות מהטאבון</span>
             </button>
           </div>
-          <div class="menu-scale">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
-            <ul class="menu-scale__list">
-              <li>אפשר לבחור את תפריט הערב גם לאירוע שמתקיים בשעות היום - מה שמתאים לכם.</li>
-              <li>כל מנה בתפריט מוגשת בכמות שמתואמת למספר האורחים שלכם ביחס של 1:10 מנות לכל אורח, ניתן לראות פירוט מדויק בשלבים הבאים.</li>
-            </ul>
+          <div class="menu-scale" id="menuScaleTop">
+            <div class="menu-scale__item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+              <span>אפשר לבחור את תפריט הערב גם לאירוע שמתקיים בשעות היום - מה שמתאים לכם.</span>
+            </div>
+            <div class="menu-scale__item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+              <span>כל מנה בתפריט מוגשת בכמות שמותאמת למספר האורחים שלכם. ניתן לראות פירוט מדויק בשלבים הבאים.</span>
+            </div>
           </div>
           <div class="menu-view" id="bookMenuView"></div>
           <div class="book-field" style="margin-block-start: 1.3rem;">
             <label for="bfFoodNotes">הערות לתפריט (לא חובה)</label>
+            <div class="menu-scale" id="menuScale">
+              <div class="menu-scale__item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+                <span>רוצים התאמות תזונתיות (טבעוני, ללא גלוטן, אלרגיות או כל בקשה אחרת)? כתבו לנו בתיבה שמתחת ונדאג להכל.</span>
+              </div>
+              <div class="menu-scale__item" id="menuNoteVegan" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+                <span>יש לציין בתיבת ההערות אם אתם מעדיפים כריכים טבעוניים במקום טונה.</span>
+              </div>
+            </div>
             <textarea id="bfFoodNotes" rows="2" placeholder="אלרגיות, העדפות או בקשות מיוחדות..."></textarea>
           </div>
           <button class="btn btn--fill book-next" id="bookNextFood" type="button" style="margin-block-start: 1.3rem;">המשך</button>
@@ -3273,7 +3412,7 @@
             <p class="book-done__hero">חוזה נשלח אליכם במייל</p>
             <p id="bookDoneMsg">ברגע שתחתמו על החוזה שנשלח לכם במייל, נחזור אליכם בתוך 24 שעות לאשר פרטים ולגבות מקדמה.</p>
             <div class="book-done__note">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16h.01"/></svg>
               <span>שימו לב, החוזה שנשלח תקף ל-12 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span>
             </div>
             <div class="receipt" id="finalReceipt"></div>
@@ -3382,14 +3521,34 @@
               <input id="cfEmail" name="email" type="email" inputmode="email" autocomplete="email" required />
             </div>
           </div>
-          <div class="book-field--row">
-            <div class="book-field">
-              <label for="cfGuests">כמה משתתפים?</label>
-              <input id="cfGuests" name="guests" type="number" inputmode="numeric" min="1" placeholder="לדוגמה 35" />
-            </div>
-            <div class="book-field">
-              <label for="cfDate">מתי בערך?</label>
-              <input id="cfDate" name="when" type="text" placeholder="תאריך או טווח" />
+          <div class="book-field">
+            <label for="cfGuests">כמה משתתפים?</label>
+            <input id="cfGuests" name="guests" type="number" inputmode="numeric" min="1" placeholder="לדוגמה 35" />
+          </div>
+          <div class="book-field">
+            <label>מתי בערך?</label>
+            <input type="hidden" id="cfDate" name="when" />
+            <button type="button" class="cf-datebtn is-empty" id="cfDateBtn" aria-haspopup="true" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+              <span id="cfDateLabel">בחרו תאריך</span>
+            </button>
+            <div class="cf-cal" id="cfCal" hidden>
+              <div class="cal">
+                <div class="cal__head">
+                  <button class="cal__nav" id="cfCalPrev" type="button" aria-label="חודש קודם">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
+                  <span class="cal__month" id="cfCalMonth"></span>
+                  <button class="cal__nav" id="cfCalNext" type="button" aria-label="חודש הבא">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+                </div>
+                <div class="cal__grid" id="cfCalGrid"></div>
+                <div class="cal__legend">
+                  <span><i class="cal__dot cal__dot--free"></i> פנוי</span>
+                  <span><i class="cal__dot cal__dot--booked"></i> תפוס</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -3666,7 +3825,7 @@
       // ── Add-ons (step 4). unit: flat = fixed, head = per guest, tray = one per ~10 guests
       const ADDONS = [
         { id: 'fruit',    label: 'מגש פירות העונה',        price: 180, unit: 'tray', desc: 'מגש אחד לכל 10 סועדים, פירות טריים חתוכים לפי העונה. <span class="addon__grow">הכמות גדלה אוטומטית לפי מספר האורחים</span>', cap: '180 ₪ למגש' },
-        { id: 'soft',     label: 'שתייה קלה ומוגזת',       price: 25,  unit: 'head', desc: 'תוספת לערב - לחבילה בסיסית ורגילה. <span class="addon__grow">הכמות גדלה אוטומטית לפי מספר האורחים</span>', cap: '25 ₪ לאדם', plans: ['happyhour', 'gibush'], menu: 'evening' },
+        { id: 'soft',     label: 'שתייה קלה ומוגזת',       price: 25,  unit: 'head', desc: 'מבחר משקאות קלים ומוגזים לכל האורחים (כלול בחבילת הפרימיום). <span class="addon__grow">הכמות גדלה אוטומטית לפי מספר האורחים</span>', cap: '25 ₪ לאדם', plans: ['happyhour', 'gibush'] },
         { id: 'balloons', label: 'בלונים',                 price: 200, unit: 'flat', desc: 'עיצוב וסידור בלונים למקום',                cap: '200 ₪' },
         { id: 'mic',      label: 'מיקרופון',               price: 250, unit: 'flat', desc: 'לנאומים, מצגות או ברכות',                  cap: '250 ₪' },
         { id: 'karaoke',  label: 'מערכת קריוקי',           price: 350, unit: 'flat', desc: 'כולל מסך/מקרן וחיבור למערכת השמע',         cap: '350 ₪' },
@@ -3762,13 +3921,13 @@
         happyhour: {
           day: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה"] },
             { t: "מגשי כריכים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני"] },
             { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] }
           ],
           evening: [
             { t: "פתיחה ושרינג", items: ["צלחת זיתים", "צלחת לחמים", "פוקאצ'ה מתבלים"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה"] },
             { t: "מהטאבון (פיצות)", items: ["מרגריטה"] },
             { t: "בר חופשי", items: ["2 סוגי בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)"] }
           ]
@@ -3776,14 +3935,14 @@
         gibush: {
           day: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "צלחת זיתים"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מגשי כריכים ופוקאצ'ות", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית"] },
             { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה"] },
             { t: "אלכוהול שמתאים ליום", items: ["מימוזה", "אפרול שפריץ", "אספרסו מרטיני"] }
           ],
           evening: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "פוקאצ'ה ומתבלים", "צלחת גבינות עשירה", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "צלחת זיתים"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מהטאבון (פיצות)", items: ["מרגריטה", "פומדוריני", "בזיל", "פונגי", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית"] },
             { t: "בר חופשי", items: ["2 סוגי בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "6 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי)", "8 ערבובים (קולה, טוניק, לימונדה, סודה, ראשן, ספרייט, אשכוליות ותפוזים)"] }
           ]
@@ -3791,14 +3950,14 @@
         mesiba: {
           day: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "כרוב חמים מהטאבון", "סביצ'ה"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מגשי כריכים, פוקאצ'ות ומאפים", items: ["סלט ביצים", "גבינה", "טונה / טבעוני", "כריך סלמון", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות / בלקנית", "מגש בורקסים", "מגש מאפים מתוקים"] },
             { t: "שתייה קלה", items: ["עמדת קפה / תה", "חליטות תה קר", "מיץ תפוזים / לימונדה סחוט", "סודה", "בקבוקי שתייה אישיים קרים"] },
             { t: "אלכוהול שמתאים ליום", items: ["מימוזה", "אפרול שפריץ", "אספרסו מרטיני", "סנגריה קרה"] }
           ],
           evening: [
             { t: "פתיחה ושרינג", items: ["צלחת לחמים (חמאה ומלח ים)", "צלחת זיתים", "פוקאצ'ה ומתבלים", "צלחת גבינות פרימיום", "צלחת קלויים (פלפלים, גבינת ברינזה)", "חריפים של סופי", "כרוב חמים מהטאבון", "קרודו (סביצ'ה אלגנטי)"] },
-            { t: "סלטים", items: ["סלט ירוק", "קיסר", "סלט קפרזה", "סלט שורשים"] },
+            { t: "סלטים", items: ["סלט ירוק", "סלט קיסר", "סלט קפרזה", "סלט שורשים"] },
             { t: "מהטאבון (פיצות ופוקאצ'ות)", items: ["פיצה גבינה כחולה וריבת צ'ילי", "פרסקה", "בזיל", "פונגי", "פוקאצ'ה חמאת שום", "פוקאצ'ה אנטיפסטי", "פוקאצ'ה גבינות", "חציל קלוי בטחינה שחורה"] },
             { t: "בר קוקטיילים", items: ["בר קוקטיילים חופשי עם מיקסולוג צמוד (אלכוהול פרימיום)", "2 סוגי בירות (באדווייזר, סאן מיגל)", "יין איכותי (שרדונה, פינו גריג'ו, רוזה / אדום)", "7 סוגי אלכוהול לבחירה (ג'ין, וודקה, וויסקי, רום, ערק, קמפרי, טקילה)", "8 ערבובים (קולה, טוניק, לימונדה, סודה, ראשן, ספרייט, אשכוליות ותפוזים)"] }
           ]
@@ -3887,6 +4046,12 @@
         if (!state.menu) state.menu = slotIsEvening(state.slot) ? 'evening' : 'day';
         if (menuToggle) menuToggle.querySelectorAll('.menu-choice__opt').forEach(b => b.classList.toggle('is-active', b.dataset.menu === state.menu));
         const secs = menuFor(state.plan, state.menu);
+        // 4th note (vegan instead of tuna) only for day menus that include the טונה / טבעוני sandwich
+        const veganNote = document.getElementById('menuNoteVegan');
+        if (veganNote) {
+          const hasTunaVegan = state.menu === 'day' && secs.some(s => s.items.some(it => /טונה.*טבעוני/.test(it)));
+          veganNote.hidden = !hasTunaVegan;
+        }
         const isDrink = s => /בר|אלכוהול|שתייה/.test(s.t);
         const food   = secs.filter(s => !isDrink(s));          // food sections → 3-up grid
         const drinks = secs.filter(isDrink);                   // drinks/bar → feature box(es) below
@@ -3940,6 +4105,15 @@
         if (!b) return;
         const id = b.dataset.id;
         state.addons[id] = !state.addons[id];
+        // flower arrangements are mutually exclusive - only one tier at a time
+        if (state.addons[id] && (id === 'flowers1' || id === 'flowers2')) {
+          const other = id === 'flowers1' ? 'flowers2' : 'flowers1';
+          if (state.addons[other]) {
+            state.addons[other] = false;
+            const ob = addonsEl.querySelector('.addon[data-id="' + other + '"]');
+            if (ob) { ob.classList.remove('is-on'); ob.setAttribute('aria-pressed', 'false'); }
+          }
+        }
         b.classList.toggle('is-on', !!state.addons[id]);
         b.setAttribute('aria-pressed', !!state.addons[id]);
       });
@@ -4032,6 +4206,14 @@
         const base = Math.floor(total / n), rem = total - base * n;
         return names.map((nm, i) => { const q = base + (i < rem ? 1 : 0); return { name: nm, qty: q > 0 ? q : null, unit }; });
       }
+      // Sandwiches show as "כריכון X" (mini-sandwich) for clarity. Focaccias / pastries /
+      // burekas in the same tray category keep their own name.
+      function dishDisplay(catLabel, name) {
+        if (/כריכ/.test(catLabel) && !/פוקאצ|מאפ|בורק/.test(name)) {
+          return /^כריך\s+/.test(name) ? name.replace(/^כריך\s+/, 'כריכון ') : 'כריכון ' + name;
+        }
+        return name;
+      }
       // returns { isBar, qtyLabel (left side), breakdown:[{name, qty, unit}] }
       function categoryPortions(catLabel, names, g) {
         if (isBarCat(catLabel)) return { isBar:true, qtyLabel:'ללא הגבלה', breakdown: names.map(n => ({ name:n, qty:null, unit:'' })) };
@@ -4041,19 +4223,19 @@
           ['bread','cheese','roasted','nibble','premium'].forEach(t => {
             const ds = by[t]; if (!ds) return; const c = PORTION[t];
             if (c.perType) ds.forEach(n => { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push({ name:n, qty:q, unit:c.unit }); });
-            else { const q = Math.max(1, portionRnd(g * c.mult)); tot += q; bd.push(...perDishRows(ds, q, c.unit)); }
+            else { const q = Math.max(ds.length, portionRnd(g * c.mult)); tot += q; bd.push(...perDishRows(ds, q, c.unit)); }
           });
           return { isBar:false, qtyLabel: tot + ' מנות', breakdown: bd };
         }
         if (/כריכ/.test(catLabel)) {
           const pa = names.filter(n => /מאפ|בורק/.test(n)), sa = names.filter(n => !/מאפ|בורק/.test(n));
           const bd = []; let tot = 0;
-          if (sa.length) { const q = Math.max(1, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push(...perDishRows(sa, q, 'מגשים')); }
-          if (pa.length) { const q = Math.max(1, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push(...perDishRows(pa, q, 'מגשים')); }
+          if (sa.length) { const q = Math.max(sa.length, portionRnd(g * PORTION.sandwich.mult)); tot += q; bd.push(...perDishRows(sa, q, 'מגשים')); }
+          if (pa.length) { const q = Math.max(pa.length, portionRnd(g * PORTION.pastry.mult));   tot += q; bd.push(...perDishRows(pa, q, 'מגשים')); }
           return { isBar:false, qtyLabel: tot + ' מגשים', breakdown: bd };
         }
         const c = /טאבון|פיצ/.test(catLabel) ? PORTION.taboon : PORTION.salad;
-        const q = Math.max(1, portionRnd(g * c.mult));
+        const q = Math.max(names.length, portionRnd(g * c.mult));
         return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: perDishRows(names, q, c.unit) };
       }
       // word-saving: collapse a shared leading "vessel" word, separate food types with |
@@ -4080,7 +4262,7 @@
       const CHEV_SVG = '<svg class="vpill__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
       function pillHTML(cat, itemsLine, p, isAddon) {
         const detail = p.breakdown.length
-          ? p.breakdown.map(b => '<div class="vpill__drow"><span>' + b.name + '</span><b>' + (b.qty != null ? b.qty + ' ' + b.unit : (isAddon ? 'נכלל' : 'כלול')) + '</b></div>').join('')
+          ? p.breakdown.map(b => '<div class="vpill__drow"><span>' + dishDisplay(cat, b.name) + '</span><b>' + (b.qty != null ? b.qty + ' ' + b.unit : 'כלול') + '</b></div>').join('')
           : '<div class="vpill__drow"><span>טרם נבחרו</span></div>';
         return '<div class="vpill ' + (isAddon ? 'vpill--addon' : 'vpill--food') + '" data-open="false">' +
           '<button class="vpill__head" type="button" aria-expanded="false">' +
@@ -4177,7 +4359,7 @@
           const p = categoryPortions(c.t, names, gg);
           const rows = p.isBar
             ? names.map(n => '<div class="rcpt-dish">• ' + n + '</div>').join('')
-            : p.breakdown.map(b => '<div class="rcpt-dish"><b>' + (b.qty != null ? b.qty + ' ' + b.unit : 'כלול') + '</b> ' + b.name + '</div>').join('');
+            : p.breakdown.map(b => '<div class="rcpt-dish"><b>' + (b.qty != null ? b.qty + ' ' + b.unit : 'כלול') + '</b> ' + dishDisplay(c.t, b.name) + '</div>').join('');
           return '<div class="rcpt-cat"><div class="rcpt-cat__t">' + c.t + '</div>' + rows + '</div>';
         }).join('');
         // each add-on on its own line with its own price; show the multiplication where it applies
@@ -4756,11 +4938,14 @@
       const showOverlay = (el) => { el.hidden = false; void el.offsetWidth; el.classList.add('open'); };
       const hideOverlay = (el) => { el.classList.remove('open'); setTimeout(() => { if (!el.classList.contains('open')) el.hidden = true; }, 350); };
 
+      const talkHead = talkModal ? talkModal.querySelector('.cf-head') : null;
       function openTalk(prefill, alreadySent) {
         const setv = (id, v) => { const e = document.getElementById(id); if (e) e.value = v || ''; };
         if (prefill) { setv('tkName', prefill.name); setv('tkPhone', prefill.phone); setv('tkEmail', prefill.email); setv('tkCompany', prefill.company); setv('tkNote', prefill.notes); }
+        if (talkHead) talkHead.hidden = !!alreadySent;
         talkForm.hidden = !!alreadySent;
         talkDone.hidden = !alreadySent;
+        const sc = talkModal.querySelector('.cf-scroll'); if (sc) sc.scrollTop = 0;
         showOverlay(talkModal);
         if (!alreadySent) setTimeout(() => { const f = document.getElementById('tkName'); if (f && !f.value) f.focus(); }, 80);
       }
@@ -4780,7 +4965,10 @@
           notes:   document.getElementById('tkNote').value.trim(),
           hp:      document.getElementById('tkHp').value,   // honeypot
         });
+        // open the thank-you as a fresh screen inside the popup (hide header + form, scroll to top)
+        if (talkHead) talkHead.hidden = true;
         talkForm.hidden = true; talkDone.hidden = false;
+        const sc = talkModal.querySelector('.cf-scroll'); if (sc) sc.scrollTop = 0;
       });
 
       // receipt step: ticking "talk to sales" asks to leave the process, then captures the lead
@@ -4798,8 +4986,9 @@
             company: document.getElementById('bfCompany').value.trim(),
             notes:   document.getElementById('bfNotes').value.trim(),
           };
-          if (contact.name && contact.phone && contact.email) { sendIncompleteLead(contact); openTalk(null, true); }
-          else { openTalk(contact, false); }
+          // always show the (prefilled) form so the user submits it themselves - never jump
+          // straight to a success check they didn't trigger in this interaction
+          openTalk(contact, false);
         });
       }
 
@@ -4838,12 +5027,18 @@
       const done = document.getElementById('customDone');
       let lastFocus = null;
 
+      const cfHead = modal.querySelector('.cf-head');
       function open() {
         lastFocus = document.activeElement;
+        // reset to the form view in case it was left on the success screen
+        if (cfHead) cfHead.hidden = false;
+        if (form) form.hidden = false;
+        if (done) done.hidden = true;
         modal.hidden = false;
         void modal.offsetWidth;
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        resetCustomCal();                       // fresh calendar + reload Monday availability
         const first = document.getElementById('cfName');
         if (first) setTimeout(() => first.focus(), 80);
       }
@@ -4919,9 +5114,96 @@
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
         if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
 
+        // swap to a clean success "screen" inside the popup - hide the header + form, reveal the
+        // animated thank-you, and scroll the panel to the top so it reads as a fresh window
+        // (same behaviour as moving to the next step in the closing process).
+        if (cfHead) cfHead.hidden = true;
         form.hidden = true;
         if (done) done.hidden = false;
+        const sc = modal.querySelector('.cf-scroll');
+        if (sc) sc.scrollTop = 0;
       });
+
+      /* ---- Availability calendar (linked to the Monday "Events Form" board) ----
+         The day grid greys out dates already taken on Monday. Booked dates are fetched from
+         window.EZRA_AVAILABILITY_ENDPOINT (a GET that the Cloudflare worker answers by querying
+         Monday's date column). Until that token is enabled the endpoint returns an empty list,
+         so the calendar simply shows every upcoming date as open - it "links" the moment the
+         Monday side is switched on, with no front-end change. */
+      const cfMO = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+      const cfDW = ['א','ב','ג','ד','ה','ו','ש'];
+      const cfPad = n => String(n).padStart(2, '0');
+      const cfToday = new Date(); cfToday.setHours(0, 0, 0, 0);
+      const cfKey = d => d.getFullYear() + '-' + cfPad(d.getMonth() + 1) + '-' + cfPad(d.getDate());
+      const cfHuman = d => d.getDate() + ' ב' + cfMO[d.getMonth()] + ' ' + d.getFullYear();
+      const cfBtn = document.getElementById('cfDateBtn');
+      const cfWrap = document.getElementById('cfCal');
+      const cfGrid = document.getElementById('cfCalGrid');
+      const cfMonthEl = document.getElementById('cfCalMonth');
+      const cfPrev = document.getElementById('cfCalPrev');
+      const cfNext = document.getElementById('cfCalNext');
+      const cfHidden = document.getElementById('cfDate');
+      const cfLbl = document.getElementById('cfDateLabel');
+      let cfView = new Date(cfToday.getFullYear(), cfToday.getMonth(), 1);
+      const cfMaxView = new Date(cfToday.getFullYear(), cfToday.getMonth() + 12, 1);
+      let cfChosen = null;
+      let cfBooked = new Set();
+
+      function cfRenderCal() {
+        if (!cfGrid) return;
+        cfMonthEl.innerHTML = cfMO[cfView.getMonth()] + ' <span class="cal__year">' + cfView.getFullYear() + '</span>';
+        cfPrev.disabled = (cfView.getFullYear() === cfToday.getFullYear() && cfView.getMonth() === cfToday.getMonth());
+        cfNext.disabled = (cfView.getFullYear() === cfMaxView.getFullYear() && cfView.getMonth() === cfMaxView.getMonth());
+        cfGrid.innerHTML = '';
+        cfDW.forEach(d => { const e = document.createElement('div'); e.className = 'cal__dow'; e.textContent = d; cfGrid.appendChild(e); });
+        const firstDow = new Date(cfView.getFullYear(), cfView.getMonth(), 1).getDay();
+        const days = new Date(cfView.getFullYear(), cfView.getMonth() + 1, 0).getDate();
+        for (let i = 0; i < firstDow; i++) { const e = document.createElement('div'); e.className = 'cal__day is-empty'; cfGrid.appendChild(e); }
+        for (let day = 1; day <= days; day++) {
+          const d = new Date(cfView.getFullYear(), cfView.getMonth(), day);
+          const cell = document.createElement('button'); cell.type = 'button'; cell.className = 'cal__day'; cell.textContent = day;
+          if (d < cfToday) { cell.classList.add('is-past'); cell.disabled = true; }
+          else if (cfBooked.has(cfKey(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - תפוס'); }
+          else { cell.setAttribute('aria-label', day + ' - פנוי'); cell.addEventListener('click', () => cfChoose(d)); }
+          if (cfChosen && cfKey(d) === cfKey(cfChosen)) cell.classList.add('is-selected');
+          cfGrid.appendChild(cell);
+        }
+      }
+      function cfChoose(d) {
+        cfChosen = d;
+        if (cfHidden) cfHidden.value = cfKey(d);
+        if (cfLbl) cfLbl.textContent = cfHuman(d);
+        if (cfBtn) cfBtn.classList.remove('is-empty');
+        cfRenderCal();
+        cfCloseCal();
+      }
+      function cfOpenCal() { if (cfWrap) { cfWrap.hidden = false; cfBtn.setAttribute('aria-expanded', 'true'); cfRenderCal(); } }
+      function cfCloseCal() { if (cfWrap) { cfWrap.hidden = true; cfBtn.setAttribute('aria-expanded', 'false'); } }
+      if (cfBtn) cfBtn.addEventListener('click', () => { cfWrap.hidden ? cfOpenCal() : cfCloseCal(); });
+      if (cfPrev) cfPrev.addEventListener('click', () => { cfView = new Date(cfView.getFullYear(), cfView.getMonth() - 1, 1); cfRenderCal(); });
+      if (cfNext) cfNext.addEventListener('click', () => { cfView = new Date(cfView.getFullYear(), cfView.getMonth() + 1, 1); cfRenderCal(); });
+      // close the calendar when clicking elsewhere in the form
+      modal.addEventListener('click', e => { if (cfWrap && !cfWrap.hidden && !cfWrap.contains(e.target) && e.target !== cfBtn && !cfBtn.contains(e.target)) cfCloseCal(); });
+
+      function cfLoadAvailability() {
+        const ep = window.EZRA_AVAILABILITY_ENDPOINT;
+        if (!ep) return;   // not wired yet → every date stays open
+        fetch(ep, { method: 'GET' })
+          .then(r => r.ok ? r.json() : null)
+          .then(j => { if (!j) return; const arr = Array.isArray(j) ? j : (j.booked || j.dates || []); cfBooked = new Set(arr); cfRenderCal(); })
+          .catch(() => {});
+      }
+      function resetCustomCal() {
+        cfChosen = null;
+        if (cfHidden) cfHidden.value = '';
+        if (cfLbl) cfLbl.textContent = 'בחרו תאריך';
+        if (cfBtn) cfBtn.classList.add('is-empty');
+        cfView = new Date(cfToday.getFullYear(), cfToday.getMonth(), 1);
+        cfCloseCal();
+        cfRenderCal();
+        cfLoadAvailability();
+      }
+      cfRenderCal();
     })();
 
     /* ---- Process flow animation -two sides, each with its own colored line ---- */
@@ -5033,7 +5315,41 @@
       const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
       const at = (ms, fn) => timers.push(setTimeout(fn, ms));
 
+      // Mobile flying ball (see .flow-ball). Moves between step circles; on desktop it's
+      // display:none and these helpers no-op so the connector line stays the single source.
+      const ball = document.createElement('span');
+      ball.className = 'flow-ball';
+      procTrack.appendChild(ball);
+      const mobileFlow = () => matchMedia('(max-width: 820px)').matches;
+      let ballX = 0, ballY = 0;
+      function ballTo(circleEl, dur) {
+        if (!mobileFlow() || !circleEl) return;
+        const pr = procTrack.getBoundingClientRect();
+        const c  = circleEl.getBoundingClientRect();
+        ballX = c.left + c.width / 2 - pr.left;
+        ballY = c.top  + c.height / 2 - pr.top;
+        ball.style.transition = dur > 0 ? 'transform ' + dur + 'ms cubic-bezier(0.45,0.05,0.2,1), opacity 0.3s ease' : 'none';
+        ball.style.transform  = 'translate(' + ballX + 'px,' + ballY + 'px) scale(1)';
+        ball.style.opacity    = '1';
+        if (dur <= 0) void ball.offsetWidth;   // flush the instant placement
+      }
+      // arrival: the ball "pours" its light into the circle - expand + fade so it reads as the
+      // circle lighting up from the ball, rather than the ball just vanishing.
+      function ballMerge() {
+        ball.style.transition = 'transform 0.4s ease-out, opacity 0.4s ease-out';
+        ball.style.transform  = 'translate(' + ballX + 'px,' + ballY + 'px) scale(2.6)';
+        ball.style.opacity    = '0';
+      }
+      const ballHide = () => { ball.style.transition = 'none'; ball.style.opacity = '0'; };
+      // light exactly one step on mobile (a single travelling glow); keep the desktop line
+      // cumulative (all completed steps stay lit as the connector fills).
+      function litStep(s) {
+        if (mobileFlow()) rows.forEach(r => r.stepEls.forEach(x => x.classList.toggle('lit', x === s)));
+        else s.classList.add('lit');
+      }
+
       function resetInstant() {
+        ballHide();
         rows.forEach(r => {
           r.stepsEl.classList.add('reset-instant');
           r.stepEls.forEach(s => s.classList.remove('lit'));
@@ -5051,18 +5367,30 @@
         let cursor = 220;
 
         rows.forEach((row, ri) => {
-          at(cursor, () => row.stepEls[0].classList.add('lit'));
+          const c0 = row.stepEls[0].querySelector('.step__num');
+          if (ri === 0) {
+            // first step: a spark pours its light into the circle (no incoming flight)
+            at(cursor, () => { ballTo(c0, 0); litStep(row.stepEls[0]); if (mobileFlow()) ballMerge(); });
+          } else {
+            // later rows: fly the ball across, then it pours its light into the circle on arrival
+            at(cursor, () => ballTo(c0, 400));
+            at(cursor + 400, () => { litStep(row.stepEls[0]); if (mobileFlow()) ballMerge(); });
+          }
           cursor += STEP;
           row.conns.forEach((c, i) => {
             const fillAt = cursor;
-            at(fillAt, () => c.classList.add('fill'));
+            at(fillAt, () => {
+              c.classList.add('fill');
+              ballTo(row.stepEls[i + 1].querySelector('.step__num'), SEG);  // ball re-emerges and flies during the fill window
+            });
             const litAt = fillAt + SEG;
             at(litAt, () => {
-            const s = row.stepEls[i + 1];
-            s.classList.add('lit');
-            if (s.classList.contains('step--party'))      launchFinaleConfetti(s.querySelector('.step__num'));
-            else if (s.classList.contains('step--happy')) launchHappyEmojis(s.querySelector('.step__num'));
-          });
+              const s = row.stepEls[i + 1];
+              litStep(s);                          // glow this one (mobile: previous stops glowing)
+              if (mobileFlow()) ballMerge();        // ball pours its light into the circle, then it glows
+              if (s.classList.contains('step--party'))      launchFinaleConfetti(s.querySelector('.step__num'));
+              else if (s.classList.contains('step--happy')) launchHappyEmojis(s.querySelector('.step__num'));
+            });
             cursor = litAt + STEP;
           });
           if (ri < rows.length - 1) cursor += GAP;
@@ -5194,5 +5522,57 @@
 
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
+
+  <!-- Cookie consent banner -->
+  <div class="cookie-bar" id="cookieBar" role="region" aria-label="הודעת עוגיות" hidden>
+    <p class="cookie-bar__text">אנחנו משתמשים בעוגיות (Cookies) כדי שהאתר יעבוד כמו שצריך, לנתח שימוש ולהציג תוכן ופרסום מותאמים. המשך הגלישה באתר מהווה הסכמה. <a href="privacy">למדיניות העוגיות</a></p>
+    <button type="button" class="cookie-bar__btn" id="cookieOk">מאשר/ת</button>
+  </div>
+  <style>
+    .cookie-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 9000;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.8rem 1.4rem;
+      padding: 0.9rem clamp(1rem, 4vw, 2rem); background: rgba(15,13,11,0.96);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      border-block-start: 1px solid rgba(196,154,60,0.35); box-shadow: 0 -10px 30px -12px rgba(0,0,0,0.6);
+      font-family: 'Heebo', system-ui, sans-serif; transform: translateY(115%); transition: transform .5s cubic-bezier(.22,1,.36,1); }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-bar__text { margin: 0; color: #d8cfbf; font-size: 0.85rem; line-height: 1.55; max-width: 62ch; text-align: center; }
+    .cookie-bar__text a { color: #f5d98a; text-decoration: underline; }
+    .cookie-bar__btn { cursor: pointer; border: 0; border-radius: 50px; padding: 0.6rem 1.6rem;
+      font: inherit; font-weight: 600; font-size: 0.85rem; color: #1a140c;
+      background: linear-gradient(110deg, #c49a3c, #f5d98a); transition: filter .25s ease; }
+    .cookie-bar__btn:hover { filter: brightness(1.07); }
+    @media (prefers-reduced-motion: reduce) { .cookie-bar { transition: none; } }
+  </style>
+  <script>
+    (function () {
+      var KEY = 'ezra_cookie_ok';
+      try { if (localStorage.getItem(KEY) === '1') return; } catch (e) {}
+      var bar = document.getElementById('cookieBar'); if (!bar) return;
+      bar.hidden = false;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('show'); }); });
+      document.getElementById('cookieOk').addEventListener('click', function () {
+        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+        bar.classList.remove('show');
+        setTimeout(function () { bar.hidden = true; }, 500);
+      });
+    })();
+  </script>
+  <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
+  <script>
+    (function () {
+      if (!(location.protocol === 'file:' || /\.html$/i.test(location.pathname))) return;
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a'); if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || a.target === '_blank' || /^(https?:|mailto:|tel:|#|javascript:)/i.test(href)) return;
+        var clean = href.replace(/^\//, '').split('#')[0].split('?')[0];
+        if (clean === '') { e.preventDefault(); location.href = 'index.html'; return; }
+        if (/\.[a-z0-9]+$/i.test(clean)) return;
+        e.preventDefault();
+        location.href = clean + '.html';
+      });
+    })();
+  </script>
 </body>
 </html>

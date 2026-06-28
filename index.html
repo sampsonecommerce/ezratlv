@@ -198,6 +198,13 @@
     }
     .nav__links a:hover { color: var(--cream); }
     .nav__links a:hover::after { width: 100%; }
+    /* language toggle (HE/EN) */
+    .nav__lang { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.03em; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 50px;
+      padding: 0.38rem 0.72rem; line-height: 1; transition: color 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .nav__lang:hover { color: var(--cream); border-color: rgba(196,154,60,0.5); }
+    .nav__lang::after { display: none !important; }
+    .nav__lang svg { width: 14px; height: 14px; }
 
     /* hide mobile-only elements on desktop */
     .nav__burger      { display: none; }
@@ -1713,6 +1720,10 @@
 
     <!-- desktop: actions -->
     <div class="nav__actions">
+      <a class="nav__lang" href="english" hreflang="en" aria-label="Switch to English">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+        EN
+      </a>
       <a class="nav__corp" href="company-events">אירועי חברה</a>
       <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
     </div>
@@ -1725,6 +1736,7 @@
       <a class="nav__menu-link" href="#bar">הבר</a>
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
+      <a class="nav__menu-link" href="english" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
         <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
@@ -2723,5 +2735,57 @@
 
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
+
+  <!-- Cookie consent banner -->
+  <div class="cookie-bar" id="cookieBar" role="region" aria-label="הודעת עוגיות" hidden>
+    <p class="cookie-bar__text">אנחנו משתמשים בעוגיות (Cookies) כדי שהאתר יעבוד כמו שצריך, לנתח שימוש ולהציג תוכן ופרסום מותאמים. המשך הגלישה באתר מהווה הסכמה. <a href="privacy">למדיניות העוגיות</a></p>
+    <button type="button" class="cookie-bar__btn" id="cookieOk">מאשר/ת</button>
+  </div>
+  <style>
+    .cookie-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 9000;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.8rem 1.4rem;
+      padding: 0.9rem clamp(1rem, 4vw, 2rem); background: rgba(15,13,11,0.96);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      border-block-start: 1px solid rgba(196,154,60,0.35); box-shadow: 0 -10px 30px -12px rgba(0,0,0,0.6);
+      font-family: 'Heebo', system-ui, sans-serif; transform: translateY(115%); transition: transform .5s cubic-bezier(.22,1,.36,1); }
+    .cookie-bar.show { transform: translateY(0); }
+    .cookie-bar__text { margin: 0; color: #d8cfbf; font-size: 0.85rem; line-height: 1.55; max-width: 62ch; text-align: center; }
+    .cookie-bar__text a { color: #f5d98a; text-decoration: underline; }
+    .cookie-bar__btn { cursor: pointer; border: 0; border-radius: 50px; padding: 0.6rem 1.6rem;
+      font: inherit; font-weight: 600; font-size: 0.85rem; color: #1a140c;
+      background: linear-gradient(110deg, #c49a3c, #f5d98a); transition: filter .25s ease; }
+    .cookie-bar__btn:hover { filter: brightness(1.07); }
+    @media (prefers-reduced-motion: reduce) { .cookie-bar { transition: none; } }
+  </style>
+  <script>
+    (function () {
+      var KEY = 'ezra_cookie_ok';
+      try { if (localStorage.getItem(KEY) === '1') return; } catch (e) {}
+      var bar = document.getElementById('cookieBar'); if (!bar) return;
+      bar.hidden = false;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('show'); }); });
+      document.getElementById('cookieOk').addEventListener('click', function () {
+        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+        bar.classList.remove('show');
+        setTimeout(function () { bar.hidden = true; }, 500);
+      });
+    })();
+  </script>
+  <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
+  <script>
+    (function () {
+      if (!(location.protocol === 'file:' || /\.html$/i.test(location.pathname))) return;
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a'); if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || a.target === '_blank' || /^(https?:|mailto:|tel:|#|javascript:)/i.test(href)) return;
+        var clean = href.replace(/^\//, '').split('#')[0].split('?')[0];
+        if (clean === '') { e.preventDefault(); location.href = 'index.html'; return; }
+        if (/\.[a-z0-9]+$/i.test(clean)) return;
+        e.preventDefault();
+        location.href = clean + '.html';
+      });
+    })();
+  </script>
 </body>
 </html>

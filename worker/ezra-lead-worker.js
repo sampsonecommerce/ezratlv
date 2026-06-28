@@ -28,6 +28,8 @@ export default {
     const cors = corsHeaders(origin);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+    // GET = availability feed for the on-site calendar (booked dates from the Monday board)
+    if (request.method === "GET") return availability(env, cors);
     if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: cors });
 
     let d;
@@ -149,7 +151,7 @@ function corsHeaders(origin) {
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allow,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "content-type",
     "Vary": "Origin",
   };
@@ -157,6 +159,39 @@ function corsHeaders(origin) {
 
 function json(obj, status, cors) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json", ...cors } });
+}
+
+// Availability for the on-site calendar: returns the dates already taken on the Monday
+// "Events Form" board so the calendar can grey them out. Reads the board's date column
+// (date5bab58wj). While MONDAY_TOKEN is unset (Monday paused) it returns an empty list, so
+// the calendar shows every upcoming date as open. Cached 5 min at the edge.
+async function availability(env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ booked: [] }, 200, cors);
+  const query = `query {
+    boards(ids: ${BOARD_ID}) {
+      items_page(limit: 500) {
+        items { column_values(ids: ["date5bab58wj"]) { ... on DateValue { date } } }
+      }
+    }
+  }`;
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    const out = await r.json();
+    const items = out?.data?.boards?.[0]?.items_page?.items || [];
+    const booked = [...new Set(items.flatMap((it) => (it.column_values || []).map((c) => c.date).filter(Boolean)))];
+    return new Response(JSON.stringify({ booked }), {
+      status: 200,
+      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=300", ...cors },
+    });
+  } catch (e) {
+    console.error("availability failed:", e);
+    return json({ booked: [] }, 200, cors);   // fail open
+  }
 }
 
 async function sha256(s) {
