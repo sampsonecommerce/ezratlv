@@ -17,3 +17,6 @@ images/ad-*.jpg
 .env
 .env.*
 .dev.vars
+
+# internal handoff notes (not part of the live site)
+HANDOFF.md
