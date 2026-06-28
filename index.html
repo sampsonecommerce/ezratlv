@@ -1695,7 +1695,7 @@
 
     <!-- desktop: actions -->
     <div class="nav__actions">
-      <a class="nav__corp" href="company-events.html">אירועי חברה</a>
+      <a class="nav__corp" href="company-events">אירועי חברה</a>
       <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
     </div>
 
@@ -1708,7 +1708,7 @@
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--corp" href="company-events.html">אירועי חברה</a>
+        <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
         <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
       </div>
     </div>
@@ -2182,9 +2182,9 @@
   ============================================================ -->
   <footer class="footer">
     <div class="footer__legal">
-      <a href="privacy.html">מדיניות פרטיות</a>
-      <a href="terms.html">תקנון ותנאי שימוש</a>
-      <a href="accessibility.html">הצהרת נגישות</a>
+      <a href="privacy">מדיניות פרטיות</a>
+      <a href="terms">תקנון ותנאי שימוש</a>
+      <a href="accessibility">הצהרת נגישות</a>
     </div>
     עזרא תל אביב © 2026 - כל הזכויות שמורות
   </footer>
@@ -2567,7 +2567,7 @@
 
           <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">שליחת הבקשה</button>
-          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
         </form>
 
         <div class="cf-done" id="privateDone" hidden>
@@ -2671,6 +2671,21 @@
         if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) e.stopImmediatePropagation();
       }, false);
     })();
+  </script>
+
+  <!-- smooth-scroll in-page links without leaving #section in the address bar -->
+  <script>
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var t = document.getElementById(id);
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', location.pathname + location.search);
+    });
   </script>
 
   <!-- Enable accessibility widget -->
