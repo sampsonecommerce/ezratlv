@@ -4,10 +4,52 @@
 // Meta Conversions API "Lead" event. Secrets come from Pages env vars MONDAY_TOKEN /
 // META_CAPI_TOKEN (Settings -> Environment variables); never in the repo, never in the browser.
 
-const BOARD_ID = "5092854682";                  // Events Form
-const NEW_LEADS_GROUP = "group_mm18zcww";        // booking-flow leads
-const CUSTOM_LEADS_GROUP = "group_mm4m7apf";     // שיחת אפיון callback leads
+// Homepage private/birthday leads -> original "Events Form" board.
+const PRIVATE_BOARD = "5092854682";
+const PRIVATE_GROUP = "group_mm18zcww";
+// All company-events leads -> dedicated "Company Events Form" board, by pipeline group.
+const COMPANY_BOARD = "5099350637";
+const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement Sent (active 12h)
+const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
+const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
+// Availability source = the real "Events Form" calendar (every lead, private + company). A date
+// is "taken" only when a committed event sits on it: Closed Deals / Pre Payment / Proposal Sent.
+const AVAIL_BOARD = "5092854682";
+const AVAIL_GROUPS = ["group_mm18mks7", "group_mm1fz3kg", "group_mm187fg9"];
 const META_PIXEL_ID = "2174553826420246";
+
+// GET /api/submit-lead -> availability feed for the on-site calendar (same-origin once the
+// domain is on Cloudflare Pages; the site reads window.EZRA_AVAILABILITY_ENDPOINT).
+export async function onRequestGet({ env }) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ booked: [] }, 200);
+  const query = `query {
+    boards(ids: ${AVAIL_BOARD}) {
+      groups(ids: ${JSON.stringify(AVAIL_GROUPS)}) {
+        items_page(limit: 500) {
+          items { column_values(ids: ["date5bab58wj"]) { ... on DateValue { date } } }
+        }
+      }
+    }
+  }`;
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    const out = await r.json();
+    const groups = out?.data?.boards?.[0]?.groups || [];
+    const items = groups.flatMap((g) => g.items_page?.items || []);
+    const booked = [...new Set(items.flatMap((it) => (it.column_values || []).map((c) => c.date).filter(Boolean)))];
+    return new Response(JSON.stringify({ booked }), {
+      status: 200,
+      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=300" },
+    });
+  } catch (e) {
+    return json({ booked: [] }, 200);   // fail open
+  }
+}
 
 export async function onRequestPost({ request, env }) {
   let d;
@@ -21,13 +63,6 @@ export async function onRequestPost({ request, env }) {
   const ua = request.headers.get("user-agent") || "";
   await sendMetaCapi(d, ip, ua, env).catch((e) => console.error("CAPI failed:", e));
 
-  // Incomplete / "rather talk to us" leads are PARKED from Monday until the dedicated
-  // company-events board exists. For now we capture them in logs + Meta only.
-  if (d.leadType === "incomplete") {
-    console.log("submit-lead incomplete lead (Monday parked):", JSON.stringify(d));
-    return json({ ok: true, parked: true }, 200);
-  }
-
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) {
     console.log("submit-lead (no MONDAY_TOKEN) payload:", JSON.stringify(d));
@@ -36,9 +71,21 @@ export async function onRequestPost({ request, env }) {
 
   const isCustom = d.leadType === "custom";
   const isPrivate = d.leadType === "private";
+  const isIncomplete = d.leadType === "incomplete";
   const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
   const ils = (n) => (n == null ? "" : n + " ₪");
-  const notes = isCustom ? [
+  const notes = isIncomplete ? [
+    "סוג פנייה: נטישת תהליך הזמנה (אירועי חברה)",
+    d.pausedStepLabel ? `נעצר בשלב: ${d.pausedStepLabel}` : "",
+    d.plan ? `מסלול: ${d.plan}` : "",
+    `תאריך: ${d.date || "-"}    שעה: ${d.slot || "-"}`,
+    d.menu ? `תפריט: ${d.menu === "evening" ? "ערב" : "יום"}` : "",
+    `אורחים: ${d.guests ?? "-"}`,
+    (d.addonLabels && d.addonLabels.length) ? `תוספות: ${d.addonLabels.join(", ")}` : "",
+    d.company ? `חברה: ${d.company}` : "",
+    d.notes ? `הערה: ${d.notes}` : "",
+    "★ הלקוח עזב את התהליך וביקש שנחזור אליו",
+  ].filter(Boolean).join("\n") : isCustom ? [
     "סוג פנייה: שיחת אפיון (מסלול מותאם אישית)",
     d.eventLocation ? `מיקום מבוקש: ${d.eventLocation}` : "",
     d.callbackTime ? `זמן נוח לחזרה: ${d.callbackTime}` : "",
@@ -102,10 +149,15 @@ export async function onRequestPost({ request, env }) {
   const query = `mutation ($board: ID!, $group: String, $name: String!, $cols: JSON!) {
     create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
   }`;
+  const board = isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
+  const group = isPrivate ? PRIVATE_GROUP
+              : isCustom ? GRP_CUSTOM
+              : isIncomplete ? GRP_FOLLOWUP
+              : GRP_AGREEMENT;
   const variables = {
-    board: BOARD_ID,
-    group: isCustom ? CUSTOM_LEADS_GROUP : NEW_LEADS_GROUP,
-    name: (isCustom ? "שיחת אפיון · " : "") + String(d.name || "ליד מהאתר").slice(0, 230),
+    board,
+    group,
+    name: (isCustom ? "שיחת אפיון · " : isIncomplete ? "נטוש · " : "") + String(d.name || "ליד מהאתר").slice(0, 230),
     cols: JSON.stringify(cols),
   };
 

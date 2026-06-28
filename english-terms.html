@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Terms of Use | Ezra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+  <nav class="legal-nav">
+    <a class="legal-nav__logo" href="english-index"><img src="images/logo.png" alt="Ezra" /></a>
+    <a class="legal-nav__back" href="english-index">Back to site</a>
+  </nav>
+
+  <main class="legal">
+    <div class="legal__kicker">Ezra</div>
+    <h1>Terms of Use</h1>
+    <div class="legal__updated">Updated: June 2026</div>
+
+    <h2>1. General</h2>
+    <p>These terms govern the conditions of use of the Ezra website, operated by Rom Sampson, business ID 204898605 ("the Business"). Use of the site constitutes full agreement to these terms. If you do not agree, please refrain from using the site.</p>
+
+    <h2>2. The site and the services</h2>
+    <p>The site presents information about Ezra's space in Florentin, Tel Aviv, for private events and for company and team events, including an illustrative price calculator and an enquiry and booking form.</p>
+
+    <h2>3. Prices and content</h2>
+    <p>The prices, menus, packages and information shown on the site are for general illustration only, are subject to change at any time, and do not constitute a binding offer or a final contract. A binding engagement takes effect only upon signing an official contract between the parties.</p>
+
+    <h2>4. Booking process and deposit</h2>
+    <p>Reserving a date is conditional on paying a deposit and signing a contract. Until then, the Business has no obligation to hold a date or a price.</p>
+
+    <h2>5. Cancellation policy</h2>
+    <p>We reserve the space especially for you and prepare for it in advance, so in the event of a cancellation:</p>
+    <ul>
+      <li>Cancellation up to 30 days before the event date: the deposit will be fully refunded with no further obligation.</li>
+      <li>Cancellation up to 14 days before the event date: half of the deposit will be refunded.</li>
+      <li>Cancellation within two weeks of the event date: the deposit will not be refunded at all.</li>
+      <li>Cancellation less than 48 hours before the event: 50% of the event cost will be charged.</li>
+      <li>Cancellation on the day of the event itself: the full amount (100%) will be charged.</li>
+      <li>Cancellation due to a security situation: charging will be carried out subject to Home Front Command directives and the official guidelines published.</li>
+    </ul>
+
+    <h2>6. Limitation of liability</h2>
+    <p>The site and its content are provided as is (As Is). The Business will not be liable for any direct or indirect damage arising from use of the site or reliance on the information in it.</p>
+
+    <h2>7. Intellectual property</h2>
+    <p>All rights in the site content, including texts, images, design, logo and menus, are reserved to the Business. You may not copy, reproduce, distribute or make commercial use of the content without prior written permission.</p>
+
+    <h2>8. External links</h2>
+    <p>The site may include links to third-party websites. The Business is not responsible for their content or their privacy policies.</p>
+
+    <h2>9. Governing law and jurisdiction</h2>
+    <p>These terms are governed by the laws of the State of Israel. Exclusive jurisdiction is granted to the competent courts in the Tel Aviv district.</p>
+
+    <h2>10. Changes to the terms</h2>
+    <p>The Business may update these terms from time to time. The updated version will be published on this page.</p>
+
+    <h2>11. Contact</h2>
+    <p>For questions regarding these terms: <a href="mailto:rom@ezratlv.com">rom@ezratlv.com</a>.</p>
+  </main>
+
+  <footer class="legal-foot">
+    <div class="legal-foot__links">
+      <a href="english-privacy">Privacy Policy</a>
+      <a href="english-terms">Terms of Use</a>
+      <a href="english-accessibility">Accessibility Statement</a>
+    </div>
+    Ezra © 2026 · All rights reserved
+  </footer>
+  <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
+  <script>
+    (function () {
+      if (!(location.protocol === 'file:' || /\.html$/i.test(location.pathname))) return;
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a'); if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || a.target === '_blank' || /^(https?:|mailto:|tel:|#|javascript:)/i.test(href)) return;
+        var clean = href.replace(/^\//, '').split('#')[0].split('?')[0];
+        if (clean === '') { e.preventDefault(); location.href = 'english-index.html'; return; }
+        if (/\.[a-z0-9]+$/i.test(clean)) return;
+        e.preventDefault();
+        location.href = clean + '.html';
+      });
+    })();
+  </script>
+</body>
+</html>

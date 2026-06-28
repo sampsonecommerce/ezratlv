@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,20 +30,20 @@
   </script>
   <!-- End Google tag -->
 
-  <title>עזרא | מרחב אירועים פרטי בפלורנטין, תל אביב</title>
-  <meta name="description" content="מרחב אירועים בוטיק ובלעדי בלב פלורנטין. אירועי חברה, ימי הולדת ואירועים פרטיים עד 50 איש. אוכל, בר קוקטיילים ואווירה - הכל כלול." />
+  <title>Ezra | Private Event Space in Florentin, Tel Aviv</title>
+  <meta name="description" content="A boutique, exclusive event space in the heart of Florentin. Company events, birthdays and private events for up to 50 guests. Food, a cocktail bar and atmosphere, all included." />
   <link rel="canonical" href="https://www.ezratlv.com" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="geo.region" content="IL-TA" />
-  <meta name="geo.placename" content="פלורנטין, תל אביב" />
+  <meta name="geo.placename" content="Florentin, Tel Aviv" />
   <meta name="geo.position" content="32.0551;34.7728" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="עזרא תל אביב - אירועי חברה פרטיים בפלורנטין" />
-  <meta property="og:description" content="מרחב פרטי בלעדי עד 50 איש. אוכל, בר, וייב - הכל כלול." />
+  <meta property="og:title" content="Ezra, private company events in Florentin" />
+  <meta property="og:description" content="An exclusive private space for up to 50 guests. Food, bar, vibe, all included." />
   <meta property="og:type" content="website" />
 
   <!-- Fonts -->
@@ -164,21 +164,16 @@
       width: auto;
       display: block;
     }
-    /* links fill the space between logo and actions and center within it,
-       so the gap stays balanced no matter how wide each side is */
+    /* EN desktop: 3 zones - logo left, links centered (flex), actions right */
     .nav__links {
       flex: 1;
       display: flex;
       justify-content: center;
-      gap: clamp(1.2rem, 2.5vw, 2.2rem);
+      gap: clamp(1rem, 2vw, 1.8rem);
       align-items: center;
       white-space: nowrap;
     }
-    .nav__actions {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
+    .nav__actions { display: flex; align-items: center; gap: 0.7rem; }
     .nav__links a {
       font-size: 0.88rem;
       font-weight: 400;
@@ -1601,7 +1596,7 @@
     @keyframes revScroll { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
     .rev-card {
       flex: 0 0 300px; max-width: 300px; margin-inline-end: 1.1rem;
-      direction: rtl; text-align: right;
+      direction: ltr; text-align: left;
       background: linear-gradient(165deg, rgba(196,154,60,0.10), rgba(26,20,14,0.4) 42%), #16110c;
       border: 1px solid rgba(196,154,60,0.22); border-radius: 16px;
       padding: 1.3rem 1.3rem 1.2rem; position: relative; isolation: isolate;
@@ -1637,16 +1632,16 @@
   {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "EventVenue"],
-    "name": "עזרא תל אביב",
+    "name": "Ezra",
     "alternateName": "Ezra TLV",
-    "description": "מרחב אירועים פרטי ובלעדי בפלורנטין, תל אביב. אירועי חברה, ימי הולדת ואירועים פרטיים עד 50 אורחים. כולל אוכל מהטאבון, בר קוקטיילים ומערכת סאונד.",
+    "description": "A private, exclusive event space in Florentin, Tel Aviv. Company events, birthdays and private events for up to 50 guests. Includes taboon food, a cocktail bar and a sound system.",
     "url": "https://www.ezratlv.com",
     "telephone": "+972509499241",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "אברבנאל 38",
-      "addressLocality": "פלורנטין",
-      "addressRegion": "תל אביב",
+      "streetAddress": "Abarbanel 38",
+      "addressLocality": "Florentin",
+      "addressRegion": "Tel Aviv",
       "addressCountry": "IL"
     },
     "geo": {
@@ -1668,22 +1663,22 @@
     "amenityFeature": [
       {
         "@type": "LocationFeatureSpecification",
-        "name": "בר קוקטיילים פתוח",
+        "name": "Open cocktail bar",
         "value": true
       },
       {
         "@type": "LocationFeatureSpecification",
-        "name": "מערכת סאונד",
+        "name": "Sound system",
         "value": true
       },
       {
         "@type": "LocationFeatureSpecification",
-        "name": "אירוע פרטי ובלעדי",
+        "name": "Private, exclusive event",
         "value": true
       },
       {
         "@type": "LocationFeatureSpecification",
-        "name": "אוכל מהטאבון",
+        "name": "Taboon food",
         "value": true
       }
     ],
@@ -1703,43 +1698,43 @@
   ============================================================ -->
   <nav class="nav" id="nav">
     <!-- mobile: hamburger (right) -->
-    <button class="nav__burger" id="navBurger" type="button" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="navMenu">
+    <button class="nav__burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
       <span></span><span></span><span></span>
     </button>
 
-    <a href="#hero" class="nav__logo"><img src="images/logo.png" alt="עזרא" /></a>
+    <a href="#hero" class="nav__logo"><img src="images/logo.png" alt="Ezra" /></a>
 
     <!-- desktop: center links -->
     <div class="nav__links">
-      <a href="#concept">החוויה בעזרא</a>
-      <a href="#food">האוכל</a>
-      <a href="#bar">הבר</a>
-      <a href="#menu">תפריט</a>
-      <a href="#gallery">גלריה</a>
+      <a href="#concept">The Ezra experience</a>
+      <a href="#food">The food</a>
+      <a href="#bar">The bar</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
     </div>
 
     <!-- desktop: actions -->
     <div class="nav__actions">
-      <a class="nav__lang" href="english-index" hreflang="en" aria-label="Switch to English">
+      <a class="nav__lang" href="/" hreflang="he" aria-label="Switch to Hebrew">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
-        EN
+        HE
       </a>
-      <a class="nav__corp" href="company-events">אירועי חברה</a>
-      <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="nav__corp" href="english-company-events">Company events</a>
+      <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
 
     <!-- mobile: dropdown menu + scrim -->
     <div class="nav__scrim" id="navScrim"></div>
     <div class="nav__menu" id="navMenu">
-      <a class="nav__menu-link" href="#concept">החוויה בעזרא</a>
-      <a class="nav__menu-link" href="#food">האוכל</a>
-      <a class="nav__menu-link" href="#bar">הבר</a>
-      <a class="nav__menu-link" href="#menu">תפריט</a>
-      <a class="nav__menu-link" href="#gallery">גלריה</a>
-      <a class="nav__menu-link" href="english-index" hreflang="en">English / EN</a>
+      <a class="nav__menu-link" href="#concept">The Ezra experience</a>
+      <a class="nav__menu-link" href="#food">The food</a>
+      <a class="nav__menu-link" href="#bar">The bar</a>
+      <a class="nav__menu-link" href="#menu">Menu</a>
+      <a class="nav__menu-link" href="#gallery">Gallery</a>
+      <a class="nav__menu-link" href="/" hreflang="he">Hebrew / HE</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
-        <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="nav__menu-cta nav__menu-cta--corp" href="english-company-events">Company events</a>
+        <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
     </div>
   </nav>
@@ -1752,19 +1747,19 @@
       <source src="videos/hero.mp4" type="video/mp4" />
     </video>
     <div class="hero__inner wrap">
-      <h1 id="heroHeadline">מרחב אירועים פרטי, חוויה בלתי מתפשרת</h1>
+      <h1 id="heroHeadline">A private event space, an uncompromising experience</h1>
       <p class="hero__sub">
-        מרחב אירועים אינטימי בלב פלורנטין - תאורה מוקפדת, קולינריה מדויקת ובר קוקטיילים עשיר עומדים כולם לרשותכם, באירועי בוטיק עד 50 מוזמנים
+        An intimate event space in the heart of Florentin. Curated lighting, precise cuisine and a rich cocktail bar are all at your service, for boutique events of up to 50 guests.
       </p>
       <div class="hero__cta">
-        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
         <span class="hero__cta-note">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          מענה תוך 24 שעות
+          A reply within 24 hours
         </span>
       </div>
     </div>
-    <a href="#concept" class="hero__scroll" aria-label="גלול למטה">
+    <a href="#concept" class="hero__scroll" aria-label="Scroll down">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 5v14M5 12l7 7 7-7"/>
       </svg>
@@ -1777,54 +1772,54 @@
   <section id="concept">
     <div class="wrap two-col">
       <div class="concept__text reveal">
-        <span class="label">החוויה</span>
-        <h2>חוויית אירוח יוצאת דופן.</h2>
+        <span class="label">The experience</span>
+        <h2>An exceptional hosting experience.</h2>
         <div class="divider"></div>
-        <p>המרחב כולו עומד לרשותכם. אנו מקיימים אירוע אחד בלבד בערב, כדי להבטיח פרטיות מוחלטת לכם ולאורחים שלכם.</p>
-        <p>תשומת הלב שלנו מוקדשת לפרטים הקטנים – מעיצוב החלל, דרך התאורה ועד לפסקול המושלם. יצרנו סביבה שנועדה לאירוח אלגנטי, באווירה חמה ומזמינה.</p>
-        <p>אנו מציעים מעטפת אירוח שלמה הכוללת תפריט שף מוקפד, בר קוקטיילים פתוח ושירות חסר פשרות. חוויה הרמונית שמאפשרת לכם פשוט להגיע וליהנות.</p>
-        <p>פתוחים שבעה ימים בשבוע, לאירועי צהריים או ערב.</p>
+        <p>The entire space is yours. We host only one event per evening, to guarantee complete privacy for you and your guests.</p>
+        <p>Our attention goes to the small details, from the design of the space, through the lighting, to the perfect soundtrack. We created an environment built for elegant hosting, in a warm and inviting atmosphere.</p>
+        <p>We offer a complete hosting package with a curated chef's menu, an open cocktail bar and uncompromising service. A seamless experience that lets you simply show up and enjoy.</p>
+        <p>Open seven days a week, for daytime or evening events.</p>
 
         <div class="benefits-pills">
           <span class="benefit-pill" style="animation-delay:0s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            עד 50 איש
+            Up to 50 guests
           </span>
           <span class="benefit-pill" style="animation-delay:0.4s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            אירוע פרטי ובלעדי
+            Private, exclusive event
           </span>
           <span class="benefit-pill" style="animation-delay:0.8s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            מעטפת אירוח שלמה
+            Complete hosting package
           </span>
           <span class="benefit-pill" style="animation-delay:1.2s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14l-7 9z"/><path d="M12 12v7"/><path d="M8 21h8"/></svg>
-            בר קוקטיילים פתוח
+            Open cocktail bar
           </span>
           <span class="benefit-pill" style="animation-delay:1.6s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 20l9-2 9 2z"/><circle cx="11" cy="11" r="1"/><circle cx="13" cy="15" r="1"/></svg>
-            אוכל מהטאבון
+            Taboon food
           </span>
           <span class="benefit-pill" style="animation-delay:0.2s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-            מערכת סאונד מקצועית
+            Professional sound system
           </span>
           <span class="benefit-pill" style="animation-delay:0.6s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M8.5 14a5 5 0 1 1 7 0c-.7.6-1.2 1.3-1.4 2.2H9.9c-.2-.9-.7-1.6-1.4-2.2z"/></svg>
-            תאורה מוקפדת
+            Curated lighting
           </span>
           <span class="benefit-pill" style="animation-delay:1s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            7 ימים בשבוע
+            7 days a week
           </span>
           <span class="benefit-pill" style="animation-delay:1.4s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-            התאמה אישית מלאה
+            Fully customizable
           </span>
           <span class="benefit-pill" style="animation-delay:1.8s">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            חוויה בלתי נשכחת
+            An unforgettable experience
           </span>
         </div>
       </div>
@@ -1833,7 +1828,7 @@
            Best photo here = an intimate shot of a small group of people
            genuinely enjoying themselves at an event - laughing, clinking glasses.
            Should feel real and warm, not posed. -->
-      <img src="images/LOGO OUTSIDE.jpg" alt="תמונת קונספט" class="concept__img reveal" style="object-fit: cover; width: 100%; height: 100%;" />
+      <img src="images/LOGO OUTSIDE.jpg" alt="Concept image" class="concept__img reveal" style="object-fit: cover; width: 100%; height: 100%;" />
     </div>
   </section>
 
@@ -1842,8 +1837,8 @@
   ============================================================ -->
   <section id="food" class="food">
     <div class="wrap center">
-      <span class="label reveal">אוכל</span>
-      <h2 class="reveal">קולינריה מדויקת</h2>
+      <span class="label reveal">Food</span>
+      <h2 class="reveal">Precise cuisine</h2>
       <div class="divider divider--center"></div>
       <div class="vibe-grid">
         <div class="vibe-card reveal">
@@ -1851,24 +1846,24 @@
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18M4 18a8 8 0 0 1 16 0M12 8V5M10.5 5h3"/></svg>
           </div>
-          <div class="vibe-card__title">הבופה</div>
-          <div class="vibe-card__body">שפע קולינרי מעוצב, צבעוני ומזמין</div>
+          <div class="vibe-card__title">The buffet</div>
+          <div class="vibe-card__body">A designed culinary abundance, colorful and inviting</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/FOOD CLOSE UP.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3v5"/></svg>
           </div>
-          <div class="vibe-card__title">המנות</div>
-          <div class="vibe-card__body">חומרי גלם טריים לביס מושלם ומדויק</div>
+          <div class="vibe-card__title">The dishes</div>
+          <div class="vibe-card__body">Fresh ingredients for a perfect, precise bite</div>
         </div>
         <div class="vibe-card reveal">
           <div class="vibe-card__media" style="background-image: url('images/FOOD ENVIRONMENT.jpg');"></div>
           <div class="vibe-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
           </div>
-          <div class="vibe-card__title">החוויה והתפריט</div>
-          <div class="vibe-card__body">תפריט עשיר שסוגר פינה לכל אורח</div>
+          <div class="vibe-card__title">The experience and the menu</div>
+          <div class="vibe-card__body">A rich menu that satisfies every guest</div>
         </div>
       </div>
     </div>
@@ -1885,37 +1880,37 @@
   <section id="bar">
     <div class="wrap bar">
       <div class="bar__text reveal">
-        <span class="label">הבר</span>
-        <h2>בר קוקטיילים ויין</h2>
+        <span class="label">The bar</span>
+        <h2>Cocktail and wine bar</h2>
         <div class="divider"></div>
 
         <div class="bar__cards">
           <div class="bar-card">
-            <span class="label">מסלול א׳</span>
-            <h3 class="bar-card__title">בר פתוח</h3>
+            <span class="label">Option A</span>
+            <h3 class="bar-card__title">Open bar</h3>
             <p class="bar-card__body">
-              תפריט אלכוהול עשיר וללא הגבלה, המשתלב כחלק ממעטפת האירוח הכוללת של הערב
+              A rich, unlimited alcohol menu, included as part of the evening's full hosting package
             </p>
           </div>
           <div class="bar-card">
-            <span class="label">מסלול ב׳</span>
-            <h3 class="bar-card__title">התאמה אישית</h3>
+            <span class="label">Option B</span>
+            <h3 class="bar-card__title">Custom build</h3>
             <p class="bar-card__body">
-              בניית תפריט משקאות מדויק לאופי האירוע שלכם, עם גמישות מלאה לאורחים במהלך הערב
+              A drinks menu tailored to your event's character, with full flexibility for guests throughout the evening
             </p>
           </div>
         </div>
 
-        <p class="bar__includes">התפריט כולל קוקטיילים, יינות, בירות ומשקאות קלים</p>
+        <p class="bar__includes">The menu includes cocktails, wines, beers and soft drinks</p>
 
-        <a class="btn btn--outline bar__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--outline bar__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
 
       <!-- REPLACE bar-img:
            Best photo = a close shot of the bar itself - bottles, glassware,
            a cocktail being poured or already plated beautifully.
            Warm backlit lighting is ideal here. -->
-      <img src="images/MAKING COCKTAILS.jpg" alt="הבר" class="bar__img reveal" style="object-fit: cover; width: 100%; height: 100%;" />
+      <img src="images/MAKING COCKTAILS.jpg" alt="The bar" class="bar__img reveal" style="object-fit: cover; width: 100%; height: 100%;" />
     </div>
 
   </section>
@@ -1926,46 +1921,46 @@
   <section class="menu-section" id="menu">
     <div class="wrap">
 
-      <div class="menu-tablist" role="tablist" aria-label="תפריט">
-        <button class="menu-tab" role="tab" id="tab-food" aria-selected="true" aria-controls="panel-food">אוכל וטאבון</button>
-        <button class="menu-tab" role="tab" id="tab-bar" aria-selected="false" aria-controls="panel-bar">אלכוהול ובר</button>
+      <div class="menu-tablist" role="tablist" aria-label="Menu">
+        <button class="menu-tab" role="tab" id="tab-food" aria-selected="true" aria-controls="panel-food">Food and taboon</button>
+        <button class="menu-tab" role="tab" id="tab-bar" aria-selected="false" aria-controls="panel-bar">Alcohol and bar</button>
       </div>
 
       <!-- ── Tab: food ── -->
       <div id="panel-food" class="menu-tabpanel" role="tabpanel" aria-labelledby="tab-food">
         <div class="menu-grid">
 
-          <!-- פתיחה ושרינג -->
+          <!-- Starters and sharing -->
           <div class="menu-category">
-            <div class="menu-category__title">פתיחה ושרינג</div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">צלחת זיתים</div><div class="menu-item__desc">תערובת זיתים בתיבול שום, שמן זית ולימון</div></div><div class="menu-item__price">₪22</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">צלחת לחמים</div><div class="menu-item__desc">לחמי מחמצת, חמאה רכה ומלח גס</div></div><div class="menu-item__price">₪24</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">חריפים של סופי</div><div class="menu-item__desc">סחוג ירוק, פלפל חריף, מטבל עגבניות ושמן זית</div></div><div class="menu-item__price">₪28</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פוקאצ׳ה</div><div class="menu-item__desc">מטבלים משתנים</div></div><div class="menu-item__price">₪34</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">צלחת קלויים</div><div class="menu-item__desc">פלפלים קלויים בתנור, גבינת ברינזה, עלי זעתר, שמן זית, מלח גס</div></div><div class="menu-item__price">₪36</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">כרוב חמים</div><div class="menu-item__desc">קרם פרש, כרוב צלוי בתנור, שמן זית, טימין, פרמזן</div></div><div class="menu-item__price">₪39</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">צלחת גבינות</div><div class="menu-item__desc">שלוש גבינות קשות, קרקרים, קנל חמאה וריבה, אגוזים</div></div><div class="menu-item__price">₪110</div></div>
+            <div class="menu-category__title">Starters and sharing</div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Olive plate</div><div class="menu-item__desc">A mix of olives seasoned with garlic, olive oil and lemon</div></div><div class="menu-item__price">₪22</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Bread plate</div><div class="menu-item__desc">Sourdough breads, soft butter and coarse salt</div></div><div class="menu-item__price">₪24</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Sophie's spicy dips</div><div class="menu-item__desc">Green zhug, hot pepper, tomato dip and olive oil</div></div><div class="menu-item__price">₪28</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Focaccia</div><div class="menu-item__desc">Rotating dips</div></div><div class="menu-item__price">₪34</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Roasted plate</div><div class="menu-item__desc">Oven-roasted peppers, brinza cheese, za'atar, olive oil, coarse salt</div></div><div class="menu-item__price">₪36</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Warm cabbage</div><div class="menu-item__desc">Creme fraiche, oven-roasted cabbage, olive oil, thyme, parmesan</div></div><div class="menu-item__price">₪39</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Cheese plate</div><div class="menu-item__desc">Three hard cheeses, crackers, butter and jam quenelle, nuts</div></div><div class="menu-item__price">₪110</div></div>
           </div>
 
-          <!-- פיצות בטאבון -->
+          <!-- Taboon pizzas -->
           <div class="menu-category">
-            <div class="menu-category__title">פיצות בטאבון</div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">מרגריטה</div><div class="menu-item__desc">רוטב עגבניות, מוצרלה, בזיליקום, פרמזן, שמן זית</div></div><div class="menu-item__price">₪65</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פיצה פונגי</div><div class="menu-item__desc">רוטב עגבניות, מוצרלה, פטריות פורטובלו צלויות, שמן כמהין</div></div><div class="menu-item__price">₪77</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פיצה פומודורינו</div><div class="menu-item__desc">רוטב עגבניות, מוצרלה, בזיליקום, שרי מיובשות, קונפי שום</div></div><div class="menu-item__price">₪77</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פיצה בזיל</div><div class="menu-item__desc">רוטב עגבניות, מוצרלה, נגיעות פסטו, זיתי קלמטה, פרמזן</div></div><div class="menu-item__price">₪78</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פיצה עזרא</div><div class="menu-item__desc">רוטב עגבניות, מוצרלה, חצילים זהובים, ריבת עמצ׳ור וכוסברה</div></div><div class="menu-item__price">₪79</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">פיצה פרסקה</div><div class="menu-item__desc">קרמי מוצרלה טריה, סלטון, עלי רוקט, שרי ובצל בוטבל בלימוני ובלסמי</div></div><div class="menu-item__price">₪85</div></div>
+            <div class="menu-category__title">Taboon pizzas</div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Margherita</div><div class="menu-item__desc">Tomato sauce, mozzarella, basil, parmesan, olive oil</div></div><div class="menu-item__price">₪65</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Funghi pizza</div><div class="menu-item__desc">Tomato sauce, mozzarella, roasted portobello mushrooms, truffle oil</div></div><div class="menu-item__price">₪77</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Pomodorino pizza</div><div class="menu-item__desc">Tomato sauce, mozzarella, basil, sun-dried cherry tomatoes, garlic confit</div></div><div class="menu-item__price">₪77</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Basil pizza</div><div class="menu-item__desc">Tomato sauce, mozzarella, pesto, kalamata olives, parmesan</div></div><div class="menu-item__price">₪78</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Ezra pizza</div><div class="menu-item__desc">Tomato sauce, mozzarella, golden eggplant, amchoor jam and cilantro</div></div><div class="menu-item__price">₪79</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Fresca pizza</div><div class="menu-item__desc">Creamy fresh mozzarella, arugula, cherry tomatoes and onion dressed in lemon and balsamic</div></div><div class="menu-item__price">₪85</div></div>
           </div>
 
-          <!-- סלטים - full width -->
+          <!-- Salads - full width -->
           <div class="menu-category menu-category--full">
-            <div class="menu-category__title">סלטים</div>
+            <div class="menu-category__title">Salads</div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0 3rem;">
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">סלקים צלויים</div><div class="menu-item__desc">קרם פרש, אגוזי מלך, ארנגולה, לימון חמצמץ, מלח גס, דבש</div></div><div class="menu-item__price">₪45</div></div>
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">סלט קפרזה</div><div class="menu-item__desc">עגבניות שרי, עלי בזיליקום, מוצרלה פרסקה, בלסמי</div></div><div class="menu-item__price">₪56</div></div>
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">סלט ירוק</div><div class="menu-item__desc">חסה לבבות, צנונית, שקדים קלויים, ויניגרט הדרים וגבינת בושה</div></div><div class="menu-item__price">₪59</div></div>
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">סלט קיסר</div><div class="menu-item__desc">2 סוגי חסה, קרוטונים, רוטב קיסר ופרמזן (אפשר להתאים להריוניות / טבעוני)</div></div><div class="menu-item__price">₪59</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Roasted beets</div><div class="menu-item__desc">Creme fraiche, walnuts, arugula, tangy lemon, coarse salt, honey</div></div><div class="menu-item__price">₪45</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Caprese salad</div><div class="menu-item__desc">Cherry tomatoes, basil leaves, fresh mozzarella, balsamic</div></div><div class="menu-item__price">₪56</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Green salad</div><div class="menu-item__desc">Baby gem lettuce, radish, roasted almonds, citrus vinaigrette and bucha cheese</div></div><div class="menu-item__price">₪59</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Caesar salad</div><div class="menu-item__desc">Two kinds of lettuce, croutons, Caesar dressing and parmesan (can be adapted for pregnant guests / vegan)</div></div><div class="menu-item__price">₪59</div></div>
             </div>
           </div>
 
@@ -1976,34 +1971,34 @@
       <div id="panel-bar" class="menu-tabpanel" role="tabpanel" aria-labelledby="tab-bar" aria-hidden="true">
         <div class="menu-grid">
 
-          <!-- קוקטיילים -->
+          <!-- Cocktails -->
           <div class="menu-category">
-            <div class="menu-category__title">קוקטיילים</div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">עזרא סאוור</div><div class="menu-item__desc">ג׳ין, סאוור אפל, ורמוט יבש, מיץ לימון, מי סוכר</div></div><div class="menu-item__price">₪55</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">מוחיטו</div><div class="menu-item__desc">רום לבן, מיץ לימון, מי סוכר, נענע</div></div><div class="menu-item__price">₪55</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">ג׳סמין</div><div class="menu-item__desc">ג׳ין, קמפרי, טריפל סק, מיץ לימון</div></div><div class="menu-item__price">₪55</div></div>
-            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">נגרוני</div><div class="menu-item__desc">קמפרי, ג׳ין, ורמוט מתוק</div></div><div class="menu-item__price">₪55</div></div>
+            <div class="menu-category__title">Cocktails</div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Ezra Sour</div><div class="menu-item__desc">Gin, apple sour, dry vermouth, lemon juice, simple syrup</div></div><div class="menu-item__price">₪55</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Mojito</div><div class="menu-item__desc">White rum, lemon juice, simple syrup, mint</div></div><div class="menu-item__price">₪55</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Jasmine</div><div class="menu-item__desc">Gin, Campari, triple sec, lemon juice</div></div><div class="menu-item__price">₪55</div></div>
+            <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Negroni</div><div class="menu-item__desc">Campari, gin, sweet vermouth</div></div><div class="menu-item__price">₪55</div></div>
           </div>
 
-          <!-- יין -->
+          <!-- Wine -->
           <div class="menu-category">
-            <div class="menu-category__title">יין · כוס או בקבוק</div>
-            <div class="menu-sublabel">לבן</div>
-            <div class="wine-item"><div class="wine-item__name">אלזה שרדונה</div><div class="wine-item__prices">כוס <strong>₪42</strong> · בקבוק <strong>₪189</strong></div></div>
-            <div class="wine-item"><div class="wine-item__name">לימה ויניו ורדה</div><div class="wine-item__prices">כוס <strong>₪44</strong> · בקבוק <strong>₪198</strong></div></div>
-            <div class="wine-item"><div class="wine-item__name">בסט באדיז סוביניון בלאן</div><div class="wine-item__prices">כוס <strong>₪46</strong> · בקבוק <strong>₪207</strong></div></div>
-            <div class="menu-sublabel">אדום ורוזה</div>
-            <div class="wine-item"><div class="wine-item__name">מונטפלצ׳יאנו אדום</div><div class="wine-item__prices">כוס <strong>₪44</strong> · בקבוק <strong>₪198</strong></div></div>
-            <div class="wine-item"><div class="wine-item__name">גראנצ׳ה רוזה</div><div class="wine-item__prices">כוס <strong>₪44</strong> · בקבוק <strong>₪198</strong></div></div>
+            <div class="menu-category__title">Wine · glass or bottle</div>
+            <div class="menu-sublabel">White</div>
+            <div class="wine-item"><div class="wine-item__name">Alsace Chardonnay</div><div class="wine-item__prices">Glass <strong>₪42</strong> · Bottle <strong>₪189</strong></div></div>
+            <div class="wine-item"><div class="wine-item__name">Lima Vinho Verde</div><div class="wine-item__prices">Glass <strong>₪44</strong> · Bottle <strong>₪198</strong></div></div>
+            <div class="wine-item"><div class="wine-item__name">Best Buddies Sauvignon Blanc</div><div class="wine-item__prices">Glass <strong>₪46</strong> · Bottle <strong>₪207</strong></div></div>
+            <div class="menu-sublabel">Red and rose</div>
+            <div class="wine-item"><div class="wine-item__name">Montepulciano red</div><div class="wine-item__prices">Glass <strong>₪44</strong> · Bottle <strong>₪198</strong></div></div>
+            <div class="wine-item"><div class="wine-item__name">Grenache rose</div><div class="wine-item__prices">Glass <strong>₪44</strong> · Bottle <strong>₪198</strong></div></div>
           </div>
 
-          <!-- מעורבבים ובירות - full width -->
+          <!-- Mixers and beers - full width -->
           <div class="menu-category menu-category--full">
-            <div class="menu-category__title">מעורבבים ובירות</div>
+            <div class="menu-category__title">Mixers and beers</div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0 3rem;">
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">מנה קמפרי או ערק</div></div><div class="menu-item__price">₪38</div></div>
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">מנה ג׳ין, וודקה, וויסקי, רום, טקילה</div><div class="menu-item__desc">תוספת קלה ₪10 · תוספת אקסל או חמוציות ₪12</div></div><div class="menu-item__price">₪42</div></div>
-              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">בירה סאן מיגל או הייניקן</div></div><div class="menu-item__price">₪30</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Campari or arak shot</div></div><div class="menu-item__price">₪38</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">Gin, vodka, whiskey, rum, tequila shot</div><div class="menu-item__desc">Soft mixer +₪10 · energy drink or cranberry +₪12</div></div><div class="menu-item__price">₪42</div></div>
+              <div class="menu-item"><div class="menu-item__info"><div class="menu-item__name">San Miguel or Heineken beer</div></div><div class="menu-item__price">₪30</div></div>
             </div>
           </div>
 
@@ -2025,46 +2020,46 @@
         <span class="stats-frame__corner stats-frame__corner--br"></span>
 
         <div class="sec-head">
-          <span class="label">עזרא במספרים</span>
-          <h2>הניסיון עושה את ההבדל</h2>
+          <span class="label">Ezra by the numbers</span>
+          <h2>Experience makes the difference</h2>
         </div>
 
         <div class="stat-band">
           <div class="stat-cell">
             <div class="stat__num">800+</div>
-            <div class="stat__label">אירועים</div>
+            <div class="stat__label">Events</div>
           </div>
           <div class="stat-cell">
             <div class="stat__num">40,000+</div>
-            <div class="stat__label">אורחים</div>
+            <div class="stat__label">Guests</div>
           </div>
           <div class="stat-cell">
             <div class="stat__num">3+</div>
-            <div class="stat__label">שנים בשטח</div>
+            <div class="stat__label">Years in the field</div>
           </div>
         </div>
 
         <div class="stats-reviews">
           <div class="rev-stars-lead">
-            <span class="rev-stars" aria-label="חמישה כוכבים">
+            <span class="rev-stars" aria-label="Five stars">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
             </span>
-            <span class="rev-lead-text">ביקורות אמיתיות מ‑Google</span>
+            <span class="rev-lead-text">Real reviews from Google</span>
           </div>
           <div class="rev-marquee reveal" id="revMarquee">
             <div class="rev-track" id="revTrack"></div>
           </div>
-          <a class="btn btn--outline reveal" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>לקריאת הביקורות ב‑Google</a>
+          <a class="btn btn--outline reveal" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>Read the reviews on Google</a>
         </div>
 
         <div class="pills-row">
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>פריים לוקיישן בתל אביב</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>מרחק קצר מהרכבת הקלה</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>גישה מרכזית לאוטובוסים</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Prime location in Tel Aviv</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A short walk from the light rail</span>
+          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Central bus access</span>
         </div>
 
         <div class="map-container">
@@ -2076,18 +2071,18 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
+            title="Map of Ezra's location, Abarbanel 38, Florentin"
           ></iframe>
           <div class="map-nav">
-            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
+            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="Navigate with Google Maps">
               <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Google Maps</span>
             </a>
-            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
+            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="Navigate with Waze">
               <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Waze</span>
             </a>
-            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
+            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="Navigate with Moovit">
               <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Moovit</span>
             </a>
@@ -2095,7 +2090,7 @@
         </div>
       </div>
 
-      <a class="btn btn--outline reveal" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+      <a class="btn btn--outline reveal" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
   </section>
 
@@ -2105,26 +2100,26 @@
   <section id="gallery" class="gallery section-soft">
     <div class="wrap center">
       <div class="sec-head reveal">
-        <span class="label">גלריה</span>
-        <h2>רגעים מתוך העזרא</h2>
-        <p>הצצה אל הערבים, האוכל והאווירה שלנו</p>
+        <span class="label">Gallery</span>
+        <h2>Moments from Ezra</h2>
+        <p>A glimpse into our evenings, food and atmosphere</p>
       </div>
 
       <div class="gallery__showcase reveal">
         <div class="gallery__row gallery__row--top">
-          <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" />
-          <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" />
-          <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" />
+          <img src="images/gallery/g01.jpg" alt="A moment from an event at Ezra" />
+          <img src="images/gallery/g02.jpg" alt="A moment from an event at Ezra" />
+          <img src="images/gallery/g03.jpg" alt="A moment from an event at Ezra" />
         </div>
-        <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="פתחו את הגלריה המלאה">
+        <div class="gallery__teaser" id="galleryMoreBtn" role="button" tabindex="0" aria-label="Open the full gallery">
           <div class="gallery__row">
-            <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" />
-            <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" />
-            <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" />
+            <img src="images/gallery/g04.jpg" alt="A moment from an event at Ezra" />
+            <img src="images/gallery/g05.jpg" alt="A moment from an event at Ezra" />
+            <img src="images/gallery/g06.jpg" alt="A moment from an event at Ezra" />
           </div>
           <div class="gallery__fade">
             <span class="gallery__more">
-              <span>לכל הרגעים</span>
+              <span>See all moments</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
             </span>
           </div>
@@ -2136,43 +2131,43 @@
   <!-- ============================================================
        GALLERY MODAL (full-screen)
   ============================================================ -->
-  <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="גלריית תמונות - עזרא" hidden>
+  <div class="gallery-modal" id="galleryModal" role="dialog" aria-modal="true" aria-label="Photo gallery, Ezra" hidden>
     <div class="gallery-modal__panel">
     <div class="gallery-modal__bar">
       <button class="gallery-modal__back" id="galleryClose" type="button">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        <span>חזרה לאתר</span>
+        <span>Back to site</span>
       </button>
-      <span class="gallery-modal__title">רגעים מתוך העזרא</span>
+      <span class="gallery-modal__title">Moments from Ezra</span>
     </div>
     <div class="gallery-modal__scroll">
       <div class="gallery-modal__grid">
-        <img src="images/gallery/g01.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g02.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g03.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g04.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g05.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g06.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g07.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g08.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g09.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g10.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g11.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
-        <img src="images/gallery/g12.jpg" alt="רגע מאירוע בעזרא" loading="lazy" />
+        <img src="images/gallery/g01.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g02.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g03.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g04.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g05.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g06.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g07.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g08.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g09.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g10.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g11.jpg" alt="A moment from an event at Ezra" loading="lazy" />
+        <img src="images/gallery/g12.jpg" alt="A moment from an event at Ezra" loading="lazy" />
       </div>
     </div>
     </div>
   </div>
 
   <!-- Gallery lightbox (single enlarged photo) -->
-  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="תצוגת תמונה" hidden>
-    <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="סגירה">
+  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Image view" hidden>
+    <button class="gallery-lightbox__close" id="galleryLightboxClose" type="button" aria-label="Close">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
-    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryLbPrev" type="button" aria-label="התמונה הקודמת">
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryLbPrev" type="button" aria-label="Previous image">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </button>
-    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryLbNext" type="button" aria-label="התמונה הבאה">
+    <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryLbNext" type="button" aria-label="Next image">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
     </button>
     <img id="galleryLightboxImg" src="" alt="" />
@@ -2185,30 +2180,30 @@
     <!-- REPLACE: drop the bottom-section background image here (set the url). -->
     <div class="contact__bg" style="background-image: url('images/contact-bg.jpg');"></div>
     <div class="wrap">
-      <span class="label reveal">יצירת קשר</span>
-      <h2 class="reveal">האירוע שלכם מתחיל כאן</h2>
+      <span class="label reveal">Contact</span>
+      <h2 class="reveal">Your event starts here</h2>
       <p class="contact__sub reveal">
-        נשמח לשמוע מכם, להבין את הצרכים שלכם ולתכנן יחד חוויה מדויקת וייחודית עבור האורחים שלכם.
+        We'd love to hear from you, understand your needs and plan a precise, one-of-a-kind experience for your guests, together.
       </p>
       <div class="contact__btns reveal">
-        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
+        <a class="btn btn--fill" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
 
       <div class="contact__social reveal">
         <!-- Instagram -->
-        <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="אינסטגרם של עזרא">
+        <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="Ezra on Instagram">
           <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.43.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.43.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.43-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.43-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.52.01-4.76.07-1.15.05-1.77.24-2.18.4-.55.21-.94.47-1.35.88-.41.41-.67.8-.88 1.35-.16.41-.35 1.03-.4 2.18-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.05 1.15.24 1.77.4 2.18.21.55.47.94.88 1.35.41.41.8.67 1.35.88.41.16 1.03.35 2.18.4 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c1.15-.05 1.77-.24 2.18-.4.55-.21.94-.47 1.35-.88.41-.41.67-.8.88-1.35.16-.41.35-1.03.4-2.18.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.05-1.15-.24-1.77-.4-2.18-.21-.55-.47-.94-.88-1.35-.41-.41-.8-.67-1.35-.88-.41-.16-1.03-.35-2.18-.4-1.24-.06-1.61-.07-4.76-.07zm0 2.76a5.46 5.46 0 1 0 0 10.92 5.46 5.46 0 0 0 0-10.92zm0 9a3.54 3.54 0 1 1 0-7.08 3.54 3.54 0 0 1 0 7.08zm5.68-9.23a1.27 1.27 0 1 1-2.55 0 1.27 1.27 0 0 1 2.55 0z"/>
           </svg>
         </a>
         <!-- WhatsApp -->
-        <a class="social-icon social-icon--wa" href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="וואטסאפ">
+        <a class="social-icon social-icon--wa" href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.42 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24zm-4.5 4.43c-.21 0-.55.08-.84.39-.29.31-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.22 3.39 5.38 4.62.75.29 1.34.46 1.8.59.76.24 1.45.21 1.99.13.61-.09 1.87-.76 2.13-1.5.26-.74.26-1.37.18-1.5-.08-.13-.29-.21-.61-.37-.31-.16-1.87-.92-2.16-1.03-.29-.1-.5-.16-.71.16-.21.31-.81 1.03-1 1.24-.18.21-.37.24-.68.08-.31-.16-1.34-.49-2.55-1.57a9.6 9.6 0 0 1-1.77-2.2c-.18-.31-.02-.48.14-.64.14-.14.31-.37.47-.55.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.61-.51-.53-.71-.54l-.6-.01z"/>
           </svg>
         </a>
         <!-- Email -->
-        <a class="social-icon social-icon--mail" href="mailto:eylam@ezratlv.com" aria-label="שלחו מייל">
+        <a class="social-icon social-icon--mail" href="mailto:eylam@ezratlv.com" aria-label="Send an email">
           <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm.6 1.8L12 12.4l8.4-5.6H3.6zM20.2 8.1l-7.65 5.1a1 1 0 0 1-1.1 0L3.8 8.1v9.1h16.4V8.1z"/>
           </svg>
@@ -2216,7 +2211,7 @@
       </div>
 
       <div class="reveal">
-        <span class="contact__meta">אברבנאל 38, פלורנטין, תל אביב&nbsp; ·&nbsp; @ezratlv</span>
+        <span class="contact__meta">Abarbanel 38, Florentin, Tel Aviv&nbsp; ·&nbsp; @ezratlv</span>
       </div>
     </div>
   </section>
@@ -2226,11 +2221,11 @@
   ============================================================ -->
   <footer class="footer">
     <div class="footer__legal">
-      <a href="privacy">מדיניות פרטיות</a>
-      <a href="terms">תקנון ותנאי שימוש</a>
-      <a href="accessibility">הצהרת נגישות</a>
+      <a href="english-privacy">Privacy Policy</a>
+      <a href="english-terms">Terms of Use</a>
+      <a href="english-accessibility">Accessibility Statement</a>
     </div>
-    עזרא תל אביב © 2026 - כל הזכויות שמורות
+    Ezra © 2026 · All rights reserved
   </footer>
 
   <script>
@@ -2250,7 +2245,7 @@
       const setOpen = (open) => {
         nav.setAttribute('data-menu', open ? 'open' : 'closed');
         burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger.setAttribute('aria-label', open ? 'סגירת תפריט' : 'פתיחת תפריט');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         document.body.style.overflow = open ? 'hidden' : '';
       };
 
@@ -2409,8 +2404,8 @@
       document.addEventListener('keydown', (e) => {
         if (lightbox && !lightbox.hidden) {
           if (e.key === 'Escape')     { closeLightbox(); return; }
-          if (e.key === 'ArrowLeft')  { lbStep(1);  return; }   // RTL: left = next
-          if (e.key === 'ArrowRight') { lbStep(-1); return; }
+          if (e.key === 'ArrowLeft')  { lbStep(-1); return; }   // LTR: left = previous
+          if (e.key === 'ArrowRight') { lbStep(1);  return; }
           return;
         }
         if (e.key === 'Escape' && !modal.hidden) close();
@@ -2439,12 +2434,12 @@
     ============================================================ */
     (function () {
       const REVIEWS = [
-        { name: "Melissa Menashe", role: "יום הולדת",  stars: 5, text: "מקום מושלם! חגגתי שם יום הולדת עם 30 חברים בערך, אווירה מהממת, נוח, יפה, יש מקום לרקוד ולעמדת דיג'יי. הבעלים שירותיים, אמינים והפכו את החוויה למושלמת. תודה!! ממליצה ממש" },
-        { name: "Liem Shayo",      role: "לקוח קבוע",   stars: 5, text: "תמיד נותנים אווירה מדהימה ושירות מעולה, עסק משפחתי שרואים שמושקעת בו הרבה נשמה!" },
-        { name: "Uri Kosman",      role: "אירוע פרטי",  stars: 5, text: "מקום שמייצר בדיוק את החוויה שמצפים לה מאירוע פרטי מתאים לאופי שלך, קוקטיילים ברמה גבוהה מאוד שקשה למצוא בארץ, אוכל שפשוט חוויה ובכללי מקום שפשוט עושה כיף וחוויה שזוכרים" },
-        { name: "Noam Avraham",    role: "אירוע פרטי",  stars: 5, text: "מקום שהוא כולו חוויה ושמחה. בנצי ורום מארחים יוצאי דופן וענו על כל בקשותיי. מומלץ מאוד" },
-        { name: "ניר פרוסט",       role: "לקוח חוזר",   stars: 5, text: "עשיתי מספר אירועים אצל רום, וזה פשוט המקום המושלם. הצוות חברתי וכיפי, האוכל מעולה, האווירה טובה ומייצרת משהו מיוחד. אל תחשבו פעמיים." },
-        { name: "Ella Tagar",      role: "יום הולדת",   stars: 5, text: "סגרתי אירוע פרטי ליום הולדת, נתחיל קודם כל מעילם המושלמת שדאגה לכל פרט בהכנות. לא הפסקתי לשגע אותה והיא לא התייאשה ממני, פירטה לי הכל לפרטי פרטים ודאגה תמיד לוודא שאנחנו באותו ראש! הגענו מוקדם לסדר וישר קיבלו אותנו בפנים חמות. המקום היה בול בגודל, הפיצות היו לא נורמליות והאוכל בכללי היה מדהים. אפילו שנה אחרי האירוע, כל פעם שעברתי שם ישר זיהו אותי ונתנו תחושה של בית. מתה כבר לחזור לעוד אירועים!!!" }
+        { name: "Melissa Menashe", role: "Birthday",  stars: 5, text: "A perfect place! I celebrated a birthday there with about 30 friends, a gorgeous atmosphere, comfortable, beautiful, room to dance and a DJ booth. The owners are attentive, reliable and made the experience perfect. Thank you!! Highly recommend" },
+        { name: "Liem Shayo",      role: "Regular customer",   stars: 5, text: "They always deliver an amazing atmosphere and excellent service, a family business you can tell has a lot of soul put into it!" },
+        { name: "Uri Kosman",      role: "Private event",  stars: 5, text: "A place that creates exactly the experience you expect from a private event suited to your style, very high-end cocktails that are hard to find here, food that is simply an experience, and overall a place that is just fun and a memory you keep" },
+        { name: "Noam Avraham",    role: "Private event",  stars: 5, text: "A place that is all experience and joy. Bentzi and Rom are exceptional hosts and met all my requests. Highly recommended" },
+        { name: "Nir Frost",       role: "Returning customer",   stars: 5, text: "I've held several events with Rom, and it's simply the perfect place. The team is friendly and fun, the food is excellent, the atmosphere is great and creates something special. Don't think twice." },
+        { name: "Ella Tagar",      role: "Birthday",   stars: 5, text: "I booked a private birthday event. First of all, Eilam was perfect and took care of every detail in the prep. I kept driving her crazy and she never gave up on me, walked me through everything in full detail and always made sure we were on the same page! We arrived early to set up and were welcomed warmly right away. The space was exactly the right size, the pizzas were insane and the food overall was amazing. Even a year after the event, every time I passed by they recognized me right away and made me feel at home. Can't wait to come back for more events!!!" }
       ];
 
       const track = document.getElementById('revTrack');
@@ -2457,13 +2452,13 @@
       function card(r) {
         const n = Math.max(1, Math.min(5, r.stars || 5));
         return '<article class="rev-card">' +
-          '<span class="rev-card__stars" aria-label="' + n + ' כוכבים">' + STAR.repeat(n) + '</span>' +
+          '<span class="rev-card__stars" aria-label="' + n + ' stars">' + STAR.repeat(n) + '</span>' +
           '<p class="rev-card__text">' + esc(r.text) + '</p>' +
           '<div class="rev-card__person">' +
             '<span class="rev-card__avatar" aria-hidden="true">' + esc(initial(r.name)) + '</span>' +
             '<div><div class="rev-card__name">' + esc(r.name) + '</div>' +
             '<div class="rev-card__role">' + esc(r.role) + '</div></div>' +
-            '<span class="rev-card__g" aria-label="ביקורת מ-Google">G</span>' +
+            '<span class="rev-card__g" aria-label="Review from Google">G</span>' +
           '</div></article>';
       }
 
@@ -2527,59 +2522,59 @@
     .book-terms a:hover { color: var(--gold-light); }
   </style>
 
-  <div class="book-modal" id="privateModal" role="dialog" aria-modal="true" aria-label="בדיקת זמינות לאירוע פרטי" hidden>
+  <div class="book-modal" id="privateModal" role="dialog" aria-modal="true" aria-label="Check availability for a private event" hidden>
     <div class="book-modal__panel cf-panel">
-      <button class="cf-close" id="privateClose" type="button" aria-label="סגירה">
+      <button class="cf-close" id="privateClose" type="button" aria-label="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
       <div class="cf-scroll">
         <div class="cf-head">
-          <span class="label">בדיקת זמינות</span>
-          <h3 class="cf-title">נשמח לחגוג איתכם</h3>
-          <p class="cf-sub">השאירו פרטים ונחזור אליכם לבדוק זמינות לתאריך שלכם ולבנות הצעה שמתאימה בדיוק לאירוע.</p>
+          <span class="label">Check availability</span>
+          <h3 class="cf-title">We'd love to celebrate with you</h3>
+          <p class="cf-sub">Leave your details and we'll get back to you to check availability for your date and build an offer that fits your event exactly.</p>
         </div>
 
         <form class="book-form" id="privateForm">
           <div class="book-field--row">
-            <div class="book-field"><label for="pfName">שם מלא</label><input id="pfName" type="text" autocomplete="name" required /></div>
-            <div class="book-field"><label for="pfPhone">טלפון</label><input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
+            <div class="book-field"><label for="pfName">Full name</label><input id="pfName" type="text" autocomplete="name" required /></div>
+            <div class="book-field"><label for="pfPhone">Phone</label><input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
           </div>
           <div class="book-field--row">
-            <div class="book-field"><label for="pfEmail">אימייל</label><input id="pfEmail" type="email" inputmode="email" autocomplete="email" required /></div>
-            <div class="book-field"><label for="pfGuests">מספר אורחים</label><input id="pfGuests" type="number" inputmode="numeric" min="1" placeholder="לדוגמה 30" required /></div>
+            <div class="book-field"><label for="pfEmail">Email</label><input id="pfEmail" type="email" inputmode="email" autocomplete="email" required /></div>
+            <div class="book-field"><label for="pfGuests">Number of guests</label><input id="pfGuests" type="number" inputmode="numeric" min="1" placeholder="e.g. 30" required /></div>
           </div>
 
           <div class="book-field">
-            <label>סוג האירוע</label>
-            <div class="cf-pills" id="cfpType" role="group" aria-label="סוג האירוע">
-              <button type="button" class="cf-pill active" data-val="יום הולדת">יום הולדת</button>
-              <button type="button" class="cf-pill" data-val="מסיבת רווקים/ רווקות">רווקים/רווקות</button>
-              <button type="button" class="cf-pill" data-val="אירוסין">אירוסין</button>
-              <button type="button" class="cf-pill" data-val="מסיבת פרידה">מסיבת פרידה</button>
-              <button type="button" class="cf-pill" data-val="מסיבה">מסיבה</button>
-              <button type="button" class="cf-pill" data-val="אחר">אחר</button>
+            <label>Event type</label>
+            <div class="cf-pills" id="cfpType" role="group" aria-label="Event type">
+              <button type="button" class="cf-pill active" data-val="יום הולדת">Birthday</button>
+              <button type="button" class="cf-pill" data-val="מסיבת רווקים/ רווקות">Bachelor/ette</button>
+              <button type="button" class="cf-pill" data-val="אירוסין">Engagement</button>
+              <button type="button" class="cf-pill" data-val="מסיבת פרידה">Farewell party</button>
+              <button type="button" class="cf-pill" data-val="מסיבה">Party</button>
+              <button type="button" class="cf-pill" data-val="אחר">Other</button>
             </div>
           </div>
 
           <div class="book-field">
-            <label for="pfDate">תאריך האירוע המבוקש</label>
+            <label for="pfDate">Requested event date</label>
             <input id="pfDate" type="date" required />
           </div>
 
           <div class="book-field">
-            <label>שעת האירוע</label>
-            <div class="cf-pills" id="cfpTime" role="group" aria-label="שעת האירוע">
-              <button type="button" class="cf-pill" data-val="בוקר">בוקר</button>
-              <button type="button" class="cf-pill" data-val="צהריים">צהריים</button>
-              <button type="button" class="cf-pill" data-val="ערב">ערב</button>
-              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+            <label>Event time</label>
+            <div class="cf-pills" id="cfpTime" role="group" aria-label="Event time">
+              <button type="button" class="cf-pill" data-val="בוקר">Morning</button>
+              <button type="button" class="cf-pill" data-val="צהריים">Afternoon</button>
+              <button type="button" class="cf-pill" data-val="ערב">Evening</button>
+              <button type="button" class="cf-pill" data-val="גמיש">Flexible</button>
             </div>
           </div>
 
           <div class="book-field">
-            <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
-            <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
-              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">עד 24</button>
+            <label>Age range of attendees <span class="cf-hint">(you can choose several)</span></label>
+            <div class="cf-pills" id="cfpAge" role="group" aria-label="Age range" data-multi="1">
+              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">Up to 24</button>
               <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
               <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
               <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
@@ -2588,39 +2583,39 @@
           </div>
 
           <div class="book-field">
-            <label>מתי נוח שנחזור אליכם?</label>
-            <div class="cf-pills" id="cfpCall" role="group" aria-label="זמן נוח לחזרה">
-              <button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">בוקר · 9:00-12:00</button>
-              <button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">צהריים · 12:00-17:00</button>
-              <button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">גמיש / בכל זמן</button>
+            <label>When is a good time to call you back?</label>
+            <div class="cf-pills" id="cfpCall" role="group" aria-label="Best time to call">
+              <button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">Morning · 9:00-12:00</button>
+              <button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">Afternoon · 12:00-17:00</button>
+              <button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">Flexible / any time</button>
             </div>
           </div>
 
           <div class="book-field">
-            <label for="pfNotes">משהו שחשוב שנדע? (לא חובה)</label>
-            <textarea id="pfNotes" rows="2" placeholder="אופי האירוע, בקשות מיוחדות, צרכים תזונתיים..."></textarea>
+            <label for="pfNotes">Anything we should know? (optional)</label>
+            <textarea id="pfNotes" rows="2" placeholder="Event style, special requests, dietary needs..."></textarea>
           </div>
 
           <label class="book-check book-check--sm" for="pfConsent">
             <input type="checkbox" id="pfConsent" />
             <span class="book-check__text">
-              <b>אישור קבלת דיוור</b>
-              <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
+              <b>Marketing consent</b>
+              <span>I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span>
             </span>
           </label>
 
-          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
-          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">שליחת הבקשה</button>
-          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Do not fill this field</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
+          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">Send request</button>
+          <p class="book-terms">By submitting this form I agree to the <a href="english-terms" target="_blank" rel="noopener">Terms of Use</a> and <a href="english-privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
         </form>
 
         <div class="cf-done" id="privateDone" hidden>
           <div class="cf-done__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           </div>
-          <h3>קיבלנו, תודה!</h3>
-          <p>נחזור אליכם בהקדם לבדוק זמינות ולתאם את כל הפרטים.</p>
-          <button type="button" class="btn btn--outline" id="privateDoneClose">סגירה</button>
+          <h3>Got it, thank you!</h3>
+          <p>We'll get back to you shortly to check availability and arrange all the details.</p>
+          <button type="button" class="btn btn--outline" id="privateDoneClose">Close</button>
         </div>
       </div>
     </div>
@@ -2650,7 +2645,7 @@
         if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
       }
 
-      // Every old "לבדיקת זמינות" CTA (the wkf.ms links) now opens this popup.
+      // Every old availability CTA (the wkf.ms links) now opens this popup.
       document.querySelectorAll('a[href^="https://wkf.ms"]').forEach(el =>
         el.addEventListener('click', e => { e.preventDefault(); open(); }));
       document.getElementById('privateClose').addEventListener('click', close);
@@ -2737,9 +2732,9 @@
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
 
   <!-- Cookie consent banner -->
-  <div class="cookie-bar" id="cookieBar" role="region" aria-label="הודעת עוגיות" hidden>
-    <p class="cookie-bar__text">אנחנו משתמשים בעוגיות (Cookies) כדי שהאתר יעבוד כמו שצריך, לנתח שימוש ולהציג תוכן ופרסום מותאמים. המשך הגלישה באתר מהווה הסכמה. <a href="privacy">למדיניות העוגיות</a></p>
-    <button type="button" class="cookie-bar__btn" id="cookieOk">מאשר/ת</button>
+  <div class="cookie-bar" id="cookieBar" role="region" aria-label="Cookie notice" hidden>
+    <p class="cookie-bar__text">We use cookies so the site works properly, to analyze usage and to show tailored content and ads. Continued use of the site constitutes consent. <a href="english-privacy">Cookie policy</a></p>
+    <button type="button" class="cookie-bar__btn" id="cookieOk">Accept</button>
   </div>
   <style>
     .cookie-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 9000;

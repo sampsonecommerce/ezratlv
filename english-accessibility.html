@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Accessibility Statement | Ezra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+  <nav class="legal-nav">
+    <a class="legal-nav__logo" href="english-index"><img src="images/logo.png" alt="Ezra" /></a>
+    <a class="legal-nav__back" href="english-index">Back to site</a>
+  </nav>
+
+  <main class="legal">
+    <div class="legal__kicker">Ezra</div>
+    <h1>Accessibility Statement</h1>
+    <div class="legal__updated">Updated: June 2026</div>
+
+    <p>Ezra, a private event space in Florentin hosting private events and company events, places great importance on providing equal and accessible service to all clients, including people with disabilities.</p>
+
+    <h2>Website accessibility</h2>
+    <p>The site was made accessible in accordance with Israeli Standard 5568 (based on the WCAG 2.1 guidelines at level AA), using an accessibility component that allows adjustments such as enlarging the font, changing color contrast, stopping animations, highlighting links and additional adaptations. The site supports keyboard navigation and common screen readers.</p>
+
+    <h2>Disclaimer</h2>
+    <p>Despite our efforts, there may be elements or pages on the site that have not yet been fully made accessible. We continue to work on improving accessibility on an ongoing basis.</p>
+
+    <h2>Physical accessibility of the venue</h2>
+    <p>The venue is located at Abarbanel 38, Tel Aviv-Yafo. An accessibility inspection was carried out at the venue by a certified accessibility consultant (a consultant for the accessibility of buildings, infrastructure and environment, and for service accessibility). Since the area serving the public at the venue is smaller than 150 sq m, the business is exempt from some of the physical accessibility adaptations, in accordance with the service accessibility regulations.</p>
+    <p>Nevertheless, out of a commitment to accessible service, the venue has accessibility arrangements that include, among others: disabled parking nearby, marking and handrails on the stairs, suitable lighting, appropriate signage, and adapted service procedures (including the option to be assisted by a service animal and a companion). Clients who need a particular accessibility arrangement are welcome to contact us in advance and we will be glad to help as much as possible.</p>
+
+    <h2>Accessibility contact</h2>
+    <p>The accessibility coordinator at the business: Bentzion<br />
+    Phone: <a href="tel:0502531110">050-2531110</a><br />
+    Email: <a href="mailto:accessibility@ezratlv.com">accessibility@ezratlv.com</a></p>
+    <p>We are glad to receive enquiries, comments and requests regarding accessibility, and to address them promptly.</p>
+  </main>
+
+  <footer class="legal-foot">
+    <div class="legal-foot__links">
+      <a href="english-privacy">Privacy Policy</a>
+      <a href="english-terms">Terms of Use</a>
+      <a href="english-accessibility">Accessibility Statement</a>
+    </div>
+    Ezra © 2026 · All rights reserved
+  </footer>
+  <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
+  <script>
+    (function () {
+      if (!(location.protocol === 'file:' || /\.html$/i.test(location.pathname))) return;
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a'); if (!a) return;
+        var href = a.getAttribute('href');
+        if (!href || a.target === '_blank' || /^(https?:|mailto:|tel:|#|javascript:)/i.test(href)) return;
+        var clean = href.replace(/^\//, '').split('#')[0].split('?')[0];
+        if (clean === '') { e.preventDefault(); location.href = 'english-index.html'; return; }
+        if (/\.[a-z0-9]+$/i.test(clean)) return;
+        e.preventDefault();
+        location.href = clean + '.html';
+      });
+    })();
+  </script>
+</body>
+</html>
