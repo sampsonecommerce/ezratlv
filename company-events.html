@@ -3854,7 +3854,20 @@
 
       // ── Placeholder availability. Replace BOOKED + takenSlots() with live data later.
       const BOOKED = [];
-      (function seedDemo() { const d = new Date(today); let n = 0; while (n < 2) { d.setDate(d.getDate() + 1); if (d.getDay() === 6) { BOOKED.push(key(d)); n++; } } })();
+      // live availability from Monday (committed events on the shared Events Form calendar)
+      (function loadBookingAvailability() {
+        const ep = window.EZRA_AVAILABILITY_ENDPOINT;
+        if (!ep) return;
+        fetch(ep, { method: 'GET' })
+          .then(r => (r.ok ? r.json() : null))
+          .then(j => {
+            if (!j) return;
+            const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
+            BOOKED.length = 0; arr.forEach(dt => BOOKED.push(dt));
+            renderCal();
+          })
+          .catch(() => {});
+      })();
       function takenSlots(dateKey, count) {
         let h = 0; for (let i = 0; i < dateKey.length; i++) h = (h * 31 + dateKey.charCodeAt(i)) >>> 0;
         const taken = new Set();
@@ -4186,8 +4199,8 @@
       const PORTION = {
         // units: pizzas / sandwiches / pastries are served on trays (מגשים); everything else is מנות
         taboon:{mult:0.3,unit:'מגשים'}, salad:{mult:0.25,unit:'מנות'}, sandwich:{mult:0.2,unit:'מגשים'},
-        pastry:{mult:0.1,unit:'מגשים'}, bread:{mult:0.15,unit:'מנות'}, cheese:{mult:0.1,unit:'מנות'},
-        roasted:{mult:0.1,unit:'מנות'}, nibble:{mult:0.3,unit:'מנות',perType:true}, premium:{mult:0.15,unit:'מנות',perType:true},
+        pastry:{mult:0.1,unit:'מגשים'}, bread:{mult:0.20,unit:'מנות'}, cheese:{mult:0.1,unit:'מנות'},
+        roasted:{mult:0.1,unit:'מנות'}, nibble:{mult:0.1,unit:'מנות',perType:true}, premium:{mult:0.15,unit:'מנות',perType:true},
       };
       const isBarCat = t => /בר|אלכוהול|קוקטייל|שתייה|קפה|תה/.test(t);
       const portionRnd = x => Math.round(x);
@@ -4237,6 +4250,24 @@
         const c = /טאבון|פיצ/.test(catLabel) ? PORTION.taboon : PORTION.salad;
         const q = Math.max(names.length, portionRnd(g * c.mult));
         return { isBar:false, qtyLabel: q + ' ' + c.unit, breakdown: perDishRows(names, q, c.unit) };
+      }
+      // Contract food-text for package leads: one line per dish + its computed quantity, in the
+      // manager's byte-exact format. Reuses MENUS / splitDish / isBarCat / categoryPortions above.
+      // Bar/drink sections are excluded; the trailing space after each "." is intentional.
+      function buildFoodText(plan, menu, guests, notes) {
+        const secs = (MENUS[plan] && MENUS[plan][menu]) || [];
+        const lines = [];
+        for (const sec of secs) {
+          if (isBarCat(sec.t)) continue;
+          const { breakdown } = categoryPortions(sec.t, sec.items.map(it => splitDish(it).name), guests);
+          for (const row of breakdown) {
+            if (row.qty == null) continue;
+            lines.push('- ' + row.name + ', כמות: ' + row.qty + '. ');
+          }
+        }
+        let out = lines.join('\n');
+        if (notes && notes.trim()) out += '\nהערות נוספות למטבח:\n' + notes.trim();
+        return out;
       }
       // word-saving: collapse a shared leading "vessel" word, separate food types with |
       const VESSEL = /^(צלחת|צלחות|קערית|קעריות|קערות|מגש|מגשי|פלטת|פלטה|סלסלת|סלסלות|עמדת|סלט|סלטי)$/;
@@ -4303,7 +4334,22 @@
         const html = pills.join('');
         if (html === lastPillsKey) return;   // nothing visible changed → skip rebuild (keeps the pop animation from restarting mid-drag)
         lastPillsKey = html;
+        // remember which pills the user had expanded so moving the slider doesn't snap them shut on rebuild
+        const openIdx = [];
+        foodAmountsEl.querySelectorAll('.vpill').forEach((v, i) => { if (v.dataset.open === 'true') openIdx.push(i); });
         foodAmountsEl.innerHTML = html;       // fresh nodes replay the qty-pop + settle animation on each real change
+        if (openIdx.length) {
+          const fresh = foodAmountsEl.querySelectorAll('.vpill');
+          openIdx.forEach(i => {
+            const pill = fresh[i];
+            if (!pill) return;
+            pill.dataset.open = 'true';
+            const head = pill.querySelector('.vpill__head');
+            if (head) head.setAttribute('aria-expanded', 'true');
+            const det = pill.querySelector('.vpill__detail');
+            if (det) det.hidden = false;
+          });
+        }
       }
       // 4-field details box (plan · date · time · per-head)
       function renderDetails() {
@@ -4770,6 +4816,7 @@
           notes:   document.getElementById('bfNotes').value,
           menu:    state.menu,                                  // 'day' | 'evening'
           foodNotes: foodNotes ? foodNotes.value : '',
+          foodMenuText: buildFoodText(state.plan, state.menu, gg, foodNotes ? foodNotes.value : ''),  // contract food-text → Monday text_mm1tgvh0
           wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
           consent: document.getElementById('bfConsent').checked,  // marketing consent (opt-in)
           hp: document.getElementById('bfHp').value,               // honeypot (bots fill this)

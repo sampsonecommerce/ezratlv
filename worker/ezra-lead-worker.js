@@ -126,6 +126,7 @@ export default {
     if (d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
     if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
     if (d.consent) cols.boolean_mm4nqth1 = { checked: "true" };
+    if (d.foodMenuText) cols.text_mm1tgvh0 = d.foodMenuText;   // contract food-text (package leads only)
 
     const slot = String(d.slot || "");
     const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
