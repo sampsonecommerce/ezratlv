@@ -127,6 +127,12 @@ export default {
     if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
     if (d.consent) cols.boolean_mm4nqth1 = { checked: "true" };
     if (d.foodMenuText) cols.text_mm1tgvh0 = d.foodMenuText;   // contract food-text (package leads only)
+    // bar / DJ / add-ons: package booking lead only (no leadType). Incomplete leads also carry
+    // addonLabels but must not populate these columns (per spec scope).
+    const isPackage = !d.leadType;
+    if (isPackage && d.barLabel) cols.color_mm1gytg8 = { label: d.barLabel };   // bar tier (included)
+    if (isPackage && d.djLabel)  cols.color_mm1g4y0y = { label: d.djLabel };    // music/DJ tier (included)
+    if (isPackage && Array.isArray(d.addonLabels) && d.addonLabels.length) cols.dropdown_mm1gze4c = { labels: d.addonLabels };   // chosen add-ons
 
     const slot = String(d.slot || "");
     const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };

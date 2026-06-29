@@ -71,8 +71,8 @@
       --font-serif: 'Cormorant Garamond', 'Heebo', serif;
       --font-body:  'Inter', 'Heebo', system-ui, sans-serif;
 
-      --section-pad:      clamp(2.5rem, 6vh, 4.5rem);
-      --section-pad-half: clamp(1.25rem, 3vh, 2.25rem);
+      --section-pad:      clamp(1.8rem, 4.2vh, 3.2rem);
+      --section-pad-half: clamp(1rem, 2.4vh, 1.8rem);
       --maxw:  1200px;
       --ease:  cubic-bezier(0.22, 0.61, 0.36, 1);
     }
@@ -432,8 +432,8 @@
     /* ============================================================
        SECTION 2: SOLUTION (feature-row)
     ============================================================ */
-    .sec-head { text-align: center; margin-block-end: clamp(2.5rem, 6vh, 4rem); }
-    .sec-head h2 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); margin-block: 1.2rem 1.4rem; }
+    .sec-head { text-align: center; margin-block-end: clamp(1.5rem, 3.6vh, 2.4rem); }
+    .sec-head h2 { font-size: clamp(2.1rem, 4.2vw, 3.1rem); margin-block: 0.9rem 1rem; }
     .sec-head p { color: var(--cream-dim); font-size: 1.05rem; max-width: 60ch; margin-inline: auto; }
 
     .feature-row {
@@ -2573,6 +2573,179 @@
       .rev-track { animation: none; }
       .rev-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
     }
+
+    /* ============================================================
+       REDESIGN (Part A) - new components
+    ============================================================ */
+
+    /* A1 - two-line hero button (label + response note stacked) */
+    .btn--stack { display: inline-flex; flex-direction: column; align-items: center; gap: 0.25rem; line-height: 1.1; }
+    .btn--stack .btn__main { font-size: 1rem; font-weight: 600; }
+    .btn--stack .btn__note {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.01em;
+      opacity: 0.78;
+    }
+    .btn--stack .btn__note svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .hero__cta .btn--stack { padding-block: 0.85rem; }
+
+    /* A2 - essence constellation (merged solution + concept) */
+    .essence { text-align: center; }
+    .cluster {
+      position: relative; width: 100%; max-width: 760px; margin: clamp(1.6rem, 4vw, 2.8rem) auto 0;
+      aspect-ratio: 5 / 3.4;
+    }
+    .cluster__links { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .cl-base { stroke: var(--line); stroke-width: 0.4; fill: none; }
+    .cl-pulse {
+      stroke: var(--gold-light); stroke-width: 0.7; fill: none; stroke-linecap: round;
+      stroke-dasharray: 16 84; stroke-dashoffset: 100;
+      filter: drop-shadow(0 0 1.2px var(--gold-light));
+      animation: clPulse 2.8s linear infinite;
+    }
+    .cl-pulse--1 { animation-delay: 0s; } .cl-pulse--2 { animation-delay: .46s; }
+    .cl-pulse--3 { animation-delay: .92s; } .cl-pulse--4 { animation-delay: 1.38s; }
+    .cl-pulse--5 { animation-delay: 1.84s; } .cl-pulse--6 { animation-delay: 2.3s; }
+    @keyframes clPulse { from { stroke-dashoffset: 100; } to { stroke-dashoffset: -100; } }
+
+    .chub {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: clamp(58px, 13vw, 78px); height: clamp(58px, 13vw, 78px); border-radius: 50%;
+      display: grid; place-items: center; z-index: 2;
+      background: radial-gradient(circle at 50% 35%, rgba(196,154,60,0.28), rgba(15,13,11,0.9));
+      border: 1px solid var(--gold); box-shadow: 0 0 28px rgba(196,154,60,0.28);
+      font-family: var(--font-serif); color: var(--gold-light); font-size: clamp(1.3rem, 3.4vw, 1.7rem); font-weight: 600;
+    }
+    .cnode {
+      position: absolute; transform: translate(-50%, -50%); z-index: 3;
+      display: inline-flex; flex-direction: column; align-items: center; gap: 0;
+      min-width: max-content; padding: 0; border: 0; background: transparent;
+      color: var(--cream); font-family: var(--font-body); cursor: pointer;
+    }
+    .cnode__dot {
+      width: 12px; height: 12px; border-radius: 50%; margin-block-end: 0.45rem;
+      background: var(--gold); box-shadow: 0 0 0 5px rgba(196,154,60,0.14), 0 0 16px rgba(196,154,60,0.5);
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    }
+    .cnode__title {
+      font-size: clamp(0.82rem, 2vw, 0.96rem); font-weight: 600; letter-spacing: 0.01em;
+      white-space: nowrap; transition: color 0.25s var(--ease);
+    }
+    .cnode__detail {
+      max-width: 17ch; margin-block-start: 0.3rem;
+      font-size: 0.78rem; line-height: 1.45; color: var(--cream-dim);
+      opacity: 0; transform: translateY(4px); transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+      pointer-events: none;
+    }
+    .cnode:hover .cnode__dot, .cnode:focus-visible .cnode__dot { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(196,154,60,0.2), 0 0 22px rgba(196,154,60,0.7); }
+    .cnode:hover .cnode__title, .cnode:focus-visible .cnode__title { color: var(--gold-light); }
+    .cnode:hover .cnode__detail, .cnode:focus-visible .cnode__detail, .cnode.is-active .cnode__detail { opacity: 1; transform: translateY(0); }
+    .cnode:focus-visible { outline: none; }
+    .cnode:focus-visible .cnode__title { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 760px) {
+      .cluster { aspect-ratio: auto; max-width: 440px; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; }
+      .cluster__links, .chub { display: none; }
+      .cnode { position: static; transform: none; inset: auto !important;
+        flex-direction: row; align-items: center; gap: 0.5rem;
+        width: 100%; max-width: 360px; padding: 0.75rem 1rem; text-align: start;
+        background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; }
+      .cnode__dot { margin: 0; }
+      .cnode__title { white-space: normal; }
+      .cnode__detail { opacity: 1; transform: none; max-width: none; margin: 0; flex-basis: 100%; }
+    }
+
+    /* A3 - single persistent floating CTA */
+    .floating-cta {
+      position: fixed; left: 50%; z-index: 90;
+      inset-block-end: calc(1rem + env(safe-area-inset-bottom, 0px));
+      transform: translate(-50%, 160%);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.9rem; border-radius: 50px;
+      background: linear-gradient(135deg, var(--gold), #e8c065); color: var(--bg);
+      font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; letter-spacing: 0.02em;
+      box-shadow: 0 10px 30px rgba(196,154,60,0.4);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s var(--ease), transform 0.45s var(--ease);
+    }
+    .floating-cta.is-visible { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+    .floating-cta:hover { box-shadow: 0 14px 38px rgba(196,154,60,0.5); }
+    .floating-cta svg { width: 17px; height: 17px; }
+    body:has(.book-modal.open) .floating-cta,
+    body:has(#customModal.open) .floating-cta { opacity: 0 !important; pointer-events: none !important; transform: translate(-50%, 160%) !important; }
+    @media (prefers-reduced-motion: reduce) { .floating-cta { transition: opacity 0.2s linear; } }
+
+    /* A4 - alternating two-sided vertical timeline */
+    .timeline { position: relative; max-width: 760px; margin: clamp(2rem, 5vw, 3.2rem) auto 0; }
+    .timeline::before {
+      content: ''; position: absolute; inset-block: 6px; inset-inline-start: 50%; transform: translateX(50%);
+      width: 2px; background: linear-gradient(180deg, transparent, var(--gold), transparent);
+      opacity: 0.55;
+    }
+    .tl-item { position: relative; display: grid; grid-template-columns: 1fr 44px 1fr; align-items: start; margin-block-end: clamp(1.2rem, 3vw, 2rem); }
+    .tl-item:last-child { margin-block-end: 0; }
+    .tl-node {
+      grid-column: 2; justify-self: center;
+      width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--bg-soft); border: 1px solid var(--gold); color: var(--gold-light);
+      font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; z-index: 1;
+      box-shadow: 0 0 0 5px rgba(15,13,11,1), 0 0 18px rgba(196,154,60,0.3);
+    }
+    .tl-card {
+      background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px;
+      padding: 0.9rem 1.05rem; position: relative;
+    }
+    .tl-card__head { display: flex; align-items: center; gap: 0.5rem; margin-block-end: 0.25rem; }
+    .tl-card__head svg { width: 18px; height: 18px; color: var(--gold); flex-shrink: 0; }
+    .tl-card h3 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; color: var(--cream); }
+    .tl-card p { font-size: 0.85rem; color: var(--cream-dim); line-height: 1.55; }
+    .tl-item:nth-child(odd)  .tl-card { grid-column: 1; }
+    .tl-item:nth-child(even) .tl-card { grid-column: 3; }
+    @media (max-width: 680px) {
+      .timeline::before { inset-inline-start: 20px; transform: none; }
+      .tl-item { grid-template-columns: 40px 1fr; gap: 0.8rem; }
+      .tl-node { grid-column: 1; justify-self: start; }
+      .tl-item:nth-child(odd) .tl-card,
+      .tl-item:nth-child(even) .tl-card { grid-column: 2; }
+    }
+
+    /* A5 - stats compressed to 3 cards */
+    .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.9rem, 2vw, 1.4rem); align-items: stretch; }
+    .scard {
+      background: var(--bg-soft); border: 1px solid var(--line); border-radius: 18px;
+      padding: clamp(1.1rem, 2.4vw, 1.6rem); display: flex; flex-direction: column; min-width: 0;
+    }
+    .scard__title { font-family: var(--font-body); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-block-end: 1rem; }
+    .scard--numbers .stat-band { display: flex; flex-direction: column; gap: 1.1rem; margin: auto 0; max-width: none; }
+    .scard--numbers .stat-cell { text-align: start; padding: 0; }
+    .scard--numbers .stat-cell + .stat-cell::before { display: none; }
+    .scard--numbers .stat__num,
+    .scard--numbers .stat-band .stat-cell:nth-child(2) .stat__num { font-size: clamp(2rem, 3.2vw, 2.7rem); }
+    .scard--numbers .stat-band .stat-cell:nth-child(2) { order: 0; grid-column: auto; }
+    .scard--numbers .stat__label { margin-block-start: 0.2rem; font-size: 0.85rem; }
+    .scard--review { justify-content: space-between; }
+    .stat-review { position: relative; flex: 1; }
+    .stat-review__item { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .stat-review__item.is-on { opacity: 1; position: relative; pointer-events: auto; }
+    .stat-review__stars { display: inline-flex; gap: 2px; margin-block-end: 0.5rem; }
+    .stat-review__stars svg { width: 15px; height: 15px; fill: var(--gold); }
+    .stat-review__text { font-size: 0.86rem; line-height: 1.6; color: var(--cream); display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+    .stat-review__who { margin-block-start: 0.7rem; font-size: 0.78rem; color: var(--cream-dim); }
+    .stat-review__who b { color: var(--cream); font-weight: 600; }
+    .scard--review .rev-lead { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.74rem; color: var(--cream-dim); margin-block-start: 0.9rem; }
+    .scard--review .rev-lead .rev-g { color: var(--gold); font-weight: 700; }
+    .scard--map { padding: 0; overflow: hidden; }
+    .scard--map .map-frame { position: relative; flex: 1; min-height: 220px; }
+    .scard--map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(100%) invert(90%) contrast(1.2); }
+    .scard--map .map-nav { border-block-start: 1px solid var(--line); }
+    .scard--map .pills-row { margin: 0; padding: 0.7rem 0.9rem 0.9rem; gap: 0.45rem; }
+    .scard--map .pills-row .pill { font-size: 0.72rem; padding: 0.32rem 0.6rem; }
+    @media (max-width: 860px) {
+      .stat-cards { grid-template-columns: 1fr; }
+      .scard--numbers .stat-band { flex-direction: row; justify-content: space-around; gap: 0.8rem; }
+      .scard--numbers .stat-cell { text-align: center; }
+      .scard--map .map-frame { min-height: 260px; }
+    }
   </style>
   <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
        During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
@@ -2638,11 +2811,13 @@
       <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
       <p class="hero__sub">חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה - אנחנו מנהלים את האוכל, האלכוהול והאווירה, ואתם פשוט מגיעים לחגוג</p>
       <div class="hero__cta">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
-        <span class="hero__cta-note">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          מענה תוך 24 שעות
-        </span>
+        <a class="btn btn--fill btn--stack js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">
+          <span class="btn__main">לבחירת חבילה</span>
+          <span class="btn__note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            מענה תוך 24 שעות
+          </span>
+        </a>
       </div>
     </div>
     <a href="#solution" class="hero__scroll" aria-label="גלול למטה">
@@ -2653,80 +2828,73 @@
   </header>
 
   <!-- ============================================================
-       SOLUTION
+       ESSENCE - merged solution + concept as a connected constellation
   ============================================================ -->
-  <section class="section-soft" id="solution">
-    <div class="wrap">
-      <div class="feature-row">
-        <div class="feature-row__text reveal">
-          <span class="label">הפתרון שלנו</span>
-          <h3>להרים אירוע מושקע לצוות, בראש שקט לגמרי</h3>
-          <div class="divider"></div>
-          <p>הגיע הזמן להעביר אלינו את המעמסה - אנחנו כאן כדי לנהל הכל מקצה לקצה ולתת לכם שקט נפשי מלא</p>
-
-          <div class="benefit-cards">
-            <div class="benefit-card">
-              <div class="benefit-card__title">מרחב בלעדי לצוות</div>
-              <div class="benefit-card__body">החלל כולו שלכם - לא אולם ולא מסעדה, בר פרטי שפועל רק בשבילכם הלילה הזה</div>
-            </div>
-            <div class="benefit-card">
-              <div class="benefit-card__title">ניהול מקצה לקצה</div>
-              <div class="benefit-card__body">אוכל, אלכוהול, מוזיקה ותאורה - הכל בידיים שלנו, ואתם רק מגיעים לחגוג</div>
-            </div>
-            <div class="benefit-card">
-              <div class="benefit-card__title">ודאות תקציבית</div>
-              <div class="benefit-card__body">מחיר סופי מראש, בלי הפתעות בסוף הערב - יודעים מה מקבלים ויודעים כמה משלמים</div>
-            </div>
-            <div class="benefit-card">
-              <div class="benefit-card__title">גמישות מלאה</div>
-              <div class="benefit-card__body">מ-20 עד 50 איש, כל יום בשבוע, עם תפריט שמותאם לצוות ולתקציב שלכם</div>
-            </div>
-          </div>
-
-          <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" style="margin: 2rem auto 0; display: block; width: fit-content;">לבחירת חבילה</a>
-        </div>
-        <img src="images/BAR.jpg" alt="הבר של עזרא" class="feature-img reveal" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       VIBE / CONCEPT
-  ============================================================ -->
-  <section id="concept">
+  <section class="section-soft essence" id="solution">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="label">החוויה השלמה</span>
-        <h2>הסטנדרט החדש לאירוע שמשאיר חותם</h2>
+        <span class="label">הפתרון שלנו</span>
+        <h2>כל מה שצריך לאירוע מושלם, במקום אחד</h2>
         <div class="divider divider--center"></div>
       </div>
 
-      <div class="vibe-grid">
-        <div class="vibe-card">
-          <div class="vibe-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-          </div>
-          <div class="vibe-card__title">האווירה</div>
-          <div class="vibe-card__body">חלל אירועים פרטי שנועד לתת אווירה חמה, צעירה ומקצועית שמאפשרת לכלל האורחים להתחבר וליצור חוויה בלתי נשכחת ביחד</div>
-        </div>
-        <div class="vibe-card">
-          <div class="vibe-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
-          </div>
-          <div class="vibe-card__title">אישור מיידי</div>
-          <div class="vibe-card__body">תהליך קצר ומהיר שנסגר כאן באתר, על ידי בחירת אחת מארבע החבילות שלנו. הכל שקוף, בלי אותיות קטנות</div>
-        </div>
-        <div class="vibe-card">
-          <div class="vibe-card__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M4 11l1.2 7.2A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 2-1.8L20 11"/></svg>
-          </div>
-          <div class="vibe-card__title">התפריט</div>
-          <div class="vibe-card__body">מנות חלביות וצמחוניות מחומרי גלם טריים - מבחר תפריטים מגוון שמתאים לכל אירוע</div>
-        </div>
-      </div>
+      <div class="cluster reveal" id="essenceCluster">
+        <svg class="cluster__links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <!-- spokes (hub -> nodes) -->
+          <line class="cl-base" x1="50" y1="50" x2="15" y2="22"/>
+          <line class="cl-base" x1="50" y1="50" x2="50" y2="12"/>
+          <line class="cl-base" x1="50" y1="50" x2="85" y2="22"/>
+          <line class="cl-base" x1="50" y1="50" x2="85" y2="78"/>
+          <line class="cl-base" x1="50" y1="50" x2="50" y2="88"/>
+          <line class="cl-base" x1="50" y1="50" x2="15" y2="78"/>
+          <!-- outer ring -->
+          <line class="cl-base" x1="15" y1="22" x2="50" y2="12"/>
+          <line class="cl-base" x1="50" y1="12" x2="85" y2="22"/>
+          <line class="cl-base" x1="85" y1="22" x2="85" y2="78"/>
+          <line class="cl-base" x1="85" y1="78" x2="50" y2="88"/>
+          <line class="cl-base" x1="50" y1="88" x2="15" y2="78"/>
+          <line class="cl-base" x1="15" y1="78" x2="15" y2="22"/>
+          <!-- travelling gold pulses along the spokes -->
+          <line class="cl-pulse cl-pulse--1" pathLength="100" x1="50" y1="50" x2="15" y2="22"/>
+          <line class="cl-pulse cl-pulse--2" pathLength="100" x1="50" y1="50" x2="50" y2="12"/>
+          <line class="cl-pulse cl-pulse--3" pathLength="100" x1="50" y1="50" x2="85" y2="22"/>
+          <line class="cl-pulse cl-pulse--4" pathLength="100" x1="50" y1="50" x2="85" y2="78"/>
+          <line class="cl-pulse cl-pulse--5" pathLength="100" x1="50" y1="50" x2="50" y2="88"/>
+          <line class="cl-pulse cl-pulse--6" pathLength="100" x1="50" y1="50" x2="15" y2="78"/>
+        </svg>
 
-      <div class="section-cta reveal">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
+        <div class="chub" aria-hidden="true">עזרא</div>
+
+        <button type="button" class="cnode" style="left:15%; top:22%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">מרחב בלעדי</span>
+          <span class="cnode__detail">החלל כולו שלכם, בר פרטי שפועל רק בשבילכם הלילה הזה</span>
+        </button>
+        <button type="button" class="cnode" style="left:50%; top:12%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">ניהול מקצה לקצה</span>
+          <span class="cnode__detail">אוכל, אלכוהול, מוזיקה ותאורה, הכל בידיים שלנו</span>
+        </button>
+        <button type="button" class="cnode" style="left:85%; top:22%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">ודאות תקציבית</span>
+          <span class="cnode__detail">מחיר סופי מראש, בלי הפתעות בסוף הערב</span>
+        </button>
+        <button type="button" class="cnode" style="left:85%; top:78%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">אישור מיידי</span>
+          <span class="cnode__detail">סוגרים הכל כאן באתר ומקבלים הצעה מיד, בלי אותיות קטנות</span>
+        </button>
+        <button type="button" class="cnode" style="left:50%; top:88%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">האווירה</span>
+          <span class="cnode__detail">חמה, צעירה ומקצועית, חוויה שכל הצוות זוכר</span>
+        </button>
+        <button type="button" class="cnode" style="left:15%; top:78%;">
+          <span class="cnode__dot"></span>
+          <span class="cnode__title">התפריט</span>
+          <span class="cnode__detail">מנות חלביות וצמחוניות מחומרי גלם טריים, מותאם לצוות ולתקציב</span>
+        </button>
       </div>
     </div>
   </section>
@@ -2743,66 +2911,68 @@
         <p>תהליך קצר ומהיר - מהרשמה עד חגיגה</p>
       </div>
 
-      <div class="process-track">
-        <!-- YOUR SIDE -steps 1-4 -->
-        <div class="process-side process-side--you reveal">
-          <span class="process-side__tag">הצד שלך</span>
-          <div class="steps steps--you">
-            <!-- 2 connectors between steps 1-3 -->
-            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
-            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
-
-            <div class="step">
-              <div class="step__num"><span class="step__n">1</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="9" cy="14" r="1.3"/><circle cx="15" cy="14" r="1.3"/><path d="M7 18.5c.3-1.1 1-1.7 2-1.7M17 18.5c-.3-1.1-1-1.7-2-1.7"/></svg></span></div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-node">1</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="9" cy="14" r="1.3"/><circle cx="15" cy="14" r="1.3"/><path d="M7 18.5c.3-1.1 1-1.7 2-1.7M17 18.5c-.3-1.1-1-1.7-2-1.7"/></svg>
               <h3>בוחרים מתי חוגגים ואת כמות האנשים</h3>
-              <p>סוגרים את כל התהליך על המקום ומקבלים הצעת מחיר מיד</p>
             </div>
-            <div class="step">
-              <div class="step__num"><span class="step__n">2</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17c2.5-.5 3.5-9 5-9s1 6.5 2.5 6.5S12 9 13.5 9s1.2 4 3 4 2.5-1.3 3.5-1.5"/><path d="M3 21h18"/></svg></span></div>
-              <h3>אישור למייל וחתימת חוזה</h3>
-              <p>החוזה נשלח אליכם מיידית</p>
-            </div>
-            <div class="step step--bridge">
-              <div class="step__num"><span class="step__n">3</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span></div>
-              <h3>סגירת קצוות</h3>
-              <p>שיחה עם מנהלת המכירות להסדרת פרטים אחרונים ותשלום</p>
-              <span class="step__bridge-tag">המעבר אלינו</span>
-            </div>
+            <p>סוגרים את כל התהליך על המקום ומקבלים הצעת מחיר מיד</p>
           </div>
         </div>
-
-        <!-- OUR SIDE -steps 5-7 -->
-        <div class="process-side process-side--us reveal">
-          <span class="process-side__tag">הצד שלנו</span>
-          <div class="steps steps--us">
-            <!-- 2 connectors between steps 5-7 -->
-            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
-            <div class="conn"><span class="conn__fill"></span><span class="conn__head"></span></div>
-
-            <div class="step">
-              <div class="step__num"><span class="step__n">4</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.2L18 9l-4.5 1.8L12 15l-1.5-4.2L6 9l4.5-1.8z"/><path d="M19 14.5l.7 1.9 1.9.6-1.9.8L19 20l-.7-2-1.9-.8 1.9-.6z"/></svg></span></div>
+        <div class="tl-item">
+          <div class="tl-node">2</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17c2.5-.5 3.5-9 5-9s1 6.5 2.5 6.5S12 9 13.5 9s1.2 4 3 4 2.5-1.3 3.5-1.5"/><path d="M3 21h18"/></svg>
+              <h3>אישור למייל וחתימת חוזה</h3>
+            </div>
+            <p>החוזה נשלח אליכם מיידית</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-node">3</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <h3>סגירת קצוות</h3>
+            </div>
+            <p>שיחה עם מנהלת המכירות להסדרת פרטים אחרונים ותשלום</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-node">4</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.2L18 9l-4.5 1.8L12 15l-1.5-4.2L6 9l4.5-1.8z"/><path d="M19 14.5l.7 1.9 1.9.6-1.9.8L19 20l-.7-2-1.9-.8 1.9-.6z"/></svg>
               <h3>אנחנו מתכוננים לאירוע שלכם</h3>
-              <p>הצוות שלנו מארגן את החלל, הבר והאוכל במיוחד עבורכם</p>
             </div>
-            <div class="step step--party">
-              <div class="step__num"><span class="step__n">5</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12 1.5 1.5 0 0 1-1.45 1.63h-.38a1.74 1.74 0 0 0-1.76 1.44L14 10"/></svg></span></div>
+            <p>הצוות שלנו מארגן את החלל, הבר והאוכל במיוחד עבורכם</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-node">5</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12 1.5 1.5 0 0 1-1.45 1.63h-.38a1.74 1.74 0 0 0-1.76 1.44L14 10"/></svg>
               <h3>אתם חוגגים</h3>
-              <p>הפעם תורכם רק להנות עם הצוות, תשאירו לנו את כל הדאגות</p>
             </div>
-            <div class="step step--happy">
-              <div class="step__num"><span class="step__n">6</span><span class="step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 13.5 7.2 9.7a1.5 1.5 0 0 1 2.1-2.1l3.2 3.2"/><path d="M13.5 12 9.4 7.9a1.5 1.5 0 0 1 2.1-2.1l4.1 4.1"/><path d="M8.6 16.4c-1.8-1.8-2.8-3.7-3.1-5a1.4 1.4 0 0 1 2.3-1.3"/><path d="M16 10.2a1.5 1.5 0 0 1 2.2 2.1l-2.7 2.7c-1.9 1.9-4.4 2.3-6.4 1"/><path d="M18.5 5 20 3.5M20 8.5h2M16.5 3l.4-1.5"/></svg></span></div>
+            <p>הפעם תורכם רק להנות עם הצוות, תשאירו לנו את כל הדאגות</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-node">6</div>
+          <div class="tl-card">
+            <div class="tl-card__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 13.5 7.2 9.7a1.5 1.5 0 0 1 2.1-2.1l3.2 3.2"/><path d="M13.5 12 9.4 7.9a1.5 1.5 0 0 1 2.1-2.1l4.1 4.1"/><path d="M8.6 16.4c-1.8-1.8-2.8-3.7-3.1-5a1.4 1.4 0 0 1 2.3-1.3"/><path d="M16 10.2a1.5 1.5 0 0 1 2.2 2.1l-2.7 2.7c-1.9 1.9-4.4 2.3-6.4 1"/><path d="M18.5 5 20 3.5M20 8.5h2M16.5 3l.4-1.5"/></svg>
               <h3>יוצרים זכרונות</h3>
-              <p>רגעים שהצוות לא ישכח, ומחמאות שאתם לא תפסיקו לקבל ביום שאחרי</p>
             </div>
+            <p>רגעים שהצוות לא ישכח, ומחמאות שאתם לא תפסיקו לקבל ביום שאחרי</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section-cta-band">
-    <div class="wrap section-cta reveal">
-      <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
   </section>
 
@@ -2822,73 +2992,66 @@
           <h2>הניסיון עושה את ההבדל</h2>
         </div>
 
-        <div class="stat-band">
-          <div class="stat-cell">
-            <div class="stat__num">800+</div>
-            <div class="stat__label">אירועים</div>
+        <div class="stat-cards">
+          <!-- card 1: numbers -->
+          <div class="scard scard--numbers">
+            <div class="scard__title">במספרים</div>
+            <div class="stat-band">
+              <div class="stat-cell">
+                <div class="stat__num">800+</div>
+                <div class="stat__label">אירועים</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat__num">40,000+</div>
+                <div class="stat__label">אורחים</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat__num">3+</div>
+                <div class="stat__label">שנים בשטח</div>
+              </div>
+            </div>
           </div>
-          <div class="stat-cell">
-            <div class="stat__num">40,000+</div>
-            <div class="stat__label">אורחים</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat__num">3+</div>
-            <div class="stat__label">שנים בשטח</div>
-          </div>
-        </div>
 
-        <div class="stats-reviews">
-          <div class="rev-stars-lead">
-            <span class="rev-stars" aria-label="חמישה כוכבים">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            </span>
-            <span class="rev-lead-text">ביקורות אמיתיות מ‑Google</span>
+          <!-- card 2: auto-rotating review -->
+          <div class="scard scard--review">
+            <div class="scard__title">מה אומרים עלינו</div>
+            <div class="stat-review" id="statReview" aria-live="polite"></div>
+            <a class="rev-lead" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>לקריאת הביקורות ב‑Google</a>
           </div>
-          <div class="rev-marquee reveal" id="revMarquee">
-            <div class="rev-track" id="revTrack"></div>
-          </div>
-          <a class="btn btn--outline reveal" href="https://share.google/5QNTu9soCGfOBsKjB" target="_blank" rel="noopener"><span class="rev-g">G</span>לקריאת הביקורות ב‑Google</a>
-        </div>
 
-        <div class="pills-row">
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>פריים לוקיישן בתל אביב</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>מרחק קצר מהרכבת הקלה</span>
-          <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>גישה מרכזית לאוטובוסים</span>
-        </div>
-
-        <div class="map-container">
-          <iframe
-            src="https://maps.google.com/maps?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&hl=iw&z=17&t=m&output=embed"
-            width="100%"
-            height="350"
-            style="border:0; filter: grayscale(100%) invert(90%) contrast(1.2);"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
-          ></iframe>
-          <div class="map-nav">
-            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
-              <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
-              <span class="map-nav__lbl">Google Maps</span>
-            </a>
-            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
-              <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
-              <span class="map-nav__lbl">Waze</span>
-            </a>
-            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
-              <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
-              <span class="map-nav__lbl">Moovit</span>
-            </a>
+          <!-- card 3: location map (close zoom) -->
+          <div class="scard scard--map">
+            <div class="map-frame">
+              <iframe
+                src="https://maps.google.com/maps?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&hl=iw&z=18&t=m&output=embed"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="מפת מיקום עזרא - אברבנאל 38, פלורנטין"
+              ></iframe>
+            </div>
+            <div class="map-nav">
+              <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
+                <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
+                <span class="map-nav__lbl">Google Maps</span>
+              </a>
+              <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
+                <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
+                <span class="map-nav__lbl">Waze</span>
+              </a>
+              <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
+                <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
+                <span class="map-nav__lbl">Moovit</span>
+              </a>
+            </div>
+            <div class="pills-row">
+              <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>פריים לוקיישן בתל אביב</span>
+              <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>מרחק קצר מהרכבת הקלה</span>
+              <span class="pill"><svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>גישה מרכזית לאוטובוסים</span>
+            </div>
           </div>
         </div>
       </div>
-
-      <a class="btn btn--fill reveal js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
   </section>
 
@@ -3106,10 +3269,6 @@
       <span class="label reveal">שלב אחרון</span>
       <h2 class="reveal">שנסגור לכם תאריך?</h2>
       <p class="contact__sub reveal">שלחו לנו הודעה עם כמות אנשים ותאריך משוער - ונחזור אליכם עם מחיר מפורט</p>
-
-      <div class="contact__btns reveal">
-        <a class="btn btn--fill js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
-      </div>
 
       <div class="contact__social reveal">
         <a class="social-icon social-icon--ig" href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="אינסטגרם">
@@ -4817,6 +4976,9 @@
           menu:    state.menu,                                  // 'day' | 'evening'
           foodNotes: foodNotes ? foodNotes.value : '',
           foodMenuText: buildFoodText(state.plan, state.menu, gg, foodNotes ? foodNotes.value : ''),  // contract food-text → Monday text_mm1tgvh0
+          // package bar + DJ labels (included, tier-determined); strings must match Monday labels exactly
+          barLabel: ({ happyhour:'בר רגיל (כלול בחבילה)', gibush:'בר מורחב (כלול בחבילה)', mesiba:'בר פרימיום (כלול בחבילה)' })[state.plan] || '',
+          djLabel:  ({ happyhour:'פלייליסט + מערכת סאונד (כלול)', gibush:'פלייליסט מותאם אישית (כלול)', mesiba:"דיג'יי מהמבחר שלנו (כלול)" })[state.plan] || '',
           wantsCall: wantsCall,   // true = wants to speak with the sales manager before signing
           consent: document.getElementById('bfConsent').checked,  // marketing consent (opt-in)
           hp: document.getElementById('bfHp').value,               // honeypot (bots fill this)
@@ -5505,38 +5667,30 @@
         { name: "Ella Tagar",      role: "יום הולדת",   stars: 5, text: "סגרתי אירוע פרטי ליום הולדת, נתחיל קודם כל מעילם המושלמת שדאגה לכל פרט בהכנות. לא הפסקתי לשגע אותה והיא לא התייאשה ממני, פירטה לי הכל לפרטי פרטים ודאגה תמיד לוודא שאנחנו באותו ראש! הגענו מוקדם לסדר וישר קיבלו אותנו בפנים חמות. המקום היה בול בגודל, הפיצות היו לא נורמליות והאוכל בכללי היה מדהים. אפילו שנה אחרי האירוע, כל פעם שעברתי שם ישר זיהו אותי ונתנו תחושה של בית. מתה כבר לחזור לעוד אירועים!!!" }
       ];
 
-      const track = document.getElementById('revTrack');
-      if (!track || !REVIEWS.length) return;
+      // A5: single review card that auto-rotates through all reviews on a 3s loop (fade between).
+      const host = document.getElementById('statReview');
+      if (!host || !REVIEWS.length) return;
 
       const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
       const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-      const initial = n => (n || '').trim().charAt(0);
 
-      function card(r) {
+      host.innerHTML = REVIEWS.map((r, i) => {
         const n = Math.max(1, Math.min(5, r.stars || 5));
-        return '<article class="rev-card">' +
-          '<span class="rev-card__stars" aria-label="' + n + ' כוכבים">' + STAR.repeat(n) + '</span>' +
-          '<p class="rev-card__text">' + esc(r.text) + '</p>' +
-          '<div class="rev-card__person">' +
-            '<span class="rev-card__avatar" aria-hidden="true">' + esc(initial(r.name)) + '</span>' +
-            '<div><div class="rev-card__name">' + esc(r.name) + '</div>' +
-            '<div class="rev-card__role">' + esc(r.role) + '</div></div>' +
-            '<span class="rev-card__g" aria-label="ביקורת מ-Google">G</span>' +
-          '</div></article>';
-      }
+        return '<div class="stat-review__item' + (i === 0 ? ' is-on' : '') + '">' +
+          '<span class="stat-review__stars" aria-label="' + n + ' כוכבים">' + STAR.repeat(n) + '</span>' +
+          '<p class="stat-review__text">' + esc(r.text) + '</p>' +
+          '<div class="stat-review__who"><b>' + esc(r.name) + '</b> · ' + esc(r.role) + '</div>' +
+        '</div>';
+      }).join('');
 
-      // Build one logical set, then repeat it until it spans the marquee width so the strip is
-      // always full edge-to-edge (no dead space on wide screens). Duplicate that grown set once
-      // for a seamless -50% loop, and scale the duration to keep a constant scroll speed.
-      const oneSet = REVIEWS.map(card).join('');
-      track.innerHTML = oneSet;
-      const marqueeW = (track.parentElement && track.parentElement.clientWidth) || window.innerWidth;
-      let reps = 1, guard = 0;
-      while (track.scrollWidth < marqueeW + 80 && guard < 20) { reps++; track.innerHTML = oneSet.repeat(reps); guard++; }
-      const grown = track.innerHTML;
-      track.innerHTML = grown + grown;                 // two copies → seamless -50% loop
-      const setLen = track.scrollWidth / 2;
-      track.style.animationDuration = Math.max(24, Math.round(setLen / 70)) + 's';   // ~70px/sec
+      const items = [...host.querySelectorAll('.stat-review__item')];
+      if (items.length < 2) return;
+      let idx = 0;
+      setInterval(() => {
+        items[idx].classList.remove('is-on');
+        idx = (idx + 1) % items.length;
+        items[idx].classList.add('is-on');
+      }, 3000);
     })();
   </script>
   <!-- html2canvas: used to render the final receipt to an image for download -->
@@ -5618,6 +5772,46 @@
         if (/\.[a-z0-9]+$/i.test(clean)) return;
         e.preventDefault();
         location.href = clean + '.html';
+      });
+    })();
+  </script>
+
+  <!-- A3: single persistent floating CTA (appears after the hero, opens the booking modal) -->
+  <a class="floating-cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener" aria-label="לבחירת חבילה">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18l-1.5 9.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+    <span>לבחירת חבילה</span>
+  </a>
+  <script>
+    /* Floating CTA: it is added to the DOM after the global .js-book binding ran, so wire its
+       click here to match a generic CTA (scroll to the packages section to pick a plan), and
+       reveal it once the hero scrolls out of view. */
+    (function () {
+      var cta = document.querySelector('.floating-cta');
+      var hero = document.getElementById('hero');
+      if (!cta) return;
+      var packages = document.getElementById('packages');
+      cta.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (packages) packages.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      if (!hero || !('IntersectionObserver' in window)) { cta.classList.add('is-visible'); return; }
+      var io = new IntersectionObserver(function (entries) {
+        cta.classList.toggle('is-visible', !entries[0].isIntersecting);
+      }, { threshold: 0, rootMargin: '-40% 0px 0px 0px' });
+      io.observe(hero);
+    })();
+
+    /* Essence constellation: tap a node to reveal its one-line detail (hover/focus already covers
+       pointer devices via CSS; this makes touch taps reveal the caption too). */
+    (function () {
+      var cluster = document.getElementById('essenceCluster');
+      if (!cluster) return;
+      cluster.querySelectorAll('.cnode').forEach(function (node) {
+        node.addEventListener('click', function () {
+          var wasActive = node.classList.contains('is-active');
+          cluster.querySelectorAll('.cnode.is-active').forEach(function (n) { n.classList.remove('is-active'); });
+          if (!wasActive) node.classList.add('is-active');
+        });
       });
     })();
   </script>
