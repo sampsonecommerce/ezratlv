@@ -136,6 +136,8 @@ export async function onRequestPost({ request, env }) {
   const timeOfEvent = d.menu ? timeLabel : (d.eventTime || "");
   if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
   if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal);
+  // ₪-formatted total as text for the contract's מחיר סופי row (matches עלות לאדם style; numeric stays)
+  if (d.estTotal != null && d.estTotal !== "") cols.text_mm1qdk3m = "₪" + Number(d.estTotal).toLocaleString("en-US");
   if (d.date) cols.date5bab58wj = { date: d.date };
   if (d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
   if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
