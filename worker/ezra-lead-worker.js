@@ -133,6 +133,18 @@ export default {
     if (isPackage && d.barLabel) cols.color_mm1gytg8 = { label: d.barLabel };   // bar tier (included)
     if (isPackage && d.djLabel)  cols.color_mm1g4y0y = { label: d.djLabel };    // music/DJ tier (included)
     if (isPackage && Array.isArray(d.addonLabels) && d.addonLabels.length) cols.dropdown_mm1gze4c = { labels: d.addonLabels };   // chosen add-ons
+    // Contact Name (the person) for company-board lead types. The column lives only on the Company
+    // Events board; private leads go to the Events Form board (5092854682) which lacks it, so skip
+    // them to avoid a create_item error and to never touch that board.
+    if (!isPrivate && d.name) cols.text_mm4the60 = String(d.name);                  // Contact Name = person
+    // package-contract columns (package booking leads only)
+    if (isPackage && d.packageLabel) cols.color_mm4tbcbp = { label: d.packageLabel }; // חבילה (status)
+    if (isPackage && d.barMenuText)  cols.text_mm4t9mgc  = d.barMenuText;             // Alcohol Package Details (full drinks text)
+    if (isPackage && d.perHeadText)  cols.text_mm4ts8zc  = d.perHeadText;             // עלות לאדם (₪ text)
+    if (isPackage && d.addonsText)   cols.text_mm4t3vrm  = d.addonsText;              // עלות התוספות (₪ text)
+    // customer note -> dedicated note column for package leads (clean note; the summary that used to
+    // fill this column is now split across the dedicated columns). Note also stays in the food text.
+    if (isPackage && d.notes) cols.long_textlwbyhlq0 = { text: String(d.notes) };     // הערות הלקוח
 
     const slot = String(d.slot || "");
     const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
@@ -150,10 +162,12 @@ export default {
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? GRP_FOLLOWUP
                 : GRP_AGREEMENT;
+    // item name: company for ALL lead types; fall back to person if no company
+    const displayName = String(d.company || d.name || "ליד מהאתר");
     const variables = {
       board,
       group,
-      name: (isCustom ? "שיחת אפיון · " : isIncomplete ? "נטוש · " : "") + String(d.name || "ליד מהאתר").slice(0, 230),
+      name: (isCustom ? "שיחת אפיון · " : isIncomplete ? "נטוש · " : "") + displayName.slice(0, 230),
       cols: JSON.stringify(cols),
     };
 

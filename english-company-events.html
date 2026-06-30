@@ -1521,21 +1521,21 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      right: 0;
+      left: 0;
       width: 0;
       border-radius: 2px;
-      background: linear-gradient(to left, var(--accent), var(--accent-light));
+      background: linear-gradient(to right, var(--accent), var(--accent-light));
       transition: width 1.7s cubic-bezier(0.45, 0, 0.25, 1);
     }
     .conn__head {
       position: absolute;
       top: 50%;
-      left: 0;
+      right: 0;
       width: 12px;
       height: 12px;
       border-radius: 50%;
       background: var(--accent-light);
-      transform: translate(-50%, -50%);
+      transform: translate(50%, -50%);
       box-shadow: 0 0 4px 1px #fff, 0 0 14px 4px var(--accent-glow);
       opacity: 0;
       transition: opacity 0.35s var(--ease);
@@ -3853,7 +3853,20 @@
 
       // ── Placeholder availability. Replace BOOKED + takenSlots() with live data later.
       const BOOKED = [];
-      (function seedDemo() { const d = new Date(today); let n = 0; while (n < 2) { d.setDate(d.getDate() + 1); if (d.getDay() === 6) { BOOKED.push(key(d)); n++; } } })();
+      // live availability from Monday (committed events on the shared Events Form calendar)
+      (function loadBookingAvailability() {
+        const ep = window.EZRA_AVAILABILITY_ENDPOINT;
+        if (!ep) return;
+        fetch(ep, { method: 'GET' })
+          .then(r => (r.ok ? r.json() : null))
+          .then(j => {
+            if (!j) return;
+            const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
+            BOOKED.length = 0; arr.forEach(dt => BOOKED.push(dt));
+            renderCal();
+          })
+          .catch(() => {});
+      })();
       function takenSlots(dateKey, count) {
         let h = 0; for (let i = 0; i < dateKey.length; i++) h = (h * 31 + dateKey.charCodeAt(i)) >>> 0;
         const taken = new Set();
@@ -3927,7 +3940,7 @@
           evening: [
             { t: "Starters & sharing", items: ["Olive plate", "Bread plate", "Focaccia & dips"] },
             { t: "Salads", items: ["Green salad", "Caesar salad", "Caprese salad"] },
-            { t: "From the taboon (pizzas)", items: ["Margherita"] },
+            { t: "Taboon pizzas", items: ["Margherita"] },
             { t: "Open bar", items: ["2 beers (Budweiser, San Miguel)", "Quality wine (Chardonnay, Pinot Grigio, rose / red)"] }
           ]
         },
@@ -3935,14 +3948,14 @@
           day: [
             { t: "Starters & sharing", items: ["Bread plate (butter & sea salt)", "Focaccia & dips", "Rich cheese plate", "Roasted plate (peppers, brinza cheese)", "Sophie's spicy dips", "Olive plate"] },
             { t: "Salads", items: ["Green salad", "Caesar salad", "Caprese salad", "Roots salad"] },
-            { t: "Sandwich & focaccia trays", items: ["Egg salad", "Cheese", "Tuna / vegan", "Antipasti focaccia", "Cheese / Balkan focaccia"] },
+            { t: "Sandwiches & focaccia", items: ["Egg salad", "Cheese", "Tuna / vegan", "Antipasti focaccia", "Cheese / Balkan focaccia"] },
             { t: "Soft drinks", items: ["Coffee / tea station", "Iced tea infusions", "Fresh orange juice / lemonade", "Soda"] },
-            { t: "Daytime-friendly alcohol", items: ["Mimosa", "Aperol Spritz", "Espresso Martini"] }
+            { t: "Daytime cocktails", items: ["Mimosa", "Aperol Spritz", "Espresso Martini"] }
           ],
           evening: [
             { t: "Starters & sharing", items: ["Bread plate (butter & sea salt)", "Focaccia & dips", "Rich cheese plate", "Roasted plate (peppers, brinza cheese)", "Sophie's spicy dips", "Olive plate"] },
             { t: "Salads", items: ["Green salad", "Caesar salad", "Caprese salad", "Roots salad"] },
-            { t: "From the taboon (pizzas)", items: ["Margherita", "Pomodorino", "Basil", "Funghi", "Antipasti focaccia", "Cheese / Balkan focaccia"] },
+            { t: "Taboon pizzas", items: ["Margherita", "Pomodorino", "Basil", "Funghi", "Antipasti focaccia", "Cheese / Balkan focaccia"] },
             { t: "Open bar", items: ["2 beers (Budweiser, San Miguel)", "Quality wine (Chardonnay, Pinot Grigio, rose / red)", "6 spirits to choose (gin, vodka, whiskey, rum, arak, Campari)", "8 mixers (cola, tonic, lemonade, soda, Schweppes, Sprite, grapefruit & orange)"] }
           ]
         },
@@ -3950,14 +3963,14 @@
           day: [
             { t: "Starters & sharing", items: ["Bread plate (butter & sea salt)", "Olive plate", "Focaccia & dips", "Premium cheese plate", "Roasted plate (peppers, brinza cheese)", "Sophie's spicy dips", "Warm taboon cabbage", "Ceviche"] },
             { t: "Salads", items: ["Green salad", "Caesar salad", "Caprese salad", "Roots salad"] },
-            { t: "Sandwich, focaccia & pastry trays", items: ["Egg salad", "Cheese", "Tuna / vegan", "Salmon sandwich", "Antipasti focaccia", "Cheese / Balkan focaccia", "Burekas tray", "Sweet pastries tray"] },
+            { t: "Sandwiches & pastries", items: ["Egg salad", "Cheese", "Tuna / vegan", "Salmon sandwich", "Antipasti focaccia", "Cheese / Balkan focaccia", "Burekas tray", "Sweet pastries tray"] },
             { t: "Soft drinks", items: ["Coffee / tea station", "Iced tea infusions", "Fresh orange juice / lemonade", "Soda", "Chilled personal drink bottles"] },
-            { t: "Daytime-friendly alcohol", items: ["Mimosa", "Aperol Spritz", "Espresso Martini", "Cold sangria"] }
+            { t: "Daytime cocktails", items: ["Mimosa", "Aperol Spritz", "Espresso Martini", "Cold sangria"] }
           ],
           evening: [
             { t: "Starters & sharing", items: ["Bread plate (butter & sea salt)", "Olive plate", "Focaccia & dips", "Premium cheese plate", "Roasted plate (peppers, brinza cheese)", "Sophie's spicy dips", "Warm taboon cabbage", "Crudo (elegant ceviche)"] },
             { t: "Salads", items: ["Green salad", "Caesar salad", "Caprese salad", "Roots salad"] },
-            { t: "From the taboon (pizzas & focaccias)", items: ["Blue cheese & chili-jam pizza", "Fresca", "Basil", "Funghi", "Garlic-butter focaccia", "Antipasti focaccia", "Cheese focaccia", "Roasted eggplant in black tahini"] },
+            { t: "Taboon pizza & focaccia", items: ["Blue cheese & chili-jam pizza", "Fresca", "Basil", "Funghi", "Garlic-butter focaccia", "Antipasti focaccia", "Cheese focaccia", "Roasted eggplant in black tahini"] },
             { t: "Cocktail bar", items: ["Open cocktail bar with a dedicated mixologist (premium spirits)", "2 beers (Budweiser, San Miguel)", "Quality wine (Chardonnay, Pinot Grigio, rose / red)", "7 spirits to choose (gin, vodka, whiskey, rum, arak, Campari, tequila)", "8 mixers (cola, tonic, lemonade, soda, Schweppes, Sprite, grapefruit & orange)"] }
           ]
         }
