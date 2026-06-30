@@ -128,8 +128,11 @@ export async function onRequestPost({ request, env }) {
     short_textoant7hbw:    d.utm_campaign || "",
     short_textgjnrhjdi:    d.utm_source || "",
     color_mm18ym70:        { label: "New Lead" },
-    long_textlwbyhlq0:     { text: notes },
   };
+  // Summary blob: company board -> Lead Summary (long_text_mm4t4fjb); private board lacks that
+  // column, so keep the blob in long_textlwbyhlq0 there (private path unchanged).
+  if (isPrivate) cols.long_textlwbyhlq0 = { text: notes };
+  else           cols.long_text_mm4t4fjb = { text: notes };
   const timeOfEvent = d.menu ? timeLabel : (d.eventTime || "");
   if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
   if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal);
@@ -153,9 +156,10 @@ export async function onRequestPost({ request, env }) {
   if (isPackage && d.barMenuText)  cols.text_mm4t9mgc  = d.barMenuText;             // Alcohol Package Details (full drinks text)
   if (isPackage && d.perHeadText)  cols.text_mm4ts8zc  = d.perHeadText;             // עלות לאדם (₪ text)
   if (isPackage && d.addonsText)   cols.text_mm4t3vrm  = d.addonsText;              // עלות התוספות (₪ text)
-  // customer note -> dedicated note column for package leads (clean note; the summary that used to
-  // fill this column is now split across the dedicated columns). Note also stays in the food text.
-  if (isPackage && d.notes) cols.long_textlwbyhlq0 = { text: String(d.notes) };     // הערות הלקוח
+  // customer note -> הערות הלקוח (clean note only). Combine the menu note and the food note if present.
+  // Company board only: the private board keeps the summary blob in this column (set above).
+  const _custNote = [d.notes, d.foodNotes].filter(Boolean).join("\n").trim();
+  if (!isPrivate && _custNote) cols.long_textlwbyhlq0 = { text: _custNote };         // הערות הלקוח
 
   const slot = String(d.slot || "");
   const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
