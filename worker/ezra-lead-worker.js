@@ -118,15 +118,19 @@ export default {
       short_textgjnrhjdi:    d.utm_source || "",
       color_mm18ym70:        { label: "New Lead" },
     };
+    const isPackage = !d.leadType;   // website booking lead (no leadType)
     // Summary blob: company board -> Lead Summary (long_text_mm4t4fjb); private board lacks that
     // column, so keep the blob in long_textlwbyhlq0 there (private path unchanged).
     if (isPrivate) cols.long_textlwbyhlq0 = { text: notes };
     else           cols.long_text_mm4t4fjb = { text: notes };
     const timeOfEvent = d.menu ? timeLabel : (d.eventTime || "");
     if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
-    if (d.estTotal != null && d.estTotal !== "") cols.numeric_mm3rxrb4 = String(d.estTotal);
-    // ₪-formatted total as text for the contract's מחיר סופי row (matches עלות לאדם style; numeric stays)
-    if (d.estTotal != null && d.estTotal !== "") cols.text_mm1qdk3m = "₪" + Number(d.estTotal).toLocaleString("en-US");
+    // Total: package leads -> Total Price (Packages) text only; non-package leads keep the Custom
+    // price columns (reserved for in-Monday calc). CAPI value reads d.estTotal directly, not the column.
+    if (d.estTotal != null && d.estTotal !== "") {
+      if (isPackage) cols.text_mm4trhj9 = "₪" + Number(d.estTotal).toLocaleString("en-US");   // Total Price (Packages)
+      else { cols.numeric_mm3rxrb4 = String(d.estTotal); cols.text_mm1qdk3m = "₪" + Number(d.estTotal).toLocaleString("en-US"); }
+    }
     if (d.date) cols.date5bab58wj = { date: d.date };
     if (d.callbackTime) cols.single_selectl0ocmt7 = { label: d.callbackTime };
     if (Array.isArray(d.ageRanges) && d.ageRanges.length) cols.dropdown_mm1qs76g = { labels: d.ageRanges };
@@ -134,7 +138,6 @@ export default {
     if (d.foodMenuText) cols.text_mm1tgvh0 = d.foodMenuText;   // contract food-text (package leads only)
     // bar / DJ / add-ons: package booking lead only (no leadType). Incomplete leads also carry
     // addonLabels but must not populate these columns (per spec scope).
-    const isPackage = !d.leadType;
     if (isPackage && d.barLabel) cols.color_mm1gytg8 = { label: d.barLabel };   // bar tier (included)
     if (isPackage && d.djLabel)  cols.color_mm1g4y0y = { label: d.djLabel };    // music/DJ tier (included)
     if (isPackage && Array.isArray(d.addonLabels) && d.addonLabels.length) cols.dropdown_mm1gze4c = { labels: d.addonLabels };   // chosen add-ons
@@ -152,6 +155,14 @@ export default {
     const _custNote = [d.notes, d.foodNotes].filter(Boolean).join("\n").trim();
     if (!isPrivate && _custNote) cols.long_textlwbyhlq0 = { text: _custNote };         // הערות הלקוח
 
+    // Package leads finished the whole website flow: distinct status, no callback needed, Ezra venue.
+    // Set last so they override the generic status/callback writes above.
+    if (isPackage) {
+      cols.color_mm18ym70       = { label: "New Lead - Packages" };
+      cols.single_selectl0ocmt7 = { label: "לא רלוונטי לצלצל" };
+      cols.color_mm4ssjj3       = { label: "עזרא" };
+    }
+
     const slot = String(d.slot || "");
     const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
     const [startStr, endStr] = slot.split("-");
@@ -164,10 +175,12 @@ export default {
       create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
     }`;
     const board = isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
+    // Package leads arrive as a new lead in the packages intake group; a Monday/GetSign automation
+    // moves them to "Agreement Sent" after the contract is sent (not the worker's job).
     const group = isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? GRP_FOLLOWUP
-                : GRP_AGREEMENT;
+                : GRP_FOLLOWUP;
     // item name: company for ALL lead types; fall back to person if no company
     const displayName = String(d.company || d.name || "ליד מהאתר");
     const variables = {
