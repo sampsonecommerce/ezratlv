@@ -4265,7 +4265,7 @@
           const { breakdown } = categoryPortions(sec.t, sec.items.map(it => splitDish(it).name), guests);
           for (const row of breakdown) {
             if (row.qty == null) continue;
-            lines.push('- ' + row.name + ', כמות: ' + row.qty + '. ');
+            lines.push(row.name + ' | כמות: ' + row.qty);
           }
         }
         let out = lines.join('\n');
@@ -4276,12 +4276,18 @@
       // Pulls every bar + soft-drink section from MENUS[plan][menu] and joins the raw items.
       function buildBarText(plan, menu) {
         const secs = (MENUS[plan] && MENUS[plan][menu]) || [];
-        const parts = [];
+        const lines = [];
         for (const sec of secs) {
           if (!isBarCat(sec.t)) continue;                 // only bar/alcohol/soft-drink sections
-          parts.push(sec.t + ': ' + sec.items.join(', '));
+          sec.items.forEach((raw, i) => {
+            const m = raw.match(/^(.*?)\s*\(([^)]*)\)\s*$/);  // split "name (detail)"
+            const name = m ? m[1].trim() : raw.trim();
+            const detail = m ? m[2].trim() : '';
+            const head = (i === 0) ? sec.t + ' | ' : '';      // section title on first item only
+            lines.push(head + name + (detail ? ' | ' + detail : ''));
+          });
         }
-        return parts.join('. ') + (parts.length ? '.' : '');
+        return lines.join('\n');
       }
       // word-saving: collapse a shared leading "vessel" word, separate food types with |
       const VESSEL = /^(צלחת|צלחות|קערית|קעריות|קערות|מגש|מגשי|פלטת|פלטה|סלסלת|סלסלות|עמדת|סלט|סלטי)$/;
