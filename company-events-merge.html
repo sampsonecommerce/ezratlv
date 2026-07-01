@@ -2073,21 +2073,35 @@
     .when-cal .cal__head { justify-content: space-between; margin-block-end: 0.6rem; padding-inline: 0.1rem; }
     .when-slots .book-slots__head { text-align: center; margin-block-end: 0.5rem; font-size: 0.7rem; }
 
-    /* the LEFT column's slot area is the real dn-graph sky panel, re-flowed VERTICALLY:
-       orb rides the top (.dn-arc), the slot buttons stack down the panel (morning top → night bottom). */
+    /* the LEFT column's slot area: one dark box with a compact REACTIVE sky strip on top
+       (orb slides + glow warm→cool on hover/select) and slim time ROWS below it. */
     .when-slots .dn-graph--vert { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
-      padding: 0.85rem 0.8rem 0.8rem; }
-    .dn-graph--vert .dn-arc { height: 52px; margin-block-end: 0.4rem; flex: none; }
-    .dn-graph--vert .dn-bars { position: static; height: auto; margin: 0; flex: 1 1 auto;
-      display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; }
-    /* relative (not static) so the absolute .dn-bar__fill anchors to the button, not the whole panel */
-    .dn-graph--vert .dn-bar { position: relative; inset: auto; left: auto; bottom: auto; height: auto;
-      width: 100%; min-height: 46px; }
-    .dn-graph--vert .dn-bar__inner { justify-content: center; gap: 0.4rem; }
-    .dn-graph--vert .dn-bar__taken { color: rgba(255,255,255,0.7); font-size: 0.72rem; }
-    .dn-graph--vert .dn-bar.is-taken .dn-bar__taken { text-decoration: none; }
+      padding: 0; overflow: hidden; }
+    /* compact sky strip (holds the sun/moon orb; the base .dn-graph ::after glow sits behind it) */
+    .dn-graph--vert .dn-arc { position: relative; height: 54px; flex: none; margin: 0;
+      border-block-end: 1px solid rgba(196,154,60,0.18); }
+    .dn-graph--vert .dn-celestial { width: 26px; height: 26px; margin-inline-start: -13px; bottom: 9px; }
+    /* slim rows, vertically centered in the remaining space */
+    .dn-rows { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+    .slotrow {
+      position: relative; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      width: 100%; min-height: 38px; padding: 0.35rem 0.8rem; direction: ltr;
+      background: transparent; border: 0; border-block-end: 1px solid rgba(255,255,255,0.06);
+      color: var(--cream); cursor: pointer; transition: background 0.2s var(--ease);
+    }
+    .slotrow:last-child { border-block-end: 0; }
+    .slotrow__icon { flex: none; width: 15px; height: 15px; display: inline-flex; }
+    .slotrow__icon svg { width: 15px; height: 15px; color: rgba(255,255,255,0.82); display: inline-block; }
+    .slotrow__time { font-family: 'Pliant', var(--font-body); font-size: 0.82rem; letter-spacing: 0.02em; white-space: nowrap; }
+    .slotrow__taken { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+    .slotrow:hover:not(.is-taken):not(.is-selected) { background: rgba(255,255,255,0.06); }
+    .slotrow.is-selected { background: linear-gradient(90deg, rgba(245,217,138,0.16), rgba(196,154,60,0.09)); }
+    .slotrow.is-selected .slotrow__time { color: var(--gold-light); font-weight: 600; }
+    .slotrow.is-selected::before { content: ''; position: absolute; inset-inline-start: 0; top: 6px; bottom: 6px; width: 3px; background: var(--gold); border-radius: 0 2px 2px 0; }
+    .slotrow.is-taken { cursor: not-allowed; opacity: 0.5; }
+    .slotrow.is-taken .slotrow__time { text-decoration: line-through; }
     /* greyed + non-interactive until a date is chosen (no layout shift) */
-    .dn-graph--vert.is-locked .dn-bar { opacity: 0.42; pointer-events: none; filter: grayscale(0.55); }
+    .dn-graph--vert.is-locked .slotrow { opacity: 0.42; pointer-events: none; filter: grayscale(0.5); }
     /* day→night caption under the panel */
     .when-slots__cap { text-align: center; margin-block-start: 0.6rem; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--cream-dim); }
 
@@ -2097,7 +2111,6 @@
       .when-divider { flex-basis: 1px; width: 100%; height: 1px; align-self: auto; margin: 0.1rem 0;
         background: linear-gradient(90deg, transparent, rgba(196,154,60,0.35), transparent); }
       .when-slots { flex: 0 0 auto; }
-      .dn-graph--vert .dn-bars { gap: 0.45rem; }
     }
 
     .dn-graph {
@@ -4701,7 +4714,7 @@
         const cel = document.getElementById('dnCelestial');
         if (!cel) return;
         cel.style.left = (frac * 100) + '%';
-        cel.style.transform = 'translateY(' + (-(50 * Math.sin(Math.PI * frac))).toFixed(1) + 'px)';
+        cel.style.transform = 'translateY(' + (-(14 * Math.sin(Math.PI * frac))).toFixed(1) + 'px)';   // gentle arc in the compact strip
       }
       // orb slide position per mood: warm sun to the left (morning), amber center (dusk), cool moon right (night)
       const MOOD_FRAC = { day: 0.16, dusk: 0.5, night: 0.84 };
@@ -4726,31 +4739,29 @@
           : '<span class="book-chosen__hint">בחרו יום מהלוח</span>';
         slotsHead.textContent = 'חלונות של ' + plan.hours + ' שעות';
 
-        // vertical sky panel: the sun/moon orb up top, the plan's windows stacked as .dn-bar buttons
-        const bars = list.map((label, i) => {
+        // compact reactive sky strip (orb + glow) on top, slim time rows below
+        const rows = list.map((label, i) => {
           const [ls, le] = label.split('-');
           const sh = parseInt(ls, 10);
           const isTaken = hasDate && taken.has(i);
           const isSel = state.slot === label && !isTaken;
-          return '<button type="button" class="dn-bar' + (isTaken ? ' is-taken' : '') + (isSel ? ' is-selected' : '') + '"' +
+          return '<button type="button" class="slotrow' + (isTaken ? ' is-taken' : '') + (isSel ? ' is-selected' : '') + '"' +
             ' data-label="' + label + '" data-mood="' + moodFor(sh) + '"' + (isTaken ? ' disabled' : '') +
             ' aria-label="' + label + (isTaken ? ' - תפוס' : '') + '">' +
-            '<span class="dn-bar__fill"></span>' +
-            '<span class="dn-bar__inner">' + slotIconFor(sh) +
-              '<span class="dn-bar__time"><span class="dn-bar__t">' + ls + '</span><span class="dn-bar__sep"> - </span><span class="dn-bar__t">' + (le || '') + '</span></span>' +
-              (isTaken ? '<span class="dn-bar__taken"> · תפוס</span>' : '') +
-            '</span>' +
+            '<span class="slotrow__icon">' + slotIconFor(sh) + '</span>' +
+            '<span class="slotrow__time">' + ls + ' - ' + (le || '') + '</span>' +
+            (isTaken ? '<span class="slotrow__taken">· תפוס</span>' : '') +
             '</button>';
         }).join('');
         slotsGraph.innerHTML =
           '<div class="dn-arc"><span class="dn-celestial" id="dnCelestial">' +
             '<span class="dn-celestial__sun"></span><span class="dn-celestial__moon"></span>' +
           '</span></div>' +
-          '<div class="dn-bars">' + bars + '</div>';
+          '<div class="dn-rows">' + rows + '</div>';
 
         slotsGraph.classList.toggle('is-locked', !hasDate);   // greyed + non-interactive until a date is chosen
         applyMood(restingMood());                             // orb + glow settle on the chosen (or morning) mood
-        slotsGraph.querySelectorAll('.dn-bar:not(.is-taken)').forEach(b => {
+        slotsGraph.querySelectorAll('.slotrow:not(.is-taken)').forEach(b => {
           b.addEventListener('click', () => selectSlot(b));
           b.addEventListener('mouseenter', () => applyMood(b.dataset.mood));   // preview the mood on hover
           b.addEventListener('mouseleave', () => applyMood(restingMood()));
@@ -4759,7 +4770,7 @@
 
       function selectSlot(b) {
         state.slot = b.dataset.label;
-        slotsGraph.querySelectorAll('.dn-bar').forEach(x => x.classList.remove('is-selected'));
+        slotsGraph.querySelectorAll('.slotrow').forEach(x => x.classList.remove('is-selected'));
         b.classList.add('is-selected');
         applyMood(b.dataset.mood);   // lock the sky to the chosen slot's time of day
         updateNext1();
@@ -5044,7 +5055,7 @@
         // setPlan wiped the slot; put the saved one back and re-highlight it on the graph
         state.slot = restoredSlot;
         if (state.date && state.slot) {
-          const b = slotsGraph.querySelector('.dn-bar[data-label="' + state.slot + '"]:not(.is-taken)');
+          const b = slotsGraph.querySelector('.slotrow[data-label="' + state.slot + '"]:not(.is-taken)');
           if (b) selectSlot(b);
         }
         next1.disabled = !(state.date && state.slot);
