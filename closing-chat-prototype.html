@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>עזרא · אב-טיפוס תהליך סגירה בצ'אט</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pliant:wght@600;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0f0d0b; --panel:#1b150f; --panel2:#141009; --cream:#f0ebe0; --cream-dim:rgba(240,235,224,.62);
+    --gold:#c49a3c; --gold-light:#f5d98a; --line:rgba(196,154,60,.22);
+    --font-body:'Heebo',sans-serif; --font-serif:'Cormorant Garamond',serif; --ease:cubic-bezier(.4,0,.2,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--cream);font-family:var(--font-body);line-height:1.5;
+    overflow:hidden; -webkit-font-smoothing:antialiased}
+  .num{font-family:'Pliant',var(--font-body);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:embed}
+  button{font-family:inherit;cursor:pointer}
+
+  /* ── fixed frame: header / two panes / nothing scrolls the page ── */
+  .frame{height:100dvh;display:flex;flex-direction:column;max-width:1180px;margin-inline:auto;
+    padding:0 clamp(.8rem,2vw,1.6rem)}
+  .bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding-block:.7rem;border-block-end:1px solid var(--line)}
+  .bar__brand{font-family:var(--font-serif);font-size:1.25rem;color:var(--gold-light);letter-spacing:.02em}
+  .bar__prog{display:flex;align-items:center;gap:.55rem;font-size:.78rem;color:var(--cream-dim)}
+  .bar__dots{display:flex;gap:.3rem;direction:ltr}
+  .bar__dots i{width:7px;height:7px;border-radius:50%;background:rgba(240,235,224,.18);transition:background .3s var(--ease)}
+  .bar__dots i.on{background:var(--gold)}
+  .bar__back{display:inline-flex;align-items:center;gap:.35rem;background:transparent;border:.5px solid var(--line);
+    border-radius:999px;color:var(--cream-dim);font-size:.78rem;padding:.3rem .75rem;
+    transition:color .2s,border-color .2s}
+  .bar__back:hover{color:var(--gold-light);border-color:var(--gold)}
+  .bar__back[hidden]{display:none}
+
+  .panes{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(.8rem,2vw,1.4rem);
+    padding-block:1rem}
+  /* RTL: first child = RIGHT pane = the chat */
+  .chat{min-height:0;display:flex;flex-direction:column;background:linear-gradient(170deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .chat__log{flex:1 1 auto;min-height:0;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.65rem;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .chat__log::-webkit-scrollbar{width:7px}
+  .chat__log::-webkit-scrollbar-thumb{background:rgba(196,154,60,.45);border-radius:99px}
+
+  .msg{max-width:88%;border-radius:16px;padding:.65rem .9rem;font-size:.92rem;
+    animation:pop .3s var(--ease)}
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .msg--bot{align-self:flex-start;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.07);
+    border-start-start-radius:4px}
+  .msg--bot .t{font-family:var(--font-serif);font-size:1.15rem;color:var(--cream);line-height:1.25}
+  .msg--bot .s{font-size:.8rem;color:var(--cream-dim);margin-block-start:.2rem}
+  .msg--bot .s--gold{color:var(--gold-light);font-weight:600}
+  .msg--me{align-self:flex-end;background:linear-gradient(135deg,rgba(196,154,60,.28),rgba(196,154,60,.16));
+    border:.5px solid rgba(196,154,60,.4);border-start-end-radius:4px;color:var(--gold-light);font-weight:500}
+  .msg--sys{align-self:center;background:none;border:none;color:var(--cream-dim);font-size:.75rem;padding:.1rem}
+
+  /* input card (chips / widgets) at the tail of the chat */
+  .ask{align-self:stretch;background:rgba(0,0,0,.22);border:.5px solid var(--line);border-radius:14px;
+    padding:.8rem;animation:pop .3s var(--ease)}
+  .chips{display:flex;gap:.5rem;flex-wrap:wrap}
+  .chip{flex:1 1 auto;min-width:110px;background:rgba(255,255,255,.05);border:.5px solid var(--line);border-radius:11px;
+    color:var(--cream);padding:.55rem .7rem;font-size:.9rem;text-align:center;
+    transition:background .2s,border-color .2s,transform .15s}
+  .chip small{display:block;font-size:.72rem;color:var(--cream-dim);font-weight:400}
+  .chip:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .chip.on{background:var(--gold);border-color:var(--gold);color:#141009;font-weight:600}
+  .chip.on small{color:rgba(20,16,9,.75)}
+  .go{width:100%;margin-block-start:.7rem;background:var(--gold);border:none;border-radius:11px;color:#141009;
+    font-weight:600;font-size:.95rem;padding:.65rem;transition:filter .2s,opacity .2s}
+  .go:hover{filter:brightness(1.07)}
+  .go:disabled{opacity:.38;cursor:not-allowed}
+  .ask label{display:block;font-size:.78rem;color:var(--cream-dim);margin:.55rem 0 .25rem}
+  .ask input[type=text],.ask input[type=tel],.ask input[type=email],.ask textarea{width:100%;background:rgba(255,255,255,.05);
+    border:.5px solid var(--line);border-radius:9px;color:var(--cream);font-family:inherit;font-size:.9rem;padding:.5rem .65rem}
+  .ask input:focus,.ask textarea:focus{outline:none;border-color:var(--gold)}
+  .ask textarea{resize:none;min-height:52px}
+  .check{display:flex;gap:.55rem;align-items:flex-start;margin-block-start:.6rem;font-size:.78rem;color:var(--cream-dim);cursor:pointer}
+  .check input{margin-block-start:.2rem;accent-color:var(--gold)}
+  .check b{color:var(--cream);display:block;font-size:.82rem}
+  .legal{font-size:.68rem;color:var(--cream-dim);text-align:center;margin-block-start:.5rem}
+  /* guests slider */
+  .gslide{display:flex;align-items:center;gap:.7rem;margin-block-start:.3rem}
+  .gslide input[type=range]{flex:1;appearance:none;-webkit-appearance:none;height:6px;border-radius:6px;
+    background:rgba(196,154,60,.25)}
+  .gslide input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--gold);border:2px solid #141009;box-shadow:0 0 10px rgba(196,154,60,.6);cursor:grab}
+  .gslide .gv{font-family:'Pliant',var(--font-body);font-size:1.25rem;color:var(--gold-light);min-width:2ch;text-align:center}
+
+  /* ── LEFT pane: live visual ── */
+  .stage{min-height:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(170deg,#171209,#100d08);overflow:hidden;position:relative}
+  .stage__body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(.9rem,2vw,1.4rem)}
+  .fadeing{animation:fadeIn .4s var(--ease)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* step-1 visual: package card */
+  .pkgcard{max-width:340px;margin-inline:auto;text-align:center;border:.5px solid var(--line);border-radius:16px;
+    padding:1.4rem 1.2rem;background:rgba(196,154,60,.05)}
+  .pkgcard .nm{font-family:var(--font-serif);font-size:1.7rem;color:var(--gold-light)}
+  .pkgcard .rows{margin-block-start:.9rem;display:flex;flex-direction:column;gap:.45rem;font-size:.88rem;color:var(--cream-dim)}
+  .pkgcard .rows b{color:var(--cream)}
+  .pkgcard .ph{margin-block-start:1rem;font-family:'Pliant',var(--font-serif);font-size:1.9rem;color:var(--gold-light)}
+  .pkgcard .ph small{display:block;font-family:var(--font-body);font-size:.72rem;color:var(--cream-dim);font-weight:400}
+
+  /* step-2 visual: merged WHEN (calendar right + sky panel left) */
+  .when{display:flex;gap:.9rem;align-items:stretch;min-height:0}
+  .when__cal{flex:1.25 1 0;min-width:0}
+  .when__sky{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
+  .colhead{text-align:center;margin-block-end:.5rem}
+  .colhead .t{font-family:var(--font-serif);font-size:1.1rem;color:var(--cream)}
+  .colhead .s{font-size:.8rem;color:var(--cream-dim);min-height:1.2em}
+  .colhead .s b{color:var(--gold)}
+  .cal{max-width:330px;margin-inline:auto}
+  .cal__head{display:flex;align-items:center;justify-content:space-between;margin-block-end:.5rem}
+  .cal__nav{width:32px;height:32px;border-radius:9px;border:.5px solid var(--line);background:transparent;color:var(--gold);
+    display:inline-flex;align-items:center;justify-content:center}
+  .cal__nav:disabled{opacity:.3;cursor:not-allowed}
+  .cal__month{font-family:var(--font-serif);font-size:1.15rem;color:var(--cream)}
+  .cal__month .num{font-family:'Pliant',var(--font-serif);font-weight:700}
+  .cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.16rem}
+  .cal__dow{text-align:center;font-size:.6rem;color:var(--cream-dim);padding-block:.15rem}
+  .cal__day{aspect-ratio:1/1;border-radius:7px;border:.5px solid transparent;background:rgba(255,255,255,.04);
+    color:var(--cream);font-size:.76rem;font-family:'Pliant',var(--font-body);
+    display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s}
+  .cal__day.is-empty{background:transparent}
+  .cal__day.is-past{opacity:.28;cursor:not-allowed;background:transparent}
+  .cal__day.is-booked{cursor:not-allowed;color:rgba(240,235,224,.4);
+    background:repeating-linear-gradient(135deg,rgba(0,0,0,.3),rgba(0,0,0,.3) 4px,transparent 4px,transparent 8px)}
+  .cal__day:not(.is-past):not(.is-booked):not(.is-empty):hover{border-color:var(--gold)}
+  .cal__day.is-selected{background:var(--gold);color:#141009;font-weight:700}
+  .cal__legend{display:flex;justify-content:center;gap:1rem;margin-block-start:.45rem;font-size:.68rem;color:var(--cream-dim)}
+  .cal__legend i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-inline-end:.3rem}
+  .cal__legend .free{background:rgba(255,255,255,.12);border:1px solid var(--line)}
+  .cal__legend .busy{background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 3px,transparent 3px,transparent 6px);border:1px solid var(--line)}
+
+  /* sky panel: compact reactive strip + slim rows */
+  .sky{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;position:relative;border-radius:14px;overflow:hidden;
+    border:1px solid var(--line);isolation:isolate}
+  .sky::before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,#15110b 0%,#0a0805 100%)}
+  .sky::after{content:'';position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(150px 100px at 50% 20px,var(--glow,rgba(255,206,120,.55)),transparent 72%);
+    opacity:var(--mood,.55);transition:opacity .5s var(--ease),background .5s var(--ease)}
+  .sky__arc{position:relative;height:50px;flex:none;border-block-end:1px solid rgba(196,154,60,.18)}
+  .orb{position:absolute;bottom:8px;left:16%;width:24px;height:24px;margin-inline-start:-12px;
+    transition:left .55s var(--ease),transform .55s var(--ease)}
+  .orb .sun,.orb .moon{position:absolute;inset:0;border-radius:50%;transition:opacity .5s var(--ease)}
+  .orb .sun{background:radial-gradient(circle,#fff3cf 0%,#ffd25e 55%,#f4a93c 100%);box-shadow:0 0 13px 3px rgba(255,206,94,.75)}
+  .orb .moon{background:radial-gradient(circle at 64% 38%,#fdfaf0 0%,#e6e2d2 60%,#cfc9b4 100%);
+    box-shadow:0 0 11px 2px rgba(220,224,255,.55);opacity:0}
+  .sky[data-mood="night"] .orb .sun{opacity:0}
+  .sky[data-mood="night"] .orb .moon{opacity:1}
+  .sky__rows{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center}
+  .srow{position:relative;display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;min-height:36px;
+    padding:.3rem .7rem;direction:ltr;background:transparent;border:0;border-block-end:1px solid rgba(255,255,255,.06);
+    color:var(--cream);transition:background .2s}
+  .srow:last-child{border-block-end:0}
+  .srow svg{width:14px;height:14px;color:rgba(255,255,255,.82)}
+  .srow .tm{font-family:'Pliant',var(--font-body);font-size:.8rem;white-space:nowrap}
+  .srow .tk{font-size:.68rem;color:rgba(255,255,255,.6)}
+  .srow:hover:not(.is-taken):not(.is-selected){background:rgba(255,255,255,.06)}
+  .srow.is-selected{background:linear-gradient(90deg,rgba(245,217,138,.16),rgba(196,154,60,.09))}
+  .srow.is-selected .tm{color:var(--gold-light);font-weight:600}
+  .srow.is-selected::before{content:'';position:absolute;inset-inline-start:0;top:5px;bottom:5px;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
+  .srow.is-taken{cursor:not-allowed;opacity:.5}
+  .srow.is-taken .tm{text-decoration:line-through}
+  .sky.is-locked .srow{opacity:.42;pointer-events:none;filter:grayscale(.5)}
+  .sky__cap{flex:none;text-align:center;font-size:.66rem;letter-spacing:.05em;color:var(--cream-dim);
+    padding-block:.35rem;border-block-start:1px solid rgba(255,255,255,.05)}
+
+  /* step-3 visual: menu */
+  .menu{overflow:hidden;display:flex;flex-direction:column;gap:.6rem;min-height:0}
+  .mcard{border:.5px solid var(--line);border-radius:12px;padding:.6rem .8rem;background:rgba(255,255,255,.03)}
+  .mcard .mt{font-size:.8rem;font-weight:600;color:var(--gold-light);margin-block-end:.3rem}
+  .mcard .md{display:flex;flex-wrap:wrap;gap:.25rem .7rem;font-size:.78rem;color:var(--cream-dim)}
+  .mcard .md span::before{content:'✦';color:var(--gold);font-size:.6rem;margin-inline-end:.3rem}
+
+  /* step-4 visual: live price */
+  .price{max-width:340px;margin-inline:auto;text-align:center}
+  .price .rows{display:flex;flex-direction:column;gap:.5rem;font-size:.9rem;color:var(--cream-dim);margin-block-end:1rem}
+  .price .rows div{display:flex;justify-content:space-between;gap:1rem}
+  .price .rows b{color:var(--cream)}
+  .price .tot{border-block-start:1px solid var(--line);padding-block-start:.8rem;
+    font-family:'Pliant',var(--font-serif);font-size:2.3rem;color:var(--gold-light)}
+  .price .tot small{display:block;font-family:var(--font-body);font-size:.72rem;color:var(--cream-dim);font-weight:400}
+
+  /* step-5/6 visual: receipt / done */
+  .rcpt{max-width:360px;margin-inline:auto;border:.5px solid var(--line);border-radius:14px;
+    background:rgba(196,154,60,.05);padding:1rem 1.1rem;font-size:.86rem}
+  .rcpt .rt{font-family:var(--font-serif);font-size:1.2rem;color:var(--gold-light);text-align:center;margin-block-end:.7rem}
+  .rcpt .rr{display:flex;justify-content:space-between;gap:1rem;padding-block:.3rem;border-block-end:1px dashed rgba(196,154,60,.18);color:var(--cream-dim)}
+  .rcpt .rr:last-child{border:none}
+  .rcpt .rr b{color:var(--cream)}
+  .done{max-width:380px;margin-inline:auto;text-align:center}
+  .done .ok{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(196,154,60,.25),transparent 70%);
+    border:2px solid var(--gold);color:var(--gold-light);display:flex;align-items:center;justify-content:center;
+    margin:0 auto 1rem;font-size:1.6rem}
+  .done .dt{font-family:var(--font-serif);font-size:1.6rem;color:var(--cream)}
+  .done .hero{color:var(--gold-light);font-weight:600;margin-block-start:.4rem}
+  .done p{font-size:.84rem;color:var(--cream-dim);margin-block:.5rem 0}
+  .done .note{border:.5px dashed rgba(196,154,60,.4);border-radius:10px;padding:.6rem .8rem;margin-block-start:.8rem;font-size:.78rem}
+
+  /* persistent talk prompt: compact pill, bottom-right of the frame, always there */
+  .talkpill{position:fixed;inset-inline-end:clamp(.8rem,2vw,1.6rem);inset-block-end:.8rem;z-index:40;
+    background:rgba(15,13,11,.92);border:1px dashed rgba(196,154,60,.5);border-radius:999px;
+    color:var(--gold-light);font-size:.72rem;padding:.42rem .85rem;backdrop-filter:blur(4px);
+    transition:border-color .2s,background .2s}
+  .talkpill:hover{border-color:var(--gold);background:rgba(196,154,60,.1)}
+
+  /* mobile: stack (chat top, visual below), frame still doesn't scroll */
+  @media(max-width:820px){
+    .panes{grid-template-columns:1fr;grid-template-rows:1.15fr 1fr;padding-block:.7rem;gap:.7rem}
+    .stage__body{padding:.7rem}
+    .when{flex-direction:column;gap:.6rem;overflow:hidden}
+    .cal{max-width:300px}
+    .msg--bot .t{font-size:1.02rem}
+    .talkpill{font-size:.66rem;inset-block-end:.5rem}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .msg,.ask,.fadeing,.orb,.orb .sun,.orb .moon,.sky::after{animation:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="bar">
+    <div class="bar__brand">עזרא</div>
+    <div class="bar__prog">
+      <span id="progTxt">שלב 1 מתוך 5</span>
+      <span class="bar__dots" id="progDots"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+    </div>
+    <button class="bar__back" id="backBtn" type="button" hidden>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      חזרה
+    </button>
+  </div>
+
+  <div class="panes">
+    <!-- RIGHT (first in RTL): the conversation -->
+    <div class="chat">
+      <div class="chat__log" id="log"></div>
+    </div>
+    <!-- LEFT: live visual for the current step -->
+    <div class="stage">
+      <div class="stage__body" id="stage"></div>
+    </div>
+  </div>
+</div>
+
+<button class="talkpill" type="button">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+
+<script src="ezra-booking-engine.js"></script>
+<script>
+(function(){
+  const E = window.EzraEngine;
+  const $ = (id)=>document.getElementById(id);
+  const log = $('log'), stage = $('stage');
+
+  // ── state (same shape as the site) ──
+  const state = { plan:null, date:null, slot:null, guests:20, menu:null, addons:{} };
+  let step = 1;
+
+  // ── shared utils ──
+  const MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  const DOW = ['א','ב','ג','ד','ה','ו','ש'];
+  const pad = n=>String(n).padStart(2,'0');
+  const key = d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const humanDate = d=>(d.getDay()===6?'שבת':'יום '+DOW[d.getDay()])+', '+pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+  const fmt = n=>'₪'+Math.round(n||0).toLocaleString('en-US');
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // demo availability (prototype only): a few booked days + one taken window on some days
+  const BOOKED = [];
+  (function(){ const b=[3,9,14,21,27,33,41]; b.forEach(off=>{ const d=new Date(today); d.setDate(d.getDate()+off); BOOKED.push(key(d)); }); })();
+  const takenSlots = (dk,count)=>{ let h=0; for(const c of dk) h=(h*31+c.charCodeAt(0))>>>0; const s=new Set(); if(h%3===0) s.add(h%count); return s; };
+
+  const ICON_SUNRISE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18h18"/><path d="M12 3v4M5.6 9.6 7 11M18.4 9.6 17 11"/><path d="M8 18a4 4 0 0 1 8 0"/></svg>';
+  const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
+  const ICON_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
+  const slotIconFor = h=>h>=17?ICON_MOON:h>=13?ICON_SUN:ICON_SUNRISE;
+  const moodFor = h=>h>=17?'night':h>=13?'dusk':'day';
+  const MOOD_OP={night:.5,dusk:.52,day:.6}, GLOW={day:'rgba(255,206,110,.55)',dusk:'rgba(228,150,92,.5)',night:'rgba(120,132,222,.45)'};
+  const MOOD_FRAC={day:.16,dusk:.5,night:.84};
+
+  const addonApplies = a=>!(a.plans&&!a.plans.includes(state.plan))&&!(a.menu&&state.menu!==a.menu);
+  const selectedAddons = ()=>E.ADDONS.filter(a=>state.addons[a.id]&&addonApplies(a));
+  const addonsTotal = g=>selectedAddons().reduce((s,a)=>s+E.addonUnitPrice(a,g),0);
+  const totals = ()=>{ const ph=state.plan?E.PLANS[state.plan].perHead:0, g=state.guests, add=addonsTotal(g);
+    return { ph, g, add, total: ph*g+add }; };
+
+  // ── chat helpers ──
+  function botMsg(title, sub, goldSub){
+    const el=document.createElement('div'); el.className='msg msg--bot';
+    el.innerHTML='<div class="t">'+title+'</div>'+(sub?'<div class="s'+(goldSub?' s--gold':'')+'">'+sub+'</div>':'');
+    log.appendChild(el); scrollLog(); return el;
+  }
+  function meMsg(text){
+    const el=document.createElement('div'); el.className='msg msg--me'; el.textContent=text;
+    log.appendChild(el); scrollLog(); return el;
+  }
+  function askCard(innerHTML){
+    const el=document.createElement('div'); el.className='ask'; el.innerHTML=innerHTML;
+    log.appendChild(el); scrollLog(); return el;
+  }
+  function scrollLog(){ requestAnimationFrame(()=>{ log.scrollTop = log.scrollHeight; }); }
+  function setStage(html){ stage.innerHTML='<div class="fadeing" style="min-height:0;display:flex;flex-direction:column;justify-content:center;flex:1">'+html+'</div>'; }
+  function setProgress(n){
+    step=n;
+    $('progTxt').textContent = n<=5 ? ('שלב '+n+' מתוך 5') : 'סיום';
+    [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on', i < Math.min(n,5)));
+    $('backBtn').hidden = (n<=1 || n>5);
+  }
+
+  // back: wipe the log from the previous question onward and re-ask it
+  const anchors = {};   // step -> first log node of that step
+  function markAnchor(n){ anchors[n] = log.lastElementChild; }
+  $('backBtn').addEventListener('click', ()=>{
+    if (step<=1 || step>5) return;
+    const target = step-1;
+    // remove everything from the target step's anchor onward
+    const a = anchors[target];
+    if (a){ while (a.previousSibling !== null && log.lastChild !== a.previousSibling) { if(!log.lastChild) break; log.removeChild(log.lastChild); } }
+    STEPS[target]();
+  });
+
+  /* ═══════════ STEP 1 · package ═══════════ */
+  function step1(){
+    setProgress(1); markAnchor(1);
+    botMsg('בחרו תאריך','בחרו מסלול ואז יום פנוי');
+    const card = askCard(
+      '<div class="chips">'+
+        '<button type="button" class="chip" data-plan="happyhour">Happy Hour<small>3 שעות</small></button>'+
+        '<button type="button" class="chip" data-plan="gibush">גיבוש מחלקה<small>5 שעות</small></button>'+
+        '<button type="button" class="chip" data-plan="mesiba">מסיבת חברה<small>5 שעות</small></button>'+
+      '</div>');
+    card.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+      state.plan=c.dataset.plan; state.slot=null;
+      card.remove();
+      meMsg(E.PLANS[state.plan].label);
+      stagePackage();
+      setTimeout(step2, 350);
+    }));
+    stagePackage();
+  }
+  function stagePackage(){
+    if(!state.plan){
+      setStage('<div class="pkgcard"><div class="nm">עזרא</div><div class="rows"><div>ערב חברה בפלורנטין, הכל כלול</div></div></div>');
+      return;
+    }
+    const p=E.PLANS[state.plan];
+    setStage('<div class="pkgcard"><div class="nm">'+p.label+'</div>'+
+      '<div class="rows">'+
+        '<div><b class="num">'+p.hours+'</b> שעות של אירוע</div>'+
+        '<div>בר: <b>'+p.barTier+'</b></div>'+
+        '<div>מוזיקה: <b>'+p.music+'</b></div>'+
+      '</div>'+
+      '<div class="ph"><span class="num">₪'+p.perHead.toLocaleString('en-US')+'</span><small>לאדם</small></div></div>');
+  }
+
+  /* ═══════════ STEP 2 · date+time (merged, interactive on the LEFT) ═══════════ */
+  let view = new Date(today.getFullYear(), today.getMonth(), 1);
+  let goBtn2 = null;
+  function step2(){
+    setProgress(2); markAnchor(2);
+    botMsg('בחרו שעה');
+    const card = askCard('<button type="button" class="go" disabled>המשך</button>');
+    goBtn2 = card.querySelector('.go');
+    goBtn2.addEventListener('click', ()=>{
+      card.remove();
+      meMsg(humanDate(state.date)+' · '+state.slot);
+      setTimeout(step3, 350);
+    });
+    stageWhen();
+  }
+  function stageWhen(){
+    setStage(
+      '<div class="when">'+
+        '<div class="when__cal">'+
+          '<div class="colhead"><div class="t">בחרו תאריך</div><div class="s" id="calMonthSub"></div></div>'+
+          '<div class="cal">'+
+            '<div class="cal__head">'+
+              '<button type="button" class="cal__nav" id="calPrev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>'+
+              '<span class="cal__month" id="calMonth"></span>'+
+              '<button type="button" class="cal__nav" id="calNext"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>'+
+            '</div>'+
+            '<div class="cal__grid" id="calGrid"></div>'+
+            '<div class="cal__legend"><span><i class="free"></i>פנוי</span><span><i class="busy"></i>תפוס</span></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="when__sky">'+
+          '<div class="colhead"><div class="t">בחרו שעה</div><div class="s" id="chosenSub">בחרו יום מהלוח</div></div>'+
+          '<div class="sky" id="sky">'+
+            '<div class="sky__arc"><span class="orb" id="orb"><span class="sun"></span><span class="moon"></span></span></div>'+
+            '<div class="sky__rows" id="skyRows"></div>'+
+            '<div class="sky__cap">בוקר → ערב → לילה</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>');
+    $('calPrev').addEventListener('click',()=>{ view=new Date(view.getFullYear(),view.getMonth()-1,1); renderCal(); });
+    $('calNext').addEventListener('click',()=>{ view=new Date(view.getFullYear(),view.getMonth()+1,1); renderCal(); });
+    renderCal(); renderSky();
+  }
+  function renderCal(){
+    $('calMonth').innerHTML = MONTHS[view.getMonth()]+' <span class="num">'+view.getFullYear()+'</span>';
+    $('calMonthSub').textContent = MONTHS[view.getMonth()]+' '+view.getFullYear();
+    $('calPrev').disabled = (view.getFullYear()===today.getFullYear() && view.getMonth()===today.getMonth());
+    const g=$('calGrid'); g.innerHTML='';
+    DOW.forEach(d=>{ const e=document.createElement('div'); e.className='cal__dow'; e.textContent=d; g.appendChild(e); });
+    const firstDow=new Date(view.getFullYear(),view.getMonth(),1).getDay();
+    const days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+    for(let i=0;i<firstDow;i++){ const e=document.createElement('div'); e.className='cal__day is-empty'; g.appendChild(e); }
+    for(let day=1;day<=days;day++){
+      const d=new Date(view.getFullYear(),view.getMonth(),day);
+      const c=document.createElement('button'); c.type='button'; c.className='cal__day'; c.textContent=day;
+      if(d<today){ c.classList.add('is-past'); c.disabled=true; }
+      else if(BOOKED.includes(key(d))){ c.classList.add('is-booked'); c.disabled=true; }
+      else c.addEventListener('click',()=>{ state.date=d; state.slot=null; renderCal(); renderSky(); updateGo2(); });
+      if(state.date && key(d)===key(state.date)) c.classList.add('is-selected');
+      g.appendChild(c);
+    }
+  }
+  function applyMood(m){
+    const sky=$('sky'); if(!sky) return;
+    sky.dataset.mood=m;
+    sky.style.setProperty('--mood',MOOD_OP[m]); sky.style.setProperty('--glow',GLOW[m]);
+    const orb=$('orb'); if(orb){ orb.style.left=(MOOD_FRAC[m]*100)+'%';
+      orb.style.transform='translateY('+(-(12*Math.sin(Math.PI*MOOD_FRAC[m]))).toFixed(1)+'px)'; }
+  }
+  const restingMood = ()=> state.slot ? moodFor(parseInt(state.slot,10)) : 'day';
+  function renderSky(){
+    const plan=E.PLANS[state.plan]; if(!plan) return;
+    const list=E.SLOTS[plan.hours]||[];
+    const hasDate=!!state.date;
+    const taken=hasDate?takenSlots(key(state.date),list.length):new Set();
+    $('chosenSub').innerHTML = hasDate?('<b>'+humanDate(state.date)+'</b>'):'בחרו יום מהלוח';
+    $('skyRows').innerHTML = list.map((label,i)=>{
+      const [ls,le]=label.split('-'); const sh=parseInt(ls,10);
+      const isTaken=hasDate&&taken.has(i);
+      const isSel=state.slot===label&&!isTaken;
+      return '<button type="button" class="srow'+(isTaken?' is-taken':'')+(isSel?' is-selected':'')+'"'+
+        ' data-label="'+label+'" data-mood="'+moodFor(sh)+'"'+(isTaken?' disabled':'')+'>'+
+        slotIconFor(sh)+'<span class="tm">'+ls+' - '+(le||'')+'</span>'+
+        (isTaken?'<span class="tk">· תפוס</span>':'')+'</button>';
+    }).join('');
+    const sky=$('sky');
+    sky.classList.toggle('is-locked',!hasDate);
+    applyMood(restingMood());
+    sky.querySelectorAll('.srow:not(.is-taken)').forEach(b=>{
+      b.addEventListener('click',()=>{ state.slot=b.dataset.label;
+        sky.querySelectorAll('.srow').forEach(x=>x.classList.remove('is-selected'));
+        b.classList.add('is-selected'); applyMood(b.dataset.mood); updateGo2(); });
+      b.addEventListener('mouseenter',()=>applyMood(b.dataset.mood));
+      b.addEventListener('mouseleave',()=>applyMood(restingMood()));
+    });
+    updateGo2();
+  }
+  function updateGo2(){ if(goBtn2) goBtn2.disabled=!(state.date&&state.slot); }
+
+  /* ═══════════ STEP 3 · menu ═══════════ */
+  function step3(){
+    setProgress(3); markAnchor(3);
+    botMsg('התפריט שלכם','בחרו תפריט · יום או ערב', true);
+    const card=askCard(
+      '<div class="chips">'+
+        '<button type="button" class="chip" data-menu="day">תפריט יום<small>כריכים, מאפים וקפה</small></button>'+
+        '<button type="button" class="chip" data-menu="evening">תפריט ערב<small>פיצות ומנות מהטאבון</small></button>'+
+      '</div>'+
+      '<label>הערות לתפריט (לא חובה)</label>'+
+      '<textarea id="pFoodNotes" placeholder="אלרגיות, העדפות או בקשות מיוחדות..."></textarea>'+
+      '<button type="button" class="go" disabled>המשך</button>');
+    const go=card.querySelector('.go');
+    card.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+      state.menu=c.dataset.menu;
+      card.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c));
+      go.disabled=false; stageMenu();
+    }));
+    go.addEventListener('click',()=>{
+      state.foodNotes = card.querySelector('#pFoodNotes').value;
+      card.remove();
+      meMsg(state.menu==='evening'?'תפריט ערב':'תפריט יום');
+      setTimeout(step4, 350);
+    });
+    // default view: suggest by slot time like the site
+    if(!state.menu) state.menu = parseInt(state.slot,10)>=17 ? 'evening':'day';
+    card.querySelector('.chip[data-menu="'+state.menu+'"]').classList.add('on');
+    go.disabled=false;
+    stageMenu();
+  }
+  function stageMenu(){
+    const secs = E.menuFor(state.plan, state.menu);
+    setStage('<div class="menu">'+secs.map(s=>
+      '<div class="mcard"><div class="mt">'+s.t+'</div><div class="md">'+
+        s.items.map(it=>'<span>'+E.splitDish(it).name+'</span>').join('')+
+      '</div></div>').join('')+'</div>');
+  }
+
+  /* ═══════════ STEP 4 · guests + add-ons ═══════════ */
+  function step4(){
+    setProgress(4); markAnchor(4);
+    botMsg('כמות אנשים','גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד');
+    const addonChips = E.ADDONS.filter(addonApplies).map(a=>
+      '<button type="button" class="chip" data-addon="'+a.id+'">'+a.label+'<small>'+(a.cap||'')+'</small></button>').join('');
+    const card=askCard(
+      '<div class="gslide"><span class="gv" id="gv">20</span><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
+      '<label style="margin-block-start:.9rem"><b style="color:var(--cream)">תוספות לאירוע</b> · סמנו מה להוסיף - אפשר גם להמשיך בלי</label>'+
+      '<div class="chips">'+addonChips+'</div>'+
+      '<button type="button" class="go">המשך</button>');
+    const gr=card.querySelector('#gr'), gv=card.querySelector('#gv');
+    gv.textContent=state.guests;
+    gr.addEventListener('input',()=>{ state.guests=+gr.value; gv.textContent=gr.value; stagePrice(); });
+    card.querySelectorAll('.chip[data-addon]').forEach(c=>c.addEventListener('click',()=>{
+      const id=c.dataset.addon; state.addons[id]=!state.addons[id];
+      c.classList.toggle('on',state.addons[id]); stagePrice();
+    }));
+    card.querySelector('.go').addEventListener('click',()=>{
+      card.remove();
+      const t=totals();
+      meMsg(state.guests+' אורחים · '+fmt(t.total));
+      setTimeout(step5, 350);
+    });
+    stagePrice();
+  }
+  function stagePrice(){
+    const t=totals();
+    const addRows=selectedAddons().map(a=>'<div><span>'+a.label+'</span><b class="num">'+fmt(E.addonUnitPrice(a,t.g))+'</b></div>').join('');
+    setStage('<div class="price">'+
+      '<div class="rows">'+
+        '<div><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
+        '<div><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
+        addRows+
+        '<div><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
+      '</div>'+
+      '<div class="tot"><span class="num">'+fmt(t.total)+'</span><small>סה"כ משוער</small></div>'+
+    '</div>');
+  }
+
+  /* ═══════════ STEP 5 · details (the only typing) ═══════════ */
+  function step5(){
+    setProgress(5); markAnchor(5);
+    botMsg('הפרטים שלכם','נשלח אליכם הצעה וחוזה לחתימה דיגיטלית');
+    const card=askCard(
+      '<label>שם מלא</label><input type="text" id="fName" autocomplete="name" />'+
+      '<label>חברה</label><input type="text" id="fCompany" autocomplete="organization" />'+
+      '<label>טלפון</label><input type="tel" id="fPhone" inputmode="tel" autocomplete="tel" />'+
+      '<label>אימייל</label><input type="email" id="fEmail" inputmode="email" autocomplete="email" />'+
+      '<label>כתובת</label><input type="text" id="fAddress" autocomplete="street-address" />'+
+      '<label>משהו שכדאי שנדע? (לא חובה)</label><textarea id="fNotes"></textarea>'+
+      '<label class="check"><input type="checkbox" id="fWantsCall" /><span><b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>'+
+        'שימו לב: סימון האפשרות יוציא אתכם מתהליך ההזמנה. נשמור את הפרטים שמילאתם ונחזור אליכם לשיחה אישית.</span></label>'+
+      '<label class="check"><input type="checkbox" id="fConsent" /><span><b>אישור קבלת דיוור</b>'+
+        'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
+      '<button type="button" class="go" disabled>שליחת הבקשה</button>'+
+      '<div class="legal">בשליחת הטופס אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות.</div>');
+    const go=card.querySelector('.go');
+    const req=['fName','fPhone','fEmail'].map(id=>card.querySelector('#'+id));
+    const validate=()=>{ go.disabled=!req.every(el=>el.value.trim()); };
+    card.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',validate));
+    go.addEventListener('click',()=>{
+      state.name=card.querySelector('#fName').value;
+      state.company=card.querySelector('#fCompany').value;
+      card.remove();
+      meMsg('שליחת הבקשה');
+      setTimeout(step6, 350);
+    });
+    stageReceipt();
+  }
+  function stageReceipt(){
+    const t=totals(); const p=E.PLANS[state.plan];
+    setStage('<div class="rcpt"><div class="rt">סיכום ההזמנה</div>'+
+      '<div class="rr"><span>מסלול</span><b>'+p.label+'</b></div>'+
+      '<div class="rr"><span>תאריך</span><b>'+(state.date?humanDate(state.date):'-')+'</b></div>'+
+      '<div class="rr"><span>שעה</span><b class="num">'+(state.slot||'-')+'</b></div>'+
+      '<div class="rr"><span>תפריט</span><b>'+(state.menu==='evening'?'ערב':'יום')+'</b></div>'+
+      '<div class="rr"><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
+      '<div class="rr"><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
+      '<div class="rr"><span>סה"כ משוער</span><b class="num">'+fmt(t.total)+'</b></div>'+
+    '</div>');
+  }
+
+  /* ═══════════ STEP 6 · confirmation ═══════════ */
+  function step6(){
+    setProgress(6);
+    botMsg('ההזמנה שלכם התקבלה');
+    const el=document.createElement('div'); el.className='msg msg--sys';
+    el.textContent='ייתכן שייקח כמה רגעים עד שהמייל יגיע אליכם.';
+    log.appendChild(el); scrollLog();
+    setStage('<div class="done">'+
+      '<div class="ok">✓</div>'+
+      '<div class="dt">ההזמנה שלכם התקבלה</div>'+
+      '<div class="hero">חוזה נשלח אליכם במייל</div>'+
+      '<p>ברגע שתחתמו על החוזה שנשלח לכם במייל, נחזור אליכם בתוך 24 שעות לאשר פרטים ולגבות מקדמה.</p>'+
+      '<div class="note">שימו לב, החוזה שנשלח תקף ל-24 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</div>'+
+      '<p style="color:var(--gold-light)">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>'+
+      '<p>ייתכן שייקח כמה רגעים עד שהמייל יגיע אליכם.</p>'+
+    '</div>');
+  }
+
+  const STEPS = {1:step1,2:step2,3:step3,4:step4,5:step5};
+  step1();
+})();
+</script>
+</body>
+</html>
