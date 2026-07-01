@@ -201,16 +201,17 @@
     padding-block:.45rem .15rem;border-block-end:1px dashed rgba(196,154,60,.18)}
   .rcpt .fr{display:flex;justify-content:space-between;gap:.8rem;padding-block:.22rem;font-size:.78rem;
     border-block-end:1px dashed rgba(196,154,60,.12);color:var(--cream-dim)}
-  .rcpt .fr b{color:var(--cream);font-weight:500}
+  .rcpt .fr b{color:var(--cream);font-weight:500;white-space:nowrap}
+  .rcpt .fr b .num{color:var(--gold-light);font-size:.9rem}   /* the amounts are the point - make them pop */
   .rcpt .grand{margin-block-start:.4rem;padding-block-start:.5rem;border-block-start:1px solid var(--line);
     display:flex;justify-content:space-between;align-items:baseline;color:var(--cream)}
   .rcpt .grand .v{font-family:'Pliant',var(--font-body);font-size:1.45rem;color:var(--gold-light)}
   /* step-4 layout: coupe beside the long receipt */
-  .p4{display:flex;gap:1rem;align-items:stretch;min-height:0;height:100%}
+  .p4{display:flex;gap:1rem;align-items:stretch;min-height:0;height:100%;flex:1 1 auto}
   .p4__side{flex:0 0 130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem}
   .p4__tot{text-align:center;font-family:'Pliant',var(--font-body);font-size:1.5rem;color:var(--gold-light)}
   .p4__tot small{display:block;font-family:var(--font-body);font-size:.68rem;color:var(--cream-dim);font-weight:400}
-  .rcpt--long{flex:1 1 auto;min-height:0;max-height:100%;overflow-y:auto;margin:0;
+  .rcpt--long{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .rcpt--long::-webkit-scrollbar{width:6px}
   .rcpt--long::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
@@ -356,7 +357,7 @@
     log.appendChild(el); scrollLog(); return el;
   }
   function scrollLog(){ requestAnimationFrame(()=>{ log.scrollTop = log.scrollHeight; }); }
-  function setStage(html){ stage.innerHTML='<div class="fadeing" style="min-height:0;display:flex;flex-direction:column;justify-content:center;flex:1">'+html+'</div>'; }
+  function setStage(html){ stage.innerHTML='<div class="fadeing" style="min-height:0;height:100%;display:flex;flex-direction:column;justify-content:center;flex:1">'+html+'</div>'; }
   function setProgress(n){
     step=n;
     $('progTxt').innerHTML = n<=5 ? ('שלב <span class="num">'+n+'</span> מתוך <span class="num">5</span>') : 'סיום';
@@ -595,16 +596,17 @@
         '<div class="fr"><span>'+E.dishDisplay(sec.t,b.name)+'</span><b><span class="num">'+b.qty+'</span> '+b.unit+'</b></div>').join('');
       if(rows) food+='<div class="sect">'+sec.t+'</div>'+rows;
     });
+    // receipt order: details -> the FOOD (the point of the calculator) -> prices -> total
     return '<div class="rt">סיכום ההזמנה</div>'+
       '<div class="rr"><span>מסלול</span><b>'+p.label+'</b></div>'+
       '<div class="rr"><span>תאריך</span><b>'+(state.date?humanDate(state.date):'-')+'</b></div>'+
       '<div class="rr"><span>שעה</span><b class="num">'+(state.slot||'-')+'</b></div>'+
       '<div class="rr"><span>תפריט</span><b>'+(state.menu==='evening'?'ערב':'יום')+'</b></div>'+
       '<div class="rr"><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
-      '<div class="rr"><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
+      food+
+      '<div class="rr" style="margin-block-start:.35rem"><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
       addRows+
       '<div class="rr"><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
-      food+
       '<div class="grand"><span>סה"כ משוער</span><span class="v">'+fmt(t.total)+'</span></div>';
   }
 
