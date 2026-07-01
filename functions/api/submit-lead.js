@@ -9,9 +9,10 @@ const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
 // All company-events leads -> dedicated "Company Events Form" board, by pipeline group.
 const COMPANY_BOARD = "5099350637";
-const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement Sent (active 12h)
+const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement Sent (active 24h)
 const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
 const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
+const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packages (In Agreement Process)
 // Availability source = the real "Events Form" calendar (every lead, private + company). A date
 // is "taken" only when a committed event sits on it: Closed Deals / Pre Payment / Proposal Sent.
 const AVAIL_BOARD = "5092854682";
@@ -20,7 +21,10 @@ const META_PIXEL_ID = "2174553826420246";
 
 // GET /api/submit-lead -> availability feed for the on-site calendar (same-origin once the
 // domain is on Cloudflare Pages; the site reads window.EZRA_AVAILABILITY_ENDPOINT).
-export async function onRequestGet({ env }) {
+export async function onRequestGet({ request, env }) {
+  // ?leadById=<id> -> private calculator prefill (secret-gated); otherwise the availability feed.
+  const leadId = new URL(request.url).searchParams.get("leadById");
+  if (leadId) return leadById(leadId, request, env);
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [] }, 200);
   const query = `query {
@@ -54,6 +58,10 @@ export async function onRequestGet({ env }) {
 export async function onRequestPost({ request, env }) {
   let d;
   try { d = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400); }
+
+  // Private calculator write-back: complete an existing lead in place (secret-gated, fill-only,
+  // no group/status change, no contract, never runs CAPI). Company board only.
+  if (d.mode === "updateLead") return updateLead(d, request, env);
 
   // honeypot: real users never fill the hidden field; bots do -> drop silently
   if (d.hp) return json({ ok: true, dropped: true }, 200);
@@ -178,7 +186,7 @@ export async function onRequestPost({ request, env }) {
   const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
   const [startStr, endStr] = slot.split("-");
   const startHM = parseHM(startStr), endHM = parseHM(endStr);
-  if (slot)    cols.text_mm2km76j = slot;
+  if (slot)    cols.text_mm4t1h0s = slot;   // Start-End (Text), e.g. "21:00-02:00"
   if (startHM) cols.hour_mm1q610q = startHM;
   if (endHM)   cols.hour_mm1qa44s = endHM;
 
@@ -186,12 +194,12 @@ export async function onRequestPost({ request, env }) {
     create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
   }`;
   const board = isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
-  // Package leads arrive as a new lead in the packages intake group; a Monday/GetSign automation
+  // Completed package leads land in "Packages (In Agreement Process)"; a Monday/GetSign automation
   // moves them to "Agreement Sent" after the contract is sent (not the worker's job).
   const group = isPrivate ? PRIVATE_GROUP
               : isCustom ? GRP_CUSTOM
               : isIncomplete ? GRP_FOLLOWUP
-              : GRP_FOLLOWUP;
+              : GRP_IN_AGREEMENT;
   // item name: company for ALL lead types; fall back to person if no company
   const displayName = String(d.company || d.name || "ליד מהאתר");
   const variables = {
@@ -221,6 +229,114 @@ export async function onRequestPost({ request, env }) {
 
 function json(obj, status) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json" } });
+}
+
+// ── Private calculator: shared secret gate (manager passcode sent as x-ezra-calc-secret header).
+function calcAuthorized(request, env) {
+  const secret = request.headers.get("x-ezra-calc-secret") || "";
+  return !!env.CALC_SECRET && secret === env.CALC_SECRET;
+}
+
+// GET one lead's partial data for the calculator prefill (company board). Secret-gated.
+async function leadById(itemId, request, env) {
+  if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ ok: false, error: "no token" }, 503);
+  const query = `query ($id: [ID!]) {
+    items(ids: $id) {
+      id name
+      column_values(ids: ["text_mm4the60","emailj9eufer1","phone0zyibnut","number0kzol2wl","date5bab58wj","text_mm4t1h0s","color_mm4tbcbp","dropdown_mm1gze4c","long_text_mm4t4fjb","long_textlwbyhlq0"]) {
+        id text ... on DateValue { date }
+      }
+    }
+  }`;
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query, variables: { id: [String(itemId)] } }),
+    });
+    const out = await r.json();
+    if (out.errors) return json({ ok: false, error: out.errors }, 502);
+    const it = out?.data?.items?.[0];
+    if (!it) return json({ ok: false, error: "not found" }, 404);
+    const cv = {};
+    (it.column_values || []).forEach((c) => { cv[c.id] = c; });
+    const item = {
+      id: it.id,
+      company: it.name || "",
+      name: cv.text_mm4the60?.text || "",
+      email: cv.emailj9eufer1?.text || "",
+      phone: cv.phone0zyibnut?.text || "",
+      guests: cv.number0kzol2wl?.text || "",
+      date: cv.date5bab58wj?.date || "",
+      slot: cv.text_mm4t1h0s?.text || "",
+      packageLabel: cv.color_mm4tbcbp?.text || "",
+      addons: cv.dropdown_mm1gze4c?.text || "",
+      summary: cv.long_text_mm4t4fjb?.text || "",
+      note: cv.long_textlwbyhlq0?.text || "",
+    };
+    return json({ ok: true, item }, 200);
+  } catch (e) {
+    return json({ ok: false, error: String(e) }, 502);
+  }
+}
+
+// Contract-ready columns for a completed lead (mirrors the package mapping, minus status/group).
+function buildCalcCols(d) {
+  const cols = {};
+  if (d.name) cols.text_mm4the60 = String(d.name);
+  if (d.email) cols.emailj9eufer1 = { email: d.email, text: d.email };
+  if (d.phone) cols.phone0zyibnut = { phone: String(d.phone), countryShortName: "IL" };
+  if (d.guests != null && d.guests !== "") { cols.number0kzol2wl = String(d.guests); cols.numeric_mm1qj01x = String(d.guests); }
+  if (d.date) cols.date5bab58wj = { date: d.date };
+  if (d.packageLabel) cols.color_mm4tbcbp = { label: d.packageLabel };
+  if (d.barMenuText) cols.text_mm4t9mgc = d.barMenuText;
+  if (d.perHeadText) cols.text_mm4ts8zc = d.perHeadText;
+  if (d.addonsText) cols.text_mm4t3vrm = d.addonsText;
+  if (d.estTotal != null && d.estTotal !== "") cols.text_mm4trhj9 = "₪" + Number(d.estTotal).toLocaleString("en-US");
+  if (d.foodMenuText) cols.text_mm1tgvh0 = d.foodMenuText;
+  if (d.barLabel) cols.color_mm1gytg8 = { label: d.barLabel };
+  if (d.djLabel) cols.color_mm1g4y0y = { label: d.djLabel };
+  if (Array.isArray(d.addonLabels) && d.addonLabels.length) cols.dropdown_mm1gze4c = { labels: d.addonLabels };
+  if (!d.customMode) cols.color_mm4ssjj3 = { label: d.eventLocation || "עזרא" };
+  cols.single_selectl0ocmt7 = { label: "לא רלוונטי לצלצל" };
+  const slot = String(d.slot || "");
+  if (slot) cols.text_mm4t1h0s = slot;
+  const parseHM = (s) => { const m = /(\d{1,2}):(\d{2})/.exec(s || ""); return m ? { hour: +m[1], minute: +m[2] } : null; };
+  const [s0, s1] = slot.split("-");
+  const a = parseHM(s0), b = parseHM(s1);
+  if (a) cols.hour_mm1q610q = a;
+  if (b) cols.hour_mm1qa44s = b;
+  const note = [d.notes, d.foodNotes].filter(Boolean).join("\n").trim();
+  if (note) cols.long_textlwbyhlq0 = { text: note };
+  return cols;
+}
+
+// POST update-existing: fill completed data into the SAME item (company board). Secret-gated;
+// change_multiple_column_values (not create_item); no group/status/contract change.
+async function updateLead(d, request, env) {
+  if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401);
+  if (!d.itemId) return json({ ok: false, error: "missing itemId" }, 400);
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ ok: false, error: "no token" }, 503);
+  const cols = buildCalcCols(d);
+  const query = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
+    change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols, create_labels_if_missing: false) { id }
+  }`;
+  const variables = { board: COMPANY_BOARD, item: String(d.itemId), cols: JSON.stringify(cols) };
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query, variables }),
+    });
+    const out = await r.json();
+    if (out.errors) return json({ ok: false, error: out.errors }, 502);
+    return json({ ok: true, id: out.data?.change_multiple_column_values?.id }, 200);
+  } catch (e) {
+    return json({ ok: false, error: String(e) }, 502);
+  }
 }
 
 // SHA-256 hex via Web Crypto (Workers runtime has no node:crypto by default)
