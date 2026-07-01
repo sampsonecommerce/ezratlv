@@ -2049,69 +2049,54 @@
 
     /* two columns: calendar (right, wider) | divider | slots (left). RTL row = first child on the right. */
     .when-grid { display: flex; flex-direction: row; align-items: stretch; gap: 0; }
-    .when-cal   { flex: 1.6 1 0; min-width: 0; }
-    /* let the calendar fill its column and restore the old calendar's roomy header spacing/size */
-    .when-cal .cal { margin-inline: 0; max-width: 100%; width: 100%; padding-inline: 0.3rem; }
-    .when-cal .cal__head { gap: 1rem; margin-block-end: 1.1rem; padding-inline: 0.2rem; }
-    .when-cal .cal__month { font-size: clamp(1.3rem, 1.9vw, 1.6rem); white-space: nowrap; }
+    /* calendar column ~1.25 : 1 vs the sky column, and shrunk so month + all rows fit with no clip/scroll */
+    .when-cal   { flex: 1.25 1 0; min-width: 0; display: flex; flex-direction: column; }
+    .when-cal .cal { margin-inline: 0; max-width: 100%; width: 100%; padding-inline: 0.2rem; }
     .when-cal .cal__month .cal__year { margin-inline-start: 0.3rem; }
-    .when-cal .cal__nav { width: 40px; height: 40px; }
-    .when-cal .cal__grid { gap: 0.3rem; }
-    .when-cal .cal__day { font-size: 0.9rem; border-radius: 9px; }
-    .when-cal .cal__dow { font-size: 0.72rem; }
-    .when-divider { flex: 0 0 1px; align-self: stretch; margin-inline: clamp(0.7rem, 2vw, 1.2rem);
+    .when-cal .cal__nav { width: 34px; height: 34px; }
+    .when-cal .cal__grid { gap: 0.16rem; }
+    .when-cal .cal__day { font-size: 0.78rem; border-radius: 7px; }
+    .when-cal .cal__dow { font-size: 0.62rem; padding-block: 0.14rem; }
+    .when-cal .cal__legend { margin-block-start: 0.5rem; font-size: 0.7rem; }
+    .when-divider { flex: 0 0 1px; align-self: stretch; margin-inline: clamp(0.6rem, 1.8vw, 1.1rem);
       background: linear-gradient(180deg, transparent, rgba(196,154,60,0.35) 15%, rgba(196,154,60,0.35) 85%, transparent); }
     .when-slots { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
 
     /* matching column headers over each side (title + subline) */
-    .when-col__head { text-align: center; margin-block-end: 0.8rem; }
-    .when-col__t { font-family: var(--font-serif); font-size: clamp(1.1rem, 1.7vw, 1.3rem); font-weight: 600; color: var(--cream); }
-    .when-col__sub { margin-block-start: 0.15rem; font-size: 0.88rem; color: var(--cream-dim); min-height: 1.2em; }
+    .when-col__head { text-align: center; margin-block-end: 0.55rem; }
+    .when-col__t { font-family: var(--font-serif); font-size: clamp(1.05rem, 1.6vw, 1.25rem); font-weight: 600; color: var(--cream); }
+    .when-col__sub { margin-block-start: 0.1rem; font-size: 0.86rem; color: var(--cream-dim); min-height: 1.2em; }
     .when-col__sub b { color: var(--gold); }
     .when-col__sub.book-chosen__hint, .when-slots .book-chosen__hint { color: var(--cream-dim); font-weight: 400; }
     /* the calendar's month rides as the calendar column's subline */
-    .when-cal .when-col__sub.cal__month { color: var(--cream); font-size: clamp(1.25rem, 1.8vw, 1.5rem); white-space: nowrap; }
-    .when-cal .cal__head { justify-content: space-between; margin-block-end: 0.9rem; padding-inline: 0.1rem; }
-    .when-slots .book-slots__head { text-align: center; margin-block-end: 0.6rem; font-size: 0.72rem; }
+    .when-cal .when-col__sub.cal__month { color: var(--cream); font-size: clamp(1.1rem, 1.6vw, 1.35rem); white-space: nowrap; }
+    .when-cal .cal__head { justify-content: space-between; margin-block-end: 0.6rem; padding-inline: 0.1rem; }
+    .when-slots .book-slots__head { text-align: center; margin-block-end: 0.5rem; font-size: 0.7rem; }
 
-    /* slot buttons centered vertically in the column (balanced against the calendar height) */
-    .when-slots__list { display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; flex: 1 1 auto; }
-    .when-slot {
-      width: 100%; min-height: 46px; display: flex; align-items: center; justify-content: center;
-      gap: 0.4rem; padding: 0.5rem 0.6rem; border-radius: 11px; cursor: pointer;
-      border: 0.5px solid var(--line); background: rgba(255,255,255,0.045); color: var(--cream);
-      font-family: var(--font-body); font-size: 0.92rem; white-space: nowrap;
-      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), opacity 0.2s var(--ease);
-    }
-    .when-slot__time { font-family: 'Pliant', var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: 0.01em; direction: ltr; unicode-bidi: embed; }
-    .when-slot__tod { flex: none; display: inline-flex; }
-    /* override the reused .dn-bar__icon defaults (white color + narrow-screen display:none) */
-    .when-slot__tod svg { width: 16px; height: 16px; color: inherit; display: inline-block; }
-    .when-slot__taken { color: var(--cream-dim); font-size: 0.82rem; }
-    /* day → night: color + icon tint graded down the column */
-    .when-slot--morning   { background: rgba(196,154,60,0.10);  border-color: rgba(196,154,60,0.40); }
-    .when-slot--morning   .when-slot__tod { color: var(--gold-light); }
-    .when-slot--afternoon { background: rgba(150,110,190,0.13); border-color: rgba(163,120,200,0.42); }
-    .when-slot--afternoon .when-slot__tod { color: #c9a7e6; }
-    .when-slot--evening   { background: rgba(92,120,208,0.13);  border-color: rgba(110,132,220,0.44); }
-    .when-slot--evening   .when-slot__tod { color: #9fb2f0; }
-    .when-slot--night     { background: rgba(60,80,168,0.16);   border-color: rgba(84,104,190,0.48); }
-    .when-slot--night     .when-slot__tod { color: #8ea0e8; }
-    .when-slot:hover:not(.is-taken):not(.is-selected) { border-color: rgba(196,154,60,0.6); }
-    .when-slot.is-selected { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 600; }
-    .when-slot.is-selected .when-slot__tod { color: var(--bg); }
-    .when-slot.is-taken { cursor: not-allowed; opacity: 0.5; }
-    .when-slot.is-taken .when-slot__time { text-decoration: line-through; }
-    /* locked: shown but greyed + non-interactive until a date is chosen (no layout shift) */
-    .when-slots__list.is-locked .when-slot { opacity: 0.4; pointer-events: none; filter: grayscale(0.55); }
-    /* day→night caption under the slots */
-    .when-slots__cap { text-align: center; margin-block-start: 0.65rem; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--cream-dim); }
+    /* the LEFT column's slot area is the real dn-graph sky panel, re-flowed VERTICALLY:
+       orb rides the top (.dn-arc), the slot buttons stack down the panel (morning top → night bottom). */
+    .when-slots .dn-graph--vert { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+      padding: 0.85rem 0.8rem 0.8rem; }
+    .dn-graph--vert .dn-arc { height: 52px; margin-block-end: 0.4rem; flex: none; }
+    .dn-graph--vert .dn-bars { position: static; height: auto; margin: 0; flex: 1 1 auto;
+      display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; }
+    .dn-graph--vert .dn-bar { position: static; inset: auto; left: auto; bottom: auto; height: auto;
+      width: 100%; min-height: 46px; }
+    .dn-graph--vert .dn-bar__inner { justify-content: center; gap: 0.4rem; }
+    .dn-graph--vert .dn-bar__taken { color: rgba(255,255,255,0.7); font-size: 0.72rem; }
+    .dn-graph--vert .dn-bar.is-taken .dn-bar__taken { text-decoration: none; }
+    /* greyed + non-interactive until a date is chosen (no layout shift) */
+    .dn-graph--vert.is-locked .dn-bar { opacity: 0.42; pointer-events: none; filter: grayscale(0.55); }
+    /* day→night caption under the panel */
+    .when-slots__cap { text-align: center; margin-block-start: 0.6rem; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--cream-dim); }
 
     @media (max-width: 640px) {
       .when-grid { flex-direction: column; gap: 0.9rem; }
+      .when-cal { flex: 0 0 auto; }
       .when-divider { flex-basis: 1px; width: 100%; height: 1px; align-self: auto; margin: 0.1rem 0;
         background: linear-gradient(90deg, transparent, rgba(196,154,60,0.35), transparent); }
-      .when-slots__list { gap: 0.45rem; flex: 0 0 auto; }
+      .when-slots { flex: 0 0 auto; }
+      .dn-graph--vert .dn-bars { gap: 0.45rem; }
     }
 
     .dn-graph {
@@ -3322,8 +3307,8 @@
                 <div class="when-col__sub" id="bookChosenDate"></div>
               </div>
               <div class="book-slots__head" id="bookSlotsHead"></div>
-              <div class="when-slots__list" id="bookSlotsGraph"></div>
-              <div class="when-slots__cap">בוקר · צהריים · ערב</div>
+              <div class="dn-graph dn-graph--vert" id="bookSlotsGraph"></div>
+              <div class="when-slots__cap">בוקר → ערב → לילה</div>
             </div>
           </div>
 
@@ -4717,6 +4702,11 @@
         cel.style.left = (frac * 100) + '%';
         cel.style.transform = 'translateY(' + (-(50 * Math.sin(Math.PI * frac))).toFixed(1) + 'px)';
       }
+      // orb slide position per mood: warm sun to the left (morning), amber center (dusk), cool moon right (night)
+      const MOOD_FRAC = { day: 0.16, dusk: 0.5, night: 0.84 };
+      function applyMood(m) { setMood(m); positionCelestialFrac(MOOD_FRAC[m] != null ? MOOD_FRAC[m] : 0.16); }
+      // resting mood = the selected slot's mood, else morning (day)
+      function restingMood() { return state.slot ? moodFor(parseInt(state.slot.slice(0, 2), 10)) : 'day'; }
       // parse "09:00-14:00" → [startHour, endHour] (end rolls past midnight: 02:00 → 26)
       const parseSlot = s => { const a = s.split('-'); const sh = parseInt(a[0], 10); let eh = parseInt(a[1], 10); if (eh <= sh) eh += 24; return [sh, eh]; };
       const fmtHour = h => pad(((h % 24) + 24) % 24) + ':00';
@@ -4735,32 +4725,42 @@
           : '<span class="book-chosen__hint">בחרו יום מהלוח</span>';
         slotsHead.textContent = 'חלונות של ' + plan.hours + ' שעות';
 
-        slotsGraph.innerHTML = list.map((label, i) => {
+        // vertical sky panel: the sun/moon orb up top, the plan's windows stacked as .dn-bar buttons
+        const bars = list.map((label, i) => {
           const [ls, le] = label.split('-');
+          const sh = parseInt(ls, 10);
           const isTaken = hasDate && taken.has(i);
           const isSel = state.slot === label && !isTaken;
-          // time-of-day treatment (color + icon), graded morning → night down the column
-          const sh = parseInt(ls, 10);
-          const tod = sh < 12 ? 'morning' : sh < 17 ? 'afternoon' : sh < 20 ? 'evening' : 'night';
-          const icon = tod === 'morning' ? ICON_SUN : tod === 'afternoon' ? ICON_SUNRISE : ICON_MOON;
-          return '<button type="button" class="when-slot when-slot--' + tod + (isTaken ? ' is-taken' : '') + (isSel ? ' is-selected' : '') + '"' +
-            ' data-label="' + label + '"' + (isTaken ? ' disabled' : '') +
+          return '<button type="button" class="dn-bar' + (isTaken ? ' is-taken' : '') + (isSel ? ' is-selected' : '') + '"' +
+            ' data-label="' + label + '" data-mood="' + moodFor(sh) + '"' + (isTaken ? ' disabled' : '') +
             ' aria-label="' + label + (isTaken ? ' - תפוס' : '') + '">' +
-            '<span class="when-slot__tod">' + icon + '</span>' +
-            '<span class="when-slot__time">' + ls + ' - ' + (le || '') + '</span>' +
-            (isTaken ? '<span class="when-slot__taken"> · תפוס</span>' : '') +
+            '<span class="dn-bar__fill"></span>' +
+            '<span class="dn-bar__inner">' + slotIconFor(sh) +
+              '<span class="dn-bar__time"><span class="dn-bar__t">' + ls + '</span><span class="dn-bar__sep"> - </span><span class="dn-bar__t">' + (le || '') + '</span></span>' +
+              (isTaken ? '<span class="dn-bar__taken"> · תפוס</span>' : '') +
+            '</span>' +
             '</button>';
         }).join('');
+        slotsGraph.innerHTML =
+          '<div class="dn-arc"><span class="dn-celestial" id="dnCelestial">' +
+            '<span class="dn-celestial__sun"></span><span class="dn-celestial__moon"></span>' +
+          '</span></div>' +
+          '<div class="dn-bars">' + bars + '</div>';
 
         slotsGraph.classList.toggle('is-locked', !hasDate);   // greyed + non-interactive until a date is chosen
-        slotsGraph.querySelectorAll('.when-slot:not(.is-taken)').forEach(b =>
-          b.addEventListener('click', () => selectSlot(b)));
+        applyMood(restingMood());                             // orb + glow settle on the chosen (or morning) mood
+        slotsGraph.querySelectorAll('.dn-bar:not(.is-taken)').forEach(b => {
+          b.addEventListener('click', () => selectSlot(b));
+          b.addEventListener('mouseenter', () => applyMood(b.dataset.mood));   // preview the mood on hover
+          b.addEventListener('mouseleave', () => applyMood(restingMood()));
+        });
       }
 
       function selectSlot(b) {
         state.slot = b.dataset.label;
-        slotsGraph.querySelectorAll('.when-slot').forEach(x => x.classList.remove('is-selected'));
+        slotsGraph.querySelectorAll('.dn-bar').forEach(x => x.classList.remove('is-selected'));
         b.classList.add('is-selected');
+        applyMood(b.dataset.mood);   // lock the sky to the chosen slot's time of day
         updateNext1();
       }
       function updateNext1() { next1.disabled = !(state.date && state.slot); }
@@ -5043,7 +5043,7 @@
         // setPlan wiped the slot; put the saved one back and re-highlight it on the graph
         state.slot = restoredSlot;
         if (state.date && state.slot) {
-          const b = slotsGraph.querySelector('.when-slot[data-label="' + state.slot + '"]:not(.is-taken)');
+          const b = slotsGraph.querySelector('.dn-bar[data-label="' + state.slot + '"]:not(.is-taken)');
           if (b) selectSlot(b);
         }
         next1.disabled = !(state.date && state.slot);
