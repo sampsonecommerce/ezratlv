@@ -7,12 +7,13 @@
 <title>עזרא · אב-טיפוס תהליך סגירה בצ'אט</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pliant:wght@600;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Pliant:wght@600;700&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#0f0d0b; --panel:#1b150f; --panel2:#141009; --cream:#f0ebe0; --cream-dim:rgba(240,235,224,.62);
     --gold:#c49a3c; --gold-light:#f5d98a; --line:rgba(196,154,60,.22);
-    --font-body:'Heebo',sans-serif; --font-serif:'Cormorant Garamond',serif; --ease:cubic-bezier(.4,0,.2,1);
+    /* Heebo everywhere; Pliant strictly for numbers (.num and numeric spans) */
+    --font-body:'Heebo',sans-serif; --font-serif:'Heebo',sans-serif; --ease:cubic-bezier(.4,0,.2,1);
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -26,7 +27,7 @@
     padding:0 clamp(.8rem,2vw,1.6rem)}
   .bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;
     padding-block:.7rem;border-block-end:1px solid var(--line)}
-  .bar__brand{font-family:var(--font-serif);font-size:1.25rem;color:var(--gold-light);letter-spacing:.02em}
+  .bar__brand{font-weight:700;font-size:1.15rem;color:var(--gold-light);letter-spacing:.02em}
   .bar__prog{display:flex;align-items:center;gap:.55rem;font-size:.78rem;color:var(--cream-dim)}
   .bar__dots{display:flex;gap:.3rem;direction:ltr}
   .bar__dots i{width:7px;height:7px;border-radius:50%;background:rgba(240,235,224,.18);transition:background .3s var(--ease)}
@@ -48,11 +49,11 @@
   .chat__log::-webkit-scrollbar-thumb{background:rgba(196,154,60,.45);border-radius:99px}
 
   .msg{max-width:88%;border-radius:16px;padding:.65rem .9rem;font-size:.92rem;
-    animation:pop .3s var(--ease)}
-  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    animation:pop .18s var(--ease)}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .msg--bot{align-self:flex-start;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.07);
     border-start-start-radius:4px}
-  .msg--bot .t{font-family:var(--font-serif);font-size:1.15rem;color:var(--cream);line-height:1.25}
+  .msg--bot .t{font-weight:600;font-size:1.02rem;color:var(--cream);line-height:1.3}
   .msg--bot .s{font-size:.8rem;color:var(--cream-dim);margin-block-start:.2rem}
   .msg--bot .s--gold{color:var(--gold-light);font-weight:600}
   .msg--me{align-self:flex-end;background:linear-gradient(135deg,rgba(196,154,60,.28),rgba(196,154,60,.16));
@@ -61,7 +62,7 @@
 
   /* input card (chips / widgets) at the tail of the chat */
   .ask{align-self:stretch;background:rgba(0,0,0,.22);border:.5px solid var(--line);border-radius:14px;
-    padding:.8rem;animation:pop .3s var(--ease)}
+    padding:.8rem;animation:pop .18s var(--ease)}
   .chips{display:flex;gap:.5rem;flex-wrap:wrap}
   .chip{flex:1 1 auto;min-width:110px;background:rgba(255,255,255,.05);border:.5px solid var(--line);border-radius:11px;
     color:var(--cream);padding:.55rem .7rem;font-size:.9rem;text-align:center;
@@ -96,16 +97,16 @@
     background:linear-gradient(170deg,#171209,#100d08);overflow:hidden;position:relative}
   .stage__body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;
     padding:clamp(.9rem,2vw,1.4rem)}
-  .fadeing{animation:fadeIn .4s var(--ease)}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .fadeing{animation:fadeIn .22s var(--ease)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
   /* step-1 visual: package card */
   .pkgcard{max-width:340px;margin-inline:auto;text-align:center;border:.5px solid var(--line);border-radius:16px;
     padding:1.4rem 1.2rem;background:rgba(196,154,60,.05)}
-  .pkgcard .nm{font-family:var(--font-serif);font-size:1.7rem;color:var(--gold-light)}
+  .pkgcard .nm{font-weight:700;font-size:1.45rem;color:var(--gold-light)}
   .pkgcard .rows{margin-block-start:.9rem;display:flex;flex-direction:column;gap:.45rem;font-size:.88rem;color:var(--cream-dim)}
   .pkgcard .rows b{color:var(--cream)}
-  .pkgcard .ph{margin-block-start:1rem;font-family:'Pliant',var(--font-serif);font-size:1.9rem;color:var(--gold-light)}
+  .pkgcard .ph{margin-block-start:1rem;font-family:'Pliant',var(--font-body);font-size:1.9rem;color:var(--gold-light)}
   .pkgcard .ph small{display:block;font-family:var(--font-body);font-size:.72rem;color:var(--cream-dim);font-weight:400}
 
   /* step-2 visual: merged WHEN (calendar right + sky panel left) */
@@ -113,7 +114,7 @@
   .when__cal{flex:1.25 1 0;min-width:0}
   .when__sky{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
   .colhead{text-align:center;margin-block-end:.5rem}
-  .colhead .t{font-family:var(--font-serif);font-size:1.1rem;color:var(--cream)}
+  .colhead .t{font-weight:600;font-size:.98rem;color:var(--cream)}
   .colhead .s{font-size:.8rem;color:var(--cream-dim);min-height:1.2em}
   .colhead .s b{color:var(--gold)}
   .cal{max-width:330px;margin-inline:auto}
@@ -121,8 +122,8 @@
   .cal__nav{width:32px;height:32px;border-radius:9px;border:.5px solid var(--line);background:transparent;color:var(--gold);
     display:inline-flex;align-items:center;justify-content:center}
   .cal__nav:disabled{opacity:.3;cursor:not-allowed}
-  .cal__month{font-family:var(--font-serif);font-size:1.15rem;color:var(--cream)}
-  .cal__month .num{font-family:'Pliant',var(--font-serif);font-weight:700}
+  .cal__month{font-weight:600;font-size:1rem;color:var(--cream)}
+  .cal__month .num{font-family:'Pliant',var(--font-body);font-weight:700}
   .cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.16rem}
   .cal__dow{text-align:center;font-size:.6rem;color:var(--cream-dim);padding-block:.15rem}
   .cal__day{aspect-ratio:1/1;border-radius:7px;border:.5px solid transparent;background:rgba(255,255,255,.04);
@@ -186,21 +187,44 @@
   .price .rows div{display:flex;justify-content:space-between;gap:1rem}
   .price .rows b{color:var(--cream)}
   .price .tot{border-block-start:1px solid var(--line);padding-block-start:.8rem;
-    font-family:'Pliant',var(--font-serif);font-size:2.3rem;color:var(--gold-light)}
+    font-family:'Pliant',var(--font-body);font-size:2.3rem;color:var(--gold-light)}
   .price .tot small{display:block;font-family:var(--font-body);font-size:.72rem;color:var(--cream-dim);font-weight:400}
 
   /* step-5/6 visual: receipt / done */
   .rcpt{max-width:360px;margin-inline:auto;border:.5px solid var(--line);border-radius:14px;
     background:rgba(196,154,60,.05);padding:1rem 1.1rem;font-size:.86rem}
-  .rcpt .rt{font-family:var(--font-serif);font-size:1.2rem;color:var(--gold-light);text-align:center;margin-block-end:.7rem}
+  .rcpt .rt{font-weight:700;font-size:1.05rem;color:var(--gold-light);text-align:center;margin-block-end:.7rem}
   .rcpt .rr{display:flex;justify-content:space-between;gap:1rem;padding-block:.3rem;border-block-end:1px dashed rgba(196,154,60,.18);color:var(--cream-dim)}
   .rcpt .rr:last-child{border:none}
   .rcpt .rr b{color:var(--cream)}
+  .rcpt .sect{font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--gold);
+    padding-block:.45rem .15rem;border-block-end:1px dashed rgba(196,154,60,.18)}
+  .rcpt .fr{display:flex;justify-content:space-between;gap:.8rem;padding-block:.22rem;font-size:.78rem;
+    border-block-end:1px dashed rgba(196,154,60,.12);color:var(--cream-dim)}
+  .rcpt .fr b{color:var(--cream);font-weight:500}
+  .rcpt .grand{margin-block-start:.4rem;padding-block-start:.5rem;border-block-start:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:baseline;color:var(--cream)}
+  .rcpt .grand .v{font-family:'Pliant',var(--font-body);font-size:1.45rem;color:var(--gold-light)}
+  /* step-4 layout: coupe beside the long receipt */
+  .p4{display:flex;gap:1rem;align-items:stretch;min-height:0;height:100%}
+  .p4__side{flex:0 0 130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem}
+  .p4__tot{text-align:center;font-family:'Pliant',var(--font-body);font-size:1.5rem;color:var(--gold-light)}
+  .p4__tot small{display:block;font-family:var(--font-body);font-size:.68rem;color:var(--cream-dim);font-weight:400}
+  .rcpt--long{flex:1 1 auto;min-height:0;max-height:100%;overflow-y:auto;margin:0;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .rcpt--long::-webkit-scrollbar{width:6px}
+  .rcpt--long::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  /* champagne coupe that fills with guests */
+  .coupe{width:110px;overflow:visible}
+  #liq{transition:y .45s var(--ease),height .45s var(--ease)}
+  .bub{animation:rise 2.4s var(--ease) infinite;opacity:0}
+  .bub.b2{animation-delay:.8s}.bub.b3{animation-delay:1.5s}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}18%{opacity:.9}85%{opacity:.7}100%{transform:translateY(-42px);opacity:0}}
   .done{max-width:380px;margin-inline:auto;text-align:center}
   .done .ok{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(196,154,60,.25),transparent 70%);
     border:2px solid var(--gold);color:var(--gold-light);display:flex;align-items:center;justify-content:center;
     margin:0 auto 1rem;font-size:1.6rem}
-  .done .dt{font-family:var(--font-serif);font-size:1.6rem;color:var(--cream)}
+  .done .dt{font-weight:700;font-size:1.35rem;color:var(--cream)}
   .done .hero{color:var(--gold-light);font-weight:600;margin-block-start:.4rem}
   .done p{font-size:.84rem;color:var(--cream-dim);margin-block:.5rem 0}
   .done .note{border:.5px dashed rgba(196,154,60,.4);border-radius:10px;padding:.6rem .8rem;margin-block-start:.8rem;font-size:.78rem}
@@ -212,14 +236,37 @@
     transition:border-color .2s,background .2s}
   .talkpill:hover{border-color:var(--gold);background:rgba(196,154,60,.1)}
 
-  /* mobile: stack (chat top, visual below), frame still doesn't scroll */
+  /* mobile: stack (chat top, visual below), frame still doesn't scroll the page */
   @media(max-width:820px){
-    .panes{grid-template-columns:1fr;grid-template-rows:1.15fr 1fr;padding-block:.7rem;gap:.7rem}
-    .stage__body{padding:.7rem}
-    .when{flex-direction:column;gap:.6rem;overflow:hidden}
-    .cal{max-width:300px}
-    .msg--bot .t{font-size:1.02rem}
-    .talkpill{font-size:.66rem;inset-block-end:.5rem}
+    .frame{padding:0 .6rem calc(2.1rem + env(safe-area-inset-bottom))}
+    .bar{padding-block:.5rem}
+    .bar__prog{font-size:.7rem}
+    .panes{grid-template-columns:1fr;grid-template-rows:minmax(0,1.25fr) minmax(0,1fr);padding-block:.6rem;gap:.6rem}
+    .chat__log{padding:.7rem;gap:.5rem}
+    .msg{max-width:94%;font-size:.86rem;padding:.55rem .75rem}
+    .msg--bot .t{font-size:.95rem}
+    .ask{padding:.65rem}
+    .chip{min-width:96px;font-size:.84rem;padding:.5rem .55rem}
+    .go{padding:.6rem;font-size:.9rem}
+    /* the visual pane may be taller than its slot: scroll INSIDE it, never the page */
+    .stage__body{padding:.6rem;overflow-y:auto;justify-content:flex-start;
+      scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+    .stage__body::-webkit-scrollbar{width:6px}
+    .stage__body::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+    .fadeing{justify-content:flex-start!important}
+    .when{flex-direction:column;gap:.55rem}
+    .cal{max-width:270px}
+    .cal__day{font-size:.68rem;border-radius:6px}
+    .sky__arc{height:40px}
+    .srow{min-height:32px}
+    .pkgcard{padding:1rem .9rem}
+    .pkgcard .ph{font-size:1.5rem}
+    .p4{flex-direction:column;gap:.6rem;height:auto}
+    .p4__side{flex:none;flex-direction:row;justify-content:center;gap:1rem}
+    .coupe{width:70px}
+    .rcpt--long{max-height:none;overflow:visible}
+    .talkpill{font-size:.64rem;padding:.36rem .7rem;inset-block-end:calc(.4rem + env(safe-area-inset-bottom));
+      inset-inline-end:.6rem}
   }
   @media (prefers-reduced-motion: reduce){
     .msg,.ask,.fadeing,.orb,.orb .sun,.orb .moon,.sky::after{animation:none;transition:none}
@@ -312,20 +359,19 @@
   function setStage(html){ stage.innerHTML='<div class="fadeing" style="min-height:0;display:flex;flex-direction:column;justify-content:center;flex:1">'+html+'</div>'; }
   function setProgress(n){
     step=n;
-    $('progTxt').textContent = n<=5 ? ('שלב '+n+' מתוך 5') : 'סיום';
+    $('progTxt').innerHTML = n<=5 ? ('שלב <span class="num">'+n+'</span> מתוך <span class="num">5</span>') : 'סיום';
     [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on', i < Math.min(n,5)));
     $('backBtn').hidden = (n<=1 || n>5);
   }
 
   // back: wipe the log from the previous question onward and re-ask it
-  const anchors = {};   // step -> first log node of that step
-  function markAnchor(n){ anchors[n] = log.lastElementChild; }
+  const anchors = {};   // step -> log child count at the moment the step began
+  function markAnchor(n){ anchors[n] = log.children.length; }
   $('backBtn').addEventListener('click', ()=>{
     if (step<=1 || step>5) return;
     const target = step-1;
-    // remove everything from the target step's anchor onward
-    const a = anchors[target];
-    if (a){ while (a.previousSibling !== null && log.lastChild !== a.previousSibling) { if(!log.lastChild) break; log.removeChild(log.lastChild); } }
+    const idx = anchors[target] || 0;
+    while (log.children.length > idx) log.removeChild(log.lastChild);
     STEPS[target]();
   });
 
@@ -344,7 +390,7 @@
       card.remove();
       meMsg(E.PLANS[state.plan].label);
       stagePackage();
-      setTimeout(step2, 350);
+      setTimeout(step2, 120);
     }));
     stagePackage();
   }
@@ -365,18 +411,27 @@
 
   /* ═══════════ STEP 2 · date+time (merged, interactive on the LEFT) ═══════════ */
   let view = new Date(today.getFullYear(), today.getMonth(), 1);
-  let goBtn2 = null;
+  let goBtn2 = null, card2 = null, askedTime2 = false;
   function step2(){
     setProgress(2); markAnchor(2);
-    botMsg('בחרו שעה');
-    const card = askCard('<button type="button" class="go" disabled>המשך</button>');
-    goBtn2 = card.querySelector('.go');
+    botMsg('בחרו תאריך');                      // date first; the time question follows once a day is picked
+    askedTime2 = !!state.date;
+    card2 = askCard('<button type="button" class="go" disabled>המשך</button>');
+    goBtn2 = card2.querySelector('.go');
     goBtn2.addEventListener('click', ()=>{
-      card.remove();
+      card2.remove(); card2 = null;
       meMsg(humanDate(state.date)+' · '+state.slot);
-      setTimeout(step3, 350);
+      setTimeout(step3, 120);
     });
     stageWhen();
+  }
+  // once a date is chosen, עזרא asks for the hour (inserted above the המשך card, once)
+  function askTime2(){
+    if (askedTime2 || !card2) return;
+    askedTime2 = true;
+    const el=document.createElement('div'); el.className='msg msg--bot';
+    el.innerHTML='<div class="t">בחרו שעה</div>';
+    log.insertBefore(el, card2); scrollLog();
   }
   function stageWhen(){
     setStage(
@@ -420,7 +475,7 @@
       const c=document.createElement('button'); c.type='button'; c.className='cal__day'; c.textContent=day;
       if(d<today){ c.classList.add('is-past'); c.disabled=true; }
       else if(BOOKED.includes(key(d))){ c.classList.add('is-booked'); c.disabled=true; }
-      else c.addEventListener('click',()=>{ state.date=d; state.slot=null; renderCal(); renderSky(); updateGo2(); });
+      else c.addEventListener('click',()=>{ state.date=d; state.slot=null; renderCal(); renderSky(); askTime2(); updateGo2(); });
       if(state.date && key(d)===key(state.date)) c.classList.add('is-selected');
       g.appendChild(c);
     }
@@ -484,7 +539,7 @@
       state.foodNotes = card.querySelector('#pFoodNotes').value;
       card.remove();
       meMsg(state.menu==='evening'?'תפריט ערב':'תפריט יום');
-      setTimeout(step4, 350);
+      setTimeout(step4, 120);
     });
     // default view: suggest by slot time like the site
     if(!state.menu) state.menu = parseInt(state.slot,10)>=17 ? 'evening':'day';
@@ -513,31 +568,84 @@
       '<button type="button" class="go">המשך</button>');
     const gr=card.querySelector('#gr'), gv=card.querySelector('#gv');
     gv.textContent=state.guests;
-    gr.addEventListener('input',()=>{ state.guests=+gr.value; gv.textContent=gr.value; stagePrice(); });
+    gr.addEventListener('input',()=>{ state.guests=+gr.value; gv.textContent=gr.value; refreshLive(); });
     card.querySelectorAll('.chip[data-addon]').forEach(c=>c.addEventListener('click',()=>{
       const id=c.dataset.addon; state.addons[id]=!state.addons[id];
-      c.classList.toggle('on',state.addons[id]); stagePrice();
+      c.classList.toggle('on',state.addons[id]); refreshLive();
     }));
     card.querySelector('.go').addEventListener('click',()=>{
       card.remove();
       const t=totals();
       meMsg(state.guests+' אורחים · '+fmt(t.total));
-      setTimeout(step5, 350);
+      setTimeout(step5, 120);
     });
-    stagePrice();
+    stageLive();
   }
-  function stagePrice(){
-    const t=totals();
-    const addRows=selectedAddons().map(a=>'<div><span>'+a.label+'</span><b class="num">'+fmt(E.addonUnitPrice(a,t.g))+'</b></div>').join('');
-    setStage('<div class="price">'+
-      '<div class="rows">'+
-        '<div><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
-        '<div><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
-        addRows+
-        '<div><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
-      '</div>'+
-      '<div class="tot"><span class="num">'+fmt(t.total)+'</span><small>סה"כ משוער</small></div>'+
+
+  // ── long receipt (all details + engine food portions) — shared by steps 4 and 5 ──
+  function receiptInner(){
+    const t=totals(); const p=E.PLANS[state.plan];
+    const addRows=selectedAddons().map(a=>'<div class="rr"><span>'+a.label+'</span><b class="num">'+fmt(E.addonUnitPrice(a,t.g))+'</b></div>').join('');
+    let food='';
+    E.menuFor(state.plan,state.menu||'day').forEach(sec=>{
+      if(E.isBarCat(sec.t)) return;
+      const names=sec.items.map(it=>E.splitDish(it).name);
+      const pr=E.categoryPortions(sec.t,names,t.g);
+      const rows=pr.breakdown.filter(b=>b.qty!=null).map(b=>
+        '<div class="fr"><span>'+E.dishDisplay(sec.t,b.name)+'</span><b><span class="num">'+b.qty+'</span> '+b.unit+'</b></div>').join('');
+      if(rows) food+='<div class="sect">'+sec.t+'</div>'+rows;
+    });
+    return '<div class="rt">סיכום ההזמנה</div>'+
+      '<div class="rr"><span>מסלול</span><b>'+p.label+'</b></div>'+
+      '<div class="rr"><span>תאריך</span><b>'+(state.date?humanDate(state.date):'-')+'</b></div>'+
+      '<div class="rr"><span>שעה</span><b class="num">'+(state.slot||'-')+'</b></div>'+
+      '<div class="rr"><span>תפריט</span><b>'+(state.menu==='evening'?'ערב':'יום')+'</b></div>'+
+      '<div class="rr"><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
+      '<div class="rr"><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
+      addRows+
+      '<div class="rr"><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
+      food+
+      '<div class="grand"><span>סה"כ משוער</span><span class="v">'+fmt(t.total)+'</span></div>';
+  }
+
+  // ── champagne coupe that fills as the guests slider moves ──
+  const COUPE =
+    '<svg class="coupe" viewBox="0 0 150 190" aria-hidden="true">'+
+      '<defs>'+
+        '<clipPath id="bowlClip"><path d="M25,25 C25,72 55,92 75,92 C95,92 125,72 125,25 Z"/></clipPath>'+
+        '<linearGradient id="liqG" x1="0" y1="0" x2="0" y2="1">'+
+          '<stop offset="0" stop-color="#f5d98a"/><stop offset="1" stop-color="#c49a3c"/>'+
+        '</linearGradient>'+
+      '</defs>'+
+      '<g clip-path="url(#bowlClip)">'+
+        '<rect id="liq" x="25" y="92" width="100" height="0" fill="url(#liqG)" opacity=".92"/>'+
+        '<circle class="bub"    cx="66" cy="86" r="2.2" fill="#fbeec0"/>'+
+        '<circle class="bub b2" cx="78" cy="87" r="1.7" fill="#fbeec0"/>'+
+        '<circle class="bub b3" cx="88" cy="86" r="2.6" fill="#fbeec0"/>'+
+      '</g>'+
+      '<path d="M25,25 C25,72 55,92 75,92 C95,92 125,72 125,25" fill="none" stroke="rgba(240,235,224,.55)" stroke-width="2.5" stroke-linecap="round"/>'+
+      '<line x1="75" y1="92" x2="75" y2="150" stroke="rgba(240,235,224,.55)" stroke-width="2.5" stroke-linecap="round"/>'+
+      '<ellipse cx="75" cy="153" rx="27" ry="5" fill="none" stroke="rgba(240,235,224,.55)" stroke-width="2.5"/>'+
+    '</svg>';
+  function updateCoupe(){
+    const liq=document.getElementById('liq'); if(!liq) return;
+    const frac=(state.guests-20)/30;                    // 20 → 50 guests
+    const fill=.3+.62*Math.min(Math.max(frac,0),1);     // never empty, never over the rim
+    const y=92-fill*65;
+    liq.setAttribute('y',y.toFixed(1)); liq.setAttribute('height',(92-y).toFixed(1));
+  }
+  function stageLive(){
+    setStage('<div class="p4">'+
+      '<div class="p4__side">'+COUPE+'<div class="p4__tot" id="p4tot"></div></div>'+
+      '<div class="rcpt rcpt--long" id="liveR"></div>'+
     '</div>');
+    refreshLive();
+  }
+  function refreshLive(){
+    const r=document.getElementById('liveR'); if(r) r.innerHTML=receiptInner();
+    const tot=document.getElementById('p4tot');
+    if(tot) tot.innerHTML='<span class="num">'+fmt(totals().total)+'</span><small>סה"כ משוער</small>';
+    updateCoupe();
   }
 
   /* ═══════════ STEP 5 · details (the only typing) ═══════════ */
@@ -566,21 +674,13 @@
       state.company=card.querySelector('#fCompany').value;
       card.remove();
       meMsg('שליחת הבקשה');
-      setTimeout(step6, 350);
+      setTimeout(step6, 120);
     });
     stageReceipt();
   }
   function stageReceipt(){
-    const t=totals(); const p=E.PLANS[state.plan];
-    setStage('<div class="rcpt"><div class="rt">סיכום ההזמנה</div>'+
-      '<div class="rr"><span>מסלול</span><b>'+p.label+'</b></div>'+
-      '<div class="rr"><span>תאריך</span><b>'+(state.date?humanDate(state.date):'-')+'</b></div>'+
-      '<div class="rr"><span>שעה</span><b class="num">'+(state.slot||'-')+'</b></div>'+
-      '<div class="rr"><span>תפריט</span><b>'+(state.menu==='evening'?'ערב':'יום')+'</b></div>'+
-      '<div class="rr"><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
-      '<div class="rr"><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
-      '<div class="rr"><span>סה"כ משוער</span><b class="num">'+fmt(t.total)+'</b></div>'+
-    '</div>');
+    // same long receipt (all details + food portions), full width, scrolls inside if needed
+    setStage('<div class="rcpt rcpt--long" style="max-width:380px;margin-inline:auto">'+receiptInner()+'</div>');
   }
 
   /* ═══════════ STEP 6 · confirmation ═══════════ */
