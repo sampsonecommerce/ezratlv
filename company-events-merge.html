@@ -2080,7 +2080,8 @@
     .dn-graph--vert .dn-arc { height: 52px; margin-block-end: 0.4rem; flex: none; }
     .dn-graph--vert .dn-bars { position: static; height: auto; margin: 0; flex: 1 1 auto;
       display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; }
-    .dn-graph--vert .dn-bar { position: static; inset: auto; left: auto; bottom: auto; height: auto;
+    /* relative (not static) so the absolute .dn-bar__fill anchors to the button, not the whole panel */
+    .dn-graph--vert .dn-bar { position: relative; inset: auto; left: auto; bottom: auto; height: auto;
       width: 100%; min-height: 46px; }
     .dn-graph--vert .dn-bar__inner { justify-content: center; gap: 0.4rem; }
     .dn-graph--vert .dn-bar__taken { color: rgba(255,255,255,0.7); font-size: 0.72rem; }
