@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>מחשבון עזרא · כלי מכירות</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pliant:wght@600;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <!-- internal tool: unlinked from the public site, noindex. Reuses the SAME booking engine. -->
+  <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
+  <style>
+    :root{
+      --bg:#12100c; --panel:#1b150f; --panel2:#171209; --cream:#f0ebe0; --cream-dim:rgba(240,235,224,.62);
+      --gold:#c49a3c; --gold-light:#f5d98a; --line:rgba(196,154,60,.22); --ok:#5fbf7f; --err:#e0736f;
+      --font-body:'Heebo',sans-serif; --font-serif:'Cormorant Garamond',serif; --ease:cubic-bezier(.4,0,.2,1);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--cream);font-family:var(--font-body);line-height:1.5;
+      -webkit-font-smoothing:antialiased}
+    .num{font-family:'Pliant',var(--font-body);font-variant-numeric:tabular-nums}
+    h1,h2,h3{font-family:var(--font-serif);font-weight:600;margin:0}
+    button{font-family:inherit;cursor:pointer}
+    input,select,textarea{font-family:inherit;font-size:.95rem;color:var(--cream);background:rgba(255,255,255,.05);
+      border:.5px solid var(--line);border-radius:9px;padding:.55rem .7rem;width:100%}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+    textarea{resize:vertical;min-height:70px;line-height:1.55}
+    label{display:block;font-size:.8rem;color:var(--cream-dim);margin-block-end:.3rem}
+    .field{margin-block-end:.9rem}
+
+    /* passcode gate */
+    #gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:1.5rem}
+    #gate .box{max-width:360px;width:100%;text-align:center;background:linear-gradient(170deg,var(--panel),var(--panel2));
+      border:1px solid var(--line);border-radius:18px;padding:2rem 1.6rem}
+    #gate h1{font-size:1.7rem;color:var(--gold-light);margin-block-end:.3rem}
+    #gate p{color:var(--cream-dim);font-size:.9rem;margin-block:.2rem 1.3rem}
+    #gate .err{color:var(--err);font-size:.82rem;min-height:1.1em;margin-block-start:.6rem}
+    .btn{background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:.7rem 1.2rem;font-weight:600;
+      transition:filter .2s var(--ease),opacity .2s}
+    .btn:hover{filter:brightness(1.08)} .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn--wide{width:100%;margin-block-start:1rem}
+    .btn--ghost{background:transparent;color:var(--gold-light);border:.5px solid var(--line)}
+
+    .wrap{max-width:1080px;margin:auto;padding:1.2rem clamp(1rem,3vw,2rem) 3rem}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+      border-block-end:1px solid var(--line);padding-block-end:1rem;margin-block-end:1.3rem}
+    .top h1{font-size:1.5rem}
+    .top .sub{color:var(--cream-dim);font-size:.82rem}
+    .badge{font-size:.78rem;color:var(--gold-light);border:.5px solid var(--line);border-radius:999px;padding:.25rem .7rem}
+    .lead-info{background:rgba(196,154,60,.06);border:.5px solid var(--line);border-radius:12px;padding:.8rem 1rem;
+      margin-block-end:1.3rem;font-size:.86rem;color:var(--cream-dim);display:none}
+    .lead-info b{color:var(--cream)} .lead-info .summary{white-space:pre-wrap;margin-block-start:.5rem;font-size:.8rem}
+
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:1.4rem;align-items:start}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(170deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:1.2rem}
+    .card + .card{margin-block-start:1.1rem}
+    .card h3{font-size:1.1rem;color:var(--gold-light);margin-block-end:.9rem}
+
+    .seg{display:flex;gap:.4rem;background:rgba(0,0,0,.25);border-radius:11px;padding:.25rem}
+    .seg button{flex:1;background:transparent;color:var(--cream-dim);border:none;border-radius:8px;padding:.5rem;font-size:.9rem;font-weight:500}
+    .seg button.on{background:var(--gold);color:var(--bg);font-weight:600}
+    .chips{display:flex;gap:.5rem;flex-wrap:wrap}
+    .chip{flex:1;min-width:120px;background:rgba(255,255,255,.04);border:.5px solid var(--line);border-radius:10px;
+      padding:.6rem;color:var(--cream-dim);text-align:center;font-size:.9rem}
+    .chip small{display:block;font-size:.72rem;opacity:.8}
+    .chip.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:600}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    .addons{display:flex;flex-direction:column;gap:.5rem}
+    .addon{display:flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.03);border:.5px solid var(--line);
+      border-radius:10px;padding:.55rem .7rem;font-size:.88rem}
+    .addon input{width:auto} .addon .price{margin-inline-start:auto;color:var(--gold-light);font-size:.82rem}
+    .addon.off{opacity:.4}
+
+    /* output */
+    .out{position:sticky;top:1rem}
+    .totals{display:flex;flex-direction:column;gap:.5rem;margin-block-end:1rem}
+    .totline{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem;color:var(--cream-dim)}
+    .totline b{color:var(--cream)}
+    .grand{border-block-start:1px solid var(--line);padding-block-start:.7rem;margin-block-start:.3rem}
+    .grand .v{font-family:'Pliant',var(--font-serif);font-weight:700;font-size:1.9rem;color:var(--gold-light);direction:ltr}
+    .txt-out{margin-block-start:.9rem}
+    .txt-out label{display:flex;justify-content:space-between;align-items:center}
+    .txt-out pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:.5px solid var(--line);border-radius:10px;
+      padding:.7rem .8rem;font-family:var(--font-body);font-size:.82rem;line-height:1.6;max-height:210px;overflow:auto;margin:0}
+    .send-status{margin-block-start:.7rem;font-size:.85rem;min-height:1.2em}
+    .send-status.ok{color:var(--ok)} .send-status.err{color:var(--err)}
+    .hidden{display:none!important}
+    .hint{font-size:.76rem;color:var(--cream-dim);margin-block-start:.3rem}
+  </style>
+</head>
+<body>
+  <!-- passcode gate -->
+  <div id="gate">
+    <div class="box">
+      <h1>מחשבון עזרא</h1>
+      <p>כלי מכירות פנימי. הזינו את סיסמת הצוות כדי להיכנס.</p>
+      <form id="gateForm">
+        <input type="password" id="gatePass" autocomplete="off" placeholder="סיסמה" aria-label="סיסמה" />
+        <button class="btn btn--wide" type="submit">כניסה</button>
+        <div class="err" id="gateErr" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- tool -->
+  <div class="wrap hidden" id="tool">
+    <div class="top">
+      <div>
+        <h1>מחשבון עזרא</h1>
+        <div class="sub">כלי מכירות פנימי · השלמת ליד ותמחור</div>
+      </div>
+      <div class="badge" id="itemBadge">ליד חדש (ללא שיוך)</div>
+    </div>
+
+    <div class="lead-info" id="leadInfo"></div>
+
+    <div class="grid">
+      <!-- inputs -->
+      <div>
+        <div class="card">
+          <h3>מסלול ותמחור</h3>
+          <div class="field">
+            <div class="seg" id="modeSeg">
+              <button type="button" data-mode="package" class="on">חבילה</button>
+              <button type="button" data-mode="custom">מותאם אישית</button>
+            </div>
+          </div>
+
+          <!-- package: plan chips -->
+          <div class="field" id="planField">
+            <label>מסלול</label>
+            <div class="chips" id="planChips">
+              <button type="button" class="chip" data-plan="happyhour">Happy Hour<small>3 שעות · ₪275</small></button>
+              <button type="button" class="chip" data-plan="gibush">גיבוש מחלקה<small>5 שעות · ₪330</small></button>
+              <button type="button" class="chip" data-plan="mesiba">מסיבת חברה<small>5 שעות · ₪450</small></button>
+            </div>
+          </div>
+
+          <!-- custom: free per-head + hours -->
+          <div class="field hidden" id="customPriceField">
+            <div class="row2">
+              <div><label>מחיר לאדם (₪)</label><input type="number" id="customPerHead" min="0" step="10" value="450" /></div>
+              <div><label>שעות</label><input type="number" id="customHours" min="1" step="1" value="5" /></div>
+            </div>
+            <div class="hint">מותאם אישית: כללי החישוב טרם הוגדרו. המחיר לאדם והתפריט נשלטים ידנית.</div>
+          </div>
+
+          <div class="field">
+            <label>תפריט</label>
+            <div class="seg" id="menuSeg">
+              <button type="button" data-menu="day" class="on">יום</button>
+              <button type="button" data-menu="evening">ערב</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="row2">
+              <div><label>מספר אורחים</label><input type="number" id="guests" min="1" step="1" value="20" /></div>
+              <div><label>תאריך</label><input type="date" id="date" /></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>חלון שעות</label>
+            <select id="slot"></select>
+          </div>
+        </div>
+
+        <div class="card" id="addonsCard">
+          <h3>תוספות</h3>
+          <div class="addons" id="addons"></div>
+        </div>
+
+        <div class="card hidden" id="customFoodCard">
+          <h3>תפריט מותאם (עריכה ידנית)</h3>
+          <div class="field"><label>טקסט אוכל לחוזה</label><textarea id="customFood" placeholder="שורה לכל מנה, בפורמט: שם | כמות: N"></textarea></div>
+          <div class="field"><label>טקסט בר לחוזה</label><textarea id="customBar" placeholder="שורה לכל פריט בר"></textarea></div>
+          <div class="hint">אפשר לטעון את תפריט אחת החבילות כבסיס ואז לערוך.</div>
+          <button type="button" class="btn btn--ghost" id="loadPkgMenu" style="margin-block-start:.6rem">טען תפריט חבילה כבסיס</button>
+        </div>
+
+        <div class="card">
+          <h3>פרטי לקוח והערות</h3>
+          <div class="row2">
+            <div class="field"><label>שם נציג</label><input id="name" /></div>
+            <div class="field"><label>שם חברה</label><input id="company" /></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>טלפון</label><input id="phone" /></div>
+            <div class="field"><label>אימייל</label><input id="email" type="email" /></div>
+          </div>
+          <div class="field"><label>הערות למטבח (נכנס גם לטקסט האוכל)</label><textarea id="foodNotes"></textarea></div>
+          <div class="field" style="margin-block-end:0"><label>הערות כלליות</label><textarea id="notes"></textarea></div>
+        </div>
+      </div>
+
+      <!-- output -->
+      <div>
+        <div class="card out">
+          <h3>סיכום</h3>
+          <div class="totals">
+            <div class="totline">מחיר לאדם <b class="num" id="oPerHead">₪0</b></div>
+            <div class="totline">אורחים <b class="num" id="oGuests">0</b></div>
+            <div class="totline">בסיס <b class="num" id="oBase">₪0</b></div>
+            <div class="totline">תוספות <b class="num" id="oAddons">₪0</b></div>
+            <div class="totline grand">סה"כ <span class="v num" id="oTotal">₪0</span></div>
+          </div>
+
+          <div class="txt-out">
+            <label>טקסט אוכל לחוזה</label>
+            <pre id="oFood"></pre>
+          </div>
+          <div class="txt-out">
+            <label>טקסט בר לחוזה</label>
+            <pre id="oBarText"></pre>
+          </div>
+
+          <button class="btn btn--wide" id="sendBtn" type="button">שליחה למאנדיי</button>
+          <div class="send-status" id="sendStatus" aria-live="polite"></div>
+          <div class="hint" id="sendHint"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="ezra-booking-engine.js"></script>
+  <script>
+  (function () {
+    const E = window.EzraEngine;
+    const ENDPOINT = window.EZRA_LEAD_ENDPOINT;
+    const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+    const ITEM_ID = params.get('item') || '';
+
+    // ── contract label maps (byte-exact to the site / Monday board)
+    const PKG_LABEL = { happyhour:'רגילה', gibush:'מורחבת', mesiba:'פרימיום' };
+    const BAR_LABEL = { happyhour:'בר רגיל (כלול בחבילה)', gibush:'בר מורחב (כלול בחבילה)', mesiba:'בר פרימיום (כלול בחבילה)' };
+    const DJ_LABEL  = { happyhour:'פלייליסט + מערכת סאונד (כלול)', gibush:'פלייליסט מותאם אישית (כלול)', mesiba:"דיג'יי מהמבחר שלנו (כלול)" };
+    const LABEL_TO_PLAN = { 'רגילה':'happyhour', 'מורחבת':'gibush', 'פרימיום':'mesiba' };
+
+    const state = { mode:'package', plan:'gibush', menu:'day', addons:{} };
+    let secret = '';
+
+    // ── engine-parity helpers
+    const fmt = n => E.CURRENCY + Math.round(n || 0).toLocaleString('en-US');
+    const addonApplies = a => !(a.plans && !a.plans.includes(state.plan)) && !(a.menu && state.menu !== a.menu);
+    function perHead() {
+      return state.mode === 'custom' ? (parseFloat($('customPerHead').value) || 0) : E.PLANS[state.plan].perHead;
+    }
+    function guests() {
+      let g = parseInt($('guests').value, 10); if (isNaN(g)) g = 20;
+      return Math.max(1, g);
+    }
+    function addonsTotal(g) {
+      return E.ADDONS.filter(a => state.addons[a.id] && addonApplies(a)).reduce((s, a) => s + E.addonUnitPrice(a, g), 0);
+    }
+    function selectedAddonLabels() {
+      return E.ADDONS.filter(a => state.addons[a.id] && addonApplies(a)).map(a => a.label);
+    }
+    function hours() {
+      return state.mode === 'custom' ? (parseInt($('customHours').value, 10) || 5) : E.PLANS[state.plan].hours;
+    }
+
+    // ── slot options follow the chosen hours (SLOTS[3] / SLOTS[5]); unknown hours → free
+    function fillSlots() {
+      const list = E.SLOTS[hours()] || [];
+      const sel = $('slot'); const cur = sel.value;
+      sel.innerHTML = '<option value="">—</option>' + list.map(s => `<option value="${s}">${s}</option>`).join('');
+      if (list.includes(cur)) sel.value = cur;
+    }
+
+    // ── add-ons list (applies-filtered visual state)
+    function renderAddons() {
+      $('addons').innerHTML = E.ADDONS.map(a => {
+        const applies = addonApplies(a);
+        const checked = state.addons[a.id] && applies ? 'checked' : '';
+        return `<label class="addon ${applies ? '' : 'off'}">
+          <input type="checkbox" data-addon="${a.id}" ${checked} ${applies ? '' : 'disabled'} />
+          <span>${a.label}</span><span class="price">${a.cap || ''}</span></label>`;
+      }).join('');
+      $('addons').querySelectorAll('input[data-addon]').forEach(inp => {
+        inp.addEventListener('change', () => { state.addons[inp.dataset.addon] = inp.checked; recompute(); });
+      });
+    }
+
+    // ── contract text (package = engine; custom = manual textareas)
+    function foodText() {
+      if (state.mode === 'custom') {
+        const base = $('customFood').value.trim();
+        const fn = $('foodNotes').value.trim();
+        return base + (fn ? (base ? '\n' : '') + 'הערות נוספות למטבח:\n' + fn : '');
+      }
+      return E.buildFoodText(state.plan, state.menu, guests(), $('foodNotes').value);
+    }
+    function barText() {
+      return state.mode === 'custom' ? $('customBar').value.trim() : E.buildBarText(state.plan, state.menu);
+    }
+
+    function recompute() {
+      const g = guests(), ph = perHead(), add = addonsTotal(g), total = ph * g + add;
+      $('oPerHead').textContent = fmt(ph);
+      $('oGuests').textContent = g.toLocaleString('en-US');
+      $('oBase').textContent = fmt(ph * g);
+      $('oAddons').textContent = fmt(add);
+      $('oTotal').textContent = fmt(total);
+      $('oFood').textContent = foodText();
+      $('oBarText').textContent = barText();
+    }
+
+    // ── mode / plan / menu wiring
+    function setMode(m) {
+      state.mode = m;
+      $('modeSeg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+      const custom = m === 'custom';
+      $('planField').classList.toggle('hidden', custom);
+      $('customPriceField').classList.toggle('hidden', !custom);
+      $('customFoodCard').classList.toggle('hidden', !custom);
+      $('addonsCard').classList.toggle('hidden', false);
+      renderAddons(); fillSlots(); recompute();
+    }
+    function setPlan(p) {
+      state.plan = p;
+      $('planChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.plan === p));
+      renderAddons(); fillSlots(); recompute();
+    }
+    function setMenu(m) {
+      state.menu = m;
+      $('menuSeg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.menu === m));
+      renderAddons(); recompute();
+    }
+
+    $('modeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setMode(b.dataset.mode); });
+    $('planChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) setPlan(b.dataset.plan); });
+    $('menuSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setMenu(b.dataset.menu); });
+    ['guests','date','slot','customPerHead','customHours','customFood','customBar','foodNotes'].forEach(id => {
+      $(id).addEventListener('input', () => { if (id === 'customHours') fillSlots(); recompute(); });
+    });
+    $('loadPkgMenu').addEventListener('click', () => {
+      // load the current plan's menu as an editable base for custom mode
+      const p = state.plan;
+      $('customFood').value = E.buildFoodText(p, state.menu, guests(), '');
+      $('customBar').value = E.buildBarText(p, state.menu);
+      recompute();
+    });
+
+    // ── send to Monday (update the existing lead in place)
+    $('sendBtn').addEventListener('click', async () => {
+      const g = guests(), ph = perHead(), add = addonsTotal(g), total = ph * g + add;
+      const custom = state.mode === 'custom';
+      const payload = {
+        mode: 'updateLead', itemId: ITEM_ID, customMode: custom,
+        name: $('name').value, company: $('company').value, phone: $('phone').value, email: $('email').value,
+        date: $('date').value, slot: $('slot').value, menu: state.menu, guests: g,
+        packageLabel: custom ? 'מותאם אישית' : PKG_LABEL[state.plan],
+        perHeadText: ph ? ('₪' + Number(ph).toLocaleString('en-US') + ' לאדם') : '',
+        addonsText: '₪' + Number(add).toLocaleString('en-US'),
+        barMenuText: barText(),
+        foodMenuText: foodText(),
+        barLabel: custom ? '' : BAR_LABEL[state.plan],
+        djLabel: custom ? '' : DJ_LABEL[state.plan],
+        addonLabels: selectedAddonLabels(),
+        estTotal: total,
+        notes: $('notes').value, foodNotes: $('foodNotes').value,
+      };
+      const st = $('sendStatus'); st.className = 'send-status'; st.textContent = 'שולח…';
+      if (!ITEM_ID) { st.className = 'send-status err'; st.textContent = 'אין מזהה ליד בכתובת (?item=...). לא ניתן לעדכן מאנדיי.'; return; }
+      $('sendBtn').disabled = true;
+      try {
+        const r = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-ezra-calc-secret': secret },
+          body: JSON.stringify(payload),
+        });
+        const out = await r.json().catch(() => ({}));
+        if (r.status === 401) { st.className = 'send-status err'; st.textContent = 'סיסמה שגויה. רעננו והזינו שוב.'; }
+        else if (out.ok) { st.className = 'send-status ok'; st.textContent = '✓ עודכן במאנדיי (הליד נשאר בקבוצת המעקב).'; }
+        else { st.className = 'send-status err'; st.textContent = 'שגיאה: ' + (JSON.stringify(out.error) || 'לא ידוע'); }
+      } catch (e) {
+        st.className = 'send-status err'; st.textContent = 'שגיאת רשת: ' + e;
+      } finally { $('sendBtn').disabled = false; }
+    });
+
+    // ── prefill from an existing lead (secret-gated GET)
+    async function prefill() {
+      $('itemBadge').textContent = 'ליד #' + ITEM_ID;
+      try {
+        const r = await fetch(ENDPOINT + '?leadById=' + encodeURIComponent(ITEM_ID), {
+          headers: { 'x-ezra-calc-secret': secret },
+        });
+        if (r.status === 401) return false;   // wrong passcode
+        const out = await r.json();
+        if (!out.ok) { $('sendHint').textContent = 'לא נטענו פרטי הליד: ' + (JSON.stringify(out.error) || ''); return true; }
+        const it = out.item;
+        $('company').value = it.company || '';
+        $('name').value = it.name || '';
+        $('email').value = it.email || '';
+        $('phone').value = it.phone || '';
+        if (it.guests) $('guests').value = it.guests;
+        if (it.date) $('date').value = it.date;
+        if (it.note) $('notes').value = it.note;
+        const p = LABEL_TO_PLAN[it.packageLabel];
+        if (p) setPlan(p); else if (it.packageLabel === 'מותאם אישית') setMode('custom');
+        if (it.slot) { fillSlots(); if (![...$('slot').options].some(o => o.value === it.slot)) { const o = document.createElement('option'); o.value = it.slot; o.textContent = it.slot; $('slot').appendChild(o); } $('slot').value = it.slot; }
+        const info = $('leadInfo');
+        info.style.display = 'block';
+        info.innerHTML = '<b>' + (it.company || '—') + '</b> · ' + (it.name || '') + (it.phone ? ' · ' + it.phone : '') +
+          (it.summary ? '<div class="summary">' + it.summary.replace(/</g,'&lt;') + '</div>' : '');
+        recompute();
+        return true;
+      } catch (e) { $('sendHint').textContent = 'שגיאה בטעינת הליד: ' + e; return true; }
+    }
+
+    // ── boot: passcode gate → (prefill if ?item) → tool
+    function initTool() {
+      setMode('package'); setPlan('gibush'); setMenu('day'); fillSlots(); recompute();
+    }
+    async function unlock(pass) {
+      secret = pass;
+      // if there's an item, validate the passcode against the prefill GET; else just enter.
+      if (ITEM_ID) {
+        const ok = await prefill();
+        if (!ok) { secret = ''; return false; }
+      }
+      sessionStorage.setItem('ezraCalcSecret', pass);
+      $('gate').classList.add('hidden');
+      $('tool').classList.remove('hidden');
+      return true;
+    }
+    initTool();
+    $('gateForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const pass = $('gatePass').value.trim();
+      if (!pass) return;
+      $('gateErr').textContent = '';
+      const btn = e.target.querySelector('button'); btn.disabled = true;
+      const ok = await unlock(pass);
+      if (!ok) $('gateErr').textContent = 'סיסמה שגויה. נסו שוב.';
+      btn.disabled = false;
+    });
+    // remember an unlocked session (still validated on each write by the server secret)
+    const saved = sessionStorage.getItem('ezraCalcSecret');
+    if (saved) { $('gatePass').value = saved; }
+  })();
+  </script>
+</body>
+</html>
