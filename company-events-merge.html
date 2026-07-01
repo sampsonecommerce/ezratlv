@@ -1951,7 +1951,7 @@
     }
     .book-scroll > * { direction: rtl; }
     /* WHEN step is a fixed-height, no-scroll screen (redesigned to fit, not inner-scrolled) */
-    .book-scroll.is-fixed { overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+    .book-scroll.is-fixed { overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding-block: 0.7rem; }
     .book-scroll:hover, .book-scroll:focus-within { scrollbar-color: rgba(196,154,60,0.7) transparent; }
     /* WebKit: slim, branded, fades in on hover only */
     .book-scroll::-webkit-scrollbar { width: 9px; }
@@ -2037,8 +2037,8 @@
 
     /* editable "מסלול: X" chip on the WHEN step - jumps back to the plan step */
     .book-plan-chip {
-      display: inline-flex; align-items: center; gap: 0.4rem; margin: -0.1rem auto 1rem;
-      padding: 0.34rem 0.8rem; border-radius: 999px; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem; margin: 0 auto 0.7rem;
+      padding: 0.3rem 0.8rem; border-radius: 999px; cursor: pointer;
       border: 0.5px solid rgba(196,154,60,0.4); background: rgba(196,154,60,0.07);
       color: var(--cream); font-family: var(--font-body); font-size: 0.82rem;
       transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
@@ -2051,7 +2051,9 @@
     .when-grid { display: flex; flex-direction: row; align-items: stretch; gap: 0; }
     /* calendar column ~1.25 : 1 vs the sky column, and shrunk so month + all rows fit with no clip/scroll */
     .when-cal   { flex: 1.25 1 0; min-width: 0; display: flex; flex-direction: column; }
-    .when-cal .cal { margin-inline: 0; max-width: 100%; width: 100%; padding-inline: 0.2rem; }
+    /* cap + center the calendar so its square cells stay small and the whole grid + the המשך button
+       and the bottom captions all fit inside the fixed height (no clipping by overflow:hidden) */
+    .when-cal .cal { margin-inline: auto; max-width: 336px; width: 100%; padding-inline: 0.2rem; }
     .when-cal .cal__month .cal__year { margin-inline-start: 0.3rem; }
     .when-cal .cal__nav { width: 34px; height: 34px; }
     .when-cal .cal__grid { gap: 0.16rem; }
