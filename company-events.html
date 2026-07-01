@@ -4582,7 +4582,12 @@
         totalEl.textContent = fmt(ph * gg + addonsTotal(gg));
       }
       let prevGuests = 20;
+      // did the customer actually interact with the guests control this session? (setGuests is only
+      // called from the slider/number input events). If not, we must NOT record the default 20 as if
+      // they chose it - abandoned leads before the guests step should carry no guest count.
+      let guestsTouched = false;
       function setGuests(v) {
+        guestsTouched = true;
         let n = parseInt(v, 10); if (isNaN(n)) n = PLANS[state.plan].minGuests;
         n = Math.min(RANGE_MAX, Math.max(0, n));
         guestsInput.value = n;
@@ -4722,6 +4727,7 @@
           state.date = null;
           if (saved.date) { const d = new Date(saved.date); if (!isNaN(d.getTime())) { d.setHours(0,0,0,0); state.date = d; } }
           guestsInput.value = state.guests; guestsRange.value = Math.min(Math.max(state.guests, RANGE_MIN), RANGE_MAX); prevGuests = state.guests;
+          guestsTouched = (saved.step || 1) >= 5;   // a resumed session that reached the guests step counts as set
           if (saved.fields) Object.keys(saved.fields).forEach(id => { const el = document.getElementById(id); if (!el) return; if (id === 'bfWantsCall') el.checked = !!saved.fields[id]; else el.value = saved.fields[id]; });
           saveOn = true; if (saveChk) saveChk.checked = true;
         } else {
@@ -4729,6 +4735,7 @@
           state.date = null; state.menu = null; state.addons = {};
           if (foodNotes) foodNotes.value = '';
           guestsInput.value = 20; guestsRange.value = 20; prevGuests = 20;
+          guestsTouched = false;   // fresh session: 20 is just the slider's start, not a customer choice
           if (form) form.reset();
           saveOn = false; if (saveChk) saveChk.checked = false;
         }
@@ -4781,7 +4788,7 @@
           date: state.date ? key(state.date) : '',
           slot: state.slot || '',
           menu: state.menu || '',
-          guests: state.guests,
+          guests: (guestsTouched ? state.guests : ''),   // only if the customer actually set it
           addons: sel.map(a => a.id),
           addonLabels: sel.map(a => a.label),
         };
