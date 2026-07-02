@@ -215,6 +215,13 @@
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .rcpt--long::-webkit-scrollbar{width:6px}
   .rcpt--long::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  /* step-5 receipt fills its pane instead of floating narrow */
+  .rcpt--wide{width:100%;max-width:560px;margin-inline:auto;font-size:.95rem;padding:1.2rem 1.4rem}
+  .rcpt--wide .rt{font-size:1.2rem;margin-block-end:.9rem}
+  .rcpt--wide .rr{padding-block:.4rem}
+  .rcpt--wide .fr{font-size:.86rem;padding-block:.3rem}
+  .rcpt--wide .sect{font-size:.78rem;padding-block:.6rem .2rem}
+  .rcpt--wide .grand .v{font-size:1.7rem}
   /* champagne coupe that fills with guests */
   .coupe{width:110px;overflow:visible}
   #liq{transition:y .45s var(--ease),height .45s var(--ease)}
@@ -681,8 +688,8 @@
     stageReceipt();
   }
   function stageReceipt(){
-    // same long receipt (all details + food portions), full width, scrolls inside if needed
-    setStage('<div class="rcpt rcpt--long" style="max-width:380px;margin-inline:auto">'+receiptInner()+'</div>');
+    // same long receipt (all details + food portions); fill the pane (it had tons of empty space)
+    setStage('<div class="rcpt rcpt--long rcpt--wide">'+receiptInner()+'</div>');
   }
 
   /* ═══════════ STEP 6 · confirmation ═══════════ */
