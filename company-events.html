@@ -4878,15 +4878,15 @@
       modal.addEventListener('click', e => { if (e.target === modal) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
 
-      // .js-book triggers: a plan-card button (data-plan) opens the wizard at that plan;
-      // a generic CTA has no plan, so send them to the plans section to choose one first.
+      // .js-book triggers: a plan-card button (data-plan) opens the NEW closing popup (v2 flow) at
+      // that plan; a generic CTA has no plan, so send them to the plans section to choose one first.
       const packagesSection = document.getElementById('packages');
       document.querySelectorAll('.js-book').forEach(el => {
         el.addEventListener('click', e => {
           e.preventDefault();
-          if (el.dataset.plan) { open(el.dataset.plan); }
+          if (el.dataset.plan) { window.openV2(el.dataset.plan); }
           else if (packagesSection) { packagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-          else { open(); }
+          else { window.openV2(''); }
         });
       });
     })();
@@ -5444,6 +5444,36 @@
         e.preventDefault();
         location.href = clean + '.html';
       });
+    })();
+  </script>
+
+  <!-- ===== NEW closing popup (v2 flow) mounted as an isolated iframe overlay ===== -->
+  <style>
+    .v2-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(8,6,4,.72);backdrop-filter:blur(3px)}
+    .v2-overlay.open{display:block}
+    .v2-overlay iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+    body.v2-locked{overflow:hidden}
+  </style>
+  <div class="v2-overlay" id="v2Overlay" aria-hidden="true">
+    <iframe id="v2Frame" title="הזמנת אירוע" allow="clipboard-write"></iframe>
+  </div>
+  <script>
+    (function(){
+      const ov = document.getElementById('v2Overlay'), fr = document.getElementById('v2Frame');
+      window.openV2 = function(plan){
+        fr.src = 'company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
+        ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
+        document.body.classList.add('v2-locked');
+      };
+      window.closeV2 = function(){
+        ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+        document.body.classList.remove('v2-locked');
+        fr.src = 'about:blank';   // reset the flow so a re-open starts clean
+      };
+      // the popup asks to close (its X button) via postMessage
+      window.addEventListener('message', e => { if (e.data && e.data.ezra === 'closeV2') window.closeV2(); });
+      // Esc closes too
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
     })();
   </script>
 </body>

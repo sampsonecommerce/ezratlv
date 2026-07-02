@@ -555,7 +555,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   goBtn.addEventListener('click', ()=>{ if(goHandler) goHandler(); });
   $('backBtn').addEventListener('click', ()=>{ if(step>1 && step<=5) render(step-1); });
   // X → leave the flow, back to the website
-  $('exitBtn').addEventListener('click', ()=>{ if(history.length>1) history.back(); else location.href='company-events.html'; });
+  $('exitBtn').addEventListener('click', ()=>{
+    // embedded as a popup (iframe) → ask the parent page to close the overlay; else navigate back
+    if(window.parent!==window){ try{ window.parent.postMessage({ezra:'closeV2'},'*'); return; }catch(e){} }
+    if(history.length>1) history.back(); else location.href='company-events.html';
+  });
 
   /* ═══════ STEP 1 · plan (pick → advance) ═══════ */
   function step1(){
@@ -913,8 +917,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   const STEPS={1:step1,2:step2,3:step3,4:step4,5:step5,6:step6};
 
-  // ── boot: restore a saved session if there is one, else start fresh ──
+  // ── boot: opened from a package card (?plan=) → preselect it and jump to the WHEN step;
+  //         otherwise restore a saved session if there is one, else start fresh ──
   (function boot(){
+    const pplan=new URLSearchParams(location.search).get('plan');
+    if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
     let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
     if(!s){ render(1); return; }
     state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
