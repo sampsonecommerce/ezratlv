@@ -168,22 +168,30 @@
   }
   .menu-scale__item{display:flex;align-items:flex-start;gap:.5rem;color:var(--cream-dim);font-size:.78rem;line-height:1.55}
   .menu-scale__item svg{width:16px;height:16px;color:var(--gold);flex:none;margin-block-start:2px}
-  /* dish cards; the whole area tints gold (day) / blue (evening) with the selection */
-  .menu-view{margin-block-start:1rem}
-  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem}
-  .menu-card{border:.5px solid var(--line);border-radius:12px;padding:.7rem .85rem;background:rgba(255,255,255,.03);
-    transition:border-color .3s,background .3s}
-  .menu-card__t{font-size:.82rem;font-weight:600;color:var(--gold-light);margin-block-end:.4rem}
-  .menu-dish{display:flex;align-items:baseline;gap:.35rem;font-size:.78rem;color:var(--cream-dim);padding-block:.12rem}
-  .menu-dish::before{content:'✦';color:var(--gold);font-size:.55rem}
-  .menu-card--hero{grid-column:1/-1}
-  .menu-card--hero .menu-dish{flex-direction:column;gap:.05rem}
-  .menu-card--hero .menu-dish b{color:var(--cream);font-weight:500}
-  .menu-card--hero .menu-dish .ds{font-size:.7rem;color:var(--cream-faint)}
-  .menu-view[data-menu="evening"] .menu-card{background:rgba(42,45,99,.14);border-color:rgba(91,95,160,.4)}
-  .menu-view[data-menu="evening"] .menu-card--hero{background:linear-gradient(150deg,rgba(42,45,99,.3),rgba(22,24,58,.35));border-color:#5b5fa0}
-  .menu-view[data-menu="day"] .menu-card{background:rgba(233,191,114,.07);border-color:rgba(240,208,137,.35)}
-  .menu-view[data-menu="day"] .menu-card--hero{background:linear-gradient(150deg,rgba(246,227,180,.14),rgba(233,191,114,.1));border-color:#f0d089}
+  /* menu grid: 3 equal food boxes in a row + a wide/2-up drinks box beneath (faithful to the live closing step) */
+  .menu-view{margin-block-start:1.1rem;display:flex;flex-direction:column;gap:.7rem}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+  .menu-drinks{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}
+  .menu-card{background:rgba(196,154,60,.05);border:1px solid var(--line);border-radius:14px;padding:.85rem .9rem;text-align:center}
+  .menu-card--hero{background:linear-gradient(160deg,rgba(196,154,60,.16),rgba(196,154,60,.04));border-color:rgba(196,154,60,.4)}
+  /* day menu = golden boxes; evening = blue/moon theme (matches the day/eve toggle) */
+  .menu-view.is-day .menu-card{background:linear-gradient(160deg,rgba(245,217,138,.2),rgba(196,154,60,.07));border-color:rgba(196,154,60,.45)}
+  .menu-view.is-day .menu-card--hero{background:linear-gradient(160deg,rgba(245,217,138,.28),rgba(196,154,60,.12));border-color:rgba(196,154,60,.55)}
+  .menu-view:not(.is-day) .menu-card:not(.menu-card--hero){background:linear-gradient(160deg,rgba(64,68,142,.5),rgba(26,28,66,.72));border-color:rgba(122,128,214,.42)}
+  .menu-view:not(.is-day) .menu-card--hero{background:linear-gradient(160deg,rgba(74,79,158,.55),rgba(30,33,76,.78));border-color:rgba(130,136,224,.5)}
+  .menu-card__t{display:flex;align-items:center;justify-content:center;gap:.45rem;color:var(--gold-light);font-weight:600;font-size:.9rem;margin-block-end:.6rem}
+  .menu-card__t::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);flex:none}
+  .menu-dishes{display:flex;flex-direction:column;align-items:stretch;gap:.42rem}
+  .menu-card--wide .menu-dishes{display:grid;grid-template-columns:repeat(2,1fr);gap:.42rem 1.1rem}
+  .menu-dish{display:flex;align-items:flex-start;justify-content:flex-start;gap:.4rem;color:var(--cream-dim);font-size:.83rem;line-height:1.45;text-align:start}
+  .menu-dish__mark{flex:none;width:11px;height:11px;margin-block-start:.26rem;color:var(--gold)}
+  .menu-dish--desc{flex-direction:column;align-items:center;gap:.1rem;text-align:center}
+  .menu-dish--desc .menu-dish__nm{color:var(--gold-light);font-weight:600;font-size:.85rem;line-height:1.3}
+  .menu-dish--desc .menu-dish__ds{color:var(--cream-faint);font-size:.74rem;line-height:1.4}
+  /* step-4 header: right-aligned above the slider it describes (not centered) */
+  .s4head{text-align:start;margin-block-end:.2rem}
+  .s4head h2{font-weight:600;font-size:clamp(1.2rem,2.4vw,1.45rem);color:var(--cream);margin:0}
+  .s4head p{font-size:.82rem;color:var(--cream-dim);margin:.25rem 0 0}
   .bfield{max-width:66ch;margin:1.1rem auto 0}
   .bfield label{display:block;font-size:.8rem;color:var(--cream-dim);margin-block-end:.35rem}
   .bfield textarea,.bfield input{width:100%;background:rgba(255,255,255,.05);border:.5px solid var(--line);border-radius:9px;
@@ -278,6 +286,8 @@
     .cal__day{font-size:.7rem}
     .sky__arc{height:42px}
     .srow{min-height:34px}
+    .menu-grid,.menu-drinks{grid-template-columns:1fr}
+    .menu-card--wide .menu-dishes{grid-template-columns:1fr}
     .calcgrid{flex-direction:column;height:auto}
     .calcgrid__live{flex-direction:column;align-items:center}
     .coupewrap{flex-direction:row;width:auto;gap:1.2rem}
@@ -348,6 +358,7 @@
   const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
   const ICON_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
   const ICON_INFO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
+  const DISH_MARK='<svg class="menu-dish__mark" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.55 4.45L12 6l-4.45 1.55L6 12 4.45 7.55 0 6l4.45-1.55z"/></svg>';
   const slotIconFor=h=>h>=17?ICON_MOON:h>=13?ICON_SUN:ICON_SUNRISE;
   const moodFor=h=>h>=17?'night':h>=13?'dusk':'day';
   const MOOD_OP={night:.5,dusk:.52,day:.6},GLOW={day:'rgba(255,206,110,.55)',dusk:'rgba(228,150,92,.5)',night:'rgba(120,132,222,.45)'};
@@ -537,19 +548,27 @@
     });
     renderMenuView();
   }
+  const dishRow=txt=>'<div class="menu-dish">'+DISH_MARK+'<span>'+txt+'</span></div>';
+  const cardHTML=(sec,extraCls,withDesc)=>'<div class="menu-card'+(extraCls||'')+'">'+
+    '<div class="menu-card__t">'+sec.t+'</div>'+
+    '<div class="menu-dishes">'+sec.items.map(it=>{const nd=E.splitDish(it);
+      return withDesc
+        ? '<div class="menu-dish menu-dish--desc"><span class="menu-dish__nm">'+nd.name+'</span>'+(nd.desc?'<span class="menu-dish__ds">'+nd.desc+'</span>':'')+'</div>'
+        : dishRow(nd.name);}).join('')+'</div>'+
+  '</div>';
   function renderMenuView(){
     document.querySelectorAll('#menuToggle .menu-choice__opt').forEach(b=>b.classList.toggle('is-active',b.dataset.menu===state.menu));
     const secs=E.menuFor(state.plan,state.menu);
     const isDrink=s=>/בר|אלכוהול|שתייה/.test(s.t);
     const food=secs.filter(s=>!isDrink(s)), drinks=secs.filter(isDrink);
-    const foodCards=food.map(s=>'<div class="menu-card"><div class="menu-card__t">'+s.t+'</div>'+
-      s.items.map(it=>'<div class="menu-dish">'+E.splitDish(it).name+'</div>').join('')+'</div>').join('');
-    const drinkCards=drinks.map(s=>'<div class="menu-card menu-card--hero"><div class="menu-card__t">'+s.t+'</div>'+
-      s.items.map(it=>{const nd=E.splitDish(it);
-        return '<div class="menu-dish"><b>'+nd.name+'</b>'+(nd.desc?'<span class="ds">'+nd.desc+'</span>':'')+'</div>';}).join('')+'</div>').join('');
+    // 3 equal food boxes; drinks = one wide hero box, or a 2-up row if there are two drink sections
+    const foodHTML=food.length?'<div class="menu-grid">'+food.map(s=>cardHTML(s)).join('')+'</div>':'';
+    const drinksHTML=drinks.length===1
+      ? cardHTML(drinks[0],' menu-card--hero menu-card--wide',true)
+      : (drinks.length?'<div class="menu-drinks">'+drinks.map(d=>cardHTML(d,' menu-card--hero',true)).join('')+'</div>':'');
     const mv=$('menuView');
-    mv.dataset.menu=state.menu;
-    mv.innerHTML='<div class="menu-grid">'+foodCards+drinkCards+'</div>';
+    mv.classList.toggle('is-day',state.menu==='day');   // gold vs blue theme, like the live step
+    mv.innerHTML=foodHTML+drinksHTML;
     // vegan note only for day menus that include the tuna/vegan sandwich (same rule as the site)
     const hasTunaVegan=state.menu==='day'&&secs.some(s=>s.items.some(it=>/טונה.*טבעוני/.test(it)));
     const nv=$('noteVegan'); if(nv) nv.hidden=!hasTunaVegan;
@@ -563,10 +582,9 @@
       '<label class="addon'+(state.addons[a.id]?' on':'')+'"><input type="checkbox" data-addon="'+a.id+'"'+(state.addons[a.id]?' checked':'')+' />'+
       '<span>'+a.label+'</span><span class="cap">'+(a.cap||'')+'</span></label>').join('');
     body.innerHTML =
-      '<h2 class="steptitle">כמות אנשים</h2>'+
-      '<p class="stepsub">גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p>'+
       '<div class="calcgrid">'+
         '<div class="calcgrid__ctrl">'+
+          '<div class="s4head"><h2>כמות אנשים</h2><p>גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p></div>'+
           '<div class="gslide"><span class="gv" id="gv"></span><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
           '<div>'+
             '<p class="subhead">תוספות לאירוע<small>סמנו מה להוסיף - אפשר גם להמשיך בלי</small></p>'+
