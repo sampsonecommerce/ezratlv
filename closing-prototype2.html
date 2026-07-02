@@ -213,9 +213,25 @@
   .bfield textarea{resize:none;min-height:56px}
 
   /* ── step 4: guests + add-ons, coupe + live long receipt ── */
-  .calcgrid{display:flex;gap:1.2rem;align-items:stretch;min-height:0;height:100%}
-  .calcgrid__ctrl{flex:1.05 1 0;min-width:0;display:flex;flex-direction:column;gap:1rem}
-  .calcgrid__live{flex:1 1 0;min-width:0;display:flex;gap:.9rem;align-items:stretch}
+  /* two groups: LEFT-in-flow controls (slider + add-ons), RIGHT-in-flow live summary (coupe crowns the receipt) */
+  .calcgrid{display:flex;gap:1.3rem;align-items:stretch;min-height:0;height:100%}
+  .calc-controls{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:1.05rem;
+    overflow-y:auto;padding-inline-end:.3rem;scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .calc-controls::-webkit-scrollbar{width:6px}
+  .calc-controls::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  /* summary = one card: coupe + total hero on top, the full-width receipt scrolling beneath */
+  .calc-summary{flex:1 1 0;min-width:0;display:flex;flex-direction:column;overflow:hidden;
+    border:1px solid var(--line);border-radius:16px;background:rgba(196,154,60,.05)}
+  .summary-hero{flex:none;display:flex;align-items:center;justify-content:center;gap:1.2rem;
+    padding:.85rem 1rem;border-block-end:1px solid var(--line);background:rgba(196,154,60,.06)}
+  .summary-hero .glass-wrap{width:clamp(70px,15vw,90px);flex:none;margin:0}
+  .summary-hero__tot{font-family:'Pliant',var(--font-body);font-size:1.9rem;color:var(--gold-light);line-height:1;text-align:center}
+  .summary-hero__tot small{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--cream-dim);font-weight:400;margin-block-start:.25rem}
+  .calc-summary .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;border:0;border-radius:0;background:transparent;margin:0;padding:.9rem 1.1rem;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .calc-summary .rcpt::-webkit-scrollbar{width:6px}
+  .calc-summary .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  .calc-summary .rcpt .rt{display:none}   /* the hero already crowns the summary; drop the redundant title */
   .gslide{display:flex;align-items:center;gap:.7rem}
   .gslide input[type=range]{flex:1;appearance:none;-webkit-appearance:none;height:6px;border-radius:6px;
     background:rgba(196,154,60,.25)}
@@ -246,7 +262,6 @@
   .addon__price{font-size:.85rem;color:var(--gold-light);white-space:nowrap}
   .addon__desc{color:var(--cream-dim);font-size:.8rem;line-height:1.45;margin-block-start:.2rem;text-align:start}
   .addon__grow{color:var(--gold-light);font-weight:500}
-  .coupewrap{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;width:130px}
   .glass-wrap{position:relative;width:clamp(100px,24vw,124px);aspect-ratio:140/180;margin:0}
   .glass-svg{width:100%;height:100%;display:block;overflow:visible}
   #bookLiquid{transition:y .45s var(--ease)}
@@ -269,10 +284,6 @@
   .rcpt .grand{margin-block-start:.4rem;padding-block-start:.55rem;border-block-start:1px solid var(--line);
     display:flex;justify-content:space-between;align-items:baseline;color:var(--cream)}
   .rcpt .grand .v{font-family:'Pliant',var(--font-body);font-size:1.5rem;color:var(--gold-light)}
-  .rcpt--live{flex:1 1 auto;min-height:0;overflow-y:auto;
-    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .rcpt--live::-webkit-scrollbar{width:6px}
-  .rcpt--live::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
 
   /* ── step 5: details + receipt side by side ── */
   .details{display:flex;gap:1.2rem;align-items:flex-start}
@@ -320,10 +331,9 @@
     .menu-grid,.menu-drinks{grid-template-columns:1fr}
     .menu-card--wide .menu-dishes{grid-template-columns:1fr}
     .calcgrid{flex-direction:column;height:auto}
-    .calcgrid__live{flex-direction:column;align-items:center}
-    .coupewrap{flex-direction:row;width:auto;gap:1.2rem}
-    .coupe{width:64px}
-    .rcpt--live{overflow:visible;width:100%}
+    .calc-controls{overflow:visible}
+    .summary-hero .glass-wrap{width:74px}
+    .calc-summary .rcpt{overflow:visible}
     .details{flex-direction:column}
     .details__rcpt{position:static;width:100%}
     .frow{grid-template-columns:1fr}
@@ -698,7 +708,7 @@
       '</button>').join('');
     body.innerHTML =
       '<div class="calcgrid">'+
-        '<div class="calcgrid__ctrl">'+
+        '<div class="calc-controls">'+
           '<div class="s4head"><h2>כמות אנשים</h2><p>גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p></div>'+
           '<div class="gslide"><input class="gv" id="gv" type="number" min="20" max="50" value="'+state.guests+'" aria-label="מספר אורחים" /><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
           '<div>'+
@@ -706,10 +716,10 @@
             '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
           '</div>'+
         '</div>'+
-        '<div class="calcgrid__live">'+
-          '<div class="coupewrap">'+COUPE+'<div class="coupetot" id="coupeTot"></div></div>'+
-          '<div class="rcpt rcpt--live" id="liveR"></div>'+
-        '</div>'+
+        '<aside class="calc-summary">'+
+          '<div class="summary-hero">'+COUPE+'<div class="summary-hero__tot" id="coupeTot"></div></div>'+
+          '<div class="rcpt" id="liveR"></div>'+
+        '</aside>'+
       '</div>';
     const gr=$('gr'), gv=$('gv');
     gv.value=state.guests;
