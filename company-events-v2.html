@@ -324,14 +324,37 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .legal{font-size:.68rem;color:var(--cream-dim);text-align:center;margin-block-start:.6rem}
 
   /* ── confirmation ── */
-  .done{max-width:400px;margin:6vh auto 0;text-align:center}
-  .done .ok{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(196,154,60,.25),transparent 70%);
-    border:2px solid var(--gold);color:var(--gold-light);display:flex;align-items:center;justify-content:center;
-    margin:0 auto 1rem;font-size:1.6rem}
-  .done .dt{font-weight:700;font-size:1.35rem;color:var(--cream)}
-  .done .hero{color:var(--gold-light);font-weight:600;margin-block-start:.4rem}
-  .done p{font-size:.84rem;color:var(--cream-dim);margin-block:.5rem 0}
-  .done .note{border:.5px dashed rgba(196,154,60,.4);border-radius:10px;padding:.6rem .8rem;margin-block-start:.8rem;font-size:.78rem}
+  /* confirmation: focal animated green check + clear mail CTA, secondary copy tucked as fine print */
+  .done{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;gap:.05rem;padding-block:1.2rem}
+  .done__badge{position:relative;width:78px;height:78px;border-radius:50%;margin-block-end:1.1rem;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle,rgba(79,202,127,.22),transparent 72%);border:2px solid #4fca7f;
+    animation:badgePop .45s var(--ease) both}
+  .done__badge svg{width:40px;height:40px;color:#7fe0a3}
+  .done__badge svg path{stroke-dasharray:30;stroke-dashoffset:30;animation:checkDraw .5s .22s var(--ease) forwards}
+  .done__badge::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(79,202,127,.55);
+    animation:ringPulse 1s .28s var(--ease) both}
+  @keyframes badgePop{0%{transform:scale(.55);opacity:0}62%{transform:scale(1.09)}100%{transform:scale(1);opacity:1}}
+  @keyframes checkDraw{to{stroke-dashoffset:0}}
+  @keyframes ringPulse{0%{transform:scale(.92);opacity:.85}100%{transform:scale(1.45);opacity:0}}
+  .done .dt{font-weight:700;font-size:1.4rem;color:var(--cream)}
+  .done .hero{color:var(--gold-light);font-weight:600;font-size:1.02rem;margin-block-start:.35rem}
+  .done__cta{margin-block:1.2rem .5rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+    background:linear-gradient(180deg,#5fd98a,#3fb56e);color:#0e2417;font-weight:700;font-size:1rem;
+    padding:.72rem 1.5rem;border-radius:12px;text-decoration:none;box-shadow:0 10px 24px -10px rgba(79,202,127,.7);
+    transition:filter .2s var(--ease),transform .15s var(--ease)}
+  .done__cta:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .done__cta svg{width:18px;height:18px}
+  .done__play{font-size:.8rem;color:var(--gold-light);margin-block-end:1rem}
+  .done__note{display:flex;gap:.45rem;align-items:flex-start;text-align:start;max-width:44ch;
+    border:.5px solid rgba(196,154,60,.4);border-radius:11px;padding:.6rem .8rem;font-size:.76rem;color:var(--cream-dim);line-height:1.45}
+  .done__note svg{width:15px;height:15px;color:var(--gold);flex:none;margin-block-start:2px}
+  .done__fine{font-size:.72rem;color:var(--cream-faint,rgba(240,235,224,.42));line-height:1.5;max-width:46ch;margin-block-start:.9rem}
+  @media (prefers-reduced-motion: reduce){
+    .done__badge,.done__badge svg path,.done__badge::after{animation:none}
+    .done__badge svg path{stroke-dashoffset:0}
+  }
 
   /* persistent talk prompt: compact pill, bottom-right, always there */
   .talkpill{position:fixed;inset-inline-end:clamp(.6rem,1.5vw,1.2rem);inset-block-end:.7rem;z-index:40;
@@ -903,13 +926,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
     setFoot(null);
     body.innerHTML =
       '<div class="done">'+
-        '<div class="ok">✓</div>'+
+        '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
         '<div class="dt">ההזמנה שלכם התקבלה</div>'+
         '<div class="hero">חוזה נשלח אליכם במייל</div>'+
-        '<p>ברגע שתחתמו על החוזה שנשלח לכם במייל, נחזור אליכם בתוך 24 שעות לאשר פרטים ולגבות מקדמה.</p>'+
-        '<div class="note">שימו לב, החוזה שנשלח תקף ל-24 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</div>'+
-        '<p style="color:var(--gold-light)">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>'+
-        '<p>ייתכן שייקח כמה רגעים עד שהמייל יגיע אליכם.</p>'+
+        '<a class="done__cta" href="mailto:" aria-label="פתיחת אפליקציית המייל">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>'+
+          'קחו אותי למייל'+
+        '</a>'+
+        '<p class="done__play">החוזה כבר מחכה לך במייל - נשאר רק לחתום :)</p>'+
+        '<div class="done__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16h.01"/></svg>'+
+          '<span>שימו לב, החוזה שנשלח תקף ל-24 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span></div>'+
+        '<p class="done__fine">נחזור אליכם תוך 24 שעות כדי לאשר את הפרטים סופית ולגבות מקדמה. ייתכן שייקחו כמה רגעים למייל להגיע.</p>'+
       '</div>';
   }
 
