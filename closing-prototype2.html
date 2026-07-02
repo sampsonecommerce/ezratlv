@@ -40,6 +40,19 @@
   .bar__dots i{width:7px;height:7px;border-radius:50%;background:rgba(240,235,224,.18);transition:background .3s var(--ease)}
   .bar__dots i.on{background:var(--gold)}
   .bar__brand{font-weight:700;font-size:1.05rem;color:var(--gold-light)}
+  /* save-and-continue toggle (top bar) */
+  .bar__start{display:flex;align-items:center;gap:.6rem;min-width:0}
+  .bar__save{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;position:relative;font-size:.76rem;color:var(--cream-dim)}
+  .bar__save input{position:absolute;opacity:0;width:0;height:0}
+  .bar__save__box{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);flex:none;
+    display:inline-flex;align-items:center;justify-content:center;color:var(--bg);transition:all .2s var(--ease)}
+  .bar__save__box svg{width:12px;height:12px;opacity:0;transition:opacity .2s var(--ease)}
+  .bar__save input:checked+.bar__save__box{background:var(--gold);border-color:var(--gold)}
+  .bar__save input:checked+.bar__save__box svg{opacity:1}
+  .bar__save__label{white-space:nowrap}
+  .bar__saved{position:absolute;inset-inline-start:0;top:calc(100% + 5px);white-space:nowrap;font-size:.68rem;color:#5fbf7f;
+    opacity:0;transform:translateY(-3px);transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none}
+  .bar__saved.show{opacity:1;transform:none}
 
   /* step body: internal scroll only (the page never scrolls) */
   .body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:clamp(1rem,2.5vw,1.6rem);
@@ -208,7 +221,11 @@
     background:rgba(196,154,60,.25)}
   .gslide input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
     background:var(--gold);border:2px solid #141009;box-shadow:0 0 10px rgba(196,154,60,.6);cursor:grab}
-  .gslide .gv{font-family:'Pliant',var(--font-body);font-size:1.4rem;color:var(--gold-light);min-width:2ch;text-align:center}
+  /* the guests count is a keyboard-editable number input */
+  .gslide .gv{font-family:'Pliant',var(--font-body);font-size:1.4rem;color:var(--gold-light);width:3.2ch;text-align:center;
+    background:transparent;border:0;border-block-end:1px solid transparent;padding:0;-moz-appearance:textfield}
+  .gslide .gv:focus{outline:none;border-block-end-color:var(--gold)}
+  .gslide .gv::-webkit-outer-spin-button,.gslide .gv::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   .subhead{font-size:.95rem;font-weight:600;color:var(--cream);margin:0}
   .subhead small{display:block;font-size:.76rem;color:var(--cream-dim);font-weight:400}
   .addons{display:flex;flex-direction:column;gap:.55rem}
@@ -259,7 +276,9 @@
 
   /* ── step 5: details + receipt side by side ── */
   .details{display:flex;gap:1.2rem;align-items:flex-start}
-  .details__form{flex:1.1 1 0;min-width:0}
+  .details__form{flex:1.1 1 0;min-width:0;display:flex;flex-direction:column;gap:.85rem}
+  .details__form .bfield{max-width:none;margin:0}
+  .details__form .frow{margin:0}
   .details__rcpt{flex:1 1 0;min-width:0;position:sticky;top:0}
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
   .check{display:flex;gap:.55rem;align-items:flex-start;margin-block-start:.7rem;font-size:.76rem;color:var(--cream-dim);cursor:pointer}
@@ -289,6 +308,7 @@
     body{padding:.4rem}
     .panel{height:100dvh;border-radius:16px}
     .bar{padding:.5rem .7rem}
+    .bar__save__label{display:none}
     .body{padding:.8rem .8rem 1.1rem}
     .plans{margin-block-start:3vh}
     .when{flex-direction:column;gap:.7rem}
@@ -320,10 +340,18 @@
 
 <div class="panel">
   <div class="bar">
-    <button class="bar__back" id="backBtn" type="button" hidden>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-      חזרה
-    </button>
+    <div class="bar__start">
+      <button class="bar__back" id="backBtn" type="button" hidden>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        חזרה
+      </button>
+      <label class="bar__save" id="saveTog" title="ניתן לשמור פה בכל שלב ולהמשיך אחר כך">
+        <input type="checkbox" id="saveChk" />
+        <span class="bar__save__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="bar__save__label">שמירה</span>
+        <span class="bar__saved" id="savedFlash">נשמר בהצלחה</span>
+      </label>
+    </div>
     <div class="bar__prog">
       <span id="progTxt"></span>
       <span class="bar__dots" id="progDots"><i></i><i></i><i></i><i></i><i></i></span>
@@ -349,8 +377,24 @@
   const body = $('body'), foot = $('foot'), goBtn = $('goBtn'), footHint = $('footHint');
 
   // ── state: same shape as the site ──
-  const state = { plan:null, date:null, slot:null, guests:20, menu:null, addons:{}, foodNotes:'', notes:'' };
+  const state = { plan:null, date:null, slot:null, guests:20, menu:null, addons:{}, foodNotes:'', notes:'',
+    name:'', company:'', phone:'', email:'', address:'' };
   let step = 1, lastStep = 0;
+
+  // ── save-and-continue (top bar) ──
+  const SAVE_KEY='ezraProto2';
+  let saveOn=false;
+  const saveChk=$('saveChk'), savedFlash=$('savedFlash');
+  function collectState(){ return { plan:state.plan, date:state.date?key(state.date):null, slot:state.slot, guests:state.guests,
+    menu:state.menu, addons:state.addons, foodNotes:state.foodNotes, notes:state.notes,
+    name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address, step }; }
+  function saveProgress(){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(collectState())); }catch(e){} }
+  function saveMaybe(){ if(saveOn) saveProgress(); }
+  function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+  let flashT;
+  function flashSaved(){ if(!savedFlash)return; savedFlash.classList.add('show'); clearTimeout(flashT);
+    flashT=setTimeout(()=>savedFlash.classList.remove('show'),1800); }
+  if(saveChk) saveChk.addEventListener('change',()=>{ saveOn=saveChk.checked; if(saveOn){saveProgress();flashSaved();} else clearSave(); });
 
   const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
   const DOW=['א','ב','ג','ד','ה','ו','ש'];
@@ -450,6 +494,7 @@
     void body.offsetWidth;
     body.classList.add(dir);
     STEPS[n]();
+    saveMaybe();
   }
   // footer CTA: one primary action, always visible
   let goHandler = null;
@@ -655,7 +700,7 @@
       '<div class="calcgrid">'+
         '<div class="calcgrid__ctrl">'+
           '<div class="s4head"><h2>כמות אנשים</h2><p>גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p></div>'+
-          '<div class="gslide"><span class="gv" id="gv"></span><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
+          '<div class="gslide"><input class="gv" id="gv" type="number" min="20" max="50" value="'+state.guests+'" aria-label="מספר אורחים" /><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
           '<div>'+
             '<p class="subhead">תוספות לאירוע<small>סמנו מה להוסיף - אפשר גם להמשיך בלי</small></p>'+
             '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
@@ -667,8 +712,14 @@
         '</div>'+
       '</div>';
     const gr=$('gr'), gv=$('gv');
-    gv.textContent=state.guests;
-    gr.addEventListener('input',()=>{state.guests=+gr.value;gv.textContent=gr.value;refreshLive();});
+    gv.value=state.guests;
+    // slider drag → number; keyboard type → slider (clamped 20-50)
+    gr.addEventListener('input',()=>{state.guests=+gr.value;gv.value=gr.value;refreshLive();saveMaybe();});
+    const commitGv=()=>{let n=parseInt(gv.value,10);if(isNaN(n))n=20;n=Math.min(50,Math.max(20,n));
+      state.guests=n;gv.value=n;gr.value=n;refreshLive();saveMaybe();};
+    gv.addEventListener('input',()=>{const n=parseInt(gv.value,10);if(!isNaN(n)){state.guests=Math.min(50,Math.max(20,n));gr.value=state.guests;refreshLive();}});
+    gv.addEventListener('blur',commitGv);
+    gv.addEventListener('keydown',e=>{if(e.key==='Enter'){commitGv();gv.blur();}});
     $('addons').addEventListener('click',e=>{
       const b=e.target.closest('.addon'); if(!b)return;
       const id=b.dataset.id; state.addons[id]=!state.addons[id];
@@ -754,9 +805,16 @@
         '<div class="details__rcpt"><div class="rcpt">'+receiptInner()+'</div></div>'+
       '</div>'+
       '<div class="legal">בשליחת הטופס אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות.</div>';
+    // prefill from state (so save/restore + back keep what was typed)
+    const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fAddress:'address',fNotes:'notes'};
+    Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
     const req=['fName','fPhone','fEmail'].map(id=>$(id));
     const validate=()=>{goBtn.disabled=!req.every(el=>el.value.trim());};
-    body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',validate));
+    body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
+      if(map[el.id]) state[map[el.id]]=el.value;
+      validate(); saveMaybe();
+    }));
+    validate();
   }
 
   /* ═══════ STEP 6 · confirmation ═══════ */
@@ -775,7 +833,18 @@
   }
 
   const STEPS={1:step1,2:step2,3:step3,4:step4,5:step5,6:step6};
-  render(1);
+
+  // ── boot: restore a saved session if there is one, else start fresh ──
+  (function boot(){
+    let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
+    if(!s){ render(1); return; }
+    state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
+    state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
+    state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
+    if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
+    saveOn=true; if(saveChk) saveChk.checked=true;
+    render(Math.min(Math.max(s.step||1,1),5));
+  })();
 })();
 </script>
 </body>
