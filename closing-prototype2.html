@@ -40,6 +40,12 @@
   .bar__dots i{width:7px;height:7px;border-radius:50%;background:rgba(240,235,224,.18);transition:background .3s var(--ease)}
   .bar__dots i.on{background:var(--gold)}
   .bar__brand{font-weight:700;font-size:1.05rem;color:var(--gold-light)}
+  /* left of the bar: logo + an X to exit back to the website */
+  .bar__end{display:flex;align-items:center;gap:.6rem}
+  .bar__logo img{height:20px;width:auto;display:block}
+  .bar__x{width:30px;height:30px;border-radius:8px;border:.5px solid var(--line);background:transparent;color:var(--cream-dim);
+    display:inline-flex;align-items:center;justify-content:center;transition:color .2s var(--ease),border-color .2s var(--ease)}
+  .bar__x:hover{color:var(--gold-light);border-color:var(--gold)}
   /* save-and-continue toggle (top bar) */
   .bar__start{display:flex;align-items:center;gap:.6rem;min-width:0}
   .bar__save{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;position:relative;font-size:.76rem;color:var(--cream-dim)}
@@ -378,7 +384,12 @@
       <span id="progTxt"></span>
       <span class="bar__dots" id="progDots"><i></i><i></i><i></i><i></i><i></i></span>
     </div>
-    <div class="bar__brand">עזרא</div>
+    <div class="bar__end">
+      <span class="bar__logo"><img src="images/logo.png" alt="עזרא" /></span>
+      <button class="bar__x" id="exitBtn" type="button" aria-label="סגירה וחזרה לאתר">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="body" id="body"></div>
@@ -531,6 +542,8 @@
   }
   goBtn.addEventListener('click', ()=>{ if(goHandler) goHandler(); });
   $('backBtn').addEventListener('click', ()=>{ if(step>1 && step<=5) render(step-1); });
+  // X → leave the flow, back to the website
+  $('exitBtn').addEventListener('click', ()=>{ if(history.length>1) history.back(); else location.href='company-events.html'; });
 
   /* ═══════ STEP 1 · plan (pick → advance) ═══════ */
   function step1(){
