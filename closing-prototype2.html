@@ -74,6 +74,10 @@
   .go:hover{filter:brightness(1.07)}
   .go:disabled{opacity:.38;cursor:not-allowed}
   .foot__hint{flex:none;font-size:.68rem;color:var(--cream-dim);max-width:34ch}
+  /* talk prompt inside the footer - shown on mobile only (desktop uses the corner pill) */
+  .foot__talk{display:none;width:100%;text-align:center;background:transparent;border:1px dashed rgba(196,154,60,.5);
+    border-radius:11px;color:var(--gold-light);font-size:.76rem;padding:.5rem .7rem}
+  .foot__talk:hover{border-color:var(--gold);background:rgba(196,154,60,.08)}
 
   .steptitle{text-align:center;font-weight:600;font-size:clamp(1.25rem,2.6vw,1.55rem);color:var(--cream);margin:0 0 .3rem}
   .stepsub{text-align:center;color:var(--cream-dim);font-size:.88rem;margin:0 0 1rem}
@@ -213,24 +217,30 @@
 
   /* ── step 4: guests + add-ons, coupe + live long receipt ── */
   /* two groups: LEFT-in-flow controls (slider + add-ons), RIGHT-in-flow live summary (coupe crowns the receipt) */
-  .calcgrid{display:flex;gap:1.3rem;align-items:stretch;min-height:0;height:100%}
-  .calc-controls{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:1.05rem;
-    overflow-y:auto;padding-inline-end:.3rem;scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .calc-controls::-webkit-scrollbar{width:6px}
-  .calc-controls::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
-  /* summary = one card: coupe + total hero on top, the full-width receipt scrolling beneath */
-  .calc-summary{flex:1 1 0;min-width:0;display:flex;flex-direction:column;overflow:hidden;
-    border:1px solid var(--line);border-radius:16px;background:rgba(196,154,60,.05)}
-  .summary-hero{flex:none;display:flex;align-items:center;justify-content:center;gap:1.2rem;
-    padding:.85rem 1rem;border-block-end:1px solid var(--line);background:rgba(196,154,60,.06)}
-  .summary-hero .glass-wrap{width:clamp(70px,15vw,90px);flex:none;margin:0}
-  .summary-hero__tot{font-family:'Pliant',var(--font-body);font-size:1.9rem;color:var(--gold-light);line-height:1;text-align:center}
-  .summary-hero__tot small{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--cream-dim);font-weight:400;margin-block-start:.25rem}
-  .calc-summary .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;border:0;border-radius:0;background:transparent;margin:0;padding:.9rem 1.1rem;
+  /* step-4 grid: desktop = slider+addons (left) · coupe-hero+receipt (right);
+     mobile = slider → coupe-hero → addons → receipt (coupe reacts right under the bar) */
+  .calcgrid{display:grid;gap:.95rem 1.3rem;min-height:0;height:100%;
+    grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"slider hero" "addons receipt"}
+  .cg-slider{grid-area:slider;align-self:center}
+  .cg-hero{grid-area:hero}
+  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;padding-inline-end:.3rem;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .calc-summary .rcpt::-webkit-scrollbar{width:6px}
-  .calc-summary .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
-  .calc-summary .rcpt .rt{display:none}   /* the hero already crowns the summary; drop the redundant title */
+  .cg-addons::-webkit-scrollbar{width:6px}
+  .cg-addons::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  .cg-rcpt{grid-area:receipt;min-height:0;display:flex}
+  .cg-rcpt .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .cg-rcpt .rcpt::-webkit-scrollbar{width:6px}
+  .cg-rcpt .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  /* coupe + total, framed together as the live meter */
+  .summary-hero{display:flex;align-items:center;justify-content:center;gap:1.2rem;
+    padding:.7rem 1rem;border:.5px solid var(--line);border-radius:14px;background:rgba(196,154,60,.06)}
+  .summary-hero .glass-wrap{width:clamp(66px,13vw,84px);flex:none;margin:0}
+  .summary-hero__tot{font-family:'Pliant',var(--font-body);font-size:1.8rem;color:var(--gold-light);line-height:1;text-align:center}
+  .summary-hero__tot small{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--cream-dim);font-weight:400;margin-block-start:.25rem}
+  .gslide{display:flex;align-items:center;gap:.7rem}
+  .gslide input[type=range]{flex:1;appearance:none;-webkit-appearance:none;height:6px;border-radius:6px;
   .gslide{display:flex;align-items:center;gap:.7rem}
   .gslide input[type=range]{flex:1;appearance:none;-webkit-appearance:none;height:6px;border-radius:6px;
     background:rgba(196,154,60,.25)}
@@ -329,16 +339,21 @@
     .srow{min-height:34px}
     .menu-grid,.menu-drinks{grid-template-columns:1fr}
     .menu-card--wide .menu-dishes{grid-template-columns:1fr}
-    .calcgrid{flex-direction:column;height:auto}
-    .calc-controls{overflow:visible}
-    .summary-hero .glass-wrap{width:74px}
-    .calc-summary .rcpt{overflow:visible}
+    /* step4 stacks: slider → coupe+total → add-ons → receipt (coupe reacts right under the bar) */
+    .calcgrid{grid-template-columns:1fr;grid-template-rows:none;height:auto;
+      grid-template-areas:"slider" "hero" "addons" "receipt"}
+    .cg-addons{overflow:visible}
+    .cg-rcpt .rcpt{overflow:visible}
+    .summary-hero{gap:1rem}
+    .summary-hero .glass-wrap{width:70px}
     .details{flex-direction:column}
     .details__rcpt{position:static;width:100%}
     .frow{grid-template-columns:1fr}
-    .foot{padding:.55rem .7rem .7rem}
+    /* talk prompt moves into the footer (above the button) so it never overlaps the CTA */
+    .foot{flex-direction:column;gap:.5rem;padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom))}
     .foot__hint{display:none}
-    .talkpill{font-size:.62rem;padding:.34rem .7rem;inset-block-end:calc(.35rem + env(safe-area-inset-bottom))}
+    .foot__talk{display:block}
+    .talkpill{display:none}
   }
   @media (prefers-reduced-motion: reduce){
     .anim-fwd,.anim-back,.orb,.orb .sun,.orb .moon,.sky::after,#liq,.bub{animation:none;transition:none}
@@ -371,6 +386,7 @@
   <div class="body" id="body"></div>
 
   <div class="foot" id="foot" hidden>
+    <button class="foot__talk" type="button">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
     <button class="go" id="goBtn" type="button">המשך</button>
     <span class="foot__hint" id="footHint"></span>
   </div>
@@ -704,18 +720,16 @@
       '</button>').join('');
     body.innerHTML =
       '<div class="calcgrid">'+
-        '<div class="calc-controls">'+
+        '<div class="cg-slider">'+
           '<div class="s4head"><h2>כמות אנשים</h2><p>גררו את הסליידר או הקלידו מספר - הכמויות והמחיר מתעדכנים יחד</p></div>'+
           '<div class="gslide"><input class="gv" id="gv" type="number" min="20" max="50" value="'+state.guests+'" aria-label="מספר אורחים" /><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
-          '<div>'+
-            '<p class="subhead">תוספות לאירוע<small>סמנו מה להוסיף - אפשר גם להמשיך בלי</small></p>'+
-            '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
-          '</div>'+
         '</div>'+
-        '<aside class="calc-summary">'+
-          '<div class="summary-hero">'+COUPE+'<div class="summary-hero__tot" id="coupeTot"></div></div>'+
-          '<div class="rcpt" id="liveR"></div>'+
-        '</aside>'+
+        '<div class="cg-hero summary-hero">'+COUPE+'<div class="summary-hero__tot" id="coupeTot"></div></div>'+
+        '<div class="cg-addons">'+
+          '<p class="subhead">תוספות לאירוע<small>סמנו מה להוסיף - אפשר גם להמשיך בלי</small></p>'+
+          '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
+        '</div>'+
+        '<div class="cg-rcpt"><div class="rcpt" id="liveR"></div></div>'+
       '</div>';
     const gr=$('gr'), gv=$('gv');
     gv.value=state.guests;
