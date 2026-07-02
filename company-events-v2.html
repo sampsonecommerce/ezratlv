@@ -47,7 +47,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     transition:color .2s,border-color .2s,opacity .2s}
   .bar__back:hover{color:var(--gold-light);border-color:var(--gold)}
   .bar__back[hidden]{display:none}
-  .bar__prog{display:flex;align-items:center;gap:.55rem;font-size:.76rem;color:var(--cream-dim)}
+  .bar__prog{display:flex;align-items:center;gap:.55rem;font-size:.76rem;color:var(--cream-dim);white-space:nowrap;flex:none}
+  .bar__prog #progTxt{white-space:nowrap}
   .bar__dots{display:flex;gap:.3rem;direction:ltr}
   .bar__dots i{width:7px;height:7px;border-radius:50%;background:rgba(240,235,224,.18);transition:background .3s var(--ease)}
   .bar__dots i.on{background:var(--gold)}
@@ -397,7 +398,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
       <span class="bar__dots" id="progDots"><i></i><i></i><i></i><i></i><i></i></span>
     </div>
     <div class="bar__end">
-      <span class="bar__logo"><img src="images/logo.png" alt="עזרא" /></span>
       <button class="bar__x" id="exitBtn" type="button" aria-label="סגירה וחזרה לאתר">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -589,7 +589,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<h2 class="steptitle">בחרו תאריך ושעה</h2>'+
       '<div class="when">'+
         '<div class="when__cal">'+
-          '<div class="colhead"><div class="t">בחרו תאריך</div><div class="s" id="calSub"></div></div>'+
           '<div class="cal">'+
             '<div class="cal__head">'+
               '<button type="button" class="cal__nav" id="calPrev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>'+
@@ -616,7 +615,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function renderCal(){
     $('calMonth').innerHTML=MONTHS[view.getMonth()]+' <span class="num">'+view.getFullYear()+'</span>';
-    $('calSub').textContent=MONTHS[view.getMonth()]+' '+view.getFullYear();
     $('calPrev').disabled=(view.getFullYear()===today.getFullYear()&&view.getMonth()===today.getMonth());
     const g=$('calGrid'); g.innerHTML='';
     DOW.forEach(d=>{const e=document.createElement('div');e.className='cal__dow';e.textContent=d;g.appendChild(e);});
