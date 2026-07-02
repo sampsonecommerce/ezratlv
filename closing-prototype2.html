@@ -173,14 +173,13 @@
   .menu-choice__opt--eve.is-active{background:linear-gradient(150deg,#2a2d63,#16183a);border-color:#5b5fa0;
     color:#f3e6c0;box-shadow:0 8px 22px -8px rgba(40,44,110,.85)}
   .menu-choice__opt--eve.is-active .menu-choice__icon{color:var(--gold-light)}
-  .menu-scale{display:grid;grid-template-columns:1fr;gap:.7rem 1.6rem;margin:.8rem auto .7rem;max-width:48ch;text-align:start;
-    padding:.9rem 1.05rem;border-radius:12px;background:rgba(196,154,60,.08);border:1px solid var(--line)}
-  @media(min-width:720px){
-    .menu-scale{grid-template-columns:1fr 1fr;max-width:66ch;padding:1.05rem 1.3rem}
-    .menu-scale.one{grid-template-columns:1fr;max-width:52ch;padding:.9rem 1.1rem}
-  }
-  .menu-scale__item{display:flex;align-items:flex-start;gap:.5rem;color:var(--cream-dim);font-size:.78rem;line-height:1.55}
-  .menu-scale__item svg{width:16px;height:16px;color:var(--gold);flex:none;margin-block-start:2px}
+  /* all 4 menu notes in ONE compact block under the menu cards (2-up on desktop, tight type) */
+  .menu-notes{display:grid;grid-template-columns:1fr;gap:.35rem .9rem;margin:.75rem auto 0;max-width:52ch;text-align:start;
+    padding:.6rem .8rem;border-radius:10px;background:rgba(196,154,60,.06);border:.5px solid var(--line)}
+  @media(min-width:720px){ .menu-notes{grid-template-columns:1fr 1fr;max-width:70ch} }
+  .menu-note{display:flex;align-items:flex-start;gap:.4rem;color:var(--cream-dim);font-size:.74rem;line-height:1.4}
+  .menu-note svg{width:13px;height:13px;color:var(--gold);flex:none;margin-block-start:2px}
+  .menu-note[hidden]{display:none}
   /* menu grid: 3 equal food boxes in a row + a wide/2-up drinks box beneath (faithful to the live closing step) */
   .menu-view{margin-block-start:1.1rem;display:flex;flex-direction:column;gap:.7rem}
   .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
@@ -648,17 +647,15 @@
           '<span class="menu-choice__hint">פיצות ומנות מהטאבון</span>'+
         '</button>'+
       '</div>'+
-      '<div class="menu-scale">'+
-        '<div class="menu-scale__item">'+ICON_INFO+'<span>אפשר לבחור את תפריט הערב גם לאירוע שמתקיים בשעות היום - מה שמתאים לכם.</span></div>'+
-        '<div class="menu-scale__item">'+ICON_INFO+'<span>כל מנה בתפריט מוגשת בכמות שמותאמת למספר האורחים שלכם. ניתן לראות פירוט מדויק בשלבים הבאים.</span></div>'+
+      '<div class="menu-notes">'+   /* all 4 notes in one compact block under the menu cards */
+        '<div class="menu-note">'+ICON_INFO+'<span>אפשר לבחור את תפריט הערב גם לאירוע שמתקיים בשעות היום - מה שמתאים לכם.</span></div>'+
+        '<div class="menu-note">'+ICON_INFO+'<span>כל מנה בתפריט מוגשת בכמות שמותאמת למספר האורחים שלכם. ניתן לראות פירוט מדויק בשלבים הבאים.</span></div>'+
+        '<div class="menu-note">'+ICON_INFO+'<span>רוצים התאמות תזונתיות (טבעוני, ללא גלוטן, אלרגיות או כל בקשה אחרת)? כתבו לנו בתיבה שמתחת ונדאג להכל.</span></div>'+
+        '<div class="menu-note" id="noteVegan" hidden>'+ICON_INFO+'<span>יש לציין בתיבת ההערות אם אתם מעדיפים כריכים טבעוניים במקום טונה.</span></div>'+
       '</div>'+
       '<div class="menu-view" id="menuView"></div>'+
       '<div class="bfield">'+
         '<label for="bfFoodNotes">הערות לתפריט (לא חובה)</label>'+
-        '<div class="menu-scale" id="dietScale">'+
-          '<div class="menu-scale__item">'+ICON_INFO+'<span>רוצים התאמות תזונתיות (טבעוני, ללא גלוטן, אלרגיות או כל בקשה אחרת)? כתבו לנו בתיבה שמתחת ונדאג להכל.</span></div>'+
-          '<div class="menu-scale__item" id="noteVegan" hidden>'+ICON_INFO+'<span>יש לציין בתיבת ההערות אם אתם מעדיפים כריכים טבעוניים במקום טונה.</span></div>'+
-        '</div>'+
         '<textarea id="bfFoodNotes" rows="2" placeholder="אלרגיות, העדפות או בקשות מיוחדות..."></textarea>'+
       '</div>';
     $('bfFoodNotes').value = state.foodNotes || '';
@@ -692,7 +689,6 @@
     // vegan note only for day menus that include the tuna/vegan sandwich (same rule as the site)
     const hasTunaVegan=state.menu==='day'&&secs.some(s=>s.items.some(it=>/טונה.*טבעוני/.test(it)));
     const nv=$('noteVegan'); if(nv) nv.hidden=!hasTunaVegan;
-    const ds=$('dietScale'); if(ds) ds.classList.toggle('one',!hasTunaVegan);
   }
 
   /* ═══════ STEP 4 · guests + add-ons (coupe + live long receipt) ═══════ */
