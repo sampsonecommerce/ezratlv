@@ -779,7 +779,7 @@
 
   /* ═══════ STEP 5 · details (the only typing) ═══════ */
   function step5(){
-    setFoot('שליחת הבקשה','בשליחת הטופס אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות.',()=>{
+    setFoot('שליחת הבקשה','',()=>{   // terms line lives under the form (.legal); no need to repeat it in the footer
       state.notes=$('fNotes').value; render(6);
     },true);
     body.innerHTML =
