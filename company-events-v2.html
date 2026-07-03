@@ -319,6 +319,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .details__rcpt{flex:1 1 0;min-width:0;position:sticky;top:0}
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
   .check{display:flex;gap:.55rem;align-items:flex-start;margin-block-start:.7rem;font-size:.76rem;color:var(--cream-dim);cursor:pointer}
+  /* mandatory-consent error state */
+  .check--err{outline:1px solid rgba(224,115,111,.6);outline-offset:4px;border-radius:8px}
+  .check--err b{color:#e0736f}
+  .check--err input{accent-color:#e0736f}
+  .consent-err{color:#e0736f;font-size:.74rem;margin-block-start:.4rem}
+  .consent-err[hidden]{display:none}
   .check input{margin-block-start:.2rem;accent-color:var(--gold)}
   .check b{color:var(--cream);display:block;font-size:.8rem}
   .legal{font-size:.68rem;color:var(--cream-dim);text-align:center;margin-block-start:.6rem}
@@ -450,10 +456,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
     name:'', company:'', phone:'', email:'', address:'' };
   let step = 1, lastStep = 0;
 
-  // ── save-and-continue (top bar) ──
+  // ── save-and-continue (top bar) — ON by default: the process auto-saves at every step ──
   const SAVE_KEY='ezraProto2';
-  let saveOn=false;
+  let saveOn=true;
   const saveChk=$('saveChk'), savedFlash=$('savedFlash');
+  if(saveChk) saveChk.checked=true;
   function collectState(){ return { plan:state.plan, date:state.date?key(state.date):null, slot:state.slot, guests:state.guests,
     menu:state.menu, addons:state.addons, foodNotes:state.foodNotes, notes:state.notes,
     name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address, step }; }
@@ -882,6 +889,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function step5(){
     setFoot('שליחת הבקשה','',()=>{   // terms line lives under the form (.legal); no need to repeat it in the footer
+      // consent is mandatory: block the send + flag it if unchecked
+      const c=$('fConsent');
+      if(!c || !c.checked){
+        const err=$('consentErr'), row=$('consentRow');
+        if(err) err.hidden=false; if(row) row.classList.add('check--err');
+        (err||row||c).scrollIntoView({behavior:'smooth',block:'center'});
+        return;
+      }
       state.notes=$('fNotes').value; submitLead(); render(6);
     },true);
     body.innerHTML =
@@ -902,8 +917,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
           '<input type="text" id="fHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
           '<label class="check"><input type="checkbox" id="fWantsCall" /><span><b>אשמח לדבר עם מנהל המכירות לפני חתימה</b>'+
             'שימו לב: סימון האפשרות יוציא אתכם מתהליך ההזמנה. נשמור את הפרטים שמילאתם ונחזור אליכם לשיחה אישית.</span></label>'+
-          '<label class="check"><input type="checkbox" id="fConsent" /><span><b>אישור קבלת דיוור</b>'+
+          '<label class="check" id="consentRow"><input type="checkbox" id="fConsent" /><span><b>אישור קבלת דיוור</b>'+
             'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
+          '<div class="consent-err" id="consentErr" hidden>יש לאשר קבלת דיוור כדי להמשיך.</div>'+
         '</div>'+
         '<div class="details__rcpt"><div class="rcpt">'+receiptInner()+'</div></div>'+
       '</div>'+
@@ -917,6 +933,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
       if(map[el.id]) state[map[el.id]]=el.value;
       validate(); saveMaybe();
     }));
+    // clear the consent error once they tick it
+    const cc=$('fConsent');
+    if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('consentErr'),r=$('consentRow');
+      if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
     validate();
   }
 
