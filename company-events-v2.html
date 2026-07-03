@@ -178,47 +178,51 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .sky__cap{flex:none;text-align:center;font-size:.66rem;letter-spacing:.05em;color:var(--cream-dim);
     padding-block:.35rem;border-block-start:1px solid rgba(255,255,255,.05)}
 
-  /* ── step 3: the menu step, styled like the closing process (day/eve cards + notes frames) ── */
-  .menu-choice__ask{text-align:center;color:var(--cream-faint);font-size:.8rem;margin:0 0 .6rem}
-  .menu-choice{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;max-width:420px;margin:0 auto}
-  .menu-choice__opt{display:flex;flex-direction:column;align-items:center;gap:.25rem;
-    padding:.8rem .6rem;border-radius:14px;cursor:pointer;
-    border:1.5px solid var(--line);background:rgba(255,255,255,.02);color:var(--cream-dim);font-family:var(--font-body);
-    transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .25s var(--ease),background .3s var(--ease),color .3s var(--ease)}
-  .menu-choice__head{display:flex;align-items:center;justify-content:center;gap:.4rem}
-  .menu-choice__icon{width:19px;height:19px;flex:none}
-  .menu-choice__icon svg{width:100%;height:100%}
-  .menu-choice__label{font-size:1rem;font-weight:600}
-  .menu-choice__hint{font-size:.72rem;opacity:.8}
-  .menu-choice__opt:hover{transform:translateY(-2px)}
-  .menu-choice__opt--day.is-active{background:linear-gradient(150deg,#f6e3b4,#e9bf72);border-color:#f0d089;
-    color:#4a360f;box-shadow:0 8px 22px -8px rgba(233,191,114,.7)}
-  .menu-choice__opt--eve.is-active{background:linear-gradient(150deg,#2a2d63,#16183a);border-color:#5b5fa0;
-    color:#f3e6c0;box-shadow:0 8px 22px -8px rgba(40,44,110,.85)}
-  .menu-choice__opt--eve.is-active .menu-choice__icon{color:var(--gold-light)}
-  /* all 4 menu notes in ONE compact block under the menu cards (2-up on desktop, tight type) */
-  .menu-notes{display:grid;grid-template-columns:1fr;gap:.35rem .9rem;margin:.75rem auto 0;max-width:52ch;text-align:start;
-    padding:.6rem .8rem;border-radius:10px;background:rgba(196,154,60,.06);border:.5px solid var(--line)}
-  @media(min-width:720px){ .menu-notes{grid-template-columns:1fr 1fr;max-width:70ch} }
-  .menu-note{display:flex;align-items:flex-start;gap:.4rem;color:var(--cream-dim);font-size:.74rem;line-height:1.4}
-  .menu-note svg{width:13px;height:13px;color:var(--gold);flex:none;margin-block-start:2px}
-  .menu-note[hidden]{display:none}
-  /* menu grid: 3 equal food boxes in a row + a wide/2-up drinks box beneath (faithful to the live closing step) */
-  .menu-view{margin-block-start:1.1rem;display:flex;flex-direction:column;gap:.7rem}
+  /* ── step 3 (hybrid): slim command band + always-visible notes + flex-fill menu board ── */
+  /* the whole step is a flex column that exactly fills the frame; only the menu board scrolls, if ever */
+  .menu3{height:100%;min-height:0;display:flex;flex-direction:column;gap:.55rem}
+  .menu3__band{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .menu3__title h2{font-weight:600;font-size:clamp(1.1rem,2.4vw,1.4rem);color:var(--cream);margin:0}
+  .menu3__title p{font-size:.8rem;color:var(--gold-light);font-weight:600;margin:.12rem 0 0}
+  /* day/eve = a clear two-button segmented control (NOT a slider) */
+  .menu-seg{flex:none;display:flex;gap:.35rem;padding:.25rem;border-radius:13px;
+    border:1px solid var(--line);background:rgba(255,255,255,.02)}
+  .menu-seg__opt{display:flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border-radius:9px;cursor:pointer;
+    border:0;background:transparent;color:var(--cream-dim);font-family:var(--font-body);font-size:.86rem;font-weight:600;
+    transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease)}
+  .menu-seg__opt svg{width:16px;height:16px;flex:none}
+  .menu-seg__opt:hover:not(.is-active){color:var(--cream)}
+  .menu-seg__opt--day.is-active{background:linear-gradient(150deg,#f6e3b4,#e9bf72);color:#4a360f;
+    box-shadow:0 5px 16px -7px rgba(233,191,114,.75)}
+  .menu-seg__opt--eve.is-active{background:linear-gradient(150deg,#2a2d63,#16183a);color:#f3e6c0;
+    box-shadow:0 5px 16px -7px rgba(40,44,110,.85)}
+  .menu-seg__opt--eve.is-active svg{color:var(--gold-light)}
+  /* option 2: notes collapse to ONE quiet, borderless hint line (no box) */
+  .menu-hints{flex:none;margin:0;padding:0;text-align:center;color:var(--cream-dim);font-size:.74rem;line-height:1.5}
+  .menu-hints svg{width:13px;height:13px;color:var(--gold);vertical-align:-2px;margin-inline-end:.3rem}
+  /* the food-notes field docks slim at the bottom, full width, no big top margin */
+  .menu3 .bfield{flex:none;max-width:none;margin:0}
+  .menu3 .bfield label{margin-block-end:.25rem}
+  .menu3 .bfield textarea{min-height:40px}
+  /* menu board FILLS the remaining height and scrolls internally only if a menu is unusually long */
+  .menu-view{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;display:flex;flex-direction:column;gap:.6rem;
+    padding-inline-end:.2rem;scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .menu-view::-webkit-scrollbar{width:6px}
+  .menu-view::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
   .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
   .menu-drinks{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}
-  .menu-card{background:rgba(196,154,60,.05);border:1px solid var(--line);border-radius:14px;padding:.85rem .9rem;text-align:center}
+  .menu-card{background:rgba(196,154,60,.05);border:1px solid var(--line);border-radius:12px;padding:.6rem .65rem;text-align:center}
   .menu-card--hero{background:linear-gradient(160deg,rgba(196,154,60,.16),rgba(196,154,60,.04));border-color:rgba(196,154,60,.4)}
   /* day menu = golden boxes; evening = blue/moon theme (matches the day/eve toggle) */
   .menu-view.is-day .menu-card{background:linear-gradient(160deg,rgba(245,217,138,.2),rgba(196,154,60,.07));border-color:rgba(196,154,60,.45)}
   .menu-view.is-day .menu-card--hero{background:linear-gradient(160deg,rgba(245,217,138,.28),rgba(196,154,60,.12));border-color:rgba(196,154,60,.55)}
   .menu-view:not(.is-day) .menu-card:not(.menu-card--hero){background:linear-gradient(160deg,rgba(64,68,142,.5),rgba(26,28,66,.72));border-color:rgba(122,128,214,.42)}
   .menu-view:not(.is-day) .menu-card--hero{background:linear-gradient(160deg,rgba(74,79,158,.55),rgba(30,33,76,.78));border-color:rgba(130,136,224,.5)}
-  .menu-card__t{display:flex;align-items:center;justify-content:center;gap:.45rem;color:var(--gold-light);font-weight:600;font-size:.9rem;margin-block-end:.6rem}
+  .menu-card__t{display:flex;align-items:center;justify-content:center;gap:.45rem;color:var(--gold-light);font-weight:600;font-size:.86rem;margin-block-end:.45rem}
   .menu-card__t::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);flex:none}
-  .menu-dishes{display:flex;flex-direction:column;align-items:stretch;gap:.42rem}
+  .menu-dishes{display:flex;flex-direction:column;align-items:stretch;gap:.32rem}
   .menu-card--wide .menu-dishes{display:grid;grid-template-columns:repeat(2,1fr);gap:.42rem 1.1rem}
-  .menu-dish{display:flex;align-items:flex-start;justify-content:flex-start;gap:.4rem;color:var(--cream-dim);font-size:.83rem;line-height:1.45;text-align:start}
+  .menu-dish{display:flex;align-items:flex-start;justify-content:center;gap:.4rem;color:var(--cream-dim);font-size:.83rem;line-height:1.35;text-align:center}
   .menu-dish__mark{flex:none;width:11px;height:11px;margin-block-start:.26rem;color:var(--gold)}
   .menu-dish--desc{flex-direction:column;align-items:center;gap:.1rem;text-align:center}
   .menu-dish--desc .menu-dish__nm{color:var(--gold-light);font-weight:600;font-size:.85rem;line-height:1.3}
@@ -385,6 +389,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .srow{min-height:34px}
     .menu-grid,.menu-drinks{grid-template-columns:1fr}
     .menu-card--wide .menu-dishes{grid-template-columns:1fr}
+    /* step3: let it flow with the page (mobile scrolls); band stacks; segmented toggle goes full-width */
+    .menu3{height:auto}
+    .menu-view{overflow:visible}
+    .menu3__band{flex-direction:column;align-items:stretch;gap:.5rem}
+    .menu3__title{text-align:center}
+    .menu-seg{width:100%}
+    .menu-seg__opt{flex:1;justify-content:center}
     /* step4 stacks: slider → coupe+total → add-ons → receipt (coupe reacts right under the bar) */
     .calcgrid{grid-template-columns:1fr;grid-template-rows:none;height:auto;
       grid-template-areas:"slider" "hero" "addons" "receipt"}
@@ -703,34 +714,24 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(!state.menu) state.menu = parseInt(state.slot,10)>=17 ? 'evening':'day';
     setFoot('המשך','',()=>{ state.foodNotes=$('bfFoodNotes').value; render(4); }, false);
     body.innerHTML =
-      '<h2 class="steptitle">התפריט שלכם</h2>'+
-      '<p class="stepsub stepsub--gold">בחרו תפריט · יום או ערב</p>'+
-      '<div class="menu-choice" id="menuToggle">'+
-        '<button type="button" class="menu-choice__opt menu-choice__opt--day" data-menu="day">'+
-          '<span class="menu-choice__head"><span class="menu-choice__label">תפריט יום</span>'+
-          '<span class="menu-choice__icon">'+ICON_SUN+'</span></span>'+
-          '<span class="menu-choice__hint">כריכים, מאפים וקפה</span>'+
-        '</button>'+
-        '<button type="button" class="menu-choice__opt menu-choice__opt--eve" data-menu="evening">'+
-          '<span class="menu-choice__head"><span class="menu-choice__label">תפריט ערב</span>'+
-          '<span class="menu-choice__icon">'+ICON_MOON+'</span></span>'+
-          '<span class="menu-choice__hint">פיצות ומנות מהטאבון</span>'+
-        '</button>'+
-      '</div>'+
-      '<div class="menu-notes">'+   /* all 4 notes in one compact block under the menu cards */
-        '<div class="menu-note">'+ICON_INFO+'<span>אפשר לבחור את תפריט הערב גם לאירוע שמתקיים בשעות היום - מה שמתאים לכם.</span></div>'+
-        '<div class="menu-note">'+ICON_INFO+'<span>כל מנה בתפריט מוגשת בכמות שמותאמת למספר האורחים שלכם. ניתן לראות פירוט מדויק בשלבים הבאים.</span></div>'+
-        '<div class="menu-note">'+ICON_INFO+'<span>רוצים התאמות תזונתיות (טבעוני, ללא גלוטן, אלרגיות או כל בקשה אחרת)? כתבו לנו בתיבה שמתחת ונדאג להכל.</span></div>'+
-        '<div class="menu-note" id="noteVegan" hidden>'+ICON_INFO+'<span>יש לציין בתיבת ההערות אם אתם מעדיפים כריכים טבעוניים במקום טונה.</span></div>'+
-      '</div>'+
-      '<div class="menu-view" id="menuView"></div>'+
-      '<div class="bfield">'+
-        '<label for="bfFoodNotes">הערות לתפריט (לא חובה)</label>'+
-        '<textarea id="bfFoodNotes" rows="2" placeholder="אלרגיות, העדפות או בקשות מיוחדות..."></textarea>'+
+      '<div class="menu3">'+
+        '<div class="menu3__band">'+
+          '<div class="menu3__title"><h2>התפריט שלכם</h2><p>בחרו תפריט · יום או ערב</p></div>'+
+          '<div class="menu-seg" id="menuToggle" role="tablist" aria-label="בחירת תפריט">'+
+            '<button type="button" class="menu-seg__opt menu-seg__opt--day" data-menu="day" role="tab">'+ICON_SUN+'<span>תפריט יום</span></button>'+
+            '<button type="button" class="menu-seg__opt menu-seg__opt--eve" data-menu="evening" role="tab">'+ICON_MOON+'<span>תפריט ערב</span></button>'+
+          '</div>'+
+        '</div>'+
+        '<p class="menu-hints">'+ICON_INFO+'<span id="menuHintText"></span></p>'+
+        '<div class="menu-view" id="menuView"></div>'+
+        '<div class="bfield">'+
+          '<label for="bfFoodNotes">הערות לתפריט (לא חובה)</label>'+
+          '<textarea id="bfFoodNotes" rows="2" placeholder="טבעוני, ללא גלוטן, אלרגיות או בקשות מיוחדות..."></textarea>'+
+        '</div>'+
       '</div>';
     $('bfFoodNotes').value = state.foodNotes || '';
     $('menuToggle').addEventListener('click',e=>{
-      const b=e.target.closest('.menu-choice__opt'); if(!b)return;
+      const b=e.target.closest('.menu-seg__opt'); if(!b)return;
       state.menu=b.dataset.menu; renderMenuView();
     });
     renderMenuView();
@@ -744,7 +745,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
         : dishRow(nd.name);}).join('')+'</div>'+
   '</div>';
   function renderMenuView(){
-    document.querySelectorAll('#menuToggle .menu-choice__opt').forEach(b=>b.classList.toggle('is-active',b.dataset.menu===state.menu));
+    document.querySelectorAll('#menuToggle .menu-seg__opt').forEach(b=>{const on=b.dataset.menu===state.menu;b.classList.toggle('is-active',on);b.setAttribute('aria-selected',on);});
     const secs=E.menuFor(state.plan,state.menu);
     const isDrink=s=>/בר|אלכוהול|שתייה/.test(s.t);
     const food=secs.filter(s=>!isDrink(s)), drinks=secs.filter(isDrink);
@@ -756,9 +757,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const mv=$('menuView');
     mv.classList.toggle('is-day',state.menu==='day');   // gold vs blue theme, like the live step
     mv.innerHTML=foodHTML+drinksHTML;
-    // vegan note only for day menus that include the tuna/vegan sandwich (same rule as the site)
+    // one quiet hint line; the vegan clause appears only for day menus with the tuna/vegan sandwich
     const hasTunaVegan=state.menu==='day'&&secs.some(s=>s.items.some(it=>/טונה.*טבעוני/.test(it)));
-    const nv=$('noteVegan'); if(nv) nv.hidden=!hasTunaVegan;
+    const ht=$('menuHintText');
+    if(ht) ht.textContent='הכמויות מותאמות למספר האורחים · אפשר תפריט ערב גם ביום · פירוט מלא בשלב הבא'+(hasTunaVegan?' · מעדיפים כריכים טבעוניים? ציינו בהערות':'');
   }
 
   /* ═══════ STEP 4 · guests + add-ons (coupe + live long receipt) ═══════ */
