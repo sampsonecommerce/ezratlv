@@ -825,9 +825,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function receiptInner(){
     const t=totals(); const p=E.PLANS[state.plan];
     const addRows=selectedAddons().map(a=>'<div class="rr"><span>'+a.label+'</span><b class="num">'+fmt(E.addonUnitPrice(a,t.g))+'</b></div>').join('');
-    let food='';
+    let bar='', food='';
     E.menuFor(state.plan,state.menu||'day').forEach(sec=>{
-      if(E.isBarCat(sec.t))return;
+      if(E.isBarCat(sec.t)){
+        // bar / alcohol / soft-drinks: included with the package, listed by name (no per-portion qty) and shown BEFORE the food
+        const brows=sec.items.map(it=>'<div class="fr"><span>'+E.splitDish(it).name+'</span><b>כלול</b></div>').join('');
+        if(brows)bar+='<div class="sect">'+sec.t+'</div>'+brows;
+        return;
+      }
       const names=sec.items.map(it=>E.splitDish(it).name);
       const pr=E.categoryPortions(sec.t,names,t.g);
       const rows=pr.breakdown.filter(b=>b.qty!=null).map(b=>
@@ -840,7 +845,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<div class="rr"><span>שעה</span><b class="num">'+(state.slot||'-')+'</b></div>'+
       '<div class="rr"><span>תפריט</span><b>'+(state.menu==='evening'?'ערב':'יום')+'</b></div>'+
       '<div class="rr"><span>אורחים</span><b class="num">'+t.g+'</b></div>'+
-      food+
+      bar+food+
       '<div class="rr" style="margin-block-start:.35rem"><span>מחיר לאדם</span><b class="num">'+fmt(t.ph)+'</b></div>'+
       addRows+
       '<div class="rr"><span>תוספות</span><b class="num">'+fmt(t.add)+'</b></div>'+
