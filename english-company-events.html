@@ -2956,7 +2956,7 @@
           <div class="package-card__rows">
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span>3 hours</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 11v10"/><path d="M17 3c-1.5 1-2 3-2 6 0 1.5 1 2 2 2v10"/></svg><span>Light nibbles buffet</span></div>
-            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>Wine and 2 kinds of beer</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>Open bar · wine and 2 kinds of beer</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>Playlist + sound system</span></div>
           </div>
           <button type="button" class="btn btn--outline js-book" data-plan="happyhour">Choose a package</button>
@@ -2975,7 +2975,7 @@
           <div class="package-card__rows">
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span>5 hours</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 11v10"/><path d="M17 3c-1.5 1-2 3-2 6 0 1.5 1 2 2 2v10"/></svg><span>Rich, varied buffet</span></div>
-            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>Full bar · 6 spirits + 8 mixers</span></div>
+            <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14l-7 8z"/><path d="M12 12v6"/><path d="M8 21h8"/></svg><span>Open bar · 6 spirits + 8 mixers</span></div>
             <div class="package-card__row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>Custom playlist</span></div>
           </div>
           <button type="button" class="btn btn--fill js-book" data-plan="gibush">Choose a package</button>
@@ -3859,9 +3859,12 @@
       const pad = n => String(n).padStart(2, '0');
       const key = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
-      // ── Placeholder availability. Replace BOOKED + takenSlots() with live data later.
+      // BOOKED = dates with >=1 committed event (day-level). BUSY = the real [date,start,end] per
+      // committed event, so time slots block only the actual overlapping hours instead of the whole
+      // day. Both come live from Monday (Events Form committed groups + Company Events Form held
+      // groups) via the worker.
       const BOOKED = [];
-      // live availability from Monday (committed events on the shared Events Form calendar)
+      const BUSY = [];
       (function loadBookingAvailability() {
         const ep = window.EZRA_AVAILABILITY_ENDPOINT;
         if (!ep) return;
@@ -3871,16 +3874,38 @@
             if (!j) return;
             const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
             BOOKED.length = 0; arr.forEach(dt => BOOKED.push(dt));
+            BUSY.length = 0; (j.busy || []).forEach(w => { if (w && w.date && w.start && w.end) BUSY.push(w); });
             renderCal();
+            if (state.date) renderSlots();
           })
           .catch(() => {});
       })();
-      function takenSlots(dateKey, count) {
-        let h = 0; for (let i = 0; i < dateKey.length; i++) h = (h * 31 + dateKey.charCodeAt(i)) >>> 0;
+      const hmToFloat = hm => { const m = /^(\d{1,2}):(\d{2})$/.exec(hm || ''); return m ? (+m[1]) + (+m[2]) / 60 : null; };
+      // real per-slot conflict check against BUSY: a slot is taken if it overlaps any busy window on
+      // that date. An event with no parseable time never reaches BUSY, so it blocks nothing.
+      function takenSlots(dateKey, list) {
+        const dayBusy = BUSY.filter(w => w.date === dateKey);
         const taken = new Set();
-        if (count > 0) taken.add(h % count);
-        if (count > 3) taken.add((h >> 3) % count);
+        if (!dayBusy.length) return taken;
+        list.forEach((label, i) => {
+          const [ss, se] = parseSlot(label);
+          const hit = dayBusy.some(w => {
+            const ws = hmToFloat(w.start), we0 = hmToFloat(w.end);
+            if (ws == null || we0 == null) return false;
+            const we = we0 <= ws ? we0 + 24 : we0;   // busy window rolls past midnight (e.g. 21:00-02:00)
+            return ss < we && ws < se;                // standard interval-overlap test
+          });
+          if (hit) taken.add(i);
+        });
         return taken;
+      }
+      // a date is fully booked only when EVERY slot for the currently chosen plan is taken -
+      // a partial-day conflict leaves the day pickable with some slots open.
+      function isDateFullyBooked(dateKey) {
+        const plan = PLANS[state.plan]; if (!plan) return false;
+        const list = SLOTS[plan.hours] || [];
+        if (!list.length) return false;
+        return takenSlots(dateKey, list).size >= list.length;
       }
 
       const state = { plan: 'gibush', date: null, slot: null, guests: 20, menu: null, addons: {} };
@@ -4530,7 +4555,7 @@
           const d = new Date(view.getFullYear(), view.getMonth(), day);
           const cell = document.createElement('button'); cell.type = 'button'; cell.className = 'cal__day'; cell.textContent = day;
           if (d < today) { cell.classList.add('is-past'); cell.disabled = true; }
-          else if (BOOKED.includes(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - booked'); }
+          else if (isDateFullyBooked(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - booked'); }
           else { cell.setAttribute('aria-label', day + ' - available'); cell.addEventListener('click', () => pickDate(d, cell)); }
           if (state.date && key(d) === key(state.date)) cell.classList.add('is-selected');
           gridEl.appendChild(cell);
@@ -4567,8 +4592,7 @@
       function renderSlots() {
         const plan = PLANS[state.plan];
         const list = SLOTS[plan.hours] || [];
-        const n = list.length;
-        const taken = takenSlots(key(state.date), n);
+        const taken = takenSlots(key(state.date), list);
         chosenEl.innerHTML = '<b>' + humanDate(state.date) + '</b>';
         slotsHead.textContent = 'Windows of ' + plan.hours + ' hours · by time of day';
 
@@ -4635,6 +4659,7 @@
       function setPlan(p) {
         state.plan = p; state.slot = null;
         planBtns.forEach(b => b.classList.toggle('is-active', b.dataset.plan === p));
+        renderCal();                    // day-blocking depends on the plan's slot bucket - refresh it
         if (state.date) renderSlots();
         updateNext1();
       }
@@ -5045,9 +5070,10 @@
       document.querySelectorAll('.js-book').forEach(el => {
         el.addEventListener('click', e => {
           e.preventDefault();
-          if (el.dataset.plan) { open(el.dataset.plan); }
+          // open the new v2 popup (English) instead of the legacy inline modal
+          if (el.dataset.plan) { window.openV2(el.dataset.plan); }
           else if (packagesSection) { packagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-          else { open(); }
+          else { window.openV2(''); }
         });
       });
     })();
@@ -5618,6 +5644,34 @@
         e.preventDefault();
         location.href = clean + '.html';
       });
+    })();
+  </script>
+
+  <!-- ===== English closing popup (v2 flow) mounted as an isolated iframe overlay ===== -->
+  <style>
+    .v2-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(8,6,4,.72);backdrop-filter:blur(3px)}
+    .v2-overlay.open{display:block}
+    .v2-overlay iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+    body.v2-locked{overflow:hidden}
+  </style>
+  <div class="v2-overlay" id="v2Overlay" aria-hidden="true">
+    <iframe id="v2Frame" title="Book an event" allow="clipboard-write"></iframe>
+  </div>
+  <script>
+    (function(){
+      const ov = document.getElementById('v2Overlay'), fr = document.getElementById('v2Frame');
+      window.openV2 = function(plan){
+        fr.src = 'english-company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
+        ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
+        document.body.classList.add('v2-locked');
+      };
+      window.closeV2 = function(){
+        ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+        document.body.classList.remove('v2-locked');
+        fr.src = 'about:blank';   // reset the flow so a re-open starts clean
+      };
+      window.addEventListener('message', e => { if (e.data && e.data.ezra === 'closeV2') window.closeV2(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
     })();
   </script>
 </body>
