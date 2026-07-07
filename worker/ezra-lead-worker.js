@@ -26,7 +26,12 @@ const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packa
 //   2) Company Events Form — a finished website booking holds its date right away: it lands in
 //      "In Agreement Process" and moves to "Agreement Sent" (24h contract). Add later "held" stages here.
 const DATE_COL = "date5bab58wj";           // event-date column (same id on both boards)
-const TIME_COL = "text_mm4t1h0s";          // "Start-End (Text)" column, e.g. "13:00-18:00" (same id on both boards)
+// Time source, in priority order: the two Hour-picker columns are what staff actually fill in when
+// entering an event by hand on the board; the combined text field is a bonus/fallback (it's only
+// reliably populated for leads our own site created). Query both and prefer the hour columns.
+const HOUR_START_COL = "hour_mm1q610q";
+const HOUR_END_COL   = "hour_mm1qa44s";
+const TIME_COL = "text_mm4t1h0s";          // "Start-End (Text)" column, e.g. "13:00-18:00" (fallback)
 const AVAIL_BOARD = "5092854682";          // Events Form
 const AVAIL_GROUPS = ["group_mm18mks7", "group_mm1fz3kg", "group_mm187fg9"]; // Closed Deals, Pre Payment, Proposal Sent
 const COMPANY_AVAIL_GROUPS = [GRP_IN_AGREEMENT, GRP_AGREEMENT];               // In Agreement Process, Agreement Sent
@@ -244,27 +249,35 @@ function json(obj, status, cors) {
 //            for which boards/groups count), so a slot picker can grey out only the overlapping hours.
 //   booked — dates that have >=1 busy window, kept for the simpler date-only pickers (private form,
 //            custom-consultation) that don't show time slots at all.
-// An item with a date but no parseable Start-End time is skipped entirely - it does not block
-// anything (confirmed: every committed event always has a Start-End time filled in). While
-// MONDAY_TOKEN is unset it returns everything open. Cached 60s at the edge so a fresh booking blocks
-// the date for new visitors almost immediately.
+// An item with a date but no parseable time is skipped entirely - it does not block anything.
+// While MONDAY_TOKEN is unset it returns everything open. Cached 60s at the edge so a fresh booking
+// blocks the date for new visitors almost immediately.
 const TIME_RANGE_RE = /(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/;
+// "1:00 PM" / "13:00" / "1:00pm" -> "HH:MM" (24h). Handles both the Hour column's rendered text and
+// a bare 24h string; returns null (not a guess) if nothing matches.
+function parseHourText(text) {
+  const m = /(\d{1,2}):(\d{2})\s*([AaPp][Mm])?/.exec(text || "");
+  if (!m) return null;
+  let h = parseInt(m[1], 10);
+  const ap = m[3] ? m[3].toLowerCase() : null;
+  if (ap === "pm" && h < 12) h += 12;
+  if (ap === "am" && h === 12) h = 0;
+  if (h > 23) return null;
+  return String(h).padStart(2, "0") + ":" + m[2];
+}
 async function availability(env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
+  const cols = `["${DATE_COL}", "${HOUR_START_COL}", "${HOUR_END_COL}", "${TIME_COL}"]`;
   const query = `query {
     events: boards(ids: ${AVAIL_BOARD}) {
       groups(ids: ${JSON.stringify(AVAIL_GROUPS)}) {
-        items_page(limit: 500) {
-          items { column_values(ids: ["${DATE_COL}", "${TIME_COL}"]) { id text ... on DateValue { date } } }
-        }
+        items_page(limit: 500) { items { column_values(ids: ${cols}) { id text ... on DateValue { date } } } }
       }
     }
     company: boards(ids: ${COMPANY_BOARD}) {
       groups(ids: ${JSON.stringify(COMPANY_AVAIL_GROUPS)}) {
-        items_page(limit: 500) {
-          items { column_values(ids: ["${DATE_COL}", "${TIME_COL}"]) { id text ... on DateValue { date } } }
-        }
+        items_page(limit: 500) { items { column_values(ids: ${cols}) { id text ... on DateValue { date } } } }
       }
     }
   }`;
@@ -284,9 +297,16 @@ async function availability(env, cors) {
       (it.column_values || []).forEach((c) => { cv[c.id] = c; });
       const date = cv[DATE_COL]?.date;
       if (!date) continue;
-      const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
-      if (!m) continue;   // no parseable start-end time -> does not block anything
-      busy.push({ date, start: m[1].padStart(2, "0") + ":" + m[2], end: m[3].padStart(2, "0") + ":" + m[4] });
+      // prefer the two Hour-picker columns (what staff actually fill in by hand on the board);
+      // fall back to the combined "Start-End (Text)" field (reliable for site-created leads).
+      let start = parseHourText(cv[HOUR_START_COL]?.text);
+      let end = parseHourText(cv[HOUR_END_COL]?.text);
+      if (!start || !end) {
+        const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
+        if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; }
+      }
+      if (!start || !end) continue;   // no parseable time anywhere -> does not block anything
+      busy.push({ date, start, end });
     }
     const booked = [...new Set(busy.map((b) => b.date))];
     return new Response(JSON.stringify({ booked, busy }), {
