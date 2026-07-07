@@ -74,7 +74,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .bar__saved.show{opacity:1;transform:none}
 
   /* step body: internal scroll only (the page never scrolls) */
-  .body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:clamp(1rem,2.5vw,1.6rem);
+  .body{flex:1 1 auto;min-height:0;overflow-y:auto;position:relative;padding:clamp(1rem,2.5vw,1.6rem);
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .body::-webkit-scrollbar{width:8px}
   .body::-webkit-scrollbar-thumb{background:rgba(196,154,60,.45);border-radius:99px}
@@ -205,10 +205,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .menu3 .bfield label{margin-block-end:.25rem}
   .menu3 .bfield textarea{min-height:40px}
   /* menu board FILLS the remaining height and scrolls internally only if a menu is unusually long */
-  .menu-view{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;display:flex;flex-direction:column;gap:.6rem;
-    padding-inline-end:.2rem;scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .menu-view{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;position:relative;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .menu-view::-webkit-scrollbar{width:6px}
   .menu-view::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  .menu-view__inner{display:flex;flex-direction:column;gap:.6rem;padding-inline-end:.2rem}
   .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
   .menu-drinks{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}
   .menu-card{background:rgba(196,154,60,.05);border:1px solid var(--line);border-radius:12px;padding:.6rem .65rem;text-align:center}
@@ -247,7 +248,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     grid-template-areas:"slider hero" "addons receipt"}
   .cg-slider{grid-area:slider;align-self:center}
   .cg-hero{grid-area:hero}
-  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;padding-inline-end:.3rem;
+  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;position:relative;padding-inline-end:.3rem;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .cg-addons::-webkit-scrollbar{width:6px}
   .cg-addons::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
@@ -300,7 +301,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .coupetot small{display:block;font-family:var(--font-body);font-size:.66rem;color:var(--cream-dim);font-weight:400}
 
   /* long receipt (shared 4/5) */
-  .rcpt{border:.5px solid var(--line);border-radius:14px;background:rgba(196,154,60,.05);padding:1rem 1.1rem;font-size:.86rem}
+  .rcpt{border:.5px solid var(--line);border-radius:14px;background:rgba(196,154,60,.05);padding:1rem 1.1rem;font-size:.86rem;position:relative}
   .rcpt .rt{font-weight:700;font-size:1.02rem;color:var(--gold-light);text-align:center;margin-block-end:.6rem}
   .rcpt .rr{display:flex;justify-content:space-between;gap:1rem;padding-block:.3rem;
     border-block-end:1px dashed rgba(196,154,60,.18);color:var(--cream-dim)}
@@ -315,12 +316,23 @@ fbq('init','2174553826420246');fbq('track','PageView');
     display:flex;justify-content:space-between;align-items:baseline;color:var(--cream)}
   .rcpt .grand .v{font-family:'Pliant',var(--font-body);font-size:1.5rem;color:var(--gold-light)}
 
-  /* ── step 5: details + receipt side by side ── */
-  .details{display:flex;gap:1.2rem;align-items:flex-start}
-  .details__form{flex:1.1 1 0;min-width:0;display:flex;flex-direction:column;gap:.85rem}
+  /* ── step 5: details + receipt side by side — both columns are equal-height scroll-boxes (like step 4),
+       so each shows its own scroll-cue arrow at the same bottom line instead of one floating mid-page ── */
+  .body.is-details{display:flex;flex-direction:column}
+  .body.is-details .details{flex:1 1 auto;min-height:0}
+  .details{display:flex;gap:1.2rem;align-items:stretch}
+  .details__form{flex:1.1 1 0;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;position:relative;
+    display:flex;flex-direction:column;gap:.85rem;padding-inline-end:.2rem;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .details__form::-webkit-scrollbar{width:6px}
+  .details__form::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
   .details__form .bfield{max-width:none;margin:0}
   .details__form .frow{margin:0}
-  .details__rcpt{flex:1 1 0;min-width:0;position:sticky;top:0}
+  .details__rcpt{flex:1 1 0;min-width:0;min-height:0;display:flex}
+  .details__rcpt .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;
+    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
+  .details__rcpt .rcpt::-webkit-scrollbar{width:6px}
+  .details__rcpt .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
   .check{display:flex;gap:.55rem;align-items:flex-start;margin-block-start:.7rem;font-size:.76rem;color:var(--cream-dim);cursor:pointer}
   /* mandatory-consent error state */
@@ -373,6 +385,24 @@ fbq('init','2174553826420246');fbq('track','PageView');
     transition:border-color .2s,background .2s}
   .talkpill:hover{border-color:var(--gold);background:rgba(196,154,60,.1)}
 
+  /* scroll-cue: a pulsing gold glow behind a bouncing chevron, tells guests a panel keeps going below the fold.
+     sticky (not absolute) so it tracks the scroll viewport's true edge in nested flex/grid panels;
+     no dark band (nothing to hide the text underneath); only the arrow itself is clickable, the rest lets taps through. */
+  .scrollcue{position:sticky;inset-inline:0;bottom:0;width:100%;height:34px;border:0;margin:0;background:none;
+    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.3rem;
+    color:var(--gold);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
+  .scrollcue.is-visible{opacity:1}
+  .scrollcue__wrap{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
+    pointer-events:none}
+  .scrollcue.is-visible .scrollcue__wrap{pointer-events:auto;cursor:pointer}
+  .scrollcue__wrap:hover{color:var(--gold-light)}
+  .scrollcue__ring{position:absolute;inset:0;border-radius:50%;
+    background:radial-gradient(circle,rgba(196,154,60,.55),transparent 68%);animation:cueRingPulse 1.7s ease-out infinite}
+  .scrollcue__arrow{position:relative;width:16px;height:16px;animation:cueBounce 1.5s ease-in-out infinite;
+    filter:drop-shadow(0 0 5px rgba(196,154,60,.9)) drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+  @keyframes cueBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+  @keyframes cueRingPulse{0%{transform:scale(.55);opacity:.8}100%{transform:scale(2.1);opacity:0}}
+
   /* mobile: same single window; sections stack, body scrolls internally */
   @media(max-width:720px){
     body{padding:.4rem}
@@ -403,8 +433,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .cg-rcpt .rcpt{overflow:visible}
     .summary-hero{gap:1rem}
     .summary-hero .glass-wrap{width:70px}
-    .details{flex-direction:column}
+    /* step5 stacks and scrolls with the page (no bounded columns / cues on mobile) */
+    .body.is-details{display:block}
+    .details{flex-direction:column;height:auto;align-items:stretch}
+    .details__form{overflow:visible;min-height:0;padding-inline-end:0}
     .details__rcpt{position:static;width:100%}
+    .details__rcpt .rcpt{overflow:visible}
     .frow{grid-template-columns:1fr}
     /* talk prompt moves into the footer (above the button) so it never overlaps the CTA */
     .foot{flex-direction:column;gap:.5rem;padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom))}
@@ -414,6 +448,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   @media (prefers-reduced-motion: reduce){
     .anim-fwd,.anim-back,.orb,.orb .sun,.orb .moon,.sky::after,#liq,.bub{animation:none;transition:none}
+    .scrollcue__arrow,.scrollcue__ring{animation:none}
   }
 </style>
 </head>
@@ -564,6 +599,38 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const addonsTotal=g=>selectedAddons().reduce((s,a)=>s+E.addonUnitPrice(a,g),0);
   const totals=()=>{const ph=state.plan?E.PLANS[state.plan].perHead:0,g=state.guests,add=addonsTotal(g);
     return{ph,g,add,total:ph*g+add};};
+
+  // ── scroll-cue: bottom fade + bouncing chevron for panels whose content can overflow
+  //    (menu board, add-ons, receipt) - several guests never realized these scroll ──
+  function checkScrollCue(el){
+    const cue = el.querySelector(':scope > .scrollcue'); if(!cue) return;
+    const hasOverflow = el.scrollHeight - el.clientHeight > 8;
+    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+    cue.classList.toggle('is-visible', hasOverflow && !nearBottom);
+  }
+  function ensureScrollCue(el){
+    if(!el) return;
+    let cue = el.querySelector(':scope > .scrollcue');
+    if(!cue){
+      cue = document.createElement('button');
+      cue.type='button'; cue.className='scrollcue'; cue.setAttribute('aria-label','גללו למטה לעוד פרטים');
+      cue.innerHTML='<span class="scrollcue__wrap"><span class="scrollcue__ring" aria-hidden="true"></span>'+
+        '<svg class="scrollcue__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>';
+      cue.addEventListener('click',()=>{ el.scrollBy({top:Math.round(el.clientHeight*.7),behavior:reduceMotion?'auto':'smooth'}); });
+      el.appendChild(cue);
+    }
+    checkScrollCue(el);
+    if(!el.dataset.cueWired){
+      el.dataset.cueWired='1';
+      el.addEventListener('scroll',()=>checkScrollCue(el),{passive:true});
+    }
+  }
+  window.addEventListener('resize',()=>{
+    document.querySelectorAll('.scrollcue').forEach(c=>{ if(c.parentElement) checkScrollCue(c.parentElement); });
+  });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{
+    document.querySelectorAll('.scrollcue').forEach(c=>{ if(c.parentElement) checkScrollCue(c.parentElement); });
+  });
 
   // ── frame plumbing ──
   function setProgress(n){
@@ -723,7 +790,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
           '</div>'+
         '</div>'+
         '<p class="menu-hints">'+ICON_INFO+'<span id="menuHintText"></span></p>'+
-        '<div class="menu-view" id="menuView"></div>'+
+        '<div class="menu-view" id="menuView"><div class="menu-view__inner" id="menuViewGrid"></div></div>'+
         '<div class="bfield">'+
           '<label for="bfFoodNotes">הערות לתפריט (לא חובה)</label>'+
           '<textarea id="bfFoodNotes" rows="2" placeholder="טבעוני, ללא גלוטן, אלרגיות או בקשות מיוחדות..."></textarea>'+
@@ -756,11 +823,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
       : (drinks.length?'<div class="menu-drinks">'+drinks.map(d=>cardHTML(d,' menu-card--hero',true)).join('')+'</div>':'');
     const mv=$('menuView');
     mv.classList.toggle('is-day',state.menu==='day');   // gold vs blue theme, like the live step
-    mv.innerHTML=foodHTML+drinksHTML;
+    $('menuViewGrid').innerHTML=foodHTML+drinksHTML;
     // one quiet hint line; the vegan clause appears only for day menus with the tuna/vegan sandwich
     const hasTunaVegan=state.menu==='day'&&secs.some(s=>s.items.some(it=>/טונה.*טבעוני/.test(it)));
     const ht=$('menuHintText');
     if(ht) ht.textContent='הכמויות מותאמות למספר האורחים · אפשר תפריט ערב גם ביום · פירוט מלא בשלב הבא'+(hasTunaVegan?' · מעדיפים כריכים טבעוניים? ציינו בהערות':'');
+    ensureScrollCue(mv);
   }
 
   /* ═══════ STEP 4 · guests + add-ons (coupe + live long receipt) ═══════ */
@@ -781,11 +849,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
           '<div class="gslide"><input class="gv" id="gv" type="number" min="20" max="50" value="'+state.guests+'" aria-label="מספר אורחים" /><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
         '</div>'+
         '<div class="cg-hero summary-hero">'+COUPE+'<div class="summary-hero__tot" id="coupeTot"></div></div>'+
-        '<div class="cg-addons">'+
+        '<div class="cg-addons" id="cgAddons">'+
           '<p class="subhead">תוספות לאירוע<small>סמנו מה להוסיף - אפשר גם להמשיך בלי</small></p>'+
           '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
         '</div>'+
-        '<div class="cg-rcpt"><div class="rcpt" id="liveR"></div></div>'+
+        '<div class="cg-rcpt"><div class="rcpt" id="liveR"><div id="liveRInner"></div></div></div>'+
       '</div>';
     const gr=$('gr'), gv=$('gv');
     gv.value=state.guests;
@@ -813,6 +881,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     setupCoupe();
     refreshLive();
     startBubbles();
+    ensureScrollCue($('cgAddons'));
   }
   function updateCoupe(){
     const f=Math.min(Math.max((state.guests-20)/30,0),1);
@@ -852,10 +921,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<div class="grand"><span>סה"כ משוער</span><span class="v">'+fmt(t.total)+'</span></div>';
   }
   function refreshLive(){
-    const r=document.getElementById('liveR'); if(r)r.innerHTML=receiptInner();
+    const r=document.getElementById('liveRInner'); if(r)r.innerHTML=receiptInner();
     const tot=document.getElementById('coupeTot');
     if(tot)tot.innerHTML='<span class="num">'+fmt(totals().total)+'</span><small>סה"כ משוער</small>';
     updateCoupe();
+    ensureScrollCue($('liveR'));
   }
 
   /* ═══════ STEP 5 · details (the only typing) ═══════ */
@@ -910,7 +980,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<h2 class="steptitle">הפרטים שלכם</h2>'+
       '<p class="stepsub">נשלח אליכם הצעה וחוזה לחתימה דיגיטלית</p>'+
       '<div class="details">'+
-        '<div class="details__form">'+
+        '<div class="details__form" id="detForm">'+
           '<div class="frow">'+
             '<div class="bfield"><label>שם מלא</label><input type="text" id="fName" autocomplete="name" /></div>'+
             '<div class="bfield"><label>חברה</label><input type="text" id="fCompany" autocomplete="organization" /></div>'+
@@ -928,9 +998,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
             'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
           '<div class="consent-err" id="consentErr" hidden>יש לאשר קבלת דיוור כדי להמשיך.</div>'+
         '</div>'+
-        '<div class="details__rcpt"><div class="rcpt">'+receiptInner()+'</div></div>'+
+        '<div class="details__rcpt"><div class="rcpt" id="detR">'+receiptInner()+'</div></div>'+
       '</div>'+
       '<div class="legal">בשליחת הטופס אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות.</div>';
+    body.classList.add('is-details');   // make .body a flex column so the two panels fill + scroll like step 4
     // prefill from state (so save/restore + back keep what was typed)
     const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fAddress:'address',fNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
@@ -945,6 +1016,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('consentErr'),r=$('consentRow');
       if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
     validate();
+    // scroll-cue on each column (shows only if that panel actually overflows); equal-height columns → arrows align
+    ensureScrollCue($('detForm'));
+    ensureScrollCue($('detR'));
   }
 
   /* ═══════ STEP 6 · confirmation ═══════ */

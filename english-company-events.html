@@ -2403,6 +2403,12 @@
     .book-check--sm input { width: 15px; height: 15px; }
     .book-check--sm .book-check__text { gap: 0.1rem; }
     .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
+    /* mandatory-consent error state: same red flag used across the site's forms */
+    .book-check--err { outline: 1px solid rgba(224,115,111,0.6); outline-offset: 4px; border-radius: 8px; }
+    .book-check--err .book-check__text b { color: #e0736f; }
+    .book-check--err input { accent-color: #e0736f; }
+    .book-consent-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.5rem; }
+    .book-consent-err[hidden] { display: none; }
     .book-check--sm .book-check__text span { font-size: 0.72rem; line-height: 1.45; }
     /* terms + privacy agreement notice under the submit button */
     .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
@@ -3387,13 +3393,14 @@
               </span>
             </label>
 
-            <label class="book-check book-check--sm" for="bfConsent">
-              <input type="checkbox" id="bfConsent" name="consent" required />
+            <label class="book-check book-check--sm" for="bfConsent" id="bfConsentRow">
+              <input type="checkbox" id="bfConsent" name="consent" />
               <span class="book-check__text">
                 <b>Marketing consent</b>
                 <span>I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span>
               </span>
             </label>
+            <div class="book-consent-err" id="bfConsentErr" hidden>Please agree to receive updates to continue.</div>
 
             <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Do not fill this field</label><input type="text" name="company_url" id="bfHp" tabindex="-1" autocomplete="off" /></div>
             <button class="btn btn--fill book-next" id="bookSubmit" type="submit">Send request</button>
@@ -3574,13 +3581,14 @@
             <textarea id="cfNotes" name="notes" rows="2" placeholder="Event style, ideas, what matters to you..."></textarea>
           </div>
 
-          <label class="book-check book-check--sm" for="cfConsent">
+          <label class="book-check book-check--sm" for="cfConsent" id="cfConsentRow">
             <input type="checkbox" id="cfConsent" name="consent" />
             <span class="book-check__text">
               <b>Marketing consent</b>
               <span>I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span>
             </span>
           </label>
+          <div class="book-consent-err" id="cfConsentErr" hidden>Please agree to receive updates to continue.</div>
 
           <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Do not fill this field</label><input type="text" name="company_url" id="cfHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="customSubmit" type="submit" style="width: 100%;">Send request</button>
@@ -4758,8 +4766,21 @@
       if (nextAddons)  nextAddons.addEventListener('click', () => goto(5));    // add-ons → calculator
       next2.addEventListener('click', () => { summary3.innerHTML = summaryText(); goto(6); });  // calculator → details
 
+      const bfConsentEl = document.getElementById('bfConsent');
+      if (bfConsentEl) bfConsentEl.addEventListener('change', () => {
+        if (!bfConsentEl.checked) return;
+        const err = document.getElementById('bfConsentErr'), row = document.getElementById('bfConsentRow');
+        if (err) err.hidden = true; if (row) row.classList.remove('book-check--err');
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (!bfConsentEl || !bfConsentEl.checked) {
+          const err = document.getElementById('bfConsentErr'), row = document.getElementById('bfConsentRow');
+          if (err) err.hidden = false; if (row) row.classList.add('book-check--err');
+          (err || row || bfConsentEl).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         const plan = PLANS[state.plan];
         const wantsCall = document.getElementById('bfWantsCall').checked;
         const ph = perHeadFor(plan);
@@ -5083,8 +5104,21 @@
         return a ? a.dataset.val : '';
       };
 
+      const cfConsentEl = document.getElementById('cfConsent');
+      if (cfConsentEl) cfConsentEl.addEventListener('change', () => {
+        if (!cfConsentEl.checked) return;
+        const err = document.getElementById('cfConsentErr'), row = document.getElementById('cfConsentRow');
+        if (err) err.hidden = true; if (row) row.classList.remove('book-check--err');
+      });
+
       form.addEventListener('submit', e => {
         e.preventDefault();
+        if (!cfConsentEl || !cfConsentEl.checked) {
+          const err = document.getElementById('cfConsentErr'), row = document.getElementById('cfConsentRow');
+          if (err) err.hidden = false; if (row) row.classList.add('book-check--err');
+          (err || row || cfConsentEl).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         const loc    = pillValue('cfLocation');
         const cb     = pillValue('cfCallback');
         const guests = document.getElementById('cfGuests').value.trim();

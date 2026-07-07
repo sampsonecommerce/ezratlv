@@ -2517,6 +2517,12 @@
     .book-check--sm input { width: 15px; height: 15px; }
     .book-check--sm .book-check__text { gap: 0.1rem; }
     .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
+    /* mandatory-consent error state: same red flag used across the site's forms */
+    .book-check--err { outline: 1px solid rgba(224,115,111,0.6); outline-offset: 4px; border-radius: 8px; }
+    .book-check--err .book-check__text b { color: #e0736f; }
+    .book-check--err input { accent-color: #e0736f; }
+    .book-consent-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.5rem; }
+    .book-consent-err[hidden] { display: none; }
     .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
     .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
     .book-terms a:hover { color: var(--gold-light); }
@@ -2596,13 +2602,14 @@
             <textarea id="pfNotes" rows="2" placeholder="Event style, special requests, dietary needs..."></textarea>
           </div>
 
-          <label class="book-check book-check--sm" for="pfConsent">
+          <label class="book-check book-check--sm" for="pfConsent" id="pfConsentRow">
             <input type="checkbox" id="pfConsent" />
             <span class="book-check__text">
               <b>Marketing consent</b>
               <span>I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span>
             </span>
           </label>
+          <div class="book-consent-err" id="pfConsentErr" hidden>Please agree to receive updates to continue.</div>
 
           <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Do not fill this field</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
           <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">Send request</button>
@@ -2667,8 +2674,21 @@
       const pillValue  = (id) => { const a = document.querySelector('#' + id + ' .cf-pill.active'); return a ? a.dataset.val : ''; };
       const pillValues = (id) => Array.from(document.querySelectorAll('#' + id + ' .cf-pill.active')).map(p => p.dataset.val);
 
+      const pfConsentEl = document.getElementById('pfConsent');
+      if (pfConsentEl) pfConsentEl.addEventListener('change', () => {
+        if (!pfConsentEl.checked) return;
+        const err = document.getElementById('pfConsentErr'), row = document.getElementById('pfConsentRow');
+        if (err) err.hidden = true; if (row) row.classList.remove('book-check--err');
+      });
+
       form.addEventListener('submit', e => {
         e.preventDefault();
+        if (!pfConsentEl || !pfConsentEl.checked) {
+          const err = document.getElementById('pfConsentErr'), row = document.getElementById('pfConsentRow');
+          if (err) err.hidden = false; if (row) row.classList.add('book-check--err');
+          (err || row || pfConsentEl).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         const guests = document.getElementById('pfGuests').value.trim();
         const data = {
           leadType: 'private',
