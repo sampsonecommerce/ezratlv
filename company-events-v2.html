@@ -1020,7 +1020,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
       perHeadText:ph?('₪'+Number(ph).toLocaleString('en-US')+' לאדם'):'',
       addonsText:'₪'+Number(addOns||0).toLocaleString('en-US'),
       barMenuText:plan?E.buildBarText(state.plan,state.menu):'',
-      leadType:isCallback?'callback':'booking',
+      // worker: isPackage = !leadType. A completed booking must send NO leadType so it gets the full
+      // package columns (status/price/bar/DJ/add-ons). A callback/abandon lead is "incomplete" so it
+      // routes to the "Asked For Follow Up" group.
+      leadType:isCallback?'incomplete':'',
       wantsCall: isCallback ? true : !!($('fWantsCall')&&$('fWantsCall').checked),
       consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
       hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot

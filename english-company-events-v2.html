@@ -1002,6 +1002,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const PKG_LABEL={happyhour:'רגילה',gibush:'מורחבת',mesiba:'פרימיום'};
   const BAR_LABEL={happyhour:'בר רגיל (כלול בחבילה)',gibush:'בר מורחב (כלול בחבילה)',mesiba:'בר פרימיום (כלול בחבילה)'};
   const DJ_LABEL={happyhour:'פלייליסט + מערכת סאונד (כלול)',gibush:'פלייליסט מותאם אישית (כלול)',mesiba:"דיג'יי מהמבחר שלנו (כלול)"};
+  // add-ons go to a Monday DROPDOWN column keyed by these exact Hebrew labels; send those (not the
+  // English display labels) or create_item errors and the lead is lost. Keyed by the language-neutral id.
+  const HE_ADDON_LABEL={fruit:'מגש פירות העונה',soft:'שתייה קלה ומוגזת',balloons:'בלונים',mic:'מיקרופון',karaoke:'מערכת קריוקי',flowers1:'סידורי פרחים · בסיסי',flowers2:'סידורי פרחים · משודרג'};
   const _cookie=n=>{const m=document.cookie.match(new RegExp('(^|;)\\s*'+n+'=\\s*([^;]+)'));return m?m.pop():'';};
   // build the SAME lead payload the live company-events.html sends, then POST to the worker (Monday + CAPI)
   // isCallback = the lead came from the "leave your details / talk to us" path (may have no plan/date yet)
@@ -1012,7 +1015,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       plan:plan?plan.label:'', hours:plan?plan.hours:'',
       date:state.date?key(state.date):'', slot:state.slot||'',
       guests:gg, perHead:ph, base:base, addonsTotal:addOns, estTotal:total,
-      addons:sel.map(a=>a.id), addonLabels:sel.map(a=>a.label),
+      addons:sel.map(a=>a.id), addonLabels:sel.map(a=>HE_ADDON_LABEL[a.id]||a.label),   // Hebrew labels for the Monday dropdown
       name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address,
       notes:state.notes, menu:state.menu||'', foodNotes:state.foodNotes,
       foodMenuText:plan?E.buildFoodText(state.plan,state.menu,gg,state.foodNotes):'',
@@ -1021,7 +1024,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
       perHeadText:ph?('₪'+Number(ph).toLocaleString('en-US')+' per person'):'',
       addonsText:'₪'+Number(addOns||0).toLocaleString('en-US'),
       barMenuText:plan?E.buildBarText(state.plan,state.menu):'',
-      leadType:isCallback?'callback':'booking',
+      // worker: isPackage = !leadType. A completed booking must send NO leadType so it gets the full
+      // package columns (status/price/bar/DJ/add-ons). A callback/abandon lead is "incomplete" so it
+      // routes to the "Asked For Follow Up" group.
+      leadType:isCallback?'incomplete':'',
       wantsCall: isCallback ? true : !!($('fWantsCall')&&$('fWantsCall').checked),
       consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
       hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot
