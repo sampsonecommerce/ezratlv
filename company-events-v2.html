@@ -85,17 +85,22 @@ fbq('init','2174553826420246');fbq('track','PageView');
   @keyframes back{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
 
   /* fixed footer CTA: always visible, never clipped */
-  .foot{flex:none;display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;
+  /* footer stacks: the talk prompt sits above the primary CTA row, always inside the panel */
+  .foot{flex:none;display:flex;flex-direction:column;gap:.55rem;padding:.7rem 1rem;
     border-block-start:1px solid var(--line);background:rgba(16,12,8,.55)}
   .foot[hidden]{display:none}
+  .foot__main{display:flex;align-items:center;gap:.8rem}
+  .foot__main[hidden]{display:none}
   .go{flex:1;background:var(--gold);border:none;border-radius:12px;color:#141009;font-weight:600;font-size:.98rem;
     padding:.72rem;transition:filter .2s,opacity .2s}
   .go:hover{filter:brightness(1.07)}
   .go:disabled{opacity:.38;cursor:not-allowed}
   .foot__hint{flex:none;font-size:.68rem;color:var(--cream-dim);max-width:34ch}
-  /* talk prompt inside the footer - shown on mobile only (desktop uses the corner pill) */
-  .foot__talk{display:none;width:100%;text-align:center;background:transparent;border:1px dashed rgba(196,154,60,.5);
-    border-radius:11px;color:var(--gold-light);font-size:.76rem;padding:.5rem .7rem}
+  /* talk prompt inside the footer - shown on every step before the details form (desktop + mobile) */
+  .foot__talk{display:block;width:100%;text-align:center;background:transparent;border:1px dashed rgba(196,154,60,.5);
+    border-radius:11px;color:var(--gold-light);font-size:.76rem;padding:.5rem .7rem;cursor:pointer;
+    transition:border-color .2s,background .2s}
+  .foot__talk[hidden]{display:none}
   .foot__talk:hover{border-color:var(--gold);background:rgba(196,154,60,.08)}
 
   .steptitle{text-align:center;font-weight:600;font-size:clamp(1.25rem,2.6vw,1.55rem);color:var(--cream);margin:0 0 .3rem}
@@ -248,7 +253,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     grid-template-areas:"slider hero" "addons receipt"}
   .cg-slider{grid-area:slider;align-self:center}
   .cg-hero{grid-area:hero}
-  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;position:relative;padding-inline-end:.3rem;
+  /* padding-block-end matches the receipt's 1rem so the two scroll-cue arrows rest at the same height */
+  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;position:relative;padding-inline-end:.3rem;padding-block-end:1rem;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .cg-addons::-webkit-scrollbar{width:6px}
   .cg-addons::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
@@ -321,8 +327,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .body.is-details{display:flex;flex-direction:column}
   .body.is-details .details{flex:1 1 auto;min-height:0}
   .details{display:flex;gap:1.2rem;align-items:stretch}
+  /* padding-block-end matches the receipt's 1rem so the two scroll-cue arrows rest at the same height */
   .details__form{flex:1.1 1 0;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;position:relative;
-    display:flex;flex-direction:column;gap:.85rem;padding-inline-end:.2rem;
+    display:flex;flex-direction:column;gap:.85rem;padding-inline-end:.2rem;padding-block-end:1rem;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
   .details__form::-webkit-scrollbar{width:6px}
   .details__form::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
@@ -344,6 +351,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .check input{margin-block-start:.2rem;accent-color:var(--gold)}
   .check b{color:var(--cream);display:block;font-size:.8rem}
   .legal{font-size:.68rem;color:var(--cream-dim);text-align:center;margin-block-start:.6rem}
+
+  /* ── talk / leave-your-details (abandon the self-serve flow) ── */
+  .talk{max-width:560px;margin:0 auto}
+  .talk__note{display:flex;gap:.6rem;align-items:flex-start;margin:0 0 1.1rem;
+    border:.5px solid rgba(196,154,60,.4);border-radius:12px;background:rgba(196,154,60,.06);padding:.7rem .9rem}
+  .talk__note svg{width:18px;height:18px;color:var(--gold);flex:none;margin-block-start:2px}
+  .talk__note b{display:block;color:var(--gold-light);font-size:.9rem;margin-block-end:.15rem}
+  .talk__note span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
+  .talk__form{display:flex;flex-direction:column;gap:.85rem}
+  .talk__form .bfield{max-width:none;margin:0}
+  .talk__form .frow{margin:0}
 
   /* ── confirmation ── */
   /* confirmation: focal animated green check + clear mail CTA, secondary copy tucked as fine print */
@@ -378,28 +396,25 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .done__badge svg path{stroke-dashoffset:0}
   }
 
-  /* persistent talk prompt: compact pill, bottom-right, always there */
-  .talkpill{position:fixed;inset-inline-end:clamp(.6rem,1.5vw,1.2rem);inset-block-end:.7rem;z-index:40;
-    background:rgba(15,13,11,.92);border:1px dashed rgba(196,154,60,.5);border-radius:999px;
-    color:var(--gold-light);font-size:.7rem;padding:.4rem .85rem;backdrop-filter:blur(4px);
-    transition:border-color .2s,background .2s}
-  .talkpill:hover{border-color:var(--gold);background:rgba(196,154,60,.1)}
-
   /* scroll-cue: a pulsing gold glow behind a bouncing chevron, tells guests a panel keeps going below the fold.
      sticky (not absolute) so it tracks the scroll viewport's true edge in nested flex/grid panels;
      no dark band (nothing to hide the text underneath); only the arrow itself is clickable, the rest lets taps through. */
-  .scrollcue{position:sticky;inset-inline:0;bottom:0;width:100%;height:34px;border:0;margin:0;background:none;
+  /* accent is night/indigo by default (contrasts the warm gold panels); the evening-menu override below flips it to gold */
+  .scrollcue{--cue:#aab1f4;--cue-hi:#d3d7ff;--cue-glow:rgba(140,150,240,.9);--cue-ring:rgba(132,142,232,.58);
+    position:sticky;inset-inline:0;bottom:0;width:100%;height:34px;border:0;margin:0;background:none;
     display:flex;align-items:flex-end;justify-content:center;padding-block-end:.3rem;
-    color:var(--gold);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
+    color:var(--cue);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
   .scrollcue.is-visible{opacity:1}
   .scrollcue__wrap{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
     pointer-events:none}
   .scrollcue.is-visible .scrollcue__wrap{pointer-events:auto;cursor:pointer}
-  .scrollcue__wrap:hover{color:var(--gold-light)}
+  .scrollcue__wrap:hover{color:var(--cue-hi)}
   .scrollcue__ring{position:absolute;inset:0;border-radius:50%;
-    background:radial-gradient(circle,rgba(196,154,60,.55),transparent 68%);animation:cueRingPulse 1.7s ease-out infinite}
+    background:radial-gradient(circle,var(--cue-ring),transparent 68%);animation:cueRingPulse 1.7s ease-out infinite}
   .scrollcue__arrow{position:relative;width:16px;height:16px;animation:cueBounce 1.5s ease-in-out infinite;
-    filter:drop-shadow(0 0 5px rgba(196,154,60,.9)) drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+    filter:drop-shadow(0 0 5px var(--cue-glow)) drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+  /* evening menu = blue boxes → keep the arrow gold so it still contrasts */
+  .menu-view:not(.is-day) > .scrollcue{--cue:var(--gold);--cue-hi:var(--gold-light);--cue-glow:rgba(196,154,60,.9);--cue-ring:rgba(196,154,60,.55)}
   @keyframes cueBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
   @keyframes cueRingPulse{0%{transform:scale(.55);opacity:.8}100%{transform:scale(2.1);opacity:0}}
 
@@ -407,6 +422,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
   @media(max-width:720px){
     body{padding:.4rem}
     .panel{height:100dvh;border-radius:16px}
+    /* panels aren't bounded scroll-boxes on mobile (the whole page scrolls) → no scroll-cue arrows */
+    .scrollcue{display:none}
     .bar{padding:.5rem .7rem}
     .bar__save__label{display:none}
     .body{padding:.8rem .8rem 1.1rem}
@@ -433,18 +450,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .cg-rcpt .rcpt{overflow:visible}
     .summary-hero{gap:1rem}
     .summary-hero .glass-wrap{width:70px}
-    /* step5 stacks and scrolls with the page (no bounded columns / cues on mobile) */
+    /* step5 stacks and scrolls with the page — never bounded scroll columns on mobile.
+       flex:none keeps the panels at natural height (flex-basis:0 + min-height:0 would collapse and overlap them)
+       while preserving the flex gaps between panels and between fields. */
     .body.is-details{display:block}
-    .details{flex-direction:column;height:auto;align-items:stretch}
-    .details__form{overflow:visible;min-height:0;padding-inline-end:0}
-    .details__rcpt{position:static;width:100%}
-    .details__rcpt .rcpt{overflow:visible}
+    .details{flex-direction:column;height:auto}
+    .details__form{flex:none;overflow:visible;min-height:auto;padding-inline-end:0;padding-block-end:0}
+    .details__rcpt{flex:none;position:static;width:100%;min-height:auto}
+    .details__rcpt .rcpt{flex:none;overflow:visible;min-height:auto}
     .frow{grid-template-columns:1fr}
-    /* talk prompt moves into the footer (above the button) so it never overlaps the CTA */
-    .foot{flex-direction:column;gap:.5rem;padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom))}
+    .foot{gap:.5rem;padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom))}
     .foot__hint{display:none}
-    .foot__talk{display:block}
-    .talkpill{display:none}
   }
   @media (prefers-reduced-motion: reduce){
     .anim-fwd,.anim-back,.orb,.orb .sun,.orb .moon,.sky::after,#liq,.bub{animation:none;transition:none}
@@ -482,13 +498,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
   <div class="body" id="body"></div>
 
   <div class="foot" id="foot" hidden>
-    <button class="foot__talk" type="button">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
-    <button class="go" id="goBtn" type="button">המשך</button>
-    <span class="foot__hint" id="footHint"></span>
+    <button class="foot__talk" id="talkBtn" type="button">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
+    <div class="foot__main" id="footMain">
+      <button class="go" id="goBtn" type="button">המשך</button>
+      <span class="foot__hint" id="footHint"></span>
+    </div>
   </div>
 </div>
-
-<button class="talkpill" type="button">מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</button>
 
 <script src="ezra-booking-engine.js"></script>
 <script>
@@ -501,6 +517,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const state = { plan:null, date:null, slot:null, guests:20, menu:null, addons:{}, foodNotes:'', notes:'',
     name:'', company:'', phone:'', email:'', address:'' };
   let step = 1, lastStep = 0;
+  let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
 
   // ── save-and-continue (top bar) — ON by default: the process auto-saves at every step ──
   const SAVE_KEY='ezraProto2';
@@ -639,6 +656,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     $('backBtn').hidden = (n<=1 || n>5);
   }
   function render(n){
+    inTalk = false;                      // any numbered-step render leaves the abandon screen
     stopBubbles();                       // halt the coupe fizz when leaving a step
     const dir = n>=lastStep ? 'anim-fwd' : 'anim-back';
     lastStep = step; step = n;
@@ -652,16 +670,26 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   // footer CTA: one primary action, always visible
   let goHandler = null;
-  function setFoot(label, hint, handler, disabled){
-    foot.hidden = !handler;
-    if (!handler){ goHandler=null; return; }
-    goBtn.textContent = label;
-    goBtn.disabled = !!disabled;
-    footHint.textContent = hint || '';
-    goHandler = handler;
+  function setFoot(label, hint, handler, disabled, showTalk){
+    showTalk = (showTalk !== false);              // talk prompt shown unless explicitly disabled
+    const hasCta = !!handler;
+    foot.hidden = !hasCta && !showTalk;            // footer stays visible if there's a CTA or the talk prompt
+    $('talkBtn').hidden = !showTalk;
+    const main = $('footMain'); if (main) main.hidden = !hasCta;
+    if (hasCta){
+      goBtn.textContent = label;
+      goBtn.disabled = !!disabled;
+      footHint.textContent = hint || '';
+      goHandler = handler;
+    } else { goHandler = null; }
   }
   goBtn.addEventListener('click', ()=>{ if(goHandler) goHandler(); });
-  $('backBtn').addEventListener('click', ()=>{ if(step>1 && step<=5) render(step-1); });
+  // talk prompt (footer) → leave-your-details / abandon screen, carrying anything already entered
+  $('talkBtn').addEventListener('click', ()=>{ openTalk(step); });
+  $('backBtn').addEventListener('click', ()=>{
+    if(inTalk){ inTalk=false; render(talkFromStep); return; }   // back out of the abandon screen → resume where they were
+    if(step>1 && step<=5) render(step-1);
+  });
   // X → leave the flow, back to the website
   $('exitBtn').addEventListener('click', ()=>{
     // embedded as a popup (iframe) → ask the parent page to close the overlay; else navigate back
@@ -935,28 +963,30 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const DJ_LABEL={happyhour:'פלייליסט + מערכת סאונד (כלול)',gibush:'פלייליסט מותאם אישית (כלול)',mesiba:"דיג'יי מהמבחר שלנו (כלול)"};
   const _cookie=n=>{const m=document.cookie.match(new RegExp('(^|;)\\s*'+n+'=\\s*([^;]+)'));return m?m.pop():'';};
   // build the SAME lead payload the live company-events.html sends, then POST to the worker (Monday + CAPI)
-  function submitLead(){
-    const plan=E.PLANS[state.plan], ph=plan.perHead, gg=state.guests;
-    const base=ph*gg, addOns=addonsTotal(gg), total=base+addOns, sel=selectedAddons();
+  // isCallback = the lead came from the "leave your details / talk to us" path (may have no plan/date yet)
+  function submitLead(isCallback){
+    const plan=state.plan?E.PLANS[state.plan]:null, ph=plan?plan.perHead:0, gg=state.guests;
+    const sel=plan?selectedAddons():[], addOns=plan?addonsTotal(gg):0, base=ph*gg, total=base+addOns;
     const data={
-      plan:plan.label, hours:plan.hours,
-      date:state.date?key(state.date):'', slot:state.slot,
+      plan:plan?plan.label:'', hours:plan?plan.hours:'',
+      date:state.date?key(state.date):'', slot:state.slot||'',
       guests:gg, perHead:ph, base:base, addonsTotal:addOns, estTotal:total,
       addons:sel.map(a=>a.id), addonLabels:sel.map(a=>a.label),
       name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address,
-      notes:state.notes, menu:state.menu, foodNotes:state.foodNotes,
-      foodMenuText:E.buildFoodText(state.plan,state.menu,gg,state.foodNotes),
+      notes:state.notes, menu:state.menu||'', foodNotes:state.foodNotes,
+      foodMenuText:plan?E.buildFoodText(state.plan,state.menu,gg,state.foodNotes):'',
       barLabel:BAR_LABEL[state.plan]||'', djLabel:DJ_LABEL[state.plan]||'',
       packageLabel:PKG_LABEL[state.plan]||'',
       perHeadText:ph?('₪'+Number(ph).toLocaleString('en-US')+' לאדם'):'',
       addonsText:'₪'+Number(addOns||0).toLocaleString('en-US'),
-      barMenuText:E.buildBarText(state.plan,state.menu),
-      wantsCall:!!($('fWantsCall')&&$('fWantsCall').checked),
-      consent:!!($('fConsent')&&$('fConsent').checked),
-      hp:($('fHp')&&$('fHp').value)||'',                       // honeypot
+      barMenuText:plan?E.buildBarText(state.plan,state.menu):'',
+      leadType:isCallback?'callback':'booking',
+      wantsCall: isCallback ? true : !!($('fWantsCall')&&$('fWantsCall').checked),
+      consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
+      hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot
     };
     const _utm=new URLSearchParams(location.search);
-    data.utm_campaign=_utm.get('utm_campaign')||''; data.utm_source=_utm.get('utm_source')||'';
+    data.utm_campaign=_utm.get('utm_campaign')||(isCallback?'talk_to_sales':''); data.utm_source=_utm.get('utm_source')||'';
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');
     fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
@@ -975,7 +1005,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
         return;
       }
       state.notes=$('fNotes').value; submitLead(); render(6);
-    },true);
+    },true,false);   // step 5 = the details step; the "talk to sales" checkbox handles the abandon path here
     body.innerHTML =
       '<h2 class="steptitle">הפרטים שלכם</h2>'+
       '<p class="stepsub">נשלח אליכם הצעה וחוזה לחתימה דיגיטלית</p>'+
@@ -1015,6 +1045,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const cc=$('fConsent');
     if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('consentErr'),r=$('consentRow');
       if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
+    // "talk to sales before signing" = leave the booking flow → the abandon screen (which shows the disclaimer)
+    const wc=$('fWantsCall');
+    if(wc) wc.addEventListener('change',()=>{ if(wc.checked){ wc.checked=false; openTalk(5); } });
     validate();
     // scroll-cue on each column (shows only if that panel actually overflows); equal-height columns → arrows align
     ensureScrollCue($('detForm'));
@@ -1023,7 +1056,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   /* ═══════ STEP 6 · confirmation ═══════ */
   function step6(){
-    setFoot(null);
+    setFoot(null,null,null,false,false);   // confirmation: no CTA and no talk prompt
     body.innerHTML =
       '<div class="done">'+
         '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
@@ -1037,6 +1070,80 @@ fbq('init','2174553826420246');fbq('track','PageView');
         '<div class="done__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16h.01"/></svg>'+
           '<span>שימו לב, החוזה שנשלח תקף ל-24 שעות בלבד. ללא חתימה על החוזה, לא נוכל לשריין את משבצת הזמן שהובטחה.</span></div>'+
         '<p class="done__fine">נחזור אליכם תוך 24 שעות כדי לאשר את הפרטים סופית ולגבות מקדמה. ייתכן שייקחו כמה רגעים למייל להגיע.</p>'+
+      '</div>';
+  }
+
+  /* ═══════ TALK · leave-your-details (abandon the self-serve flow, talk to sales) ═══════ */
+  const TALK_INFO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg>';
+  function openTalk(fromStep){
+    inTalk=true; talkFromStep=fromStep||1;
+    stopBubbles();
+    $('progTxt').textContent='יצירת קשר';
+    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
+    $('backBtn').hidden=false;
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    setFoot('שליחת הפרטים','', submitTalk, true, false);   // no talk-prompt on the talk screen itself
+    body.innerHTML =
+      '<div class="talk">'+
+        '<div class="talk__note">'+TALK_INFO+
+          '<div><b>אתם יוצאים מתהליך ההזמנה העצמית</b>'+
+          '<span>בלי התחייבות. נשמור את מה שכבר מילאתם, ומנהל המכירות יחזור אליכם לתיאום אישי של האירוע.</span></div>'+
+        '</div>'+
+        '<h2 class="steptitle">נחזור אליכם</h2>'+
+        '<p class="stepsub">השאירו פרטים ונתאם שיחה אישית</p>'+
+        '<div class="talk__form">'+
+          '<div class="frow">'+
+            '<div class="bfield"><label>שם מלא</label><input type="text" id="tkName" autocomplete="name" /></div>'+
+            '<div class="bfield"><label>טלפון</label><input type="tel" id="tkPhone" inputmode="tel" autocomplete="tel" /></div>'+
+          '</div>'+
+          '<div class="frow">'+
+            '<div class="bfield"><label>אימייל</label><input type="email" id="tkEmail" inputmode="email" autocomplete="email" /></div>'+
+            '<div class="bfield"><label>חברה (לא חובה)</label><input type="text" id="tkCompany" autocomplete="organization" /></div>'+
+          '</div>'+
+          '<div class="bfield"><label>משהו שכדאי שנדע? (לא חובה)</label><textarea id="tkNotes" rows="2"></textarea></div>'+
+          '<input type="text" id="tkHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
+          '<label class="check" id="tkConsentRow"><input type="checkbox" id="tkConsent" /><span><b>אישור קבלת דיוור</b>'+
+            'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
+          '<div class="consent-err" id="tkConsentErr" hidden>יש לאשר קבלת דיוור כדי להמשיך.</div>'+
+        '</div>';
+    const map={tkName:'name',tkPhone:'phone',tkEmail:'email',tkCompany:'company',tkNotes:'notes'};
+    Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
+    const req=['tkName','tkPhone','tkEmail'].map(id=>$(id));
+    const validate=()=>{goBtn.disabled=!req.every(el=>el.value.trim());};
+    body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
+      if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
+    }));
+    const cc=$('tkConsent');
+    if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('tkConsentErr'),r=$('tkConsentRow');
+      if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
+    validate();
+  }
+  function submitTalk(){
+    const c=$('tkConsent');
+    if(!c || !c.checked){
+      const e=$('tkConsentErr'), r=$('tkConsentRow');
+      if(e) e.hidden=false; if(r) r.classList.add('check--err');
+      (e||r||c).scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    state.notes=$('tkNotes').value;
+    submitLead(true);          // callback lead (guards a missing plan/date)
+    inTalk=false;
+    callbackDone();
+  }
+  function callbackDone(){
+    setFoot(null,null,null,false,false);
+    $('progTxt').textContent='סיום';
+    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
+    $('backBtn').hidden=true;
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    body.innerHTML =
+      '<div class="done">'+
+        '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+        '<div class="dt">קיבלנו את הפרטים</div>'+
+        '<div class="hero">מנהל המכירות יחזור אליכם בהקדם</div>'+
+        '<div class="done__note">'+TALK_INFO+
+          '<span>שמרנו את מה שמילאתם עד כה. נחזור אליכם לתיאום אישי של האירוע, בלי התחייבות.</span></div>'+
       '</div>';
   }
 
