@@ -13,10 +13,13 @@ const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement
 const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
 const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
 const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packages (In Agreement Process)
-// Availability source = the real "Events Form" calendar (every lead, private + company). A date
-// is "taken" only when a committed event sits on it: Closed Deals / Pre Payment / Proposal Sent.
+// Availability for the on-site calendar merges two boards: committed events on the Events Form
+// calendar (Closed Deals / Pre Payment / Proposal Sent), plus dates just held by a completed
+// website booking on the Company Events Form board (In Agreement Process → Agreement Sent, 24h).
+const DATE_COL = "date5bab58wj";           // event-date column (same id on both boards)
 const AVAIL_BOARD = "5092854682";
 const AVAIL_GROUPS = ["group_mm18mks7", "group_mm1fz3kg", "group_mm187fg9"];
+const COMPANY_AVAIL_GROUPS = [GRP_IN_AGREEMENT, GRP_AGREEMENT];
 const META_PIXEL_ID = "2174553826420246";
 
 // GET /api/submit-lead -> availability feed for the on-site calendar (same-origin once the
@@ -28,11 +31,14 @@ export async function onRequestGet({ request, env }) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [] }, 200);
   const query = `query {
-    boards(ids: ${AVAIL_BOARD}) {
+    events: boards(ids: ${AVAIL_BOARD}) {
       groups(ids: ${JSON.stringify(AVAIL_GROUPS)}) {
-        items_page(limit: 500) {
-          items { column_values(ids: ["date5bab58wj"]) { ... on DateValue { date } } }
-        }
+        items_page(limit: 500) { items { column_values(ids: ["${DATE_COL}"]) { ... on DateValue { date } } } }
+      }
+    }
+    company: boards(ids: ${COMPANY_BOARD}) {
+      groups(ids: ${JSON.stringify(COMPANY_AVAIL_GROUPS)}) {
+        items_page(limit: 500) { items { column_values(ids: ["${DATE_COL}"]) { ... on DateValue { date } } } }
       }
     }
   }`;
@@ -43,12 +49,13 @@ export async function onRequestGet({ request, env }) {
       body: JSON.stringify({ query }),
     });
     const out = await r.json();
-    const groups = out?.data?.boards?.[0]?.groups || [];
-    const items = groups.flatMap((g) => g.items_page?.items || []);
+    if (out.errors) return json({ booked: [] }, 200);   // fail open
+    const boards = [...(out?.data?.events || []), ...(out?.data?.company || [])];
+    const items = boards.flatMap((b) => (b.groups || []).flatMap((g) => g.items_page?.items || []));
     const booked = [...new Set(items.flatMap((it) => (it.column_values || []).map((c) => c.date).filter(Boolean)))];
     return new Response(JSON.stringify({ booked }), {
       status: 200,
-      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=300" },
+      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=60" },
     });
   } catch (e) {
     return json({ booked: [] }, 200);   // fail open
