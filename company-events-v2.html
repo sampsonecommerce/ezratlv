@@ -17,6 +17,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B8RHLY5VJK');</script>
 <!-- lead endpoint (Cloudflare worker → Monday + server CAPI), same as the live page -->
 <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
+<!-- availability feed (same worker, GET) — live calendar/slot data, same as the live page -->
+<script>window.EZRA_AVAILABILITY_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Pliant:wght@600;700&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -543,10 +545,48 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const fmt=n=>'₪'+Math.round(n||0).toLocaleString('en-US');
   const today=new Date(); today.setHours(0,0,0,0);
 
-  // demo availability (prototype only)
-  const BOOKED=[];
-  (function(){[3,9,14,21,27,33,41].forEach(off=>{const d=new Date(today);d.setDate(d.getDate()+off);BOOKED.push(key(d));});})();
-  const takenSlots=(dk,count)=>{let h=0;for(const c of dk)h=(h*31+c.charCodeAt(0))>>>0;const s=new Set();if(h%3===0)s.add(h%count);return s;};
+  // BOOKED/BUSY come live from Monday via the shared worker (Events Form committed groups + Company
+  // Events Form held groups). BUSY carries the real [date,start,end] per event so slots block only
+  // the actual overlapping hours instead of the whole day. Re-renders step 2 in place if it's the
+  // step currently on screen when the fetch resolves.
+  const BOOKED=[], BUSY=[];
+  (function loadAvailability(){
+    const ep=window.EZRA_AVAILABILITY_ENDPOINT; if(!ep) return;
+    fetch(ep,{method:'GET'}).then(r=>r.ok?r.json():null).then(j=>{
+      if(!j) return;
+      BOOKED.length=0; (j.booked||[]).forEach(dt=>BOOKED.push(dt));
+      BUSY.length=0; (j.busy||[]).forEach(w=>{ if(w&&w.date&&w.start&&w.end) BUSY.push(w); });
+      if(step===2){ renderCal(); renderSky(); }
+    }).catch(()=>{});
+  })();
+  // "09:00-14:00" -> [startHour, endHour] with midnight rollover (02:00 end -> 26)
+  const parseSlot=s=>{const a=s.split('-');const sh=parseInt(a[0],10);let eh=parseInt(a[1],10);if(eh<=sh)eh+=24;return [sh,eh];};
+  const hmToFloat=hm=>{const m=/^(\d{1,2}):(\d{2})$/.exec(hm||'');return m?(+m[1])+(+m[2])/60:null;};
+  // real per-slot conflict check against BUSY (replaces the old fake/random demo logic)
+  function takenSlots(dateKey,list){
+    const dayBusy=BUSY.filter(w=>w.date===dateKey);
+    const taken=new Set();
+    if(!dayBusy.length) return taken;
+    list.forEach((label,i)=>{
+      const [ss,se]=parseSlot(label);
+      const hit=dayBusy.some(w=>{
+        const ws=hmToFloat(w.start), we0=hmToFloat(w.end);
+        if(ws==null||we0==null) return false;
+        const we=we0<=ws?we0+24:we0;             // busy window rolls past midnight (e.g. 21:00-02:00)
+        return ss<we && ws<se;                    // standard interval-overlap test
+      });
+      if(hit) taken.add(i);
+    });
+    return taken;
+  }
+  // a date is fully booked only when EVERY slot for the currently chosen plan is taken -
+  // a partial-day conflict leaves the day pickable with some slots open.
+  function isDateFullyBooked(dateKey){
+    const plan=E.PLANS[state.plan]; if(!plan) return false;
+    const list=E.SLOTS[plan.hours]||[];
+    if(!list.length) return false;
+    return takenSlots(dateKey,list).size>=list.length;
+  }
 
   const ICON_SUNRISE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18h18"/><path d="M12 3v4M5.6 9.6 7 11M18.4 9.6 17 11"/><path d="M8 18a4 4 0 0 1 8 0"/></svg>';
   const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>';
@@ -761,7 +801,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       const d=new Date(view.getFullYear(),view.getMonth(),day);
       const c=document.createElement('button');c.type='button';c.className='cal__day';c.textContent=day;
       if(d<today){c.classList.add('is-past');c.disabled=true;}
-      else if(BOOKED.includes(key(d))){c.classList.add('is-booked');c.disabled=true;}
+      else if(isDateFullyBooked(key(d))){c.classList.add('is-booked');c.disabled=true;}
       else c.addEventListener('click',()=>{state.date=d;state.slot=null;renderCal();renderSky();updateGo2();});
       if(state.date&&key(d)===key(state.date))c.classList.add('is-selected');
       g.appendChild(c);
@@ -779,7 +819,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const plan=E.PLANS[state.plan]; if(!plan)return;
     const list=E.SLOTS[plan.hours]||[];
     const hasDate=!!state.date;
-    const taken=hasDate?takenSlots(key(state.date),list.length):new Set();
+    const taken=hasDate?takenSlots(key(state.date),list):new Set();
     $('chosenSub').innerHTML=hasDate?('<b>'+humanDate(state.date)+'</b>'):'בחרו יום מהלוח';
     $('skyRows').innerHTML=list.map((label,i)=>{
       const [ls,le]=label.split('-'); const sh=parseInt(ls,10);
