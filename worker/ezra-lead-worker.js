@@ -26,6 +26,7 @@ const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packa
 //   2) Company Events Form — a finished website booking holds its date right away: it lands in
 //      "In Agreement Process" and moves to "Agreement Sent" (24h contract). Add later "held" stages here.
 const DATE_COL = "date5bab58wj";           // event-date column (same id on both boards)
+const TIME_COL = "text_mm4t1h0s";          // "Start-End (Text)" column, e.g. "13:00-18:00" (same id on both boards)
 const AVAIL_BOARD = "5092854682";          // Events Form
 const AVAIL_GROUPS = ["group_mm18mks7", "group_mm1fz3kg", "group_mm187fg9"]; // Closed Deals, Pre Payment, Proposal Sent
 const COMPANY_AVAIL_GROUPS = [GRP_IN_AGREEMENT, GRP_AGREEMENT];               // In Agreement Process, Agreement Sent
@@ -238,23 +239,32 @@ function json(obj, status, cors) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json", ...cors } });
 }
 
-// Availability for the on-site calendar: dates already taken so the calendar can grey them out.
-// Merged from two boards (see the constants above): committed events on the Events Form calendar,
-// plus dates just held by a completed website booking on the Company Events Form board. While
-// MONDAY_TOKEN is unset it returns an empty list (every date open). Cached 60s at the edge so a
-// fresh booking blocks the date for new visitors almost immediately.
+// Availability for the on-site calendar. Returns two things:
+//   busy   — the real [date, start, end] window for every committed/held event (see constants above
+//            for which boards/groups count), so a slot picker can grey out only the overlapping hours.
+//   booked — dates that have >=1 busy window, kept for the simpler date-only pickers (private form,
+//            custom-consultation) that don't show time slots at all.
+// An item with a date but no parseable Start-End time is skipped entirely - it does not block
+// anything (confirmed: every committed event always has a Start-End time filled in). While
+// MONDAY_TOKEN is unset it returns everything open. Cached 60s at the edge so a fresh booking blocks
+// the date for new visitors almost immediately.
+const TIME_RANGE_RE = /(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/;
 async function availability(env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
-  if (!TOKEN) return json({ booked: [] }, 200, cors);
+  if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
   const query = `query {
     events: boards(ids: ${AVAIL_BOARD}) {
       groups(ids: ${JSON.stringify(AVAIL_GROUPS)}) {
-        items_page(limit: 500) { items { column_values(ids: ["${DATE_COL}"]) { ... on DateValue { date } } } }
+        items_page(limit: 500) {
+          items { column_values(ids: ["${DATE_COL}", "${TIME_COL}"]) { id text ... on DateValue { date } } }
+        }
       }
     }
     company: boards(ids: ${COMPANY_BOARD}) {
       groups(ids: ${JSON.stringify(COMPANY_AVAIL_GROUPS)}) {
-        items_page(limit: 500) { items { column_values(ids: ["${DATE_COL}"]) { ... on DateValue { date } } } }
+        items_page(limit: 500) {
+          items { column_values(ids: ["${DATE_COL}", "${TIME_COL}"]) { id text ... on DateValue { date } } }
+        }
       }
     }
   }`;
@@ -265,17 +275,27 @@ async function availability(env, cors) {
       body: JSON.stringify({ query }),
     });
     const out = await r.json();
-    if (out.errors) { console.error("availability Monday errors:", JSON.stringify(out.errors)); return json({ booked: [] }, 200, cors); }
+    if (out.errors) { console.error("availability Monday errors:", JSON.stringify(out.errors)); return json({ booked: [], busy: [] }, 200, cors); }
     const boards = [...(out?.data?.events || []), ...(out?.data?.company || [])];
     const items = boards.flatMap((b) => (b.groups || []).flatMap((g) => g.items_page?.items || []));
-    const booked = [...new Set(items.flatMap((it) => (it.column_values || []).map((c) => c.date).filter(Boolean)))];
-    return new Response(JSON.stringify({ booked }), {
+    const busy = [];
+    for (const it of items) {
+      const cv = {};
+      (it.column_values || []).forEach((c) => { cv[c.id] = c; });
+      const date = cv[DATE_COL]?.date;
+      if (!date) continue;
+      const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
+      if (!m) continue;   // no parseable start-end time -> does not block anything
+      busy.push({ date, start: m[1].padStart(2, "0") + ":" + m[2], end: m[3].padStart(2, "0") + ":" + m[4] });
+    }
+    const booked = [...new Set(busy.map((b) => b.date))];
+    return new Response(JSON.stringify({ booked, busy }), {
       status: 200,
       headers: { "content-type": "application/json", "Cache-Control": "public, max-age=60", ...cors },
     });
   } catch (e) {
     console.error("availability failed:", e);
-    return json({ booked: [] }, 200, cors);   // fail open
+    return json({ booked: [], busy: [] }, 200, cors);   // fail open
   }
 }
 

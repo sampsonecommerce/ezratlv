@@ -3839,9 +3839,12 @@
       const pad = n => String(n).padStart(2, '0');
       const key = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
-      // ── Placeholder availability. Replace BOOKED + takenSlots() with live data later.
+      // BOOKED = dates with >=1 committed event (day-level; kept for reference/back-compat).
+      // BUSY = the real [date,start,end] per committed event, so time slots block only the actual
+      // overlapping hours instead of the whole day. Both come live from Monday (Events Form board's
+      // committed groups + the Company Events Form board's held groups) via the worker.
       const BOOKED = [];
-      // live availability from Monday (committed events on the shared Events Form calendar)
+      const BUSY = [];
       (function loadBookingAvailability() {
         const ep = window.EZRA_AVAILABILITY_ENDPOINT;
         if (!ep) return;
@@ -3851,16 +3854,40 @@
             if (!j) return;
             const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
             BOOKED.length = 0; arr.forEach(dt => BOOKED.push(dt));
+            BUSY.length = 0; (j.busy || []).forEach(w => { if (w && w.date && w.start && w.end) BUSY.push(w); });
             renderCal();
+            if (state.date) renderSlots();
           })
           .catch(() => {});
       })();
-      function takenSlots(dateKey, count) {
-        let h = 0; for (let i = 0; i < dateKey.length; i++) h = (h * 31 + dateKey.charCodeAt(i)) >>> 0;
+      // "HH:MM" -> hour as a float (handles the odd non-zero minute, though ours are always :00)
+      function hmToFloat(hm) { const m = /^(\d{1,2}):(\d{2})$/.exec(hm || ''); return m ? (+m[1]) + (+m[2]) / 60 : null; }
+      // real per-slot conflict check against BUSY (replaces the old hash-based placeholder):
+      // for each slot in `list` (e.g. "13:00-16:00"), mark it taken if it overlaps any busy window
+      // on that same date. An event with no parseable time never reaches BUSY, so it blocks nothing.
+      function takenSlots(dateKey, list) {
+        const dayBusy = BUSY.filter(w => w.date === dateKey);
         const taken = new Set();
-        if (count > 0) taken.add(h % count);
-        if (count > 3) taken.add((h >> 3) % count);
+        if (!dayBusy.length) return taken;
+        list.forEach((label, i) => {
+          const [ss, se] = parseSlot(label);
+          const hit = dayBusy.some(w => {
+            const ws = hmToFloat(w.start), we0 = hmToFloat(w.end);
+            if (ws == null || we0 == null) return false;
+            const we = we0 <= ws ? we0 + 24 : we0;   // busy window rolls past midnight (e.g. 21:00-02:00)
+            return ss < we && ws < se;                // standard interval-overlap test
+          });
+          if (hit) taken.add(i);
+        });
         return taken;
+      }
+      // a date is fully booked only when EVERY slot for the currently chosen plan is taken -
+      // a partial-day conflict (e.g. 13:00-18:00) leaves the day pickable with some slots open.
+      function isDateFullyBooked(dateKey) {
+        const plan = PLANS[state.plan]; if (!plan) return false;
+        const list = SLOTS[plan.hours] || [];
+        if (!list.length) return false;
+        return takenSlots(dateKey, list).size >= list.length;
       }
 
       const state = { plan: 'gibush', date: null, slot: null, guests: 20, menu: null, addons: {} };
@@ -4372,7 +4399,7 @@
           const d = new Date(view.getFullYear(), view.getMonth(), day);
           const cell = document.createElement('button'); cell.type = 'button'; cell.className = 'cal__day'; cell.textContent = day;
           if (d < today) { cell.classList.add('is-past'); cell.disabled = true; }
-          else if (BOOKED.includes(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - תפוס'); }
+          else if (isDateFullyBooked(key(d))) { cell.classList.add('is-booked'); cell.disabled = true; cell.setAttribute('aria-label', day + ' - תפוס'); }
           else { cell.setAttribute('aria-label', day + ' - פנוי'); cell.addEventListener('click', () => pickDate(d, cell)); }
           if (state.date && key(d) === key(state.date)) cell.classList.add('is-selected');
           gridEl.appendChild(cell);
@@ -4409,8 +4436,7 @@
       function renderSlots() {
         const plan = PLANS[state.plan];
         const list = SLOTS[plan.hours] || [];
-        const n = list.length;
-        const taken = takenSlots(key(state.date), n);
+        const taken = takenSlots(key(state.date), list);
         chosenEl.innerHTML = '<b>' + humanDate(state.date) + '</b>';
         slotsHead.textContent = 'חלונות של ' + plan.hours + ' שעות · לפי שעות היום';
 
@@ -4477,6 +4503,7 @@
       function setPlan(p) {
         state.plan = p; state.slot = null;
         planBtns.forEach(b => b.classList.toggle('is-active', b.dataset.plan === p));
+        renderCal();                    // day-blocking depends on the plan's slot bucket - refresh it
         if (state.date) renderSlots();
         updateNext1();
       }
