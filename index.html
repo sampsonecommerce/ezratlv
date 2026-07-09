@@ -2529,6 +2529,10 @@
     .book-check--err input { accent-color: #e0736f; }
     .book-consent-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.5rem; }
     .book-consent-err[hidden] { display: none; }
+    /* guest-count over the 60 cap: same red flag, but live as they type - not a silent fail at submit */
+    .book-field--err input { outline: 1px solid rgba(224,115,111,0.6); outline-offset: 2px; border-radius: 8px; }
+    .book-field-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.35rem; }
+    .book-field-err[hidden] { display: none; }
     .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
     .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
     .book-terms a:hover { color: var(--gold-light); }
@@ -2553,7 +2557,9 @@
           </div>
           <div class="book-field--row">
             <div class="book-field"><label for="pfEmail">אימייל</label><input id="pfEmail" type="email" inputmode="email" autocomplete="email" required /></div>
-            <div class="book-field"><label for="pfGuests">מספר אורחים</label><input id="pfGuests" type="number" inputmode="numeric" min="1" max="60" placeholder="לדוגמה 30" required /></div>
+            <div class="book-field" id="pfGuestsRow"><label for="pfGuests">מספר אורחים</label><input id="pfGuests" type="number" inputmode="numeric" min="1" max="60" placeholder="לדוגמה 30" required />
+              <div class="book-field-err" id="pfGuestsErr" hidden>המרחב מתאים עד 60 אורחים. לאירוע גדול יותר, צרו קשר ישירות.</div>
+            </div>
           </div>
 
           <div class="book-field">
@@ -2693,12 +2699,27 @@
         if (err) err.hidden = true; if (row) row.classList.remove('book-check--err');
       });
 
+      // guest count over the 60-guest cap: flag the moment they type it, not after the whole form is filled
+      const pfGuestsEl = document.getElementById('pfGuests');
+      const guestsOverCap = () => Number(pfGuestsEl.value) > 60;
+      const setGuestsErr = (on) => {
+        const err = document.getElementById('pfGuestsErr'), row = document.getElementById('pfGuestsRow');
+        if (err) err.hidden = !on; if (row) row.classList.toggle('book-field--err', on);
+      };
+      if (pfGuestsEl) pfGuestsEl.addEventListener('input', () => setGuestsErr(guestsOverCap()));
+
       form.addEventListener('submit', e => {
         e.preventDefault();
         if (!pfConsentEl || !pfConsentEl.checked) {
           const err = document.getElementById('pfConsentErr'), row = document.getElementById('pfConsentRow');
           if (err) err.hidden = false; if (row) row.classList.add('book-check--err');
           (err || row || pfConsentEl).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        if (pfGuestsEl && guestsOverCap()) {
+          setGuestsErr(true);
+          pfGuestsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          pfGuestsEl.focus();
           return;
         }
         const guests = document.getElementById('pfGuests').value.trim();
