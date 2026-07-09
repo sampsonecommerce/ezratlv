@@ -5530,9 +5530,16 @@
         ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
         document.body.classList.remove('v2-locked');
         fr.src = 'about:blank';   // reset the flow so a re-open starts clean
+        if (location.hash === '#event-confirmation') history.pushState(null, '', location.pathname + location.search);
       };
-      // the popup asks to close (its X button) via postMessage
-      window.addEventListener('message', e => { if (e.data && e.data.ezra === 'closeV2') window.closeV2(); });
+      // the popup asks to close (its X button) via postMessage, or confirms a completed booking
+      window.addEventListener('message', e => {
+        if (e.data && e.data.ezra === 'closeV2') window.closeV2();
+        else if (e.data && e.data.ezra === 'confirmed') {
+          try { history.pushState(null, '', location.pathname + location.search + '#event-confirmation'); } catch(err) {}
+          if (window.gtag) gtag('event', 'page_view', { page_location: location.href, page_path: location.pathname + location.hash });
+        }
+      });
       // Esc closes too
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
     })();
