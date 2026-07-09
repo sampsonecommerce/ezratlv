@@ -1176,6 +1176,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const _ck=n=>{const v=_cookie(n);if(!v)return'';try{return decodeURIComponent(v);}catch(e){return v;}};  // parent stored these URL-encoded
     data.utm_campaign=_ck('ezra_utm_campaign')||_utm.get('utm_campaign')||(isCallback?'talk_to_sales':'');
     data.utm_source=_ck('ezra_utm_source')||_utm.get('utm_source')||'';
+    data.utm_content=_ck('ezra_utm_content')||_utm.get('utm_content')||'';   // Google ad group · Facebook adset
+    data.utm_term=_ck('ezra_utm_term')||_utm.get('utm_term')||'';            // Google keyword · Facebook ad
     data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';   // Google click id → offline-conversion match key
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');

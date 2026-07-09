@@ -171,7 +171,16 @@ export async function onRequestPost({ request, env }) {
     d.wantsCall ? "★ הלקוח ביקש לשוחח עם מנהל המכירות לפני חתימה" : "",
     `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
   ].filter(Boolean).join("\n");
-  if (d.gclid) notes += `\ngclid: ${d.gclid}`;   // Google click id, kept visible on the lead for month-2 offline-conversion upload
+  // attribution block on the lead for a Monday glance. Google fills utm_content=ad group; Facebook
+  // fills utm_content={{adset.name}}, utm_term={{ad.name}}; utm_source tells the two apart.
+  const atto = [
+    d.utm_source   ? `מקור: ${d.utm_source}` : "",
+    d.utm_campaign ? `קמפיין: ${d.utm_campaign}` : "",
+    d.utm_content  ? `קבוצת מודעות / אדסט: ${d.utm_content}` : "",
+    d.utm_term     ? `מודעה / מילת מפתח: ${d.utm_term}` : "",
+    d.gclid        ? `gclid: ${d.gclid}` : "",   // month-2 offline-conversion upload key
+  ].filter(Boolean);
+  if (atto.length) notes += "\n— שיוך מקור —\n" + atto.join("\n");
 
   const cols = {
     emailj9eufer1:         { email: d.email || "", text: d.email || "" },
