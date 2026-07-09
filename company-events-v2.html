@@ -464,7 +464,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .scrollcue{display:none}
     .bar{padding:.5rem .7rem}
     .bar__save__label{display:none}
-    .body{padding:.8rem .8rem 1.1rem}
+    /* mobile: the internal scroller only scrolls vertically. without this, overflow-y:auto makes the
+       horizontal axis compute to `auto`, so any element a few px too wide (e.g. the receipt's perforated
+       line with its negative side-margins) lets the whole panel be dragged left/right. hidden kills that. */
+    .body{padding:.8rem .8rem 1.1rem;overflow-x:hidden}
     .plans{margin-block-start:3vh}
     .when{flex-direction:column;gap:.7rem}
     .when__div{display:none}
