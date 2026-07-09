@@ -219,6 +219,11 @@ export async function onRequestPost({ request, env }) {
   // Events board; private leads go to the Events Form board (5092854682) which lacks it, so skip
   // them to avoid a create_item error and to never touch that board.
   if (!isPrivate && d.name) cols.text_mm4the60 = String(d.name);                  // Contact Name = person
+  // ad attribution → dedicated columns (company board only; private board lacks them). source/campaign
+  // already map to short_textgjnrhjdi/short_textoant7hbw above.
+  if (!isPrivate && d.utm_content) cols.text_mm53a533 = String(d.utm_content);    // ad group (Google) / adset (Facebook)
+  if (!isPrivate && d.utm_term)    cols.text_mm53htse = String(d.utm_term);       // keyword (Google) / ad (Facebook)
+  if (!isPrivate && d.gclid)       cols.text_mm53djv5 = String(d.gclid);          // Google click id → offline-conversion upload
   // package-contract columns (package booking leads only)
   if (isPackage && d.packageLabel) cols.color_mm4tbcbp = { label: d.packageLabel }; // חבילה (status)
   if (isPackage && d.barMenuText)  cols.text_mm4t9mgc  = d.barMenuText;             // Alcohol Package Details (full drinks text)
