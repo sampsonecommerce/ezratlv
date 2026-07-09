@@ -65,11 +65,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .bar__start{display:flex;align-items:center;gap:.6rem;min-width:0}
   .bar__save{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;position:relative;font-size:.76rem;color:var(--cream-dim)}
   .bar__save input{position:absolute;opacity:0;width:0;height:0}
-  .bar__save__box{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);flex:none;
-    display:inline-flex;align-items:center;justify-content:center;color:var(--bg);transition:all .2s var(--ease)}
-  .bar__save__box svg{width:12px;height:12px;opacity:0;transition:opacity .2s var(--ease)}
-  .bar__save input:checked+.bar__save__box{background:var(--gold);border-color:var(--gold)}
-  .bar__save input:checked+.bar__save__box svg{opacity:1}
+  /* bookmark toggle: outline = not saved, filled gold = saved. self-explanatory, so it works icon-only on mobile */
+  .bar__save__box{flex:none;display:inline-flex;align-items:center;justify-content:center;transition:all .2s var(--ease)}
+  .bar__save__box svg{width:15px;height:18px;fill:none;stroke:var(--cream-dim);stroke-width:1.7;stroke-linejoin:round;
+    transition:fill .2s var(--ease),stroke .2s var(--ease)}
+  .bar__save input:checked+.bar__save__box svg{fill:var(--gold);stroke:var(--gold)}
   .bar__save__label{white-space:nowrap}
   .bar__saved{position:absolute;inset-inline-start:0;top:calc(100% + 5px);white-space:nowrap;font-size:.68rem;color:#5fbf7f;
     opacity:0;transform:translateY(-3px);transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none}
@@ -428,6 +428,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .scrollcue{display:none}
     .bar{padding:.5rem .7rem}
     .bar__save__label{display:none}
+    #progTxt{display:none}   /* dots already show progress; drop the "Step X of N" text to de-cram the mobile header */
     .body{padding:.8rem .8rem 1.1rem}
     .plans{margin-block-start:3vh}
     .when{flex-direction:column;gap:.7rem}
@@ -481,7 +482,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       </button>
       <label class="bar__save" id="saveTog" title="You can save here at any step and continue later">
         <input type="checkbox" id="saveChk" />
-        <span class="bar__save__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="bar__save__box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></span>
         <span class="bar__save__label">Save</span>
         <span class="bar__saved" id="savedFlash">Saved successfully</span>
       </label>

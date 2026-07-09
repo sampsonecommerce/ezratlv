@@ -2487,6 +2487,10 @@
     .book-field input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
     /* the closed-state calendar icon renders near-black by default (invisible on a dark field) - invert it */
     .book-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); cursor: pointer; }
+    /* native date inputs can't take a placeholder - overlay a hint that hides once a date is chosen */
+    .date-wrap { position: relative; }
+    .date-hint { position: absolute; inset-inline-start: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--cream-faint); font-size: 0.95rem; pointer-events: none; }
+    .date-hint[hidden] { display: none; }
     .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
 
@@ -2578,7 +2582,10 @@
 
           <div class="book-field">
             <label for="pfDate">Requested event date</label>
-            <input id="pfDate" type="date" required />
+            <div class="date-wrap">
+              <input id="pfDate" type="date" required />
+              <span class="date-hint" id="pfDateHint">Choose a date</span>
+            </div>
           </div>
 
           <div class="book-field">
@@ -2709,6 +2716,11 @@
         if (err) err.hidden = !on; if (row) row.classList.toggle('book-field--err', on);
       };
       if (pfGuestsEl) pfGuestsEl.addEventListener('input', () => setGuestsErr(guestsOverCap()));
+
+      // date field has no native placeholder -> show a "choose a date" hint until a value is picked
+      const pfDateEl = document.getElementById('pfDate'), pfDateHint = document.getElementById('pfDateHint');
+      const syncDateHint = () => { if (pfDateHint) pfDateHint.hidden = !!pfDateEl.value; };
+      if (pfDateEl) { syncDateHint(); pfDateEl.addEventListener('input', syncDateHint); pfDateEl.addEventListener('change', syncDateHint); }
 
       form.addEventListener('submit', e => {
         e.preventDefault();
