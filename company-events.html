@@ -5521,6 +5521,11 @@
   <script>
     (function(){
       const ov = document.getElementById('v2Overlay'), fr = document.getElementById('v2Frame');
+      // on a completed booking the address bar switches to a real /confirmation path (clean URL for
+      // GA4/Ads conversion tracking). pushState only rewrites the bar — no page load — so it's safe even
+      // though no such file exists; a direct hit/refresh of it is caught by the _redirects rule.
+      const CONFIRM_PATH = location.pathname.replace(/\/+$/,'') + '/confirmation';
+      let prevPath = null;   // where to send the bar back to when the confirmation URL is dismissed
       window.openV2 = function(plan){
         fr.src = 'company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
@@ -5530,14 +5535,17 @@
         ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
         document.body.classList.remove('v2-locked');
         fr.src = 'about:blank';   // reset the flow so a re-open starts clean
-        if (location.hash === '#event-confirmation') history.pushState(null, '', location.pathname + location.search);
+        if (prevPath !== null) { history.pushState(null, '', prevPath); prevPath = null; }
       };
       // the popup asks to close (its X button) via postMessage, or confirms a completed booking
       window.addEventListener('message', e => {
         if (e.data && e.data.ezra === 'closeV2') window.closeV2();
         else if (e.data && e.data.ezra === 'confirmed') {
-          try { history.pushState(null, '', location.pathname + location.search + '#event-confirmation'); } catch(err) {}
-          if (window.gtag) gtag('event', 'page_view', { page_location: location.href, page_path: location.pathname + location.hash });
+          try {
+            prevPath = location.pathname + location.search;   // remember the funnel URL to restore on close
+            history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
+            if (window.gtag) gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
+          } catch(err) {}
         }
       });
       // Esc closes too
