@@ -84,7 +84,7 @@ export default {
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
-    const notes = isIncomplete ? [
+    let notes = isIncomplete ? [
       "סוג פנייה: נטישת תהליך הזמנה (אירועי חברה)",
       d.pausedStepLabel ? `נעצר בשלב: ${d.pausedStepLabel}` : "",
       d.plan ? `מסלול: ${d.plan}` : "",
@@ -128,6 +128,7 @@ export default {
       d.wantsCall ? "★ הלקוח ביקש לשוחח עם מנהל המכירות לפני חתימה" : "",
       `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
     ].filter(Boolean).join("\n");
+    if (d.gclid) notes += `\ngclid: ${d.gclid}`;   // Google click id, kept visible on the lead for month-2 offline-conversion upload
 
     const cols = {
       emailj9eufer1:         { email: d.email || "", text: d.email || "" },

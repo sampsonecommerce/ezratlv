@@ -1169,8 +1169,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
       consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
       hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot
     };
+    // Attribution rides cookies the PARENT page set from the real ad-landing URL. The iframe's own
+    // location.search only ever carries ?plan=, so reading utm/gclid off it here would always be empty;
+    // location.search stays only as a fallback for the rare case the widget is loaded directly.
     const _utm=new URLSearchParams(location.search);
-    data.utm_campaign=_utm.get('utm_campaign')||(isCallback?'talk_to_sales':''); data.utm_source=_utm.get('utm_source')||'';
+    const _ck=n=>{const v=_cookie(n);if(!v)return'';try{return decodeURIComponent(v);}catch(e){return v;}};  // parent stored these URL-encoded
+    data.utm_campaign=_ck('ezra_utm_campaign')||_utm.get('utm_campaign')||(isCallback?'talk_to_sales':'');
+    data.utm_source=_ck('ezra_utm_source')||_utm.get('utm_source')||'';
+    data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';   // Google click id → offline-conversion match key
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');
     fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
@@ -1382,10 +1388,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
   // ── boot: opened from a package card (?plan=) → preselect it and jump to the WHEN step;
   //         otherwise restore a saved session if there is one, else start fresh ──
   (function boot(){
-    const pplan=new URLSearchParams(location.search).get('plan');
-    if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
+    // precedence: a saved in-progress session wins over a ?plan= deep-link, so an ad click never
+    // clobbers a half-done booking. Only with no saved draft does ?plan= preselect and skip to step 2.
     let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
-    if(!s){ render(1); return; }
+    if(!s){
+      const pplan=new URLSearchParams(location.search).get('plan');
+      if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
+      render(1); return;
+    }
     state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
     state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
     state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';

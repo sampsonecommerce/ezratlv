@@ -5548,6 +5548,27 @@
           } catch(err) {}
         }
       });
+
+      // ── ad-landing plumbing ──────────────────────────────────────────────────────────────────────
+      // The ad click lands HERE (the parent), so this is the only place that sees the real ?utm_*/?gclid.
+      // The wizard runs in an iframe whose own URL is just ?plan=, so we bridge attribution via cookies
+      // (the wizard reads ezra_gclid/ezra_utm_* alongside the Meta _fbp/_fbc it already reads).
+      (function(){
+        const qs = new URLSearchParams(location.search);
+        const setCookie = (name, val) => {
+          if (!val) return;
+          document.cookie = name + '=' + encodeURIComponent(val) + '; path=/; max-age=7776000; SameSite=Lax';  // ~90 days
+        };
+        setCookie('ezra_gclid',        qs.get('gclid'));         // Google click id → offline-conversion match key
+        setCookie('ezra_utm_source',   qs.get('utm_source'));
+        setCookie('ezra_utm_campaign', qs.get('utm_campaign'));
+
+        // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan id and
+        // auto-open the booking flow preselected on step 2. Unknown/missing value = normal page, never error.
+        const PACKAGE_TO_PLAN = { 'happy-hour': 'happyhour', 'gibush': 'gibush', 'party': 'mesiba' };
+        const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
+        if (plan) window.openV2(plan);
+      })();
       // Esc closes too
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
     })();
