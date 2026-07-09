@@ -1,0 +1,10 @@
+# Cloudflare Pages response headers (like _redirects, Cloudflare reads this file).
+#
+# Browser-cache policy. Cloudflare's EDGE already serves fresh (cf-cache-status: DYNAMIC);
+# this controls how long a VISITOR'S BROWSER may reuse a file before checking for a newer one.
+# Default was `max-age=600`, so a new deploy stayed invisible for up to 10 minutes (the classic
+# "still showing the old version until I hard-refresh"). `no-cache` = store it, but always
+# revalidate with the server first — the browser gets a cheap 304 when nothing changed, and the
+# new file the instant it does. So deploys show immediately, for every visitor.
+/*
+  Cache-Control: no-cache
