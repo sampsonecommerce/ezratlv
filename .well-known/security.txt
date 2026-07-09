@@ -1,0 +1,5 @@
+# Security contact for ezratlv.com (RFC 9116)
+Contact: mailto:rom@ezratlv.com
+Expires: 2027-07-09T00:00:00.000Z
+Preferred-Languages: he, en
+Canonical: https://ezratlv.com/.well-known/security.txt
