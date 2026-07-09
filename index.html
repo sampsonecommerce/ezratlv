@@ -2486,9 +2486,11 @@
     .book-field label { font-size: 0.82rem; color: var(--cream-dim); font-weight: 500; }
     .book-field input, .book-field textarea { width: 100%; padding: 0.75rem 0.9rem; border-radius: 11px; border: 1px solid var(--line); background: rgba(0,0,0,0.25); color: var(--cream); font-family: var(--font-body); font-size: 0.95rem; transition: border-color 0.25s var(--ease); }
     .book-field input:focus, .book-field textarea:focus { outline: none; border-color: var(--gold); }
-    .book-field input[type="date"] { color-scheme: dark; }
-    /* color-scheme:dark styles the picker popup, but the closed-state calendar icon still renders
-       near-black by default (invisible on a dark field) - invert it so it's actually visible */
+    .book-field input[type="date"] { color-scheme: dark; -webkit-appearance: none; appearance: none; min-width: 0; }
+    /* iOS renders the date value with its own centered metrics -> in a narrow RTL box it looked
+       off-center and clipped. Pin the value to the start (right) edge like every other field. */
+    .book-field input[type="date"]::-webkit-date-and-time-value { text-align: right; margin: 0; }
+    /* the closed-state calendar icon renders near-black by default (invisible on a dark field) - invert it */
     .book-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); cursor: pointer; }
     .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
