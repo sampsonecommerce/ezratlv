@@ -2648,6 +2648,8 @@
         void modal.offsetWidth;
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        // #book in the address bar -> shareable/copyable link straight to this form
+        if (location.hash !== '#book') history.pushState(null, '', location.pathname + location.search + '#book');
         const first = document.getElementById('pfName');
         if (first) setTimeout(() => first.focus(), 80);
       }
@@ -2656,6 +2658,7 @@
         document.body.style.overflow = '';
         setTimeout(() => { modal.hidden = true; }, 350);
         if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
+        if (location.hash === '#book') history.pushState(null, '', location.pathname + location.search);
       }
 
       // Every old "לבדיקת זמינות" CTA (the wkf.ms links) now opens this popup.
@@ -2666,6 +2669,9 @@
       if (dClose) dClose.addEventListener('click', close);
       modal.addEventListener('click', e => { if (e.target === modal) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+
+      // deep link: opening the site with #book in the URL (a copied/shared link) auto-opens the form
+      if (location.hash === '#book') open();
 
       // pill groups: single-select by default, multi-select when data-multi is set
       modal.querySelectorAll('.cf-pills').forEach(group => {
