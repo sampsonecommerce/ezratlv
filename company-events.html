@@ -2343,7 +2343,9 @@
     }
     .cf-close:hover { color: var(--cream); border-color: var(--gold); }
     .cf-close svg { width: 17px; height: 17px; }
-    .cf-scroll { overflow-y: auto; padding: clamp(1.6rem, 5vw, 2.4rem); }
+    /* overflow-y alone makes overflow-x compute to auto too (spec), which let the whole panel be
+       dragged side to side on mobile - same root cause fixed earlier in company-events-v2 */
+    .cf-scroll { overflow-y: auto; overflow-x: hidden; padding: clamp(1.6rem, 5vw, 2.4rem); }
     .cf-head { margin-block-end: 1.4rem; }
     .cf-title { font-family: var(--serif); font-size: clamp(1.5rem, 4.5vw, 2rem); color: var(--cream); margin: 0.5rem 0 0.5rem; line-height: 1.15; }
     .cf-sub { color: var(--cream-dim); line-height: 1.6; font-size: 0.95rem; margin: 0; }
