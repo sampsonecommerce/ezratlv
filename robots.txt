@@ -40,4 +40,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://www.ezratlv.com/sitemap.xml
+Sitemap: https://ezratlv.com/sitemap.xml

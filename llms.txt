@@ -15,9 +15,9 @@
 - Custom track available (including off-site at the company's own location)
 
 ## Key pages
-- Home (private events): https://www.ezratlv.com/
-- Company events (booking + pricing): https://www.ezratlv.com/company-events
-- English: https://www.ezratlv.com/english-index
+- Home (private events): https://ezratlv.com/
+- Company events (booking + pricing): https://ezratlv.com/company-events
+- English: https://ezratlv.com/english-index
 
 ## Booking
 Self-serve on the company-events page: pick a package, see live date availability, pick a menu, set guest count, get a final price on screen, and receive a contract by email. Response within 24 hours.
