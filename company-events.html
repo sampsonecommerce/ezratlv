@@ -34,6 +34,9 @@
   <title>אירועי חברה בעזרא | חלל בר פרטי בפלורנטין</title>
   <meta name="description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
   <link rel="canonical" href="https://www.ezratlv.com/company-events" />
+  <link rel="alternate" hreflang="he" href="https://www.ezratlv.com/company-events" />
+  <link rel="alternate" hreflang="en" href="https://www.ezratlv.com/english-company-events" />
+  <link rel="alternate" hreflang="x-default" href="https://www.ezratlv.com/company-events" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
@@ -2590,6 +2593,79 @@
        During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
   <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
   <script>window.EZRA_AVAILABILITY_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
+
+  <!-- Structured data: venue + packages (machine-readable pricing for AI agents) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "EventVenue"],
+    "name": "עזרא תל אביב",
+    "alternateName": "Ezra TLV",
+    "description": "בר פרטי לאירועי חברה בפלורנטין, תל אביב. אירוע אחד בערב, עד 50 אורחים, הכל כלול: אוכל מהטאבון, בר קוקטיילים, סאונד ותאורה והפקה מלאה.",
+    "url": "https://www.ezratlv.com/company-events",
+    "telephone": "+972509499241",
+    "image": "https://www.ezratlv.com/images/BAR.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "אברבנאל 38",
+      "addressLocality": "תל אביב",
+      "addressRegion": "תל אביב",
+      "addressCountry": "IL"
+    },
+    "geo": { "@type": "GeoCoordinates", "latitude": 32.0573711, "longitude": 34.766951 },
+    "priceRange": "₪₪₪",
+    "maximumAttendeeCapacity": 50,
+    "sameAs": [
+      "https://www.instagram.com/ezratlv",
+      "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "131",
+      "bestRating": "5"
+    },
+    "makesOffer": [
+      {
+        "@type": "Offer",
+        "name": "Happy Hour",
+        "priceCurrency": "ILS",
+        "price": "275",
+        "description": "3 שעות, בופה קל, יין ו-2 בירות, מחיר לאדם"
+      },
+      {
+        "@type": "Offer",
+        "name": "גיבוש מחלקה",
+        "priceCurrency": "ILS",
+        "price": "330",
+        "description": "5 שעות, בופה עשיר, בר מלא, מחיר לאדם"
+      },
+      {
+        "@type": "Offer",
+        "name": "מסיבת חברה פרימיום",
+        "priceCurrency": "ILS",
+        "price": "450",
+        "description": "5 שעות, בופה פרימיום, בר קוקטיילים פתוח, DJ, מחיר לאדם"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "כמה אורחים אפשר להזמין?", "acceptedAnswer": { "@type": "Answer", "text": "מ-20 עד 50 איש. אירוע אחד בערב, המרחב כולו של הצוות שלכם." } },
+      { "@type": "Question", "name": "כמה עולה אירוע חברה בעזרא?", "acceptedAnswer": { "@type": "Answer", "text": "שלוש חבילות במחיר סופי לאדם: Happy Hour ₪275 (3 שעות, בופה קל, יין ובירה), גיבוש מחלקה ₪330 (5 שעות, בופה עשיר, בר מלא), ומסיבת חברה פרימיום ₪450 (5 שעות, בופה פרימיום, בר קוקטיילים פתוח ו-DJ). יש גם מסלול בהתאמה אישית." } },
+      { "@type": "Question", "name": "מה כלול במחיר?", "acceptedAnswer": { "@type": "Answer", "text": "הכל: אוכל מהטאבון (פיצות, בופה וסלטים), בר, סאונד, תאורה והפקה מלאה. אתם רק מגיעים." } },
+      { "@type": "Question", "name": "איפה עזרא ממוקם?", "acceptedAnswer": { "@type": "Answer", "text": "אברבנאל 38, בלב אזור התעשייה של פלורנטין, תל אביב." } },
+      { "@type": "Question", "name": "אפשר לסגור תאריך ומחיר אונליין?", "acceptedAnswer": { "@type": "Answer", "text": "כן. באתר בוחרים חבילה, רואים זמינות תאריכים ושעה, בוחרים תפריט וכמות אורחים - ומקבלים מחיר סופי על המסך וחוזה למייל, במקום ובאישור מיידי." } },
+      { "@type": "Question", "name": "מה מייחד את עזרא מאולם או מסעדה?", "acceptedAnswer": { "@type": "Answer", "text": "בר פרטי שנפתח רק לצוות שלכם, לערב שלם. מעל 800 אירועים ו-40,000 אורחים עד היום." } },
+      { "@type": "Question", "name": "האוכל כשר?", "acceptedAnswer": { "@type": "Answer", "text": "המקום אינו בהשגחת כשרות, אך התפריט כולו חלבי-צמחוני, בלי בשר ובלי פירות ים." } },
+      { "@type": "Question", "name": "יש חניה?", "acceptedAnswer": { "@type": "Answer", "text": "אין חנייה במקום, אך יש חניונים בתשלום בקרבת מקום." } }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -2611,6 +2687,7 @@
       <a href="#menu">תפריט</a>
       <a href="#packages">חבילות</a>
       <a href="#gallery">גלריה</a>
+      <a href="#faq">שאלות נפוצות</a>
     </div>
 
     <!-- desktop: actions -->
@@ -2631,6 +2708,7 @@
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#packages">חבילות</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
+      <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
       <a class="nav__menu-link" href="english-company-events" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="/">אירועים פרטיים</a>
@@ -3107,6 +3185,45 @@
     </button>
     <img id="galleryLightboxImg" src="" alt="" />
   </div>
+
+  <!-- ============================================================
+       FAQ  (visible Q&A; mirrors the FAQPage schema for AI extractability)
+  ============================================================ -->
+  <style>
+    #faq .faq-wrap { max-width: 760px; margin-inline: auto; }
+    #faq .faq-item { border-block-end: 1px solid var(--line); }
+    #faq .faq-item summary {
+      list-style: none; cursor: pointer; padding: 1.15rem 0; display: flex;
+      justify-content: space-between; align-items: center; gap: 1rem;
+      color: var(--cream); font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600;
+    }
+    #faq .faq-item summary::-webkit-details-marker { display: none; }
+    #faq .faq-item summary::after {
+      content: '+'; color: var(--gold-light); font-size: 1.6rem; line-height: 1;
+      flex-shrink: 0; transition: transform 0.25s ease;
+    }
+    #faq .faq-item[open] summary::after { transform: rotate(45deg); }
+    #faq .faq-item__body { color: var(--cream-dim); line-height: 1.85; padding: 0 0 1.2rem; font-size: 1rem; }
+  </style>
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">שאלות נפוצות</span>
+        <h2>כל מה שרוצים לדעת לפני שסוגרים</h2>
+        <div class="divider divider--center"></div>
+      </div>
+      <div class="faq-wrap reveal">
+        <details class="faq-item"><summary>כמה אורחים אפשר להזמין?</summary><div class="faq-item__body">מ-20 עד 50 איש. אירוע אחד בערב, המרחב כולו של הצוות שלכם.</div></details>
+        <details class="faq-item"><summary>כמה עולה אירוע חברה בעזרא?</summary><div class="faq-item__body">שלוש חבילות במחיר סופי לאדם: Happy Hour ₪275 (3 שעות, בופה קל, יין ובירה), גיבוש מחלקה ₪330 (5 שעות, בופה עשיר, בר מלא), ומסיבת חברה פרימיום ₪450 (5 שעות, בופה פרימיום, בר קוקטיילים פתוח ו-DJ). יש גם מסלול בהתאמה אישית.</div></details>
+        <details class="faq-item"><summary>מה כלול במחיר?</summary><div class="faq-item__body">הכל: אוכל מהטאבון (פיצות, בופה וסלטים), בר, סאונד, תאורה והפקה מלאה. אתם רק מגיעים.</div></details>
+        <details class="faq-item"><summary>איפה עזרא ממוקם?</summary><div class="faq-item__body">אברבנאל 38, בלב אזור התעשייה של פלורנטין, תל אביב.</div></details>
+        <details class="faq-item"><summary>אפשר לסגור תאריך ומחיר אונליין?</summary><div class="faq-item__body">כן. באתר בוחרים חבילה, רואים זמינות תאריכים ושעה, בוחרים תפריט וכמות אורחים - ומקבלים מחיר סופי על המסך וחוזה למייל, במקום ובאישור מיידי.</div></details>
+        <details class="faq-item"><summary>מה מייחד את עזרא מאולם או מסעדה?</summary><div class="faq-item__body">בר פרטי שנפתח רק לצוות שלכם, לערב שלם. מעל 800 אירועים ו-40,000 אורחים עד היום.</div></details>
+        <details class="faq-item"><summary>האוכל כשר?</summary><div class="faq-item__body">המקום אינו בהשגחת כשרות, אך התפריט כולו חלבי-צמחוני, בלי בשר ובלי פירות ים.</div></details>
+        <details class="faq-item"><summary>יש חניה?</summary><div class="faq-item__body">אין חנייה במקום, אך יש חניונים בתשלום בקרבת מקום.</div></details>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================================================
        CTA / CONTACT

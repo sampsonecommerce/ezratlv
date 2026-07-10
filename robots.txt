@@ -1,0 +1,43 @@
+# robots.txt — ezratlv.com
+# Goal: maximum discoverability. This is a marketing site for a local events
+# venue — being crawled, indexed, and cited is the entire point. We explicitly
+# welcome AI answer engines because they cite sources with a link back (referral
+# traffic + "which venue?" recommendations). There is no proprietary content to
+# protect here.
+
+# --- Everyone allowed ---
+User-agent: *
+Allow: /
+
+# --- AI search & answer engines (cite with links) — explicitly welcomed ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://www.ezratlv.com/sitemap.xml

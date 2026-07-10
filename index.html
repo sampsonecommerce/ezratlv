@@ -34,6 +34,9 @@
   <title>עזרא | מרחב אירועים פרטי בפלורנטין, תל אביב</title>
   <meta name="description" content="מרחב אירועים בוטיק ובלעדי בלב פלורנטין. אירועי חברה, ימי הולדת ואירועים פרטיים עד 50 איש. אוכל, בר קוקטיילים ואווירה - הכל כלול." />
   <link rel="canonical" href="https://www.ezratlv.com" />
+  <link rel="alternate" hreflang="he" href="https://www.ezratlv.com/" />
+  <link rel="alternate" hreflang="en" href="https://www.ezratlv.com/english-index" />
+  <link rel="alternate" hreflang="x-default" href="https://www.ezratlv.com/" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
@@ -1689,8 +1692,15 @@
       }
     ],
     "sameAs": [
-      "https://www.instagram.com/ezratlv"
-    ]
+      "https://www.instagram.com/ezratlv",
+      "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "131",
+      "bestRating": "5"
+    }
   }
   </script>
   <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
@@ -1717,6 +1727,7 @@
       <a href="#bar">הבר</a>
       <a href="#menu">תפריט</a>
       <a href="#gallery">גלריה</a>
+      <a href="#faq">שאלות נפוצות</a>
     </div>
 
     <!-- desktop: actions -->
@@ -1737,6 +1748,7 @@
       <a class="nav__menu-link" href="#bar">הבר</a>
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
+      <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
       <a class="nav__menu-link" href="english-index" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
@@ -2178,6 +2190,63 @@
     </button>
     <img id="galleryLightboxImg" src="" alt="" />
   </div>
+
+  <!-- ============================================================
+       FAQ  (visible Q&A; mirrors the FAQPage schema for AI extractability)
+  ============================================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "כמה אנשים אפשר לארח בעזרא?", "acceptedAnswer": { "@type": "Answer", "text": "עד 50 אורחים. אירוע אחד בערב, כל החלל שלכם בלבד." } },
+      { "@type": "Question", "name": "אילו אירועים חוגגים בעזרא?", "acceptedAnswer": { "@type": "Answer", "text": "ימי הולדת, אירוסין ומסיבות פרטיות. מעל 800 אירועים ו-40,000 אורחים עד היום." } },
+      { "@type": "Question", "name": "כמה עולה אירוע פרטי בעזרא?", "acceptedAnswer": { "@type": "Answer", "text": "המחיר נבנה יחד אתכם לפי כמות האורחים והתקציב. שולחים פרטים בטופס באתר ומקבלים הצעה מותאמת תוך 24 שעות." } },
+      { "@type": "Question", "name": "מה מקבלים באירוע?", "acceptedAnswer": { "@type": "Answer", "text": "אוכל מהטאבון, בר קוקטיילים, סאונד, תאורה והפקה - הכל במקום אחד, מותאם לאירוע שלכם." } },
+      { "@type": "Question", "name": "איפה עזרא ממוקם?", "acceptedAnswer": { "@type": "Answer", "text": "אברבנאל 38, בלב פלורנטין, תל אביב." } },
+      { "@type": "Question", "name": "איך סוגרים אירוע בעזרא?", "acceptedAnswer": { "@type": "Answer", "text": "ממלאים את הטופס באתר עם כמות אורחים ותאריך משוער, ואנחנו חוזרים אליכם עם הצעה תוך 24 שעות." } },
+      { "@type": "Question", "name": "מה מייחד את עזרא?", "acceptedAnswer": { "@type": "Answer", "text": "מרחב פרטי ובלעדי שנסגר רק בשבילכם לערב שלם, עם אוכל, בר והפקה במקום אחד." } },
+      { "@type": "Question", "name": "האוכל כשר?", "acceptedAnswer": { "@type": "Answer", "text": "המקום אינו בהשגחת כשרות, אך התפריט כולו חלבי-צמחוני, בלי בשר ובלי פירות ים." } },
+      { "@type": "Question", "name": "יש חניה?", "acceptedAnswer": { "@type": "Answer", "text": "אין חנייה במקום, אך יש חניונים בתשלום בקרבת מקום." } }
+    ]
+  }
+  </script>
+  <style>
+    #faq .faq-wrap { max-width: 760px; margin-inline: auto; }
+    #faq .faq-item { border-block-end: 1px solid var(--line); }
+    #faq .faq-item summary {
+      list-style: none; cursor: pointer; padding: 1.15rem 0; display: flex;
+      justify-content: space-between; align-items: center; gap: 1rem;
+      color: var(--cream); font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600;
+    }
+    #faq .faq-item summary::-webkit-details-marker { display: none; }
+    #faq .faq-item summary::after {
+      content: '+'; color: var(--gold-light); font-size: 1.6rem; line-height: 1;
+      flex-shrink: 0; transition: transform 0.25s ease;
+    }
+    #faq .faq-item[open] summary::after { transform: rotate(45deg); }
+    #faq .faq-item__body { color: var(--cream-dim); line-height: 1.85; padding: 0 0 1.2rem; font-size: 1rem; }
+  </style>
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">שאלות נפוצות</span>
+        <h2>כל מה שרוצים לדעת</h2>
+        <div class="divider divider--center"></div>
+      </div>
+      <div class="faq-wrap reveal">
+        <details class="faq-item"><summary>כמה אנשים אפשר לארח בעזרא?</summary><div class="faq-item__body">עד 50 אורחים. אירוע אחד בערב, כל החלל שלכם בלבד.</div></details>
+        <details class="faq-item"><summary>אילו אירועים חוגגים בעזרא?</summary><div class="faq-item__body">ימי הולדת, אירוסין ומסיבות פרטיות. מעל 800 אירועים ו-40,000 אורחים עד היום.</div></details>
+        <details class="faq-item"><summary>כמה עולה אירוע פרטי בעזרא?</summary><div class="faq-item__body">המחיר נבנה יחד אתכם לפי כמות האורחים והתקציב. שולחים פרטים בטופס באתר ומקבלים הצעה מותאמת תוך 24 שעות.</div></details>
+        <details class="faq-item"><summary>מה מקבלים באירוע?</summary><div class="faq-item__body">אוכל מהטאבון, בר קוקטיילים, סאונד, תאורה והפקה - הכל במקום אחד, מותאם לאירוע שלכם.</div></details>
+        <details class="faq-item"><summary>איפה עזרא ממוקם?</summary><div class="faq-item__body">אברבנאל 38, בלב פלורנטין, תל אביב.</div></details>
+        <details class="faq-item"><summary>איך סוגרים אירוע בעזרא?</summary><div class="faq-item__body">ממלאים את הטופס באתר עם כמות אורחים ותאריך משוער, ואנחנו חוזרים אליכם עם הצעה תוך 24 שעות.</div></details>
+        <details class="faq-item"><summary>מה מייחד את עזרא?</summary><div class="faq-item__body">מרחב פרטי ובלעדי שנסגר רק בשבילכם לערב שלם, עם אוכל, בר והפקה במקום אחד.</div></details>
+        <details class="faq-item"><summary>האוכל כשר?</summary><div class="faq-item__body">המקום אינו בהשגחת כשרות, אך התפריט כולו חלבי-צמחוני, בלי בשר ובלי פירות ים.</div></details>
+        <details class="faq-item"><summary>יש חניה?</summary><div class="faq-item__body">אין חנייה במקום, אך יש חניונים בתשלום בקרבת מקום.</div></details>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================================================
        8. CONTACT / CTA
