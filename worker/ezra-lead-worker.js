@@ -222,7 +222,10 @@ export default {
     const variables = {
       board,
       group,
-      name: (isCustom ? "שיחת אפיון · " : isIncomplete ? "נטוש · " : "") + displayName.slice(0, 230),
+      // no "נטוש ·" prefix on incomplete/abandoned leads: the item's group (Asked For Follow Up)
+      // already signals that, and this same name feeds the generated contract - a literal "abandoned"
+      // label there would be wrong once the lead comes back and books.
+      name: (isCustom ? "שיחת אפיון · " : "") + displayName.slice(0, 230),
       cols: JSON.stringify(cols),
     };
 
