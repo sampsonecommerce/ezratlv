@@ -181,6 +181,9 @@ export default {
     if (!isPrivate && d.utm_content) cols.text_mm53a533 = String(d.utm_content);    // ad group (Google) / adset (Facebook)
     if (!isPrivate && d.utm_term)    cols.text_mm53htse = String(d.utm_term);       // keyword (Google) / ad (Facebook)
     if (!isPrivate && d.gclid)       cols.text_mm53djv5 = String(d.gclid);          // Google click id → offline-conversion upload
+    // gclid on the private board: repurposed "Short text" column (private board has no dedicated
+    // attribution columns like the company board does).
+    if (isPrivate && d.gclid)        cols.short_text53r8p0sy = String(d.gclid);     // Google click id → offline-conversion upload
     // package-contract columns (package booking leads only)
     if (isPackage && d.packageLabel) cols.color_mm4tbcbp = { label: d.packageLabel }; // חבילה (status)
     if (isPackage && d.barMenuText)  cols.text_mm4t9mgc  = d.barMenuText;             // Alcohol Package Details (full drinks text)
