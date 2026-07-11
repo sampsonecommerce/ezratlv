@@ -2827,9 +2827,14 @@
           hp:      document.getElementById('pfHp').value,   // honeypot
         };
         const _utm = new URLSearchParams(location.search);
-        data.utm_campaign = _utm.get('utm_campaign') || 'private_form';
-        data.utm_source   = _utm.get('utm_source') || 'website';
-        const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? m.pop() : ''; };
+        const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? decodeURIComponent(m.pop()) : ''; };
+        // URL param wins (this load's own ad click); else fall back to the ezra_utm_* cookie
+        // (set on whichever page the ad actually landed on, home or company-events).
+        data.utm_campaign = _utm.get('utm_campaign') || _cookie('ezra_utm_campaign') || 'private_form';
+        data.utm_source   = _utm.get('utm_source')   || _cookie('ezra_utm_source')   || 'website';
+        data.utm_content  = _utm.get('utm_content')  || _cookie('ezra_utm_content')  || '';
+        data.utm_term     = _utm.get('utm_term')     || _cookie('ezra_utm_term')     || '';
+        data.gclid        = _utm.get('gclid')        || _cookie('ezra_gclid')        || '';
         const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
         data.eventId = eventId;
         data.pageUrl = location.href;
@@ -2921,6 +2926,24 @@
         e.preventDefault();
         location.href = clean + '.html';
       });
+    })();
+  </script>
+  <!-- ad-landing plumbing: an ad can land here (home) instead of /company-events, so capture
+       ?gclid/?utm_* into the same 90-day cookies company-events.html uses, and read them back
+       as a fallback if the private form is submitted on a page load with no query string
+       (e.g. arrived via nav link after the ad-landing page already stored them). -->
+  <script>
+    (function(){
+      const qs = new URLSearchParams(location.search);
+      const setCookie = (name, val) => {
+        if (!val) return;
+        document.cookie = name + '=' + encodeURIComponent(val) + '; path=/; max-age=7776000; SameSite=Lax';  // ~90 days
+      };
+      setCookie('ezra_gclid',        qs.get('gclid'));
+      setCookie('ezra_utm_source',   qs.get('utm_source'));
+      setCookie('ezra_utm_campaign', qs.get('utm_campaign'));
+      setCookie('ezra_utm_content',  qs.get('utm_content'));
+      setCookie('ezra_utm_term',     qs.get('utm_term'));
     })();
   </script>
 </body>
