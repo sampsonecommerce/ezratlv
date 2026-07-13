@@ -5676,6 +5676,11 @@
   <script>
     (function(){
       const ov = document.getElementById('v2Overlay'), fr = document.getElementById('v2Frame');
+      // on a completed booking the address bar switches to a real /confirmation path (clean URL for
+      // GA4/Ads conversion tracking). pushState only rewrites the bar — safe though no such file exists;
+      // a direct hit/refresh is caught by the _redirects rule.
+      const CONFIRM_PATH = location.pathname.replace(/\/+$/,'') + '/confirmation';
+      let prevPath = null;   // where to send the bar back to when the confirmation URL is dismissed
       window.openV2 = function(plan){
         fr.src = 'english-company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
@@ -5685,9 +5690,40 @@
         ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
         document.body.classList.remove('v2-locked');
         fr.src = 'about:blank';   // reset the flow so a re-open starts clean
+        if (prevPath !== null) { history.pushState(null, '', prevPath); prevPath = null; }
       };
-      window.addEventListener('message', e => { if (e.data && e.data.ezra === 'closeV2') window.closeV2(); });
+      window.addEventListener('message', e => {
+        if (e.data && e.data.ezra === 'closeV2') window.closeV2();
+        else if (e.data && e.data.ezra === 'confirmed') {
+          try {
+            prevPath = location.pathname + location.search;   // remember the funnel URL to restore on close
+            history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
+            if (window.gtag) {
+              gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
+              // Google Ads booking conversion — same action/label as the Hebrew flow; fires on a real booking only.
+              gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', value: (e.data.value || 0), currency: 'ILS' });
+            }
+          } catch(err) {}
+        }
+      });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
+
+      // ── ad-landing plumbing (mirrors the Hebrew page): the ad click lands HERE, so this is the only
+      // place that sees the real ?utm_*/?gclid. Bridge attribution to the iframe wizard via same-origin cookies.
+      (function(){
+        const qs = new URLSearchParams(location.search);
+        const setCookie = (name, val) => { if (!val) return;
+          document.cookie = name + '=' + encodeURIComponent(val) + '; path=/; max-age=7776000; SameSite=Lax'; };  // ~90 days
+        setCookie('ezra_gclid',        qs.get('gclid'));
+        setCookie('ezra_utm_source',   qs.get('utm_source'));
+        setCookie('ezra_utm_campaign', qs.get('utm_campaign'));
+        setCookie('ezra_utm_content',  qs.get('utm_content'));   // Google ad group · Facebook adset
+        setCookie('ezra_utm_term',     qs.get('utm_term'));      // Google keyword · Facebook ad
+        // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan and auto-open.
+        const PACKAGE_TO_PLAN = { 'happy-hour': 'happyhour', 'gibush': 'gibush', 'party': 'mesiba' };
+        const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
+        if (plan) window.openV2(plan);
+      })();
     })();
   </script>
 </body>

@@ -1041,8 +1041,15 @@ fbq('init','2174553826420246');fbq('track','PageView');
       consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
       hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot
     };
+    // Attribution rides cookies the PARENT set from the real ad-landing URL; the iframe's own
+    // location.search only carries ?plan=, so reading utm/gclid off it here would always be empty.
     const _utm=new URLSearchParams(location.search);
-    data.utm_campaign=_utm.get('utm_campaign')||(isCallback?'talk_to_sales':''); data.utm_source=_utm.get('utm_source')||'';
+    const _ck=n=>{const v=_cookie(n);if(!v)return'';try{return decodeURIComponent(v);}catch(e){return v;}};
+    data.utm_campaign=_ck('ezra_utm_campaign')||_utm.get('utm_campaign')||(isCallback?'talk_to_sales':'');
+    data.utm_source=_ck('ezra_utm_source')||_utm.get('utm_source')||'';
+    data.utm_content=_ck('ezra_utm_content')||_utm.get('utm_content')||'';   // Google ad group · Facebook adset
+    data.utm_term=_ck('ezra_utm_term')||_utm.get('utm_term')||'';            // Google keyword · Facebook ad
+    data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';                     // Google click id → offline upload
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');
     fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
@@ -1061,6 +1068,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
         return;
       }
       state.notes=$('fNotes').value; submitLead(); render(6);
+      // tell the parent a booking completed → it switches the URL to /confirmation and fires the Ads conversion
+      if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
     },true,false);   // step 5 = the details step; the "talk to sales" checkbox handles the abandon path here
     body.innerHTML =
       '<h2 class="steptitle">Your details</h2>'+

@@ -6,7 +6,8 @@
 /iruvei-hevra.html   /company-events   301
 
 # transient thank-you URL (set client-side via pushState); a direct hit/refresh returns to the booking page
-/company-events/confirmation   /company-events   302
+/company-events/confirmation           /company-events           302
+/english-company-events/confirmation   /english-company-events   302
 /he                  /                 301
 /he/*                /                 301
 /*                   /                 301
