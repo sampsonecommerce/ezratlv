@@ -5676,8 +5676,8 @@
             history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
             if (window.gtag) {
               gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
-              // Google Ads booking conversion — fires only on a completed booking. Replace PASTE_LABEL with the
-              // conversion label from the "Company Events Booking" action (Ads → Goals → Conversions), e.g. AbC-dEfGhI.
+              // Google Ads booking conversion — fires only on a completed booking. Label from the
+              // "Submit lead form (1)" / Company Events Booking action (Ads → Goals → Conversions).
               gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', value: (e.data.value || 0), currency: 'ILS' });
             }
           } catch(err) {}
