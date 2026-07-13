@@ -1251,7 +1251,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
         return;
       }
       state.notes=$('fNotes').value; submitLead(); render(7);
-      if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed'},'*'); }catch(e){} }
+      if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
     },true,false);   // step 6 = the details step; the "talk to sales" checkbox handles the abandon path here
     body.innerHTML =
       '<h2 class="steptitle">הפרטים שלכם</h2>'+
