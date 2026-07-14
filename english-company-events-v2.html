@@ -1199,6 +1199,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     }
     state.notes=$('tkNotes').value;
     submitLead(true);          // callback lead (guards a missing plan/date)
+    // callback = a real qualified lead too → parent fires the same Ads conversion (no /confirmation URL)
+    if(window.parent!==window){ try{ window.parent.postMessage({ezra:'lead'},'*'); }catch(e){} }
     inTalk=false;
     callbackDone();
   }

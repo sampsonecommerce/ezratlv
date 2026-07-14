@@ -5200,7 +5200,11 @@
           body: JSON.stringify(data),
         }).catch(() => {});
         if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
-        if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
+        if (window.gtag) {
+          gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
+          // custom-package inquiry is a qualified lead too → same Ads conversion (equal value)
+          gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', currency: 'ILS' });
+        }
 
         // swap to a clean success "screen" inside the popup - hide the header + form, reveal the
         // animated thank-you, and scroll the panel to the top so it reads as a fresh window
@@ -5694,6 +5698,10 @@
       };
       window.addEventListener('message', e => {
         if (e.data && e.data.ezra === 'closeV2') window.closeV2();
+        // callback / "talk to sales" lead — same Ads conversion (equal-value lead), no URL change
+        else if (e.data && e.data.ezra === 'lead') {
+          if (window.gtag) gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', currency: 'ILS' });
+        }
         else if (e.data && e.data.ezra === 'confirmed') {
           try {
             prevPath = location.pathname + location.search;   // remember the funnel URL to restore on close
