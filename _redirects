@@ -10,4 +10,13 @@
 /english-company-events/confirmation   /english-company-events   302
 /he                  /                 301
 /he/*                /                 301
+
+# recovered SEO from the old Wix event pages (rescue their link equity into the new site)
+/he/event-list                                /   301
+/he/event-details/hananvedan                  /   301
+/event-details/ezra-jazz-hang-haynes-tribute  /   301
+/event-details/stndp-bzr                      /   301
+/event-details/*                              /   301
+/he/event-details/*                           /   301
+
 /*                   /                 301
