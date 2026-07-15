@@ -5689,6 +5689,9 @@
         fr.src = 'english-company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
         document.body.classList.add('v2-locked');
+        // top-of-funnel signal: someone opened the booking wizard. Custom Meta event → build a custom
+        // conversion / retargeting audience (wizard-openers who didn't submit). Lead fires at submit.
+        if (window.fbq) fbq('trackCustom', 'WizardStart', { language: 'en', plan: plan || '' });
       };
       window.closeV2 = function(){
         ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
