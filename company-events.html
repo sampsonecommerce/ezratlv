@@ -5715,6 +5715,7 @@
         setCookie('ezra_utm_campaign', qs.get('utm_campaign'));  // campaign name
         setCookie('ezra_utm_content',  qs.get('utm_content'));   // Google: ad group · Facebook: {{adset.name}}
         setCookie('ezra_utm_term',     qs.get('utm_term'));      // Google: keyword · Facebook: {{ad.name}}
+        setCookie('ezra_promo',        qs.get('promo'));         // Meta-only discount token; only Meta ad URLs carry ?promo=, so Google/organic never trigger it
 
         // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan id and
         // auto-open the booking flow preselected on step 2. Unknown/missing value = normal page, never error.

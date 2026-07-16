@@ -663,8 +663,19 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const addonApplies=a=>!(a.plans&&!a.plans.includes(state.plan))&&!(a.menu&&state.menu!==a.menu);
   const selectedAddons=()=>E.ADDONS.filter(a=>state.addons[a.id]&&addonApplies(a));
   const addonsTotal=g=>selectedAddons().reduce((s,a)=>s+E.addonUnitPrice(a,g),0);
+  // Meta-only July promo: the parent page stored ?promo= in the ezra_promo cookie (only Meta ad URLs
+  // carry the param, so Google/organic/direct never match it). 10% off when the token matches AND the
+  // chosen EVENT date falls in July 2026 (gated on event date, not booking date).
+  function promoDiscount(gross){
+    const m=document.cookie.match(/(?:^|;)\s*ezra_promo=\s*([^;]+)/);
+    let tok=m?m[1]:''; try{tok=decodeURIComponent(tok);}catch(e){}
+    const active = tok==='july_meta' && !!state.date && state.date.getFullYear()===2026 && state.date.getMonth()===6;
+    const amount = active ? Math.round((gross||0)*0.10) : 0;
+    return { active, amount, net:(gross||0)-amount };
+  }
   const totals=()=>{const ph=state.plan?E.PLANS[state.plan].perHead:0,g=state.guests,add=addonsTotal(g);
-    return{ph,g,add,total:ph*g+add};};
+    const gross=ph*g+add, d=promoDiscount(gross);
+    return{ph,g,add,gross,discount:d.amount,promoActive:d.active,total:d.net};};
 
   // ── scroll-cue: bottom fade + bouncing chevron for panels whose content can overflow
   //    (menu board, add-ons, receipt) - several guests never realized these scroll ──
@@ -999,6 +1010,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<div class="rr" style="margin-block-start:.35rem"><span>Price per person</span><b class="num">'+fmt(t.ph)+'</b></div>'+
       addRows+
       '<div class="rr"><span>Add-ons</span><b class="num">'+fmt(t.add)+'</b></div>'+
+      (t.promoActive?'<div class="rr"><span>July 10% off</span><b class="num">-'+fmt(t.discount)+'</b></div>':'')+
       '<div class="grand"><span>Total (estimated)</span><span class="v">'+fmt(t.total)+'</span></div>';
   }
   function refreshLive(){
@@ -1023,11 +1035,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
   // isCallback = the lead came from the "leave your details / talk to us" path (may have no plan/date yet)
   function submitLead(isCallback){
     const plan=state.plan?E.PLANS[state.plan]:null, ph=plan?plan.perHead:0, gg=state.guests;
-    const sel=plan?selectedAddons():[], addOns=plan?addonsTotal(gg):0, base=ph*gg, total=base+addOns;
+    const sel=plan?selectedAddons():[], addOns=plan?addonsTotal(gg):0, base=ph*gg, gross=base+addOns;
+    const _pd=promoDiscount(gross), total=_pd.net;   // estTotal + reported value = net (what they actually pay)
     const data={
       plan:plan?plan.label:'', hours:plan?plan.hours:'',
       date:state.date?key(state.date):'', slot:state.slot||'',
       guests:gg, perHead:ph, base:base, addonsTotal:addOns, estTotal:total,
+      estTotalGross:gross, discount:_pd.amount, promoApplied:_pd.active,
       addons:sel.map(a=>a.id), addonLabels:sel.map(a=>HE_ADDON_LABEL[a.id]||a.label),   // Hebrew labels for the Monday dropdown
       name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address,
       notes:state.notes, menu:state.menu||'', foodNotes:state.foodNotes,

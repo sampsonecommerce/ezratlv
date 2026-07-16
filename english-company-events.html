@@ -5734,6 +5734,7 @@
         setCookie('ezra_utm_campaign', qs.get('utm_campaign'));
         setCookie('ezra_utm_content',  qs.get('utm_content'));   // Google ad group · Facebook adset
         setCookie('ezra_utm_term',     qs.get('utm_term'));      // Google keyword · Facebook ad
+        setCookie('ezra_promo',        qs.get('promo'));         // Meta-only discount token; only Meta ad URLs carry ?promo=, so Google/organic never trigger it
         // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan and auto-open.
         const PACKAGE_TO_PLAN = { 'happy-hour': 'happyhour', 'gibush': 'gibush', 'party': 'mesiba' };
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
