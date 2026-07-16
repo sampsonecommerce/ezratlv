@@ -2731,8 +2731,9 @@
        HERO
   ============================================================ -->
   <header class="hero" id="hero">
-    <video class="hero__video" autoplay muted loop playsinline>
-      <source src="videos/hero.mp4" type="video/mp4" />
+    <video class="hero__video" autoplay muted loop playsinline preload="none" poster="videos/hero-poster.jpg">
+      <source src="videos/hero.webm" type="video/webm" />
+      <source src="videos/hero-opt.mp4" type="video/mp4" />
     </video>
     <div class="hero__inner wrap">
       <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
