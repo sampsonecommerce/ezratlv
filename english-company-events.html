@@ -5662,8 +5662,8 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <span class="promo-pop__eyebrow">July offer</span>
-      <h2 class="promo-pop__title" id="promoPopTitle"><span class="promo-pop__num">10%</span> off your July company event</h2>
-      <p class="promo-pop__body" id="promoPopBody">Any company event held on a date in July gets 10% off. The updated price shows right in the calculator, no code and no fine print.</p>
+      <h2 class="promo-pop__title" id="promoPopTitle">Any company event held during July gets <span class="promo-pop__hl"><span class="promo-pop__num">10%</span> off</span></h2>
+      <p class="promo-pop__body" id="promoPopBody">The updated price shows right in the calculator, no code and no fine print!</p>
       <button type="button" class="btn btn--fill promo-pop__cta" id="promoPopCta">Choose a package</button>
     </div>
   </div>
@@ -5687,6 +5687,9 @@
       color: var(--gold-light); background: var(--gold-soft); padding: 0.35rem 0.9rem; border-radius: 50px; margin-block-end: 1rem; }
     .promo-pop__title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(1.55rem, 5vw, 2.1rem); line-height: 1.15; color: var(--cream); margin: 0 0 0.9rem; }
     .promo-pop__num { font-family: 'Pliant', var(--font-serif); color: var(--gold-light); }
+    .promo-pop__hl { position: relative; color: var(--gold-light); white-space: nowrap; }
+    .promo-pop__hl::after { content: ''; position: absolute; inset-inline: 0; inset-block-end: -0.14em; height: 2px; border-radius: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold-light) 50%, var(--gold) 85%, transparent); }
     .promo-pop__body { font-size: 0.98rem; line-height: 1.6; color: var(--cream-dim); margin: 0 0 1.6rem; }
     .promo-pop__cta { width: 100%; font-size: 1rem; padding: 0.95rem 1.6rem; }
     @media (prefers-reduced-motion: reduce) { .promo-pop__scrim, .promo-pop__card { transition: none; } .promo-pop__card { transform: none; } }
@@ -5697,6 +5700,7 @@
       // Suppress if a promo token is already set: Meta ad visitors (ezra_promo=july_meta, discount already
       // auto-applied + shown in the ad) and returning visitors who already saw this popup (july_site).
       if (/(?:^|;)\s*ezra_promo=/.test(document.cookie)) return;
+      try { if (localStorage.getItem('ezra_promo_seen') === '1') return; } catch (e) {}   // saw it once already
       var DELAY = 12000;   // Clarity: avg active engagement 23-30s; fire ~halfway, after they've oriented
       var x = document.getElementById('promoPopX'), cta = document.getElementById('promoPopCta'), lastFocus = null;
       function onKey(e) {
@@ -5708,8 +5712,8 @@
         }
       }
       function open() {
-        // grant the same 10% to this non-Meta visitor and mark the popup as seen (90 days)
-        document.cookie = 'ezra_promo=july_site; path=/; max-age=7776000; SameSite=Lax';
+        // mark as seen so it never nags again, whether or not they claim (localStorage, not the discount cookie)
+        try { localStorage.setItem('ezra_promo_seen', '1'); } catch (e) {}
         lastFocus = document.activeElement;
         pop.hidden = false;
         requestAnimationFrame(function () { requestAnimationFrame(function () { pop.classList.add('show'); }); });
@@ -5725,6 +5729,8 @@
       pop.querySelectorAll('[data-promo-close]').forEach(function (el) { el.addEventListener('click', close); });
       x.addEventListener('click', close);
       cta.addEventListener('click', function () {
+        // claim = grant the same 10% (wizard honors july_site); X/Esc/scrim close WITHOUT granting
+        document.cookie = 'ezra_promo=july_site; path=/; max-age=7776000; SameSite=Lax';
         close();
         var t = document.getElementById('packages');
         if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
