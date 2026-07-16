@@ -5682,15 +5682,18 @@
   <script>
     (function(){
       const ov = document.getElementById('v2Overlay'), fr = document.getElementById('v2Frame');
-      // on a completed booking the address bar switches to a real /confirmation path (clean URL for
-      // GA4/Ads conversion tracking). pushState only rewrites the bar — safe though no such file exists;
-      // a direct hit/refresh is caught by the _redirects rule.
-      const CONFIRM_PATH = location.pathname.replace(/\/+$/,'') + '/confirmation';
-      let prevPath = null;   // where to send the bar back to when the confirmation URL is dismissed
+      // the address bar tracks the funnel via pushState (no real page load, so this is safe even though
+      // no such files exist server-side; a direct hit/refresh is caught by the _redirects rule).
+      const BASE_PATH = location.pathname.replace(/\/+$/,'');
+      const WIZARD_PATH = BASE_PATH + '/wizard';
+      const CONFIRM_PATH = BASE_PATH + '/confirmation';
+      const ORIGINAL_PATH = location.pathname + location.search;   // true landing URL, captured once before any pushState
       window.openV2 = function(plan){
         fr.src = 'english-company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
         document.body.classList.add('v2-locked');
+        history.pushState(null, '', WIZARD_PATH + location.search);
+        if (window.gtag) gtag('event', 'page_view', { page_location: location.href, page_path: WIZARD_PATH });
         // top-of-funnel signal: someone opened the booking wizard. Custom Meta event → build a custom
         // conversion / retargeting audience (wizard-openers who didn't submit). Lead fires at submit.
         if (window.fbq) fbq('trackCustom', 'WizardStart', { language: 'en', plan: plan || '' });
@@ -5699,7 +5702,7 @@
         ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
         document.body.classList.remove('v2-locked');
         fr.src = 'about:blank';   // reset the flow so a re-open starts clean
-        if (prevPath !== null) { history.pushState(null, '', prevPath); prevPath = null; }
+        history.pushState(null, '', ORIGINAL_PATH);
       };
       window.addEventListener('message', e => {
         if (e.data && e.data.ezra === 'closeV2') window.closeV2();
@@ -5709,7 +5712,6 @@
         }
         else if (e.data && e.data.ezra === 'confirmed') {
           try {
-            prevPath = location.pathname + location.search;   // remember the funnel URL to restore on close
             history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
             if (window.gtag) {
               gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
