@@ -703,7 +703,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function promoDiscount(gross){
     const m=document.cookie.match(/(?:^|;)\s*ezra_promo=\s*([^;]+)/);
     let tok=m?m[1]:''; try{tok=decodeURIComponent(tok);}catch(e){}
-    const active = tok==='july_meta' && !!state.date && state.date.getFullYear()===2026 && state.date.getMonth()===6;
+    const active = (tok==='july_meta'||tok==='july_site') && !!state.date && state.date.getFullYear()===2026 && state.date.getMonth()===6;
     const amount = active ? Math.round((gross||0)*0.10) : 0;
     return { active, amount, net:(gross||0)-amount };
   }

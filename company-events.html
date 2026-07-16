@@ -5628,6 +5628,86 @@
       });
     })();
   </script>
+
+  <!-- July promo popup: time-triggered urgency for non-Meta traffic. Suppressed when ezra_promo is
+       already set (Meta visitors get 10% auto-applied + in the ad, no popup needed). -->
+  <div class="promo-pop" id="promoPop" hidden>
+    <div class="promo-pop__scrim" data-promo-close></div>
+    <div class="promo-pop__card" role="dialog" aria-modal="true" aria-labelledby="promoPopTitle" aria-describedby="promoPopBody">
+      <button type="button" class="promo-pop__x" id="promoPopX" aria-label="סגירה">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <span class="promo-pop__eyebrow">מבצע יולי</span>
+      <h2 class="promo-pop__title" id="promoPopTitle"><span class="promo-pop__num">10%</span> הנחה לאירוע חברה ביולי</h2>
+      <p class="promo-pop__body" id="promoPopBody">כל אירוע חברה שמתקיים בתאריך במהלך חודש יולי מקבל 10% הנחה. המחיר המעודכן מופיע לכם ישר במחשבון, בלי קוד ובלי אותיות קטנות.</p>
+      <button type="button" class="btn btn--fill promo-pop__cta" id="promoPopCta">לבחירת חבילה</button>
+    </div>
+  </div>
+  <style>
+    .promo-pop { position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center; padding: clamp(1rem, 4vw, 2rem); }
+    .promo-pop[hidden] { display: none; }
+    .promo-pop__scrim { position: absolute; inset: 0; background: rgba(8,6,4,0.72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); opacity: 0; transition: opacity .3s var(--ease); }
+    .promo-pop.show .promo-pop__scrim { opacity: 1; }
+    .promo-pop__card { position: relative; z-index: 1; width: min(440px, 100%); text-align: center;
+      background: linear-gradient(160deg, #1b1611, var(--bg-soft)); border: 1px solid rgba(196,154,60,0.4); border-radius: 20px;
+      padding: clamp(1.9rem, 5vw, 2.6rem) clamp(1.4rem, 5vw, 2.2rem);
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,0.75), inset 0 0 0 1px rgba(245,217,138,0.06);
+      font-family: 'Heebo', system-ui, sans-serif;
+      opacity: 0; transform: translateY(16px) scale(0.96); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+    .promo-pop.show .promo-pop__card { opacity: 1; transform: translateY(0) scale(1); }
+    .promo-pop__x { position: absolute; inset-block-start: 0.55rem; inset-inline-end: 0.55rem; width: 44px; height: 44px;
+      display: grid; place-items: center; cursor: pointer; background: transparent; border: 0; color: var(--cream-dim);
+      border-radius: 50%; transition: color .2s var(--ease), background .2s var(--ease); }
+    .promo-pop__x:hover { color: var(--cream); background: rgba(240,235,224,0.08); }
+    .promo-pop__eyebrow { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold-light); background: var(--gold-soft); padding: 0.35rem 0.9rem; border-radius: 50px; margin-block-end: 1rem; }
+    .promo-pop__title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(1.55rem, 5vw, 2.1rem); line-height: 1.15; color: var(--cream); margin: 0 0 0.9rem; }
+    .promo-pop__num { font-family: 'Pliant', var(--font-serif); color: var(--gold-light); }
+    .promo-pop__body { font-size: 0.98rem; line-height: 1.6; color: var(--cream-dim); margin: 0 0 1.6rem; }
+    .promo-pop__cta { width: 100%; font-size: 1rem; padding: 0.95rem 1.6rem; }
+    @media (prefers-reduced-motion: reduce) { .promo-pop__scrim, .promo-pop__card { transition: none; } .promo-pop__card { transform: none; } }
+  </style>
+  <script>
+    (function () {
+      var pop = document.getElementById('promoPop'); if (!pop) return;
+      // Suppress if a promo token is already set: Meta ad visitors (ezra_promo=july_meta, discount already
+      // auto-applied + shown in the ad) and returning visitors who already saw this popup (july_site).
+      if (/(?:^|;)\s*ezra_promo=/.test(document.cookie)) return;
+      var DELAY = 12000;   // Clarity: avg active engagement 23-30s; fire ~halfway, after they've oriented
+      var x = document.getElementById('promoPopX'), cta = document.getElementById('promoPopCta'), lastFocus = null;
+      function onKey(e) {
+        if (e.key === 'Escape') { close(); return; }
+        if (e.key === 'Tab') {   // minimal focus trap: only X + CTA are focusable
+          var f = [x, cta], i = f.indexOf(document.activeElement);
+          if (e.shiftKey) { if (i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } }
+          else { if (i === f.length - 1) { e.preventDefault(); f[0].focus(); } }
+        }
+      }
+      function open() {
+        // grant the same 10% to this non-Meta visitor and mark the popup as seen (90 days)
+        document.cookie = 'ezra_promo=july_site; path=/; max-age=7776000; SameSite=Lax';
+        lastFocus = document.activeElement;
+        pop.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { pop.classList.add('show'); }); });
+        x.focus();
+        document.addEventListener('keydown', onKey);
+      }
+      function close() {
+        pop.classList.remove('show');
+        document.removeEventListener('keydown', onKey);
+        setTimeout(function () { pop.hidden = true; }, 300);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+      pop.querySelectorAll('[data-promo-close]').forEach(function (el) { el.addEventListener('click', close); });
+      x.addEventListener('click', close);
+      cta.addEventListener('click', function () {
+        close();
+        var t = document.getElementById('packages');
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      setTimeout(open, DELAY);
+    })();
+  </script>
   <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
   <script>
     (function () {
