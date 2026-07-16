@@ -5729,8 +5729,7 @@
       pop.querySelectorAll('[data-promo-close]').forEach(function (el) { el.addEventListener('click', close); });
       x.addEventListener('click', close);
       cta.addEventListener('click', function () {
-        // claim = grant the same 10% (wizard honors july_site); X/Esc/scrim close WITHOUT granting
-        document.cookie = 'ezra_promo=july_site; path=/; max-age=7776000; SameSite=Lax';
+        // the 10% applies to any July event regardless; the CTA just routes them to the packages
         close();
         var t = document.getElementById('packages');
         if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
