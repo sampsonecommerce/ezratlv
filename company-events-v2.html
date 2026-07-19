@@ -190,7 +190,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .srow .tm{font-family:'Pliant',var(--font-body);font-size:.82rem;white-space:nowrap}
   .srow .tk{font-size:.68rem;color:rgba(255,255,255,.6)}
   .srow:hover:not(.is-taken):not(.is-selected){background:rgba(255,255,255,.06)}
-  .srow.is-selected{background:linear-gradient(90deg,rgba(245,217,138,.16),rgba(196,154,60,.09))}
+  .srow.is-selected{background:linear-gradient(90deg,rgba(245,217,138,.16),rgba(196,154,60,.09));box-shadow:inset 0 0 0 1.5px var(--gold)}
   .srow.is-selected .tm{color:var(--gold-light);font-weight:600}
   .srow.is-selected::before{content:'';position:absolute;inset-inline-start:0;top:5px;bottom:5px;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
   .srow.is-taken{cursor:not-allowed;opacity:.5}
@@ -792,7 +792,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function setGoOff(off){ goBtn.classList.toggle('is-off',!!off); goBtn.setAttribute('aria-disabled',String(!!off)); }
   let nudgeT = null;
   function nudgeGo(){
-    if(step===2) footHint.textContent = !state.date ? 'בחרו קודם יום פנוי בלוח' : 'בחרו גם חלון שעות';
+    // the talk screen keeps `step` at the step it was opened from, so it must be checked FIRST —
+    // otherwise a step-2 visitor gets "pick a day in the calendar" on a screen with no calendar
+    // (the exact rage-click Clarity recorded on שליחת הפרטים)
+    if(inTalk) footHint.textContent = 'מלאו שם, טלפון ואימייל';
+    else if(step===2) footHint.textContent = !state.date ? 'בחרו קודם יום פנוי בלוח' : 'בחרו גם חלון שעות';
     else if(!footHint.textContent) footHint.textContent = 'מלאו את כל שדות החובה';
     footHint.classList.remove('nudge'); void footHint.offsetWidth;   // restart the pulse on repeat taps
     footHint.classList.add('nudge');
@@ -880,7 +884,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
       const c=document.createElement('button');c.type='button';c.className='cal__day';c.textContent=day;
       if(d<today){c.classList.add('is-past');c.disabled=true;}
       else if(isDateFullyBooked(key(d))){c.classList.add('is-booked');c.disabled=true;}
-      else c.addEventListener('click',()=>{state.date=d;state.slot=null;renderCal();renderSky();updateGo2();});
+      else c.addEventListener('click',()=>{state.date=d;state.slot=null;renderCal();renderSky();updateGo2();
+        // mobile stacks the calendar above the time slots — Clarity showed users picking a day and
+        // never finding the slots below the fold, so bring them into view on selection
+        if(window.matchMedia('(max-width:720px)').matches){
+          // instant, not smooth: smooth programmatic scroll silently no-ops in some WebViews (verified)
+          const ch=body.querySelector('.colhead'); if(ch&&ch.scrollIntoView) ch.scrollIntoView({block:'start'});
+        }});
       if(state.date&&key(d)===key(state.date))c.classList.add('is-selected');
       g.appendChild(c);
     }
