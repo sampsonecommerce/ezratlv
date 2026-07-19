@@ -138,6 +138,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
   /* ── step 2: merged WHEN (calendar right + reactive sky left) — repurposed as-is ── */
   .when{display:flex;gap:1rem;align-items:stretch;min-height:0}
   .when__cal{flex:1.25 1 0;min-width:0}
+  .when__strip{display:none;align-items:center;gap:.6rem;background:rgba(196,154,60,.08);border:1px solid rgba(196,154,60,.45);border-radius:10px;padding:.55rem .8rem;margin-bottom:.7rem}
+  .when__strip b{color:var(--gold-light);font-weight:600;flex:1;font-size:.95rem}
+  .when__strip button{background:none;border:none;color:var(--gold);text-decoration:underline;font-size:.85rem;cursor:pointer;font-family:inherit}
   .when__sky{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
   .when__div{flex:0 0 1px;align-self:stretch;
     background:linear-gradient(180deg,transparent,rgba(196,154,60,.35) 15%,rgba(196,154,60,.35) 85%,transparent)}
@@ -808,10 +811,25 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   /* ═══════ STEP 2 · merged WHEN ═══════ */
   let view=new Date(today.getFullYear(),today.getMonth(),1);
+  let calExpanded=false;
+  /* mobile: once a day is picked, the calendar collapses into a one-line date strip and the time
+     slots take its place on the same screen (Clarity: users picked a day and never found the slots) */
+  function syncCalCollapse(){
+    const strip=$('whenStrip'), cal=body.querySelector('.when__cal'), div=body.querySelector('.when__div');
+    if(!strip||!cal) return;
+    const collapse = !!state.date && !calExpanded && window.matchMedia('(max-width:720px)').matches;
+    strip.style.display = collapse ? 'flex' : 'none';
+    cal.style.display = collapse ? 'none' : '';
+    if(div) div.style.display = collapse ? 'none' : '';
+    const sub=$('chosenSub'); if(sub) sub.style.display = collapse ? 'none' : '';   // strip already shows the date
+    if(collapse) $('stripDate').textContent = humanDate(state.date);
+  }
   function step2(){
+    calExpanded=false;
     setFoot('Continue','Pick a free day, then a time slot',()=>render(3),!(state.date&&state.slot));
     body.innerHTML =
       '<h2 class="steptitle">Choose a date and time</h2>'+
+      '<div class="when__strip" id="whenStrip"><b id="stripDate"></b><button type="button" id="stripEdit">Change</button></div>'+
       '<div class="when">'+
         '<div class="when__cal">'+
           '<div class="cal">'+
@@ -836,7 +854,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '</div>';
     $('calPrev').addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);renderCal();});
     $('calNext').addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);renderCal();});
-    renderCal(); renderSky();
+    $('stripEdit').addEventListener('click',()=>{calExpanded=true;syncCalCollapse();});
+    renderCal(); renderSky(); syncCalCollapse();
   }
   function renderCal(){
     $('calMonth').innerHTML=MONTHS[view.getMonth()]+' <span class="num">'+view.getFullYear()+'</span>';
@@ -851,9 +870,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
       const c=document.createElement('button');c.type='button';c.className='cal__day';c.textContent=day;
       if(d<today){c.classList.add('is-past');c.disabled=true;}
       else if(isDateFullyBooked(key(d))){c.classList.add('is-booked');c.disabled=true;}
-      else c.addEventListener('click',()=>{state.date=d;state.slot=null;renderCal();renderSky();updateGo2();
-        // mobile stacks the calendar above the time slots — Clarity showed users picking a day and
-        // never finding the slots below the fold, so bring them into view on selection
+      else c.addEventListener('click',()=>{state.date=d;state.slot=null;calExpanded=false;renderCal();renderSky();updateGo2();
+        syncCalCollapse();
         if(window.matchMedia('(max-width:720px)').matches){
           // instant, not smooth: smooth programmatic scroll silently no-ops in some WebViews (verified)
           const ch=body.querySelector('.colhead'); if(ch&&ch.scrollIntoView) ch.scrollIntoView({block:'start'});
