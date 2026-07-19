@@ -105,7 +105,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
     padding:.72rem;transition:filter .2s,opacity .2s}
   .go:hover{filter:brightness(1.07)}
   .go:disabled{opacity:.38;cursor:not-allowed}
+  /* "not ready yet" state: looks disabled but stays tappable so a tap can EXPLAIN what's missing
+     (a real disabled button swallows the tap silently = Clarity dead-clicks on mobile) */
+  .go.is-off{opacity:.38}
   .foot__hint{flex:none;font-size:.68rem;color:var(--cream-dim);max-width:34ch}
+  .foot__hint.nudge{display:block;color:var(--gold-light);font-weight:600;animation:hintPulse .45s var(--ease)}
+  @keyframes hintPulse{0%{transform:scale(.9);opacity:.3}100%{transform:scale(1);opacity:1}}
   /* talk prompt inside the footer - shown on every step before the details form (desktop + mobile) */
   .foot__talk{display:block;width:100%;text-align:center;background:transparent;border:1px dashed rgba(196,154,60,.5);
     border-radius:11px;color:var(--gold-light);font-size:.76rem;padding:.5rem .7rem;cursor:pointer;
@@ -740,12 +745,28 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const main = $('footMain'); if (main) main.hidden = !hasCta;
     if (hasCta){
       goBtn.textContent = label;
-      goBtn.disabled = !!disabled;
+      setGoOff(!!disabled);
       footHint.textContent = hint || '';
+      footHint.classList.remove('nudge');
       goHandler = handler;
     } else { goHandler = null; }
   }
-  goBtn.addEventListener('click', ()=>{ if(goHandler) goHandler(); });
+  // "not ready" = visually off but still tappable: a native disabled button swallows the tap with zero
+  // feedback (the exact dead-clicks Clarity recorded on mobile). Tapping the off button now names the
+  // missing choice in the hint - which mobile CSS normally hides, so .nudge also forces it visible.
+  function setGoOff(off){ goBtn.classList.toggle('is-off',!!off); goBtn.setAttribute('aria-disabled',String(!!off)); }
+  let nudgeT = null;
+  function nudgeGo(){
+    if(step===2) footHint.textContent = !state.date ? 'Pick an available day first' : 'Also pick a time window';
+    else if(!footHint.textContent) footHint.textContent = 'Fill in all the required fields';
+    footHint.classList.remove('nudge'); void footHint.offsetWidth;   // restart the pulse on repeat taps
+    footHint.classList.add('nudge');
+    clearTimeout(nudgeT); nudgeT = setTimeout(()=>footHint.classList.remove('nudge'), 2600);
+  }
+  goBtn.addEventListener('click', ()=>{
+    if(goBtn.classList.contains('is-off')){ nudgeGo(); return; }
+    if(goHandler) goHandler();
+  });
   // talk prompt (footer) → leave-your-details / abandon screen, carrying anything already entered
   $('talkBtn').addEventListener('click', ()=>{ openTalk(step); });
   $('backBtn').addEventListener('click', ()=>{
@@ -864,7 +885,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     });
     updateGo2();
   }
-  function updateGo2(){ if(step===2) goBtn.disabled=!(state.date&&state.slot); }
+  function updateGo2(){ if(step===2) setGoOff(!(state.date&&state.slot)); }
 
   /* ═══════ STEP 3 · the menu step (closing-process styling: day/eve cards + notes) ═══════ */
   function step3(){
@@ -1117,7 +1138,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fAddress:'address',fNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
     const req=['fName','fPhone','fEmail'].map(id=>$(id));
-    const validate=()=>{goBtn.disabled=!req.every(el=>el.value.trim());};
+    const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
       if(map[el.id]) state[map[el.id]]=el.value;
       validate(); saveMaybe();
@@ -1192,7 +1213,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const map={tkName:'name',tkPhone:'phone',tkEmail:'email',tkCompany:'company',tkNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
     const req=['tkName','tkPhone','tkEmail'].map(id=>$(id));
-    const validate=()=>{goBtn.disabled=!req.every(el=>el.value.trim());};
+    const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
       if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
     }));

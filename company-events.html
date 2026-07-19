@@ -5735,6 +5735,10 @@
     .v2-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(8,6,4,.72);backdrop-filter:blur(3px)}
     .v2-overlay.open{display:block}
     .v2-overlay iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+    /* in-app browsers (Instagram/Facebook) keep a persistent bottom toolbar; inset:0 sizes the iframe to
+       the LAYOUT viewport which extends behind it, burying the wizard's submit button under browser chrome
+       (dead taps). svh = smallest visible viewport, so the footer always sits above the toolbar. */
+    @supports (height:100svh){ .v2-overlay iframe{bottom:auto;height:100svh} }
     body.v2-locked{overflow:hidden}
   </style>
   <div class="v2-overlay" id="v2Overlay" aria-hidden="true">
