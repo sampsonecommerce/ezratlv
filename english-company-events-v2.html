@@ -112,11 +112,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .foot__hint.nudge{display:block;color:var(--gold-light);font-weight:600;animation:hintPulse .45s var(--ease)}
   @keyframes hintPulse{0%{transform:scale(.9);opacity:.3}100%{transform:scale(1);opacity:1}}
   /* talk prompt inside the footer - shown on every step before the details form (desktop + mobile) */
-  .foot__talk{display:block;width:100%;text-align:center;background:transparent;border:1px dashed rgba(196,154,60,.5);
-    border-radius:11px;color:var(--gold-light);font-size:.76rem;padding:.5rem .7rem;cursor:pointer;
-    transition:border-color .2s,background .2s}
+  .foot__talk{display:flex;align-items:center;justify-content:center;gap:.42rem;width:100%;text-align:center;
+    background:rgba(196,154,60,.14);border:0;border-radius:11px;color:var(--gold-light);font-size:.82rem;
+    padding:.6rem .7rem;cursor:pointer;transition:background .2s}
+  .foot__talk svg{flex:none}
   .foot__talk[hidden]{display:none}
-  .foot__talk:hover{border-color:var(--gold);background:rgba(196,154,60,.08)}
+  .foot__talk:hover{background:rgba(196,154,60,.22)}
 
   .steptitle{text-align:center;font-weight:600;font-size:clamp(1.25rem,2.6vw,1.55rem);color:var(--cream);margin:0 0 .3rem}
   .stepsub{text-align:center;color:var(--cream-dim);font-size:.88rem;margin:0 0 1rem}
@@ -514,10 +515,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   <div class="body" id="body"></div>
 
   <div class="foot" id="foot" hidden>
-    <button class="foot__talk" id="talkBtn" type="button">Prefer to talk before booking? Leave your details and we'll get back to you</button>
     <div class="foot__main" id="footMain">
       <button class="go" id="goBtn" type="button">Continue</button>
       <span class="foot__hint" id="footHint"></span>
+    </div>
+    <button class="foot__talk" id="talkBtn" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1 3.6-11.3 8.38 8.38 0 0 1 12.5 7.5z"/></svg><span>Prefer to talk before booking? Leave your details and we'll get back to you</span></button>
     </div>
   </div>
 </div>
