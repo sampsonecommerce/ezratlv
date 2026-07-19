@@ -49,6 +49,7 @@
   <link rel="alternate" hreflang="x-default" href="https://ezratlv.com/company-events" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="geo.region" content="IL-TA" />
@@ -2737,6 +2738,21 @@
       <source src="videos/hero.webm" type="video/webm" />
       <source src="videos/hero-opt.mp4" type="video/mp4" />
     </video>
+    <script>
+    /* Mobile (incl. Meta IG/FB in-app browsers, which have no cache and re-download the hero on
+       every ad click - Clarity showed 6-27s loads) gets a 0.94MB version instead of the 4MB one.
+       Desktop keeps the hi-res. Swap sources before the browser picks one, then load(). */
+    (function(){
+      if(!window.matchMedia('(max-width:820px)').matches) return;
+      var v=document.querySelector('.hero__video'); if(!v) return;
+      v.querySelectorAll('source').forEach(function(s){
+        var t=s.getAttribute('type')||'';
+        if(t.indexOf('webm')>-1) s.setAttribute('src','videos/hero-mobile.webm');
+        else if(t.indexOf('mp4')>-1) s.setAttribute('src','videos/hero-mobile.mp4');
+      });
+      v.load();
+    })();
+    </script>
     <div class="hero__inner wrap">
       <h1 id="heroHeadline">אירוע חברה באווירה צעירה, במינימום התעסקות</h1>
       <p class="hero__sub">חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה - אנחנו מנהלים את האוכל, האלכוהול והאווירה, ואתם פשוט מגיעים לחגוג</p>
@@ -3790,7 +3806,10 @@
     /* ---- Scroll reveal (IntersectionObserver) ---- */
     const io = new IntersectionObserver(
       (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
-      { threshold: 0.12 }
+      /* threshold 0.12 broke on mobile: a section ~8x taller than the viewport can never have 12%
+         visible at once (never reveals - stays blank), and fast scrolling outran the callback.
+         Now: reveal at first pixel, pre-triggered 160px before the section enters the viewport. */
+      { threshold: 0.01, rootMargin: '0px 0px 160px 0px' }
     );
     document.querySelectorAll('.reveal, .divider').forEach(el => io.observe(el));
     { const vibeGrid = document.querySelector('.vibe-grid'); if (vibeGrid) io.observe(vibeGrid); }  // deals the 3 cards out of a stack
