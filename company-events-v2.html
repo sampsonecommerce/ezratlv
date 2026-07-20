@@ -279,6 +279,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
     color:var(--cream);font-family:inherit;font-size:.9rem;padding:.55rem .7rem}
   .bfield textarea:focus,.bfield input:focus{outline:none;border-color:var(--gold)}
   .bfield textarea{resize:none;min-height:56px}
+  /* iOS auto-zooms into any focused input under 16px and leaves the whole wizard zoomed/panned (X and
+     frame edges off-screen, scroll jumps, top bar hidden after advancing). 16px on touch-width screens
+     disables that auto-zoom without disabling the user's own pinch-zoom. */
+  @media (max-width:820px){ .bfield input,.bfield textarea,.guest-edit input{font-size:16px} }
 
   /* ── step 4: add-ons only (single column; the whole step scrolls with .body, like the old flow) ── */
   .addons-wrap{max-width:640px;margin:0 auto}
