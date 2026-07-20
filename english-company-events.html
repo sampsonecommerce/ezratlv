@@ -5867,9 +5867,14 @@
         setCookie('ezra_utm_term',     qs.get('utm_term'));      // Google keyword · Facebook ad
         setCookie('ezra_promo',        qs.get('promo'));         // Meta-only discount token; only Meta ad URLs carry ?promo=, so Google/organic never trigger it
         // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan and auto-open.
+        // resume link: ?resume=<token> restores a saved draft. Session cookie (not the 90-day setCookie)
+        // so it fires once; the wizard reads + clears it. Auto-open the wizard so boot() can hydrate.
+        const resumeTok = qs.get('resume');
+        if (resumeTok) document.cookie = 'ezra_resume=' + encodeURIComponent(resumeTok) + '; path=/; SameSite=Lax';
         const PACKAGE_TO_PLAN = { 'happy-hour': 'happyhour', 'gibush': 'gibush', 'party': 'mesiba' };
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
-        if (plan) window.openV2(plan);
+        if (resumeTok) window.openV2();
+        else if (plan) window.openV2(plan);
       })();
     })();
   </script>

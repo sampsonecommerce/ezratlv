@@ -5850,9 +5850,14 @@
 
         // Google Ads sitelinks pass ?package=<ad-facing id>; map to the wizard's internal plan id and
         // auto-open the booking flow preselected on step 2. Unknown/missing value = normal page, never error.
+        // resume link: ?resume=<token> restores a saved draft. Session cookie (not the 90-day setCookie)
+        // so it fires once; the wizard reads + clears it. Auto-open the wizard so boot() can hydrate.
+        const resumeTok = qs.get('resume');
+        if (resumeTok) document.cookie = 'ezra_resume=' + encodeURIComponent(resumeTok) + '; path=/; SameSite=Lax';
         const PACKAGE_TO_PLAN = { 'happy-hour': 'happyhour', 'gibush': 'gibush', 'party': 'mesiba' };
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
-        if (plan) window.openV2(plan);
+        if (resumeTok) window.openV2();
+        else if (plan) window.openV2(plan);
       })();
       // Esc closes too
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });

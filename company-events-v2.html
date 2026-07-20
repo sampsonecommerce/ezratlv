@@ -616,6 +616,20 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function saveProgress(){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(collectState())); }catch(e){} }
   function saveMaybe(){ saveProgress(); }
   function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+  // ── cross-device resume: POST the draft to the worker, which returns a link keyed by an opaque token.
+  // draftId+token are stashed so repeat saves update the same Monday item instead of piling up duplicates.
+  const DRAFT_ID_KEY='ezraDraftId', DRAFT_TOKEN_KEY='ezraDraftToken';
+  const draftEndpoint=()=>(window.EZRA_LEAD_ENDPOINT||'/api/submit-lead');
+  window.EZRA_CREATE_DRAFT=async(s)=>{
+    try{
+      const body={mode:'saveDraft',lang:'he',state:s,draftId:localStorage.getItem(DRAFT_ID_KEY)||'',token:localStorage.getItem(DRAFT_TOKEN_KEY)||''};
+      const r=await fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+      const j=await r.json();
+      if(!j||!j.ok||!j.url) return null;
+      try{ if(j.draftId) localStorage.setItem(DRAFT_ID_KEY,j.draftId); if(j.token) localStorage.setItem(DRAFT_TOKEN_KEY,j.token); }catch(e){}
+      return {url:j.url};
+    }catch(e){ return null; }
+  };
   let flashT;
   function flashSaved(){ if(!savedFlash)return; savedFlash.classList.add('show'); clearTimeout(flashT);
     flashT=setTimeout(()=>savedFlash.classList.remove('show'),1800); }
@@ -1352,6 +1366,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(window.fbq) fbq('track','Lead',{value:total||0,currency:'ILS'},{eventID:eventId});
     if(window.gtag) gtag('event','generate_lead',{value:total||0,currency:'ILS',transaction_id:eventId});
     clearSave(); finished=true;   // booked - no draft to resume
+    try{ const _did=localStorage.getItem(DRAFT_ID_KEY); if(_did) fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'clearDraft',draftId:_did})}).catch(()=>{}); localStorage.removeItem(DRAFT_ID_KEY); localStorage.removeItem(DRAFT_TOKEN_KEY); }catch(e){}
   }
   // Digital paper receipt (perforated header, dotted-leader rows, per-dish detail, add-on math lines,
   // total) - the design explicitly asked to bring back for this step. Pure display; submitLead()'s
@@ -1579,7 +1594,28 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   // ── boot: opened from a package card (?plan=) → preselect it and jump to the WHEN step;
   //         otherwise restore a saved session if there is one, else start fresh ──
+  function hydrate(s){
+    state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
+    state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
+    state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
+    if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
+    render(Math.min(Math.max(s.step||1,1),6));
+  }
   (function boot(){
+    // cross-device resume: a ?resume token (bridged from the parent page via the ezra_resume cookie)
+    // restores a draft saved on any device. One-shot: the cookie is cleared once read.
+    const resumeTok=_cookie('ezra_resume');
+    if(resumeTok){
+      document.cookie='ezra_resume=; path=/; max-age=0; SameSite=Lax';
+      render(1);   // show step 1 immediately; hydrate when the draft returns
+      fetch(draftEndpoint()+'?resume='+encodeURIComponent(resumeTok)).then(r=>r.json()).then(j=>{
+        if(j&&j.ok&&j.state&&Object.keys(j.state).length){
+          try{ if(j.draftId){ localStorage.setItem(DRAFT_ID_KEY,j.draftId); localStorage.setItem(DRAFT_TOKEN_KEY,resumeTok); } }catch(e){}
+          hydrate(j.state);
+        }
+      }).catch(()=>{});
+      return;
+    }
     // precedence: a saved in-progress session wins over a ?plan= deep-link, so an ad click never
     // clobbers a half-done booking. Only with no saved draft does ?plan= preselect and skip to step 2.
     let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
@@ -1588,11 +1624,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
       render(1); return;
     }
-    state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
-    state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
-    state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
-    if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
-    render(Math.min(Math.max(s.step||1,1),6));
+    hydrate(s);
   })();
 })();
 </script>
