@@ -432,7 +432,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
     background:rgba(10,8,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1rem}
   .ovl[hidden]{display:none}
   .ovl__card{background:var(--panel);border:1px solid rgba(196,154,60,.45);border-radius:14px;
-    padding:1.3rem 1.2rem;max-width:360px;width:100%;text-align:center}
+    padding:1.3rem 1.2rem;max-width:360px;width:100%;text-align:center;position:relative}
+  .ovl__x{position:absolute;top:.55rem;left:.55rem;width:30px;height:30px;display:flex;align-items:center;
+    justify-content:center;background:transparent;border:none;color:#fff;font-size:1.15rem;line-height:1;
+    cursor:pointer;border-radius:8px}
+  .ovl__x:hover{background:rgba(255,255,255,.08)}
   .ovl__title{font-size:1.05rem;font-weight:700;color:var(--cream);margin:0 0 .5rem}
   .ovl__txt{font-size:.85rem;color:var(--cream-dim);margin:0 0 1rem;line-height:1.55}
   .ovl__btn{display:block;width:100%;border-radius:11px;font-weight:600;font-size:.95rem;padding:.7rem 0;
@@ -855,7 +859,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function closeOvl(){ const o=$('ezraOvl'); if(o) o.remove(); }
   function showOvl(html){ closeOvl();
-    const o=document.createElement('div'); o.className='ovl'; o.id='ezraOvl'; o.innerHTML='<div class="ovl__card">'+html+'</div>';
+    const o=document.createElement('div'); o.className='ovl'; o.id='ezraOvl';
+    o.innerHTML='<div class="ovl__card"><button class="ovl__x" type="button" aria-label="\u05e1\u05d2\u05d9\u05e8\u05d4">\u2715</button>'+html+'</div>';
+    o.querySelector('.ovl__x').addEventListener('click',closeOvl);
     document.querySelector('.panel').appendChild(o); return o; }
   async function openSave(){
     saveProgress();
