@@ -5611,6 +5611,29 @@
 
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
+  <!-- Shrink the accessibility trigger (it was covering content on mobile) + let users hide it for
+       the session. Legal: IS 5568 requires the SITE to be accessible + a statement (footer link) -
+       the floating widget itself is a helper, not the legal requirement. -->
+  <style>
+    #enable-toolbar-trigger{transform:scale(.7);transform-origin:bottom left;opacity:.9}
+    #enable-toolbar-trigger .keyboard-shorcut{display:none}
+    #ezra-acc-hide{position:fixed;z-index:2147483647;left:41px;bottom:50px;width:17px;height:17px;border-radius:50%;
+      background:rgba(20,16,11,.88);color:#fff;border:1px solid rgba(255,255,255,.4);font-size:10px;line-height:14px;
+      text-align:center;cursor:pointer;padding:0}
+  </style>
+  <script>
+    (function(){
+      function hideAll(){ var t=document.getElementById('enable-toolbar'); if(t) t.style.display='none';
+        var x=document.getElementById('ezra-acc-hide'); if(x) x.style.display='none'; }
+      try{ if(sessionStorage.getItem('ezraAccHide')==='1'){
+        var iv=setInterval(function(){ if(document.getElementById('enable-toolbar')){ hideAll(); clearInterval(iv); } },300);
+        setTimeout(function(){ clearInterval(iv); },8000); return; } }catch(e){}
+      var b=document.createElement('button'); b.id='ezra-acc-hide'; b.type='button'; b.textContent='\u2715';
+      b.setAttribute('aria-label','הסתרת כפתור הנגישות');
+      b.addEventListener('click',function(){ try{ sessionStorage.setItem('ezraAccHide','1'); }catch(e){} hideAll(); });
+      document.body.appendChild(b);
+    })();
+  </script>
 
   <!-- Cookie consent banner -->
   <div class="cookie-bar" id="cookieBar" role="region" aria-label="הודעת עוגיות" hidden>
