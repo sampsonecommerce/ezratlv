@@ -20,6 +20,10 @@ const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement
 const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
 const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
 const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packages (In Agreement Process)
+// Saved wizard drafts (resume-link feature): items land in a dedicated group on the company board.
+const DRAFTS_GROUP    = "group_mm5eq9a9";
+const DRAFT_STATE_COL = "long_text_mm5eajcn"; // Long Text — full wizard-state JSON blob
+const DRAFT_TOKEN_COL = "text_mm5e3gzm";      // Text — opaque resume token (getDraft looks up by this)
 // Availability for the on-site calendar merges two sources, so a date is "taken" the moment it is
 // committed OR the moment a website booking completes:
 //   1) Events Form board  — committed events: Closed Deals / Pre Payment / Proposal Sent.
@@ -53,7 +57,10 @@ export default {
     // GET = availability feed for the on-site calendar; OR ?leadById=<id> for the private calculator
     // prefill (secret-gated, never public).
     if (request.method === "GET") {
-      const leadId = new URL(request.url).searchParams.get("leadById");
+      const params = new URL(request.url).searchParams;
+      const resume = params.get("resume");
+      if (resume) return getDraft(resume, env, cors);   // public: restore a saved draft by opaque token
+      const leadId = params.get("leadById");
       if (leadId) return leadById(leadId, request, env, cors);
       return availability(env, cors);
     }
@@ -65,6 +72,9 @@ export default {
     // Private calculator write-back: complete an existing (abandoned/custom) lead IN PLACE.
     // Secret-gated; fill-only (no group/status change, no contract); never runs CAPI. Company board only.
     if (d.mode === "updateLead") return updateLead(d, request, env, cors);
+    // wizard save-for-later (public): create/update a draft item, never a lead, never CAPI.
+    if (d.mode === "saveDraft")  return saveDraft(d, request, env, cors);
+    if (d.mode === "clearDraft") return clearDraft(d, env, cors);
 
     // honeypot: real users never fill this hidden field; bots do -> drop silently
     if (d.hp) return json({ ok: true, dropped: true }, 200, cors);
@@ -453,6 +463,103 @@ async function updateLead(d, request, env, cors) {
     return json({ ok: true, id: out.data?.change_multiple_column_values?.id }, 200, cors);
   } catch (e) {
     console.error("updateLead failed:", e);
+    return json({ ok: false, error: String(e) }, 502, cors);
+  }
+}
+
+// ── Wizard drafts (resume-link). PUBLIC — no secret, since any visitor can save their own draft.
+// Keyed by an opaque random token, NEVER the Monday item id (that's a guessable integer, and drafts
+// hold name/phone/email — using it would let anyone enumerate other people's contact details).
+function randToken() {
+  const b = new Uint8Array(16); crypto.getRandomValues(b);
+  return [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+async function mondayFetch(token, query, variables) {
+  const r = await fetch("https://api.monday.com/v2", {
+    method: "POST",
+    headers: { "content-type": "application/json", "Authorization": token, "API-Version": "2024-01" },
+    body: JSON.stringify({ query, variables }),
+  });
+  return r.json();
+}
+// reuse the existing company-board contact columns so a draft is readable at a glance on Monday
+function draftContactCols(s) {
+  const cols = {};
+  if (s.name)  cols.text_mm4the60 = String(s.name);
+  if (s.email) cols.emailj9eufer1 = { email: s.email, text: s.email };
+  if (s.phone) cols.phone0zyibnut = { phone: String(s.phone), countryShortName: "IL" };
+  if (s.guests != null && s.guests !== "") cols.number0kzol2wl = String(s.guests);
+  if (s.date)  cols.date5bab58wj = { date: s.date };
+  if (s.slot)  cols.text_mm4t1h0s = String(s.slot);
+  return cols;
+}
+async function saveDraft(d, request, env, cors) {
+  if (d.hp) return json({ ok: true, dropped: true }, 200, cors);   // honeypot
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ ok: false, error: "no token" }, 503, cors);
+  const s = d.state || {};
+  const base = d.lang === "en" ? "https://ezratlv.com/english-company-events" : "https://ezratlv.com/company-events";
+  const cols = draftContactCols(s);
+  cols[DRAFT_STATE_COL] = { text: JSON.stringify(s).slice(0, 60000) };   // long_text safety cap
+  try {
+    // repeat save from the same visitor -> update the SAME item (client passes back draftId + token)
+    if (d.draftId) {
+      const q = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
+        change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols, create_labels_if_missing: false) { id }
+      }`;
+      const out = await mondayFetch(TOKEN, q, { board: COMPANY_BOARD, item: String(d.draftId), cols: JSON.stringify(cols) });
+      if (out.errors) return json({ ok: false, error: out.errors }, 502, cors);
+      const token = d.token || "";
+      return json({ ok: true, draftId: String(d.draftId), token, url: token ? base + "?resume=" + encodeURIComponent(token) : base }, 200, cors);
+    }
+    // first save -> mint an opaque token and create the draft item
+    const token = randToken();
+    cols[DRAFT_TOKEN_COL] = token;
+    const name = String(s.name || s.company || "טיוטה מהאתר").slice(0, 230);
+    const q = `mutation ($board: ID!, $group: String, $name: String!, $cols: JSON!) {
+      create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
+    }`;
+    const out = await mondayFetch(TOKEN, q, { board: COMPANY_BOARD, group: DRAFTS_GROUP, name, cols: JSON.stringify(cols) });
+    if (out.errors) return json({ ok: false, error: out.errors }, 502, cors);
+    const id = out.data?.create_item?.id;
+    return json({ ok: true, draftId: String(id), token, url: base + "?resume=" + encodeURIComponent(token) }, 200, cors);
+  } catch (e) {
+    console.error("saveDraft failed:", e);
+    return json({ ok: false, error: String(e) }, 502, cors);
+  }
+}
+async function getDraft(token, env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ ok: false, error: "no token" }, 503, cors);
+  if (!token) return json({ ok: false, error: "missing token" }, 400, cors);
+  const q = `query ($board: ID!, $cols: [ItemsPageByColumnValuesQuery!]) {
+    items_page_by_column_values(board_id: $board, columns: $cols, limit: 1) {
+      items { id column_values(ids: ["${DRAFT_STATE_COL}"]) { id text } }
+    }
+  }`;
+  const vars = { board: COMPANY_BOARD, cols: [{ column_id: DRAFT_TOKEN_COL, column_values: [String(token)] }] };
+  try {
+    const out = await mondayFetch(TOKEN, q, vars);
+    if (out.errors) return json({ ok: false, error: out.errors }, 502, cors);
+    const it = out.data?.items_page_by_column_values?.items?.[0];
+    if (!it) return json({ ok: false, error: "not found" }, 404, cors);
+    const blob = (it.column_values || []).find((c) => c.id === DRAFT_STATE_COL)?.text || "";
+    let state = {}; try { state = JSON.parse(blob || "{}"); } catch (e) {}
+    return json({ ok: true, draftId: String(it.id), state }, 200, cors);
+  } catch (e) {
+    console.error("getDraft failed:", e);
+    return json({ ok: false, error: String(e) }, 502, cors);
+  }
+}
+async function clearDraft(d, env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN || !d.draftId) return json({ ok: true, skipped: true }, 200, cors);
+  const q = `mutation ($item: ID!) { delete_item(item_id: $item) { id } }`;
+  try {
+    await mondayFetch(TOKEN, q, { item: String(d.draftId) });
+    return json({ ok: true }, 200, cors);
+  } catch (e) {
+    console.error("clearDraft failed:", e);
     return json({ ok: false, error: String(e) }, 502, cors);
   }
 }
