@@ -99,8 +99,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .foot{flex:none;display:flex;flex-direction:column;gap:.55rem;padding:.7rem 1rem;
     border-block-start:1px solid var(--line);background:rgba(16,12,8,.55)}
   .foot[hidden]{display:none}
-  .foot__main{display:flex;align-items:center;gap:.8rem}
+  .foot__main{display:flex;flex-direction:column;gap:.5rem}
   .foot__main[hidden]{display:none}
+  .foot__alert{display:none;background:#3a1512;color:#f0a49d;border:1px solid #a3372d;font-size:.8rem;font-weight:600;
+    border-radius:9px;padding:.55rem .8rem;text-align:center}
+  .foot__alert.on{display:block;animation:alertShake .4s var(--ease)}
+  @keyframes alertShake{0%,100%{transform:translateX(0)}25%{transform:translateX(5px)}50%{transform:translateX(-5px)}75%{transform:translateX(3px)}}
+  .foot__btns{display:flex;align-items:stretch;gap:.6rem}
+  .go--back{flex:1;background:transparent;border:1px solid var(--line);border-radius:12px;color:var(--cream);
+    font-weight:600;font-size:.98rem;padding:.78rem 0;cursor:pointer}
+  .go--back:hover{border-color:var(--gold);color:var(--gold-light)}
+  .go--back[hidden]{display:none}
   .go{flex:1;background:var(--gold);border:none;border-radius:12px;color:#141009;font-weight:600;font-size:.98rem;
     padding:.72rem;transition:filter .2s,opacity .2s}
   .go:hover{filter:brightness(1.07)}
@@ -253,7 +262,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .menu-dish--desc .menu-dish__nm{color:var(--gold-light);font-weight:600;font-size:.85rem;line-height:1.3}
   .menu-dish--desc .menu-dish__ds{color:var(--cream-faint);font-size:.74rem;line-height:1.4}
   .bfield{max-width:66ch;margin:1.1rem auto 0}
-  .bfield label{display:block;font-size:.8rem;color:var(--cream-dim);margin-block-end:.35rem}
+  .bfield label{display:block;font-size:.8rem;color:var(--cream);font-weight:600;margin-block-end:.35rem}
+  .bfield--err input,.bfield--err textarea{border-color:#a3372d;background:rgba(163,55,45,.1)}
+  .bfield--err label{color:#e0736f}
   .bfield textarea,.bfield input{width:100%;background:rgba(255,255,255,.05);border:.5px solid var(--line);border-radius:9px;
     color:var(--cream);font-family:inherit;font-size:.9rem;padding:.55rem .7rem}
   .bfield textarea:focus,.bfield input:focus{outline:none;border-color:var(--gold)}
@@ -416,6 +427,21 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .talk__note span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
   .talk__form{display:flex;flex-direction:column;gap:.85rem}
   .talk__form .bfield{max-width:none;margin:0}
+  /* save / exit overlays: sit on top of the wizard, wizard stays visible blurred behind */
+  .ovl{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+    background:rgba(10,8,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1rem}
+  .ovl[hidden]{display:none}
+  .ovl__card{background:var(--panel);border:1px solid rgba(196,154,60,.45);border-radius:14px;
+    padding:1.3rem 1.2rem;max-width:360px;width:100%;text-align:center}
+  .ovl__title{font-size:1.05rem;font-weight:700;color:var(--cream);margin:0 0 .5rem}
+  .ovl__txt{font-size:.85rem;color:var(--cream-dim);margin:0 0 1rem;line-height:1.55}
+  .ovl__btn{display:block;width:100%;border-radius:11px;font-weight:600;font-size:.95rem;padding:.7rem 0;
+    cursor:pointer;margin-block-start:.55rem}
+  .ovl__btn--gold{background:var(--gold);border:none;color:#141009}
+  .ovl__btn--ghost{background:transparent;border:1px solid var(--line);color:var(--cream-dim)}
+  .ovl__btn--ghost:hover{color:var(--cream);border-color:var(--gold)}
+  .ovl__link{display:block;background:rgba(255,255,255,.06);border:1px dashed rgba(196,154,60,.5);border-radius:9px;
+    padding:.55rem .6rem;font-size:.78rem;color:var(--gold-light);word-break:break-all;margin:0 0 .3rem;direction:ltr}
   .talk__form .frow{margin:0}
 
   /* ── confirmation ── */
@@ -493,6 +519,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .cal__day{font-size:.7rem}
     .sky__arc{height:42px}
     .srow{min-height:34px}
+    /* staged step 2: once the calendar collapses to the strip, the freed space goes to the
+       time panel - taller arc so the sun animation isn't cut off, roomier slot rows */
+    .when--picked .sky__arc{height:120px}
+    .when--picked .srow{min-height:52px}
+    .when--picked .when__sky{min-height:340px}
     .menu-grid,.menu-drinks{grid-template-columns:1fr}
     .menu-card--wide .menu-dishes{grid-template-columns:1fr}
     /* step3: let it flow with the page (mobile scrolls); band stacks; segmented toggle goes full-width */
@@ -527,16 +558,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
 <div class="panel">
   <div class="bar">
     <div class="bar__start">
-      <button class="bar__back" id="backBtn" type="button" hidden>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-        חזרה
-      </button>
-      <label class="bar__save" id="saveTog" title="ניתן לשמור פה בכל שלב ולהמשיך אחר כך">
-        <input type="checkbox" id="saveChk" />
-        <span class="bar__save__box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></span>
-        <span class="bar__save__label">שמירה</span>
+      <button class="bar__back" id="saveBtn" type="button" title="שמירת ההתקדמות - אפשר לחזור בכל שלב">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>
+        לשמירה
         <span class="bar__saved" id="savedFlash">נשמר בהצלחה</span>
-      </label>
+      </button>
     </div>
     <div class="bar__prog">
       <span id="progTxt"></span>
@@ -553,8 +579,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   <div class="foot" id="foot" hidden>
     <div class="foot__main" id="footMain">
-      <button class="go" id="goBtn" type="button">המשך</button>
-      <span class="foot__hint" id="footHint"></span>
+      <div class="foot__alert" id="footAlert" role="alert"></div>
+      <div class="foot__btns">
+        <button class="go--back" id="backBtn2" type="button">חזור</button>
+        <button class="go" id="goBtn" type="button">המשך</button>
+      </div>
     </div>
     <button class="foot__talk" id="talkBtn" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1 3.6-11.3 8.38 8.38 0 0 1 12.5 7.5z"/></svg><span>מעדיפים לדבר לפני סגירה? השאירו פרטים ונחזור אליכם</span></button>
   </div>
@@ -565,7 +594,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
 (function(){
   const E = window.EzraEngine;
   const $ = id=>document.getElementById(id);
-  const body = $('body'), foot = $('foot'), goBtn = $('goBtn'), footHint = $('footHint');
+  const body = $('body'), foot = $('foot'), goBtn = $('goBtn'), footAlert = $('footAlert'), backBtn2 = $('backBtn2');
 
   // ── state: same shape as the site ──
   const state = { plan:null, date:null, slot:null, guests:20, menu:null, addons:{}, foodNotes:'', notes:'',
@@ -573,21 +602,18 @@ fbq('init','2174553826420246');fbq('track','PageView');
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
 
-  // ── save-and-continue (top bar) — ON by default: the process auto-saves at every step ──
+  // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
   const SAVE_KEY='ezraProto2';
-  let saveOn=true;
-  const saveChk=$('saveChk'), savedFlash=$('savedFlash');
-  if(saveChk) saveChk.checked=true;
+  const savedFlash=$('savedFlash');
   function collectState(){ return { plan:state.plan, date:state.date?key(state.date):null, slot:state.slot, guests:state.guests,
     menu:state.menu, addons:state.addons, foodNotes:state.foodNotes, notes:state.notes,
     name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address, step }; }
   function saveProgress(){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(collectState())); }catch(e){} }
-  function saveMaybe(){ if(saveOn) saveProgress(); }
+  function saveMaybe(){ saveProgress(); }
   function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
   let flashT;
   function flashSaved(){ if(!savedFlash)return; savedFlash.classList.add('show'); clearTimeout(flashT);
     flashT=setTimeout(()=>savedFlash.classList.remove('show'),1800); }
-  if(saveChk) saveChk.addEventListener('change',()=>{ saveOn=saveChk.checked; if(saveOn){saveProgress();flashSaved();} else clearSave(); });
 
   const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
   const DOW=['א','ב','ג','ד','ה','ו','ש'];
@@ -756,10 +782,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function setProgress(n){
     $('progTxt').innerHTML = n<=6 ? ('שלב <span class="num">'+n+'</span> מתוך <span class="num">6</span>') : 'סיום';
     [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on',i<Math.min(n,6)));
-    $('backBtn').hidden = (n<=1 || n>6);
   }
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
+    markReq = null;                      // each step wires its own missing-fields highlighter
     stopBubbles();                       // halt the coupe fizz when leaving a step
     const dir = n>=lastStep ? 'anim-fwd' : 'anim-back';
     lastStep = step; step = n;
@@ -773,37 +799,43 @@ fbq('init','2174553826420246');fbq('track','PageView');
     // one GA4 event per step entry → build the wizard drop-off funnel (step 1 → confirmation)
     if(window.gtag) gtag('event','wizard_step',{step_number:n,step_name:(STEP_NAMES[n]||('step_'+n))});
   }
-  // footer CTA: one primary action, always visible
+  // footer CTA: primary action (המשך, left) + back (חזור, right) sharing the same row
   let goHandler = null;
+  let markReq = null;                    // set per form: paints .bfield--err on empty required fields
   function setFoot(label, hint, handler, disabled, showTalk){
     showTalk = (showTalk !== false);              // talk prompt shown unless explicitly disabled
     const hasCta = !!handler;
     foot.hidden = !hasCta && !showTalk;            // footer stays visible if there's a CTA or the talk prompt
     $('talkBtn').hidden = !showTalk;
     const main = $('footMain'); if (main) main.hidden = !hasCta;
+    backBtn2.hidden = !(hasCta && (step>1 || inTalk));   // nothing behind step 1
     if (hasCta){
       goBtn.textContent = label;
       setGoOff(!!disabled);
-      footHint.textContent = hint || '';
-      footHint.classList.remove('nudge');
+      hideAlert();
       goHandler = handler;
     } else { goHandler = null; }
   }
   // "not ready" = visually off but still tappable: a native disabled button swallows the tap with zero
-  // feedback (the exact dead-clicks Clarity recorded on mobile). Tapping the off button now names the
-  // missing choice in the hint - which mobile CSS normally hides, so .nudge also forces it visible.
-  function setGoOff(off){ goBtn.classList.toggle('is-off',!!off); goBtn.setAttribute('aria-disabled',String(!!off)); }
-  let nudgeT = null;
+  // feedback (the exact dead-clicks Clarity recorded on mobile). Tapping the off button raises a red
+  // alert above the button and paints the missing fields red.
+  function setGoOff(off){
+    goBtn.classList.toggle('is-off',!!off); goBtn.setAttribute('aria-disabled',String(!!off));
+    if(!off) hideAlert();
+  }
+  function hideAlert(){
+    footAlert.classList.remove('on'); footAlert.textContent='';
+    body.querySelectorAll('.bfield--err').forEach(b=>b.classList.remove('bfield--err'));
+  }
   function nudgeGo(){
     // the talk screen keeps `step` at the step it was opened from, so it must be checked FIRST —
     // otherwise a step-2 visitor gets "pick a day in the calendar" on a screen with no calendar
-    // (the exact rage-click Clarity recorded on שליחת הפרטים)
-    if(inTalk) footHint.textContent = 'מלאו שם, טלפון ואימייל';
-    else if(step===2) footHint.textContent = !state.date ? 'בחרו קודם יום פנוי בלוח' : 'בחרו גם חלון שעות';
-    else if(!footHint.textContent) footHint.textContent = 'מלאו את כל שדות החובה';
-    footHint.classList.remove('nudge'); void footHint.offsetWidth;   // restart the pulse on repeat taps
-    footHint.classList.add('nudge');
-    clearTimeout(nudgeT); nudgeT = setTimeout(()=>footHint.classList.remove('nudge'), 2600);
+    if(inTalk || step===6) footAlert.textContent = 'אנא מלאו את המידע החסר למעלה על מנת לשלוח את הטופס!';
+    else if(step===2) footAlert.textContent = !state.date ? 'בחרו קודם יום פנוי בלוח' : 'בחרו גם חלון שעות';
+    else footAlert.textContent = 'אנא מלאו את המידע החסר למעלה על מנת להמשיך!';
+    if(markReq) markReq();
+    footAlert.classList.remove('on'); void footAlert.offsetWidth;   // restart the shake on repeat taps
+    footAlert.classList.add('on');
   }
   goBtn.addEventListener('click', ()=>{
     if(goBtn.classList.contains('is-off')){ nudgeGo(); return; }
@@ -811,15 +843,50 @@ fbq('init','2174553826420246');fbq('track','PageView');
   });
   // talk prompt (footer) → leave-your-details / abandon screen, carrying anything already entered
   $('talkBtn').addEventListener('click', ()=>{ openTalk(step); });
-  $('backBtn').addEventListener('click', ()=>{
+  backBtn2.addEventListener('click', ()=>{
     if(inTalk){ inTalk=false; render(talkFromStep); return; }   // back out of the abandon screen → resume where they were
     if(step>1 && step<=6) render(step-1);
   });
-  // X → leave the flow, back to the website
-  $('exitBtn').addEventListener('click', ()=>{
-    // embedded as a popup (iframe) → ask the parent page to close the overlay; else navigate back
+  // ── save + exit overlays ──
+  let finished = false;                  // set once booked / callback sent - exit needs no warning then
+  function doExit(){
     if(window.parent!==window){ try{ window.parent.postMessage({ezra:'closeV2'},'*'); return; }catch(e){} }
     if(history.length>1) history.back(); else location.href='company-events.html';
+  }
+  function closeOvl(){ const o=$('ezraOvl'); if(o) o.remove(); }
+  function showOvl(html){ closeOvl();
+    const o=document.createElement('div'); o.className='ovl'; o.id='ezraOvl'; o.innerHTML='<div class="ovl__card">'+html+'</div>';
+    document.querySelector('.panel').appendChild(o); return o; }
+  async function openSave(){
+    saveProgress();
+    // resume-link contract: if the backend hook exists it returns a cross-device link;
+    // until then the draft lives in this browser and the plain URL restores it on return
+    let url=null;
+    if(window.EZRA_CREATE_DRAFT){ try{ url=(await window.EZRA_CREATE_DRAFT(collectState())||{}).url||null; }catch(e){} }
+    const local=!url; if(!url) url=location.origin+location.pathname;
+    const o=showOvl(
+      '<div class="ovl__title">הפרטים נשמרו</div>'+
+      '<p class="ovl__txt">ניתן לחזור לתהליך בכל שלב - נמשיך בדיוק מאיפה שעצרתם.'+(local?'<br>השמירה היא בדפדפן זה.':'')+'</p>'+
+      '<span class="ovl__link" id="ovlLink">'+url+'</span>'+
+      '<button class="ovl__btn ovl__btn--gold" id="ovlCopy" type="button">העתקת הקישור</button>'+
+      '<button class="ovl__btn ovl__btn--ghost" id="ovlClose" type="button">חזרה לתהליך</button>');
+    flashSaved();
+    o.querySelector('#ovlCopy').addEventListener('click',()=>{
+      try{ navigator.clipboard.writeText(url); o.querySelector('#ovlCopy').textContent='הקישור הועתק ✓'; }catch(e){}
+    });
+    o.querySelector('#ovlClose').addEventListener('click',closeOvl);
+  }
+  $('saveBtn').addEventListener('click', openSave);
+  // X → recommend saving first (wizard stays blurred behind); confirmation screens exit directly
+  $('exitBtn').addEventListener('click', ()=>{
+    if(finished || step>=7){ doExit(); return; }
+    const o=showOvl(
+      '<div class="ovl__title">רגע לפני שיוצאים</div>'+
+      '<p class="ovl__txt">אנו ממליצים לשמור את הפרטים שמילאתם עד כה, על מנת שלא תאבדו את המידע.<br>(ניתן לחזור לתהליך בכל שלב)</p>'+
+      '<button class="ovl__btn ovl__btn--gold" id="ovlSave" type="button">לשמירה</button>'+
+      '<button class="ovl__btn ovl__btn--ghost" id="ovlExit" type="button">יציאה ללא שמירה</button>');
+    o.querySelector('#ovlSave').addEventListener('click',()=>{ openSave(); });
+    o.querySelector('#ovlExit').addEventListener('click',()=>{ closeOvl(); doExit(); });
   });
 
   /* ═══════ STEP 1 · plan (pick → advance) ═══════ */
@@ -850,12 +917,18 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function syncCalCollapse(){
     const strip=$('whenStrip'), cal=body.querySelector('.when__cal'), div=body.querySelector('.when__div');
     if(!strip||!cal) return;
-    const collapse = !!state.date && !calExpanded && window.matchMedia('(max-width:720px)').matches;
+    const mobile = window.matchMedia('(max-width:720px)').matches;
+    const collapse = !!state.date && !calExpanded && mobile;
     strip.style.display = collapse ? 'flex' : 'none';
     cal.style.display = collapse ? 'none' : '';
     if(div) div.style.display = collapse ? 'none' : '';
     const sub=$('chosenSub'); if(sub) sub.style.display = collapse ? 'none' : '';   // strip already shows the date
     if(collapse) $('stripDate').textContent = humanDate(state.date);
+    // staged step 2 on mobile: calendar-only first; the time panel appears (big) only after a day
+    // is picked, using the space the collapsed calendar freed - sun arc fully visible
+    const skyWrap=body.querySelector('.when__sky'), when=body.querySelector('.when');
+    if(skyWrap) skyWrap.style.display = (mobile && !collapse) ? 'none' : '';
+    if(when) when.classList.toggle('when--picked', collapse);
   }
   function step2(){
     calExpanded=false;
@@ -1260,7 +1333,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
     if(window.fbq) fbq('track','Lead',{value:total||0,currency:'ILS'},{eventID:eventId});
     if(window.gtag) gtag('event','generate_lead',{value:total||0,currency:'ILS',transaction_id:eventId});
-    clearSave(); saveOn=false; if(saveChk) saveChk.checked=false;   // booked - no draft to resume
+    clearSave(); finished=true;   // booked - no draft to resume
   }
   // Digital paper receipt (perforated header, dotted-leader rows, per-dish detail, add-on math lines,
   // total) - the design explicitly asked to bring back for this step. Pure display; submitLead()'s
@@ -1352,7 +1425,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
     const req=['fName','fPhone','fEmail'].map(id=>$(id));
     const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
+    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
+      const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       if(map[el.id]) state[map[el.id]]=el.value;
       validate(); saveMaybe();
     }));
@@ -1397,7 +1472,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     stopBubbles();
     $('progTxt').textContent='יצירת קשר';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    $('backBtn').hidden=false;
     body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
     setFoot('שליחת הפרטים','', submitTalk, true, false);   // no talk-prompt on the talk screen itself
     body.innerHTML =
@@ -1427,7 +1501,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
     const req=['tkName','tkPhone','tkEmail'].map(id=>$(id));
     const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
+    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
+      const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
     }));
     const cc=$('tkConsent');
@@ -1454,7 +1530,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     setFoot(null,null,null,false,false);
     $('progTxt').textContent='סיום';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    $('backBtn').hidden=true;
     body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
     body.innerHTML =
       '<div class="done">'+
@@ -1483,7 +1558,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
     state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
     if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
-    saveOn=true; if(saveChk) saveChk.checked=true;
     render(Math.min(Math.max(s.step||1,1),6));
   })();
 })();
