@@ -451,21 +451,21 @@ fbq('init','2174553826420246');fbq('track','PageView');
      sticky (not absolute) so it tracks the scroll viewport's true edge in nested flex/grid panels;
      no dark band (nothing to hide the text underneath); only the arrow itself is clickable, the rest lets taps through. */
   /* accent is night/indigo by default (contrasts the warm gold panels); the evening-menu override below flips it to gold */
-  .scrollcue{--cue:#aab1f4;--cue-hi:#d3d7ff;--cue-glow:rgba(140,150,240,.9);--cue-ring:rgba(132,142,232,.58);
-    position:sticky;inset-inline:0;bottom:0;width:100%;height:34px;border:0;margin:0;background:none;
-    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.3rem;
+  .scrollcue{--cue:#9aa8f0;--cue-hi:#c9d1ff;
+    position:sticky;inset-inline:0;bottom:0;width:100%;height:48px;border:0;margin:0;
+    background:linear-gradient(180deg,transparent,rgba(27,21,15,.94) 75%);
+    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.15rem;
     color:var(--cue);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
   .scrollcue.is-visible{opacity:1}
   .scrollcue__wrap{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
     pointer-events:none}
   .scrollcue.is-visible .scrollcue__wrap{pointer-events:auto;cursor:pointer}
   .scrollcue__wrap:hover{color:var(--cue-hi)}
-  .scrollcue__ring{position:absolute;inset:0;border-radius:50%;
+  .scrollcue__ring{display:none;position:absolute;inset:0;border-radius:50%;
     background:radial-gradient(circle,var(--cue-ring),transparent 68%);animation:cueRingPulse 1.7s ease-out infinite}
-  .scrollcue__arrow{position:relative;width:16px;height:16px;animation:cueBounce 1.5s ease-in-out infinite;
+  .scrollcue__arrow{position:relative;width:20px;height:20px;animation:cueBounce 1.5s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(120,132,222,.85));
     filter:drop-shadow(0 0 5px var(--cue-glow)) drop-shadow(0 1px 2px rgba(0,0,0,.5))}
   /* evening menu = blue boxes → keep the arrow gold so it still contrasts */
-  .menu-view:not(.is-day) > .scrollcue{--cue:var(--gold);--cue-hi:var(--gold-light);--cue-glow:rgba(196,154,60,.9);--cue-ring:rgba(196,154,60,.55)}
   @keyframes cueBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
   @keyframes cueRingPulse{0%{transform:scale(.55);opacity:.8}100%{transform:scale(2.1);opacity:0}}
 
@@ -474,7 +474,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     body{padding:.4rem}
     .panel{height:100dvh;border-radius:16px}
     /* panels aren't bounded scroll-boxes on mobile (the whole page scrolls) → no scroll-cue arrows */
-    .scrollcue{display:none}
     .bar{padding:.5rem .7rem}
     .bar__save__label{display:none}
     #progTxt{display:none}   /* dots already show progress; drop the "Step X of N" text to de-cram the mobile header */
@@ -766,6 +765,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     void body.offsetWidth;
     body.classList.add(dir);
     STEPS[n]();
+    ensureScrollCue(body);            // every scrollable wizard page shows the scroll cue
     saveMaybe();
     // one GA4 event per step entry → build the wizard drop-off funnel (step 1 → confirmation)
     if(window.gtag) gtag('event','wizard_step',{step_number:n,step_name:(STEP_NAMES[n]||('step_'+n))});
@@ -1350,6 +1350,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       setFoot('Save details','', submitTalk, true, false);
     }
     validate();
+    ensureScrollCue(body);
   }
   function submitTalk(){
     if(saveModeActive){
