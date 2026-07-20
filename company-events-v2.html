@@ -489,9 +489,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
      no dark band (nothing to hide the text underneath); only the arrow itself is clickable, the rest lets taps through. */
   /* accent is night/indigo by default (contrasts the warm gold panels); the evening-menu override below flips it to gold */
   .scrollcue{--cue:#9aa8f0;--cue-hi:#c9d1ff;
-    position:sticky;inset-inline:0;bottom:0;width:100%;height:48px;border:0;margin:0;
-    background:linear-gradient(180deg,transparent,rgba(27,21,15,.94) 75%);
-    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.15rem;
+    position:sticky;inset-inline:0;bottom:0;width:100%;height:40px;border:0;margin:0;background:none;
+    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.2rem;
     color:var(--cue);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
   .scrollcue.is-visible{opacity:1}
   .scrollcue__wrap{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
