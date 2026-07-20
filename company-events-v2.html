@@ -114,6 +114,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
     padding:.72rem;transition:filter .2s,opacity .2s}
   .go:hover{filter:brightness(1.07)}
   .go:disabled{opacity:.38;cursor:not-allowed}
+  /* directional arrows: חזור points back (right, RTL), המשך points forward (left). CSS pseudo-elements
+     so they survive goBtn's textContent label swaps; masked SVG inherits the button's text color. */
+  .go,.go--back{display:inline-flex;align-items:center;justify-content:center;gap:.45em}
+  .go::after,.go--back::before{content:'';flex:none;width:.95em;height:.95em;background:currentColor;
+    -webkit-mask:center/contain no-repeat;mask:center/contain no-repeat}
+  .go--back::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E")}
+  .go::after{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E")}
   /* "not ready yet" state: looks disabled but stays tappable so a tap can EXPLAIN what's missing
      (a real disabled button swallows the tap silently = Clarity dead-clicks on mobile) */
   .go.is-off{opacity:.38}
@@ -489,8 +496,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
      no dark band (nothing to hide the text underneath); only the arrow itself is clickable, the rest lets taps through. */
   /* accent is night/indigo by default (contrasts the warm gold panels); the evening-menu override below flips it to gold */
   .scrollcue{--cue:#9aa8f0;--cue-hi:#c9d1ff;
-    position:sticky;inset-inline:0;bottom:0;width:100%;height:40px;border:0;margin:0;background:none;
-    display:flex;align-items:flex-end;justify-content:center;padding-block-end:.2rem;
+    position:sticky;inset-inline:0;bottom:.25rem;width:34px;height:34px;margin-inline:auto;border:0;background:none;
+    display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;
     color:var(--cue);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);z-index:2}
   .scrollcue.is-visible{opacity:1}
   .scrollcue__wrap{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
