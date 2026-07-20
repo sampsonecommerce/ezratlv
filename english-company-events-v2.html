@@ -537,9 +537,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .srow{min-height:34px}
     /* staged step 2: once the calendar collapses to the strip, the freed space goes to the
        time panel - taller arc so the sun animation isn't cut off, roomier slot rows */
-    .when--picked .sky__arc{height:72px}
-    .when--picked .srow{min-height:48px}
-    .when--picked .when__sky{min-height:200px}
+    .when--picked .sky__arc{height:56px}
+    .when--picked .srow{min-height:44px}
+    /* tall enough for the orb + up to 4 slot rows (Happy Hour) + caption, so the night row is never
+       clipped by the sky's overflow:hidden on mobile */
+    .when--picked .when__sky{min-height:268px}
     .menu-grid,.menu-drinks{grid-template-columns:1fr}
     .menu-card--wide .menu-dishes{grid-template-columns:1fr}
     /* step3: let it flow with the page (mobile scrolls); band stacks; segmented toggle goes full-width */
