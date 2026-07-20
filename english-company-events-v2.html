@@ -114,8 +114,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     padding:.72rem;transition:filter .2s,opacity .2s}
   .go:hover{filter:brightness(1.07)}
   .go:disabled{opacity:.38;cursor:not-allowed}
-  /* directional arrows (LTR): Back points back (left), Continue points forward (right). CSS pseudo-
-     elements so they survive goBtn's textContent label swaps; masked SVG inherits the button text color. */
+  /* directional arrows (LTR): Back points back (left), Continue points forward (right). CSS pseudo-elements
+     so they survive goBtn's textContent label swaps; masked SVG inherits the button's text color. */
   .go,.go--back{display:inline-flex;align-items:center;justify-content:center;gap:.45em}
   .go::after,.go--back::before{content:'';flex:none;width:.95em;height:.95em;background:currentColor;
     -webkit-mask:center/contain no-repeat;mask:center/contain no-repeat}
@@ -271,10 +271,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .menu-dish--desc{flex-direction:column;align-items:center;gap:.1rem;text-align:center}
   .menu-dish--desc .menu-dish__nm{color:var(--gold-light);font-weight:600;font-size:.85rem;line-height:1.3}
   .menu-dish--desc .menu-dish__ds{color:var(--cream-faint);font-size:.74rem;line-height:1.4}
-  /* step-4 header: right-aligned above the slider it describes (not centered) */
-  .s4head{text-align:start;margin-block-end:.2rem}
-  .s4head h2{font-weight:600;font-size:clamp(1.2rem,2.4vw,1.45rem);color:var(--cream);margin:0}
-  .s4head p{font-size:.82rem;color:var(--cream-dim);margin:.25rem 0 0}
   .bfield{max-width:66ch;margin:1.1rem auto 0}
   .bfield label{display:block;font-size:.8rem;color:var(--cream);font-weight:600;margin-block-end:.35rem}
   .bfield--err input,.bfield--err textarea{border-color:#a3372d;background:rgba(163,55,45,.1)}
@@ -286,43 +282,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
   /* iOS auto-zooms into any focused input under 16px and leaves the whole wizard zoomed/panned (X and
      frame edges off-screen, scroll jumps, top bar hidden after advancing). 16px on touch-width screens
      disables that auto-zoom without disabling the user's own pinch-zoom. */
-  @media (max-width:820px){ .bfield input,.bfield textarea,#gv{font-size:16px} }
+  @media (max-width:820px){ .bfield input,.bfield textarea,.guest-edit input{font-size:16px} }
 
-  /* ── step 4: guests + add-ons, coupe + live long receipt ── */
-  /* two groups: LEFT-in-flow controls (slider + add-ons), RIGHT-in-flow live summary (coupe crowns the receipt) */
-  /* step-4 grid: desktop = slider+addons (left) · coupe-hero+receipt (right);
-     mobile = slider → coupe-hero → addons → receipt (coupe reacts right under the bar) */
-  .calcgrid{display:grid;gap:.95rem 1.3rem;min-height:0;height:100%;
-    grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);
-    grid-template-areas:"slider hero" "addons receipt"}
-  .cg-slider{grid-area:slider;align-self:center}
-  .cg-hero{grid-area:hero}
-  /* padding-block-end matches the receipt's 1rem so the two scroll-cue arrows rest at the same height */
-  .cg-addons{grid-area:addons;min-height:0;overflow-y:auto;position:relative;padding-inline-end:.3rem;padding-block-end:1rem;
-    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .cg-addons::-webkit-scrollbar{width:6px}
-  .cg-addons::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
-  .cg-rcpt{grid-area:receipt;min-height:0;display:flex}
-  .cg-rcpt .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;
-    scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .cg-rcpt .rcpt::-webkit-scrollbar{width:6px}
-  .cg-rcpt .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
-  /* coupe + total, framed together as the live meter */
-  .summary-hero{display:flex;align-items:center;justify-content:center;gap:1.2rem;
-    padding:.7rem 1rem;border:.5px solid var(--line);border-radius:14px;background:rgba(196,154,60,.06)}
-  .summary-hero .glass-wrap{width:clamp(66px,13vw,84px);flex:none;margin:0}
-  .summary-hero__tot{font-family:'Pliant',var(--font-body);font-size:1.8rem;color:var(--gold-light);line-height:1;text-align:center}
-  .summary-hero__tot small{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--cream-dim);font-weight:400;margin-block-start:.25rem}
-  .gslide{display:flex;align-items:center;gap:.7rem}
-  .gslide input[type=range]{flex:1;appearance:none;-webkit-appearance:none;height:6px;border-radius:6px;
-    background:rgba(196,154,60,.25)}
-  .gslide input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
-    background:var(--gold);border:2px solid #141009;box-shadow:0 0 10px rgba(196,154,60,.6);cursor:grab}
-  /* the guests count is a keyboard-editable number input */
-  .gslide .gv{font-family:'Pliant',var(--font-body);font-size:1.4rem;color:var(--gold-light);width:3.2ch;text-align:center;
-    background:transparent;border:0;border-block-end:1px solid transparent;padding:0;-moz-appearance:textfield}
-  .gslide .gv:focus{outline:none;border-block-end-color:var(--gold)}
-  .gslide .gv::-webkit-outer-spin-button,.gslide .gv::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  /* ── step 4: add-ons only (single column; the whole step scrolls with .body, like the old flow) ── */
+  .addons-wrap{max-width:640px;margin:0 auto}
   .subhead{font-size:.95rem;font-weight:600;color:var(--cream);margin:0}
   .subhead small{display:block;font-size:.76rem;color:var(--cream-dim);font-weight:400}
   .addons{display:flex;flex-direction:column;gap:.55rem}
@@ -350,24 +313,97 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .coupetot{text-align:center;font-family:'Pliant',var(--font-body);font-size:1.35rem;color:var(--gold-light)}
   .coupetot small{display:block;font-family:var(--font-body);font-size:.66rem;color:var(--cream-dim);font-weight:400}
 
-  /* long receipt (shared 4/5) */
-  .rcpt{border:.5px solid var(--line);border-radius:14px;background:rgba(196,154,60,.05);padding:1rem 1.1rem;font-size:.86rem;position:relative}
-  .rcpt .rt{font-weight:700;font-size:1.02rem;color:var(--gold-light);text-align:center;margin-block-end:.6rem}
-  .rcpt .rr{display:flex;justify-content:space-between;gap:1rem;padding-block:.3rem;
-    border-block-end:1px dashed rgba(196,154,60,.18);color:var(--cream-dim)}
-  .rcpt .rr b{color:var(--cream)}
-  .rcpt .sect{font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--gold);
-    padding-block:.45rem .15rem;border-block-end:1px dashed rgba(196,154,60,.18)}
-  .rcpt .fr{display:flex;justify-content:space-between;gap:.8rem;padding-block:.24rem;font-size:.78rem;
-    border-block-end:1px dashed rgba(196,154,60,.12);color:var(--cream-dim)}
-  .rcpt .fr b{color:var(--cream);font-weight:500;white-space:nowrap}
-  .rcpt .fr b .num{color:var(--gold-light);font-size:.9rem}
-  .rcpt .grand{margin-block-start:.4rem;padding-block-start:.55rem;border-block-start:1px solid var(--line);
-    display:flex;justify-content:space-between;align-items:baseline;color:var(--cream)}
-  .rcpt .grand .v{font-family:'Pliant',var(--font-body);font-size:1.5rem;color:var(--gold-light)}
+  /* ── step 5: guest count — mini-info chip, plan/date/time/perhead chip, day/eve toggle,
+       collapsible food-amount pills, then a slider + guest-number/coupe/total row (old-flow layout) ── */
+  .calc-mininfo{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:0 0 .5rem;
+    font-size:.72rem;letter-spacing:.02em;color:var(--cream-faint)}
+  .calc-mininfo svg{width:14px;height:14px;color:var(--gold);flex:none}
+  .calc-details{padding:.5rem .85rem;border-radius:12px;background:rgba(196,154,60,.08);border:1px solid var(--line);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem .9rem;margin:0 0 .6rem}
+  .cd-row{display:flex;flex-direction:column;gap:0;min-width:0;text-align:center}
+  .cd-v{color:var(--cream);font-weight:600;font-size:.84rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;font-family:'Pliant',var(--font-body)}
+  .cd-k{color:var(--cream-faint);font-size:.68rem;line-height:1.2;white-space:nowrap}
+  .calc-zone{display:flex;flex-direction:column;gap:.6rem;margin-block:.3rem .5rem;padding:.75rem .7rem 1rem;
+    border:1px solid rgba(196,154,60,.22);border-radius:16px;background:rgba(0,0,0,.18)}
+  .calc-zone .menu-seg{margin:0 auto .1rem}
+  .calc-zone__pills{display:flex;flex-direction:column;gap:.4rem}
+  .vpill{border-radius:12px;overflow:hidden}
+  .vpill--food{background:linear-gradient(150deg,var(--gold-light),var(--gold))}
+  .vpill--addon{background:linear-gradient(150deg,#2a2d63,#16183a)}
+  .vpill__head{width:100%;display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .6rem;background:none;
+    border:0;cursor:pointer;text-align:start;font-family:var(--font-body)}
+  .vpill__main{flex:1;min-width:0;font-size:.76rem;line-height:1.5}
+  .vpill__cat{font-weight:700;font-size:.82rem;color:#2a1d05}
+  .vpill__cat svg{width:14px;height:14px;vertical-align:-2px;margin-inline-end:.25rem}
+  .vpill__items{color:#4a360f}
+  .vpill__qty{flex:none;margin-block-start:1px;font-weight:700;font-size:.74rem;color:#2a1d05;white-space:nowrap}
+  .vpill__chev{flex:none;margin-block-start:3px;width:14px;height:14px;color:#4a360f;transition:transform .25s var(--ease)}
+  .vpill[data-open="true"] .vpill__chev{transform:rotate(180deg)}
+  .vpill--addon .vpill__cat{color:#f4ecd3}
+  .vpill--addon .vpill__items{color:#c7c2e0}
+  .vpill--addon .vpill__qty{color:#f4ecd3}
+  .vpill--addon .vpill__chev{color:#c7c2e0}
+  .vpill__detail{padding:0 .7rem .6rem}
+  .vpill__detail-inner{background:rgba(0,0,0,.13);border-radius:8px;padding:.45rem .65rem;
+    display:flex;flex-direction:column;gap:.22rem}
+  .vpill__drow{display:flex;justify-content:space-between;gap:.6rem;font-size:.74rem;color:#3a2a08}
+  .vpill__drow b{font-weight:700;white-space:nowrap}
+  .vpill--addon .vpill__detail-inner{background:rgba(255,255,255,.07)}
+  .vpill--addon .vpill__drow{color:#e6e0f3}
+  .book-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:6px;
+    background:rgba(196,154,60,.22);outline:none;margin-block:.4rem 1.2rem;cursor:pointer}
+  .book-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;
+    background:var(--gold);border:3px solid #1b150f;box-shadow:0 0 0 1px var(--gold),0 4px 12px rgba(196,154,60,.5);cursor:pointer}
+  .book-range::-moz-range-thumb{width:26px;height:26px;border-radius:50%;
+    background:var(--gold);border:3px solid #1b150f;cursor:pointer;box-shadow:0 0 0 1px var(--gold)}
+  .calc-value__line{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:.9rem;margin-block:.3rem .2rem}
+  .calc-value__line .guest-edit{justify-self:end}
+  .calc-value__total{justify-self:start;font-family:'Pliant',var(--font-body);font-weight:700;font-size:1.7rem;
+    color:var(--gold-light);direction:ltr}
+  /* small coupe sits between the guest count and the price as a glowing separator */
+  .calc-value__coupe{position:relative;justify-self:center;display:flex;align-items:center;justify-content:center}
+  .calc-value__coupe::before{content:'';position:absolute;inset:-55% -35%;z-index:0;pointer-events:none;
+    background:radial-gradient(50% 46% at 50% 48%,rgba(245,217,138,.42),rgba(245,217,138,.10) 52%,transparent 72%)}
+  .calc-value__coupe .glass-wrap{position:relative;z-index:1;width:clamp(42px,11vw,54px);height:auto;aspect-ratio:150/188;margin:0}
+  .guest-edit{display:inline-flex;align-items:baseline;gap:.35rem;color:var(--cream);font-size:.95rem}
+  .guest-edit input{width:2.6em;text-align:center;background:rgba(196,154,60,.1);border:1px solid var(--line);
+    border-radius:9px;padding:.1rem .2rem;color:var(--gold-light);font-family:'Pliant',var(--font-body);
+    font-size:1.5rem;font-weight:700}
+  .guest-edit input::-webkit-outer-spin-button,.guest-edit input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .guest-edit input:focus{outline:none;border-color:var(--gold)}
+  .calc-zone-wrap{max-width:640px;margin:0 auto}
 
-  /* ── step 5: details + receipt side by side — both columns are equal-height scroll-boxes (like step 4),
-       so each shows its own scroll-cue arrow at the same bottom line instead of one floating mid-page ── */
+  /* ── step 6: details + paper receipt side by side ── */
+  .receipt{position:relative;text-align:start;background:rgba(0,0,0,.28);border:1px solid rgba(196,154,60,.18);
+    border-radius:16px;padding:1.1rem 1.15rem 1.2rem}
+  .receipt__bar{position:absolute;inset-block-start:0;inset-inline:0;height:3px;border-radius:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);opacity:.6}
+  .receipt__head{display:flex;justify-content:space-between;align-items:center;padding-block:.2rem .4rem}
+  .receipt__brand{font-weight:600;font-size:1rem;color:var(--gold-light)}
+  .receipt__ref{font-family:'Pliant',var(--font-body);font-size:.82rem;letter-spacing:.04em;color:var(--cream-dim);direction:ltr}
+  .receipt__perf{position:relative;border-block-start:1px dashed rgba(240,235,224,.22);margin-inline:-1.15rem;margin-block:.7rem .9rem}
+  .receipt__perf::before,.receipt__perf::after{content:'';position:absolute;top:-7px;width:14px;height:14px;
+    border-radius:50%;background:var(--panel2)}
+  .receipt__perf::before{inset-inline-start:-7px}
+  .receipt__perf::after{inset-inline-end:-7px}
+  .receipt__row{display:flex;align-items:baseline;gap:.5rem;margin-block-end:.65rem}
+  .receipt__k{font-size:.86rem;color:var(--cream-dim);white-space:nowrap}
+  .receipt__dots{flex:1;border-block-end:1px dotted rgba(240,235,224,.18);transform:translateY(-3px)}
+  .receipt__v{font-size:.9rem;color:var(--cream);font-weight:500;white-space:nowrap;font-family:'Pliant',var(--font-body)}
+  .receipt__row--sub .receipt__k{font-size:.8rem;color:var(--cream-faint)}
+  .receipt__row--sub .receipt__v{font-size:.85rem;color:var(--cream-dim);font-family:'Pliant',var(--font-body);direction:ltr}
+  .receipt__sect{border-block-start:1px solid rgba(240,235,224,.1);padding-block-start:.8rem;margin-block-start:.85rem}
+  .receipt__sect-head{display:flex;justify-content:space-between;align-items:center;margin-block-end:.55rem}
+  .receipt__detail{margin-block-start:.7rem;display:flex;flex-direction:column;gap:.7rem}
+  .rcpt-cat__t{color:var(--gold-light);font-weight:600;font-size:.82rem;margin-block-end:.3rem}
+  .rcpt-dish{color:var(--cream-dim);font-size:.8rem;line-height:1.5;padding-inline-start:.2rem}
+  .receipt__addhead{font-size:.82rem;font-weight:600;color:var(--gold-light);margin-block:.55rem .35rem}
+  .receipt__total{display:flex;justify-content:space-between;align-items:baseline;padding-block-start:.9rem}
+  .receipt__sum{font-family:'Pliant',var(--font-body);font-weight:700;font-size:1.5rem;color:var(--gold-light);direction:ltr}
+
+  /* both columns are equal-height scroll-boxes, so each shows its own scroll-cue arrow at the same
+     bottom line instead of one floating mid-page ── */
   .body.is-details{display:flex;flex-direction:column}
   .body.is-details .details{flex:1 1 auto;min-height:0}
   .details{display:flex;gap:1.2rem;align-items:stretch}
@@ -380,10 +416,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .details__form .bfield{max-width:none;margin:0}
   .details__form .frow{margin:0}
   .details__rcpt{flex:1 1 0;min-width:0;min-height:0;display:flex}
-  .details__rcpt .rcpt{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;
+  .details__rcpt .receipt{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0;max-width:none;
     scrollbar-width:thin;scrollbar-color:rgba(196,154,60,.5) transparent}
-  .details__rcpt .rcpt::-webkit-scrollbar{width:6px}
-  .details__rcpt .rcpt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
+  .details__rcpt .receipt::-webkit-scrollbar{width:6px}
+  .details__rcpt .receipt::-webkit-scrollbar-thumb{background:rgba(196,154,60,.4);border-radius:99px}
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
   .check{display:flex;gap:.55rem;align-items:flex-start;margin-block-start:.7rem;font-size:.76rem;color:var(--cream-dim);cursor:pointer}
   /* mandatory-consent error state */
@@ -405,6 +441,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .talk__note span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
   .talk__form{display:flex;flex-direction:column;gap:.85rem}
   .talk__form .bfield{max-width:none;margin:0}
+  /* save / exit overlays: sit on top of the wizard, wizard stays visible blurred behind */
   .ovl{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
     background:rgba(10,8,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1rem}
   .ovl[hidden]{display:none}
@@ -487,7 +524,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .bar{padding:.5rem .7rem}
     .bar__save__label{display:none}
     #progTxt{display:none}   /* dots already show progress; drop the "Step X of N" text to de-cram the mobile header */
-    .body{padding:.8rem .8rem 1.1rem}
+    /* mobile: the internal scroller only scrolls vertically. without this, overflow-y:auto makes the
+       horizontal axis compute to `auto`, so any element a few px too wide (e.g. the receipt's perforated
+       line with its negative side-margins) lets the whole panel be dragged left/right. hidden kills that. */
+    .body{padding:.8rem .8rem 1.1rem;overflow-x:hidden}
     .plans{margin-block-start:3vh}
     .when{flex-direction:column;gap:.7rem}
     .when__div{display:none}
@@ -495,6 +535,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .cal__day{font-size:.7rem}
     .sky__arc{height:42px}
     .srow{min-height:34px}
+    /* staged step 2: once the calendar collapses to the strip, the freed space goes to the
+       time panel - taller arc so the sun animation isn't cut off, roomier slot rows */
     .when--picked .sky__arc{height:72px}
     .when--picked .srow{min-height:48px}
     .when--picked .when__sky{min-height:200px}
@@ -507,21 +549,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
     .menu3__title{text-align:center}
     .menu-seg{width:100%}
     .menu-seg__opt{flex:1;justify-content:center}
-    /* step4 stacks: slider → coupe+total → add-ons → receipt (coupe reacts right under the bar) */
-    .calcgrid{grid-template-columns:1fr;grid-template-rows:none;height:auto;
-      grid-template-areas:"slider" "hero" "addons" "receipt"}
-    .cg-addons{overflow:visible}
-    .cg-rcpt .rcpt{overflow:visible}
-    .summary-hero{gap:1rem}
-    .summary-hero .glass-wrap{width:70px}
-    /* step5 stacks and scrolls with the page — never bounded scroll columns on mobile.
+    .addons-wrap,.calc-zone-wrap{max-width:none}
+    .calc-value__coupe .glass-wrap{width:48px}
+    /* step6 stacks and scrolls with the page — never bounded scroll columns on mobile.
        flex:none keeps the panels at natural height (flex-basis:0 + min-height:0 would collapse and overlap them)
        while preserving the flex gaps between panels and between fields. */
     .body.is-details{display:block}
     .details{flex-direction:column;height:auto}
     .details__form{flex:none;overflow:visible;min-height:auto;padding-inline-end:0;padding-block-end:0}
-    .details__rcpt{flex:none;position:static;width:100%;min-height:auto}
-    .details__rcpt .rcpt{flex:none;overflow:visible;min-height:auto}
+    .details__rcpt{flex:none;position:static;width:100%;min-height:auto;display:block}
+    .details__rcpt .receipt{flex:none;overflow:visible;min-height:auto;max-width:none}
     .frow{grid-template-columns:1fr}
     .foot{gap:.5rem;padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom))}
     .foot__hint{display:none}
@@ -545,7 +582,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     </div>
     <div class="bar__prog">
       <span id="progTxt"></span>
-      <span class="bar__dots" id="progDots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="bar__dots" id="progDots"><i></i><i></i><i></i><i></i><i></i><i></i></span>
     </div>
     <div class="bar__end">
       <button class="bar__x" id="exitBtn" type="button" aria-label="Close and return to the site">
@@ -565,7 +602,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
       </div>
     </div>
     <button class="foot__talk" id="talkBtn" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1 3.6-11.3 8.38 8.38 0 0 1 12.5 7.5z"/></svg><span>Prefer to talk before booking? Leave your details and we'll get back to you</span></button>
-    </div>
   </div>
 </div>
 
@@ -582,7 +618,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
 
-  // ── save-and-continue (top bar) — ON by default: the process auto-saves at every step ──
+  // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
   const SAVE_KEY='ezraProto2';
   const savedFlash=$('savedFlash');
   function collectState(){ return { plan:state.plan, date:state.date?key(state.date):null, slot:state.slot, guests:state.guests,
@@ -772,10 +808,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   // ── frame plumbing ──
   // funnel measurement: GA4 event names per step so the booking wizard shows a real drop-off funnel
-  const STEP_NAMES={1:'plan',2:'date_time',3:'menu',4:'guests_addons',5:'details',6:'confirmation'};
+  const STEP_NAMES={1:'plan',2:'date_time',3:'menu',4:'addons',5:'guests',6:'details',7:'confirmation'};
   function setProgress(n){
-    $('progTxt').innerHTML = n<=5 ? ('Step <span class="num">'+n+'</span> of <span class="num">5</span>') : 'Done';
-    [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on',i<Math.min(n,5)));
+    $('progTxt').innerHTML = n<=6 ? ('Step <span class="num">'+n+'</span> of <span class="num">6</span>') : 'Done';
+    [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on',i<Math.min(n,6)));
   }
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
@@ -824,8 +860,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function nudgeGo(){
     // the talk screen keeps `step` at the step it was opened from, so it must be checked FIRST —
-    // otherwise a step-2 visitor gets "pick a day first" on a screen with no calendar
-    if(inTalk || step===5) footAlert.textContent = 'Please fill in the missing information above to send the form!';
+    // otherwise a step-2 visitor gets "pick a day in the calendar" on a screen with no calendar
+    if(inTalk || step===6) footAlert.textContent = 'Please fill in the missing information above to send the form!';
     else if(step===2) footAlert.textContent = !state.date ? 'Pick an available day first' : 'Also pick a time window';
     else footAlert.textContent = 'Please fill in the missing information above to continue!';
     if(markReq){ markReq();
@@ -843,7 +879,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   $('talkBtn').addEventListener('click', ()=>{ openTalk(step); });
   backBtn2.addEventListener('click', ()=>{
     if(inTalk){ inTalk=false; render(talkFromStep); return; }   // back out of the abandon screen → resume where they were
-    if(step>1 && step<=5) render(step-1);
+    if(step>1 && step<=6) render(step-1);
   });
   // ── save + exit overlays ──
   let finished = false;                  // set once booked / callback sent - exit needs no warning then
@@ -854,7 +890,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function closeOvl(){ const o=$('ezraOvl'); if(o) o.remove(); }
   function showOvl(html){ closeOvl();
     const o=document.createElement('div'); o.className='ovl'; o.id='ezraOvl';
-    o.innerHTML='<div class="ovl__card"><button class="ovl__x" type="button" aria-label="\u05e1\u05d2\u05d9\u05e8\u05d4">\u2715</button>'+html+'</div>';
+    o.innerHTML='<div class="ovl__card"><button class="ovl__x" type="button" aria-label="Close">\u2715</button>'+html+'</div>';
     o.querySelector('.ovl__x').addEventListener('click',closeOvl);
     document.querySelector('.panel').appendChild(o); return o; }
   let saveModeActive=false;
@@ -886,7 +922,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   $('saveBtn').addEventListener('click', openSave);
   // X → recommend saving first (wizard stays blurred behind); confirmation screens exit directly
   $('exitBtn').addEventListener('click', ()=>{
-    if(finished || step>=6){ doExit(); return; }
+    if(finished || step>=7){ doExit(); return; }
     const o=showOvl(
       '<div class="ovl__title">Before you go</div>'+
       '<p class="ovl__txt">We recommend saving what you\'ve filled in so far, so you don\'t lose your details.<br>(You can return to the process at any stage)</p>'+
@@ -1085,7 +1121,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     ensureScrollCue(mv);
   }
 
-  /* ═══════ STEP 4 · guests + add-ons (coupe + live long receipt) ═══════ */
+  /* ═══════ STEP 4 · add-ons only ═══════ */
   function step4(){
     setFoot('Continue','',()=>render(5),false);
     const addonRows=E.ADDONS.filter(addonApplies).map(a=>
@@ -1097,27 +1133,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
         '</span>'+
       '</button>').join('');
     body.innerHTML =
-      '<div class="calcgrid">'+
-        '<div class="cg-slider">'+
-          '<div class="s4head"><h2>Number of guests</h2><p>Drag the slider or type a number - the quantities and price update together</p></div>'+
-          '<div class="gslide"><input class="gv" id="gv" type="number" min="20" max="50" value="'+state.guests+'" aria-label="Number of guests" /><input type="range" id="gr" min="20" max="50" value="'+state.guests+'" /></div>'+
-        '</div>'+
-        '<div class="cg-hero summary-hero">'+COUPE+'<div class="summary-hero__tot" id="coupeTot"></div></div>'+
-        '<div class="cg-addons" id="cgAddons">'+
-          '<p class="subhead">Event add-ons<small>Check what to add - you can also continue without any</small></p>'+
-          '<div class="addons" id="addons" style="margin-block-start:.55rem">'+addonRows+'</div>'+
-        '</div>'+
-        '<div class="cg-rcpt"><div class="rcpt" id="liveR"><div id="liveRInner"></div></div></div>'+
-      '</div>';
-    const gr=$('gr'), gv=$('gv');
-    gv.value=state.guests;
-    // slider drag → number; keyboard type → slider (clamped 20-50)
-    gr.addEventListener('input',()=>{state.guests=+gr.value;gv.value=gr.value;refreshLive();saveMaybe();});
-    const commitGv=()=>{let n=parseInt(gv.value,10);if(isNaN(n))n=20;n=Math.min(50,Math.max(20,n));
-      state.guests=n;gv.value=n;gr.value=n;refreshLive();saveMaybe();};
-    gv.addEventListener('input',()=>{const n=parseInt(gv.value,10);if(!isNaN(n)){state.guests=Math.min(50,Math.max(20,n));gr.value=state.guests;refreshLive();}});
-    gv.addEventListener('blur',commitGv);
-    gv.addEventListener('keydown',e=>{if(e.key==='Enter'){commitGv();gv.blur();}});
+      '<h2 class="steptitle">Event add-ons</h2>'+
+      '<p class="stepsub">Check what to add - you can also continue without any</p>'+
+      '<div class="addons-wrap"><div class="addons" id="addons">'+addonRows+'</div></div>';
     $('addons').addEventListener('click',e=>{
       const b=e.target.closest('.addon'); if(!b)return;
       const id=b.dataset.id; state.addons[id]=!state.addons[id];
@@ -1130,12 +1148,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
       }
       b.classList.toggle('is-on',!!state.addons[id]);
       b.setAttribute('aria-pressed',!!state.addons[id]);
-      refreshLive();
+      saveMaybe();
     });
-    setupCoupe();
-    refreshLive();
-    startBubbles();
-    ensureScrollCue($('cgAddons'));
+    ensureScrollCue($('body'));   // single-column step → body-level cue is safe (nothing to float between)
   }
   function updateCoupe(){
     const f=Math.min(Math.max((state.guests-20)/30,0),1);
@@ -1145,45 +1160,174 @@ fbq('init','2174553826420246');fbq('track','PageView');
       liquidTopEl.setAttribute('cy',liqSurfaceY.toFixed(1));
       liquidTopEl.setAttribute('rx',(halfWidth(liqSurfaceY)-1.5).toFixed(1)); }
   }
-  function receiptInner(){
-    const t=totals(); const p=E.PLANS[state.plan];
-    const addRows=selectedAddons().map(a=>'<div class="rr"><span>'+a.label+'</span><b class="num">'+fmt(E.addonUnitPrice(a,t.g))+'</b></div>').join('');
-    let bar='', food='';
-    E.menuFor(state.plan,state.menu||'day').forEach(sec=>{
-      if(E.isBarCat(sec.t)){
-        // bar / alcohol / soft-drinks: included with the package, listed by name (no per-portion qty) and shown BEFORE the food
-        const brows=sec.items.map(it=>'<div class="fr"><span>'+E.splitDish(it).name+'</span><b>Included</b></div>').join('');
-        if(brows)bar+='<div class="sect">'+sec.t+'</div>'+brows;
-        return;
-      }
-      const names=sec.items.map(it=>E.splitDish(it).name);
-      const pr=E.categoryPortions(sec.t,names,t.g);
-      const rows=pr.breakdown.filter(b=>b.qty!=null).map(b=>
-        '<div class="fr"><span>'+E.dishDisplay(sec.t,b.name)+'</span><b><span class="num">'+b.qty+'</span> '+b.unit+'</b></div>').join('');
-      if(rows)food+='<div class="sect">'+sec.t+'</div>'+rows;
+
+  /* ═══════ STEP 5 · guest count: mini-info + plan/date/time chip + day/eve toggle +
+     collapsible food-amount pills + slider/coupe/total (old-flow layout, ported) ═══════ */
+  const CHEV_SVG='<svg class="vpill__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  const FOOD_CAT_ICON=name=>{
+    const I=p=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+    if(/bar|alcohol|cocktail/i.test(name)) return I('<path d="M5 3h14l-7 9z"/><path d="M12 12v7"/><path d="M8 21h8"/>');
+    if(/drink|coffee|tea|soft/i.test(name))       return I('<path d="M4 8h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 3v2M11 3v2"/>');
+    if(/sandwich|tray|bureka|pastr/i.test(name))   return I('<path d="M4 11a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1H4z"/><path d="M4 12v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>');
+    if(/taboon|pizza/i.test(name))           return I('<path d="M12 3 3 20l9-2 9 2z"/><circle cx="11" cy="11" r="1"/><circle cx="13" cy="15" r="1"/>');
+    if(/salad/i.test(name))                 return I('<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 11a3 3 0 0 1 6 0"/><path d="M12 3v4"/>');
+    return I('<path d="M12 3v18M3 12h18"/>');
+  };
+  // word-saving: collapse a shared leading "vessel" word, separate food types with |
+  const VESSEL=/^(plate|platter|bowl|tray|trays|basket|station)$/i;
+  function compactItems(names){
+    const groups=[]; const idx={};
+    names.forEach(n=>{
+      const sp=n.split(' '), head=sp[0], tail=sp.slice(1).join(' ');
+      if(VESSEL.test(head)&&tail){
+        if(idx[head]==null){ idx[head]=groups.length; groups.push({head,tails:[]}); }
+        groups[idx[head]].tails.push(tail);
+      } else groups.push({head:n,tails:null});
     });
-    return '<div class="rt">Order summary</div>'+
-      '<div class="rr"><span>Package</span><b>'+p.label+'</b></div>'+
-      '<div class="rr"><span>Date</span><b>'+(state.date?humanDate(state.date):'-')+'</b></div>'+
-      '<div class="rr"><span>Time</span><b class="num">'+(state.slot||'-')+'</b></div>'+
-      '<div class="rr"><span>Menu</span><b>'+(state.menu==='evening'?'Evening':'Day')+'</b></div>'+
-      '<div class="rr"><span>Guests</span><b class="num">'+t.g+'</b></div>'+
-      bar+food+
-      '<div class="rr" style="margin-block-start:.35rem"><span>Price per person</span><b class="num">'+fmt(t.ph)+'</b></div>'+
-      addRows+
-      '<div class="rr"><span>Add-ons</span><b class="num">'+fmt(t.add)+'</b></div>'+
-      (t.promoActive?'<div class="rr"><span>July 10% off</span><b class="num">-'+fmt(t.discount)+'</b></div>':'')+
-      '<div class="grand"><span>Total (estimated)</span><span class="v">'+fmt(t.total)+'</span></div>';
+    return groups.map(g=>g.tails?g.head+' '+g.tails.join(', '):g.head).join(' | ');
   }
-  function refreshLive(){
-    const r=document.getElementById('liveRInner'); if(r)r.innerHTML=receiptInner();
-    const tot=document.getElementById('coupeTot');
-    if(tot)tot.innerHTML='<span class="num">'+fmt(totals().total)+'</span><small>Total (estimated)</small>';
+  function compactTaboon(names){
+    const pi=[], fo=[];
+    names.forEach(n=>{ if(/focaccia/i.test(n)) fo.push(n.replace(/\s*focaccia$/i,'')); else pi.push(n); });
+    const parts=[];
+    if(pi.length) parts.push('Pizza '+pi.join(', '));
+    if(fo.length) parts.push('Focaccia '+fo.join(', '));
+    return parts.join(' | ');
+  }
+  function pillHTML(cat,itemsLine,p,isAddon){
+    const detail=p.breakdown.length
+      ? p.breakdown.map(b=>'<div class="vpill__drow"><span>'+E.dishDisplay(cat,b.name)+'</span><b>'+(b.qty!=null?b.qty+' '+b.unit:'Included')+'</b></div>').join('')
+      : '<div class="vpill__drow"><span>Not selected yet</span></div>';
+    return '<div class="vpill '+(isAddon?'vpill--addon':'vpill--food')+'" data-open="false">'+
+      '<button class="vpill__head" type="button" aria-expanded="false">'+
+        '<span class="vpill__main"><span class="vpill__cat">'+FOOD_CAT_ICON(cat)+cat+':</span> '+
+        '<span class="vpill__items">'+itemsLine+'</span></span>'+
+        '<span class="vpill__qty">'+p.qtyLabel+'</span>'+CHEV_SVG+
+      '</button>'+
+      '<div class="vpill__detail" hidden><div class="vpill__detail-inner">'+detail+'</div></div>'+
+    '</div>';
+  }
+  // 5-ish pills: food/alcohol categories (drinks merged into one bar pill) + an add-ons pill
+  let lastPillsKey='';
+  function renderFoodPills(){
+    const el=$('foodAmounts'); if(!el) return;
+    const guests=state.guests;
+    const secs=E.menuFor(state.plan,state.menu);
+    const food=secs.filter(s=>!E.isBarCat(s.t)), drinks=secs.filter(s=>E.isBarCat(s.t));
+    const pills=[];
+    food.forEach(s=>{
+      const names=s.items.map(it=>E.splitDish(it).name);
+      const p=E.categoryPortions(s.t,names,guests);
+      const items=/taboon|pizza/i.test(s.t)?compactTaboon(names):compactItems(names);
+      pills.push(pillHTML(s.t,items,p,false));
+    });
+    if(drinks.length){
+      const names=drinks.reduce((a,s)=>a.concat(s.items.map(it=>E.splitDish(it).name)),[]);
+      const label=drinks.length===1?drinks[0].t:'Bar & drinks';
+      pills.push(pillHTML(label,compactItems(names),{isBar:true,qtyLabel:'Unlimited',breakdown:names.map(n=>({name:n,qty:null,unit:''}))},false));
+    }
+    const sel=selectedAddons();
+    const adBreak=sel.map(a=>({
+      name:a.label,
+      qty:a.unit==='tray'?Math.max(1,Math.ceil(guests/10)):a.unit==='head'?guests:null,
+      unit:a.unit==='tray'?'trays':a.unit==='head'?'servings':'',
+    }));
+    pills.push(pillHTML('Add-ons',sel.length?sel.map(a=>a.label).join(' · '):'No add-ons selected',
+      {isBar:false,qtyLabel:sel.length?(sel.length===1?'1 add-on':sel.length+' add-ons'):'None',breakdown:adBreak},true));
+    const html=pills.join('');
+    if(html===lastPillsKey) return;   // nothing visible changed → skip rebuild (keeps the pop animation from restarting mid-drag)
+    lastPillsKey=html;
+    // remember which pills the user had expanded so moving the slider doesn't snap them shut on rebuild
+    const openIdx=[];
+    el.querySelectorAll('.vpill').forEach((v,i)=>{ if(v.dataset.open==='true') openIdx.push(i); });
+    el.innerHTML=html;
+    if(openIdx.length){
+      const fresh=el.querySelectorAll('.vpill');
+      openIdx.forEach(i=>{
+        const pill=fresh[i]; if(!pill) return;
+        pill.dataset.open='true';
+        const head=pill.querySelector('.vpill__head'); if(head) head.setAttribute('aria-expanded','true');
+        const det=pill.querySelector('.vpill__detail'); if(det) det.hidden=false;
+      });
+    }
+  }
+  // 4-field chip: plan · date · time · per-head
+  function renderCalcDetails(){
+    const el=$('calcDetails'); if(!el) return;
+    const plan=E.PLANS[state.plan]; if(!plan) return;
+    const shortDate=d=>pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.'+String(d.getFullYear()%100).padStart(2,'0');
+    const rows=[
+      ['Package',plan.label],
+      ['Date',state.date?shortDate(state.date):'-'],
+      ['Time',state.slot||'-'],
+      ['Per person',fmt(plan.perHead)],
+    ];
+    const T=totals();
+    if(T.promoActive) rows.push(['July 10% off','-'+fmt(T.discount)]);
+    el.innerHTML=rows.map(r=>'<div class="cd-row"><span class="cd-v">'+r[1]+'</span><span class="cd-k">'+r[0]+'</span></div>').join('');
+  }
+  function step5(){
+    setFoot('Continue to details','',()=>render(6),false);
+    body.innerHTML =
+      '<h2 class="steptitle">Number of guests</h2>'+
+      '<p class="stepsub">Drag the slider or type a number - the quantities and price update together</p>'+
+      '<div class="calc-zone-wrap">'+
+        '<p class="calc-mininfo">'+ICON_INFO+'<span>Minimum booking - 20 guests</span></p>'+
+        '<div class="calc-details" id="calcDetails"></div>'+
+        '<div class="calc-zone">'+
+          '<div class="menu-seg" id="calcMenuToggle" role="tablist" aria-label="Menu selection">'+
+            '<button type="button" class="menu-seg__opt menu-seg__opt--day" data-menu="day" role="tab">'+ICON_SUN+'<span>Day menu</span></button>'+
+            '<button type="button" class="menu-seg__opt menu-seg__opt--eve" data-menu="evening" role="tab">'+ICON_MOON+'<span>Evening menu</span></button>'+
+          '</div>'+
+          '<div class="calc-zone__pills" id="foodAmounts"></div>'+
+          '<input type="range" id="gr" class="book-range" min="20" max="50" step="1" value="'+state.guests+'" aria-label="Number of guests" />'+
+          '<div class="calc-value__line">'+
+            '<span class="guest-edit"><input id="gv" type="number" inputmode="numeric" min="20" max="50" value="'+state.guests+'" aria-label="Number of guests" /><span>guests</span></span>'+
+            '<span class="calc-value__coupe" aria-hidden="true">'+COUPE+'</span>'+
+            '<span class="calc-value__total" id="coupeTot"></span>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    document.querySelectorAll('#calcMenuToggle .menu-seg__opt').forEach(b=>b.classList.toggle('is-active',b.dataset.menu===state.menu));
+    document.querySelectorAll('#calcMenuToggle .menu-seg__opt').forEach(b=>b.setAttribute('aria-selected',b.dataset.menu===state.menu));
+    $('calcMenuToggle').addEventListener('click',e=>{
+      const b=e.target.closest('.menu-seg__opt'); if(!b||b.dataset.menu===state.menu) return;
+      state.menu=b.dataset.menu;
+      document.querySelectorAll('#calcMenuToggle .menu-seg__opt').forEach(x=>{const on=x.dataset.menu===state.menu;x.classList.toggle('is-active',on);x.setAttribute('aria-selected',on);});
+      refreshCalc(); saveMaybe();
+    });
+    const gr=$('gr'), gv=$('gv');
+    gr.addEventListener('input',()=>{state.guests=+gr.value;gv.value=gr.value;refreshCalc();saveMaybe();});
+    const commitGv=()=>{let n=parseInt(gv.value,10);if(isNaN(n))n=20;n=Math.min(50,Math.max(20,n));
+      state.guests=n;gv.value=n;gr.value=n;refreshCalc();saveMaybe();};
+    gv.addEventListener('input',()=>{const n=parseInt(gv.value,10);if(!isNaN(n)){state.guests=Math.min(50,Math.max(20,n));gr.value=state.guests;refreshCalc();}});
+    gv.addEventListener('blur',commitGv);
+    gv.addEventListener('keydown',e=>{if(e.key==='Enter'){commitGv();gv.blur();}});
+    $('foodAmounts').addEventListener('click',e=>{
+      const head=e.target.closest('.vpill__head'); if(!head) return;
+      const pill=head.closest('.vpill');
+      const open=pill.dataset.open==='true';
+      pill.dataset.open=String(!open);
+      head.setAttribute('aria-expanded',String(!open));
+      pill.querySelector('.vpill__detail').hidden=open;
+      checkScrollCue(body);   // expanding/collapsing a pill changes the step's content height
+    });
+    setupCoupe();
+    lastPillsKey='';   // force a fresh pill render on step entry
+    refreshCalc();
+    startBubbles();
+    ensureScrollCue($('body'));   // single-column step → body-level cue is safe (nothing to float between)
+  }
+  function refreshCalc(){
+    renderCalcDetails();
+    renderFoodPills();
+    const tot=$('coupeTot');
+    if(tot) tot.innerHTML=fmt(totals().total);
     updateCoupe();
-    ensureScrollCue($('liveR'));
+    checkScrollCue(body);   // pill expand/collapse + guest-count changes affect content height
   }
 
-  /* ═══════ STEP 5 · details (the only typing) ═══════ */
+  /* ═══════ STEP 6 · details (the only typing) ═══════ */
   // contract label maps — Monday status-column KEYS (never shown to the customer). Must match the
   // board's existing Hebrew labels exactly, same values the Hebrew v2 sends, or the columns won't set.
   const PKG_LABEL={happyhour:'רגילה',gibush:'מורחבת',mesiba:'פרימיום'};
@@ -1204,7 +1348,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       date:state.date?key(state.date):'', slot:state.slot||'',
       guests:gg, perHead:ph, base:base, addonsTotal:addOns, estTotal:total,
       estTotalGross:gross, discount:_pd.amount, promoApplied:_pd.active,
-      addons:sel.map(a=>a.id), addonLabels:sel.map(a=>HE_ADDON_LABEL[a.id]||a.label),   // Hebrew labels for the Monday dropdown
+      addons:sel.map(a=>a.id), addonLabels:sel.map(a=>HE_ADDON_LABEL[a.id]||a.label),
       name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address,
       notes:state.notes, menu:state.menu||'', foodNotes:state.foodNotes,
       foodMenuText:plan?E.buildFoodText(state.plan,state.menu,gg,state.foodNotes):'',
@@ -1221,15 +1365,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
       consent: isCallback ? !!($('tkConsent')&&$('tkConsent').checked) : !!($('fConsent')&&$('fConsent').checked),
       hp: isCallback ? (($('tkHp')&&$('tkHp').value)||'') : (($('fHp')&&$('fHp').value)||''),   // honeypot
     };
-    // Attribution rides cookies the PARENT set from the real ad-landing URL; the iframe's own
-    // location.search only carries ?plan=, so reading utm/gclid off it here would always be empty.
+    // Attribution rides cookies the PARENT page set from the real ad-landing URL. The iframe's own
+    // location.search only ever carries ?plan=, so reading utm/gclid off it here would always be empty;
+    // location.search stays only as a fallback for the rare case the widget is loaded directly.
     const _utm=new URLSearchParams(location.search);
-    const _ck=n=>{const v=_cookie(n);if(!v)return'';try{return decodeURIComponent(v);}catch(e){return v;}};
+    const _ck=n=>{const v=_cookie(n);if(!v)return'';try{return decodeURIComponent(v);}catch(e){return v;}};  // parent stored these URL-encoded
     data.utm_campaign=_ck('ezra_utm_campaign')||_utm.get('utm_campaign')||(isCallback?'talk_to_sales':'');
     data.utm_source=_ck('ezra_utm_source')||_utm.get('utm_source')||'';
     data.utm_content=_ck('ezra_utm_content')||_utm.get('utm_content')||'';   // Google ad group · Facebook adset
     data.utm_term=_ck('ezra_utm_term')||_utm.get('utm_term')||'';            // Google keyword · Facebook ad
-    data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';                     // Google click id → offline upload
+    data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';   // Google click id → offline-conversion match key
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');
     fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
@@ -1238,7 +1383,53 @@ fbq('init','2174553826420246');fbq('track','PageView');
     clearSave(); finished=true;   // booked - no draft to resume
     try{ const _did=localStorage.getItem(DRAFT_ID_KEY); if(_did) fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'clearDraft',draftId:_did})}).catch(()=>{}); localStorage.removeItem(DRAFT_ID_KEY); localStorage.removeItem(DRAFT_TOKEN_KEY); }catch(e){}
   }
-  function step5(){
+  // Digital paper receipt (perforated header, dotted-leader rows, per-dish detail, add-on math lines,
+  // total) - the design explicitly asked to bring back for this step. Pure display; submitLead()'s
+  // payload is unrelated and untouched.
+  function receiptPaperHTML(ref){
+    const plan=E.PLANS[state.plan]; if(!plan) return '';
+    const ph=plan.perHead, gg=state.guests;
+    const base=ph*gg, addOns=addonsTotal(gg), total=base+addOns;
+    const sel=selectedAddons();
+    const menuData=E.menuFor(state.plan,state.menu);
+    const row=(k,v)=>'<div class="receipt__row"><span class="receipt__k">'+k+'</span><span class="receipt__dots"></span><span class="receipt__v">'+v+'</span></div>';
+    const subRow=(k,v)=>'<div class="receipt__row receipt__row--sub"><span class="receipt__k">'+k+'</span><span class="receipt__dots"></span><span class="receipt__v">'+v+'</span></div>';
+    // menu detail shown directly (no chips, no collapsible); dish titles only
+    const detail=menuData.map(c=>{
+      const names=c.items.map(it=>E.splitDish(it).name);
+      const p=E.categoryPortions(c.t,names,gg);
+      const rows=p.isBar
+        ? names.map(n=>'<div class="rcpt-dish">• '+n+'</div>').join('')
+        : p.breakdown.map(b=>'<div class="rcpt-dish"><b>'+(b.qty!=null?b.qty+' '+b.unit:'Included')+'</b> '+E.dishDisplay(c.t,b.name)+'</div>').join('');
+      return '<div class="rcpt-cat"><div class="rcpt-cat__t">'+c.t+'</div>'+rows+'</div>';
+    }).join('');
+    // each add-on on its own line with its own price; show the multiplication where it applies
+    const addonLine=a=>{
+      const u=E.addonUnitPrice(a,gg);
+      let v;
+      if(a.unit==='tray'){ const t=Math.max(1,Math.ceil(gg/10)); v=t+'×'+fmt(a.price)+' = '+fmt(u); }
+      else if(a.unit==='head'){ v=gg+'×'+fmt(a.price)+' = '+fmt(u); }
+      else v=fmt(u);
+      return subRow(a.label,v);
+    };
+    return '<span class="receipt__bar"></span>'+
+      '<div class="receipt__head"><span class="receipt__brand">Ezra Tel Aviv</span><span class="receipt__ref">'+(ref?'#'+ref:'Order summary')+'</span></div>'+
+      '<div class="receipt__perf"></div>'+
+      row('Package',plan.label)+row('Guests',gg+' guests')+
+      row('Date',state.date?humanDate(state.date):'-')+row('Time window',state.slot||'-')+
+      row('Music',plan.music)+row('Bar',plan.barTier)+
+      '<div class="receipt__sect"><div class="receipt__sect-head"><span class="receipt__k">Your menu</span><span class="receipt__v">'+(state.menu==='evening'?'Evening menu':'Day menu')+'</span></div>'+
+        '<div class="receipt__detail">'+detail+'</div>'+
+      '</div>'+
+      '<div class="receipt__perf"></div>'+
+      subRow(plan.label+' · '+gg+' × '+fmt(ph),fmt(base))+
+      (sel.length
+        ? '<div class="receipt__addhead">Add-ons</div>'+sel.map(addonLine).join('')
+        : subRow('Add-ons','None'))+
+      (function(){var d=promoDiscount(total);return (d.active?subRow('July 10% off','-'+fmt(d.amount)):'')+
+        '<div class="receipt__total"><span class="receipt__k">Final price</span><span class="receipt__sum">'+fmt(d.active?d.net:total)+'</span></div>';})();
+  }
+  function step6(){
     setFoot('Send request','',()=>{   // terms line lives under the form (.legal); no need to repeat it in the footer
       // consent is mandatory: block the send + flag it if unchecked
       const c=$('fConsent');
@@ -1248,10 +1439,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
         (err||row||c).scrollIntoView({behavior:'smooth',block:'center'});
         return;
       }
-      state.notes=$('fNotes').value; submitLead(); render(6);
-      // tell the parent a booking completed → it switches the URL to /confirmation and fires the Ads conversion
+      state.notes=$('fNotes').value; submitLead(); render(7);
       if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
-    },true,false);   // step 5 = the details step; the "talk to sales" checkbox handles the abandon path here
+    },true,false);   // step 6 = the details step; the "talk to sales" checkbox handles the abandon path here
     body.innerHTML =
       '<h2 class="steptitle">Your details</h2>'+
       '<p class="stepsub">We\'ll send you a proposal and a contract for digital signature</p>'+
@@ -1274,10 +1464,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
             'I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can unsubscribe at any time.</span></label>'+
           '<div class="consent-err" id="consentErr" hidden>Please accept marketing consent to continue.</div>'+
         '</div>'+
-        '<div class="details__rcpt"><div class="rcpt" id="detR">'+receiptInner()+'</div></div>'+
+        '<div class="details__rcpt"><div class="receipt" id="detR">'+receiptPaperHTML(null)+'</div></div>'+
       '</div>'+
       '<div class="legal">By submitting the form I accept the terms of use and privacy policy.</div>';
-    body.classList.add('is-details');   // make .body a flex column so the two panels fill + scroll like step 4
+    body.classList.add('is-details');   // make .body a flex column so the two panels fill + scroll like step 5
     // prefill from state (so save/restore + back keep what was typed)
     const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fAddress:'address',fNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
@@ -1295,15 +1485,15 @@ fbq('init','2174553826420246');fbq('track','PageView');
       if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
     // "talk to sales before signing" = leave the booking flow → the abandon screen (which shows the disclaimer)
     const wc=$('fWantsCall');
-    if(wc) wc.addEventListener('change',()=>{ if(wc.checked){ wc.checked=false; openTalk(5); } });
+    if(wc) wc.addEventListener('change',()=>{ if(wc.checked){ wc.checked=false; openTalk(6); } });
     validate();
     // scroll-cue on each column (shows only if that panel actually overflows); equal-height columns → arrows align
     ensureScrollCue($('detForm'));
     ensureScrollCue($('detR'));
   }
 
-  /* ═══════ STEP 6 · confirmation ═══════ */
-  function step6(){
+  /* ═══════ STEP 7 · confirmation ═══════ */
+  function step7(){
     setFoot(null,null,null,false,false);   // confirmation: no CTA and no talk prompt
     body.innerHTML =
       '<div class="done">'+
@@ -1326,7 +1516,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function openTalk(fromStep, saveMode){
     inTalk=true; talkFromStep=fromStep||1; saveModeActive=!!saveMode;
     // abandon signal: which step they bailed on to talk-to-sales instead of self-closing
-    if(window.gtag) gtag('event',saveModeActive?'wizard_save_details':'wizard_abandon',{from_step:talkFromStep,step_name:(STEP_NAMES[talkFromStep]||('step_'+talkFromStep))});
+    if(window.gtag) gtag('event',saveMode?'wizard_save_details':'wizard_abandon',{from_step:talkFromStep,step_name:(STEP_NAMES[talkFromStep]||('step_'+talkFromStep))});
     stopBubbles();
     $('progTxt').textContent='Contact us';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
@@ -1415,7 +1605,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '</div>';
   }
 
-  const STEPS={1:step1,2:step2,3:step3,4:step4,5:step5,6:step6};
+  const STEPS={1:step1,2:step2,3:step3,4:step4,5:step5,6:step6,7:step7};
 
   // ── boot: opened from a package card (?plan=) → preselect it and jump to the WHEN step;
   //         otherwise restore a saved session if there is one, else start fresh ──
@@ -1424,15 +1614,15 @@ fbq('init','2174553826420246');fbq('track','PageView');
     state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
     state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
     if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
-    render(Math.min(Math.max(s.step||1,1),5));
+    render(Math.min(Math.max(s.step||1,1),6));
   }
   (function boot(){
-    // cross-device resume: a ?resume token (bridged from the parent via the ezra_resume cookie) restores
-    // a draft saved on any device. One-shot: the cookie is cleared once read.
+    // cross-device resume: a ?resume token (bridged from the parent page via the ezra_resume cookie)
+    // restores a draft saved on any device. One-shot: the cookie is cleared once read.
     const resumeTok=_cookie('ezra_resume');
     if(resumeTok){
       document.cookie='ezra_resume=; path=/; max-age=0; SameSite=Lax';
-      render(1);
+      render(1);   // show step 1 immediately; hydrate when the draft returns
       fetch(draftEndpoint()+'?resume='+encodeURIComponent(resumeTok)).then(r=>r.json()).then(j=>{
         if(j&&j.ok&&j.state&&Object.keys(j.state).length){
           try{ if(j.draftId){ localStorage.setItem(DRAFT_ID_KEY,j.draftId); localStorage.setItem(DRAFT_TOKEN_KEY,resumeTok); } }catch(e){}
@@ -1441,10 +1631,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
       }).catch(()=>{});
       return;
     }
-    const pplan=new URLSearchParams(location.search).get('plan');
-    if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
+    // precedence: a saved in-progress session wins over a ?plan= deep-link, so an ad click never
+    // clobbers a half-done booking. Only with no saved draft does ?plan= preselect and skip to step 2.
     let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
-    if(!s){ render(1); return; }
+    if(!s){
+      const pplan=new URLSearchParams(location.search).get('plan');
+      if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
+      render(1); return;
+    }
     hydrate(s);
   })();
 })();
