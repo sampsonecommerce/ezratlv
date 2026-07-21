@@ -5609,6 +5609,27 @@
     });
   </script>
 
+  <!-- iOS in-app browsers (Instagram/Facebook) can block storage; the Enable widget reads
+       sessionStorage in componentDidMount with no try/catch and no error boundary, so the throw
+       unmounts the whole widget and the trigger never shows (Android IAB allows storage, works fine).
+       Give it a memory-backed storage fallback ONLY when native storage is actually broken. -->
+  <script>
+    (function(){
+      function mem(){ var m={}; return {
+        getItem:function(k){ return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null; },
+        setItem:function(k,v){ m[k]=String(v); },
+        removeItem:function(k){ delete m[k]; },
+        clear:function(){ m={}; },
+        key:function(i){ return Object.keys(m)[i]||null; },
+        get length(){ return Object.keys(m).length; } }; }
+      ['sessionStorage','localStorage'].forEach(function(s){
+        var broken=false;
+        try{ window[s].setItem('__ezt','1'); window[s].removeItem('__ezt'); }catch(e){ broken=true; }
+        if(broken){ try{ Object.defineProperty(window,s,{configurable:true,value:mem()}); }catch(e){} }
+      });
+    })();
+  </script>
+
   <!-- Enable accessibility widget -->
   <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
   <!-- Shrink the accessibility trigger (it was covering content on mobile) + let users hide it for
@@ -5628,10 +5649,17 @@
       try{ if(sessionStorage.getItem('ezraAccHide')==='1'){
         var iv=setInterval(function(){ if(document.getElementById('enable-toolbar')){ hideAll(); clearInterval(iv); } },300);
         setTimeout(function(){ clearInterval(iv); },8000); return; } }catch(e){}
+      // Only add our dismiss X once Enable's trigger has actually rendered. If the widget fails to
+      // mount (e.g. an iOS in-app browser that still blocks storage) no orphan X is left behind.
+      var tries=0, w=setInterval(function(){
+        if(!document.getElementById('enable-toolbar-trigger')){ if(++tries>40) clearInterval(w); return; }
+        clearInterval(w);
+        if(document.getElementById('ezra-acc-hide')) return;
       var b=document.createElement('button'); b.id='ezra-acc-hide'; b.type='button'; b.textContent='\u2715';
       b.setAttribute('aria-label','הסתרת כפתור הנגישות');
       b.addEventListener('click',function(){ try{ sessionStorage.setItem('ezraAccHide','1'); }catch(e){} hideAll(); });
       document.body.appendChild(b);
+      },300);
     })();
   </script>
 
