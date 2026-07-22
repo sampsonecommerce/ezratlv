@@ -7,7 +7,7 @@ Last verified against the live code: 2026-07-13.
 
 | Tool | ID | Where in code | Notes |
 |---|---|---|---|
-| **GA4 (Analytics)** | `G-B8RHLY5VJK` | all 6 live HTML files (loader + config) | THE analytics property. Keep. |
+| **GA4 (Analytics)** | `G-95JJX7T6CY` | all 6 live HTML files (loader + config) | THE live analytics property. Keep. |
 | **Google Ads** | `AW-18310736783` | 4 main pages (config) + as a Google-tag destination | Conversion/remarketing tag. |
 | **Meta Pixel** | `2174553826420246` | all pages (Pixel init) + server CAPI | |
 | **Microsoft Clarity** | `xlpxnugq1w` | index, company-events, both wizard iframes | Heatmaps + session recordings. |
@@ -19,19 +19,23 @@ Live files carrying the tags: `index.html`, `company-events.html`, `english-inde
 
 ## GA4 accounts/properties — KEEP vs RETIRE
 
-There are two GA4 properties. Only one is real.
+There are two GA4 measurement IDs. Only one is a live, collecting stream.
+
+**CORRECTED 2026-07-21 (live browser test):** the earlier table was BACKWARDS. `G-B8RHLY5VJK`
+returns **404** from `googletagmanager.com/gtag/js?id=...` — it is a dead/deleted stream and has
+never collected. `G-95JJX7T6CY` fires a real `page_view` to `analytics.google.com/g/collect`
+and is the live one. The site loader carried the dead `G-B8` until 2026-07-21, so GA4 **and**
+Google Ads both silently collected nothing (one loader feeds both). Swapped all 6 files to `G-95`.
 
 | | KEEP ✅ | RETIRE ⛔ |
 |---|---|---|
-| Measurement ID | **G-B8RHLY5VJK** | G-95JJX7T6CY |
-| Property | "Ezra" (543484942) | "www.ezratlv.com" (420920594) |
-| Analytics account | "Ezra (New account)" (399506198) | "Google Ads חשבון" (297174080) |
-| Installed on site? | **Yes** | No (nowhere) |
-| Status | live, has history | accidental duplicate |
+| Measurement ID | **G-95JJX7T6CY** (live, collects) | G-B8RHLY5VJK (dead, loader 404s) |
+| Installed on site? | **Yes** (since 2026-07-21) | was on site until 2026-07-21 |
+| Status | verified firing page_view | never worked |
 
-**Why both showed the same data:** the installed G-B8 tag was forwarding hits to the
-G-95 property via a "connected destination" (Google tag → Destinations listed AW + G-95).
-Not the Ads link — Ads never mirrors GA data.
+Confirm in the GA4 UI which property/account owns `G-95JJX7T6CY` and treat that as home; if it
+sits under the old "Google Ads חשבון" account, use Admin → Move property to relocate it under the
+"Ezra" account (keeps all history, no re-tagging).
 
 ## Correct linking (the "one home" setup)
 
