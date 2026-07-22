@@ -94,7 +94,9 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    /* overflow-anchor:none stops iOS in-app browsers (Instagram/Facebook) from re-anchoring
+       scroll and snapping the page up when their toolbar animates back in on scroll. */
+    html { scroll-behavior: smooth; overflow-anchor: none; }
     body {
       background: var(--bg);
       color: var(--cream);
