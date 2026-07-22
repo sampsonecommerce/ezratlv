@@ -29,6 +29,22 @@
     gtag('config', 'G-95JJX7T6CY');
     gtag('config', 'AW-18310736783');   /* Google Ads (remarketing + conversion-ready); shares the gtag.js already loaded above */
   </script>
+  <!-- Freeze the hero height to the initial webview height. In the IG/FB in-app browser the
+       webview ITSELF resizes when the app's toolbar hides/shows mid-scroll (Safari's svh absorbs
+       this; a webview's doesn't), so a 100svh hero grows/shrinks by the toolbar height and shoves
+       the whole page under the user's finger - felt as scroll fighting on drag/direction changes.
+       Re-measures only when the width changes (rotation / real resize), never on height-only
+       changes (= the toolbar). -->
+  <script>
+    (function(){
+      var w = window.innerWidth;
+      function freeze(){ document.documentElement.style.setProperty('--heroH', window.innerHeight + 'px'); }
+      freeze();
+      window.addEventListener('resize', function(){
+        if (window.innerWidth !== w) { w = window.innerWidth; freeze(); }
+      });
+    })();
+  </script>
   <!-- End Google tag -->
 
   <!-- Microsoft Clarity (heatmaps + session recordings) -->
@@ -413,7 +429,10 @@
     /* ============================================================
        HERO
     ============================================================ */
-    .hero { min-height: 100svh; display: flex; align-items: flex-end; position: relative; padding-block-end: clamp(4.5rem, 13vh, 9rem); overflow: hidden; background: var(--bg); }
+    /* --heroH: px-frozen webview height (set by the inline script in <head>). In the IG/FB in-app
+       browser the webview itself resizes when the app toolbar hides/shows mid-scroll, so a raw
+       100svh hero pumps by the toolbar height and shoves the page under the user's finger. */
+    .hero { min-height: var(--heroH, 100svh); display: flex; align-items: flex-end; position: relative; padding-block-end: clamp(4.5rem, 13vh, 9rem); overflow: hidden; background: var(--bg); }
     .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; }
     .hero::before {
       content: '';
