@@ -92,9 +92,12 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* overflow-anchor:none stops iOS in-app browsers (Instagram/Facebook) from re-anchoring
-       scroll and snapping the page up when their toolbar animates back in on scroll. */
-    html { scroll-behavior: smooth; overflow-anchor: none; }
+    /* No CSS scroll-behavior:smooth - iOS ANIMATES the browser's own scroll corrections when the
+       IG/FB in-app toolbar resizes the viewport mid-scroll, so the page visibly fights the user's
+       finger (scroll down -> it scrolls up). In-page anchor clicks still scroll smoothly via the JS
+       click handler (scrollIntoView behavior:'smooth'). overflow-anchor:none is for Android Chrome
+       scroll anchoring (Safari doesn't implement it). */
+    html { overflow-anchor: none; }
 
     body {
       background: var(--bg);
@@ -2926,8 +2929,15 @@
     })();
   </script>
 
-  <!-- Enable accessibility widget -->
-  <script src="https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js"></script>
+  <!-- Enable accessibility widget. ?noacc=1 skips it entirely - diagnostic switch to isolate
+       whether the widget's JS is interfering with scrolling in the IG/FB in-app browser. -->
+  <script>
+    if(!/[?&]noacc=1/.test(location.search)){
+      var _accS=document.createElement('script');
+      _accS.src='https://cdn.enable.co.il/licenses/enable-L55568la7pq2vdkn-0626-82671/init.js';
+      document.head.appendChild(_accS);
+    }
+  </script>
   <!-- Shrink the accessibility trigger (it was covering content on mobile) + let users hide it for
        the session. Legal: IS 5568 requires the SITE to be accessible + a statement (footer link) -
        the floating widget itself is a helper, not the legal requirement. -->
