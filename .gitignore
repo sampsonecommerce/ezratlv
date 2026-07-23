@@ -20,3 +20,9 @@ images/ad-*.jpg
 
 # internal handoff notes (not part of the live site)
 HANDOFF.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
