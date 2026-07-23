@@ -5155,9 +5155,9 @@
       document.querySelectorAll('.js-book').forEach(el => {
         el.addEventListener('click', e => {
           e.preventDefault();
-          if (el.dataset.plan) { window.openV2(el.dataset.plan); }
+          if (el.dataset.plan) { window.openV2(el.dataset.plan, true); }
           else if (packagesSection) { packagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-          else { window.openV2(''); }
+          else { window.openV2('', true); }
         });
       });
       // .js-talk = the דברו איתנו partner button: opens the wizard straight into the soft form
@@ -5905,8 +5905,13 @@
       const WIZARD_PATH = BASE_PATH + '/wizard';
       const CONFIRM_PATH = BASE_PATH + '/confirmation';
       const ORIGINAL_PATH = location.pathname + location.search;   // true landing URL, captured once before any pushState
-      window.openV2 = function(plan){
-        fr.src = 'company-events-v2.html' + (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
+      // userGate=true (a real click on a package CTA/card) always opens on the two-choice gate first,
+      // remembering any picked plan. Ad ?package= deep-links and resume links call this WITHOUT
+      // userGate, so they stay frictionless (straight to step 2 / hydrate).
+      window.openV2 = function(plan, userGate){
+        const q = userGate ? ('?gate=1' + (plan ? ('&plan=' + encodeURIComponent(plan)) : ''))
+                           : (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
+        fr.src = 'company-events-v2.html' + q;
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
         document.body.classList.add('v2-locked');
         history.pushState(null, '', WIZARD_PATH + location.search);
