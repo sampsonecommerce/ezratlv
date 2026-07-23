@@ -453,6 +453,32 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .gate__ic svg{width:19px;height:19px}
   .gate__t{display:block;color:var(--cream);font-size:.92rem;font-weight:600;line-height:1.35}
   .gate__s{display:block;color:var(--cream-dim);font-size:.78rem;margin-block-start:.15rem}
+  /* fresh soft-form event picker (guests + mini calendar + broad time windows) */
+  .talk__event{border:.5px solid var(--line);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.7rem;background:rgba(196,154,60,.04)}
+  .talk__event-h{font-size:.8rem;font-weight:600;color:var(--gold-light)}
+  .talk-datebtn{width:100%;text-align:start;background:rgba(0,0,0,.25);border:.5px solid var(--line);border-radius:10px;color:var(--cream);font-family:inherit;font-size:.9rem;padding:.65rem .8rem;cursor:pointer}
+  .talk-datebtn:hover{border-color:var(--gold)}
+  .talk-cal{margin-block-start:.5rem;background:rgba(0,0,0,.25);border:.5px solid var(--line);border-radius:12px;padding:.6rem}
+  .talk-cal[hidden]{display:none}
+  .tcal__head{display:flex;align-items:center;justify-content:space-between;margin-block-end:.4rem}
+  .tcal__month{font-size:.82rem;color:var(--cream);font-weight:600}
+  .tcal__nav{width:26px;height:26px;border-radius:7px;border:.5px solid var(--line);background:transparent;color:var(--cream-dim);cursor:pointer;font-size:1rem;line-height:1}
+  .tcal__nav:disabled{opacity:.3;cursor:default}
+  .tcal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .tcal__dow{text-align:center;font-size:.62rem;color:rgba(240,235,224,.45);padding-block:.2rem}
+  .tcal__day{aspect-ratio:1;border:0;background:transparent;color:var(--cream);font-family:inherit;font-size:.78rem;border-radius:7px;cursor:pointer;padding:0}
+  .tcal__day.is-empty{visibility:hidden;pointer-events:none}
+  .tcal__day:hover:not(:disabled){background:rgba(196,154,60,.18)}
+  .tcal__day.is-past{opacity:.25;cursor:default}
+  .tcal__day.is-booked{opacity:.32;text-decoration:line-through;cursor:default}
+  .tcal__day.is-selected{background:var(--gold);color:#1a140c;font-weight:700}
+  .talk-slots{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
+  .talk-slot{display:flex;flex-direction:column;align-items:center;gap:.12rem;background:rgba(0,0,0,.25);border:.5px solid var(--line);border-radius:10px;padding:.55rem;color:var(--cream);font-family:inherit;cursor:pointer}
+  .talk-slot:hover:not(:disabled){border-color:var(--gold)}
+  .talk-slot__t{font-size:.82rem;font-weight:600}
+  .talk-slot__h{font-size:.72rem;color:var(--cream-dim)}
+  .talk-slot.is-selected{border-color:var(--gold);background:rgba(196,154,60,.18)}
+  .talk-slot.is-taken{opacity:.35;text-decoration:line-through;cursor:default}
   .talk__form .bfield{max-width:none;margin:0}
   /* save / exit overlays: sit on top of the wizard, wizard stays visible blurred behind */
   .ovl{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
@@ -994,7 +1020,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     });
     $('gateTalk').addEventListener('click',()=>{
       if(window.gtag) gtag('event','wizard_gate_choice',{choice:'callback'});
-      openTalk(1);
+      openTalk(1,false,true);   // fresh: contact form + event picker, no abandon note
     });
     ensureScrollCue(body);
   }
@@ -1556,21 +1582,90 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   /* ═══════ TALK · leave-your-details (abandon the self-serve flow, talk to sales) ═══════ */
   const TALK_INFO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg>';
-  function openTalk(fromStep, saveMode){
+  // fresh soft-form event picker: broad windows (no plan chosen yet, so plan slot-lengths don't exist).
+  // Greyed against the SAME live BUSY data step 2 uses, via the shared takenSlots() overlap test.
+  const TALK_SLOTS=['09:00-13:00','13:00-17:00','17:00-21:00','21:00-01:00'];
+  const TALK_SLOT_NAMES=['בוקר','צהריים','ערב','לילה'];
+  let talkView=new Date(today.getFullYear(),today.getMonth(),1);
+  function renderTalkSlots(){
+    const wrap=$('tkSlots'); if(!wrap||!state.date) return;
+    const taken=takenSlots(key(state.date),TALK_SLOTS);
+    wrap.innerHTML=TALK_SLOTS.map((label,i)=>{
+      const parts=label.split('-'), ls=parts[0], le=parts[1];
+      const isTaken=taken.has(i), isSel=state.slot===label&&!isTaken;
+      return '<button type="button" class="talk-slot'+(isTaken?' is-taken':'')+(isSel?' is-selected':'')+'"'+(isTaken?' disabled':'')+' data-label="'+label+'">'+
+        '<span class="talk-slot__t">'+TALK_SLOT_NAMES[i]+'</span><span class="talk-slot__h">'+ls+' - '+le+'</span></button>';
+    }).join('');
+    wrap.querySelectorAll('.talk-slot[data-label]').forEach(b=>{ if(b.disabled) return;
+      b.addEventListener('click',()=>{ state.slot=b.dataset.label; renderTalkSlots(); saveMaybe(); }); });
+  }
+  function renderTalkCal(){
+    const box=$('tkCal'); if(!box) return;
+    const y=talkView.getFullYear(), mo=talkView.getMonth();
+    const prevOff=(y===today.getFullYear()&&mo===today.getMonth());
+    let html='<div class="tcal__head">'+
+      '<button type="button" class="tcal__nav" id="tkCalPrev"'+(prevOff?' disabled':'')+' aria-label="חודש קודם">‹</button>'+
+      '<span class="tcal__month">'+MONTHS[mo]+' <span class="num">'+y+'</span></span>'+
+      '<button type="button" class="tcal__nav" id="tkCalNext" aria-label="חודש הבא">›</button>'+
+    '</div><div class="tcal__grid">';
+    DOW.forEach(d=>html+='<span class="tcal__dow">'+d+'</span>');
+    const firstDow=new Date(y,mo,1).getDay();
+    const days=new Date(y,mo+1,0).getDate();
+    for(let i=0;i<firstDow;i++) html+='<span class="tcal__day is-empty"></span>';
+    for(let day=1;day<=days;day++){
+      const d=new Date(y,mo,day), dk=key(d);
+      const full=takenSlots(dk,TALK_SLOTS).size>=TALK_SLOTS.length;
+      const past=d<today, dis=past||full;
+      let cls='tcal__day'+(past?' is-past':'')+(full?' is-booked':'')+((state.date&&key(state.date)===dk)?' is-selected':'');
+      html+='<button type="button" class="'+cls+'"'+(dis?' disabled':'')+' data-day="'+day+'">'+day+'</button>';
+    }
+    html+='</div>';
+    box.innerHTML=html;
+    $('tkCalPrev').addEventListener('click',()=>{ talkView=new Date(y,mo-1,1); renderTalkCal(); });
+    $('tkCalNext').addEventListener('click',()=>{ talkView=new Date(y,mo+1,1); renderTalkCal(); });
+    box.querySelectorAll('.tcal__day[data-day]').forEach(b=>{ if(b.disabled) return;
+      b.addEventListener('click',()=>{ state.date=new Date(y,mo,+b.dataset.day); state.slot=null;
+        $('tkDateBtn').textContent=humanDate(state.date); box.hidden=true;
+        renderTalkSlots(); $('tkSlotWrap').hidden=false; saveMaybe(); }); });
+  }
+  function wireTalkEvent(){
+    const g=$('tkGuests');
+    if(g){ g.value=(state.guests===''||state.guests==null)?'':state.guests;
+      g.addEventListener('input',()=>{ const v=g.value.trim(); state.guests = v===''?'':Math.max(1,parseInt(v,10)||1); saveMaybe(); }); }
+    const db=$('tkDateBtn'), box=$('tkCal');
+    if(db){ if(state.date) db.textContent=humanDate(state.date);
+      db.addEventListener('click',()=>{ const show=box.hidden; box.hidden=!show;
+        if(show){ talkView=state.date?new Date(state.date.getFullYear(),state.date.getMonth(),1):new Date(today.getFullYear(),today.getMonth(),1); renderTalkCal(); } }); }
+    if(state.date){ renderTalkSlots(); const sw=$('tkSlotWrap'); if(sw) sw.hidden=false; }
+  }
+  function openTalk(fromStep, saveMode, fresh){
     inTalk=true; inGate=false; talkFromStep=fromStep||1; saveModeActive=!!saveMode;
+    const isFresh=!!fresh && !saveMode;   // a fresh contact form (page/gate) - no abandon note, add event picker
+    if(isFresh) state.guests='';          // don't pre-send the wizard's default 20 for a fresh soft lead
     // abandon signal: which step they bailed on to talk-to-sales instead of self-closing
-    if(window.gtag) gtag('event',saveMode?'wizard_save_details':'wizard_abandon',{from_step:talkFromStep,step_name:(STEP_NAMES[talkFromStep]||('step_'+talkFromStep))});
+    if(window.gtag) gtag('event',saveMode?'wizard_save_details':(isFresh?'talk_form_open':'wizard_abandon'),{from_step:talkFromStep,step_name:(STEP_NAMES[talkFromStep]||('step_'+talkFromStep))});
     stopBubbles();
     $('progTxt').textContent='יצירת קשר';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
     body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
     setFoot('שליחת הפרטים','', submitTalk, true, false);   // no talk-prompt on the talk screen itself
-    body.innerHTML =
-      '<div class="talk">'+
-        '<div class="talk__note">'+TALK_INFO+
-          '<div><b>אתם יוצאים מתהליך ההזמנה העצמית</b>'+
-          '<span>בלי התחייבות. נשמור את מה שכבר מילאתם, ומנהל המכירות יחזור אליכם לתיאום אישי של האירוע.</span></div>'+
+    const noteHTML = isFresh ? '' :
+      '<div class="talk__note">'+TALK_INFO+
+        '<div><b>אתם יוצאים מתהליך ההזמנה העצמית</b>'+
+        '<span>בלי התחייבות. נשמור את מה שכבר מילאתם, ומנהל המכירות יחזור אליכם לתיאום אישי של האירוע.</span></div>'+
+      '</div>';
+    const eventHTML = isFresh ?
+      '<div class="talk__event">'+
+        '<div class="talk__event-h">פרטי האירוע (לא חובה)</div>'+
+        '<div class="bfield"><label>כמות אורחים</label><input type="number" id="tkGuests" inputmode="numeric" min="1" placeholder="כמה תהיו?" /></div>'+
+        '<div class="bfield"><label>תאריך</label>'+
+          '<button type="button" class="talk-datebtn" id="tkDateBtn">בחרו תאריך</button>'+
+          '<div class="talk-cal" id="tkCal" hidden></div>'+
         '</div>'+
+        '<div class="bfield" id="tkSlotWrap" hidden><label>חלון זמן</label><div class="talk-slots" id="tkSlots"></div></div>'+
+      '</div>' : '';
+    body.innerHTML =
+      '<div class="talk">'+ noteHTML +
         '<h2 class="steptitle">נחזור אליכם</h2>'+
         '<p class="stepsub">השאירו פרטים ונתאם שיחה אישית</p>'+
         '<div class="talk__form">'+
@@ -1583,6 +1678,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
             '<div class="bfield"><label>חברה (לא חובה)</label><input type="text" id="tkCompany" autocomplete="organization" /></div>'+
           '</div>'+
           '<div class="bfield"><label>משהו שכדאי שנדע? (לא חובה)</label><textarea id="tkNotes" rows="2"></textarea></div>'+
+          eventHTML +
           '<input type="text" id="tkHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
           '<label class="check" id="tkConsentRow"><input type="checkbox" id="tkConsent" /><span><b>אישור קבלת דיוור</b>'+
             'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
@@ -1597,6 +1693,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
     }));
+    if(isFresh) wireTalkEvent();
     const cc=$('tkConsent');
     if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('tkConsentErr'),r=$('tkConsentRow');
       if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
@@ -1662,7 +1759,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   (function boot(){
     // ?talk=1: the parent's דברו איתנו buttons open the wizard straight into the soft form.
     // Explicit talk intent wins over drafts/deep-links; backing out lands on step 1.
-    if(new URLSearchParams(location.search).get('talk')==='1'){ render(1); openTalk(1); return; }
+    if(new URLSearchParams(location.search).get('talk')==='1'){ render(1); openTalk(1,false,true); return; }
     // cross-device resume: a ?resume token (bridged from the parent page via the ezra_resume cookie)
     // restores a draft saved on any device. One-shot: the cookie is cleared once read.
     const resumeTok=_cookie('ezra_resume');
