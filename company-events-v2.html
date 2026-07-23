@@ -1615,6 +1615,9 @@ fbq('init','2174553826420246');fbq('track','PageView');
     render(Math.min(Math.max(s.step||1,1),6));
   }
   (function boot(){
+    // ?talk=1: the parent's דברו איתנו buttons open the wizard straight into the soft form.
+    // Explicit talk intent wins over drafts/deep-links; backing out lands on step 1.
+    if(new URLSearchParams(location.search).get('talk')==='1'){ render(1); openTalk(1); return; }
     // cross-device resume: a ?resume token (bridged from the parent page via the ezra_resume cookie)
     // restores a draft saved on any device. One-shot: the cookie is cleared once read.
     const resumeTok=_cookie('ezra_resume');
