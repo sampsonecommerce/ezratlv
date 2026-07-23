@@ -226,9 +226,14 @@ export default {
     const board = isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
     // Completed package leads land in "Packages (In Agreement Process)"; a Monday/GetSign automation
     // moves them to "Agreement Sent" after the contract is sent (not the worker's job).
+    // Incomplete/"talk to us" leads (page CTA, wizard gate, footer talk button) share DRAFTS_GROUP
+    // with saveDraft() - a single "soft leads" pool of anyone who left contact info without
+    // finishing a booking. Safe to share: these items never populate DRAFT_TOKEN_COL/DRAFT_STATE_COL,
+    // so getDraft()'s token lookup can never match one, and the group isn't in COMPANY_AVAIL_GROUPS
+    // so it never affects calendar availability either.
     const group = isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
-                : isIncomplete ? GRP_FOLLOWUP
+                : isIncomplete ? DRAFTS_GROUP
                 : GRP_IN_AGREEMENT;
     // item name: company for ALL lead types; fall back to person if no company
     const displayName = String(d.company || d.name || "ליד מהאתר");
