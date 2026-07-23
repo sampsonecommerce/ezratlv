@@ -1775,14 +1775,15 @@ fbq('init','2174553826420246');fbq('track','PageView');
       return;
     }
     // precedence: a saved in-progress session wins over a ?plan= deep-link, so an ad click never
-    // clobbers a half-done booking. Only with no saved draft does ?plan= preselect and skip to step 2.
+    // clobbers a half-done booking. But autosave writes a draft the instant the wizard opens, so
+    // only a draft with REAL progress (plan / contact / past step 1) should resume and skip the
+    // gate - an empty step-1 autosave must not suppress the two-choice opener.
     let s=null; try{ s=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){}
-    if(!s){
-      const pplan=new URLSearchParams(location.search).get('plan');
-      if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
-      gate(); return;   // organic open, no deep-link, no draft - offer the two-choice opener first
-    }
-    hydrate(s);
+    const hasProgress = s && (s.plan || s.name || s.phone || s.email || (s.step && s.step>1));
+    if(hasProgress){ hydrate(s); return; }
+    const pplan=new URLSearchParams(location.search).get('plan');
+    if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
+    gate(); return;   // organic open, no deep-link, no real draft - offer the two-choice opener first
   })();
 })();
 </script>
