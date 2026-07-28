@@ -453,6 +453,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .gate__ic svg{width:19px;height:19px}
   .gate__t{display:block;color:var(--cream);font-size:.92rem;font-weight:600;line-height:1.35}
   .gate__s{display:block;color:var(--cream-dim);font-size:.78rem;margin-block-start:.15rem}
+  /* contact-first screen: three fields before anything else, so a lead is captured up front */
+  .lead0{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:.85rem}
+  .lead0__why{display:flex;gap:.6rem;align-items:flex-start;border:.5px solid rgba(196,154,60,.4);
+    border-radius:12px;background:rgba(196,154,60,.06);padding:.7rem .9rem}
+  .lead0__why svg{width:18px;height:18px;color:var(--gold);flex:none;margin-block-start:2px}
+  .lead0__why span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
   /* fresh soft-form event picker (guests + mini calendar + broad time windows) */
   .talk__event{border:.5px solid var(--line);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.7rem;background:rgba(196,154,60,.04)}
   .talk__event-h{font-size:.8rem;font-weight:600;color:var(--gold-light)}
@@ -659,6 +665,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
   let inGate = false;                     // the step-0 opener gate (not a numbered step)
+  let inLead0 = false;                    // the contact-first capture screen (not a numbered step)
 
   // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
   const SAVE_KEY='ezraProto2';
@@ -858,6 +865,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
     inGate = false;                      // ...and leaves the gate screen too
+    inLead0 = false;                     // ...and the contact-first screen
     markReq = null;                      // each step wires its own missing-fields highlighter
     stopBubbles();                       // halt the coupe fizz when leaving a step
     const dir = n>=lastStep ? 'anim-fwd' : 'anim-back';
@@ -904,7 +912,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function nudgeGo(){
     // the talk screen keeps `step` at the step it was opened from, so it must be checked FIRST —
     // otherwise a step-2 visitor gets "pick a day in the calendar" on a screen with no calendar
-    if(inTalk || step===6) footAlert.textContent = 'Please fill in the missing information above to send the form!';
+    if(inLead0) footAlert.textContent = 'Name and phone are needed to continue';
+    else if(inTalk || step===6) footAlert.textContent = 'Please fill in the missing information above to send the form!';
     else if(step===2) footAlert.textContent = !state.date ? 'Pick an available day first' : 'Also pick a time window';
     else footAlert.textContent = 'Please fill in the missing information above to continue!';
     if(markReq){ markReq();
@@ -993,6 +1002,50 @@ fbq('init','2174553826420246');fbq('track','PageView');
       state.plan=b.dataset.plan;
       render(2);
     }));
+  }
+
+  /* ═══════ CONTACT FIRST · captured before anything else, so no lead is ever lost ═══════ */
+  // Every downstream screen prefills from state, so these are never asked twice. On continue we
+  // silently push a soft-lead draft to Monday (reuses the save-draft machinery, deduped by draftId),
+  // meaning even a visitor who closes the tab one second later is already a reachable lead.
+  const hasLead=()=>!!(state.name&&state.name.trim()&&state.phone&&state.phone.trim());
+  function lead0(opts){
+    opts=opts||{};
+    inLead0=true; inTalk=false; inGate=false;
+    stopBubbles();
+    $('progTxt').textContent='Contact details';
+    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    const go=()=>{
+      if(!hasLead()){ nudgeGo(); return; }
+      if(window.gtag) gtag('event','contact_captured',{});
+      // fire-and-forget: the lead is banked before they choose a path
+      if(window.EZRA_CREATE_DRAFT){ try{ window.EZRA_CREATE_DRAFT(collectState()); }catch(e){} }
+      gate(opts);
+    };
+    setFoot('Continue','', go, true, false);
+    body.innerHTML =
+      '<h2 class="steptitle">Just before we start</h2>'+
+      '<p class="stepsub">We\'ll save your progress and can help if anything gets stuck</p>'+
+      '<div class="lead0">'+
+        '<div class="frow">'+
+          '<div class="bfield"><label>Full name</label><input type="text" id="l0Name" autocomplete="name" /></div>'+
+          '<div class="bfield"><label>Phone</label><input type="tel" id="l0Phone" inputmode="tel" autocomplete="tel" /></div>'+
+        '</div>'+
+        '<div class="bfield"><label>Email (optional)</label><input type="email" id="l0Email" inputmode="email" autocomplete="email" /></div>'+
+        '<div class="lead0__why">'+ICON_INFO+'<span>Your details are saved only so we can get back to you. No spam, and you can pick up from here at any stage.</span></div>'+
+      '</div>';
+    const map={l0Name:'name',l0Phone:'phone',l0Email:'email'};
+    Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
+    const req=[$('l0Name'),$('l0Phone')];
+    const validate=()=>setGoOff(!req.every(el=>el.value.trim()));
+    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
+    body.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{
+      const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
+      state[map[el.id]]=el.value; validate(); saveMaybe();
+    }));
+    validate();
+    ensureScrollCue(body);
   }
 
   /* ═══════ GATE · step-0 opener, organic entry only (skipped by ?plan=/?resume=/?talk=1/saved draft) ═══════ */
@@ -1757,11 +1810,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   // ── boot: opened from a package card (?plan=) → preselect it and jump to the WHEN step;
   //         otherwise restore a saved session if there is one, else start fresh ──
-  function hydrate(s){
+  // hydrate0 = restore state WITHOUT rendering (so the contact screen can prefill from a draft);
+  // hydrate = restore state and jump to the saved step.
+  function hydrate0(s){
     state.plan=(s.plan&&E.PLANS[s.plan])?s.plan:null; state.slot=s.slot||null; state.guests=s.guests||20;
     state.menu=s.menu||null; state.addons=s.addons||{}; state.foodNotes=s.foodNotes||''; state.notes=s.notes||'';
     state.name=s.name||''; state.company=s.company||''; state.phone=s.phone||''; state.email=s.email||''; state.address=s.address||'';
     if(s.date){ const d=new Date(s.date); if(!isNaN(d.getTime())){ d.setHours(0,0,0,0); state.date=d; view=new Date(d.getFullYear(),d.getMonth(),1); } }
+  }
+  function hydrate(s){
+    hydrate0(s);
     render(Math.min(Math.max(s.step||1,1),6));
   }
   (function boot(){
@@ -1786,12 +1844,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const hasProgress = s && (s.plan || s.name || s.phone || s.email || (s.step && s.step>1));
     const q=new URLSearchParams(location.search);
     const pplan=q.get('plan');
-    // ?gate=1 = a real click on a package CTA/card: ALWAYS show the two-choice opener first, no
-    // matter what. "build it myself" then resumes an in-progress booking if any, else the picked plan.
-    if(q.get('gate')==='1'){ gate({ plan:pplan, resume:hasProgress?s:null }); return; }
-    // non-gate opens (ad ?package= deep-link, resume): stay frictionless.
+    // A real click on a package CTA/card (?gate=1) OR an ad ?plan= deep-link both start with the
+    // contact capture, then the two-choice opener. Contact is skipped once we already know them
+    // (draft carries name+phone), so a returning visitor is never asked twice.
+    if(q.get('gate')==='1' || (pplan && E.PLANS[pplan])){
+      if(hasProgress) hydrate0(s);   // fills state so the contact screen prefills / is skipped
+      const opts={ plan:pplan, resume:hasProgress?s:null };
+      if(hasLead()){ gate(opts); return; }
+      lead0(opts); return;
+    }
+    // resume links stay frictionless - they already are that lead
     if(hasProgress){ hydrate(s); return; }
-    if(pplan && E.PLANS[pplan]){ state.plan=pplan; render(2); return; }
     gate(); return;
   })();
 })();
