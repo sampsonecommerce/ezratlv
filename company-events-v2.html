@@ -1041,9 +1041,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const req=[$('l0Name'),$('l0Phone')];
     const validate=()=>setGoOff(!req.every(el=>el.value.trim()));
     markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
+    // bank the lead the moment name+phone are both in, debounced - NOT only on continue. Someone
+    // who fills the fields and closes the tab is still captured (server dedupes by draftId).
+    let bankT;
+    const bank=()=>{ if(hasLead() && window.EZRA_CREATE_DRAFT){ try{ window.EZRA_CREATE_DRAFT(collectState()); }catch(e){} } };
     body.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{
       const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       state[map[el.id]]=el.value; validate(); saveMaybe();
+      clearTimeout(bankT); bankT=setTimeout(bank,600);
     }));
     validate();
     ensureScrollCue(body);
