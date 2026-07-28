@@ -454,11 +454,14 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .gate__t{display:block;color:var(--cream);font-size:.92rem;font-weight:600;line-height:1.35}
   .gate__s{display:block;color:var(--cream-dim);font-size:.78rem;margin-block-start:.15rem}
   /* contact-first screen: three fields before anything else, so a lead is captured up front */
-  .lead0{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:.85rem}
-  .lead0__why{display:flex;gap:.6rem;align-items:flex-start;border:.5px solid rgba(196,154,60,.4);
-    border-radius:12px;background:rgba(196,154,60,.06);padding:.7rem .9rem}
-  .lead0__why svg{width:18px;height:18px;color:var(--gold);flex:none;margin-block-start:2px}
-  .lead0__why span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
+  .lead0{max-width:380px;margin:0 auto;display:flex;flex-direction:column;gap:.9rem;
+    background:rgba(255,255,255,.04);border:1px solid rgba(196,154,60,.35);border-radius:16px;
+    padding:1.3rem 1.2rem 1.1rem}
+  .lead0 .bfield{width:100%}
+  .lead0 .bfield input{width:100%;box-sizing:border-box}
+  .lead0__note{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:.1rem 0 0;
+    color:var(--cream-dim);font-size:.78rem;text-align:center}
+  .lead0__note svg{width:14px;height:14px;color:var(--gold);flex:none}
   /* fresh soft-form event picker (guests + mini calendar + broad time windows) */
   .talk__event{border:.5px solid var(--line);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.7rem;background:rgba(196,154,60,.04)}
   .talk__event-h{font-size:.8rem;font-weight:600;color:var(--gold-light)}
@@ -1028,12 +1031,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '<h2 class="steptitle">רגע לפני שמתחילים</h2>'+
       '<p class="stepsub">נשמור לכם את ההתקדמות ונוכל לעזור אם משהו נתקע</p>'+
       '<div class="lead0">'+
-        '<div class="frow">'+
-          '<div class="bfield"><label>שם מלא</label><input type="text" id="l0Name" autocomplete="name" /></div>'+
-          '<div class="bfield"><label>טלפון</label><input type="tel" id="l0Phone" inputmode="tel" autocomplete="tel" /></div>'+
-        '</div>'+
+        '<div class="bfield"><label>שם מלא</label><input type="text" id="l0Name" autocomplete="name" /></div>'+
+        '<div class="bfield"><label>טלפון</label><input type="tel" id="l0Phone" inputmode="tel" autocomplete="tel" /></div>'+
         '<div class="bfield"><label>אימייל (לא חובה)</label><input type="email" id="l0Email" inputmode="email" autocomplete="email" /></div>'+
-        '<div class="lead0__why">'+ICON_INFO+'<span>הפרטים נשמרים רק כדי שנוכל לחזור אליכם. לא שולחים ספאם, ואפשר להמשיך משם בכל שלב.</span></div>'+
+        '<p class="lead0__note">'+ICON_INFO+'<span>הפרטים נשמרים רק כדי שנוכל לחזור אליכם.</span></p>'+
       '</div>';
     const map={l0Name:'name',l0Phone:'phone',l0Email:'email'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
