@@ -683,12 +683,22 @@ fbq('init','2174553826420246');fbq('track','PageView');
   // draftId+token are stashed so repeat saves update the same Monday item instead of piling up duplicates.
   const DRAFT_ID_KEY='ezraDraftId', DRAFT_TOKEN_KEY='ezraDraftToken';
   const draftEndpoint=()=>(window.EZRA_LEAD_ENDPOINT||'/api/submit-lead');
-  window.EZRA_CREATE_DRAFT=async(s)=>{
+  window.EZRA_CREATE_DRAFT=async(s,_retried)=>{
     try{
-      const body={mode:'saveDraft',lang:'he',state:s,draftId:localStorage.getItem(DRAFT_ID_KEY)||'',token:localStorage.getItem(DRAFT_TOKEN_KEY)||''};
-      const r=await fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+      const draftId=localStorage.getItem(DRAFT_ID_KEY)||'';
+      const body={mode:'saveDraft',lang:'he',state:s,draftId,token:localStorage.getItem(DRAFT_TOKEN_KEY)||''};
+      // keepalive: the save survives the popup being closed mid-request
+      const r=await fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),keepalive:true});
       const j=await r.json();
-      if(!j||!j.ok||!j.url) return null;
+      if(!j||!j.ok||!j.url){
+        // stale draftId (its item was deleted on the board) -> the update errors and the lead would
+        // silently vanish. Drop the dead id and retry ONCE as a fresh create.
+        if(draftId && !_retried){
+          try{ localStorage.removeItem(DRAFT_ID_KEY); localStorage.removeItem(DRAFT_TOKEN_KEY); }catch(e){}
+          return window.EZRA_CREATE_DRAFT(s,true);
+        }
+        return null;
+      }
       try{ if(j.draftId) localStorage.setItem(DRAFT_ID_KEY,j.draftId); if(j.token) localStorage.setItem(DRAFT_TOKEN_KEY,j.token); }catch(e){}
       return {url:j.url};
     }catch(e){ return null; }
@@ -1051,7 +1061,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
       clearTimeout(bankT); bankT=setTimeout(bank,600);
     }));
     validate();
-    ensureScrollCue(body);
   }
 
   /* ═══════ GATE · step-0 opener, organic entry only (skipped by ?plan=/?resume=/?talk=1/saved draft) ═══════ */
