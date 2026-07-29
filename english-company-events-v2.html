@@ -458,6 +458,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .road__on i{width:6px;height:6px;border-radius:50%;background:var(--gold-light);display:block}
   .road__ln{flex:none;width:14px;height:1px;background:rgba(240,235,224,.2)}
   .road__off{color:rgba(240,235,224,.45);font-size:.7rem}
+  /* lead0 is a short screen: center it so there's no dead gap above the footer, and make the
+     single CTA visibly bigger than the standard step button */
+  .body--lead0{display:flex;flex-direction:column;justify-content:center;min-height:100%}
+  .foot--lead0 .go{font-size:1.06rem;padding-block:1.05rem;letter-spacing:.02em}
   /* fresh soft-form event picker (guests + mini calendar + broad time windows) */
   .talk__event{border:.5px solid var(--line);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.7rem;background:rgba(196,154,60,.04)}
   .talk__event-h{font-size:.8rem;font-weight:600;color:var(--gold-light)}
@@ -896,6 +900,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const hasCta = !!handler;
     foot.hidden = !hasCta && !showTalk;            // footer stays visible if there's a CTA or the talk prompt
     $('talkBtn').hidden = !showTalk;
+    foot.classList.toggle('foot--lead0', inLead0);
     const main = $('footMain'); if (main) main.hidden = !hasCta;
     backBtn2.hidden = !(hasCta && (step>1 || inTalk));   // nothing behind step 1
     if (hasCta){
@@ -1022,7 +1027,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     stopBubbles();
     $('progTxt').textContent='Contact details';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd','body--lead0');
     const go=()=>{
       if(!hasLead()){ nudgeGo(); return; }
       if(window.gtag) gtag('event','contact_captured',{});
