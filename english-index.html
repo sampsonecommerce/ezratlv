@@ -2907,6 +2907,11 @@
        the floating widget itself is a helper, not the legal requirement. -->
   <style>
     #enable-toolbar-trigger{transform:scale(.7);transform-origin:bottom left;opacity:.9}
+    /* on short viewports (~<=760px tall - common on laptops with browser chrome) the widget's
+       own bottom-anchoring pushes the trigger below the fold, clipped and invisible; nudge its
+       fixed container up so it stays on-screen. Verified live: trigger clipped at 1280x720,
+       fully visible again with this override. */
+    @media (max-height:760px){ #enable-toolbar-content{bottom:40px!important} }
     #enable-toolbar-trigger .keyboard-shorcut{display:none}
     #ezra-acc-hide{position:fixed;z-index:2147483647;left:41px;bottom:50px;width:17px;height:17px;border-radius:50%;
       background:rgba(20,16,11,.88);color:#fff;border:1px solid rgba(255,255,255,.4);font-size:10px;line-height:14px;
