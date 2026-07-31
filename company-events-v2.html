@@ -127,15 +127,34 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .foot__hint{flex:none;font-size:.68rem;color:var(--cream-dim);max-width:34ch}
   .foot__hint.nudge{display:block;color:var(--gold-light);font-weight:600;animation:hintPulse .45s var(--ease)}
   @keyframes hintPulse{0%{transform:scale(.9);opacity:.3}100%{transform:scale(1);opacity:1}}
-  /* talk prompt inside the footer - shown on every step before the details form (desktop + mobile) */
-  .foot__talk{display:flex;align-items:center;justify-content:center;gap:.42rem;width:100%;text-align:center;
-    background:rgba(196,154,60,.14);border:0;border-radius:11px;color:var(--gold-light);font-size:.82rem;
-    padding:.6rem .7rem;cursor:pointer;transition:background .2s}
-  .foot__talk svg{flex:none;color:#7ee2a0}
+  /* footer contact button: WhatsApp, shown on every step before the details form */
+  .foot__talk{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;text-align:center;
+    background:rgba(37,211,102,.13);border:0;border-radius:11px;color:#4fdc7c;font-size:.9rem;font-weight:600;
+    padding:.65rem .7rem;cursor:pointer;transition:background .2s;text-decoration:none;font-family:inherit}
+  .foot__talk svg{flex:none;fill:currentColor}
   .foot__talk[hidden]{display:none}
-  .foot__talk:hover{background:rgba(196,154,60,.22)}
-  .foot__talk .q{color:#7ee2a0;font-weight:600}
-  .foot__talk .r{color:rgba(240,235,224,.85)}
+  .foot__talk:hover{background:rgba(37,211,102,.2)}
+  /* chooser: three tall banner cards - build alone / call me back / WhatsApp (green, breaks the
+     gold system on purpose so the instant-human option is unmissable) */
+  .chz{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:.65rem}
+  .chz__card{display:flex;align-items:center;gap:.85rem;width:100%;text-align:start;
+    background:rgba(255,255,255,.04);border:1px solid rgba(196,154,60,.4);border-radius:16px;
+    padding:1.05rem .95rem;cursor:pointer;font-family:inherit;text-decoration:none;
+    transition:border-color .2s ease,background .2s ease,transform .15s ease}
+  .chz__card:hover{border-color:var(--gold);background:rgba(255,255,255,.06)}
+  .chz__card:active{transform:scale(.99)}
+  .chz__ic{width:52px;height:52px;border-radius:50%;background:rgba(196,154,60,.16);color:var(--gold-light);
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .chz__ic svg{width:25px;height:25px}
+  .chz__tx{flex:1;min-width:0}
+  .chz__t{display:block;color:var(--cream);font-size:1.05rem;font-weight:700;line-height:1.25}
+  .chz__s{display:block;color:var(--cream-dim);font-size:.78rem;margin-block-start:.15rem}
+  .chz__ar{flex:none;color:rgba(245,217,138,.6);font-size:1.15rem;line-height:1}
+  .chz__card--wa{background:rgba(37,211,102,.07);border-color:rgba(37,211,102,.5)}
+  .chz__card--wa:hover{border-color:#4fdc7c;background:rgba(37,211,102,.11)}
+  .chz__card--wa .chz__ic{background:rgba(37,211,102,.16);color:#4fdc7c}
+  .chz__card--wa .chz__t{color:#4fdc7c}
+  .chz__card--wa .chz__ar{color:rgba(79,220,124,.6)}
 
   .steptitle{text-align:center;font-weight:600;font-size:clamp(1.25rem,2.6vw,1.55rem);color:var(--cream);margin:0 0 .3rem}
   .stepsub{text-align:center;color:var(--cream-dim);font-size:.88rem;margin:0 0 1rem}
@@ -651,7 +670,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
         <button class="go" id="goBtn" type="button">המשך</button>
       </div>
     </div>
-    <button class="foot__talk" id="talkBtn" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1 3.6-11.3 8.38 8.38 0 0 1 12.5 7.5z"/></svg><span><span class="q">מעדיפים לדבר לפני סגירה?</span> <span class="r">השאירו פרטים ונחזור אליכם</span></span></button>
+    <a class="foot__talk" id="talkBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg><span>צור קשר</span></a>
   </div>
 </div>
 
@@ -668,6 +687,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
   let inLead0 = false;                    // the contact-first capture screen (not a numbered step)
+  let inChooser = false;                  // the three-card chooser (not a numbered step)
 
   // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
   const SAVE_KEY='ezraProto2';
@@ -877,6 +897,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
     inLead0 = false;                     // ...and the contact-first screen
+    inChooser = false;                   // ...and the chooser
     markReq = null;                      // each step wires its own missing-fields highlighter
     stopBubbles();                       // halt the coupe fizz when leaving a step
     const dir = n>=lastStep ? 'anim-fwd' : 'anim-back';
@@ -940,7 +961,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(goHandler) goHandler();
   });
   // talk prompt (footer) → leave-your-details / abandon screen, carrying anything already entered
-  $('talkBtn').addEventListener('click', ()=>{ openTalk(step); });
+  $('talkBtn').href = WA_URL;   // real anchor: reliable inside the iframe, unlike window.open
+  $('talkBtn').addEventListener('click', ()=>{ waOpen('footer_step_'+step); });
   backBtn2.addEventListener('click', ()=>{
     if(inTalk){ inTalk=false; render(talkFromStep); return; }   // back out of the abandon screen → resume where they were
     if(step>1 && step<=6) render(step-1);
@@ -1023,7 +1045,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const hasLead=()=>!!(state.name&&state.name.trim()&&state.phone&&state.phone.trim());
   function lead0(opts){
     opts=opts||{};
-    inLead0=true; inTalk=false;
+    inLead0=true; inTalk=false; inChooser=false;
     stopBubbles();
     $('progTxt').textContent='פרטי קשר';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
@@ -1063,6 +1085,58 @@ fbq('init','2174553826420246');fbq('track','PageView');
       clearTimeout(bankT); bankT=setTimeout(bank,600);
     }));
     validate();
+  }
+
+  /* ═══════ CHOOSER · first screen on any package click: build alone / call me / WhatsApp ═══════ */
+  const WA_URL='https://wa.me/972539225592?text='+encodeURIComponent('היי, אני מתכננ/ת אירוע חברה ואשמח לשמוע פרטים');
+  function waOpen(source){
+    if(window.gtag) gtag('event','whatsapp_click',{source:source});
+    // custom Meta event only - never Lead/WizardStart, so ad optimization stays booking-intent
+    if(window.fbq) fbq('trackCustom','WhatsAppClick',{source:source,language:'he'});
+  }
+  function chooser(opts){
+    opts=opts||{};
+    inChooser=true; inTalk=false; inLead0=false;
+    stopBubbles();
+    $('progTxt').textContent='איך מתחילים';
+    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    setFoot(null,'',null,false,false);   // the cards ARE the choice; no footer CTA, no WhatsApp pill here
+    if(window.gtag) gtag('event','wizard_chooser_view',{});
+    body.innerHTML =
+      '<h2 class="steptitle">איך נוח לכם להתחיל?</h2>'+
+      '<p class="stepsub">בוחרים דרך, אפשר לשנות בכל שלב</p>'+
+      '<div class="chz">'+
+        '<button type="button" class="chz__card" id="chzSelf">'+
+          '<span class="chz__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="21" y1="4" x2="14" y2="4"/><circle cx="10" cy="4" r="2"/><line x1="6" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><circle cx="8" cy="12" r="2"/><line x1="6" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><circle cx="12" cy="20" r="2"/><line x1="6" y1="20" x2="3" y2="20"/></svg></span>'+
+          '<span class="chz__tx"><span class="chz__t">מרכיבים את האירוע לבד</span><span class="chz__s">חבילה, תאריך ותפריט בכמה דקות</span></span>'+
+          '<span class="chz__ar" aria-hidden="true">&#8249;</span>'+
+        '</button>'+
+        '<button type="button" class="chz__card" id="chzCall">'+
+          '<span class="chz__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>'+
+          '<span class="chz__tx"><span class="chz__t">תחזרו אליי לשיחה</span><span class="chz__s">משאירים שם וטלפון ואנחנו מתקשרים</span></span>'+
+          '<span class="chz__ar" aria-hidden="true">&#8249;</span>'+
+        '</button>'+
+        '<a class="chz__card chz__card--wa" id="chzWa" href="'+WA_URL+'" target="_blank" rel="noopener">'+
+          '<span class="chz__ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></span>'+
+          '<span class="chz__tx"><span class="chz__t">דברו איתנו בוואטסאפ</span><span class="chz__s">מענה מהיר, בלי טפסים</span></span>'+
+          '<span class="chz__ar" aria-hidden="true">&#8249;</span>'+
+        '</a>'+
+      '</div>';
+    $('chzSelf').addEventListener('click',()=>{
+      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'self'});
+      if(hasLead()){ proceed(opts); return; }   // already known - skip straight into the build
+      lead0(opts);
+    });
+    $('chzCall').addEventListener('click',()=>{
+      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'callback'});
+      openTalk(1,false,true);
+    });
+    $('chzWa').addEventListener('click',()=>{
+      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'whatsapp'});
+      waOpen('chooser');
+    });
+    ensureScrollCue(body);
   }
 
   /* ═══════ PROCEED · after contact capture, straight into the build (no gate screen) ═══════ */
@@ -1688,7 +1762,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(state.date){ renderTalkSlots(); const sw=$('tkSlotWrap'); if(sw) sw.hidden=false; }
   }
   function openTalk(fromStep, saveMode, fresh){
-    inTalk=true; talkFromStep=fromStep||1; saveModeActive=!!saveMode;
+    inTalk=true; inChooser=false; talkFromStep=fromStep||1; saveModeActive=!!saveMode;
     const isFresh=!!fresh && !saveMode;   // a fresh contact form (page/gate) - no abandon note, add event picker
     if(isFresh) state.guests='';          // don't pre-send the wizard's default 20 for a fresh soft lead
     // abandon signal: which step they bailed on to talk-to-sales instead of self-closing
@@ -1838,12 +1912,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(q.get('gate')==='1' || (pplan && E.PLANS[pplan])){
       if(hasProgress) hydrate0(s);   // fills state so the contact screen prefills / is skipped
       const opts={ plan:pplan, resume:hasProgress?s:null };
-      if(hasLead()){ proceed(opts); return; }
-      lead0(opts); return;
+      chooser(opts); return;   // every package click starts on the three-card chooser
     }
     // resume links stay frictionless - they already are that lead
     if(hasProgress){ hydrate(s); return; }
-    lead0({}); return;
+    chooser({}); return;
   })();
 })();
 </script>
