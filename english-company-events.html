@@ -5866,7 +5866,7 @@
       window.openV2 = function(plan, userGate){
         const q = userGate ? ('?gate=1' + (plan ? ('&plan=' + encodeURIComponent(plan)) : ''))
                            : (plan ? ('?plan=' + encodeURIComponent(plan)) : '');
-        fr.src = 'english-company-events-v2.html' + q;
+        fr.src = '/english-company-events-v2.html' + q;
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
         document.body.classList.add('v2-locked');
         history.pushState(null, '', WIZARD_PATH + location.search);
@@ -5879,7 +5879,7 @@
       // Deliberately does NOT fire WizardStart (Meta optimization event stays booking-intent only)
       // and does NOT pushState /wizard - separate TalkOpen/talk_open signals instead.
       window.openV2Talk = function(){
-        fr.src = 'english-company-events-v2.html?talk=1';
+        fr.src = '/english-company-events-v2.html?talk=1';
         ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
         document.body.classList.add('v2-locked');
         if (window.fbq) fbq('trackCustom', 'TalkOpen', { language: 'en' });
