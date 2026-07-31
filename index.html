@@ -69,6 +69,8 @@
 
   <!-- Microsoft Clarity (heatmaps + session recordings) -->
   <script type="text/javascript">
+    // skip Clarity entirely for visitors who chose essential-only cookies
+    if ((function(){ try { return localStorage.getItem("ezra_cookie_ok"); } catch(e) { return null; } })() !== "essential")
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -3011,7 +3013,9 @@
   <!-- Cookie consent banner -->
   <div class="cookie-bar" id="cookieBar" role="region" aria-label="הודעת עוגיות" hidden>
     <p class="cookie-bar__text">אנחנו משתמשים בעוגיות ובכלי Microsoft Clarity כדי שהאתר יעבוד כמו שצריך, לנתח שימוש ולהתאים תוכן ופרסום. המשך הגלישה מהווה הסכמה. <a href="privacy">למדיניות העוגיות</a></p>
-    <button type="button" class="cookie-bar__btn" id="cookieOk">מאשר/ת</button>
+    <button type="button" class="cookie-bar__btn cookie-bar__btn--ghost" id="cookieEssential">הכרחיות בלבד</button>
+    <button type="button" class="cookie-bar__btn" id="cookieOk">מאשר/ת הכל</button>
+    <button type="button" class="cookie-bar__x" id="cookieX" aria-label="סגירה">&#10005;</button>
   </div>
   <style>
     .cookie-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 9000;
@@ -3027,20 +3031,35 @@
       font: inherit; font-weight: 600; font-size: 0.85rem; color: #1a140c;
       background: linear-gradient(110deg, #c49a3c, #f5d98a); transition: filter .25s ease; }
     .cookie-bar__btn:hover { filter: brightness(1.07); }
+    .cookie-bar__btn--ghost { background: transparent; border: 1px solid rgba(240,235,224,0.3); color: #d8cfbf; font-weight: 500; }
+    .cookie-bar__btn--ghost:hover { filter: none; border-color: rgba(240,235,224,0.55); color: #f0ebe0; }
+    .cookie-bar__x { position: absolute; inset-block-start: 8px; inset-inline-start: 10px; width: 30px; height: 30px;
+      border-radius: 50%; border: 1px solid rgba(240,235,224,0.25); background: transparent; color: rgba(240,235,224,0.6);
+      font-size: 0.72rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .cookie-bar__x:hover { color: #f0ebe0; border-color: rgba(240,235,224,0.5); }
     @media (prefers-reduced-motion: reduce) { .cookie-bar { transition: none; } }
   </style>
   <script>
     (function () {
       var KEY = 'ezra_cookie_ok';
-      try { if (localStorage.getItem(KEY) === '1') return; } catch (e) {}
+      // '1' = accepted all, 'essential' = necessary only. Either way the banner stays gone.
+      try { var v = localStorage.getItem(KEY); if (v === '1' || v === 'essential') return; } catch (e) {}
       var bar = document.getElementById('cookieBar'); if (!bar) return;
       bar.hidden = false;
       requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('show'); }); });
-      document.getElementById('cookieOk').addEventListener('click', function () {
-        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      function closeBar() {
         bar.classList.remove('show');
         setTimeout(function () { bar.hidden = true; }, 500);
+      }
+      function remember(val) { try { localStorage.setItem(KEY, val); } catch (e) {} closeBar(); }
+      document.getElementById('cookieOk').addEventListener('click', function () { remember('1'); });
+      document.getElementById('cookieEssential').addEventListener('click', function () {
+        // stop the Clarity instance already running on this page; later loads skip it entirely
+        try { if (window.clarity) window.clarity('stop'); } catch (e) {}
+        remember('essential');
       });
+      // X = dismiss without choosing, so the banner returns on the next visit
+      document.getElementById('cookieX').addEventListener('click', closeBar);
     })();
   </script>
   <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
