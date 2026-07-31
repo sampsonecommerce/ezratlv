@@ -700,6 +700,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
   // ── cross-device resume: POST the draft to the worker, which returns a link keyed by an opaque token.
   // draftId+token are stashed so repeat saves update the same Monday item instead of piling up duplicates.
+  const WA_URL='https://wa.me/972539225592?text='+encodeURIComponent("Hi, I'm planning a company event and I'd love to hear more");
   const DRAFT_ID_KEY='ezraDraftId', DRAFT_TOKEN_KEY='ezraDraftToken';
   const draftEndpoint=()=>(window.EZRA_LEAD_ENDPOINT||'/api/submit-lead');
   window.EZRA_CREATE_DRAFT=async(s,_retried)=>{
@@ -1088,7 +1089,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
 
   /* ═══════ CHOOSER · first screen on any package click: build alone / call me / WhatsApp ═══════ */
-  const WA_URL='https://wa.me/972539225592?text='+encodeURIComponent("Hi, I'm planning a company event and I'd love to hear more");
   function waOpen(source){
     if(window.gtag) gtag('event','whatsapp_click',{source:source});
     // custom Meta event only - never Lead/WizardStart, so ad optimization stays booking-intent
