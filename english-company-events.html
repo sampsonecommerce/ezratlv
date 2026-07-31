@@ -5814,10 +5814,12 @@
     .cookie-bar__btn:hover { filter: brightness(1.07); }
     .cookie-bar__btn--ghost { background: transparent; border: 1px solid rgba(240,235,224,0.3); color: #d8cfbf; font-weight: 500; }
     .cookie-bar__btn--ghost:hover { filter: none; border-color: rgba(240,235,224,0.55); color: #f0ebe0; }
-    .cookie-bar__x { position: absolute; inset-block-start: 8px; inset-inline-start: 10px; width: 30px; height: 30px;
-      border-radius: 50%; border: 1px solid rgba(240,235,224,0.25); background: transparent; color: rgba(240,235,224,0.6);
-      font-size: 0.72rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .cookie-bar__x:hover { color: #f0ebe0; border-color: rgba(240,235,224,0.5); }
+    /* plain X in the normal button row (not an absolute overlay), so it can never sit on top of
+       the text when it wraps on mobile - it just wraps down with the buttons instead. */
+    .cookie-bar__x { flex: none; width: 28px; height: 28px; border: 0; border-radius: 0; background: transparent;
+      color: #fff; font-size: 1rem; font-weight: 700; line-height: 1; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; opacity: 0.85; }
+    .cookie-bar__x:hover { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .cookie-bar { transition: none; } }
   </style>
   <script>
