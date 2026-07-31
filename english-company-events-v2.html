@@ -461,26 +461,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .talk__note b{display:block;color:var(--gold-light);font-size:.9rem;margin-block-end:.15rem}
   .talk__note span{color:var(--cream-dim);font-size:.8rem;line-height:1.5}
   .talk__form{display:flex;flex-direction:column;gap:.85rem}
-  /* contact-first screen: three fields before anything else, so a lead is captured up front */
-  .lead0{max-width:380px;margin:0 auto;display:flex;flex-direction:column;gap:.9rem;
-    background:rgba(255,255,255,.04);border:1px solid rgba(196,154,60,.35);border-radius:16px;
-    padding:1.3rem 1.2rem 1.1rem}
-  .lead0 .bfield{width:100%}
-  .lead0 .bfield input{width:100%;box-sizing:border-box}
-  .lead0__note{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:.1rem 0 0;
-    color:var(--cream-dim);font-size:.78rem;text-align:center}
-  .lead0__note svg{width:14px;height:14px;color:var(--gold);flex:none}
-  /* roadmap: shows this is step 1 of a build, so the form never reads as a dead-end lead capture */
-  .road{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:0 0 .9rem;flex-wrap:wrap}
-  .road__on{display:inline-flex;align-items:center;gap:.35rem;background:rgba(196,154,60,.16);
-    border-radius:50px;padding:.25rem .65rem;color:var(--gold-light);font-size:.7rem;font-weight:600}
-  .road__on i{width:6px;height:6px;border-radius:50%;background:var(--gold-light);display:block}
-  .road__ln{flex:none;width:14px;height:1px;background:rgba(240,235,224,.2)}
-  .road__off{color:rgba(240,235,224,.45);font-size:.7rem}
-  /* lead0 is a short screen: center it so there's no dead gap above the footer, and make the
-     single CTA visibly bigger than the standard step button */
-  .body--lead0{display:flex;flex-direction:column;justify-content:center}
-  .foot--lead0 .go{font-size:1.06rem;padding-block:1.05rem;letter-spacing:.02em}
   /* fresh soft-form event picker (guests + mini calendar + broad time windows) */
   .talk__event{border:.5px solid var(--line);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.7rem;background:rgba(196,154,60,.04)}
   .talk__event-h{font-size:.8rem;font-weight:600;color:var(--gold-light)}
@@ -686,7 +666,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     name:'', company:'', phone:'', email:'', address:'' };
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
-  let inLead0 = false;                    // the contact-first capture screen (not a numbered step)
   let inChooser = false;                  // the three-card chooser (not a numbered step)
 
   // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
@@ -897,7 +876,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
-    inLead0 = false;                     // ...and the contact-first screen
     inChooser = false;                   // ...and the chooser
     markReq = null;                      // each step wires its own missing-fields highlighter
     stopBubbles();                       // halt the coupe fizz when leaving a step
@@ -922,7 +900,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const hasCta = !!handler;
     foot.hidden = !hasCta && !showTalk;            // footer stays visible if there's a CTA or the talk prompt
     $('talkBtn').hidden = !showTalk;
-    foot.classList.toggle('foot--lead0', inLead0);
     const main = $('footMain'); if (main) main.hidden = !hasCta;
     backBtn2.hidden = !(hasCta && (step>1 || inTalk));   // nothing behind step 1
     if (hasCta){
@@ -946,8 +923,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function nudgeGo(){
     // the talk screen keeps `step` at the step it was opened from, so it must be checked FIRST —
     // otherwise a step-2 visitor gets "pick a day in the calendar" on a screen with no calendar
-    if(inLead0) footAlert.textContent = 'Name and phone are needed to continue';
-    else if(inTalk || step===6) footAlert.textContent = 'Please fill in the missing information above to send the form!';
+    if(inTalk || step===6) footAlert.textContent = 'Please fill in the missing information above to send the form!';
     else if(step===2) footAlert.textContent = !state.date ? 'Pick an available day first' : 'Also pick a time window';
     else footAlert.textContent = 'Please fill in the missing information above to continue!';
     if(markReq){ markReq();
@@ -1039,55 +1015,6 @@ fbq('init','2174553826420246');fbq('track','PageView');
     }));
   }
 
-  /* ═══════ CONTACT FIRST · captured before anything else, so no lead is ever lost ═══════ */
-  // Every downstream screen prefills from state, so these are never asked twice. On continue we
-  // silently push a soft-lead draft to Monday (reuses the save-draft machinery, deduped by draftId),
-  // meaning even a visitor who closes the tab one second later is already a reachable lead.
-  const hasLead=()=>!!(state.name&&state.name.trim()&&state.phone&&state.phone.trim());
-  function lead0(opts){
-    opts=opts||{};
-    inLead0=true; inTalk=false; inChooser=false;
-    stopBubbles();
-    $('progTxt').textContent='Contact details';
-    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd','body--lead0');
-    const go=()=>{
-      if(!hasLead()){ nudgeGo(); return; }
-      if(window.gtag) gtag('event','contact_captured',{});
-      // fire-and-forget: the lead is banked before they choose a path
-      if(window.EZRA_CREATE_DRAFT){ try{ window.EZRA_CREATE_DRAFT(collectState()); }catch(e){} }
-      proceed(opts);
-    };
-    setFoot('Start building','', go, true, false);
-    body.innerHTML =
-      '<div class="road"><span class="road__on"><i></i>Details</span><span class="road__ln"></span>'+
-        '<span class="road__off">Build your event</span><span class="road__ln"></span>'+
-        '<span class="road__off">Price</span></div>'+
-      '<h2 class="steptitle">Nice to meet you</h2>'+
-      '<p class="stepsub">Name and phone, then we start building your event</p>'+
-      '<div class="lead0">'+
-        '<div class="bfield"><label>Name</label><input type="text" id="l0Name" autocomplete="name" /></div>'+
-        '<div class="bfield"><label>Phone</label><input type="tel" id="l0Phone" inputmode="tel" autocomplete="tel" /></div>'+
-        '<div class="bfield"><label>Email (optional)</label><input type="email" id="l0Email" inputmode="email" autocomplete="email" /></div>'+
-        '<p class="lead0__note">'+ICON_INFO+'<span>Your details are saved only so we can get back to you.</span></p>'+
-      '</div>';
-    const map={l0Name:'name',l0Phone:'phone',l0Email:'email'};
-    Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
-    const req=[$('l0Name'),$('l0Phone')];
-    const validate=()=>setGoOff(!req.every(el=>el.value.trim()));
-    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
-    // bank the lead the moment name+phone are both in, debounced - NOT only on continue. Someone
-    // who fills the fields and closes the tab is still captured (server dedupes by draftId).
-    let bankT;
-    const bank=()=>{ if(hasLead() && window.EZRA_CREATE_DRAFT){ try{ window.EZRA_CREATE_DRAFT(collectState()); }catch(e){} } };
-    body.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{
-      const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
-      state[map[el.id]]=el.value; validate(); saveMaybe();
-      clearTimeout(bankT); bankT=setTimeout(bank,600);
-    }));
-    validate();
-  }
-
   /* ═══════ CHOOSER · first screen on any package click: build alone / call me / WhatsApp ═══════ */
   function waOpen(source){
     if(window.gtag) gtag('event','whatsapp_click',{source:source});
@@ -1096,7 +1023,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function chooser(opts){
     opts=opts||{};
-    inChooser=true; inTalk=false; inLead0=false;
+    inChooser=true; inTalk=false;
     stopBubbles();
     $('progTxt').textContent='Getting started';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
@@ -1125,8 +1052,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       '</div>';
     $('chzSelf').addEventListener('click',()=>{
       if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'self'});
-      if(hasLead()){ proceed(opts); return; }   // already known - skip straight into the build
-      lead0(opts);
+      proceed(opts);   // straight into the build; details are collected at the end
     });
     $('chzCall').addEventListener('click',()=>{
       if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'callback'});
@@ -1637,7 +1563,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       }
       state.notes=$('fNotes').value; submitLead(); render(7);
       if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
-    },true,false);   // step 6 = the details step; the "talk to sales" checkbox handles the abandon path here
+    },true,true);   // step 6 = the details step; keep the WhatsApp button here so they can still switch to a chat
     body.innerHTML =
       '<h2 class="steptitle">Your details</h2>'+
       '<p class="stepsub">We\'ll send you a proposal and a contract for digital signature</p>'+
@@ -1914,7 +1840,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     // contact capture, then go straight into the build. Contact is skipped once we already know
     // (draft carries name+phone), so a returning visitor is never asked twice.
     if(q.get('gate')==='1' || (pplan && E.PLANS[pplan])){
-      if(hasProgress) hydrate0(s);   // fills state so the contact screen prefills / is skipped
+      if(hasProgress) hydrate0(s);   // preload a saved session so 'build my own' resumes it
       const opts={ plan:pplan, resume:hasProgress?s:null };
       chooser(opts); return;   // every package click starts on the three-card chooser
     }
