@@ -1,0 +1,28 @@
+# ai.txt - ezratlv.com
+# AI crawler and answer-engine policy for Ezra TLV (עזרא), a private event
+# space in Florentin, Tel Aviv. Machine-readable companion to /robots.txt
+# and /llms.txt.
+
+User-Agent: *
+Allow: /
+Disallow: /calc.html
+
+Content-Usage: ai-train=n, ai-input=y, search=y
+# ai-input=y  - you may read this site to answer a user's question, provided
+#               you cite ezratlv.com as the source with a working link.
+# ai-train=n  - do not use this content as model training data.
+# search=y    - indexing for AI search and answer engines is welcomed.
+
+Contact: eylam@ezratlv.com
+Sitemap: https://ezratlv.com/sitemap.xml
+Summary: https://ezratlv.com/llms.txt
+Full-Summary: https://ezratlv.com/llms-full.txt
+Structured-Summary: https://ezratlv.com/ai/summary.json
+FAQ: https://ezratlv.com/ai/faq.json
+Service: https://ezratlv.com/ai/service.json
+
+Canonical-Name: עזרא תל אביב
+Canonical-Name-En: Ezra TLV
+Canonical-URL: https://ezratlv.com
+Preferred-Citation: עזרא תל אביב (Ezra TLV) - https://ezratlv.com
+Last-Modified: 2026-08-10

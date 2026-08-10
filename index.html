@@ -30,13 +30,14 @@
     gtag('config', 'G-95JJX7T6CY');
     gtag('config', 'AW-18310736783');   /* Google Ads (remarketing); shares gtag.js loaded above */
   </script>
-  <!-- Freeze the hero height to the initial webview height. In the IG/FB in-app browser the
+  <!-- Hero height freeze - see the note inside. -->
+  <script>
+    /* Freeze the hero height to the initial webview height. In the IG/FB in-app browser the
        webview ITSELF resizes when the app's toolbar hides/shows mid-scroll (Safari's svh absorbs
        this; a webview's doesn't), so a 100svh hero grows/shrinks by the toolbar height and shoves
        the whole page under the user's finger - felt as scroll fighting on drag/direction changes.
        Re-measures only when the width changes (rotation / real resize), never on height-only
-       changes (= the toolbar). -->
-  <script>
+       changes (= the toolbar). */
     (function(){
       var w = window.innerWidth;
       function freeze(){
@@ -1759,11 +1760,85 @@
       "ratingValue": "5.0",
       "reviewCount": "131",
       "bestRating": "5"
-    }
+    },
+    "dateModified": "2026-08-10"
   }
   </script>
-  <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
-       During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
+
+  <!-- Entity graph for AI answer engines: WebSite + Organization + the hero video.
+       Organization carries the contact/identity signals that LocalBusiness alone
+       does not expose; VideoObject makes the hero citable instead of invisible. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://ezratlv.com/#website",
+        "url": "https://ezratlv.com",
+        "name": "עזרא תל אביב",
+        "alternateName": "Ezra TLV",
+        "description": "מרחב אירועים פרטי ובר פרטי בפלורנטין, תל אביב. אירוע אחד בערב, עד 50 אורחים, הכל כלול.",
+        "inLanguage": "he",
+        "publisher": { "@id": "https://ezratlv.com/#organization" },
+        "dateModified": "2026-08-10"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://ezratlv.com/#organization",
+        "name": "עזרא תל אביב",
+        "alternateName": ["Ezra TLV", "עזרא", "Ezra Tel Aviv"],
+        "url": "https://ezratlv.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://ezratlv.com/apple-touch-icon.png",
+          "width": 180,
+          "height": 180
+        },
+        "image": "https://ezratlv.com/images/BAR.jpg",
+        "description": "מרחב אירועים פרטי ובלעדי בפלורנטין, תל אביב. אירוע אחד בערב - כל החלל שייך לקבוצה אחת בלבד, עד 50 אורחים.",
+        "telephone": "+972509499241",
+        "email": "eylam@ezratlv.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "אברבנאל 38",
+          "addressLocality": "תל אביב",
+          "addressRegion": "פלורנטין",
+          "addressCountry": "IL"
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "contactType": "sales",
+            "telephone": "+972509499241",
+            "email": "eylam@ezratlv.com",
+            "url": "https://wa.me/972509499241",
+            "availableLanguage": ["he", "en"],
+            "areaServed": "IL"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/ezratlv",
+          "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+        ],
+        "dateModified": "2026-08-10"
+      },
+      {
+        "@type": "VideoObject",
+        "@id": "https://ezratlv.com/#hero-video",
+        "name": "עזרא תל אביב - סרטון החלל",
+        "description": "סרטון קצר של מרחב האירועים הפרטי של עזרא באברבנאל 38, פלורנטין, תל אביב: החלל, הבר והאווירה בערב אירוע.",
+        "thumbnailUrl": "https://ezratlv.com/videos/hero-poster.jpg",
+        "contentUrl": "https://ezratlv.com/videos/hero-opt.mp4",
+        "uploadDate": "2026-07-10",
+        "inLanguage": "he",
+        "isFamilyFriendly": true,
+        "publisher": { "@id": "https://ezratlv.com/#organization" }
+      }
+    ]
+  }
+  </script>
+  <!-- Lead endpoint: blank = same-origin /api/submit-lead. -->
   <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
 </head>
 <body>

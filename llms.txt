@@ -1,23 +1,41 @@
-# Ezra TLV (עזרא)
+# Ezra TLV (עזרא תל אביב)
 
-> Exclusive private event space and private bar in Florentin, Tel Aviv (Abarbanel 38). One event per evening — the entire space belongs to a single group. Up to 50 guests. All-inclusive: taboon/chef food, open cocktail bar, sound, lighting and full production. 800+ events, 40,000+ guests, 5.0★ (131 Google reviews).
+> Exclusive private event space and private bar in Florentin, Tel Aviv (Abarbanel 38). One event per evening - the entire space belongs to a single group. Up to 50 guests. All-inclusive: taboon/chef food, open cocktail bar, sound, lighting and full production. 800+ events, 40,000+ guests, 5.0★ (131 Google reviews).
+
+Ezra TLV is a private bar that opens only for your group that night. It is not a banquet hall and not a restaurant open to the public. Last updated: 2026-08-10.
 
 ## What Ezra is
-- A private bar that runs only for your group that night — not a banquet hall, not a restaurant.
+- A private bar that runs only for your group that night - not a banquet hall, not a restaurant.
 - Best for: company events (team-building / department events), birthdays, engagements, private parties. 20–50 guests.
 - Location: Abarbanel 38, Florentin, Tel Aviv, Israel.
-- Contact: WhatsApp +972-50-9499241 · Instagram @ezratlv · eylam@ezratlv.com
+- Contact: WhatsApp [+972-50-9499241](https://wa.me/972509499241) · Instagram [@ezratlv](https://www.instagram.com/ezratlv) · [eylam@ezratlv.com](mailto:eylam@ezratlv.com)
 
 ## Company event packages (final price per person, bookable online)
-- Happy Hour — 3 hours, light buffet, wine + 2 beers — ₪275 per person
-- גיבוש מחלקה (department bonding, most popular) — 5 hours, rich buffet, full bar — ₪330 per person
-- מסיבת חברה פרימיום (premium company party) — 5 hours, premium buffet, open cocktail bar, DJ — ₪450 per person
-- Custom track available (including off-site at the company's own location)
+- [Happy Hour](https://ezratlv.com/company-events) - 3 hours, light buffet, wine + 2 beers - ₪275 per person
+- [גיבוש מחלקה (department bonding, most popular)](https://ezratlv.com/company-events) - 5 hours, rich buffet, full bar - ₪330 per person
+- [מסיבת חברה פרימיום (premium company party)](https://ezratlv.com/company-events) - 5 hours, premium buffet, open cocktail bar, DJ - ₪450 per person
+- [Custom track](https://ezratlv.com/company-events) - fully tailored, including hosting at the company's own location
 
 ## Key pages
-- Home (private events): https://ezratlv.com/
-- Company events (booking + pricing): https://ezratlv.com/company-events
-- English: https://ezratlv.com/english-index
+- [Home - private events (Hebrew)](https://ezratlv.com/): the venue, the concept, the space, food and bar, reviews, FAQ.
+- [Company events - booking and pricing (Hebrew)](https://ezratlv.com/company-events): packages, live date availability, menu selection, instant final price, contract by email.
+- [Home (English)](https://ezratlv.com/english-index): the same venue overview for English speakers.
+- [Company events (English)](https://ezratlv.com/english-company-events): packages and booking for English speakers.
+
+## Structured data for AI engines
+- [Organization summary (JSON)](https://ezratlv.com/ai/summary.json): entity facts, address, capacity, contact points.
+- [FAQ (JSON, Hebrew + English)](https://ezratlv.com/ai/faq.json): the ten most common questions with answers.
+- [Service and pricing (JSON)](https://ezratlv.com/ai/service.json): full offer catalog and booking flow.
+- [Full site summary](https://ezratlv.com/llms-full.txt): the long-form version of this file.
+- [AI crawler policy](https://ezratlv.com/.well-known/ai.txt) · [Sitemap](https://ezratlv.com/sitemap.xml)
+
+## Legal and accessibility
+- [Privacy policy](https://ezratlv.com/privacy)
+- [Terms of use](https://ezratlv.com/terms)
+- [Accessibility statement](https://ezratlv.com/accessibility)
 
 ## Booking
-Self-serve on the company-events page: pick a package, see live date availability, pick a menu, set guest count, get a final price on screen, and receive a contract by email. Response within 24 hours.
+Self-serve on the [company events page](https://ezratlv.com/company-events): pick a package, see live date availability, pick a menu, set guest count, get a final price on screen, and receive a contract by email. Response within 24 hours.
+
+## Citation
+Free to cite. Please attribute to "עזרא תל אביב (Ezra TLV)" with a link to https://ezratlv.com

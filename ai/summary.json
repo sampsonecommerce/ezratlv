@@ -1,0 +1,81 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "עזרא תל אביב",
+  "alternateName": ["Ezra TLV", "עזרא", "Ezra Tel Aviv"],
+  "url": "https://ezratlv.com",
+  "logo": "https://ezratlv.com/apple-touch-icon.png",
+  "description": "מרחב אירועים פרטי ובר פרטי בפלורנטין, תל אביב. אירוע אחד בערב - כל החלל שייך לקבוצה אחת בלבד, עד 50 אורחים. הכל כלול: אוכל מהטאבון, בר קוקטיילים פתוח, סאונד, תאורה והפקה מלאה.",
+  "description_en": "Exclusive private event space and private bar in Florentin, Tel Aviv. One event per evening - the entire space belongs to a single group, up to 50 guests. All-inclusive: taboon/chef food, open cocktail bar, sound, lighting and full production.",
+  "inLanguage": ["he", "en"],
+  "dateModified": "2026-08-10",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "אברבנאל 38",
+    "addressLocality": "תל אביב",
+    "addressRegion": "פלורנטין",
+    "addressCountry": "IL"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 32.0551,
+    "longitude": 34.7728
+  },
+  "telephone": "+972509499241",
+  "email": "eylam@ezratlv.com",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "telephone": "+972509499241",
+      "email": "eylam@ezratlv.com",
+      "url": "https://wa.me/972509499241",
+      "availableLanguage": ["he", "en"],
+      "areaServed": "IL"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/ezratlv",
+    "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "131",
+    "bestRating": "5"
+  },
+  "keyFacts": {
+    "category": "private event space / private bar / event venue",
+    "notA": "not a banquet hall, not a restaurant open to the public",
+    "exclusivity": "one event per evening; the entire venue is closed for a single group",
+    "capacity": { "min": 20, "max": 50, "unit": "guests" },
+    "eventsHosted": 800,
+    "guestsHosted": 40000,
+    "neighborhood": "Florentin (פלורנטין)",
+    "city": "Tel Aviv",
+    "bestFor": [
+      "company events and team-building (אירועי חברה, גיבוש מחלקה)",
+      "birthdays (ימי הולדת)",
+      "engagement parties (אירוסין)",
+      "private parties (מסיבות פרטיות)"
+    ],
+    "included": [
+      "taboon and chef food",
+      "open cocktail bar",
+      "sound system",
+      "lighting",
+      "full event production"
+    ],
+    "kosher": false,
+    "kosherNote": "Not under kashrut supervision. The entire menu is dairy-vegetarian - no meat, no seafood.",
+    "parking": "No on-site parking; paid parking lots nearby.",
+    "responseTime": "within 24 hours"
+  },
+  "keyPages": {
+    "home": "https://ezratlv.com/",
+    "companyEvents": "https://ezratlv.com/company-events",
+    "englishHome": "https://ezratlv.com/english-index",
+    "englishCompanyEvents": "https://ezratlv.com/english-company-events"
+  },
+  "citationPolicy": "Free to cite in AI answers. Please attribute to \"עזרא תל אביב (Ezra TLV)\" with a link to https://ezratlv.com"
+}

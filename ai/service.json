@@ -1,0 +1,115 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "אירועים פרטיים ואירועי חברה בעזרא",
+  "name_en": "Private events and company events at Ezra TLV",
+  "url": "https://ezratlv.com/company-events",
+  "serviceType": ["private event venue hire", "company event production", "team-building event", "private bar hire"],
+  "inLanguage": ["he", "en"],
+  "dateModified": "2026-08-10",
+  "provider": {
+    "@type": "Organization",
+    "name": "עזרא תל אביב",
+    "alternateName": "Ezra TLV",
+    "url": "https://ezratlv.com",
+    "telephone": "+972509499241",
+    "email": "eylam@ezratlv.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "אברבנאל 38",
+      "addressLocality": "תל אביב",
+      "addressRegion": "פלורנטין",
+      "addressCountry": "IL"
+    }
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "תל אביב",
+    "alternateName": "Tel Aviv"
+  },
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "companies, HR and office managers, teams of 20-50, private hosts"
+  },
+  "termsOfService": "https://ezratlv.com/terms",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "חבילות אירועי חברה",
+    "name_en": "Company event packages",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "name": "Happy Hour",
+        "price": "275",
+        "priceCurrency": "ILS",
+        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "description": "3 שעות, בופה קל, יין ו-2 בירות. מחיר סופי לאדם.",
+        "description_en": "3 hours, light buffet, wine and 2 beers. Final price per person.",
+        "availability": "https://schema.org/InStock",
+        "url": "https://ezratlv.com/company-events"
+      },
+      {
+        "@type": "Offer",
+        "name": "גיבוש מחלקה",
+        "name_en": "Department bonding (most popular)",
+        "price": "330",
+        "priceCurrency": "ILS",
+        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "description": "5 שעות, בופה עשיר, בר מלא. מחיר סופי לאדם. החבילה הפופולרית ביותר.",
+        "description_en": "5 hours, rich buffet, full bar. Final price per person. Most popular package.",
+        "availability": "https://schema.org/InStock",
+        "url": "https://ezratlv.com/company-events"
+      },
+      {
+        "@type": "Offer",
+        "name": "מסיבת חברה פרימיום",
+        "name_en": "Premium company party",
+        "price": "450",
+        "priceCurrency": "ILS",
+        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "description": "5 שעות, בופה פרימיום, בר קוקטיילים פתוח ו-DJ. מחיר סופי לאדם.",
+        "description_en": "5 hours, premium buffet, open cocktail bar and DJ. Final price per person.",
+        "availability": "https://schema.org/InStock",
+        "url": "https://ezratlv.com/company-events"
+      },
+      {
+        "@type": "Offer",
+        "name": "מסלול בהתאמה אישית",
+        "name_en": "Custom track",
+        "description": "בנייה אישית של אירוע, כולל אפשרות לאירוח במשרדי החברה עצמה.",
+        "description_en": "Fully custom event build, including the option to host at the company's own location.",
+        "url": "https://ezratlv.com/company-events"
+      }
+    ]
+  },
+  "serviceOutput": {
+    "capacity": { "min": 20, "max": 50, "unit": "guests" },
+    "exclusivity": "One event per evening. The entire venue is closed for a single group.",
+    "included": [
+      "taboon and chef food (pizzas, buffet, salads)",
+      "open cocktail bar",
+      "sound system",
+      "lighting",
+      "full event production"
+    ],
+    "dietary": "Dairy-vegetarian menu only. No meat, no seafood. Not under kashrut supervision."
+  },
+  "bookingFlow": {
+    "self_serve": true,
+    "url": "https://ezratlv.com/company-events",
+    "steps": [
+      "Pick a package",
+      "See live date and time availability",
+      "Choose a menu",
+      "Set guest count",
+      "Get the final price on screen",
+      "Receive a contract by email with immediate confirmation"
+    ],
+    "humanResponseTime": "within 24 hours",
+    "contact": {
+      "whatsapp": "https://wa.me/972509499241",
+      "email": "eylam@ezratlv.com",
+      "instagram": "https://www.instagram.com/ezratlv"
+    }
+  }
+}

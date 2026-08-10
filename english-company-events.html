@@ -30,13 +30,14 @@
     gtag('config', 'G-95JJX7T6CY');
     gtag('config', 'AW-18310736783');   /* Google Ads (remarketing); shares gtag.js loaded above */
   </script>
-  <!-- Freeze the hero height to the initial webview height. In the IG/FB in-app browser the
+  <!-- Hero height freeze - see the note inside. -->
+  <script>
+    /* Freeze the hero height to the initial webview height. In the IG/FB in-app browser the
        webview ITSELF resizes when the app's toolbar hides/shows mid-scroll (Safari's svh absorbs
        this; a webview's doesn't), so a 100svh hero grows/shrinks by the toolbar height and shoves
        the whole page under the user's finger - felt as scroll fighting on drag/direction changes.
        Re-measures only when the width changes (rotation / real resize), never on height-only
-       changes (= the toolbar). -->
-  <script>
+       changes (= the toolbar). */
     (function(){
       var w = window.innerWidth;
       function freeze(){
@@ -2661,8 +2662,138 @@
       .rev-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
     }
   </style>
-  <!-- Lead endpoint. Blank = same-origin /api/submit-lead (Netlify/Cloudflare Pages function).
-       During the GitHub-Pages bridge, paste the Cloudflare Worker URL between the quotes. -->
+
+  <!-- Structured data. This page had none, so AI engines had no machine-readable
+       version of the English packages, pricing or FAQ to cite. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["LocalBusiness", "EventVenue"],
+        "@id": "https://ezratlv.com/english-company-events#venue",
+        "name": "Ezra TLV",
+        "alternateName": "עזרא תל אביב",
+        "description": "Private bar for company events in Florentin, Tel Aviv. One event per evening, up to 50 guests, all-inclusive: taboon food, cocktail bar, sound, lighting and full production.",
+        "url": "https://ezratlv.com/english-company-events",
+        "telephone": "+972509499241",
+        "email": "eylam@ezratlv.com",
+        "image": "https://ezratlv.com/images/BAR.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "38 Abarbanel Street",
+          "addressLocality": "Tel Aviv",
+          "addressRegion": "Florentin",
+          "addressCountry": "IL"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 32.0573711, "longitude": 34.766951 },
+        "priceRange": "₪₪₪",
+        "maximumAttendeeCapacity": 50,
+        "sameAs": [
+          "https://www.instagram.com/ezratlv",
+          "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "131",
+          "bestRating": "5"
+        },
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "name": "Happy Hour",
+            "priceCurrency": "ILS",
+            "price": "275",
+            "description": "3 hours, light buffet, wine and 2 beers. Final price per person."
+          },
+          {
+            "@type": "Offer",
+            "name": "Department bonding",
+            "priceCurrency": "ILS",
+            "price": "330",
+            "description": "5 hours, rich buffet, full bar. Final price per person. Most popular."
+          },
+          {
+            "@type": "Offer",
+            "name": "Premium company party",
+            "priceCurrency": "ILS",
+            "price": "450",
+            "description": "5 hours, premium buffet, open cocktail bar and DJ. Final price per person."
+          }
+        ],
+        "dateModified": "2026-08-10"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://ezratlv.com/#website",
+        "url": "https://ezratlv.com",
+        "name": "Ezra TLV",
+        "alternateName": "עזרא תל אביב",
+        "inLanguage": ["he", "en"],
+        "publisher": { "@id": "https://ezratlv.com/#organization" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://ezratlv.com/#organization",
+        "name": "Ezra TLV",
+        "alternateName": ["עזרא תל אביב", "עזרא", "Ezra Tel Aviv"],
+        "url": "https://ezratlv.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://ezratlv.com/apple-touch-icon.png",
+          "width": 180,
+          "height": 180
+        },
+        "telephone": "+972509499241",
+        "email": "eylam@ezratlv.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "38 Abarbanel Street",
+          "addressLocality": "Tel Aviv",
+          "addressRegion": "Florentin",
+          "addressCountry": "IL"
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "contactType": "sales",
+            "telephone": "+972509499241",
+            "email": "eylam@ezratlv.com",
+            "url": "https://wa.me/972509499241",
+            "availableLanguage": ["he", "en"],
+            "areaServed": "IL"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/ezratlv",
+          "https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f"
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Ezra TLV", "item": "https://ezratlv.com/english-index" },
+          { "@type": "ListItem", "position": 2, "name": "Company events", "item": "https://ezratlv.com/english-company-events" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "How many guests can Ezra host?", "acceptedAnswer": { "@type": "Answer", "text": "From 20 to 50 people. One event per evening - the entire space belongs to your team." } },
+          { "@type": "Question", "name": "How much does a company event at Ezra cost?", "acceptedAnswer": { "@type": "Answer", "text": "Three packages at a final per-person price: Happy Hour 275 ILS (3 hours, light buffet, wine and beer), Department bonding 330 ILS (5 hours, rich buffet, full bar) and Premium company party 450 ILS (5 hours, premium buffet, open cocktail bar and DJ). A custom track is also available." } },
+          { "@type": "Question", "name": "What is included in the price?", "acceptedAnswer": { "@type": "Answer", "text": "Everything: taboon food (pizzas, buffet and salads), the bar, sound, lighting and full production. You just show up." } },
+          { "@type": "Question", "name": "Where is Ezra located?", "acceptedAnswer": { "@type": "Answer", "text": "38 Abarbanel Street, in the heart of the Florentin industrial area, Tel Aviv." } },
+          { "@type": "Question", "name": "Can I lock a date and a price online?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. On the site you pick a package, see date and time availability, choose a menu and guest count, then get a final price on screen and a contract by email with immediate confirmation." } },
+          { "@type": "Question", "name": "What makes Ezra different from a hall or a restaurant?", "acceptedAnswer": { "@type": "Answer", "text": "A private bar that opens only for your team, for a whole evening. Over 800 events and 40,000 guests to date." } },
+          { "@type": "Question", "name": "Is the food kosher?", "acceptedAnswer": { "@type": "Answer", "text": "The venue is not under kashrut supervision, but the entire menu is dairy-vegetarian - no meat and no seafood." } },
+          { "@type": "Question", "name": "Is there parking?", "acceptedAnswer": { "@type": "Answer", "text": "There is no on-site parking, but there are paid parking lots nearby." } }
+        ]
+      }
+    ]
+  }
+  </script>
+  <!-- Lead endpoint: blank = same-origin /api/submit-lead. -->
   <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
   <script>window.EZRA_AVAILABILITY_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
 </head>

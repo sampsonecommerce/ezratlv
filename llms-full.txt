@@ -1,0 +1,100 @@
+# Ezra TLV (עזרא תל אביב) - full site summary for AI answer engines
+
+> Ezra TLV is an exclusive private event space and private bar at Abarbanel 38, Florentin, Tel Aviv, Israel. It hosts one event per evening: the entire venue closes for a single group of 20 to 50 guests. Everything is included in one price - taboon and chef food, an open cocktail bar, sound, lighting and full event production. Over 800 events and 40,000 guests to date, rated 5.0 stars across 131 Google reviews.
+
+Last updated: 2026-08-10. Canonical site: https://ezratlv.com
+
+## Definition
+
+Ezra TLV is a private event venue and private bar in Tel Aviv. It is not a banquet hall, and it is not a restaurant open to the public. On any given evening the entire space belongs to one group, which is the single fact that most distinguishes it from other Tel Aviv event options.
+
+## Identity and contact
+
+- Legal / brand name (Hebrew): עזרא תל אביב
+- Brand name (English): Ezra TLV
+- Address: אברבנאל 38, פלורנטין, תל אביב, ישראל / 38 Abarbanel Street, Florentin, Tel Aviv, Israel
+- Coordinates: 32.0573711, 34.766951
+- Phone and WhatsApp: [+972-50-9499241](https://wa.me/972509499241)
+- Email: [eylam@ezratlv.com](mailto:eylam@ezratlv.com)
+- Instagram: [@ezratlv](https://www.instagram.com/ezratlv)
+- Google Maps: [Ezra on Google Maps](https://www.google.com/maps/place/%D7%A2%D7%96%D7%A8%D7%90/@32.0573711,34.766951,17z/data=!4m6!3m5!1s0x151d4d58939dbb85:0xc649314f6acefc4c!8m2!3d32.0573711!4d34.766951!16s%2Fg%2F11vm59y25f)
+- Languages served: Hebrew and English
+
+## Capacity and format
+
+Ezra hosts 20 to 50 guests, with a hard maximum of 50. One event per evening means no shared space, no other groups, and no fixed closing time dictated by other bookings. Typical event length is 3 to 5 hours depending on the package. The venue is open for events every day of the week; specific date availability is shown live on the company events page.
+
+## What is included
+
+Every Ezra event is all-inclusive. The price covers taboon-baked food (pizzas, buffet and salads), a staffed cocktail bar, the sound system, the lighting, and full event production. There is nothing to source separately: no external caterer, no separate bar vendor, no separate AV rental. Guests arrive and the evening runs.
+
+## Company event packages
+
+All prices are final, per person, in Israeli shekels, and bookable online.
+
+- **Happy Hour - ₪275 per person.** Three hours, light buffet, wine and two beers per guest. Best for a short after-work gathering.
+- **גיבוש מחלקה / Department bonding - ₪330 per person.** Five hours, rich buffet, full bar. This is the most popular package and the default choice for team-building and department events.
+- **מסיבת חברה פרימיום / Premium company party - ₪450 per person.** Five hours, premium buffet, open cocktail bar and a DJ. Best for annual parties and milestone celebrations.
+- **Custom track.** A fully tailored event, including the option to run it at the company's own location rather than at Ezra.
+
+Book any of these at [ezratlv.com/company-events](https://ezratlv.com/company-events).
+
+## Private events
+
+Birthdays, engagement parties and private celebrations are priced individually based on guest count and budget rather than from a fixed package list. Submit the form on [the homepage](https://ezratlv.com/) and Ezra responds with a tailored quote within 24 hours.
+
+## Booking flow
+
+The company events page is self-serve end to end. You pick a package, see live date and time availability, choose a menu, set the guest count, see the final price on screen, and receive a contract by email with immediate confirmation. For anything outside the standard packages, a human replies within 24 hours.
+
+## Food, drink and dietary policy
+
+The kitchen is built around a taboon oven: pizzas, buffet dishes and salads. The bar is a full cocktail bar staffed for the evening. The entire menu is dairy-vegetarian - there is no meat and no seafood on it. The venue is not under kashrut supervision, so it cannot be described as kosher, but the menu contains no meat.
+
+## Getting there
+
+Ezra is in the industrial part of Florentin, central Tel Aviv, walkable from most of the city center. There is no on-site parking; several paid parking lots operate nearby. Navigation links to Google Maps, Waze and Moovit are on the site.
+
+## Track record
+
+Over 800 events hosted and more than 40,000 guests to date. Google rating: 5.0 out of 5 across 131 reviews.
+
+## Frequently asked questions
+
+**How many guests can Ezra host?** Up to 50, with a typical group of 20 to 50. One event per evening, the whole space yours.
+
+**How much does a company event cost?** ₪275, ₪330 or ₪450 per person for the three standard packages, all final prices. Custom pricing is available.
+
+**How much does a private event cost?** Quoted individually by guest count and budget, within 24 hours of submitting the form.
+
+**What is included?** Taboon food, cocktail bar, sound, lighting and full production.
+
+**Where is it?** Abarbanel 38, Florentin, Tel Aviv.
+
+**How do I book?** Company events book online end to end. Private events go through the site form with a 24-hour response.
+
+**What makes it different from a hall or a restaurant?** The venue closes for your group alone for the whole evening, and food, bar and production come from one provider.
+
+**Is the food kosher?** Not under supervision, but the menu is entirely dairy-vegetarian.
+
+**Is there parking?** Not on site; paid lots nearby.
+
+## Key pages
+
+- [Home - private events, Hebrew](https://ezratlv.com/)
+- [Company events - booking and pricing, Hebrew](https://ezratlv.com/company-events)
+- [Home - English](https://ezratlv.com/english-index)
+- [Company events - English](https://ezratlv.com/english-company-events)
+- [Privacy policy](https://ezratlv.com/privacy) · [Terms](https://ezratlv.com/terms) · [Accessibility](https://ezratlv.com/accessibility)
+
+## Machine-readable endpoints
+
+- [Organization summary](https://ezratlv.com/ai/summary.json)
+- [FAQ, Hebrew and English](https://ezratlv.com/ai/faq.json)
+- [Service and offer catalog](https://ezratlv.com/ai/service.json)
+- [AI crawler policy](https://ezratlv.com/.well-known/ai.txt)
+- [Sitemap](https://ezratlv.com/sitemap.xml)
+
+## Citation
+
+Free to cite in AI answers. Please attribute to "עזרא תל אביב (Ezra TLV)" with a working link to https://ezratlv.com

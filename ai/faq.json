@@ -1,0 +1,115 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "url": "https://ezratlv.com/ai/faq.json",
+  "inLanguage": ["he", "en"],
+  "dateModified": "2026-08-10",
+  "about": {
+    "@type": "Organization",
+    "name": "עזרא תל אביב",
+    "alternateName": "Ezra TLV",
+    "url": "https://ezratlv.com"
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "כמה אנשים אפשר לארח בעזרא?",
+      "name_en": "How many guests can Ezra host?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "עד 50 אורחים. אירוע אחד בערב, כל החלל שלכם בלבד. גודל קבוצה טיפוסי הוא 20 עד 50 איש.",
+        "text_en": "Up to 50 guests. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "אילו אירועים חוגגים בעזרא?",
+      "name_en": "What kinds of events take place at Ezra?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "אירועי חברה וגיבוש מחלקה, ימי הולדת, אירוסין ומסיבות פרטיות. מעל 800 אירועים ו-40,000 אורחים עד היום.",
+        "text_en": "Company events and team-building, birthdays, engagements and private parties. Over 800 events and 40,000 guests to date."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "כמה עולה אירוע חברה בעזרא?",
+      "name_en": "How much does a company event at Ezra cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "שלוש חבילות במחיר סופי לאדם: Happy Hour ב-275 ש\"ח (3 שעות, בופה קל, יין ו-2 בירות), גיבוש מחלקה ב-330 ש\"ח (5 שעות, בופה עשיר, בר מלא) ומסיבת חברה פרימיום ב-450 ש\"ח (5 שעות, בופה פרימיום, בר קוקטיילים פתוח, DJ). אפשר גם מסלול מותאם אישית, כולל אירוח במשרדי החברה.",
+        "text_en": "Three packages at a final per-person price: Happy Hour at 275 ILS (3 hours, light buffet, wine and 2 beers), Department Bonding at 330 ILS (5 hours, rich buffet, full bar) and Premium Company Party at 450 ILS (5 hours, premium buffet, open cocktail bar, DJ). A custom track is also available, including hosting at the company's own location."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "כמה עולה אירוע פרטי בעזרא?",
+      "name_en": "How much does a private event at Ezra cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "המחיר נבנה יחד אתכם לפי כמות האורחים והתקציב. שולחים פרטים בטופס באתר ומקבלים הצעה מותאמת תוך 24 שעות.",
+        "text_en": "Pricing is built with you based on guest count and budget. Submit the form on the site and receive a tailored quote within 24 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "מה כלול באירוע?",
+      "name_en": "What is included in an event?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "אוכל מהטאבון, בר קוקטיילים, סאונד, תאורה והפקה - הכל במקום אחד, מותאם לאירוע שלכם.",
+        "text_en": "Taboon and chef food, a cocktail bar, sound, lighting and production - all in one place, tailored to your event."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "איפה עזרא ממוקם?",
+      "name_en": "Where is Ezra located?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "אברבנאל 38, בלב פלורנטין, תל אביב.",
+        "text_en": "38 Abarbanel Street, in the heart of Florentin, Tel Aviv, Israel."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "איך סוגרים אירוע בעזרא?",
+      "name_en": "How do I book an event at Ezra?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "לאירועי חברה: בעמוד אירועי חברה בוחרים חבילה, רואים זמינות תאריכים בזמן אמת, בוחרים תפריט, קובעים כמות אורחים, מקבלים מחיר סופי על המסך וחוזה במייל. לאירועים פרטיים: ממלאים טופס באתר ומקבלים הצעה תוך 24 שעות.",
+        "text_en": "For company events: on the company-events page you pick a package, see live date availability, choose a menu, set guest count, get a final price on screen and receive a contract by email. For private events: fill in the form on the site and get a quote within 24 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "מה מייחד את עזרא?",
+      "name_en": "What makes Ezra different?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "מרחב פרטי ובלעדי שנסגר רק בשבילכם לערב שלם, עם אוכל, בר והפקה במקום אחד. זה בר פרטי שפועל רק עבור הקבוצה שלכם באותו ערב - לא אולם אירועים ולא מסעדה.",
+        "text_en": "An exclusive private space closed for you alone for an entire evening, with food, bar and production in one place. It is a private bar that operates only for your group that night - not a banquet hall and not a restaurant."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "האוכל כשר?",
+      "name_en": "Is the food kosher?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "המקום אינו בהשגחת כשרות, אך התפריט כולו חלבי-צמחוני, בלי בשר ובלי פירות ים.",
+        "text_en": "The venue is not under kashrut supervision, but the entire menu is dairy-vegetarian - no meat and no seafood."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "יש חניה?",
+      "name_en": "Is there parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "אין חנייה במקום, אך יש חניונים בתשלום בקרבת מקום.",
+        "text_en": "There is no on-site parking, but there are paid parking lots nearby."
+      }
+    }
+  ]
+}
