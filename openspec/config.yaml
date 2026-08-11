@@ -1,0 +1,56 @@
+schema: spec-driven
+
+context: |
+  Ezra public marketing site — ezratlv.com. Repo: sampsonecommerce/ezratlv
+  (public). Local checkout is the "ezra v5" folder.
+
+  Stack: static HTML, no framework and no build step. Every page ships as its
+  own file at the repo root. Hebrew is primary; English pages are separate
+  files prefixed `english-` (index, company-events, privacy, terms,
+  accessibility). Keep the two language sets in sync when changing either.
+
+  Lead capture and booking: `ezra-booking-engine.js` /
+  `english-ezra-booking-engine.js` on the pages, `functions/api/` for Pages
+  Functions, `worker/ezra-lead-worker.js` for the Cloudflare Worker.
+
+  Deploy: Cloudflare Pages via the Git connection. `CNAME`, `_headers`,
+  `_redirects`, `robots.txt`, `sitemap.xml` are live production config —
+  changing them changes the public site immediately.
+
+  Tracking: ANALYTICS.md is the mirror, the page `<head>` is the truth.
+  Live GA4 is G-95JJX7T6CY (G-B8RHLY5VJK is dead — a 404 loader that silently
+  collected nothing, including for Google Ads, until 2026-07-21). Google Ads
+  AW-18310736783, Meta Pixel 2174553826420246, Clarity xlpxnugq1w. No GTM;
+  tags are hard-coded gtag.js. Any tag edit must touch all six live HTML files.
+
+  `llms.txt` / `llms-full.txt` exist for AI search visibility — update them
+  when the offering or the page set changes.
+
+  `_archive/` holds dead pages (company-events-original / -merge / -demo).
+  Never served. Do not spend spec work on them.
+
+  This repo is PUBLIC. Never put pricing strategy, supplier terms, internal
+  business planning, or credentials in a spec here — that belongs in the
+  ezra-plans store.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
