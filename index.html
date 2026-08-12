@@ -3059,11 +3059,11 @@
        the floating widget itself is a helper, not the legal requirement. -->
   <style>
     #enable-toolbar-trigger{transform:scale(.7);transform-origin:bottom left;opacity:.9}
-    /* on short viewports (~<=760px tall - common on laptops with browser chrome) the widget's
-       own bottom-anchoring pushes the trigger below the fold, clipped and invisible; nudge its
-       fixed container up so it stays on-screen. Verified live: trigger clipped at 1280x720,
-       fully visible again with this override. */
-    @media (max-height:760px){ #enable-toolbar-content{bottom:40px!important} }
+    /* Do NOT set 'bottom' on #enable-toolbar-content. Enable parks the closed panel with
+       bottom:0 plus transform:translateY(<panel height>), and those two cancel exactly. Any rule
+       here that changes 'bottom' desyncs them by that amount and leaves a strip of the open panel
+       showing on every load, unasked. That was the bug: bottom:40px under @media (max-height:760px)
+       left the panel permanently 40px open at 1280x720. The trigger is lifted in JS below instead. */
     #enable-toolbar-trigger .keyboard-shorcut{display:none}
     #ezra-acc-hide{position:fixed;z-index:2147483647;left:41px;bottom:50px;width:17px;height:17px;border-radius:50%;
       background:rgba(20,16,11,.88);color:#fff;border:1px solid rgba(255,255,255,.4);font-size:10px;line-height:14px;
@@ -3078,9 +3078,63 @@
         setTimeout(function(){ clearInterval(iv); },8000); return; } }catch(e){}
       // Only add our dismiss X once Enable's trigger has actually rendered. If the widget fails to
       // mount (e.g. an iOS in-app browser that still blocks storage) no orphan X is left behind.
+      // Enable puts the trigger INSIDE the panel container, and closes the panel by translating
+      // that container down by its own height - which carries the trigger off the bottom of a short
+      // viewport with it (measured: trigger bottom at y=750 in a 720px viewport). So lift the
+      // trigger on its own, and leave the container's geometry alone.
+      //
+      // Lift via 'bottom', NOT 'transform'. Enable owns transform on this element: it declares a
+      // 0.3s transition on it and animates it, and a running transition outranks even an !important
+      // author declaration. A transform lift is accepted into the inline style and then silently
+      // ignored - verified live, inline translateY(-42px) set, computed transform still unscaled.
+      //
+      // The overhang is measured, never hardcoded. It is Enable's panel height minus the trigger's
+      // offset inside that panel, and both are theirs to change without telling us. The old
+      // hardcoded 40px is exactly the constant that rotted.
+      function liftTrigger(){
+        var t=document.getElementById('enable-toolbar-trigger'); if(!t) return;
+        // Enable transitions 'bottom' as well, so suppress transitions across the measure-and-set.
+        // Without this the read lands mid-animation and the overhang comes out wrong.
+        var prev=t.style.transition;
+        t.style.setProperty('transition','none','important');
+        if(!t.hasAttribute('data-ezra-base')){
+          var cs=getComputedStyle(t), b=parseFloat(cs.bottom), tp=parseFloat(cs.top);
+          // No usable resting offsets means Enable has changed its layout. Leave the widget exactly
+          // as the vendor shipped it rather than move it on a stale assumption.
+          if(isNaN(b)||isNaN(tp)){ t.style.removeProperty('transition'); return; }
+          t.setAttribute('data-ezra-base',b+','+tp);
+        }
+        // Enable pins BOTH top and bottom on this absolutely positioned button, so its height is
+        // derived from the pair rather than set outright. Shift both by the same amount: changing
+        // only 'bottom' resizes the button instead of moving it, and at this offset it collapses to
+        // zero height - measured, a 23px trigger became 0px and vanished.
+        var p=t.getAttribute('data-ezra-base').split(','), base=parseFloat(p[0]), baseTop=parseFloat(p[1]);
+        t.style.setProperty('bottom',base+'px','important');    // back to rest first, so lifts never stack
+        t.style.setProperty('top',baseTop+'px','important');
+        var over=Math.ceil(t.getBoundingClientRect().bottom-window.innerHeight);
+        // Correct only a genuine overhang. A trigger already inside the viewport is left exactly
+        // where the vendor put it - nudging it anyway is a change nobody asked for.
+        var L=(over>0)?(over+12):0;
+        t.style.setProperty('bottom',(base+L)+'px','important');
+        t.style.setProperty('top',(baseTop-L)+'px','important');
+        t.getBoundingClientRect();                             // flush layout before restoring the transition
+        if(prev) t.style.transition=prev; else t.style.removeProperty('transition');
+      }
       var tries=0, w=setInterval(function(){
-        if(!document.getElementById('enable-toolbar-trigger')){ if(++tries>40) clearInterval(w); return; }
+        var _t=document.getElementById('enable-toolbar-trigger');
+        // Wait until Enable has POSITIONED the trigger, not merely inserted it. For the first few
+        // hundred ms the element exists with computed bottom:auto, and there is nothing to measure
+        // an overhang against - lifting then just bails and never runs again.
+        if(!_t || isNaN(parseFloat(getComputedStyle(_t).bottom))){ if(++tries>40) clearInterval(w); return; }
         clearInterval(w);
+        liftTrigger();
+        // Enable keeps adjusting itself for a beat after it first settles; these are idempotent.
+        setTimeout(liftTrigger,900); setTimeout(liftTrigger,2500);
+        // A laptop gaining browser chrome, or a phone rotating, changes the height after mount.
+        var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(liftTrigger,150); });
+        // Opening the panel untranslates the container, so the trigger stops overhanging and the
+        // lift has to come back off. Recompute once Enable's own slide has settled.
+        document.getElementById('enable-toolbar-trigger').addEventListener('click',function(){ setTimeout(liftTrigger,450); });
         if(document.getElementById('ezra-acc-hide')) return;
       var b=document.createElement('button'); b.id='ezra-acc-hide'; b.type='button'; b.textContent='\u2715';
       b.setAttribute('aria-label','הסתרת כפתור הנגישות');
