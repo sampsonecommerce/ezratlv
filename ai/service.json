@@ -5,6 +5,16 @@
   "name_en": "Private events and company events at Ezra TLV",
   "url": "https://ezratlv.com/company-events",
   "serviceType": ["private event venue hire", "company event production", "team-building event", "private bar hire"],
+  "capabilities": [
+    "Host a private company event or team-building evening for 20 to 50 guests in Florentin, Tel Aviv",
+    "Close the entire venue for a single group - one event per evening, no shared space",
+    "Serve taboon-baked food: pizzas, buffet dishes and salads, all dairy-vegetarian",
+    "Run a fully staffed open cocktail bar for the evening",
+    "Provide sound, lighting and full event production with no external vendors",
+    "Book a package online end to end: live date availability, menu choice, final price on screen and a contract by email",
+    "Host birthdays, engagement parties and private celebrations with a custom quote within 24 hours",
+    "Run a custom event off-site at the company's own location"
+  ],
   "inLanguage": ["he", "en"],
   "dateModified": "2026-08-10",
   "provider": {

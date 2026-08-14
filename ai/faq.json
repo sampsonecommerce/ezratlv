@@ -10,6 +10,18 @@
     "alternateName": "Ezra TLV",
     "url": "https://ezratlv.com"
   },
+  "faqs": [
+    { "question": "How many guests can Ezra host?", "answer": "Up to 50 guests. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people." },
+    { "question": "What kinds of events take place at Ezra?", "answer": "Company events and team-building, birthdays, engagements and private parties. Over 800 events and 40,000 guests to date." },
+    { "question": "How much does a company event at Ezra cost?", "answer": "Three packages at a final per-person price: Happy Hour at 275 ILS (3 hours, light buffet, wine and 2 beers), Department Bonding at 330 ILS (5 hours, rich buffet, full bar) and Premium Company Party at 450 ILS (5 hours, premium buffet, open cocktail bar, DJ). A custom track is also available." },
+    { "question": "How much does a private event at Ezra cost?", "answer": "Pricing is built with you based on guest count and budget. Submit the form on the site and receive a tailored quote within 24 hours." },
+    { "question": "What is included in an event?", "answer": "Taboon and chef food, a cocktail bar, sound, lighting and full production - all in one place, tailored to your event." },
+    { "question": "Where is Ezra located?", "answer": "38 Abarbanel Street, in the heart of Florentin, Tel Aviv, Israel." },
+    { "question": "How do I book an event at Ezra?", "answer": "For company events, the company-events page is self-serve: pick a package, see live date availability, choose a menu, set guest count, get a final price on screen and receive a contract by email. For private events, fill in the form and get a quote within 24 hours." },
+    { "question": "What makes Ezra different from a hall or a restaurant?", "answer": "An exclusive private space closed for you alone for an entire evening, with food, bar and production in one place. It is a private bar that operates only for your group that night." },
+    { "question": "Is the food kosher?", "answer": "The venue is not under kashrut supervision, but the entire menu is dairy-vegetarian - no meat and no seafood." },
+    { "question": "Is there parking?", "answer": "There is no on-site parking, but there are several paid parking lots nearby." }
+  ],
   "mainEntity": [
     {
       "@type": "Question",
