@@ -1,0 +1,33 @@
+# The gate this repository did not have.
+#
+# Cloudflare Pages builds from the Git connection and this site has no build
+# step, so a push to main is on ezratlv.com within a minute and nothing in
+# between reads the diff. This runs on the pull request, before that happens.
+#
+# It cannot run as a Pages build command the way the calculator's does, because
+# a static site here has no build command to hang it from.
+
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No install step: check-site.mjs uses Node built-ins only, because this
+      # repository has no package.json and adding one to run a checker would be
+      # the tail wagging the dog.
+      - name: Check the public site
+        run: node check-site.mjs
