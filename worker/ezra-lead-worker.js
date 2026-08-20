@@ -13,6 +13,9 @@
 // Homepage private/birthday leads keep going to the original "Events Form" board.
 const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
+// Open Events leads (events page inquiry with calendar) go to the Open Events board.
+const OPEN_EVENTS_BOARD = "5102602771";
+const OPEN_EVENTS_GROUP = "topics";
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
 const COMPANY_BOARD = "5099350637";
@@ -91,10 +94,19 @@ export default {
 
     const isCustom = d.leadType === "custom";
     const isPrivate = d.leadType === "private";
+    const isOpenEvents = d.leadType === "open_events" || d.board === "5102602771";
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
-    let notes = isIncomplete ? [
+    let notes = isOpenEvents ? [
+      "סוג פנייה: ליד מעמוד אירועים פתוחים (Open Events)",
+      `סוג אירוע: ${d.eventType || "-"}`,
+      `תאריך מבוקש: ${d.date || "-"}`,
+      `שעה/סלוט: ${d.slot || "-"}`,
+      `אורחים: ${d.guests ?? "-"}`,
+      d.notes ? `הערות: ${d.notes}` : "",
+      `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
+    ].filter(Boolean).join("\n") : isIncomplete ? [
       "סוג פנייה: נטישת תהליך הזמנה (אירועי חברה)",
       d.pausedStepLabel ? `נעצר בשלב: ${d.pausedStepLabel}` : "",
       d.plan ? `מסלול: ${d.plan}` : "",
@@ -152,7 +164,7 @@ export default {
     const cols = {
       emailj9eufer1:         { email: d.email || "", text: d.email || "" },
       phone0zyibnut:         { phone: String(d.phone || ""), countryShortName: "IL" },
-      single_selecta6erdt9:  { label: d.eventType || "אירוע חברה" },
+      single_selecta6erdt9:  { label: d.eventType || (isOpenEvents ? "אירוע פתוח" : "אירוע חברה") },
       number0kzol2wl:        String(d.guests ?? ""),
       numeric_mm1qj01x:      String(d.guests ?? ""),
       short_textoant7hbw:    d.utm_campaign || "",
@@ -162,9 +174,9 @@ export default {
     const isPackage = !d.leadType;   // website booking lead (no leadType)
     // Summary blob: company board -> Lead Summary (long_text_mm4t4fjb); private board lacks that
     // column, so keep the blob in long_textlwbyhlq0 there (private path unchanged).
-    if (isPrivate) cols.long_textlwbyhlq0 = { text: notes };
+    if (isPrivate || isOpenEvents) cols.long_textlwbyhlq0 = { text: notes };
     else           cols.long_text_mm4t4fjb = { text: notes };
-    const timeOfEvent = d.menu ? timeLabel : (d.eventTime || "");
+    const timeOfEvent = d.menu ? timeLabel : (d.eventTime || d.slot || "");
     if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
     // Total: package leads -> Total Price (Packages) text only; non-package leads keep the Custom
     // price columns (reserved for in-Monday calc). CAPI value reads d.estTotal directly, not the column.
@@ -223,15 +235,9 @@ export default {
     const query = `mutation ($board: ID!, $group: String, $name: String!, $cols: JSON!) {
       create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
     }`;
-    const board = isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
-    // Completed package leads land in "Packages (In Agreement Process)"; a Monday/GetSign automation
-    // moves them to "Agreement Sent" after the contract is sent (not the worker's job).
-    // Incomplete/"talk to us" leads (page CTA, wizard gate, footer talk button) share DRAFTS_GROUP
-    // with saveDraft() - a single "soft leads" pool of anyone who left contact info without
-    // finishing a booking. Safe to share: these items never populate DRAFT_TOKEN_COL/DRAFT_STATE_COL,
-    // so getDraft()'s token lookup can never match one, and the group isn't in COMPANY_AVAIL_GROUPS
-    // so it never affects calendar availability either.
-    const group = isPrivate ? PRIVATE_GROUP
+    const board = isOpenEvents ? OPEN_EVENTS_BOARD : isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
+    const group = isOpenEvents ? (d.group || OPEN_EVENTS_GROUP)
+                : isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? DRAFTS_GROUP
                 : GRP_IN_AGREEMENT;

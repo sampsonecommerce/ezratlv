@@ -938,6 +938,21 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.4rem;
+      border-radius: 8px;
+      padding: 0.2rem 0.35rem;
+      transition: all 0.2s var(--ease);
+    }
+    .slot-row--clickable {
+      cursor: pointer;
+    }
+    .slot-row--clickable:hover {
+      background: rgba(196, 154, 60, 0.16);
+      transform: scale(1.02);
+    }
+    .slot-row--day-free.slot-row--clickable:hover .slot-row__badge {
+      background: var(--gold);
+      color: var(--bg);
+      box-shadow: 0 0 10px rgba(196, 154, 60, 0.5);
     }
     .slot-row__time {
       display: flex;
@@ -959,6 +974,7 @@
       font-size: 0.68rem;
       font-weight: 700;
       white-space: nowrap;
+      transition: all 0.2s var(--ease);
     }
     .slot-row__dot {
       width: 5px;
@@ -977,8 +993,8 @@
       color: #f87171;
     }
     .slot-row--day-free .slot-row__badge {
-      background: rgba(196, 154, 60, 0.12);
-      border: 1px solid rgba(196, 154, 60, 0.35);
+      background: rgba(196, 154, 60, 0.14);
+      border: 1px solid rgba(196, 154, 60, 0.45);
       color: var(--gold-light);
     }
 
@@ -1545,6 +1561,227 @@
     .rsvp-input:focus { outline: 1px solid var(--gold); border-color: var(--gold); }
     .rsvp-submit { width: 100%; }
 
+    /* ---- Leave Details Modal & Interactive Calendar ---- */
+    .contact-modal-box {
+      width: 100%;
+      max-width: 580px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: linear-gradient(165deg, #1a140e 0%, #0d0a07 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 24px;
+      padding: clamp(1.6rem, 5vw, 2.6rem);
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.95);
+      transform: translateY(20px);
+      transition: transform 0.3s var(--ease);
+    }
+    .modal-scrim.is-open .contact-modal-box { transform: translateY(0); }
+
+    .cf-head { margin-block-end: 1.3rem; }
+    .cf-title { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800; color: var(--cream); margin-block-end: 0.35rem; }
+    .cf-sub { font-size: 0.92rem; color: var(--cream-dim); line-height: 1.6; }
+
+    .cf-form-grid { display: flex; flex-direction: column; gap: 0.9rem; }
+    .cf-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .cf-field label { font-size: 0.8rem; font-weight: 700; color: var(--cream-dim); }
+    .cf-field input, .cf-field textarea, .cf-field select {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--cream);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s var(--ease);
+    }
+    .cf-field input:focus, .cf-field textarea:focus, .cf-field select:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(196,154,60,0.06);
+    }
+    .cf-field--row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      .cf-field--row { grid-template-columns: 1fr; }
+    }
+
+    .cf-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .cf-pill {
+      padding: 0.4rem 0.85rem;
+      border-radius: 50px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--cream-dim);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      font-family: inherit;
+    }
+    .cf-pill:hover { border-color: var(--gold); color: var(--cream); }
+    .cf-pill.is-active {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+      font-weight: 800;
+    }
+
+    /* Calendar Date Button & Inline Calendar */
+    .cf-datebtn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(196, 154, 60, 0.08);
+      color: var(--cream);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      text-align: start;
+    }
+    .cf-datebtn:hover { border-color: var(--gold); background: rgba(196, 154, 60, 0.15); }
+    .cf-datebtn.is-empty { color: var(--cream-faint); }
+    .cf-datebtn svg { width: 17px; height: 17px; color: var(--gold); flex-shrink: 0; }
+
+    .cf-cal {
+      margin-block-start: 0.5rem;
+      background: #110e0a;
+      border: 1px solid var(--line-bright);
+      border-radius: 16px;
+      padding: 0.9rem;
+    }
+    .cf-cal[hidden] { display: none !important; }
+    .cal__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 0.7rem;
+    }
+    .cal__month { font-size: 1rem; font-weight: 800; color: var(--gold-light); }
+    .cal__nav {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      font-family: inherit;
+    }
+    .cal__nav:hover:not(:disabled) { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .cal__nav:disabled { opacity: 0.3; cursor: not-allowed; }
+    .cal__grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.25rem;
+      text-align: center;
+    }
+    .cal__dow {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--gold);
+      padding-block: 0.25rem;
+    }
+    .cal__day {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,0.03);
+      color: var(--cream);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s var(--ease);
+      font-family: inherit;
+    }
+    .cal__day:hover:not(:disabled) {
+      background: rgba(196,154,60,0.25);
+      border-color: var(--gold);
+      transform: scale(1.08);
+    }
+    .cal__day.is-selected {
+      background: var(--gold) !important;
+      color: var(--bg) !important;
+      font-weight: 900;
+      box-shadow: 0 0 12px rgba(196,154,60,0.6);
+    }
+    .cal__day.is-past {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+    .cal__day.is-booked {
+      background: rgba(248, 113, 113, 0.12);
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.25);
+      cursor: not-allowed;
+      opacity: 0.55;
+      text-decoration: line-through;
+    }
+    .cal__day.is-empty { background: transparent; cursor: default; }
+
+    .cal__legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-block-start: 0.7rem;
+      padding-block-start: 0.5rem;
+      border-block-start: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.72rem;
+      color: var(--cream-dim);
+    }
+    .cal__legend-item { display: flex; align-items: center; gap: 0.35rem; }
+    .cal__legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .cal__legend-dot--free { background: var(--gold); }
+    .cal__legend-dot--busy { background: #f87171; }
+
+    /* Success Screen */
+    .cf-done { text-align: center; padding: 2rem 0.5rem 1rem; }
+    .cf-done[hidden] { display: none !important; }
+    .cf-done__icon {
+      position: relative; width: 72px; height: 72px; margin: 0 auto 1.2rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1.5px solid rgba(74, 222, 128, 0.5);
+      animation: cfIconPop 0.55s cubic-bezier(.22,1.3,.36,1) both;
+    }
+    @keyframes cfIconPop { 0% { transform: scale(0); opacity: 0; } 55% { transform: scale(1.14); } 75% { transform: scale(0.95); } 100% { transform: scale(1); opacity: 1; } }
+    .cf-done__icon::after {
+      content: ''; position: absolute; inset: -1px; border-radius: 50%;
+      border: 2px solid rgba(74, 222, 128, 0.55);
+      animation: cfRing 0.9s 0.25s var(--ease) both;
+    }
+    @keyframes cfRing { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.6); opacity: 0; } }
+    .cf-done h3 { font-size: 1.5rem; color: var(--cream); margin-block-end: 0.4rem; }
+    .cf-done p { color: var(--cream-dim); line-height: 1.6; font-size: 0.9rem; margin-block-end: 1.4rem; }
+
+    /* Animations & Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -1776,63 +2013,98 @@
   <!-- ============================================================
        3. CURATED CONCEPT SERIES & RESIDENT VIBES
   ============================================================ -->
-  <section id="events">
+  <section id="events" class="reveal">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Resident Series & Concepts · סדרות תוכן</span>
-        <h2>ליינים וקונספטים שבועיים בעזרא</h2>
+        <span class="eyebrow">Resident Concepts & Open Nights · פורמטים וערבים פתוחים</span>
+        <h2>מה קורה בעזרא בערבים פתוחים</h2>
         <p>
-          מעבר ללוח התאריכים החודשי, עזרא מציע ארבע סדרות תוכן ייחודיות עם אופי מוזיקלי, קולינרי ואווירתי מוגדר. כל קונספט פתוח לקהל הרחב וניתן גם לסגירה כאירוע פרטי.
+          עזרא מארח מגוון פורמטים וקונספטים שבועיים פתוחים לקהל הרחב. בחרו פורמט כדי לגלות את האופי, המוזיקה והקולינריה, או השאירו פרטים ליזום ליין / אירוע משותף.
         </p>
       </div>
 
       <div class="events-nav-filter" id="eventsFilter">
-        <button class="filter-btn is-active" data-filter="all" type="button">הכל</button>
-        <button class="filter-btn" data-filter="vinyl" type="button">📻 סלון תקליטים ו-Hi-Fi</button>
-        <button class="filter-btn" data-filter="food" type="button">🔥 פופ-אפ שפים מהטאבון</button>
-        <button class="filter-btn" data-filter="listening" type="button">🎙️ השמעות אלבומים</button>
-        <button class="filter-btn" data-filter="live" type="button">🎷 ג'אז חי והופעות</button>
+        <button class="filter-btn is-active" data-filter="tea" type="button">☕ בית התה של רום</button>
+        <button class="filter-btn" data-filter="live" type="button">🎸 מוזיקה חיה והופעות</button>
+        <button class="filter-btn" data-filter="food" type="button">🔥 פופ-אפ שפים וטאבון</button>
+        <button class="filter-btn" data-filter="vinyl" type="button">🎙️ השמעות אלבומים ו-Hi-Fi</button>
+        <button class="filter-btn" data-filter="openmic" type="button">🎤 מיקרופון פתוח וספוקן</button>
+        <button class="filter-btn" data-filter="wine" type="button">🍸 יין טבעי ומיקסולוגיה</button>
       </div>
 
       <div class="teder-feed" id="eventsList">
-        <!-- Series 1: Vinyl Night -->
-        <article class="teder-card" data-category="vinyl">
+        <!-- Series 1: Rom's Tea House -->
+        <article class="teder-card" data-category="tea">
           <div class="teder-poster">
-            <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="ערב תקליטים בעזרא" loading="lazy" />
+            <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="בית התה של רום בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today">Vinyl Only · Funk & Soul</span>
+              <span class="time-card__badge time-card__badge--today">Tea & Ambient Lounge ☕</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">קבוע בימי חמישי</span>
-                <span class="day-name">· מ-21:00 עד אחרון הלקוחות</span>
+                <span class="num">פורמט סלון קבוע</span>
+                <span class="day-name">· מ-19:00 אל תוך הלילה</span>
               </div>
-              <h3 class="teder-title">Groove & Grapes · סלון תקליטי פאנק וסול נדירים</h3>
-              <p class="teder-lineup">סלקטורים מתחלפים · תקליטי 70s-80s מקוריים במערכת Hi-Fi אנלוגית</p>
+              <h3 class="teder-title">בית התה של רום · סלון תה, טקסים וצמחי מרפא</h3>
+              <p class="teder-lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
               <p class="teder-desc">
-                סשן תקליטים אנלוגי מוקפד באווירת סלון תל אביבי אינטימי. פתיחת בקבוקי יין טבעי נבחרים, מנות חמות ומדויקות מהטאבון, וגרוב עמוק שממלא את החלל.
+                סלון תה חם ואינטימי המציע מגוון חליטות צמחי מרפא ייחודיות מכל העולם, עוגיות ומאפים טריים בעבודת יד, תאורה רכה ומוזיקה מדיטטיבית. מרחב רגוע ונעים למפגש קהילתי, קריאה, שיחה שקטה והתרגעות בלב פלורנטין.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>📍 אברבנאל 38, פלורנטין</span>
-                <span>🍷 יין טבעי & סאונד אנלוגי</span>
+                <span>☕ חליטות בוטיק וטקסים</span>
+                <span>🌿 וייב מרגיע וקהילתי</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="1" type="button">שריון שולחן לערב הקרוב</button>
-                <a class="btn btn--outline btn--sm" href="/#contact">סגירת אירוע פרטי בקונספט זה</a>
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="בית התה של רום" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Series 2: Chef Pop-Up -->
-        <article class="teder-card" data-category="food">
+        <!-- Series 2: Live Music & Acoustic Sessions -->
+        <article class="teder-card" data-category="live" style="display:none;">
           <div class="teder-poster">
-            <img src="images/FOOD ENVIRONMENT.jpg" alt="פופ אפ שף מהטאבון בעזרא" loading="lazy" />
+            <img src="images/MOMENT 1.jpg" alt="הופעות חיות בעזרא" loading="lazy" />
+            <div class="teder-stickers">
+              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
+              <span class="time-card__badge time-card__badge--today">Live Acoustic & Jazz 🎸</span>
+            </div>
+          </div>
+          <div class="teder-content">
+            <div>
+              <div class="teder-date-badge">
+                <span class="num">לייב סשן שבועי</span>
+                <span class="day-name">· מ-21:00</span>
+              </div>
+              <h3 class="teder-title">מוזיקה חיה & סשנים אקוסטיים · אינדי, סול וג'אז</h3>
+              <p class="teder-lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
+              <p class="teder-desc">
+                ערבי מוזיקה חיה באווירת מועדון הופעות אינטימי: הרכבי אינדי מקוריים, זמרים-יוצרים, טריו ג'אז חי על הבר וג'אם סשנים חופשיים לצד קוקטיילים מדויקים ואקוסטיקה חמה שעוטפת את החלל.
+              </p>
+            </div>
+            <div class="teder-footer-row">
+              <div class="teder-meta-chips">
+                <span>🎸 הרכבים חיים ואינדי</span>
+                <span>🎷 סאונד אקוסטי חם</span>
+              </div>
+              <div class="teder-actions">
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="הופעה חיה / מוזיקה" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Series 3: Guest Chef Pop-Up & Taboon -->
+        <article class="teder-card" data-category="food" style="display:none;">
+          <div class="teder-poster">
+            <img src="images/FOOD ENVIRONMENT.jpg" alt="פופ אפ שף וטאבון בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--rsvp">בהזמנת מקום</span>
               <span class="time-card__badge time-card__badge--today">טאבון שף לוהט 🍕</span>
@@ -1841,32 +2113,32 @@
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">קבוע בימי שני</span>
-                <span class="day-name">· שני סבבים: 19:30 | 22:00</span>
+                <span class="num">ערבי קולינריה מיוחדים</span>
+                <span class="day-name">· מ-19:30</span>
               </div>
-              <h3 class="teder-title">Fire & Dough · פופ-אפ שפים אורחים מהטאבון</h3>
-              <p class="teder-lineup">שפים אורחים ממיטב המסעדות & קוקטיילים מותאמים אישית</p>
+              <h3 class="teder-title">פופ-אפ שפים אורחים & ערבי טאבון לוהט</h3>
+              <p class="teder-lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
               <p class="teder-desc">
-                תפריט ספיישלים עונתי ייחודי מהטאבון הלוהט: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות עונתיים חרוכים בגחלים וקוקטיילים שנרקחו במיוחד.
+                אירוח שפים מובילים לתפריטי ספיישל עונתיים מהטאבון הלוהט: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות חרוכים בגחלים, פיצות ארטיזנליות וקוקטיילים שנרקחו במיוחד לכל תפריט.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
                 <span>🔥 טאבון אבן לוהט</span>
-                <span>🍸 Cocktail Pairing</span>
+                <span>🍕 שפים אורחים</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="2" type="button">שריון מקום לפופ-אפ הבא</button>
-                <a class="btn btn--outline btn--sm" href="/#contact">סגירת אירוע שף פרטי</a>
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="פופ-אפ שף / טאבון" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Series 3: Album Listening Session -->
-        <article class="teder-card" data-category="listening">
+        <!-- Series 4: Hi-Fi Vinyl & Album Listening -->
+        <article class="teder-card" data-category="vinyl" style="display:none;">
           <div class="teder-poster">
-            <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="השמעת אלבום בעזרא" loading="lazy" />
+            <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="סלון תקליטים והשמעת אלבומים" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
               <span class="time-card__badge time-card__badge--today">Hi-Fi Audio Premiere 🎙️</span>
@@ -1875,13 +2147,13 @@
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">קבוע בימי רביעי</span>
-                <span class="day-name">· מ-20:30 (האזנה מרוכזת ב-21:30)</span>
+                <span class="num">סשן סאונד אנלוגי</span>
+                <span class="day-name">· מ-20:30</span>
               </div>
-              <h3 class="teder-title">Night Sessions · השמעות בכורה וסשן האזנה לאלבומים</h3>
-              <p class="teder-lineup">האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא + שיחה עם היוצרים</p>
+              <h3 class="teder-title">השמעות אלבומים & סלון תקליטי Hi-Fi</h3>
+              <p class="teder-lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
               <p class="teder-desc">
-                חוויית האזנה מרוכזת באיכות סאונד אנלוגית עמוקה, תאורה עמומה ומשקאות מותאמים. לאחר ההשמעה מתקיים סשן שאלות-תשובות ושיחה פתוחה עם האמנים והמפיקים.
+                חוויית האזנה עמוקה ומרוכזת באיכות סאונד אנלוגית עשירה, תאורה עמומה ומשקאות מותאמים. השמעות טרום-בכורה לאלבומים ישראליים ובינלאומיים, ולאחריהן סשן שאלות-תשובות ושיחה פתוחה עם האמנים והמפיקים.
               </p>
             </div>
             <div class="teder-footer-row">
@@ -1890,42 +2162,76 @@
                 <span>🎙️ שיחה עם יוצרים</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="3" type="button">פרטי המפגש הקרוב</button>
-                <a class="btn btn--outline btn--sm" href="/#contact">אירוע השקה / השמעה פרטית</a>
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="השמעת אלבום / תקליטים" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Series 4: Live Jazz Trio -->
-        <article class="teder-card" data-category="live">
+        <!-- Series 5: Open Mic & Spoken Word -->
+        <article class="teder-card" data-category="openmic" style="display:none;">
           <div class="teder-poster">
-            <img src="images/MOMENT 1.jpg" alt="הופעת ג'אז חיה בעזרא" loading="lazy" />
+            <img src="images/BAR.jpg" alt="מיקרופון פתוח וספוקן וורד בעזרא" loading="lazy" />
             <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
-              <span class="time-card__badge time-card__badge--today">Live Jazz Trio 🎷</span>
+              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
+              <span class="time-card__badge time-card__badge--today">Open Mic & Poetry 🎤</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">קבוע במוצ״ש</span>
-                <span class="day-name">· מ-21:00</span>
+                <span class="num">במה פתוחה ליוצרים</span>
+                <span class="day-name">· מ-20:00</span>
               </div>
-              <h3 class="teder-title">Florentin Jazz Hang · טריו ג'אז חי על הבר</h3>
-              <p class="teder-lineup">פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי</p>
+              <h3 class="teder-title">מיקרופון פתוח & ספוקן וורד</h3>
+              <p class="teder-lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
               <p class="teder-desc">
-                סשן ג'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין. מומלץ להקדים כדי לתפוס מקום סביב הבר.
+                במה פתוחה ומחבקת ליוצרים ויוצרות מכל התחומים. מרחב אמנותי אותנטי ובלתי אמצעי שבו אמנים מנוסים וחדשים עולים לשתף שירים, טקסטים, קטעי ספוקן וורד ומוזיקה מקורית מול קהל קשוב ומפרגן.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🎷 לייב טריו ואלתורים</span>
-                <span>🍸 קוקטיילים קלאסיים</span>
+                <span>🎤 במה פתוחה ליוצרים</span>
+                <span>✍️ שירה וספוקן וורד</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="4" type="button">שריון מקום על הבר</button>
-                <a class="btn btn--outline btn--sm" href="/#contact">אירוע ג'אז חי פרטי</a>
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="מיקרופון פתוח" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Series 6: Natural Wine & Mixology -->
+        <article class="teder-card" data-category="wine" style="display:none;">
+          <div class="teder-poster">
+            <img src="images/MAKING COCKTAILS.jpg" alt="יין טבעי וקוקטיילים בעזרא" loading="lazy" />
+            <div class="teder-stickers">
+              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
+              <span class="time-card__badge time-card__badge--today">Natural Wine & Drinks 🍸</span>
+            </div>
+          </div>
+          <div class="teder-content">
+            <div>
+              <div class="teder-date-badge">
+                <span class="num">סלון אלכוהול ויין</span>
+                <span class="day-name">· מ-19:00</span>
+              </div>
+              <h3 class="teder-title">ערבי יין טבעי & מיקסולוגיה מדויקת</h3>
+              <p class="teder-lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
+              <p class="teder-desc">
+                מסע טעימות מודרך בין יקבים מקומיים ויינות טבעיים נדירים, לצד תפריט קוקטיילים הנרקחים מחומרי גלם עונתיים ונשנושים חמים מותאמים מהטאבון. אווירת בר יין אירופאי עם חום תל אביבי.
+              </p>
+            </div>
+            <div class="teder-footer-row">
+              <div class="teder-meta-chips">
+                <span>🍷 יין טבעי ובוטיק</span>
+                <span>🍸 קוקטיילים עונתיים</span>
+              </div>
+              <div class="teder-actions">
+                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="ערב יין / קוקטיילים" type="button">השאירו פרטים להצעה / שת״פ</button>
+                <a class="btn btn--outline btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
               </div>
             </div>
           </div>
@@ -2191,9 +2497,131 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
                 <span>בדיקת תאריכים בוואטסאפ</span>
               </a>
-              <a class="btn btn--outline btn--sm" href="/#contact">השאירו פרטים ונחזור אליכם</a>
+              <button class="btn btn--outline btn--sm js-open-contact" data-event-type="אירוע פרטי" type="button">השאירו פרטים ונחזור אליכם</button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       8B. LEAVE DETAILS & DATE BOOKING MODAL (MONDAY BOARD 5102602771)
+  ============================================================ -->
+  <div class="modal-scrim" id="contactModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="contact-modal-box">
+      <button class="modal-close" id="contactModalClose" type="button" aria-label="סגירת חלון">✕</button>
+      
+      <div id="contactFormWrap">
+        <div class="cf-head">
+          <span class="eyebrow">Ezra · שריון תאריך / הצעה</span>
+          <h3 class="cf-title">השאירו פרטים ונחזור אליכם</h3>
+          <p class="cf-sub">
+            תכנון אירוע פרטי, יום הולדת, חתונה אינטימית או יוזמת תוכן בעזרא. ממלאים את הפרטים ונציג יחזור אליכם תוך 24 שעות.
+          </p>
+        </div>
+
+        <form id="contactFormEl" class="cf-form-grid">
+          <div class="cf-field--row">
+            <div class="cf-field">
+              <label for="cfName">שם מלא *</label>
+              <input type="text" id="cfName" name="name" placeholder="ישראל ישראלי" required />
+            </div>
+            <div class="cf-field">
+              <label for="cfPhone">טלפון נייד *</label>
+              <input type="tel" id="cfPhone" name="phone" placeholder="050-0000000" required />
+            </div>
+          </div>
+
+          <div class="cf-field--row">
+            <div class="cf-field">
+              <label for="cfEmail">אימייל</label>
+              <input type="email" id="cfEmail" name="email" placeholder="name@example.com" />
+            </div>
+            <div class="cf-field">
+              <label for="cfGuests">מספר אורחים משוער</label>
+              <input type="number" id="cfGuests" name="guests" placeholder="10-50" min="1" max="80" />
+            </div>
+          </div>
+
+          <div class="cf-field">
+            <label>סוג האירוע / הפנייה</label>
+            <div class="cf-pills" id="cfEventTypePills">
+              <button type="button" class="cf-pill is-active" data-val="אירוע פרטי">אירוע פרטי / יום הולדת</button>
+              <button type="button" class="cf-pill" data-val="יוזמת תוכן / ערב פתוח">יוזמת תוכן / ערב פתוח</button>
+              <button type="button" class="cf-pill" data-val="אירוע חברה">אירוע חברה וצוות</button>
+              <button type="button" class="cf-pill" data-val="פופ-אפ שף / הופעה">פופ-אפ שף / הופעה</button>
+              <button type="button" class="cf-pill" data-val="אחר">אחר</button>
+            </div>
+            <input type="hidden" id="cfEventType" name="eventType" value="אירוע פרטי" />
+          </div>
+
+          <!-- Interactive Date Picker & Availability Calendar -->
+          <div class="cf-field">
+            <label>תאריך מבוקש (לוח זמינות חי)</label>
+            <button type="button" class="cf-datebtn is-empty" id="cfDateBtn" aria-expanded="false">
+              <span id="cfDateLabel">בחרו תאריך מהלוח</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </button>
+            <input type="hidden" id="cfDate" name="date" />
+
+            <div class="cf-cal" id="cfCal" hidden>
+              <div class="cal__head">
+                <button type="button" class="cal__nav" id="cfCalPrev" aria-label="חודש קודם">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+                <div class="cal__month" id="cfCalMonth"></div>
+                <button type="button" class="cal__nav" id="cfCalNext" aria-label="חודש הבא">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+              </div>
+              <div class="cal__grid" id="cfCalGrid"></div>
+              <div class="cal__legend">
+                <div class="cal__legend-item"><span class="cal__legend-dot cal__legend-dot--free"></span><span>פנוי לשריון</span></div>
+                <div class="cal__legend-item"><span class="cal__legend-dot cal__legend-dot--busy"></span><span>תפוס / אירוע</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cf-field">
+            <label>חלק היום המועדף</label>
+            <div class="cf-pills" id="cfSlotPills">
+              <button type="button" class="cf-pill is-active" data-val="ערב (18:00–02:00)">ערב (18:00–02:00)</button>
+              <button type="button" class="cf-pill" data-val="צהריים (12:00–18:00)">צהריים (12:00–18:00)</button>
+              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+            </div>
+            <input type="hidden" id="cfSlot" name="slot" value="ערב (18:00–02:00)" />
+          </div>
+
+          <div class="cf-field">
+            <label for="cfNotes">פרטים נוספים / הערות</label>
+            <textarea id="cfNotes" name="notes" rows="2" placeholder="ספרו לנו קצת על האירוע או הבקשה שלכם..."></textarea>
+          </div>
+
+          <button class="btn btn--fill btn--full" id="cfSubmitBtn" type="submit" style="margin-block-start: 0.5rem; padding: 0.85rem;">
+            <span>שליחת פרטים ושריון תאריך</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Screen -->
+      <div class="cf-done" id="cfDoneScreen" hidden>
+        <div class="cf-done__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h3 id="cfDoneTitle">תודה! הפרטים התקבלו בעזרא</h3>
+        <p id="cfDoneDesc">
+          הפנייה שלך נרשמה בהצלחה בלוח האירועים שלנו. נחזור אליך בהקדם (תוך 24 שעות) לתיאום כל הפרטים.
+        </p>
+        <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
+          <a class="btn btn--green" id="cfDoneWa" href="https://wa.me/972509499241" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+            <span>המשך שיחה בוואטסאפ</span>
+          </a>
+          <button class="btn btn--outline" id="cfDoneClose" type="button">סגירה</button>
         </div>
       </div>
     </div>
@@ -2504,7 +2932,7 @@
 
         allDaysData.forEach((item, idx) => {
           const card = document.createElement('article');
-          card.className = `time-card ${item.isToday ? 'is-today' : ''}`;
+          card.className = `time-card ${item.isToday ? 'is-today' : ''} reveal`;
           card.setAttribute('tabindex', '0');
           card.setAttribute('role', 'button');
           card.setAttribute('data-index', idx);
@@ -2518,13 +2946,14 @@
             badgeHtml = `<span class="time-card__badge time-card__badge--today">✦ הערב בעזרא</span>`;
           }
 
+          const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
             ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
-            : `<div class="slot-row slot-row--day-free"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע</span></div>`;
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע ✍️</span></div>`;
 
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
-            : `<div class="slot-row slot-row--open"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
+            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -2552,6 +2981,27 @@
             </div>
           `;
 
+          // Handle clicks on specific slots
+          const afternoonEl = card.querySelector('[data-action="contact-afternoon"]');
+          if (afternoonEl) {
+            afternoonEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (typeof openContactModal === 'function') {
+                openContactModal({ date: item.dateKey, slot: 'צהריים (12:00–18:00)', eventType: 'אירוע פרטי' });
+              }
+            });
+          }
+
+          const eveningBusyEl = card.querySelector('[data-action="contact-evening"]');
+          if (eveningBusyEl) {
+            eveningBusyEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (typeof openContactModal === 'function') {
+                openContactModal({ date: item.dateKey, slot: 'ערב (18:00–02:00)', eventType: 'אירוע פרטי' });
+              }
+            });
+          }
+
           card.addEventListener('click', () => {
             if (typeof openEventModal === 'function') {
               openEventModal(item);
@@ -2570,6 +3020,7 @@
 
         renderTabs();
         updateProgress();
+        initScrollAnimations();
       }
 
       function updateProgress() {
@@ -2635,9 +3086,7 @@
         generate30Days();
         renderGrid();
 
-        const ep = window.EZRA_AVAILABILITY_ENDPOINT;
-        if (!ep) return;
-
+        const ep = window.EZRA_AVAILABILITY_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev';
         fetch(ep, { method: 'GET' })
           .then(r => r.ok ? r.json() : null)
           .then(j => {
@@ -2794,6 +3243,340 @@
         });
       });
     })();
+
+    // ============================================================
+    // LEAVE DETAILS / CONTACT MODAL & INTERACTIVE CALENDAR
+    // Target Monday Board: 5102602771 (Open Events) | Group: topics (New Leads)
+    // ============================================================
+    let openContactModal;
+
+    (function(){
+      const contactModal = document.getElementById('contactModal');
+      const closeBtn = document.getElementById('contactModalClose');
+      const form = document.getElementById('contactFormEl');
+      const formWrap = document.getElementById('contactFormWrap');
+      const doneScreen = document.getElementById('cfDoneScreen');
+      const doneClose = document.getElementById('cfDoneClose');
+      const dateBtn = document.getElementById('cfDateBtn');
+      const dateLabel = document.getElementById('cfDateLabel');
+      const dateInput = document.getElementById('cfDate');
+      const cal = document.getElementById('cfCal');
+      const calMonth = document.getElementById('cfCalMonth');
+      const calGrid = document.getElementById('cfCalGrid');
+      const calPrev = document.getElementById('cfCalPrev');
+      const calNext = document.getElementById('cfCalNext');
+      const submitBtn = document.getElementById('cfSubmitBtn');
+      const doneWa = document.getElementById('cfDoneWa');
+
+      const monthsHe = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+      const dowsHe = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
+      const pad = n => String(n).padStart(2, '0');
+
+      let viewDate = new Date();
+      let selectedIso = '';
+      let bookedDatesSet = new Set();
+
+      // Fetch availability for calendar
+      fetch('https://ezra-lead.yeheli.workers.dev', { method: 'GET' })
+        .then(r => r.ok ? r.json() : null)
+        .then(j => {
+          if (j) {
+            const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
+            bookedDatesSet = new Set(arr);
+            renderCalendar();
+          }
+        })
+        .catch(() => {});
+
+      function renderCalendar() {
+        if (!calGrid || !calMonth) return;
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        calMonth.textContent = `${monthsHe[month]} ${year}`;
+
+        calGrid.innerHTML = '';
+        dowsHe.forEach(d => {
+          const el = document.createElement('div');
+          el.className = 'cal__dow';
+          el.textContent = d;
+          calGrid.appendChild(el);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const now = new Date();
+        const todayKey = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+
+        // Empty cells before day 1
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'cal__day is-empty';
+          calGrid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dayKey = `${year}-${pad(month+1)}-${pad(d)}`;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'cal__day';
+          btn.textContent = d;
+
+          const isPast = dayKey < todayKey;
+          const isBooked = bookedDatesSet.has(dayKey);
+          const isSelected = dayKey === selectedIso;
+
+          if (isPast) {
+            btn.classList.add('is-past');
+            btn.disabled = true;
+          } else if (isBooked) {
+            btn.classList.add('is-booked');
+            btn.title = 'תאריך תפוס לאירוע';
+          } else {
+            btn.addEventListener('click', () => {
+              selectDate(dayKey, `${d} ב${monthsHe[month]} ${year}`);
+            });
+          }
+
+          if (isSelected) btn.classList.add('is-selected');
+          calGrid.appendChild(btn);
+        }
+
+        // Disable prev if in current month
+        if (calPrev) {
+          const isCurrentMonth = year === now.getFullYear() && month === now.getMonth();
+          calPrev.disabled = isCurrentMonth;
+        }
+      }
+
+      function selectDate(isoKey, displayStr) {
+        selectedIso = isoKey;
+        dateInput.value = isoKey;
+        dateLabel.textContent = displayStr;
+        dateBtn.classList.remove('is-empty');
+        cal.hidden = true;
+        dateBtn.setAttribute('aria-expanded', 'false');
+        renderCalendar();
+      }
+
+      if (dateBtn) {
+        dateBtn.addEventListener('click', () => {
+          const isHidden = cal.hidden;
+          cal.hidden = !isHidden;
+          dateBtn.setAttribute('aria-expanded', String(isHidden));
+          if (isHidden) renderCalendar();
+        });
+      }
+
+      if (calPrev) {
+        calPrev.addEventListener('click', () => {
+          viewDate.setMonth(viewDate.getMonth() - 1);
+          renderCalendar();
+        });
+      }
+
+      if (calNext) {
+        calNext.addEventListener('click', () => {
+          viewDate.setMonth(viewDate.getMonth() + 1);
+          renderCalendar();
+        });
+      }
+
+      // Event Type Pills
+      const typePills = document.querySelectorAll('#cfEventTypePills .cf-pill');
+      const typeInput = document.getElementById('cfEventType');
+      typePills.forEach(p => {
+        p.addEventListener('click', () => {
+          typePills.forEach(x => x.classList.remove('is-active'));
+          p.classList.add('is-active');
+          if (typeInput) typeInput.value = p.getAttribute('data-val');
+        });
+      });
+
+      // Slot Pills
+      const slotPills = document.querySelectorAll('#cfSlotPills .cf-pill');
+      const slotInput = document.getElementById('cfSlot');
+      slotPills.forEach(p => {
+        p.addEventListener('click', () => {
+          slotPills.forEach(x => x.classList.remove('is-active'));
+          p.classList.add('is-active');
+          if (slotInput) slotInput.value = p.getAttribute('data-val');
+        });
+      });
+
+      openContactModal = function(opts = {}) {
+        if (!contactModal) return;
+        formWrap.hidden = false;
+        doneScreen.hidden = true;
+
+        if (opts.date) {
+          const parts = opts.date.split('-');
+          if (parts.length === 3) {
+            const y = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10) - 1;
+            const d = parseInt(parts[2], 10);
+            viewDate = new Date(y, m, d);
+            selectDate(opts.date, `${d} ב${monthsHe[m]} ${y}`);
+          }
+        }
+
+        if (opts.slot && slotInput) {
+          slotInput.value = opts.slot;
+          slotPills.forEach(p => {
+            p.classList.toggle('is-active', p.getAttribute('data-val') === opts.slot);
+          });
+        }
+
+        if (opts.eventType && typeInput) {
+          typeInput.value = opts.eventType;
+          typePills.forEach(p => {
+            p.classList.toggle('is-active', p.getAttribute('data-val') === opts.eventType);
+          });
+        }
+
+        contactModal.classList.add('is-open');
+        contactModal.setAttribute('aria-hidden', 'false');
+      };
+
+      function closeContactModal() {
+        if (!contactModal) return;
+        contactModal.classList.remove('is-open');
+        contactModal.setAttribute('aria-hidden', 'true');
+        if (cal) cal.hidden = true;
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', closeContactModal);
+      if (doneClose) doneClose.addEventListener('click', closeContactModal);
+      if (contactModal) {
+        contactModal.addEventListener('click', e => {
+          if (e.target === contactModal) closeContactModal();
+        });
+      }
+
+      // Attach to all .js-open-contact buttons
+      document.querySelectorAll('.js-open-contact').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const evType = btn.getAttribute('data-event-type') || 'יוזמת תוכן / ערב פתוח';
+          openContactModal({ eventType: evType });
+        });
+      });
+
+      // Confetti Animation
+      function launchFinaleConfetti() {
+        const colors = ['#c49a3c', '#e5c158', '#4ade80', '#ffffff', '#f59e0b'];
+        for (let i = 0; i < 40; i++) {
+          const el = document.createElement('div');
+          el.style.position = 'fixed';
+          el.style.zIndex = '3000';
+          el.style.width = Math.random() * 8 + 6 + 'px';
+          el.style.height = Math.random() * 8 + 6 + 'px';
+          el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          el.style.left = 50 + (Math.random() * 40 - 20) + '%';
+          el.style.top = '40%';
+          el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          el.style.pointerEvents = 'none';
+          el.style.transform = `rotate(${Math.random() * 360}deg)`;
+          el.style.transition = 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
+          document.body.appendChild(el);
+
+          const destX = (Math.random() - 0.5) * window.innerWidth * 0.7;
+          const destY = Math.random() * 400 + 100;
+
+          requestAnimationFrame(() => {
+            el.style.transform = `translate(${destX}px, ${destY}px) rotate(${Math.random() * 720}deg)`;
+            el.style.opacity = '0';
+          });
+
+          setTimeout(() => el.remove(), 1400);
+        }
+      }
+
+      // Handle Submission
+      if (form) {
+        form.addEventListener('submit', async e => {
+          e.preventDefault();
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>שולח...</span>`;
+          }
+
+          const payload = {
+            board: '5102602771', // Open Events Monday Board
+            group: 'topics',      // New Leads group
+            leadType: 'open_events',
+            name: document.getElementById('cfName')?.value || '',
+            phone: document.getElementById('cfPhone')?.value || '',
+            email: document.getElementById('cfEmail')?.value || '',
+            guests: document.getElementById('cfGuests')?.value || '',
+            eventType: typeInput?.value || 'אירוע פרטי',
+            date: dateInput?.value || '',
+            slot: slotInput?.value || '',
+            notes: document.getElementById('cfNotes')?.value || '',
+            utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'events_page',
+            utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || ''
+          };
+
+          try {
+            await fetch('https://ezra-lead.yeheli.workers.dev', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+          } catch (err) {
+            console.error('Lead submit worker err:', err);
+          }
+
+          // Also post to local /api/submit-lead if on Pages
+          try {
+            fetch('/api/submit-lead', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            }).catch(() => {});
+          } catch (_) {}
+
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>שליחת פרטים ושריון תאריך</span>`;
+          }
+
+          // Update WA link on success
+          if (doneWa) {
+            const text = `היי עזרא, השארתי כרגע פרטים באתר בנוגע ל${payload.eventType} בתאריך ${payload.date || 'גמיש'}.\nשם: ${payload.name}\nטלפון: ${payload.phone}`;
+            doneWa.href = `https://wa.me/972509499241?text=${encodeURIComponent(text)}`;
+          }
+
+          formWrap.hidden = true;
+          doneScreen.hidden = false;
+          launchFinaleConfetti();
+        });
+      }
+    })();
+
+    // ============================================================
+    // SCROLL REVEAL & PAGE ANIMATIONS
+    // ============================================================
+    function initScrollAnimations() {
+      const reveals = document.querySelectorAll('.reveal, .sec-head, .sound-box, .flyer-card, .collab-strip, .faq-item');
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        reveals.forEach(el => {
+          el.classList.add('reveal');
+          obs.observe(el);
+        });
+      } else {
+        reveals.forEach(el => el.classList.add('is-revealed'));
+      }
+    }
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+    initScrollAnimations();
 
     // FAQ Accordion
     (function(){
