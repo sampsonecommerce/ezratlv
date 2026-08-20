@@ -93,6 +93,14 @@
       --gold:        #c49a3c;
       --gold-light:  #f5d98a;
       --gold-soft:   rgba(196, 154, 60, 0.16);
+      --gold-deep:   #8c6a21;
+
+      /* Warm metal for the record-player illustration. Neutral greys read cold
+         against this palette, which is the same problem the coloured category
+         chips had. */
+      --metal:       #9c948a;
+      --metal-dim:   #5a544c;
+      --metal-dark:  #38332d;
       --line:        rgba(196, 154, 60, 0.24);
       --line-bright: rgba(196, 154, 60, 0.55);
       
@@ -263,7 +271,7 @@
       color: var(--bg) !important;
       overflow: hidden;
       border: 1.5px solid transparent;
-      background: linear-gradient(110deg, var(--gold) 0%, #e8c065 40%, #f5d98a 50%, #e8c065 60%, var(--gold) 100%);
+      background: linear-gradient(110deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
       background-size: 250% 100%;
       animation: navShimmer 2.8s ease-in-out infinite;
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -1268,7 +1276,7 @@
       width: 90px;
       height: 90px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #e5c158 0%, #c49a3c 55%, #8c6a21 100%);
+      background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold) 55%, var(--gold-deep) 100%);
       border: 3px solid #110e0a;
       box-shadow: 0 0 8px rgba(0,0,0,0.7), inset 0 0 6px rgba(0,0,0,0.4);
       display: flex;
@@ -1323,8 +1331,8 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: radial-gradient(circle, #888, #333);
-      border: 2px solid #555;
+      background: radial-gradient(circle, var(--metal), var(--metal-dark));
+      border: 2px solid var(--metal-dim);
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
     .vinyl-arm::after {
@@ -1334,7 +1342,7 @@
       inset-block-start: 12px;
       width: 4px;
       height: 95px;
-      background: linear-gradient(to bottom, #aaa, #666);
+      background: linear-gradient(to bottom, var(--metal), var(--metal-dim));
       transform-origin: top center;
       transform: rotate(-25deg);
       border-radius: 2px;
