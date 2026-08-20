@@ -384,8 +384,8 @@
 
       .nav__menu-ctas {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.45rem;
         margin-block-start: 1.2rem;
       }
       .nav__menu-cta {
@@ -393,18 +393,19 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        min-height: 48px;
+        min-height: 46px;
         border-radius: 50px;
-        font-size: 0.88rem;
+        font-size: 0.82rem;
         font-weight: 600;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.01em;
         text-align: center;
-        padding-inline: 0.5rem;
+        padding-inline: 0.3rem;
       }
       .nav__menu-cta--pill { color: var(--cream); border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
       .nav__menu-cta--corp { color: var(--gold); border: 1.5px solid var(--gold); background: var(--gold-soft); }
+      .nav__menu-cta--corp.is-active { color: var(--bg); background: var(--gold); }
+      .nav__menu-cta--full { grid-column: 1 / -1; }
       .nav__menu-cta--book {
-        grid-column: 1 / -1;
         color: var(--bg);
         background: linear-gradient(110deg, var(--gold), #f5d98a);
         box-shadow: 0 8px 22px rgba(196, 154, 60, 0.3);
@@ -2858,6 +2859,7 @@
         HE
       </a>
       <a class="nav__pill" href="english-index">Private events</a>
+      <a class="nav__corp is-active" href="english-company-events">Company events</a>
       <a class="nav__pill" href="english-events">Public events</a>
       <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Choose a package</a>
     </div>
@@ -2874,8 +2876,9 @@
       <a class="nav__menu-link" href="company-events" hreflang="he">Hebrew / HE</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--pill" href="english-index">Private events</a>
+        <a class="nav__menu-cta nav__menu-cta--corp is-active" href="english-company-events">Company events</a>
         <a class="nav__menu-cta nav__menu-cta--pill" href="english-events">Public events</a>
-        <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Choose a package</a>
+        <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Choose a package</a>
       </div>
     </div>
   </nav>
