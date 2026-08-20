@@ -696,6 +696,7 @@
       background: var(--gold);
       color: var(--bg);
       border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(196, 154, 60, 0.4);
     }
     /* Schedule Slider Container */
     .schedule-slider-wrap {
@@ -704,12 +705,12 @@
     }
     .timeline-grid {
       display: flex;
-      gap: 1.35rem;
+      gap: 1.15rem;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding-block: 0.5rem 1.4rem;
+      padding-block: 0.5rem 1.2rem;
       padding-inline: 4px;
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -718,15 +719,52 @@
       display: none;
     }
 
-    /* Rich Visual Time Card (Slider Card) */
+    /* Slider Progress & Controls Indicator */
+    .slider-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem;
+      margin-block-start: 1rem;
+      padding-inline: 0.5rem;
+    }
+    .slider-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .slider-progress-bar__thumb {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 25%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(196, 154, 60, 0.6);
+      transition: width 0.2s ease, inset-inline-start 0.2s ease;
+    }
+    .slider-hint-text {
+      font-size: 0.78rem;
+      color: var(--cream-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+    }
+
+    /* Rich Visual Time Card (Slider Card - 4 across on Desktop) */
     .time-card {
-      flex: 0 0 320px;
-      width: 320px;
-      min-width: 320px;
+      flex: 0 0 calc((100% - (3 * 1.15rem)) / 4);
+      width: calc((100% - (3 * 1.15rem)) / 4);
+      min-width: 260px;
+      max-width: 310px;
       scroll-snap-align: start;
       background: #130f0b;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -736,11 +774,25 @@
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
       text-align: start;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 1100px) {
       .time-card {
-        flex: 0 0 285px;
-        width: 285px;
-        min-width: 285px;
+        flex: 0 0 calc((100% - (2 * 1.15rem)) / 3);
+        width: calc((100% - (2 * 1.15rem)) / 3);
+        min-width: 260px;
+      }
+    }
+    @media (max-width: 800px) {
+      .time-card {
+        flex: 0 0 calc((100% - 1.15rem) / 2);
+        width: calc((100% - 1.15rem) / 2);
+        min-width: 250px;
+      }
+    }
+    @media (max-width: 540px) {
+      .time-card {
+        flex: 0 0 280px;
+        width: 280px;
+        min-width: 280px;
       }
     }
     .time-card:hover {
@@ -835,91 +887,111 @@
     }
 
     .time-card__body {
-      padding: 1.1rem 1.15rem 1.25rem;
+      padding: 1rem 1.05rem 1.15rem;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 0.65rem;
     }
     .time-card__header {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
     }
     .time-card__dow {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--gold);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .time-card__title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 800;
       color: var(--cream);
       line-height: 1.3;
       margin: 0;
     }
     .time-card__lineup {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--cream-dim);
-      line-height: 1.4;
+      line-height: 1.35;
       margin: 0;
     }
-    .time-card__slots-bar {
+
+    /* 2-Row Daily Slot Grid (Afternoon & Evening) */
+    .time-card__slots-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 0.45rem 0.6rem;
+    }
+    .slot-row {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      flex-wrap: wrap;
-      margin-block: 0.2rem;
+      justify-content: space-between;
+      gap: 0.4rem;
     }
-    .slot-tag {
-      display: inline-flex;
+    .slot-row__time {
+      display: flex;
       align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 8px;
+      gap: 0.3rem;
       font-size: 0.72rem;
       font-weight: 700;
-      line-height: 1.2;
+      color: var(--cream-dim);
     }
-    .slot-tag__dot {
-      width: 6px;
-      height: 6px;
+    .slot-row__time-icon {
+      font-size: 0.78rem;
+    }
+    .slot-row__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      padding: 0.16rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .slot-row__dot {
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
+      background: currentColor;
     }
-    .slot-tag--open {
-      background: rgba(52, 211, 153, 0.1);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+    .slot-row--open .slot-row__badge {
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
       color: #34d399;
     }
-    .slot-tag--open .slot-tag__dot { background: #34d399; }
-    .slot-tag--busy {
-      background: rgba(248, 113, 113, 0.1);
-      border: 1px solid rgba(248, 113, 113, 0.3);
+    .slot-row--busy .slot-row__badge {
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.35);
       color: #f87171;
     }
-    .slot-tag--busy .slot-tag__dot { background: #f87171; }
-    .slot-tag--day {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--cream-dim);
+    .slot-row--day-free .slot-row__badge {
+      background: rgba(196, 154, 60, 0.12);
+      border: 1px solid rgba(196, 154, 60, 0.35);
+      color: var(--gold-light);
     }
 
     .time-card__footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-block-start: 0.75rem;
+      padding-block-start: 0.65rem;
       border-block-start: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--gold-light);
     }
     .time-card__footer svg {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       transition: transform 0.25s var(--ease);
     }
     .time-card:hover .time-card__footer svg {
@@ -1660,84 +1732,93 @@
             <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
           </div>
         </div>
+
+        <div class="slider-progress-wrap">
+          <div class="slider-progress-bar">
+            <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
+          </div>
+          <span class="slider-hint-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <span>Scroll horizontally to browse all 30 days</span>
+          </span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 3. UPCOMING EVENTS -->
+  <!-- 3. CURATED CONCEPT SERIES & RESIDENCIES -->
   <section id="events">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Lineup & Nights</span>
-        <h2>Upcoming Events</h2>
+        <span class="eyebrow">Resident Series & Concepts</span>
+        <h2>Weekly Concept Series at Ezra</h2>
         <p>
-          Concept nights, vinyl sessions, live performances and culinary pop-ups. Free entry or advance RSVP.
+          Beyond the monthly calendar, Ezra hosts four signature recurring content series featuring analog sound, guest chef pop-ups, live jazz and botanical mixology. Each residency is open to the public and available for private hire.
         </p>
       </div>
 
       <div class="events-nav-filter" id="eventsFilter">
-        <button class="filter-btn is-active" data-filter="all" type="button">All Events</button>
-        <button class="filter-btn" data-filter="vinyl" type="button">Vinyl Sessions 🎧</button>
-        <button class="filter-btn" data-filter="food" type="button">Chef Pop-Ups 🍕</button>
-        <button class="filter-btn" data-filter="listening" type="button">Album Premieres 🎙️</button>
-        <button class="filter-btn" data-filter="live" type="button">Live Jazz 🎷</button>
-        <button class="filter-btn" data-filter="free" type="button">Free Entry 🎟️</button>
+        <button class="filter-btn is-active" data-filter="all" type="button">All Concepts</button>
+        <button class="filter-btn" data-filter="vinyl" type="button">📻 Hi-Fi Vinyl Salon</button>
+        <button class="filter-btn" data-filter="food" type="button">🔥 Wood-Oven Chef Pop-Ups</button>
+        <button class="filter-btn" data-filter="listening" type="button">🎙️ Album Premieres</button>
+        <button class="filter-btn" data-filter="live" type="button">🎷 Live Jazz Hang</button>
       </div>
 
       <div class="teder-feed" id="eventsList">
-        <!-- Event 1: Vinyl Night -->
-        <article class="teder-card" data-category="vinyl free">
+        <!-- Series 1: Vinyl Night -->
+        <article class="teder-card" data-category="vinyl">
           <div class="teder-poster">
             <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="Vinyl night at Ezra" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--free">Free Entry</span>
-              <span class="sticker sticker--vinyl">Vinyl Only · Funk & Soul</span>
+              <span class="time-card__badge time-card__badge--free">Free Entry</span>
+              <span class="time-card__badge time-card__badge--today">Vinyl Only · Funk & Soul</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">20.08</span>
-                <span class="day-name">· Thursday · 21:00 till late</span>
+                <span class="num">Every Thursday</span>
+                <span class="day-name">· From 21:00 till late</span>
               </div>
               <h3 class="teder-title">Groove & Grapes · Rare Funk & Soul Vinyl Session</h3>
-              <p class="teder-lineup">On the decks: DJ Amir Peled & Special Guests</p>
+              <p class="teder-lineup">Resident Selectors & Guest Vinyl Collectors · Pure Analog Hi-Fi</p>
               <p class="teder-desc">
-                An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and hot sourdough dishes from the wood oven. Free entry on a first-come basis.
+                An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and hot sourdough dishes from the wood oven.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
                 <span>📍 38 Abarbanel St, Florentin</span>
-                <span>🍷 Natural Wine & Cocktails</span>
+                <span>🍷 Natural Wine & Hi-Fi Sound</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="1" type="button">Event Details</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="Vinyl Session at Ezra" data-url="https://ezratlv.com/english-events#event-1" type="button">Share</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="1" type="button">Reserve Next Table</button>
+                <a class="btn btn--outline btn--sm" href="english-index#contact">Host a Private Event in this Vibe</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 2: Chef Pop-Up -->
-        <article class="teder-card" data-category="food rsvp">
+        <!-- Series 2: Chef Pop-Up -->
+        <article class="teder-card" data-category="food">
           <div class="teder-poster">
             <img src="images/FOOD ENVIRONMENT.jpg" alt="Chef pop up at Ezra" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--rsvp">RSVP Required</span>
-              <span class="sticker sticker--food">Wood-Fired Oven 🍕</span>
+              <span class="time-card__badge time-card__badge--rsvp">RSVP Required</span>
+              <span class="time-card__badge time-card__badge--today">Wood-Fired Oven 🍕</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">24.08</span>
-                <span class="day-name">· Monday · Two seatings: 19:30 | 22:00</span>
+                <span class="num">Every Monday</span>
+                <span class="day-name">· Two seatings: 19:30 | 22:00</span>
               </div>
               <h3 class="teder-title">Fire & Dough · Guest Chef Wood-Oven Pop-Up</h3>
-              <p class="teder-lineup">Guest Chef: Itay Lev (ex-Pera / HaBasta) & Tailored Cocktails</p>
+              <p class="teder-lineup">Guest Chefs from Top TLV Kitchens & Tailored Mixology</p>
               <p class="teder-desc">
-                A one-night special menu: warm fermented sourdough with whipped spiced butters, crudo fish in cold-pressed olive oil, ember-charred seasonal vegetables and botanical cocktails. Limited to 45 guests.
+                A seasonal special menu: warm fermented sourdough with whipped spiced butters, crudo fish in cold-pressed olive oil, ember-charred vegetables and botanical cocktails.
               </p>
             </div>
             <div class="teder-footer-row">
@@ -1746,27 +1827,27 @@
                 <span>🍸 Cocktail Pairing</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="2" type="button">Reserve a Table</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="Chef Pop-Up at Ezra" data-url="https://ezratlv.com/english-events#event-2" type="button">Share</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="2" type="button">Reserve for Next Pop-Up</button>
+                <a class="btn btn--outline btn--sm" href="english-index#contact">Book a Private Chef Night</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 3: Album Premiere -->
-        <article class="teder-card" data-category="listening free">
+        <!-- Series 3: Album Premiere -->
+        <article class="teder-card" data-category="listening">
           <div class="teder-poster">
             <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="Album listening party at Ezra" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--free">Free Entry</span>
-              <span class="sticker sticker--listen">Hi-Fi Audio Premiere 🎙️</span>
+              <span class="time-card__badge time-card__badge--free">Free Entry</span>
+              <span class="time-card__badge time-card__badge--today">Hi-Fi Audio Premiere 🎙️</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">26.08</span>
-                <span class="day-name">· Wednesday · 20:30 (Listening at 21:30)</span>
+                <span class="num">Every Wednesday</span>
+                <span class="day-name">· From 20:30 (Listening at 21:30)</span>
               </div>
               <h3 class="teder-title">Night Sessions · Exclusive Album Pre-Release</h3>
               <p class="teder-lineup">Deep listening on Ezra's custom analog system + Artist Q&A</p>
@@ -1777,30 +1858,30 @@
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
                 <span>🔊 Hi-Fi Sound</span>
-                <span>🍷 Free Entry</span>
+                <span>🎙️ Artist Q&A</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="3" type="button">Event Details</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="Album Listening at Ezra" data-url="https://ezratlv.com/english-events#event-3" type="button">Share</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="3" type="button">Next Session Details</button>
+                <a class="btn btn--outline btn--sm" href="english-index#contact">Private Launch / Listening Hire</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 4: Live Jazz -->
-        <article class="teder-card" data-category="live rsvp">
+        <!-- Series 4: Live Jazz -->
+        <article class="teder-card" data-category="live">
           <div class="teder-poster">
             <img src="images/MOMENT 1.jpg" alt="Live jazz trio at Ezra" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--rsvp">RSVP Recommended</span>
-              <span class="sticker sticker--live">Live Jazz Trio 🎷</span>
+              <span class="time-card__badge time-card__badge--rsvp">RSVP Recommended</span>
+              <span class="time-card__badge time-card__badge--today">Live Jazz Trio 🎷</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">29.08</span>
-                <span class="day-name">· Saturday · 21:00</span>
+                <span class="num">Every Saturday (Motzash)</span>
+                <span class="day-name">· From 21:00</span>
               </div>
               <h3 class="teder-title">Florentin Jazz Hang · Live Trio at the Bar</h3>
               <p class="teder-lineup">Piano, Double Bass & Drums · Intimate Improvisation Session</p>
@@ -1814,8 +1895,8 @@
                 <span>🍸 Classic Cocktails</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="4" type="button">Reserve a Table</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="Live Jazz at Ezra" data-url="https://ezratlv.com/english-events#event-4" type="button">Share</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="4" type="button">Reserve Bar Seating</button>
+                <a class="btn btn--outline btn--sm" href="english-index#contact">Private Live Jazz Event</a>
               </div>
             </div>
           </div>
@@ -2063,7 +2144,7 @@
             <p style="font-size: 0.85rem; color: var(--cream-dim); margin-block-end: 1rem; line-height: 1.5;">Looking to host a birthday, intimate wedding, or corporate event at Ezra? We would love to host your celebration on one of our available dates.</p>
             <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
               <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=Hi%20Ezra%2C%20I%20am%20interested%20in%20booking%20a%20private%20event" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-              <a class="btn btn--outline btn--sm" href="english-index">Private Event Details</a>
+              <a class="btn btn--outline btn--sm" href="english-index#contact">Leave Details & We'll Be In Touch</a>
             </div>
           </div>
         </div>
@@ -2383,11 +2464,13 @@
             badgeHtml = `<span class="time-card__badge time-card__badge--today">✦ TONIGHT</span>`;
           }
 
-          let eveningSlotText = item.isClosedEvening ? 'Evening: Private Event' : `Evening: Public (${openHour})`;
-          let eveningSlotClass = item.isClosedEvening ? 'slot-tag--busy' : 'slot-tag--open';
+          let afternoonRow = item.hasAfternoonEvent
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
+            : `<div class="slot-row slot-row--day-free"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Available</span></div>`;
 
-          let afternoonSlotText = item.hasAfternoonEvent ? 'Afternoon: Private' : 'Afternoon: Available';
-          let afternoonSlotClass = item.hasAfternoonEvent ? 'slot-tag--busy' : 'slot-tag--day';
+          let eveningRow = item.isClosedEvening
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
+            : `<div class="slot-row slot-row--open"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Public (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -2404,14 +2487,9 @@
                 <h4 class="time-card__title">${item.title}</h4>
               </div>
               <p class="time-card__lineup">${item.lineup}</p>
-              <div class="time-card__slots-bar">
-                <span class="slot-tag ${eveningSlotClass}">
-                  <span class="slot-tag__dot"></span>
-                  <span>${eveningSlotText}</span>
-                </span>
-                <span class="slot-tag ${afternoonSlotClass}">
-                  <span>${afternoonSlotText}</span>
-                </span>
+              <div class="time-card__slots-grid">
+                ${afternoonRow}
+                ${eveningRow}
               </div>
               <div class="time-card__footer">
                 <span>${item.isClosedEvening ? 'Private Event Details' : 'Details & RSVP'}</span>
@@ -2437,20 +2515,35 @@
         });
 
         renderTabs();
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const progressThumb = document.getElementById('scheduleProgressThumb');
+        if (!progressThumb || !weekGrid) return;
+        const maxScroll = weekGrid.scrollWidth - weekGrid.clientWidth;
+        if (maxScroll > 0) {
+          const scrollPos = Math.abs(weekGrid.scrollLeft);
+          const fraction = Math.min(1, Math.max(0, scrollPos / maxScroll));
+          const maxShift = 75; // 100% - 25% thumb width
+          progressThumb.style.insetInlineStart = (fraction * maxShift) + '%';
+        }
       }
 
       // Slider scroll arrow buttons
       if (prevWeekBtn) {
         prevWeekBtn.addEventListener('click', () => {
           if (!weekGrid) return;
-          weekGrid.scrollBy({ left: -340, behavior: 'smooth' });
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: -(cardW + 18) * 2, behavior: 'smooth' });
         });
       }
 
       if (nextWeekBtn) {
         nextWeekBtn.addEventListener('click', () => {
           if (!weekGrid) return;
-          weekGrid.scrollBy({ left: 340, behavior: 'smooth' });
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: (cardW + 18) * 2, behavior: 'smooth' });
         });
       }
 
@@ -2458,6 +2551,7 @@
       let scrollTimer;
       if (weekGrid) {
         weekGrid.addEventListener('scroll', () => {
+          updateProgress();
           clearTimeout(scrollTimer);
           scrollTimer = setTimeout(() => {
             const cards = weekGrid.querySelectorAll('.time-card');
@@ -2480,7 +2574,7 @@
               updateTabState();
             }
           }, 100);
-        });
+        }, { passive: true });
       }
 
       function loadAvailability() {
