@@ -310,16 +310,25 @@ function parseHourText(text) {
 async function availability(env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
-  const cols = `["${DATE_COL}", "${HOUR_START_COL}", "${HOUR_END_COL}", "${TIME_COL}"]`;
   const query = `query {
-    events: boards(ids: ${AVAIL_BOARD}) {
-      groups(ids: ${JSON.stringify(AVAIL_GROUPS)}) {
-        items_page(limit: 500) { items { column_values(ids: ${cols}) { id text ... on DateValue { date } } } }
-      }
-    }
-    company: boards(ids: ${COMPANY_BOARD}) {
-      groups(ids: ${JSON.stringify(COMPANY_AVAIL_GROUPS)}) {
-        items_page(limit: 500) { items { column_values(ids: ${cols}) { id text ... on DateValue { date } } } }
+    boards(ids: [${AVAIL_BOARD}, ${COMPANY_BOARD}, ${OPEN_EVENTS_BOARD}]) {
+      id
+      title
+      groups {
+        id
+        title
+        items_page(limit: 500) {
+          items {
+            id
+            name
+            column_values {
+              id
+              type
+              text
+              ... on DateValue { date }
+            }
+          }
+        }
       }
     }
   }`;
@@ -331,26 +340,62 @@ async function availability(env, cors) {
     });
     const out = await r.json();
     if (out.errors) { console.error("availability Monday errors:", JSON.stringify(out.errors)); return json({ booked: [], busy: [] }, 200, cors); }
-    const boards = [...(out?.data?.events || []), ...(out?.data?.company || [])];
-    const items = boards.flatMap((b) => (b.groups || []).flatMap((g) => g.items_page?.items || []));
+    const boards = out?.data?.boards || [];
     const busy = [];
-    for (const it of items) {
-      const cv = {};
-      (it.column_values || []).forEach((c) => { cv[c.id] = c; });
-      const date = cv[DATE_COL]?.date;
-      if (!date) continue;
-      // prefer the two Hour-picker columns (what staff actually fill in by hand on the board);
-      // fall back to the combined "Start-End (Text)" field (reliable for site-created leads).
-      let start = parseHourText(cv[HOUR_START_COL]?.text);
-      let end = parseHourText(cv[HOUR_END_COL]?.text);
-      if (!start || !end) {
-        const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
-        if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; }
+    const bookedSet = new Set();
+
+    for (const b of boards) {
+      for (const g of (b.groups || [])) {
+        const gTitle = (g.title || "").toLowerCase();
+        const gId = g.id || "";
+        // Check if group represents closed / booked / taken dates
+        const isClosedGroup = gTitle.includes("תפוס") ||
+          gTitle.includes("סגור") ||
+          gTitle.includes("closed") ||
+          gTitle.includes("booked") ||
+          gTitle.includes("deal") ||
+          gTitle.includes("pre payment") ||
+          gTitle.includes("proposal") ||
+          gTitle.includes("agreement") ||
+          AVAIL_GROUPS.includes(gId) ||
+          COMPANY_AVAIL_GROUPS.includes(gId);
+
+        if (!isClosedGroup && b.id !== OPEN_EVENTS_BOARD) continue;
+
+        for (const it of (g.items_page?.items || [])) {
+          const cv = {};
+          let itemDate = null;
+          (it.column_values || []).forEach((c) => {
+            cv[c.id] = c;
+            if (!itemDate && c.date) itemDate = c.date;
+            if (!itemDate && c.type === "date" && c.text && /^\d{4}-\d{2}-\d{2}$/.test(c.text.trim())) {
+              itemDate = c.text.trim();
+            }
+          });
+
+          // Check standard date column or any discovered date
+          const date = cv[DATE_COL]?.date || itemDate;
+          if (!date) continue;
+
+          let start = parseHourText(cv[HOUR_START_COL]?.text);
+          let end = parseHourText(cv[HOUR_END_COL]?.text);
+          if (!start || !end) {
+            const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
+            if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; }
+          }
+
+          // If no specific hour was chosen for a closed date item, treat it as evening / full day booked
+          if (!start || !end) {
+            start = "18:00";
+            end = "02:00";
+          }
+
+          busy.push({ date, start, end });
+          bookedSet.add(date);
+        }
       }
-      if (!start || !end) continue;   // no parseable time anywhere -> does not block anything
-      busy.push({ date, start, end });
     }
-    const booked = [...new Set(busy.map((b) => b.date))];
+    const booked = Array.from(bookedSet);
     return new Response(JSON.stringify({ booked, busy }), {
       status: 200,
       headers: { "content-type": "application/json", "Cache-Control": "public, max-age=60", ...cors },
