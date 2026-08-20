@@ -137,6 +137,9 @@
     .num { font-family: 'Pliant', sans-serif; font-variant-numeric: tabular-nums; }
 
     /* NAVIGATION */
+    /* ============================================================
+       NAVIGATION BAR (100% IDENTICAL SIZING ACROSS ALL PAGES)
+    ============================================================ */
     .nav {
       position: fixed;
       inset-block-start: 0;
@@ -144,39 +147,49 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      padding: 1.1rem clamp(1.2rem, 4vw, 2.5rem);
-      background: rgba(11, 9, 7, 0.94);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      transition: padding 0.3s var(--ease), border-color 0.3s var(--ease);
-      border-block-end: 1px solid var(--line);
+      padding: 1.4rem clamp(1.25rem, 5vw, 3rem);
+      background: #000;
+      transition: padding 0.4s var(--ease), border-color 0.5s var(--ease);
+      border-block-end: 1px solid transparent;
     }
     .nav.scrolled {
-      padding-block: 0.75rem;
-      border-block-end: 1px solid var(--line-bright);
+      padding-block: 1rem;
+      border-block-end: 1px solid rgba(196, 154, 60, 0.14);
     }
     .nav__logo { display: flex; align-items: center; }
-    .nav__logo img { height: 23px; width: auto; display: block; }
+    .nav__logo img { height: 22px; width: auto; display: block; }
     .nav__links {
       flex: 1;
       display: flex;
       justify-content: center;
-      gap: clamp(1rem, 2vw, 1.8rem);
+      gap: clamp(1.2rem, 2.5vw, 2.2rem);
       align-items: center;
       white-space: nowrap;
     }
     .nav__links a {
       font-size: 0.88rem;
-      font-weight: 500;
+      font-weight: 400;
       color: var(--cream-dim);
-      transition: color 0.25s var(--ease);
+      position: relative;
+      transition: color 0.3s var(--ease);
     }
-    .nav__links a:hover, .nav__links a.is-active { color: var(--gold-light); }
+    .nav__links a::after {
+      content: '';
+      position: absolute;
+      inset-block-end: -6px;
+      inset-inline-start: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.35s var(--ease);
+    }
+    .nav__links a:hover { color: var(--cream); }
+    .nav__links a:hover::after { width: 100%; }
 
     .nav__actions {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.85rem;
       flex-wrap: nowrap;
     }
     .nav__pill {
@@ -208,30 +221,33 @@
       transform: translateY(-1px);
     }
     .nav__cta {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.48rem 1.2rem;
+      padding: 0.5rem 1.25rem;
       border-radius: 50px;
-      font-size: 0.86rem;
-      font-weight: 700;
+      font-size: 0.9rem;
+      font-weight: 600;
       line-height: 1;
       color: var(--bg) !important;
-      background: linear-gradient(110deg, var(--gold) 0%, #f5d98a 50%, var(--gold) 100%);
-      background-size: 200% 100%;
-      animation: navShimmer 3s infinite ease-in-out;
-      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+      overflow: hidden;
+      border: 1.5px solid transparent;
+      background: linear-gradient(110deg, var(--gold) 0%, #e8c065 40%, #f5d98a 50%, #e8c065 60%, var(--gold) 100%);
+      background-size: 250% 100%;
+      animation: navShimmer 2.8s ease-in-out infinite;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
       white-space: nowrap;
     }
-    .nav__cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(196,154,60,0.45); }
+    .nav__cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(196,154,60,0.45); }
     .nav__lang {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 34px; height: 32px; padding-inline: 0.5rem;
-      border: 1px solid var(--line); border-radius: 8px;
-      color: var(--cream-dim) !important; font-size: 0.78rem; font-weight: 700; line-height: 1;
-      transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+      display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.03em; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 50px;
+      padding: 0.38rem 0.72rem; line-height: 1; transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
     }
-    .nav__lang:hover { color: var(--gold) !important; border-color: var(--gold); }
+    .nav__lang:hover { color: var(--cream); border-color: rgba(196,154,60,0.5); }
+    .nav__lang::after { display: none !important; }
+    .nav__lang svg { width: 14px; height: 14px; }
     @keyframes navShimmer {
       0%   { background-position: 100% 50%; }
       50%  { background-position: 0% 50%; }
@@ -242,121 +258,119 @@
     .nav__burger { display: none; }
     .nav__menu, .nav__scrim { display: none; }
 
-    @media (max-width: 900px) {
-      .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.8rem; }
+    @media (max-width: 720px) {
+      .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; }
+      .nav.scrolled { padding-block: 0.7rem; }
       .nav__links, .nav__actions { display: none; }
+
       .nav__logo { order: 1; }
+      .nav__logo img { height: 24px; }
+
       .nav__burger {
         order: 3;
-        display: inline-flex;
+        display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         gap: 5px;
-        width: 42px;
-        height: 42px;
-        padding: 0;
-        background: none;
-        border: 0;
+        width: 38px;
+        height: 38px;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 8px;
         cursor: pointer;
+        padding: 8px;
+        z-index: 101;
       }
       .nav__burger span {
         display: block;
-        width: 24px;
-        height: 2.2px;
-        border-radius: 2px;
+        width: 20px;
+        height: 1.5px;
         background: var(--cream);
-        transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+        border-radius: 1px;
+        transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
       }
-      .nav[data-menu="open"] .nav__burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav[data-menu="open"] .nav__burger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
       .nav[data-menu="open"] .nav__burger span:nth-child(2) { opacity: 0; }
-      .nav[data-menu="open"] .nav__burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .nav[data-menu="open"] .nav__burger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
       .nav__menu {
         display: flex;
         flex-direction: column;
-        position: absolute;
-        inset-block-start: 100%;
-        inset-inline: 0;
-        background: #0b0907;
-        border-block-end: 1px solid var(--line-bright);
-        padding: 0.8rem clamp(1.2rem, 4vw, 2rem) 1.6rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-        max-height: calc(100svh - 100%);
+        gap: 0;
+        position: fixed;
+        inset-block-start: 0;
+        inset-inline-end: 0;
+        width: min(320px, 85vw);
+        height: 100vh;
+        background: #0e0c09;
+        border-inline-start: 1px solid var(--line);
+        padding: 5rem 1.8rem 2rem;
+        z-index: 100;
+        transform: translateX(100%);
+        transition: transform 0.35s var(--ease);
         overflow-y: auto;
-        transform: translateY(-10px);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0s linear 0.3s;
       }
-      .nav[data-menu="open"] .nav__menu {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-      }
+      .nav[data-menu="open"] .nav__menu { transform: translateX(0); }
+
       .nav__menu-link {
-        display: flex;
-        align-items: center;
-        min-height: 48px;
-        font-size: 0.98rem;
+        font-size: 1.05rem;
         font-weight: 500;
         color: var(--cream);
-        border-block-end: 1px solid rgba(196, 154, 60, 0.08);
+        padding-block: 0.85rem;
+        border-block-end: 1px solid rgba(255,255,255,0.06);
+        transition: color 0.2s var(--ease);
       }
-      .nav__menu-link:hover { color: var(--gold); padding-inline-start: 0.35rem; }
-
+      .nav__menu-link:hover { color: var(--gold); }
       .nav__menu-ctas {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.45rem;
-        margin-block-start: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-block-start: 1.5rem;
       }
       .nav__menu-cta {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
-        width: 100%;
-        min-height: 46px;
+        padding: 0.75rem 1.2rem;
         border-radius: 50px;
-        font-size: 0.82rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        letter-spacing: 0.01em;
         text-align: center;
-        padding-inline: 0.3rem;
+        transition: all 0.2s var(--ease);
       }
-      .nav__menu-cta--full { grid-column: 1 / -1; }
-      .nav__menu-cta--corp { color: var(--gold); border: 1.2px solid var(--gold); background: var(--gold-soft); }
-      .nav__menu-cta--pill { color: var(--cream); border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
-      .nav__menu-cta--pill.is-active { color: var(--gold-light); border-color: var(--gold); background: rgba(196,154,60,0.18); }
+      .nav__menu-cta--pill {
+        border: 1px solid var(--line);
+        color: var(--cream-dim);
+        background: rgba(196, 154, 60, 0.05);
+      }
+      .nav__menu-cta--pill.is-active {
+        border: 1.2px solid var(--gold);
+        color: var(--gold-light);
+        background: rgba(196, 154, 60, 0.2);
+      }
       .nav__menu-cta--book {
+        background: var(--gold);
         color: var(--bg);
-        background: linear-gradient(110deg, var(--gold), #f5d98a);
-        box-shadow: 0 6px 18px rgba(196, 154, 60, 0.3);
+        font-weight: 700;
       }
-
       .nav__scrim {
         display: block;
-        position: absolute;
-        inset-block-start: 100%;
-        inset-inline: 0;
-        height: 100svh;
-        background: rgba(0, 0, 0, 0.6);
-        -webkit-backdrop-filter: blur(3px);
-        backdrop-filter: blur(3px);
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        z-index: 99;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s var(--ease), visibility 0s linear 0.3s;
+        transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
       }
       .nav[data-menu="open"] .nav__scrim {
         opacity: 1;
         visibility: visible;
-        transition: opacity 0.3s var(--ease);
       }
     }
 
-    /* BUTTONS & STICKERS */
+    /* GLOBAL UI / BUTTONS / STICKERS */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -398,6 +412,32 @@
     .sticker--free    { background: var(--green); color: #061e12; font-weight: 900; }
     .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 900; }
 
+    /* TICKER MARQUEE */
+    .ticker-strip {
+      background: #14100b;
+      border-block: 1px solid var(--line);
+      overflow: hidden;
+      white-space: nowrap;
+      padding-block: 0.65rem;
+      position: relative;
+      z-index: 5;
+    }
+    .ticker-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.8rem;
+      animation: tickerMoveEn 28s linear infinite;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+    }
+    .ticker-track span.gold { color: var(--gold); }
+    @keyframes tickerMoveEn {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
     section { padding-block: var(--section-pad); position: relative; }
     .section-soft { background: var(--bg-soft); }
 
@@ -417,30 +457,39 @@
 
     /* HERO */
     .hero-events {
-      min-height: 84vh;
+      min-height: 88vh;
       display: flex;
       align-items: center;
+      justify-content: center;
       position: relative;
-      padding-block-start: 7.5rem;
-      padding-block-end: 4rem;
+      padding-block-start: 8rem;
+      padding-block-end: 4.5rem;
       overflow: hidden;
-      background:
-        radial-gradient(85% 70% at 50% 20%, rgba(196,154,60,0.18), transparent 75%),
-        radial-gradient(40% 40% at 85% 85%, rgba(52,211,153,0.06), transparent 80%),
-        linear-gradient(180deg, #16110b 0%, #0b0907 100%);
+      background: #0a0806;
     }
-    .hero-events::before {
-      content: '';
+    .hero-events__video {
       position: absolute;
       inset: 0;
-      background: url('images/bar photo for 3 cards.jpg') center/cover no-repeat;
-      opacity: 0.16;
-      filter: grayscale(30%) contrast(1.15);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.42;
+      filter: saturate(1.15) contrast(1.1);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-events__overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(11,9,7,0.25) 0%, rgba(11,9,7,0.85) 100%),
+        linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 35%, #0b0907 100%);
+      z-index: 2;
       pointer-events: none;
     }
     .hero-events__inner {
       position: relative;
-      z-index: 2;
+      z-index: 3;
       max-width: 980px;
       margin-inline: auto;
       text-align: center;
@@ -508,7 +557,7 @@
       gap: 0.9rem;
       padding: 0.75rem 1.6rem;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--line-bright);
       font-size: 0.92rem;
       color: var(--cream);
@@ -1233,53 +1282,81 @@
     </div>
   </nav>
 
-  <!-- 1. HERO -->
+  <!-- 1. HERO (WITH FAST-PACED VIDEO & ATMOSPHERE) -->
   <header class="hero-events" id="hero">
+    <video class="hero-events__video" autoplay muted loop playsinline preload="auto">
+      <source src="videos/events-hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-events__overlay"></div>
     <div class="wrap hero-events__inner">
       <div class="hero-live-pill">
         <span class="hero-live-pill__dot"></span>
         <span>Public Nights & Culture · Florentin, Tel Aviv</span>
       </div>
-      <h1>What's On at Ezra<br /><span class="gold">Music, Vinyl & Pop-Ups</span></h1>
+      <h1>What's On at Ezra<br /><span class="gold">Vinyl, Wood-Oven & Nightlife</span></h1>
       <p class="lead">
         Rare vinyl DJ sessions, album listening premieres, guest chef pop-ups from the wood-fired oven, live jazz and natural wine in an intimate bar in the heart of Florentin.
       </p>
       <div class="hero-ctas">
         <a class="btn btn--fill" href="#events">Explore Upcoming Lineup</a>
-        <a class="btn btn--outline" href="#schedule">View Live Weekly Schedule</a>
+        <a class="btn btn--outline" href="#schedule">Weekly Schedule & Hours</a>
       </div>
       <div class="today-status-strip" id="heroLiveStatus">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span id="heroLiveText">Connecting to Monday.com live feed...</span>
+        <span id="heroLiveText">Checking tonight's status...</span>
       </div>
     </div>
   </header>
 
-  <!-- 2. REAL-TIME MONDAY SCHEDULE -->
+  <!-- TICKER MARQUEE -->
+  <div class="ticker-strip" aria-hidden="true">
+    <div class="ticker-track">
+      <span>🔴 FLORENTIN TEL AVIV</span>
+      <span>✦</span>
+      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI & RARE VINYL</span>
+      <span>✦</span>
+      <span>🔥 WOOD-FIRED CHEF POP-UPS & NATURAL WINE</span>
+      <span>✦</span>
+      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
+      <span>✦</span>
+      <span>🎟️ FREE ENTRY ON A FIRST-COME BASIS</span>
+      <span>✦</span>
+      <span>🔴 FLORENTIN TEL AVIV</span>
+      <span>✦</span>
+      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI & RARE VINYL</span>
+      <span>✦</span>
+      <span>🔥 WOOD-FIRED CHEF POP-UPS & NATURAL WINE</span>
+      <span>✦</span>
+      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
+      <span>✦</span>
+    </div>
+  </div>
+
+  <!-- 2. REAL-TIME WEEKLY SCHEDULE -->
   <section class="section-soft" id="schedule">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Monday.com Live Sync</span>
-        <h2>This Week at Ezra · Live Schedule</h2>
+        <span class="eyebrow">Weekly Schedule · What's On</span>
+        <h2>Weekly Opening Hours & Nights</h2>
         <p>
-          Real-time synchronization with Ezra's booking management. Check when we're open to the public and when the venue is held for a private gathering.
+          Check when we're open to the public for vinyl sessions, natural wine and wood-fired dishes, and when the venue is held for a private gathering.
         </p>
       </div>
 
       <div class="schedule-box">
         <div class="schedule-top">
           <div class="schedule-top__info">
-            <h3>Weekly Availability & Public Nights</h3>
-            <p>Afternoon vs. Evening slots synced live with Monday</p>
+            <h3>Weekly Opening Hours</h3>
+            <p>Open to the public from 20:00 on public nights</p>
           </div>
           <div class="schedule-source-badge">
             <span class="schedule-source-badge__dot"></span>
-            <span>Live Monday Sync</span>
+            <span>Weekly Schedule</span>
           </div>
         </div>
 
         <div class="timeline-grid" id="weekGrid">
-          <!-- Rendered dynamically by JS with real Monday data -->
+          <!-- Rendered dynamically by JS with real availability -->
         </div>
       </div>
     </div>
@@ -1567,7 +1644,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            The weekly schedule on this page is synced in real time with Ezra's Monday.com booking system. Dates booked for private gatherings are clearly marked in red ("Private Event"), and open nights display operating hours and featured programs.
+            The weekly schedule on this page updates in real time. Dates booked for private gatherings are clearly marked in red ("Private Event"), and open nights display operating hours and featured programs.
           </div>
         </div>
 
@@ -1786,7 +1863,7 @@
 
           if (isToday && liveText) {
             if (hasEveningEvent || (isBooked && !hasAfternoonEvent)) {
-              liveText.innerHTML = `<strong>Tonight:</strong> Closed for Private Event (Monday.com sync)`;
+              liveText.innerHTML = `<strong>Tonight:</strong> Closed for Private Event`;
             } else {
               const openHour = (weeklyTheme[dow]?.hours || '20:00').split(' - ')[0];
               liveText.innerHTML = `<strong>Tonight:</strong> Open to public from ${openHour} · ${conceptTitle}`;
