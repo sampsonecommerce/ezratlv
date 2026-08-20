@@ -697,36 +697,33 @@
       color: var(--bg);
       border-color: var(--gold);
     }
-    .nav-arrow-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
+    /* Schedule Slider Container */
+    .schedule-slider-wrap {
+      position: relative;
+      width: 100%;
     }
-
-    /* Timeline Visual Grid */
     .timeline-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      transition: opacity 0.3s var(--ease);
+      display: flex;
+      gap: 1.35rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-block: 0.5rem 1.4rem;
+      padding-inline: 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
-    @media (min-width: 1200px) {
-      .timeline-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-    @media (max-width: 1199px) and (min-width: 860px) {
-      .timeline-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 859px) and (min-width: 560px) {
-      .timeline-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 559px) {
-      .timeline-grid { grid-template-columns: 1fr; }
-      .schedule-nav-bar { border-radius: 20px; justify-content: center; }
-      .schedule-weeks-tabs { width: 100%; justify-content: center; }
-      .schedule-nav-arrows { width: 100%; justify-content: center; }
+    .timeline-grid::-webkit-scrollbar {
+      display: none;
     }
 
-    /* Rich Visual Time Card */
+    /* Rich Visual Time Card (Slider Card) */
     .time-card {
+      flex: 0 0 320px;
+      width: 320px;
+      min-width: 320px;
+      scroll-snap-align: start;
       background: #130f0b;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 22px;
@@ -738,6 +735,13 @@
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
       text-align: start;
+    }
+    @media (max-width: 600px) {
+      .time-card {
+        flex: 0 0 285px;
+        width: 285px;
+        min-width: 285px;
+      }
     }
     .time-card:hover {
       transform: translateY(-6px);
@@ -1637,26 +1641,24 @@
 
         <div class="schedule-nav-bar">
           <div class="schedule-weeks-tabs" id="weekTabs">
-            <button class="week-tab-btn is-active" data-week="0" type="button">Current Week</button>
-            <button class="week-tab-btn" data-week="1" type="button">Next Week</button>
-            <button class="week-tab-btn" data-week="2" type="button">Week 3</button>
-            <button class="week-tab-btn" data-week="3" type="button">Week 4</button>
-            <button class="week-tab-btn" data-week="all" type="button">Full Month (30 Days) ✦</button>
+            <!-- Rendered dynamically with exact dates by JS -->
           </div>
           <div class="schedule-nav-arrows">
-            <button class="nav-arrow-btn" id="prevWeekBtn" type="button" aria-label="Previous week">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <button class="nav-arrow-btn" id="prevWeekBtn" type="button" aria-label="Previous days">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               <span>Prev</span>
             </button>
-            <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="Next week">
+            <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="Next days">
               <span>Next</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
         </div>
 
-        <div class="timeline-grid" id="weekGrid">
-          <!-- Rendered dynamically with 30 visual day cards by JS -->
+        <div class="schedule-slider-wrap">
+          <div class="timeline-grid" id="weekGrid">
+            <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
+          </div>
         </div>
       </div>
     </div>
@@ -2316,23 +2318,62 @@
         }
       }
 
+      function renderTabs() {
+        if (!weekTabs || allDaysData.length === 0) return;
+        weekTabs.innerHTML = '';
+
+        const weekRanges = [
+          { idx: 0, label: `This Week (${allDaysData[0].dateFormatted} - ${allDaysData[6].dateFormatted})` },
+          { idx: 1, label: `Week 2 (${allDaysData[7].dateFormatted} - ${allDaysData[13].dateFormatted})` },
+          { idx: 2, label: `Week 3 (${allDaysData[14].dateFormatted} - ${allDaysData[20].dateFormatted})` },
+          { idx: 3, label: `Week 4 (${allDaysData[21].dateFormatted} - ${allDaysData[27].dateFormatted})` }
+        ];
+
+        weekRanges.forEach(w => {
+          const btn = document.createElement('button');
+          btn.className = `week-tab-btn ${w.idx === currentView ? 'is-active' : ''}`;
+          btn.setAttribute('data-week', w.idx);
+          btn.type = 'button';
+          btn.textContent = w.label;
+
+          btn.addEventListener('click', () => {
+            currentView = w.idx;
+            updateTabState();
+            scrollToWeek(w.idx);
+          });
+
+          weekTabs.appendChild(btn);
+        });
+      }
+
+      function scrollToWeek(weekIdx) {
+        if (!weekGrid) return;
+        const targetIndex = weekIdx * 7;
+        const card = weekGrid.children[targetIndex];
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        }
+      }
+
+      function updateTabState() {
+        if (!weekTabs) return;
+        weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
+          const w = parseInt(btn.getAttribute('data-week'), 10);
+          btn.classList.toggle('is-active', w === currentView);
+        });
+      }
+
       function renderGrid() {
         if (!weekGrid) return;
         weekGrid.innerHTML = '';
 
-        let visibleDays = allDaysData;
-        if (currentView !== 'all') {
-          visibleDays = allDaysData.filter(d => d.weekIdx === currentView);
-          weekGrid.classList.remove('is-month-view');
-        } else {
-          weekGrid.classList.add('is-month-view');
-        }
-
-        visibleDays.forEach(item => {
+        allDaysData.forEach((item, idx) => {
           const card = document.createElement('article');
           card.className = `time-card ${item.isToday ? 'is-today' : ''}`;
           card.setAttribute('tabindex', '0');
           card.setAttribute('role', 'button');
+          card.setAttribute('data-index', idx);
+          card.setAttribute('data-week', item.weekIdx);
           card.setAttribute('aria-label', `${item.fullDateString} - ${item.title}`);
 
           const openHour = (item.hours || '20:00').split(' - ')[0].split(' ')[0];
@@ -2395,51 +2436,50 @@
           weekGrid.appendChild(card);
         });
 
-        updateNavControls();
+        renderTabs();
       }
 
-      function updateNavControls() {
-        if (weekTabs) {
-          weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
-            const w = btn.getAttribute('data-week');
-            const isActive = (w === 'all' && currentView === 'all') || (parseInt(w, 10) === currentView);
-            btn.classList.toggle('is-active', isActive);
-          });
-        }
-        if (prevWeekBtn && nextWeekBtn) {
-          if (currentView === 'all') {
-            prevWeekBtn.disabled = true;
-            nextWeekBtn.disabled = true;
-          } else {
-            prevWeekBtn.disabled = currentView <= 0;
-            nextWeekBtn.disabled = currentView >= 3;
-          }
-        }
-      }
-
-      if (weekTabs) {
-        weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const w = btn.getAttribute('data-week');
-            currentView = w === 'all' ? 'all' : parseInt(w, 10);
-            renderGrid();
-          });
-        });
-      }
-
+      // Slider scroll arrow buttons
       if (prevWeekBtn) {
         prevWeekBtn.addEventListener('click', () => {
-          if (currentView === 'all') currentView = 0;
-          else if (currentView > 0) currentView--;
-          renderGrid();
+          if (!weekGrid) return;
+          weekGrid.scrollBy({ left: -340, behavior: 'smooth' });
         });
       }
 
       if (nextWeekBtn) {
         nextWeekBtn.addEventListener('click', () => {
-          if (currentView === 'all') currentView = 1;
-          else if (currentView < 3) currentView++;
-          renderGrid();
+          if (!weekGrid) return;
+          weekGrid.scrollBy({ left: 340, behavior: 'smooth' });
+        });
+      }
+
+      // Sync active tab on scroll
+      let scrollTimer;
+      if (weekGrid) {
+        weekGrid.addEventListener('scroll', () => {
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(() => {
+            const cards = weekGrid.querySelectorAll('.time-card');
+            const gridRect = weekGrid.getBoundingClientRect();
+            let closestIdx = 0;
+            let minDiff = Infinity;
+
+            cards.forEach((c, idx) => {
+              const rect = c.getBoundingClientRect();
+              const diff = Math.abs(rect.left - gridRect.left);
+              if (diff < minDiff) {
+                minDiff = diff;
+                closestIdx = idx;
+              }
+            });
+
+            const newWeek = Math.floor(closestIdx / 7);
+            if (newWeek !== currentView && newWeek >= 0 && newWeek <= 3) {
+              currentView = newWeek;
+              updateTabState();
+            }
+          }, 100);
         });
       }
 
