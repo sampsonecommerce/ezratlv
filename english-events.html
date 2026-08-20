@@ -333,10 +333,11 @@
       }
       .nav__menu-link:hover { color: var(--gold); padding-inline-start: 0.35rem; }
 
+      /* Mobile CTA buttons: 3 columns side-by-side */
       .nav__menu-ctas {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.45rem;
         margin-block-start: 1.2rem;
       }
       .nav__menu-cta {
@@ -346,14 +347,16 @@
         width: 100%;
         min-height: 46px;
         border-radius: 50px;
-        font-size: 0.88rem;
+        font-size: 0.82rem;
         font-weight: 600;
+        letter-spacing: 0.01em;
         text-align: center;
-        padding-inline: 0.5rem;
+        padding-inline: 0.3rem;
       }
       .nav__menu-cta--full { grid-column: 1 / -1; }
       .nav__menu-cta--corp { color: var(--gold); border: 1.2px solid var(--gold); background: var(--gold-soft); }
       .nav__menu-cta--pill { color: var(--cream); border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
+      .nav__menu-cta--pill.is-active { color: var(--gold-light); border-color: var(--gold); background: rgba(196,154,60,0.18); }
       .nav__menu-cta--book {
         color: var(--bg);
         background: linear-gradient(110deg, var(--gold), #f5d98a);
@@ -1218,6 +1221,7 @@
       </a>
       <a class="nav__pill" href="english-index">Private Events</a>
       <a class="nav__corp" href="english-company-events">Company Events</a>
+      <a class="nav__pill is-active" href="english-events">Public Events</a>
       <a class="nav__cta" href="#schedule">Events Calendar</a>
     </div>
 
@@ -1233,6 +1237,7 @@
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--pill" href="english-index">Private Events</a>
         <a class="nav__menu-cta nav__menu-cta--corp" href="english-company-events">Company Events</a>
+        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="english-events">Public Events</a>
         <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full" href="#schedule">Events Calendar</a>
       </div>
     </div>
