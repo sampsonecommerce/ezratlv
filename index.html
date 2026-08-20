@@ -343,20 +343,29 @@
       .nav__menu-link:hover,
       .nav__menu-link:focus-visible { color: var(--gold); padding-inline-start: 0.35rem; outline: none; }
 
-      .nav__menu-ctas { display: flex; flex-direction: column; gap: 0.7rem; margin-block-start: 1.2rem; }
+      .nav__menu-ctas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+        margin-block-start: 1.2rem;
+      }
       .nav__menu-cta {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 100%;
-        min-height: 50px;
+        min-height: 48px;
         border-radius: 50px;
-        font-size: 0.95rem;
+        font-size: 0.88rem;
         font-weight: 600;
         letter-spacing: 0.02em;
+        text-align: center;
+        padding-inline: 0.5rem;
       }
+      .nav__menu-cta--pill { color: var(--cream); border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
       .nav__menu-cta--corp { color: var(--gold); border: 1.5px solid var(--gold); background: var(--gold-soft); }
       .nav__menu-cta--book {
+        grid-column: 1 / -1;
         color: var(--bg);
         background: linear-gradient(110deg, var(--gold), #f5d98a);
         box-shadow: 0 8px 22px rgba(196, 154, 60, 0.3);
@@ -1568,6 +1577,29 @@
       100% { background-position: 100% 50%; }
     }
 
+    .nav__pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1.15rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--cream-dim) !important;
+      border: 1px solid var(--line);
+      background: rgba(196, 154, 60, 0.05);
+      transition: color 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
+      white-space: nowrap;
+    }
+    .nav__pill::after { display: none !important; }
+    .nav__pill:hover {
+      color: var(--gold-light) !important;
+      border-color: var(--gold);
+      background: rgba(196, 154, 60, 0.15);
+      transform: translateY(-1px);
+    }
+
     /* Corporate events link - transparent outlined pill, same size as the CTA,
        made to stand out with a confident gold outline + pulsing glow */
     .nav__corp {
@@ -1870,6 +1902,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         EN
       </a>
+      <a class="nav__pill" href="events">אירועים פתוחים</a>
       <a class="nav__corp" href="company-events">אירועי חברה</a>
       <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
     </div>
@@ -1883,8 +1916,10 @@
       <a class="nav__menu-link" href="#menu">תפריט</a>
       <a class="nav__menu-link" href="#gallery">גלריה</a>
       <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
+      <a class="nav__menu-link" href="events">אירועים פתוחים</a>
       <a class="nav__menu-link" href="english-index" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
+        <a class="nav__menu-cta nav__menu-cta--pill" href="events">אירועים פתוחים</a>
         <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
         <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבדיקת זמינות</a>
       </div>
