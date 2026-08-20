@@ -338,29 +338,19 @@
       .nav__menu-link:hover,
       .nav__menu-link:focus-visible { color: var(--gold); padding-inline-start: 0.35rem; outline: none; }
 
-      .nav__menu-ctas {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.45rem;
-        margin-block-start: 1.2rem;
-      }
+      .nav__menu-ctas { display: flex; flex-direction: column; gap: 0.7rem; margin-block-start: 1.2rem; }
       .nav__menu-cta {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 100%;
-        min-height: 46px;
+        min-height: 50px;
         border-radius: 50px;
-        font-size: 0.82rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        letter-spacing: 0.01em;
-        text-align: center;
-        padding-inline: 0.3rem;
+        letter-spacing: 0.02em;
       }
-      .nav__menu-cta--pill { color: var(--cream); border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
-      .nav__menu-cta--pill.is-active { color: var(--gold-light); border-color: var(--gold); background: rgba(196,154,60,0.18); }
       .nav__menu-cta--corp { color: var(--gold); border: 1.5px solid var(--gold); background: var(--gold-soft); }
-      .nav__menu-cta--full { grid-column: 1 / -1; }
       .nav__menu-cta--book {
         color: var(--bg);
         background: linear-gradient(110deg, var(--gold), #f5d98a);
@@ -1572,33 +1562,27 @@
       100% { background-position: 100% 50%; }
     }
 
-    .nav__pill {
+    /* Corporate events link - transparent outlined pill, same size as the CTA,
+       made to stand out with a confident gold outline + pulsing glow */
+    .nav__corp {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.45rem 1.05rem;
+      padding: 0.5rem 1.25rem;
       border-radius: 50px;
-      font-size: 0.84rem;
+      font-size: 0.9rem;
       font-weight: 600;
       line-height: 1;
-      color: var(--cream-dim) !important;
-      border: 1px solid var(--line);
-      background: rgba(196, 154, 60, 0.05);
-      transition: all 0.25s var(--ease);
-      white-space: nowrap;
+      color: var(--gold) !important;
+      border: 1.5px solid var(--gold);
+      background: transparent;
+      transition: color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
+      animation: corpPulse 3s ease-in-out infinite;
     }
-    .nav__pill::after { display: none !important; }
-    .nav__pill:hover {
-      color: var(--cream) !important;
-      border-color: var(--gold);
-      background: rgba(196, 154, 60, 0.12);
-      transform: translateY(-1px);
-    }
-    .nav__pill.is-active {
-      color: var(--gold-light) !important;
-      border: 1.2px solid var(--gold) !important;
-      background: rgba(196, 154, 60, 0.2) !important;
-      box-shadow: 0 0 14px rgba(196, 154, 60, 0.25);
+    .nav__corp::after { display: none !important; }
+    .nav__corp:hover {
+      color: var(--bg) !important;
+      background: var(--gold);
       transform: translateY(-1px);
     }
     @keyframes corpPulse {
@@ -1878,9 +1862,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         HE
       </a>
-      <a class="nav__pill is-active" href="english-index">Private events</a>
-      <a class="nav__pill" href="english-company-events">Company events</a>
-      <a class="nav__pill" href="english-events">Public events</a>
+      <a class="nav__corp" href="english-company-events">Company events</a>
       <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
 
@@ -1892,13 +1874,10 @@
       <a class="nav__menu-link" href="#bar">The bar</a>
       <a class="nav__menu-link" href="#menu">Menu</a>
       <a class="nav__menu-link" href="#gallery">Gallery</a>
-      <a class="nav__menu-link" href="english-events">Public events</a>
       <a class="nav__menu-link" href="/" hreflang="he">Hebrew / HE</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="english-index">Private events</a>
-        <a class="nav__menu-cta nav__menu-cta--pill" href="english-company-events">Company events</a>
-        <a class="nav__menu-cta nav__menu-cta--pill" href="english-events">Public events</a>
-        <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
+        <a class="nav__menu-cta nav__menu-cta--corp" href="english-company-events">Company events</a>
+        <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
     </div>
   </nav>
