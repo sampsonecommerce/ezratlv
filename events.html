@@ -699,6 +699,7 @@
       background: var(--gold);
       color: var(--bg);
       border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(196, 154, 60, 0.4);
     }
     /* Schedule Slider Container */
     .schedule-slider-wrap {
@@ -707,12 +708,12 @@
     }
     .timeline-grid {
       display: flex;
-      gap: 1.35rem;
+      gap: 1.15rem;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding-block: 0.5rem 1.4rem;
+      padding-block: 0.5rem 1.2rem;
       padding-inline: 4px;
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -721,15 +722,52 @@
       display: none;
     }
 
-    /* Rich Visual Time Card (Slider Card) */
+    /* Slider Progress & Controls Indicator */
+    .slider-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem;
+      margin-block-start: 1rem;
+      padding-inline: 0.5rem;
+    }
+    .slider-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .slider-progress-bar__thumb {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 25%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(196, 154, 60, 0.6);
+      transition: width 0.2s ease, inset-inline-start 0.2s ease;
+    }
+    .slider-hint-text {
+      font-size: 0.78rem;
+      color: var(--cream-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+    }
+
+    /* Rich Visual Time Card (Slider Card - 4 across on Desktop) */
     .time-card {
-      flex: 0 0 320px;
-      width: 320px;
-      min-width: 320px;
+      flex: 0 0 calc((100% - (3 * 1.15rem)) / 4);
+      width: calc((100% - (3 * 1.15rem)) / 4);
+      min-width: 260px;
+      max-width: 310px;
       scroll-snap-align: start;
       background: #130f0b;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -739,11 +777,25 @@
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
       text-align: start;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 1100px) {
       .time-card {
-        flex: 0 0 285px;
-        width: 285px;
-        min-width: 285px;
+        flex: 0 0 calc((100% - (2 * 1.15rem)) / 3);
+        width: calc((100% - (2 * 1.15rem)) / 3);
+        min-width: 260px;
+      }
+    }
+    @media (max-width: 800px) {
+      .time-card {
+        flex: 0 0 calc((100% - 1.15rem) / 2);
+        width: calc((100% - 1.15rem) / 2);
+        min-width: 250px;
+      }
+    }
+    @media (max-width: 540px) {
+      .time-card {
+        flex: 0 0 280px;
+        width: 280px;
+        min-width: 280px;
       }
     }
     .time-card:hover {
@@ -838,91 +890,111 @@
     }
 
     .time-card__body {
-      padding: 1.1rem 1.15rem 1.25rem;
+      padding: 1rem 1.05rem 1.15rem;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 0.65rem;
     }
     .time-card__header {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
     }
     .time-card__dow {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--gold);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .time-card__title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 800;
       color: var(--cream);
       line-height: 1.3;
       margin: 0;
     }
     .time-card__lineup {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--cream-dim);
-      line-height: 1.4;
+      line-height: 1.35;
       margin: 0;
     }
-    .time-card__slots-bar {
+
+    /* 2-Row Daily Slot Grid (Afternoon & Evening) */
+    .time-card__slots-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 0.45rem 0.6rem;
+    }
+    .slot-row {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      flex-wrap: wrap;
-      margin-block: 0.2rem;
+      justify-content: space-between;
+      gap: 0.4rem;
     }
-    .slot-tag {
-      display: inline-flex;
+    .slot-row__time {
+      display: flex;
       align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 8px;
+      gap: 0.3rem;
       font-size: 0.72rem;
       font-weight: 700;
-      line-height: 1.2;
+      color: var(--cream-dim);
     }
-    .slot-tag__dot {
-      width: 6px;
-      height: 6px;
+    .slot-row__time-icon {
+      font-size: 0.78rem;
+    }
+    .slot-row__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      padding: 0.16rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .slot-row__dot {
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
+      background: currentColor;
     }
-    .slot-tag--open {
-      background: rgba(52, 211, 153, 0.1);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+    .slot-row--open .slot-row__badge {
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
       color: #34d399;
     }
-    .slot-tag--open .slot-tag__dot { background: #34d399; }
-    .slot-tag--busy {
-      background: rgba(248, 113, 113, 0.1);
-      border: 1px solid rgba(248, 113, 113, 0.3);
+    .slot-row--busy .slot-row__badge {
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.35);
       color: #f87171;
     }
-    .slot-tag--busy .slot-tag__dot { background: #f87171; }
-    .slot-tag--day {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--cream-dim);
+    .slot-row--day-free .slot-row__badge {
+      background: rgba(196, 154, 60, 0.12);
+      border: 1px solid rgba(196, 154, 60, 0.35);
+      color: var(--gold-light);
     }
 
     .time-card__footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-block-start: 0.75rem;
+      padding-block-start: 0.65rem;
       border-block-start: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--gold-light);
     }
     .time-card__footer svg {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       transition: transform 0.25s var(--ease);
     }
     .time-card:hover .time-card__footer svg {
@@ -1675,176 +1747,159 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               <span>קודם</span>
             </button>
-            <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="ימים הבאים">
-              <span>הבא</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="schedule-slider-wrap">
-          <div class="timeline-grid" id="weekGrid">
-            <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       3. UPCOMING EVENTS (TEDER-STYLE POSTER CARDS)
+            <!-- ============================================================
+       3. CURATED CONCEPT SERIES & RESIDENT VIBES
   ============================================================ -->
   <section id="events">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Lineup & Nights</span>
-        <h2>אירועים קרובים</h2>
+        <span class="eyebrow">Resident Series & Concepts · סדרות תוכן</span>
+        <h2>ליינים וקונספטים שבועיים בעזרא</h2>
         <p>
-          ערבי קונספט, תקליטים, הופעות וקולינריה. חלק מהאירועים בכניסה חופשית וחלקם בהזמנת מקום מראש.
+          מעבר ללוח התאריכים החודשי, עזרא מציע ארבע סדרות תוכן ייחודיות עם אופי מוזיקלי, קולינרי ואווירתי מוגדר. כל קונספט פתוח לקהל הרחב וניתן גם לסגירה כאירוע פרטי.
         </p>
       </div>
 
       <div class="events-nav-filter" id="eventsFilter">
         <button class="filter-btn is-active" data-filter="all" type="button">הכל</button>
-        <button class="filter-btn" data-filter="vinyl" type="button">ערבי תקליטים 🎧</button>
-        <button class="filter-btn" data-filter="food" type="button">פופ-אפ שפים 🍕</button>
-        <button class="filter-btn" data-filter="listening" type="button">השמעות אלבומים 🎙️</button>
-        <button class="filter-btn" data-filter="live" type="button">הופעות חיות 🎷</button>
-        <button class="filter-btn" data-filter="free" type="button">כניסה חופשית 🎟️</button>
+        <button class="filter-btn" data-filter="vinyl" type="button">📻 סלון תקליטים ו-Hi-Fi</button>
+        <button class="filter-btn" data-filter="food" type="button">🔥 פופ-אפ שפים מהטאבון</button>
+        <button class="filter-btn" data-filter="listening" type="button">🎙️ השמעות אלבומים</button>
+        <button class="filter-btn" data-filter="live" type="button">🎷 ג'אז חי והופעות</button>
       </div>
 
       <div class="teder-feed" id="eventsList">
-        <!-- Event 1: Vinyl Night -->
-        <article class="teder-card" data-category="vinyl free">
+        <!-- Series 1: Vinyl Night -->
+        <article class="teder-card" data-category="vinyl">
           <div class="teder-poster">
             <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="ערב תקליטים בעזרא" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--free">כניסה חופשית</span>
-              <span class="sticker sticker--vinyl">Vinyl Only · Funk & Soul</span>
+              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
+              <span class="time-card__badge time-card__badge--today">Vinyl Only · Funk & Soul</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">20.08</span>
-                <span class="day-name">· יום חמישי · 21:00 עד אחרון הלקוחות</span>
+                <span class="num">קבוע בימי חמישי</span>
+                <span class="day-name">· מ-21:00 עד אחרון הלקוחות</span>
               </div>
-              <h3 class="teder-title">Groove & Grapes · סשן תקליטי פאנק וסול נדירים</h3>
-              <p class="teder-lineup">בעמדה: DJ Amir Peled & Special Guests</p>
+              <h3 class="teder-title">Groove & Grapes · סלון תקליטי פאנק וסול נדירים</h3>
+              <p class="teder-lineup">סלקטורים מתחלפים · תקליטי 70s-80s מקוריים במערכת Hi-Fi אנלוגית</p>
               <p class="teder-desc">
-                סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי. הכניסה חופשית על בסיס מקום פנוי.
+                סשן תקליטים אנלוגי מוקפד באווירת סלון תל אביבי אינטימי. פתיחת בקבוקי יין טבעי נבחרים, מנות חמות ומדויקות מהטאבון, וגרוב עמוק שממלא את החלל.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
                 <span>📍 אברבנאל 38, פלורנטין</span>
-                <span>🍷 יין טבעי & קוקטיילים</span>
+                <span>🍷 יין טבעי & סאונד אנלוגי</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="1" type="button">פרטים מלאים</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="ערב תקליטים בעזרא" data-url="https://ezratlv.com/events#event-1" type="button">שיתוף</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="1" type="button">שריון שולחן לערב הקרוב</button>
+                <a class="btn btn--outline btn--sm" href="/#contact">סגירת אירוע פרטי בקונספט זה</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 2: Chef Pop-Up -->
-        <article class="teder-card" data-category="food rsvp">
+        <!-- Series 2: Chef Pop-Up -->
+        <article class="teder-card" data-category="food">
           <div class="teder-poster">
             <img src="images/FOOD ENVIRONMENT.jpg" alt="פופ אפ שף מהטאבון בעזרא" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--rsvp">בהזמנת מקום</span>
-              <span class="sticker sticker--food">טאבון שף לוהט 🍕</span>
+              <span class="time-card__badge time-card__badge--rsvp">בהזמנת מקום</span>
+              <span class="time-card__badge time-card__badge--today">טאבון שף לוהט 🍕</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">24.08</span>
-                <span class="day-name">· יום שני · שני סבבים: 19:30 | 22:00</span>
+                <span class="num">קבוע בימי שני</span>
+                <span class="day-name">· שני סבבים: 19:30 | 22:00</span>
               </div>
-              <h3 class="teder-title">Fire & Dough · פופ-אפ שף אורח מהטאבון</h3>
-              <p class="teder-lineup">שף אורח: איתי לב (לשעבר פרא / הבסטה) & קוקטיילים מותאמים</p>
+              <h3 class="teder-title">Fire & Dough · פופ-אפ שפים אורחים מהטאבון</h3>
+              <p class="teder-lineup">שפים אורחים ממיטב המסעדות & קוקטיילים מותאמים אישית</p>
               <p class="teder-desc">
-                תפריט ספיישלים ייחודי מהטאבון: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים בשמן זית ומלח ים, ירקות עונתיים חרוכים בגחלים וקוקטיילים שנרקחו במיוחד לערב זה. מספר המקומות מוגבל ל-45 סועדים.
+                תפריט ספיישלים עונתי ייחודי מהטאבון הלוהט: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות עונתיים חרוכים בגחלים וקוקטיילים שנרקחו במיוחד.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🔥 טאבון אבן</span>
-                <span>🍸 Pairing קוקטיילים</span>
+                <span>🔥 טאבון אבן לוהט</span>
+                <span>🍸 Cocktail Pairing</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="2" type="button">שריון מקום מראש</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="פופ-אפ שף בעזרא" data-url="https://ezratlv.com/events#event-2" type="button">שיתוף</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="2" type="button">שריון מקום לפופ-אפ הבא</button>
+                <a class="btn btn--outline btn--sm" href="/#contact">סגירת אירוע שף פרטי</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 3: Album Listening Session -->
-        <article class="teder-card" data-category="listening free">
+        <!-- Series 3: Album Listening Session -->
+        <article class="teder-card" data-category="listening">
           <div class="teder-poster">
             <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="השמעת אלבום בעזרא" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--free">כניסה חופשית</span>
-              <span class="sticker sticker--listen">Hi-Fi Audio Premiere 🎙️</span>
+              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
+              <span class="time-card__badge time-card__badge--today">Hi-Fi Audio Premiere 🎙️</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">26.08</span>
-                <span class="day-name">· יום רביעי · 20:30 (האזנה מרוכזת ב-21:30)</span>
+                <span class="num">קבוע בימי רביעי</span>
+                <span class="day-name">· מ-20:30 (האזנה מרוכזת ב-21:30)</span>
               </div>
-              <h3 class="teder-title">Night Sessions · השמעת בכורה לאלבום חדש</h3>
+              <h3 class="teder-title">Night Sessions · השמעות בכורה וסשן האזנה לאלבומים</h3>
               <p class="teder-lineup">האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא + שיחה עם היוצרים</p>
               <p class="teder-desc">
-                חוויית האזנה מרוכזת באיכות סאונד אנלוגית עמוקה, תאורה עמומה ומשקאות מותאמים. לאחר ההשמעה שיחה פתוחה וסשן שאלות-תשובות עם האמנים והמפיקים.
+                חוויית האזנה מרוכזת באיכות סאונד אנלוגית עמוקה, תאורה עמומה ומשקאות מותאמים. לאחר ההשמעה מתקיים סשן שאלות-תשובות ושיחה פתוחה עם האמנים והמפיקים.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🔊 מערכת סאונד מותאמת</span>
-                <span>🍷 כניסה חופשית</span>
+                <span>🔊 מערכת Hi-Fi אנלוגית</span>
+                <span>🎙️ שיחה עם יוצרים</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="3" type="button">פרטי האירוע</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="השמעת אלבום בעזרא" data-url="https://ezratlv.com/events#event-3" type="button">שיתוף</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="3" type="button">פרטי המפגש הקרוב</button>
+                <a class="btn btn--outline btn--sm" href="/#contact">אירוע השקה / השמעה פרטית</a>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- Event 4: Live Jazz Trio -->
-        <article class="teder-card" data-category="live rsvp">
+        <!-- Series 4: Live Jazz Trio -->
+        <article class="teder-card" data-category="live">
           <div class="teder-poster">
             <img src="images/MOMENT 1.jpg" alt="הופעת ג'אז חיה בעזרא" loading="lazy" />
             <div class="teder-stickers">
-              <span class="sticker sticker--rsvp">מומלץ להזמין מקום</span>
-              <span class="sticker sticker--live">Live Jazz Trio 🎷</span>
+              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
+              <span class="time-card__badge time-card__badge--today">Live Jazz Trio 🎷</span>
             </div>
           </div>
           <div class="teder-content">
             <div>
               <div class="teder-date-badge">
-                <span class="num">29.08</span>
-                <span class="day-name">· מוצ״ש · 21:00</span>
+                <span class="num">קבוע במוצ״ש</span>
+                <span class="day-name">· מ-21:00</span>
               </div>
               <h3 class="teder-title">Florentin Jazz Hang · טריו ג'אז חי על הבר</h3>
               <p class="teder-lineup">פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי</p>
               <p class="teder-desc">
-                סשן ג'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין. מומלץ להקדים כדי לתפוס מקום ליד הבר.
+                סשן ג'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין. מומלץ להקדים כדי לתפוס מקום סביב הבר.
               </p>
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🎷 לייב טריו</span>
+                <span>🎷 לייב טריו ואלתורים</span>
                 <span>🍸 קוקטיילים קלאסיים</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-modal-open" data-event="4" type="button">שריון מקום מראש</button>
-                <button class="btn btn--outline btn--sm js-share" data-title="ג'אז חי בעזרא" data-url="https://ezratlv.com/events#event-4" type="button">שיתוף</button>
+                <button class="btn btn--fill btn--sm js-modal-open" data-event="4" type="button">שריון מקום על הבר</button>
+                <a class="btn btn--outline btn--sm" href="/#contact">אירוע ג'אז חי פרטי</a>
               </div>
             </div>
           </div>
@@ -2079,32 +2134,38 @@
         </div>
         <div class="modal-body">
           <div class="modal-tags" id="modalTags">
-            <span class="sticker sticker--free" id="modalBadge">כניסה חופשית</span>
-            <span class="sticker sticker--vinyl" id="modalDateTag">חמישי 20.08</span>
+            <span class="time-card__badge time-card__badge--free" id="modalBadge">כניסה חופשית</span>
+            <span class="time-card__date-pill" id="modalDateTag">חמישי 20.08</span>
           </div>
           <h3 id="modalTitle">שם האירוע</h3>
           <p class="teder-lineup" id="modalLineup">ליינאפ ואמנים</p>
           <p class="modal-desc" id="modalDesc">פירוט האירוע...</p>
 
           <div class="rsvp-form" id="modalRsvp">
-            <h4 id="rsvpTitle">שריון מקום מהיר לאירוע</h4>
+            <h4 id="rsvpTitle">✦ שריון מקום מהיר</h4>
             <form id="rsvpFormEl">
               <div class="rsvp-fields">
                 <input class="rsvp-input" type="text" id="rsvpName" placeholder="שם מלא *" required />
                 <input class="rsvp-input" type="tel" id="rsvpPhone" placeholder="טלפון נייד *" required />
-                <input class="rsvp-input" type="number" id="rsvpGuests" placeholder="מספר אנשים (1-10)" min="1" max="10" value="2" required />
+                <input class="rsvp-input" type="number" id="rsvpGuests" placeholder="כמות אורחים (1-10)" min="1" max="10" value="2" required />
                 <input class="rsvp-input" type="text" id="rsvpNote" placeholder="הערות או העדפת הושבה" />
               </div>
-              <button class="btn btn--fill rsvp-submit" type="submit">אישור ושליחה לוואטסאפ</button>
+              <button class="btn btn--fill rsvp-submit" type="submit">
+                <span>אישור ושריון מקום בוואטסאפ</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+              </button>
             </form>
           </div>
 
-          <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.2rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 16px; text-align: center;">
-            <h4 style="color: var(--gold-light); font-size: 1.05rem; font-weight: 800; margin-block-end: 0.4rem;">המקום סגור הערב לאירוע פרטי</h4>
-            <p style="font-size: 0.85rem; color: var(--cream-dim); margin-block-end: 1rem; line-height: 1.5;">מעוניינים לחגוג יום הולדת, חתונה אינטימית או אירוע חברה בעזרא? נשמח להתאים לכם אירוע בלתי נשכח באחד התאריכים הפנויים.</p>
-            <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
-              <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%A1%D7%92%D7%99%D7%A8%D7%AA%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99" target="_blank" rel="noopener">בדיקת תאריכים בוואטסאפ</a>
-              <a class="btn btn--outline btn--sm" href="/">פרטים על אירועים פרטיים</a>
+          <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.3rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 18px; text-align: center;">
+            <h4 style="color: var(--gold-light); font-size: 1.1rem; font-weight: 800; margin-block-end: 0.4rem;">המקום סגור הערב לאירוע פרטי</h4>
+            <p style="font-size: 0.88rem; color: var(--cream-dim); margin-block-end: 1.1rem; line-height: 1.6;">מעוניינים לחגוג יום הולדת, חתונה אינטימית או אירוע חברה בעזרא? נשמח להתאים לכם אירוע בלתי נשכח באחד התאריכים הפנויים.</p>
+            <div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;">
+              <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%A1%D7%92%D7%99%D7%A8%D7%AA%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99" target="_blank" rel="noopener">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+                <span>בדיקת תאריכים בוואטסאפ</span>
+              </a>
+              <a class="btn btn--outline btn--sm" href="/#contact">השאירו פרטים ונחזור אליכם</a>
             </div>
           </div>
         </div>
@@ -2431,11 +2492,13 @@
             badgeHtml = `<span class="time-card__badge time-card__badge--today">✦ הערב בעזרא</span>`;
           }
 
-          let eveningSlotText = item.isClosedEvening ? 'ערב: אירוע סגור' : `ערב: פתוח לקהל (${openHour})`;
-          let eveningSlotClass = item.isClosedEvening ? 'slot-tag--busy' : 'slot-tag--open';
+          let afternoonRow = item.hasAfternoonEvent
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
+            : `<div class="slot-row slot-row--day-free"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע</span></div>`;
 
-          let afternoonSlotText = item.hasAfternoonEvent ? 'צהריים: אירוע פרטי' : 'צהריים: פנוי לאירוע';
-          let afternoonSlotClass = item.hasAfternoonEvent ? 'slot-tag--busy' : 'slot-tag--day';
+          let eveningRow = item.isClosedEvening
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
+            : `<div class="slot-row slot-row--open"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -2452,14 +2515,9 @@
                 <h4 class="time-card__title">${item.title}</h4>
               </div>
               <p class="time-card__lineup">${item.lineup}</p>
-              <div class="time-card__slots-bar">
-                <span class="slot-tag ${eveningSlotClass}">
-                  <span class="slot-tag__dot"></span>
-                  <span>${eveningSlotText}</span>
-                </span>
-                <span class="slot-tag ${afternoonSlotClass}">
-                  <span>${afternoonSlotText}</span>
-                </span>
+              <div class="time-card__slots-grid">
+                ${afternoonRow}
+                ${eveningRow}
               </div>
               <div class="time-card__footer">
                 <span>${item.isClosedEvening ? 'פרטים על אירועים פרטיים' : 'לפרטים ושריון מקום'}</span>
@@ -2485,27 +2543,43 @@
         });
 
         renderTabs();
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const progressThumb = document.getElementById('scheduleProgressThumb');
+        if (!progressThumb || !weekGrid) return;
+        const maxScroll = weekGrid.scrollWidth - weekGrid.clientWidth;
+        if (maxScroll > 0) {
+          const scrollPos = Math.abs(weekGrid.scrollLeft);
+          const fraction = Math.min(1, Math.max(0, scrollPos / maxScroll));
+          const maxShift = 75; // 100% - 25% thumb width
+          progressThumb.style.insetInlineStart = (fraction * maxShift) + '%';
+        }
       }
 
       // Slider scroll arrow buttons
       if (prevWeekBtn) {
         prevWeekBtn.addEventListener('click', () => {
           if (!weekGrid) return;
-          weekGrid.scrollBy({ left: 340, behavior: 'smooth' });
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: (cardW + 18) * 2, behavior: 'smooth' });
         });
       }
 
       if (nextWeekBtn) {
         nextWeekBtn.addEventListener('click', () => {
           if (!weekGrid) return;
-          weekGrid.scrollBy({ left: -340, behavior: 'smooth' });
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: -(cardW + 18) * 2, behavior: 'smooth' });
         });
       }
 
-      // Sync active tab on scroll
+      // Sync active tab & progress on scroll
       let scrollTimer;
       if (weekGrid) {
         weekGrid.addEventListener('scroll', () => {
+          updateProgress();
           clearTimeout(scrollTimer);
           scrollTimer = setTimeout(() => {
             const cards = weekGrid.querySelectorAll('.time-card');
@@ -2528,7 +2602,7 @@
               updateTabState();
             }
           }, 100);
-        });
+        }, { passive: true });
       }
 
       function loadAvailability() {
