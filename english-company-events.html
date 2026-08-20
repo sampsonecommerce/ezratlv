@@ -80,8 +80,8 @@
   </script>
   <!-- End Microsoft Clarity -->
 
-  <title>Company Events at Ezra | Private Bar Space in Florentin</title>
-  <meta name="description" content="A team event with a young vibe and almost nothing for you to manage. A private bar space in Florentin for team-bonding days and department events." />
+  <title>Company Events at Ezra | Small Company Event Venue in Tel Aviv, up to 50</title>
+  <meta name="description" content="A venue for a small company event in Tel Aviv: a private bar space in Florentin for up to 50 guests - team-bonding days, team evenings and department events. Final price, book online." />
   <link rel="canonical" href="https://ezratlv.com/english-company-events" />
   <link rel="alternate" hreflang="he" href="https://ezratlv.com/company-events" />
   <link rel="alternate" hreflang="en" href="https://ezratlv.com/english-company-events" />
@@ -3268,6 +3268,21 @@
   <!-- ============================================================
        GALLERY
   ============================================================ -->
+  <section id="small-company-events">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">Exactly your size</span>
+        <h2>A venue for a small company event in Tel Aviv</h2>
+        <div class="divider divider--center"></div>
+      </div>
+      <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto;line-height:1.85;text-align:center">
+        A company of 20 to 50 people falls between the cracks: too small for a hall,
+        too big for a restaurant. Ezra is built for exactly this size - a private bar
+        closed for one evening for your company alone, with food, bar and production
+        included in one per-person price.
+      </p>
+    </div>
+  </section>
   <section class="section-soft" id="gallery">
     <div class="wrap center">
       <div class="sec-head reveal">
@@ -6104,7 +6119,7 @@
       };
       window.addEventListener('message', e => {
         if (e.data && e.data.ezra === 'closeV2') window.closeV2();
-        // callback / "talk to sales" lead — same Ads conversion (equal-value lead), no URL change
+        // callback / "talk to sales" lead - same Ads conversion (equal-value lead), no URL change
         else if (e.data && e.data.ezra === 'lead') {
           if (window.gtag) gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', currency: 'ILS' });
         }
@@ -6113,7 +6128,7 @@
             history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
             if (window.gtag) {
               gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
-              // Google Ads booking conversion — same action/label as the Hebrew flow; fires on a real booking only.
+              // Google Ads booking conversion - same action/label as the Hebrew flow; fires on a real booking only.
               gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', value: (e.data.value || 0), currency: 'ILS' });
             }
           } catch(err) {}

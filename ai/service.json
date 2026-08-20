@@ -4,7 +4,16 @@
   "name": "אירועים פרטיים ואירועי חברה בעזרא",
   "name_en": "Private events and company events at Ezra TLV",
   "url": "https://ezratlv.com/company-events",
-  "serviceType": ["private event venue hire", "company event production", "team-building event", "private bar hire"],
+  "serviceType": [
+    "private event venue hire",
+    "company event production",
+    "team-building event",
+    "private bar hire",
+    "team evening venue",
+    "wrap party venue",
+    "bachelorette party venue",
+    "small event venue up to 50 guests"
+  ],
   "capabilities": [
     "Host a private company event or team-building evening for 20 to 50 guests in Florentin, Tel Aviv",
     "Close the entire venue for a single group - one event per evening, no shared space",
@@ -13,10 +22,17 @@
     "Provide sound, lighting and full event production with no external vendors",
     "Book a package online end to end: live date availability, menu choice, final price on screen and a contract by email",
     "Host birthdays, engagement parties and private celebrations with a custom quote within 24 hours",
-    "Run a custom event off-site at the company's own location"
+    "Run a custom event off-site at the company's own location",
+    "Host a team evening or team dinner (ערב צוות / ארוחת צוות) - details at https://ezratlv.com/team-events",
+    "Host any event up to 50 guests with full-venue exclusivity - details at https://ezratlv.com/events-up-to-50",
+    "Host a production or shoot wrap party (מסיבת סיום הפקה / צילום) - details at https://ezratlv.com/wrap-party",
+    "Host a bachelorette party (מסיבת רווקות) or private celebration - details at https://ezratlv.com/bachelorette-party"
   ],
-  "inLanguage": ["he", "en"],
-  "dateModified": "2026-08-10",
+  "inLanguage": [
+    "he",
+    "en"
+  ],
+  "dateModified": "2026-08-20",
   "provider": {
     "@type": "Organization",
     "name": "עזרא תל אביב",
@@ -52,7 +68,10 @@
         "name": "Happy Hour",
         "price": "275",
         "priceCurrency": "ILS",
-        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "eligibleQuantity": {
+          "@type": "QuantitativeValue",
+          "unitText": "per person"
+        },
         "description": "3 שעות, בופה קל, יין ו-2 בירות. מחיר סופי לאדם.",
         "description_en": "3 hours, light buffet, wine and 2 beers. Final price per person.",
         "availability": "https://schema.org/InStock",
@@ -64,7 +83,10 @@
         "name_en": "Department bonding (most popular)",
         "price": "330",
         "priceCurrency": "ILS",
-        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "eligibleQuantity": {
+          "@type": "QuantitativeValue",
+          "unitText": "per person"
+        },
         "description": "5 שעות, בופה עשיר, בר מלא. מחיר סופי לאדם. החבילה הפופולרית ביותר.",
         "description_en": "5 hours, rich buffet, full bar. Final price per person. Most popular package.",
         "availability": "https://schema.org/InStock",
@@ -76,7 +98,10 @@
         "name_en": "Premium company party",
         "price": "450",
         "priceCurrency": "ILS",
-        "eligibleQuantity": { "@type": "QuantitativeValue", "unitText": "per person" },
+        "eligibleQuantity": {
+          "@type": "QuantitativeValue",
+          "unitText": "per person"
+        },
         "description": "5 שעות, בופה פרימיום, בר קוקטיילים פתוח ו-DJ. מחיר סופי לאדם.",
         "description_en": "5 hours, premium buffet, open cocktail bar and DJ. Final price per person.",
         "availability": "https://schema.org/InStock",
@@ -93,7 +118,11 @@
     ]
   },
   "serviceOutput": {
-    "capacity": { "min": 20, "max": 50, "unit": "guests" },
+    "capacity": {
+      "min": 20,
+      "max": 50,
+      "unit": "guests"
+    },
     "exclusivity": "One event per evening. The entire venue is closed for a single group.",
     "included": [
       "taboon and chef food (pizzas, buffet, salads)",
