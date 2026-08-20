@@ -80,8 +80,8 @@
   </script>
   <!-- End Microsoft Clarity -->
 
-  <title>אירועי חברה בעזרא | חלל בר פרטי בפלורנטין</title>
-  <meta name="description" content="אירוע חברה באווירה צעירה, במינימום התעסקות. חלל בר פרטי בפלורנטין לימי גיבוש ואירועי מחלקה." />
+  <title>אירועי חברה בעזרא | מקום לאירוע חברה בתל אביב, עד 50 איש</title>
+  <meta name="description" content="מקום לאירוע חברה קטן בתל אביב: חלל בר פרטי בפלורנטין עד 50 איש, לימי גיבוש, ערבי צוות ואירועי מחלקה. מחיר סופי וסגירה אונליין." />
   <link rel="canonical" href="https://ezratlv.com/company-events" />
   <link rel="alternate" hreflang="he" href="https://ezratlv.com/company-events" />
   <link rel="alternate" hreflang="en" href="https://ezratlv.com/english-company-events" />
@@ -1790,7 +1790,7 @@
       opacity: 0; transform: translateY(-3px); pointer-events: none; transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
     }
     .book-save:hover .book-save__note, .book-save input:focus-visible ~ .book-save__note { opacity: 1; transform: translateY(0); }
-    /* "saved successfully" confirmation — a small box that drops below the save toggle (no longer cut off) */
+    /* "saved successfully" confirmation - a small box that drops below the save toggle (no longer cut off) */
     .book-saved {
       position: absolute; inset-block-start: calc(100% + 0.5rem); inset-inline-start: 0; z-index: 30;
       display: inline-flex; align-items: center; gap: 0.32rem; white-space: nowrap;
@@ -3386,6 +3386,26 @@
     #faq .faq-item[open] summary::after { transform: rotate(45deg); }
     #faq .faq-item__body { color: var(--cream-dim); line-height: 1.85; padding: 0 0 1.2rem; font-size: 1rem; }
   </style>
+  <section id="small-company-events">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">בדיוק בגודל שלכם</span>
+        <h2>מקום לאירוע חברה קטן בתל אביב</h2>
+        <div class="divider divider--center"></div>
+      </div>
+      <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto 1.2rem;line-height:1.85;text-align:center">
+        חברה של 20 עד 50 איש נופלת בין הכיסאות: קטנה מדי לאולם, גדולה מדי למסעדה.
+        עזרא בנוי בדיוק לגודל הזה - בר פרטי שנסגר לערב אחד עבור החברה שלכם בלבד,
+        עם אוכל, בר והפקה כלולים במחיר אחד לאדם.
+      </p>
+      <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto;line-height:1.85;text-align:center">
+        מתלבטים על הפורמט? יש לנו עמודים עם כל הפרטים על
+        <a href="team-events" style="color:var(--gold-light)">ערב צוות</a>,
+        <a href="events-up-to-50" style="color:var(--gold-light)">אירוע עד 50 איש</a>
+        ו<a href="wrap-party" style="color:var(--gold-light)">מסיבת סיום הפקה</a>.
+      </p>
+    </div>
+  </section>
   <section id="faq">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -6026,7 +6046,7 @@
       // the popup asks to close (its X button) via postMessage, or confirms a completed booking
       window.addEventListener('message', e => {
         if (e.data && e.data.ezra === 'closeV2') window.closeV2();
-        // callback / "talk to sales" lead — same Ads conversion (equal-value lead), no URL change
+        // callback / "talk to sales" lead - same Ads conversion (equal-value lead), no URL change
         else if (e.data && e.data.ezra === 'lead') {
           if (window.gtag) gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', currency: 'ILS' });
         }
@@ -6035,7 +6055,7 @@
             history.pushState(null, '', CONFIRM_PATH + location.search);   // keep any UTM query on the confirmation URL
             if (window.gtag) {
               gtag('event', 'page_view', { page_location: location.href, page_path: CONFIRM_PATH });
-              // Google Ads booking conversion — fires only on a completed booking. Label from the
+              // Google Ads booking conversion - fires only on a completed booking. Label from the
               // "Submit lead form (1)" / Company Events Booking action (Ads → Goals → Conversions).
               gtag('event', 'conversion', { send_to: 'AW-18310736783/6WsZCKel288cEI_XnptE', value: (e.data.value || 0), currency: 'ILS' });
             }
