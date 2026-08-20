@@ -1198,43 +1198,140 @@
       margin-block-end: 1.8rem;
     }
 
+    /* Vinyl record realistic 3D continuous animation */
     .vinyl-visual {
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      padding: 1.5rem;
+      perspective: 800px;
     }
     .vinyl-disc {
-      width: 240px;
-      height: 240px;
+      width: 250px;
+      height: 250px;
       border-radius: 50%;
-      background: radial-gradient(circle, #050403 35%, #181512 40%, #0c0a08 60%, #1f1a14 75%, #050403 100%);
-      border: 3px solid #332a1f;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      background:
+        radial-gradient(circle at center, transparent 38%, rgba(0,0,0,0.85) 39%, rgba(0,0,0,0.85) 100%),
+        repeating-radial-gradient(circle at center, #0a0806 0, #0a0806 2px, #1f1a14 3px, #0a0806 4px);
+      border: 3px solid #2a2218;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.9), 0 0 30px rgba(196,154,60,0.15), inset 0 0 10px rgba(0,0,0,0.9);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: spinVinyl 14s linear infinite;
+      animation: spinVinyl 6s linear infinite;
+      will-change: transform;
     }
+    /* Rotating light reflection sheen */
     .vinyl-disc::before {
       content: '';
       position: absolute;
-      width: 80px;
-      height: 80px;
+      inset: 0;
       border-radius: 50%;
-      background: var(--gold);
-      border: 4px solid var(--bg);
+      background: conic-gradient(
+        from 30deg at 50% 50%,
+        rgba(255, 255, 255, 0.0) 0deg,
+        rgba(255, 255, 255, 0.14) 45deg,
+        rgba(255, 255, 255, 0.0) 90deg,
+        rgba(255, 255, 255, 0.0) 180deg,
+        rgba(255, 255, 255, 0.14) 225deg,
+        rgba(255, 255, 255, 0.0) 270deg,
+        rgba(255, 255, 255, 0.0) 360deg
+      );
+      pointer-events: none;
     }
-    .vinyl-disc::after {
-      content: '';
+    /* Record Center Label */
+    .vinyl-label {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #e5c158 0%, #c49a3c 55%, #8c6a21 100%);
+      border: 3px solid #110e0a;
+      box-shadow: 0 0 8px rgba(0,0,0,0.7), inset 0 0 6px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      color: #110e0a;
+      text-align: center;
+      user-select: none;
+    }
+    .vinyl-label__brand {
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      margin-block-end: 0.15rem;
+    }
+    .vinyl-label__sub {
+      font-size: 0.42rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
+      text-transform: uppercase;
+    }
+    .vinyl-hole {
       position: absolute;
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: #fff;
+      background: #080604;
+      border: 2px solid rgba(255,255,255,0.4);
+      box-shadow: inset 0 0 4px #000;
     }
+
+    /* Tonearm */
+    .vinyl-arm {
+      position: absolute;
+      inset-inline-end: 10px;
+      inset-block-start: 10px;
+      width: 80px;
+      height: 110px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .vinyl-arm::before {
+      content: '';
+      position: absolute;
+      inset-inline-end: 15px;
+      inset-block-start: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #888, #333);
+      border: 2px solid #555;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+    .vinyl-arm::after {
+      content: '';
+      position: absolute;
+      inset-inline-end: 24px;
+      inset-block-start: 12px;
+      width: 4px;
+      height: 95px;
+      background: linear-gradient(to bottom, #aaa, #666);
+      transform-origin: top center;
+      transform: rotate(-25deg);
+      border-radius: 2px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    }
+    .vinyl-arm__head {
+      position: absolute;
+      inset-inline-end: 56px;
+      inset-block-start: 86px;
+      width: 14px;
+      height: 22px;
+      background: #c49a3c;
+      border-radius: 3px;
+      transform: rotate(-15deg);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
     @keyframes spinVinyl {
+      0%   { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
@@ -1345,21 +1442,46 @@
     .pills-row {
       display: flex;
       justify-content: center;
-      gap: clamp(0.6rem, 2vw, 1rem);
+      gap: clamp(0.7rem, 2vw, 1.1rem);
       flex-wrap: wrap;
-      margin-block-end: 2.2rem;
+      margin-block-end: 2.5rem;
     }
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1.2rem;
-      border-radius: 50px;
-      font-size: 0.86rem;
-      font-weight: 600;
+      gap: 0;
+      padding: 0.55rem 1.15rem;
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 500;
       color: var(--cream);
-      background: rgba(255,255,255,0.03);
+      background: rgba(196,154,60,0.07);
       border: 1px solid var(--line);
+      transition: border-color 0.4s var(--ease), background 0.4s var(--ease), transform 0.3s var(--ease);
+    }
+    .pill:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .pill__check {
+      width: 0;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--gold);
+      opacity: 0;
+      transform: scale(0.4);
+      margin-inline-end: 0;
+      transition: opacity 0.4s var(--ease), transform 0.45s var(--ease), width 0.4s var(--ease), margin-inline-end 0.4s var(--ease);
+    }
+    .pill.is-checked {
+      border-color: rgba(196,154,60,0.5);
+      background: rgba(196,154,60,0.13);
+    }
+    .pill.is-checked .pill__check {
+      width: 18px;
+      opacity: 1;
+      transform: scale(1);
+      margin-inline-end: 0.5rem;
     }
     .pill svg {
       width: 16px;
@@ -2035,8 +2157,8 @@
                 <span>🌿 Calm Community Vibe</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Rom's Tea House" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Rom's Tea House" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2069,8 +2191,8 @@
                 <span>🎷 Warm Room Acoustics</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Live Music / Band" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Live Music / Band" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2103,8 +2225,8 @@
                 <span>🍕 Guest Chefs</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Chef Pop-Up" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Chef Pop-Up" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2137,8 +2259,8 @@
                 <span>🎙️ Artist Conversation</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Album Listening / Vinyl" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Album Listening / Vinyl" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2171,8 +2293,8 @@
                 <span>✍️ Poetry & Spoken Word</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Open Mic" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Open Mic" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2205,8 +2327,8 @@
                 <span>🍸 Seasonal Mixology</span>
               </div>
               <div class="teder-actions">
-                <button class="btn btn--fill btn--sm js-open-contact" data-event-type="Wine / Cocktail Night" type="button">Propose a Collab / Event</button>
-                <a class="btn btn--outline btn--sm" href="#schedule">View Upcoming Dates</a>
+                <a class="btn btn--fill btn--sm" href="#schedule">View Upcoming Dates</a>
+                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="Wine / Cocktail Night" type="button">Leave Details for an Event</button>
               </div>
             </div>
           </div>
@@ -2228,7 +2350,16 @@
           <a class="btn btn--fill" href="#events">Check Upcoming Lineup</a>
         </div>
         <div class="vinyl-visual">
-          <div class="vinyl-disc"></div>
+          <div class="vinyl-disc">
+            <div class="vinyl-label">
+              <span class="vinyl-label__brand">EZRA</span>
+              <span class="vinyl-label__sub">33⅓ RPM · TLV</span>
+              <div class="vinyl-hole"></div>
+            </div>
+          </div>
+          <div class="vinyl-arm">
+            <div class="vinyl-arm__head"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2302,17 +2433,17 @@
         </p>
       </div>
 
-      <div class="pills-row">
+      <div class="pills-row" id="locationPills">
         <span class="pill">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           38 Abarbanel St, Florentin
         </span>
         <span class="pill">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>
+          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           3 min walk from Red Line Light Rail (Elifelet / Salame)
         </span>
         <span class="pill">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           Nearby Parking: Elifelet & Rabi Ravia Lots
         </span>
       </div>
@@ -2360,7 +2491,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
             Pitch an Event via WhatsApp
           </a>
-          <a class="btn btn--outline" href="english-index#contact">Leave Details & We'll Be In Touch</a>
+          <button class="btn btn--outline js-open-contact" data-event-type="Event Proposal / Collab" type="button">Leave Details & We'll Be In Touch</button>
         </div>
       </div>
     </div>
@@ -2949,16 +3080,36 @@
             });
           }
 
+          const rsvpEveningEl = card.querySelector('[data-action="rsvp-evening"]');
+          if (rsvpEveningEl) {
+            rsvpEveningEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (typeof openEventModal === 'function') {
+                openEventModal(item);
+              }
+            });
+          }
+
           card.addEventListener('click', () => {
-            if (typeof openEventModal === 'function') {
-              openEventModal(item);
+            if (item.isClosedEvening) {
+              if (typeof openContactModal === 'function') {
+                openContactModal({ date: item.dateKey, slot: 'Evening (18:00–02:00)', eventType: 'Private Event' });
+              }
+            } else {
+              if (typeof openEventModal === 'function') {
+                openEventModal(item);
+              }
             }
           });
 
           card.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              if (typeof openEventModal === 'function') openEventModal(item);
+              if (item.isClosedEvening) {
+                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'Evening (18:00–02:00)', eventType: 'Private Event' });
+              } else {
+                if (typeof openEventModal === 'function') openEventModal(item);
+              }
             }
           });
 
@@ -3030,9 +3181,6 @@
       }
 
       function loadAvailability() {
-        generate30Days();
-        renderGrid();
-
         const ep = window.EZRA_AVAILABILITY_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev';
         fetch(ep, { method: 'GET' })
           .then(r => r.ok ? r.json() : null)
@@ -3051,7 +3199,17 @@
           });
       }
 
+      generate30Days();
+      renderGrid();
       loadAvailability();
+
+      // Live recurring refresh every 60s and on tab focus
+      setInterval(loadAvailability, 60000);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          loadAvailability();
+        }
+      });
     })();
 
     // Events filter
@@ -3540,8 +3698,24 @@
           el.classList.add('reveal');
           obs.observe(el);
         });
+
+        // Location Pills Animation
+        const locPills = document.querySelectorAll('#locationPills .pill');
+        if (locPills.length > 0) {
+          const locObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                locPills.forEach((p, i) => setTimeout(() => p.classList.add('is-checked'), i * 300));
+                locObs.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.15 });
+          const locSection = document.getElementById('location');
+          if (locSection) locObs.observe(locSection);
+        }
       } else {
         reveals.forEach(el => el.classList.add('is-revealed'));
+        document.querySelectorAll('#locationPills .pill').forEach(p => p.classList.add('is-checked'));
       }
     }
     document.addEventListener('DOMContentLoaded', initScrollAnimations);
