@@ -1747,7 +1747,33 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               <span>קודם</span>
             </button>
-            <!-- ============================================================
+            <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="ימים הבאים">
+              <span>הבא</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="schedule-slider-wrap">
+          <div class="timeline-grid" id="weekGrid">
+            <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
+          </div>
+        </div>
+
+        <div class="slider-progress-wrap">
+          <div class="slider-progress-bar">
+            <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
+          </div>
+          <span class="slider-hint-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <span>גללו אופקית לצפייה ב-30 הימים הקרובים</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        3. CURATED CONCEPT SERIES & RESIDENT VIBES
   ============================================================ -->
   <section id="events">

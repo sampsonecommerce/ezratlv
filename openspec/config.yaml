@@ -13,9 +13,9 @@ context: |
   `english-ezra-booking-engine.js` on the pages, `functions/api/` for Pages
   Functions, `worker/ezra-lead-worker.js` for the Cloudflare Worker.
 
-  Deploy: Cloudflare Pages via the Git connection. `CNAME`, `_headers`,
-  `_redirects`, `robots.txt`, `sitemap.xml` are live production config —
-  changing them changes the public site immediately.
+  Deploy: GitHub Pages via the `main` branch with Cloudflare as DNS + CDN proxy.
+  `CNAME`, `robots.txt`, `sitemap.xml` are live production config. `_redirects` is
+  inert (real redirects are managed via Cloudflare Redirect Rules).
 
   Tracking: ANALYTICS.md is the mirror, the page `<head>` is the truth.
   Live GA4 is G-95JJX7T6CY (G-B8RHLY5VJK is dead — a 404 loader that silently
