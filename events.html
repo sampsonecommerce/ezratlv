@@ -76,7 +76,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Pliant:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
@@ -104,7 +104,6 @@
       --red-soft:    rgba(248, 113, 113, 0.14);
       --red-border:  rgba(248, 113, 113, 0.35);
 
-      --neon-yellow: #fde047;
 
       --font-display: 'Heebo', system-ui, sans-serif;
       --font-body:    'Heebo', system-ui, sans-serif;
@@ -135,6 +134,11 @@
     }
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
+    /* Form controls do not inherit the page font, so without this the filter
+       chips and every button fell back to the UA default. It read as Arial next
+       to Heebo everywhere else, which is exactly the mixed-typeface problem the
+       emoji were also causing. */
+    button, input, select, textarea { font-family: inherit; }
 
     .wrap {
       width: 100%;
@@ -142,7 +146,25 @@
       margin-inline: auto;
       padding-inline: clamp(1.2rem, 4vw, 2.5rem);
     }
-    .num { font-family: 'Pliant', 'Heebo', sans-serif; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: embed; }
+
+    /* Inline icons. `.sprite` is the hidden symbol library at the top of <body>;
+       every icon inherits currentColor and the font size around it, so an icon
+       never introduces a colour of its own. */
+    .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .ico {
+      width: 1em; height: 1em;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.14em;
+    }
+    .ico--fill { fill: currentColor; stroke: none; }
+    .ico--lg { width: 1.15em; height: 1.15em; }
+
+    .num { font-family: var(--font-body); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: embed; }
 
     /* ============================================================
        NAVIGATION BAR (100% IDENTICAL SIZING ACROSS ALL PAGES)
@@ -399,7 +421,7 @@
     .btn--outline { border: 1.5px solid var(--gold); color: var(--gold); background: transparent; }
     .btn--outline:hover { background: var(--gold); color: var(--bg); transform: translateY(-2px); }
     .btn--fill { background: var(--gold); color: var(--bg); border: 1.5px solid var(--gold); font-weight: 700; }
-    .btn--fill:hover { background: #d8ad46; border-color: #d8ad46; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,154,60,0.35); }
+    .btn--fill:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,154,60,0.35); }
     .btn--sm { font-size: 0.84rem; padding: 0.55rem 1.25rem; }
     .btn--green { background: var(--green); color: #071c10; border: 1.5px solid var(--green); font-weight: 700; }
     .btn--green:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(52,211,153,0.35); }
@@ -415,10 +437,12 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
-    .sticker--vinyl   { background: #1c1917; color: #facc15; border: 1px solid rgba(250, 204, 21, 0.4); }
-    .sticker--live    { background: #1e1b4b; color: #a5b4fc; border: 1px solid rgba(165, 180, 252, 0.4); }
-    .sticker--food    { background: #2a1208; color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.4); }
-    .sticker--listen  { background: #142a22; color: #6ee7b7; border: 1px solid rgba(110, 231, 183, 0.4); }
+    /* One chip for every category. Green and red below stay, and only because
+       they carry meaning the words do not: open versus closed. */
+    .sticker--vinyl,
+    .sticker--live,
+    .sticker--food,
+    .sticker--listen { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--line); }
     .sticker--free    { background: var(--green); color: #061e12; font-weight: 900; }
     .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 900; }
 
@@ -540,12 +564,7 @@
       color: var(--cream);
       text-shadow: 0 4px 35px rgba(0,0,0,0.8);
     }
-    .hero-events h1 span.gold {
-      color: var(--gold-light);
-      background: linear-gradient(110deg, #f5d98a 0%, #c49a3c 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .hero-events h1 span.gold { color: var(--gold-light); }
     .hero-events p.lead {
       font-size: clamp(1.05rem, 1.5vw, 1.25rem);
       color: var(--cream-dim);
@@ -1873,7 +1892,7 @@
     .cf-done__icon {
       position: relative; width: 72px; height: 72px; margin: 0 auto 1.2rem; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1.5px solid rgba(74, 222, 128, 0.5);
+      background: var(--green-soft); color: var(--green); border: 1.5px solid var(--green-border);
       animation: cfIconPop 0.55s cubic-bezier(.22,1.3,.36,1) both;
     }
     @keyframes cfIconPop { 0% { transform: scale(0); opacity: 0; } 55% { transform: scale(1.14); } 75% { transform: scale(0.95); } 100% { transform: scale(1); opacity: 1; } }
@@ -1960,6 +1979,31 @@
   </style>
 </head>
 <body>
+  <!-- Icon sprite. Replaces the emoji this page used to lean on: emoji render as
+       a different typeface on every OS, break the one-font rule, and carry their
+       own colour, which is what made the palette sprawl. These are stroke-only
+       and inherit currentColor, so an icon is always the colour of its text. -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 2v3M12 2v3"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 20c0-8 5-14 16-15 1 11-5 16-12 16H4Z"/><path d="M4 20c4-5 8-8 12-9"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2s5 4.5 5 9a5 5 0 0 1-10 0c0-1.6.6-3 1.5-4.2C9.7 8.4 12 7 12 2Z"/><path d="M12 21a4 4 0 0 0 4-4c0-2-2-3.5-4-6-2 2.5-4 4-4 6a4 4 0 0 0 4 4Z"/></symbol>
+    <symbol id="i-slice" viewBox="0 0 24 24"><path d="M12 3 3 20l18-1L12 3Z"/><circle cx="11" cy="12" r="1.2"/><circle cx="14" cy="16" r="1.2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4M8 22h8"/></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4V9Z"/><path d="M17 9a4 4 0 0 1 0 6"/><path d="M20 6a8 8 0 0 1 0 12"/></symbol>
+    <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="2" y="14" width="5" height="7" rx="2"/><rect x="17" y="14" width="5" height="7" rx="2"/></symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24"><path d="M4 4h16l-8 8-8-8Z"/><path d="M12 12v8M8 20h8"/></symbol>
+    <symbol id="i-wine" viewBox="0 0 24 24"><path d="M7 3h10l-1 7a4 4 0 0 1-8 0L7 3Z"/><path d="M12 14v6M9 20h6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M15 3l6 6L8 22H2v-6L15 3Z"/><path d="M13 5l6 6"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 8V5h18v3a3 3 0 0 0 0 6v3H3v-3a3 3 0 0 0 0-6Z"/><path d="M12 6v2M12 11v2M12 16v2"/></symbol>
+    <symbol id="i-radio" viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="13" rx="2"/><circle cx="8" cy="14.5" r="3.5"/><path d="M16 12h3M16 17h3M17 8 8 4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5 13.9 9 20.5 12 13.9 15 12 21.5 10.1 15 3.5 12 10.1 9 12 2.5Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+  </svg>
+
 
   <!-- ============================================================
        NAVIGATION (WITH ALL 3 MAIN BUTTONS SIDE BY SIDE)
@@ -2031,8 +2075,8 @@
         סשנים של תקליטי ויניל נדירים, השמעות טרום-בכורה לאלבומים, פופ-אפ שפים מהטאבון, הופעות ג'אז חיות ויין טבעי בבר אינטימי בלב פלורנטין.
       </p>
       <div class="hero-ctas">
-        <a class="btn btn--fill" href="#events">לליינאפ האירועים הקרובים</a>
-        <a class="btn btn--outline" href="#schedule">ללוח השבועי וזמני פתיחה</a>
+        <a class="btn btn--outline" href="#schedule">הלוח השבועי וזמני פתיחה</a>
+        <a class="btn btn--fill" href="#events">ליינאפ האירועים הקבועים</a>
       </div>
       <div class="today-status-strip" id="heroLiveStatus">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -2044,24 +2088,24 @@
   <!-- TICKER MARQUEE -->
   <div class="ticker-strip" aria-hidden="true">
     <div class="ticker-track">
-      <span>🔴 FLORENTIN TEL AVIV</span>
-      <span>✦</span>
-      <span>📻 EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
-      <span>✦</span>
-      <span>🔥 טאבון אבן לוהט & יין טבעי</span>
-      <span>✦</span>
-      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
-      <span>✦</span>
-      <span>🎟️ כניסה חופשית על בסיס מקום פנוי</span>
-      <span>✦</span>
-      <span>🔴 FLORENTIN TEL AVIV</span>
-      <span>✦</span>
-      <span>📻 EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
-      <span>✦</span>
-      <span>🔥 טאבון אבן לוהט & יין טבעי</span>
-      <span>✦</span>
-      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
-      <span>✦</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט ויין טבעי</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> כניסה חופשית על בסיס מקום פנוי</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט ויין טבעי</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
     </div>
   </div>
 
@@ -2071,8 +2115,8 @@
   <section class="section-soft" id="schedule">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Weekly Schedule · השבוע בעזרא</span>
-        <h2>לוח ימי פתיחה ואירועים</h2>
+        <span class="eyebrow">השבוע בעזרא</span>
+        <h2>לוח האירועים</h2>
         <p>
           בדקו מתי אנחנו פתוחים לקהל הרחב לערבי תקליטים, יין וטאבון, ומתי החלל סגור לאירוע פרטי.
         </p>
@@ -2131,20 +2175,20 @@
   <section id="events" class="reveal">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Resident Concepts & Open Nights · פורמטים וערבים פתוחים</span>
-        <h2>מה קורה בעזרא בערבים פתוחים</h2>
+        <span class="eyebrow">ערבים פתוחים</span>
+        <h2>הפורמטים הקבועים</h2>
         <p>
           עזרא מארח מגוון פורמטים וקונספטים שבועיים פתוחים לקהל הרחב. בחרו פורמט כדי לגלות את האופי, המוזיקה והקולינריה, או השאירו פרטים ליזום ליין / אירוע משותף.
         </p>
       </div>
 
       <div class="events-nav-filter" id="eventsFilter">
-        <button class="filter-btn is-active" data-filter="tea" type="button">☕ בית התה של רום</button>
-        <button class="filter-btn" data-filter="live" type="button">🎸 מוזיקה חיה והופעות</button>
-        <button class="filter-btn" data-filter="food" type="button">🔥 פופ-אפ שפים וטאבון</button>
-        <button class="filter-btn" data-filter="vinyl" type="button">🎙️ השמעות אלבומים ו-Hi-Fi</button>
-        <button class="filter-btn" data-filter="openmic" type="button">🎤 מיקרופון פתוח וספוקן</button>
-        <button class="filter-btn" data-filter="wine" type="button">🍸 יין טבעי ומיקסולוגיה</button>
+        <button class="filter-btn is-active" data-filter="tea" type="button"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg><span>בית התה של רום</span></button>
+        <button class="filter-btn" data-filter="live" type="button"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg><span>מוזיקה חיה והופעות</span></button>
+        <button class="filter-btn" data-filter="food" type="button"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg><span>פופ-אפ שפים וטאבון</span></button>
+        <button class="filter-btn" data-filter="vinyl" type="button"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg><span>השמעות אלבומים ו-Hi-Fi</span></button>
+        <button class="filter-btn" data-filter="openmic" type="button"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg><span>מיקרופון פתוח וספוקן</span></button>
+        <button class="filter-btn" data-filter="wine" type="button"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg><span>יין טבעי ומיקסולוגיה</span></button>
       </div>
 
       <div class="teder-feed" id="eventsList">
@@ -2154,7 +2198,7 @@
             <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="בית התה של רום בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today">Tea & Ambient Lounge ☕</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg><span>Tea &amp; Ambient Lounge</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2163,7 +2207,7 @@
                 <span class="num">פורמט סלון קבוע</span>
                 <span class="day-name">· מ-19:00 אל תוך הלילה</span>
               </div>
-              <h3 class="teder-title">בית התה של רום · סלון תה, טקסים וצמחי מרפא</h3>
+              <h3 class="teder-title">בית התה של רום</h3>
               <p class="teder-lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
               <p class="teder-desc">
                 סלון תה חם ואינטימי המציע מגוון חליטות צמחי מרפא ייחודיות מכל העולם, עוגיות ומאפים טריים בעבודת יד, תאורה רכה ומוזיקה מדיטטיבית. מרחב רגוע ונעים למפגש קהילתי, קריאה, שיחה שקטה והתרגעות בלב פלורנטין.
@@ -2171,8 +2215,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>☕ חליטות בוטיק וטקסים</span>
-                <span>🌿 וייב מרגיע וקהילתי</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg>חליטות בוטיק וטקסים</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg>וייב מרגיע וקהילתי</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2188,7 +2232,7 @@
             <img src="images/MOMENT 1.jpg" alt="הופעות חיות בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
-              <span class="time-card__badge time-card__badge--today">Live Acoustic & Jazz 🎸</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg><span>Live Acoustic &amp; Jazz</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2197,7 +2241,7 @@
                 <span class="num">לייב סשן שבועי</span>
                 <span class="day-name">· מ-21:00</span>
               </div>
-              <h3 class="teder-title">מוזיקה חיה & סשנים אקוסטיים · אינדי, סול וג'אז</h3>
+              <h3 class="teder-title">מוזיקה חיה וסשנים אקוסטיים</h3>
               <p class="teder-lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
               <p class="teder-desc">
                 ערבי מוזיקה חיה באווירת מועדון הופעות אינטימי: הרכבי אינדי מקוריים, זמרים-יוצרים, טריו ג'אז חי על הבר וג'אם סשנים חופשיים לצד קוקטיילים מדויקים ואקוסטיקה חמה שעוטפת את החלל.
@@ -2205,8 +2249,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🎸 הרכבים חיים ואינדי</span>
-                <span>🎷 סאונד אקוסטי חם</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>הרכבים חיים ואינדי</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>סאונד אקוסטי חם</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2222,7 +2266,7 @@
             <img src="images/FOOD ENVIRONMENT.jpg" alt="פופ אפ שף וטאבון בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--rsvp">בהזמנת מקום</span>
-              <span class="time-card__badge time-card__badge--today">טאבון שף לוהט 🍕</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg><span>טאבון שף לוהט</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2231,7 +2275,7 @@
                 <span class="num">ערבי קולינריה מיוחדים</span>
                 <span class="day-name">· מ-19:30</span>
               </div>
-              <h3 class="teder-title">פופ-אפ שפים אורחים & ערבי טאבון לוהט</h3>
+              <h3 class="teder-title">פופ-אפ שפים וערבי טאבון</h3>
               <p class="teder-lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
               <p class="teder-desc">
                 אירוח שפים מובילים לתפריטי ספיישל עונתיים מהטאבון הלוהט: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות חרוכים בגחלים, פיצות ארטיזנליות וקוקטיילים שנרקחו במיוחד לכל תפריט.
@@ -2239,8 +2283,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🔥 טאבון אבן לוהט</span>
-                <span>🍕 שפים אורחים</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg>טאבון אבן לוהט</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>שפים אורחים</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2256,7 +2300,7 @@
             <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="סלון תקליטים והשמעת אלבומים" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today">Hi-Fi Audio Premiere 🎙️</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg><span>Hi-Fi Audio Premiere</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2265,7 +2309,7 @@
                 <span class="num">סשן סאונד אנלוגי</span>
                 <span class="day-name">· מ-20:30</span>
               </div>
-              <h3 class="teder-title">השמעות אלבומים & סלון תקליטי Hi-Fi</h3>
+              <h3 class="teder-title">השמעות אלבומים וסלון תקליטים</h3>
               <p class="teder-lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
               <p class="teder-desc">
                 חוויית האזנה עמוקה ומרוכזת באיכות סאונד אנלוגית עשירה, תאורה עמומה ומשקאות מותאמים. השמעות טרום-בכורה לאלבומים ישראליים ובינלאומיים, ולאחריהן סשן שאלות-תשובות ושיחה פתוחה עם האמנים והמפיקים.
@@ -2273,8 +2317,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🔊 מערכת Hi-Fi אנלוגית</span>
-                <span>🎙️ שיחה עם יוצרים</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-speaker"/></svg>מערכת Hi-Fi אנלוגית</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>שיחה עם יוצרים</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2290,7 +2334,7 @@
             <img src="images/BAR.jpg" alt="מיקרופון פתוח וספוקן וורד בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today">Open Mic & Poetry 🎤</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg><span>Open Mic &amp; Poetry</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2299,7 +2343,7 @@
                 <span class="num">במה פתוחה ליוצרים</span>
                 <span class="day-name">· מ-20:00</span>
               </div>
-              <h3 class="teder-title">מיקרופון פתוח & ספוקן וורד</h3>
+              <h3 class="teder-title">מיקרופון פתוח וספוקן וורד</h3>
               <p class="teder-lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
               <p class="teder-desc">
                 במה פתוחה ומחבקת ליוצרים ויוצרות מכל התחומים. מרחב אמנותי אותנטי ובלתי אמצעי שבו אמנים מנוסים וחדשים עולים לשתף שירים, טקסטים, קטעי ספוקן וורד ומוזיקה מקורית מול קהל קשוב ומפרגן.
@@ -2307,8 +2351,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🎤 במה פתוחה ליוצרים</span>
-                <span>✍️ שירה וספוקן וורד</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>במה פתוחה ליוצרים</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>שירה וספוקן וורד</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2324,7 +2368,7 @@
             <img src="images/MAKING COCKTAILS.jpg" alt="יין טבעי וקוקטיילים בעזרא" loading="lazy" />
             <div class="teder-stickers">
               <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
-              <span class="time-card__badge time-card__badge--today">Natural Wine & Drinks 🍸</span>
+              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg><span>Natural Wine &amp; Drinks</span></span>
             </div>
           </div>
           <div class="teder-content">
@@ -2333,7 +2377,7 @@
                 <span class="num">סלון אלכוהול ויין</span>
                 <span class="day-name">· מ-19:00</span>
               </div>
-              <h3 class="teder-title">ערבי יין טבעי & מיקסולוגיה מדויקת</h3>
+              <h3 class="teder-title">ערבי יין טבעי ומיקסולוגיה</h3>
               <p class="teder-lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
               <p class="teder-desc">
                 מסע טעימות מודרך בין יקבים מקומיים ויינות טבעיים נדירים, לצד תפריט קוקטיילים הנרקחים מחומרי גלם עונתיים ונשנושים חמים מותאמים מהטאבון. אווירת בר יין אירופאי עם חום תל אביבי.
@@ -2341,8 +2385,8 @@
             </div>
             <div class="teder-footer-row">
               <div class="teder-meta-chips">
-                <span>🍷 יין טבעי ובוטיק</span>
-                <span>🍸 קוקטיילים עונתיים</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg>יין טבעי ובוטיק</span>
+                <span><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>קוקטיילים עונתיים</span>
               </div>
               <div class="teder-actions">
                 <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
@@ -2362,7 +2406,7 @@
     <div class="wrap">
       <div class="sound-box">
         <div class="sound-text">
-          <span class="eyebrow">Culture & Atmosphere</span>
+          <span class="eyebrow">הסאונד והוייב</span>
           <h3>Ezra Sound System · סאונד אנלוגי, טאבון ויין טבעי</h3>
           <p>
             עזרא הוקם מתוך אהבה עמוקה למוזיקה אנלוגית, קולינריה מדויקת ומפגשים בלתי אמצעיים. תכננו את החלל עם אקוסטיקה חמה, תאורה לילית מלטפת ותפריט שמתכתב עם מה שמתנגן ברמקולים.
@@ -2391,8 +2435,8 @@
   <section id="archive">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Past Flyers & Memory</span>
-        <h2>ארכיון אירועים</h2>
+        <span class="eyebrow">ארכיון</span>
+        <h2>ארכיון</h2>
         <p>הצצה לערבי תקליטים, פופ-אפים ומפגשי עבר שהיו אצלנו בעזרא.</p>
       </div>
 
@@ -2450,8 +2494,8 @@
   <section id="location">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Location & Directions</span>
-        <h2>איך מגיעים לעזרא?</h2>
+        <span class="eyebrow">דרכי הגעה</span>
+        <h2>איך מגיעים</h2>
         <p>
           אברבנאל 38, פלורנטין, תל אביב · בלב הסצינה של דרום העיר, עם גישה נוחה ברגל, ברכב ובתחבורה ציבורית.
         </p>
@@ -2507,7 +2551,7 @@
   <section class="section-soft" id="collab">
     <div class="wrap">
       <div class="collab-strip">
-        <span class="eyebrow">Collaborate With Us</span>
+        <span class="eyebrow">יוזמים אירוע</span>
         <h3>רוצים ליזום אירוע, לתקלט או לבשל בעזרא?</h3>
         <p>
           אנחנו תמיד שמחים לארח תקליטנים, שפים אורחים, מוזיקאים ויוזמות קהילתיות שמתאימות לווייב של עזרא. דברו איתנו ונבנה ערב ביחד.
@@ -2529,7 +2573,7 @@
   <section id="faq">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Questions & Answers</span>
+        <span class="eyebrow">שאלות נפוצות</span>
         <h2>שאלות נפוצות</h2>
         <p>כל מה שצריך לדעת לקראת הגעה לאירועים פתוחים בעזרא.</p>
       </div>
@@ -2583,7 +2627,7 @@
   ============================================================ -->
   <div class="modal-scrim" id="eventModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-box">
-      <button class="modal-close" id="modalClose" type="button" aria-label="סגירת חלון">✕</button>
+      <button class="modal-close" id="modalClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       <div class="modal-grid">
         <div class="modal-poster">
           <img id="modalImg" src="images/BAR.jpg" alt="פוסטר אירוע" />
@@ -2598,7 +2642,7 @@
           <p class="modal-desc" id="modalDesc">פירוט האירוע...</p>
 
           <div class="rsvp-form" id="modalRsvp">
-            <h4 id="rsvpTitle">✦ שריון מקום מהיר</h4>
+            <h4 id="rsvpTitle"><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg> שריון מקום מהיר</h4>
             <form id="rsvpFormEl">
               <div class="rsvp-fields">
                 <input class="rsvp-input" type="text" id="rsvpName" placeholder="שם מלא *" required />
@@ -2634,11 +2678,11 @@
   ============================================================ -->
   <div class="modal-scrim" id="contactModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="contact-modal-box">
-      <button class="modal-close" id="contactModalClose" type="button" aria-label="סגירת חלון">✕</button>
+      <button class="modal-close" id="contactModalClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       
       <div id="contactFormWrap">
         <div class="cf-head">
-          <span class="eyebrow">Ezra · שריון תאריך / הצעה</span>
+          <span class="eyebrow">שריון תאריך</span>
           <h3 class="cf-title">השאירו פרטים ונחזור אליכם</h3>
           <p class="cf-sub">
             תכנון אירוע פרטי, יום הולדת, חתונה אינטימית או יוזמת תוכן בעזרא. ממלאים את הפרטים ונציג יחזור אליכם תוך 24 שעות.
@@ -3067,17 +3111,17 @@
 
           let badgeHtml = `<span class="time-card__badge time-card__badge--${item.badgeClass.replace('sticker--', '')}">${item.badge}</span>`;
           if (item.isToday) {
-            badgeHtml = `<span class="time-card__badge time-card__badge--today">✦ הערב בעזרא</span>`;
+            badgeHtml = `<span class="time-card__badge time-card__badge--today"><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg> הערב בעזרא</span>`;
           }
 
           const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע ✍️</span></div>`;
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
-            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
+            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -3613,7 +3657,7 @@
 
       // Confetti Animation
       function launchFinaleConfetti() {
-        const colors = ['#c49a3c', '#e5c158', '#4ade80', '#ffffff', '#f59e0b'];
+        const colors = ['#c49a3c', '#f5d98a', '#f5f0e6'];
         for (let i = 0; i < 40; i++) {
           const el = document.createElement('div');
           el.style.position = 'fixed';
