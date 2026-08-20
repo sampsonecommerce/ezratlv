@@ -40,5 +40,5 @@ Origin: `add-event-marketing-growth` (ezra-plans hub). Content inputs — real c
 - [x] 6.1 Phrase-presence check: grep the branch tree for each intent phrase; each found in its dedicated page's title, h1, and body
 - [x] 6.2 Pre-merge checklist from design: JSON-LD validates and matches visible content; tag parity vs ANALYTICS.md on every new page; every sitemap/llms URL resolves; boundary check — no internal material, no unconsented identification
 - [x] 6.3 Review pass for natural Hebrew: every heading and paragraph reads as spoken language; anything that exists only for phrase-matching removed
-- [ ] 6.4 Single reviewed merge to `main`; after Pages deploys, verify live URLs and structured data on production
-- [ ] 6.5 Report ship date to the hub so the post-ship query-log run (hub 4.3–4.4) is scheduled ≥2 weeks out
+- [x] 6.4 Single reviewed merge to `main`; after Pages deploys, verify live URLs and structured data on production - merged 2026-08-20 as PR #19 (0c9a157); all five pages 200, JSON-LD parses live, tag set present, sitemap/llms/service.json carry the four new URLs
+- [x] 6.5 Report ship date to the hub so the post-ship query-log run (hub 4.3–4.4) is scheduled ≥2 weeks out - shipped 2026-08-20, re-run due 2026-09-03, recorded in `knowledge/marketing/geo-query-log.md`
