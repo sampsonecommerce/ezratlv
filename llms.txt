@@ -19,8 +19,10 @@ Ezra TLV is a private bar that opens only for your group that night. It is not a
 ## Key pages
 - [Home - private events (Hebrew)](https://ezratlv.com/): the venue, the concept, the space, food and bar, reviews, FAQ.
 - [Company events - booking and pricing (Hebrew)](https://ezratlv.com/company-events): packages, live date availability, menu selection, instant final price, contract by email.
+- [Public events & line-up (Hebrew)](https://ezratlv.com/events): vinyl sessions, chef pop-ups, album listening sessions, live schedule.
 - [Home (English)](https://ezratlv.com/english-index): the same venue overview for English speakers.
 - [Company events (English)](https://ezratlv.com/english-company-events): packages and booking for English speakers.
+- [Public events & line-up (English)](https://ezratlv.com/english-events): public events schedule and bookings for English speakers.
 
 ## Structured data for AI engines
 - [Organization summary (JSON)](https://ezratlv.com/ai/summary.json): entity facts, address, capacity, contact points.
