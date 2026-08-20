@@ -1,12 +1,12 @@
 ## Purpose
 
-On-site showcase posts for real past events — the proof layer the event-type pages link to, giving AI search systems and buyers concrete evidence the venue actually hosts each event type. Derived from the case-study truthfulness rule in the hub's `marketing/geo-ai-search` capability.
+On-site showcase posts for real past events - the proof layer the event-type pages link to, giving AI search systems and buyers concrete evidence the venue actually hosts each event type. Derived from the case-study truthfulness rule in the hub's `marketing/geo-ai-search` capability.
 
 ## ADDED Requirements
 
 ### Requirement: Every showcase maps to a real event
 
-Each showcase post SHALL describe one actual past event and state: who it was for (anonymised or named only with consent), approximate group size, event type, what was requested, what was provided, and why the venue fit. Invented events, invented quotes, invented reviews, and details that cannot be verified SHALL NOT be published — an unverifiable detail is omitted, not approximated.
+Each showcase post SHALL describe one actual past event and state: who it was for (anonymised or named only with consent), approximate group size, event type, what was requested, what was provided, and why the venue fit. Invented events, invented quotes, invented reviews, and details that cannot be verified SHALL NOT be published - an unverifiable detail is omitted, not approximated.
 
 #### Scenario: Showcase drafted
 

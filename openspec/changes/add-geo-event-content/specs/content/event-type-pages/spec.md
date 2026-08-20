@@ -1,26 +1,26 @@
 ## Purpose
 
-The Hebrew event-type pages on ezratlv.com — one page per real buyer intent, each answering that intent's question completely enough to be the page an AI search system cites for it. Derived from the `marketing/geo-ai-search` contract in the ezra-plans hub change `add-event-marketing-growth`.
+The Hebrew event-type pages on ezratlv.com - one page per real buyer intent, each answering that intent's question completely enough to be the page an AI search system cites for it. Derived from the `marketing/geo-ai-search` contract in the ezra-plans hub change `add-event-marketing-growth`.
 
 ## ADDED Requirements
 
 ### Requirement: One page per lost intent, in the buyer's words
 
-The site SHALL carry a dedicated Hebrew page for each of these intents, each using the buyer's own phrasing in its title, heading, and body — not synonyms the venue prefers: ערב צוות / ארוחת צוות (team evening), אירוע עד 50 איש (capacity-led), מסיבת סיום הפקה / מסיבת סיום צילום (wrap party), and מסיבת רווקות ואירועים פרטיים (private / bachelorette). The 2026-08-20 baseline showed winners state the use case in the user's exact words; ערב צוות and מסיבת סיום appear nowhere on the site today.
+The site SHALL carry a dedicated Hebrew page for each of these intents, each using the buyer's own phrasing in its title, heading, and body - not synonyms the venue prefers: ערב צוות / ארוחת צוות (team evening), אירוע עד 50 איש (capacity-led), מסיבת סיום הפקה / מסיבת סיום צילום (wrap party), and מסיבת רווקות ואירועים פרטיים (private / bachelorette). The 2026-08-20 baseline showed winners state the use case in the user's exact words; ערב צוות and מסיבת סיום appear nowhere on the site today.
 
 #### Scenario: Phrase presence
 
 - **WHEN** any of the four pages is published
-- **THEN** the intent's exact Hebrew phrase appears in the page `<title>`, its `<h1>`, and body copy, and a text search of the live site finds the phrase on a page dedicated to that intent — not only as a passing mention elsewhere
+- **THEN** the intent's exact Hebrew phrase appears in the page `<title>`, its `<h1>`, and body copy, and a text search of the live site finds the phrase on a page dedicated to that intent - not only as a passing mention elsewhere
 
 #### Scenario: Page answers the question alone
 
 - **WHEN** a reader or AI system lands on an event-type page with no other context
-- **THEN** it can answer from that page alone: who the event type suits, capacity (with the number 50 stated next to the use case), what is included (food, bar, sound, lighting, production), possible formats, the address, and how to book — with a WhatsApp CTA present
+- **THEN** it can answer from that page alone: who the event type suits, capacity (with the number 50 stated next to the use case), what is included (food, bar, sound, lighting, production), possible formats, the address, and how to book - with a WhatsApp CTA present
 
 ### Requirement: Written as answers, not keyword blocks
 
-Each page SHALL read as natural conversational Hebrew a person would say aloud. Keyword-stuffed headings, comma-separated phrase lists, and copy that exists only for matching SHALL NOT be published — the venue's own naming stays clean even where competitors win via padded listing titles.
+Each page SHALL read as natural conversational Hebrew a person would say aloud. Keyword-stuffed headings, comma-separated phrase lists, and copy that exists only for matching SHALL NOT be published - the venue's own naming stays clean even where competitors win via padded listing titles.
 
 #### Scenario: Copy review
 

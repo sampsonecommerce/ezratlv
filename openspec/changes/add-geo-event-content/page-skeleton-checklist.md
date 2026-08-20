@@ -1,4 +1,4 @@
-# Shared page skeleton — checklist for every new page
+# Shared page skeleton - checklist for every new page
 
 No build step, so this is verified per file, not shared code. Source of truth:
 `index.html` head + chrome; tag IDs cross-checked against ANALYTICS.md.
@@ -15,10 +15,10 @@ No build step, so this is verified per file, not shared code. Source of truth:
 8. Design tokens: `--bg #0f0d0b`, `--bg-soft`, `--cream #f0ebe0`, `--gold
    #c49a3c`, `--gold-light #f5d98a`
 9. JSON-LD: `WebPage` + `Service` with `provider: {"@id":
-   "https://ezratlv.com/#organization"}` — never a second LocalBusiness
+   "https://ezratlv.com/#organization"}` - never a second LocalBusiness
 
-Hero-height-freeze script NOT copied — content pages have no 100svh hero.
-`hreflang` alternates NOT added — the new pages have no English twin (design
+Hero-height-freeze script NOT copied - content pages have no 100svh hero.
+`hreflang` alternates NOT added - the new pages have no English twin (design
 decision 2); canonical only.
 
 ## Body chrome
