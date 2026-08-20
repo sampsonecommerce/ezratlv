@@ -583,11 +583,11 @@
       align-items: center;
     /* SCHEDULE BOX & 30-DAY VISUAL CARDS */
     .schedule-box {
-      background: linear-gradient(180deg, #15110c 0%, #0d0b08 100%);
-      border: 1px solid var(--line-bright);
-      border-radius: 24px;
+      background: linear-gradient(180deg, #130f0b 0%, #0a0806 100%);
+      border: 1px solid rgba(196, 154, 60, 0.25);
+      border-radius: 28px;
       padding: clamp(1.8rem, 4vw, 3rem) clamp(1.2rem, 3.5vw, 2.5rem);
-      box-shadow: 0 25px 60px -20px rgba(0,0,0,0.9);
+      box-shadow: 0 30px 70px -20px rgba(0,0,0,0.95);
       margin-block-end: 2.5rem;
     }
     .schedule-top {
@@ -596,33 +596,39 @@
       justify-content: space-between;
       gap: 1.2rem;
       flex-wrap: wrap;
-      margin-block-end: 1.5rem;
+      margin-block-end: 1.8rem;
       padding-block-end: 1.2rem;
-      border-block-end: 1px solid rgba(196,154,60,0.2);
+      border-block-end: 1px solid rgba(196,154,60,0.18);
     }
     .schedule-top__info h3 {
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--cream);
-      margin-block-end: 0.3rem;
+      margin-block-end: 0.35rem;
     }
     .schedule-top__info p {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--cream-dim);
     }
     .schedule-source-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      padding: 0.4rem 0.9rem;
+      padding: 0.45rem 1rem;
       border-radius: 50px;
       background: rgba(52, 211, 153, 0.1);
-      border: 1px solid var(--green-border);
+      border: 1px solid rgba(52, 211, 153, 0.35);
       color: var(--green);
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       font-weight: 700;
     }
-    .schedule-source-badge__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .schedule-source-badge__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
 
     /* Schedule Navigation & Week Tabs */
     .schedule-nav-bar {
@@ -631,9 +637,9 @@
       justify-content: space-between;
       gap: 1rem;
       flex-wrap: wrap;
-      margin-block-end: 1.8rem;
-      padding: 0.5rem 0.8rem;
-      background: rgba(255, 255, 255, 0.02);
+      margin-block-end: 2rem;
+      padding: 0.6rem 0.9rem;
+      background: rgba(255, 255, 255, 0.025);
       border: 1px solid var(--line);
       border-radius: 50px;
     }
@@ -647,9 +653,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.45rem 1.05rem;
+      padding: 0.5rem 1.15rem;
       border-radius: 50px;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 600;
       color: var(--cream-dim);
       background: transparent;
@@ -667,7 +673,7 @@
       background: var(--gold);
       border-color: var(--gold);
       font-weight: 800;
-      box-shadow: 0 0 16px rgba(196, 154, 60, 0.35);
+      box-shadow: 0 0 18px rgba(196, 154, 60, 0.35);
     }
     .schedule-nav-arrows {
       display: flex;
@@ -678,13 +684,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.35rem;
-      padding: 0.45rem 0.9rem;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
       border-radius: 50px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--line);
       color: var(--cream-dim);
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s var(--ease);
@@ -696,207 +702,228 @@
       border-color: var(--gold);
     }
     .nav-arrow-btn:disabled {
-      opacity: 0.35;
+      opacity: 0.3;
       cursor: not-allowed;
     }
 
     /* Timeline Visual Grid */
     .timeline-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
       transition: opacity 0.3s var(--ease);
     }
-    .timeline-grid.is-month-view {
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.1rem;
+    @media (min-width: 1200px) {
+      .timeline-grid { grid-template-columns: repeat(4, 1fr); }
     }
-    @media (max-width: 1250px) {
-      .timeline-grid:not(.is-month-view) { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 1199px) and (min-width: 860px) {
+      .timeline-grid { grid-template-columns: repeat(3, 1fr); }
     }
-    @media (max-width: 800px) {
-      .timeline-grid:not(.is-month-view) { grid-template-columns: repeat(2, 1fr); }
-      .timeline-grid.is-month-view { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 859px) and (min-width: 560px) {
+      .timeline-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 559px) {
+      .timeline-grid { grid-template-columns: 1fr; }
       .schedule-nav-bar { border-radius: 20px; justify-content: center; }
       .schedule-weeks-tabs { width: 100%; justify-content: center; }
       .schedule-nav-arrows { width: 100%; justify-content: center; }
     }
-    @media (max-width: 520px) {
-      .timeline-grid:not(.is-month-view) { grid-template-columns: 1fr; }
-      .timeline-grid.is-month-view { grid-template-columns: 1fr; }
-    }
 
     /* Rich Visual Time Card */
     .time-card {
-      background: #14100b;
-      border: 1px solid var(--line);
-      border-radius: 18px;
+      background: #130f0b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 22px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       cursor: pointer;
       position: relative;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
       text-align: start;
     }
     .time-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
       border-color: var(--gold);
-      box-shadow: 0 18px 38px -10px rgba(196,154,60,0.3);
+      box-shadow: 0 20px 45px -10px rgba(196,154,60,0.35);
     }
     .time-card.is-today {
       border: 1.5px solid var(--gold);
-      background: #1a140d;
-      box-shadow: 0 0 28px -5px rgba(196, 154, 60, 0.4);
+      background: linear-gradient(180deg, #1c150e 0%, #130f0b 100%);
+      box-shadow: 0 0 32px -5px rgba(196, 154, 60, 0.4);
     }
     .time-card__img-wrap {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 11;
+      aspect-ratio: 16 / 10;
       overflow: hidden;
-      background: #090705;
+      background: #080605;
     }
     .time-card__img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(0.85) contrast(1.08);
-      transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
+      filter: brightness(0.88) contrast(1.05);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s var(--ease);
       display: block;
     }
     .time-card:hover .time-card__img-wrap img {
-      transform: scale(1.08);
-      filter: brightness(1) contrast(1.15);
+      transform: scale(1.06);
+      filter: brightness(1) contrast(1.12);
     }
     .time-card__overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(20,16,11,0.92) 100%);
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(19,15,11,0.9) 100%);
       pointer-events: none;
     }
     .time-card__top-bar {
       position: absolute;
-      inset-block-start: 8px;
-      inset-inline: 8px;
+      inset-block-start: 10px;
+      inset-inline: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
+      gap: 6px;
       z-index: 2;
-    }
-    .time-card__today-badge {
-      background: var(--gold);
-      color: var(--bg);
-      font-size: 0.68rem;
-      font-weight: 900;
-      padding: 0.2rem 0.55rem;
-      border-radius: 50px;
-      letter-spacing: 0.04em;
+      pointer-events: none;
     }
     .time-card__date-pill {
-      background: rgba(0, 0, 0, 0.78);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(10, 8, 6, 0.82);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--cream);
-      font-size: 0.72rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      padding: 0.2rem 0.55rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 50px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
+    .time-card__badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      white-space: nowrap;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    .time-card__badge--free {
+      background: rgba(52, 211, 153, 0.16);
+      border: 1px solid rgba(52, 211, 153, 0.5);
+      color: #34d399;
+    }
+    .time-card__badge--rsvp {
+      background: rgba(196, 154, 60, 0.2);
+      border: 1px solid rgba(196, 154, 60, 0.6);
+      color: var(--gold-light);
+    }
+    .time-card__badge--busy {
+      background: rgba(248, 113, 113, 0.16);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      color: #f87171;
+    }
+    .time-card__badge--today {
+      background: var(--gold);
+      color: #0b0907;
+      font-weight: 900;
+      border: 1px solid var(--gold-light);
+      box-shadow: 0 0 14px rgba(196, 154, 60, 0.5);
+    }
+
     .time-card__body {
-      padding: 0.85rem 0.9rem 0.95rem;
+      padding: 1.1rem 1.15rem 1.25rem;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
-      gap: 0.55rem;
+      gap: 0.75rem;
     }
     .time-card__header {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.25rem;
     }
     .time-card__dow {
-      font-size: 0.74rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: var(--gold);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
     .time-card__title {
-      font-size: 0.92rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--cream);
-      line-height: 1.25;
+      line-height: 1.3;
       margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
     }
     .time-card__lineup {
-      font-size: 0.75rem;
+      font-size: 0.82rem;
       color: var(--cream-dim);
-      line-height: 1.35;
+      line-height: 1.4;
       margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 2em;
     }
-    .time-card__slots {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      margin-block: 0.15rem;
-    }
-    .slot-pill {
+    .time-card__slots-bar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0.22rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.7rem;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-block: 0.2rem;
+    }
+    .slot-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      font-size: 0.72rem;
       font-weight: 700;
       line-height: 1.2;
     }
-    .slot-pill--open {
-      background: var(--green-soft);
-      border: 1px solid var(--green-border);
-      color: var(--green);
+    .slot-tag__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
     }
-    .slot-pill--busy {
-      background: var(--red-soft);
-      border: 1px solid var(--red-border);
-      color: var(--red);
+    .slot-tag--open {
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: #34d399;
     }
-    .slot-pill--special {
-      background: var(--gold-soft);
-      border: 1px solid rgba(196,154,60,0.4);
-      color: var(--gold-light);
+    .slot-tag--open .slot-tag__dot { background: #34d399; }
+    .slot-tag--busy {
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      color: #f87171;
     }
-    .slot-label { font-size: 0.66rem; opacity: 0.9; }
+    .slot-tag--busy .slot-tag__dot { background: #f87171; }
+    .slot-tag--day {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--cream-dim);
+    }
 
     .time-card__footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-block-start: 0.55rem;
-      border-block-start: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 0.74rem;
+      padding-block-start: 0.75rem;
+      border-block-start: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--gold-light);
     }
     .time-card__footer svg {
-      width: 13px;
-      height: 13px;
+      width: 15px;
+      height: 15px;
       transition: transform 0.25s var(--ease);
     }
     .time-card:hover .time-card__footer svg {
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
     /* TEDER-STYLE FEED */
@@ -2312,15 +2339,18 @@
           card.setAttribute('role', 'button');
           card.setAttribute('aria-label', `${item.fullDateString} - ${item.title}`);
 
-          let morningPill = `<div class="slot-pill slot-pill--open"><span>Afternoon</span><span class="slot-label">Open / Free</span></div>`;
-          if (item.hasAfternoonEvent) {
-            morningPill = `<div class="slot-pill slot-pill--busy"><span>Afternoon</span><span class="slot-label">Private Event</span></div>`;
+          const openHour = (item.hours || '20:00').split(' - ')[0].split(' ')[0];
+
+          let badgeHtml = `<span class="time-card__badge time-card__badge--${item.badgeClass.replace('sticker--', '')}">${item.badge}</span>`;
+          if (item.isToday) {
+            badgeHtml = `<span class="time-card__badge time-card__badge--today">✦ TONIGHT</span>`;
           }
 
-          let eveningPill = `<div class="slot-pill slot-pill--open"><span>Evening</span><span class="slot-label">Public Night</span></div>`;
-          if (item.isClosedEvening) {
-            eveningPill = `<div class="slot-pill slot-pill--busy"><span>Evening</span><span class="slot-label">Private Event</span></div>`;
-          }
+          let eveningSlotText = item.isClosedEvening ? 'Evening: Private Event' : `Evening: Public (${openHour})`;
+          let eveningSlotClass = item.isClosedEvening ? 'slot-tag--busy' : 'slot-tag--open';
+
+          let afternoonSlotText = item.hasAfternoonEvent ? 'Afternoon: Private' : 'Afternoon: Available';
+          let afternoonSlotClass = item.hasAfternoonEvent ? 'slot-tag--busy' : 'slot-tag--day';
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -2328,18 +2358,23 @@
               <div class="time-card__overlay"></div>
               <div class="time-card__top-bar">
                 <span class="time-card__date-pill">${item.dateFormatted} · ${item.dayName.slice(0,3)}</span>
-                ${item.isToday ? '<span class="time-card__today-badge">TODAY</span>' : `<span class="sticker ${item.badgeClass}">${item.badge}</span>`}
+                ${badgeHtml}
               </div>
             </div>
             <div class="time-card__body">
               <div class="time-card__header">
-                <div class="time-card__dow">${item.fullDateString}</div>
+                <span class="time-card__dow">${item.fullDateString}</span>
                 <h4 class="time-card__title">${item.title}</h4>
               </div>
               <p class="time-card__lineup">${item.lineup}</p>
-              <div class="time-card__slots">
-                ${morningPill}
-                ${eveningPill}
+              <div class="time-card__slots-bar">
+                <span class="slot-tag ${eveningSlotClass}">
+                  <span class="slot-tag__dot"></span>
+                  <span>${eveningSlotText}</span>
+                </span>
+                <span class="slot-tag ${afternoonSlotClass}">
+                  <span>${afternoonSlotText}</span>
+                </span>
               </div>
               <div class="time-card__footer">
                 <span>${item.isClosedEvening ? 'Private Event Details' : 'Details & RSVP'}</span>
