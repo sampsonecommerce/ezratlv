@@ -265,44 +265,34 @@
       transition: color 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
       white-space: nowrap;
     }
-    .nav__pill::after { display: none !important; }
-    .nav__pill:hover {
-      color: var(--gold-light) !important;
-      border-color: var(--gold);
-      background: rgba(196, 154, 60, 0.15);
-      transform: translateY(-1px);
-    }
-
-    .nav__corp {
+    .nav__pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.5rem 1.25rem;
+      padding: 0.45rem 1.05rem;
       border-radius: 50px;
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       font-weight: 600;
       line-height: 1;
-      color: var(--gold) !important;
-      border: 1.5px solid var(--gold);
-      background: transparent;
-      transition: color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
-      animation: corpPulse 3s ease-in-out infinite;
+      color: var(--cream-dim) !important;
+      border: 1px solid var(--line);
+      background: rgba(196, 154, 60, 0.05);
+      transition: all 0.25s var(--ease);
+      white-space: nowrap;
     }
-    .nav__corp::after { display: none !important; }
-    .nav__corp:hover { color: var(--bg) !important; background: var(--gold); transform: translateY(-1px); }
-    /* language toggle */
-    .nav__lang {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 36px; height: 34px; padding-inline: 0.55rem;
-      border: 1px solid var(--line); border-radius: 8px;
-      color: var(--cream-dim) !important; font-size: 0.82rem; font-weight: 600; line-height: 1;
-      transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+    .nav__pill::after { display: none !important; }
+    .nav__pill:hover {
+      color: var(--cream) !important;
+      border-color: var(--gold);
+      background: rgba(196, 154, 60, 0.12);
+      transform: translateY(-1px);
     }
-    .nav__lang::after { display: none !important; }
-    .nav__lang:hover { color: var(--gold) !important; border-color: var(--gold); }
-    @keyframes corpPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(196,154,60,0); }
-      50%       { box-shadow: 0 0 14px 1px rgba(196,154,60,0.4); }
+    .nav__pill.is-active {
+      color: var(--gold-light) !important;
+      border: 1.2px solid var(--gold) !important;
+      background: rgba(196, 154, 60, 0.2) !important;
+      box-shadow: 0 0 14px rgba(196, 154, 60, 0.25);
+      transform: translateY(-1px);
     }
 
     /* hide mobile-only elements on desktop */
@@ -2859,7 +2849,7 @@
         HE
       </a>
       <a class="nav__pill" href="english-index">Private events</a>
-      <a class="nav__corp is-active" href="english-company-events">Company events</a>
+      <a class="nav__pill is-active" href="english-company-events">Company events</a>
       <a class="nav__pill" href="english-events">Public events</a>
       <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Choose a package</a>
     </div>
@@ -2876,7 +2866,7 @@
       <a class="nav__menu-link" href="company-events" hreflang="he">Hebrew / HE</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--pill" href="english-index">Private events</a>
-        <a class="nav__menu-cta nav__menu-cta--corp is-active" href="english-company-events">Company events</a>
+        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="english-company-events">Company events</a>
         <a class="nav__menu-cta nav__menu-cta--pill" href="english-events">Public events</a>
         <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Choose a package</a>
       </div>

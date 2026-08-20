@@ -202,30 +202,17 @@
       transition: all 0.25s var(--ease);
       white-space: nowrap;
     }
-    .nav__pill:hover, .nav__pill.is-active {
-      color: var(--gold-light) !important;
+    .nav__pill:hover {
+      color: var(--cream) !important;
       border-color: var(--gold);
-      background: rgba(196, 154, 60, 0.16);
+      background: rgba(196, 154, 60, 0.12);
       transform: translateY(-1px);
     }
-    .nav__corp {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.45rem 1.05rem;
-      border-radius: 50px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      line-height: 1;
-      color: var(--gold) !important;
-      border: 1.2px solid var(--gold);
-      background: transparent;
-      transition: all 0.25s var(--ease);
-      white-space: nowrap;
-    }
-    .nav__corp:hover {
-      color: var(--bg) !important;
-      background: var(--gold);
+    .nav__pill.is-active {
+      color: var(--gold-light) !important;
+      border: 1.2px solid var(--gold) !important;
+      background: rgba(196, 154, 60, 0.2) !important;
+      box-shadow: 0 0 14px rgba(196, 154, 60, 0.25);
       transform: translateY(-1px);
     }
     .nav__cta {
@@ -1262,7 +1249,7 @@
         EN
       </a>
       <a class="nav__pill" href="/">אירועים פרטיים</a>
-      <a class="nav__corp" href="company-events">אירועי חברה</a>
+      <a class="nav__pill" href="company-events">אירועי חברה</a>
       <a class="nav__pill is-active" href="events">אירועים פתוחים</a>
       <a class="nav__cta" href="#schedule">לוח אירועים</a>
     </div>
@@ -1279,7 +1266,7 @@
       <a class="nav__menu-link" href="english-events" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
         <a class="nav__menu-cta nav__menu-cta--pill" href="/">אירועים פרטיים</a>
-        <a class="nav__menu-cta nav__menu-cta--corp" href="company-events">אירועי חברה</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="company-events">אירועי חברה</a>
         <a class="nav__menu-cta nav__menu-cta--pill is-active" href="events">אירועים פתוחים</a>
         <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full" href="#schedule">ללוח האירועים</a>
       </div>
