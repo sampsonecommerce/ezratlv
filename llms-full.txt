@@ -80,6 +80,7 @@ Over 800 events hosted and more than 40,000 guests to date. Google rating: 5.0 o
 **Is there parking?** Not on site; paid lots nearby.
 
 ## Key pages
+- [סוגי אירועים](https://ezratlv.com/event-types): every event type the venue runs, with the venue facts in one scannable block.
 
 - [Home - private events, Hebrew](https://ezratlv.com/)
 - [Company events - booking and pricing, Hebrew](https://ezratlv.com/company-events)

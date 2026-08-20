@@ -21,6 +21,7 @@ Ezra TLV is a private bar that opens only for your group that night. It is not a
 - [Company events - booking and pricing (Hebrew)](https://ezratlv.com/company-events): packages, live date availability, menu selection, instant final price, contract by email.
 - [Home (English)](https://ezratlv.com/english-index): the same venue overview for English speakers.
 - [Company events (English)](https://ezratlv.com/english-company-events): packages and booking for English speakers.
+- [סוגי אירועים (event-types)](https://ezratlv.com/event-types): every event type the venue runs, the venue facts in one scannable block, and how to choose a small-event venue.
 - [ערב צוות בתל אביב (team-events)](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings and team dinners, up to 50.
 - [אירוע עד 50 איש בתל אביב (events-up-to-50)](https://ezratlv.com/events-up-to-50): Events up to 50 guests (Hebrew): formats by group size, full exclusivity.
 - [מסיבת סיום הפקה בתל אביב (wrap-party)](https://ezratlv.com/wrap-party): Production wrap party (Hebrew): private venue for wrap parties, up to 50.
