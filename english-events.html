@@ -577,11 +577,23 @@
     .schedule-top {
       display: flex;
       align-items: center;
+    /* SCHEDULE BOX & 30-DAY VISUAL CARDS */
+    .schedule-box {
+      background: linear-gradient(180deg, #15110c 0%, #0d0b08 100%);
+      border: 1px solid var(--line-bright);
+      border-radius: 24px;
+      padding: clamp(1.8rem, 4vw, 3rem) clamp(1.2rem, 3.5vw, 2.5rem);
+      box-shadow: 0 25px 60px -20px rgba(0,0,0,0.9);
+      margin-block-end: 2.5rem;
+    }
+    .schedule-top {
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 1.2rem;
       flex-wrap: wrap;
-      margin-block-end: 2rem;
-      padding-block-end: 1.4rem;
+      margin-block-end: 1.5rem;
+      padding-block-end: 1.2rem;
       border-block-end: 1px solid rgba(196,154,60,0.2);
     }
     .schedule-top__info h3 {
@@ -608,82 +620,242 @@
     }
     .schedule-source-badge__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
 
+    /* Schedule Navigation & Week Tabs */
+    .schedule-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-block-end: 1.8rem;
+      padding: 0.5rem 0.8rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      border-radius: 50px;
+    }
+    .schedule-weeks-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .week-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 1.05rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--cream-dim);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      font-family: inherit;
+    }
+    .week-tab-btn:hover {
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .week-tab-btn.is-active {
+      color: var(--bg);
+      background: var(--gold);
+      border-color: var(--gold);
+      font-weight: 800;
+      box-shadow: 0 0 16px rgba(196, 154, 60, 0.35);
+    }
+    .schedule-nav-arrows {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-arrow-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--cream-dim);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      font-family: inherit;
+    }
+    .nav-arrow-btn:hover:not(:disabled) {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+    }
+    .nav-arrow-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* Timeline Visual Grid */
     .timeline-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 0.75rem;
+      gap: 0.85rem;
+      transition: opacity 0.3s var(--ease);
     }
-    @media (max-width: 960px) {
-      .timeline-grid { grid-template-columns: repeat(4, 1fr); }
+    .timeline-grid.is-month-view {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.1rem;
     }
-    @media (max-width: 600px) {
-      .timeline-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 1250px) {
+      .timeline-grid:not(.is-month-view) { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .timeline-grid:not(.is-month-view) { grid-template-columns: repeat(2, 1fr); }
+      .timeline-grid.is-month-view { grid-template-columns: repeat(2, 1fr); }
+      .schedule-nav-bar { border-radius: 20px; justify-content: center; }
+      .schedule-weeks-tabs { width: 100%; justify-content: center; }
+      .schedule-nav-arrows { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 520px) {
+      .timeline-grid:not(.is-month-view) { grid-template-columns: 1fr; }
+      .timeline-grid.is-month-view { grid-template-columns: 1fr; }
     }
 
+    /* Rich Visual Time Card */
     .time-card {
-      background: rgba(255, 255, 255, 0.025);
+      background: #14100b;
       border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 1.1rem 0.85rem;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      cursor: pointer;
       position: relative;
-      overflow: hidden;
-      transition: all 0.3s var(--ease);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6);
+      text-align: start;
     }
     .time-card:hover {
+      transform: translateY(-5px);
       border-color: var(--gold);
-      background: rgba(196,154,60,0.06);
-      transform: translateY(-3px);
+      box-shadow: 0 18px 38px -10px rgba(196,154,60,0.3);
     }
     .time-card.is-today {
-      border-color: var(--gold);
-      background: rgba(196, 154, 60, 0.1);
-      box-shadow: 0 0 25px -5px rgba(196,154,60,0.35);
+      border: 1.5px solid var(--gold);
+      background: #1a140d;
+      box-shadow: 0 0 28px -5px rgba(196, 154, 60, 0.4);
     }
-    .time-card.is-today::before {
-      content: 'TODAY';
-      position: absolute;
-      inset-block-start: 6px;
-      inset-inline-start: 6px;
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: var(--bg);
-      background: var(--gold);
-      padding: 0.15rem 0.5rem;
-      border-radius: 20px;
-    }
-    .time-card__dow {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--cream-dim);
-      margin-block-end: 0.15rem;
-    }
-    .time-card__date {
-      font-family: 'Pliant', sans-serif;
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: var(--cream);
-      line-height: 1.1;
-      margin-block-end: 0.75rem;
-    }
-
-    .time-card__slots {
+    .time-card__img-wrap {
+      position: relative;
       width: 100%;
+      aspect-ratio: 16 / 11;
+      overflow: hidden;
+      background: #090705;
+    }
+    .time-card__img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) contrast(1.08);
+      transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
+      display: block;
+    }
+    .time-card:hover .time-card__img-wrap img {
+      transform: scale(1.08);
+      filter: brightness(1) contrast(1.15);
+    }
+    .time-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(20,16,11,0.92) 100%);
+      pointer-events: none;
+    }
+    .time-card__top-bar {
+      position: absolute;
+      inset-block-start: 8px;
+      inset-inline: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      z-index: 2;
+    }
+    .time-card__today-badge {
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 0.2rem 0.55rem;
+      border-radius: 50px;
+      letter-spacing: 0.04em;
+    }
+    .time-card__date-pill {
+      background: rgba(0, 0, 0, 0.78);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: var(--cream);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: 50px;
+    }
+    .time-card__body {
+      padding: 0.85rem 0.9rem 0.95rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-      margin-block-end: 0.6rem;
+      flex: 1;
+      justify-content: space-between;
+      gap: 0.55rem;
+    }
+    .time-card__header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .time-card__dow {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .time-card__title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.25;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .time-card__lineup {
+      font-size: 0.75rem;
+      color: var(--cream-dim);
+      line-height: 1.35;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2em;
+    }
+    .time-card__slots {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-block: 0.15rem;
     }
     .slot-pill {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.25rem 0.55rem;
-      border-radius: 8px;
-      font-size: 0.72rem;
+      padding: 0.22rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
       font-weight: 700;
       line-height: 1.2;
     }
@@ -697,19 +869,30 @@
       border: 1px solid var(--red-border);
       color: var(--red);
     }
-    .slot-label { font-size: 0.68rem; opacity: 0.85; }
+    .slot-pill--special {
+      background: var(--gold-soft);
+      border: 1px solid rgba(196,154,60,0.4);
+      color: var(--gold-light);
+    }
+    .slot-label { font-size: 0.66rem; opacity: 0.9; }
 
-    .time-card__concept {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--cream);
-      min-height: 2.3em;
-      line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-block-start: 0.2rem;
+    .time-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block-start: 0.55rem;
+      border-block-start: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+    .time-card__footer svg {
+      width: 13px;
+      height: 13px;
+      transition: transform 0.25s var(--ease);
+    }
+    .time-card:hover .time-card__footer svg {
+      transform: translateX(3px);
     }
 
     /* TEDER-STYLE FEED */
@@ -1416,17 +1599,37 @@
       <div class="schedule-box">
         <div class="schedule-top">
           <div class="schedule-top__info">
-            <h3>Weekly Opening Hours</h3>
-            <p>Open to the public from 20:00 on public nights</p>
+            <h3 id="scheduleHeading">Upcoming Nights & Opening Hours</h3>
+            <p id="scheduleSubhead">1 Month Schedule · Click any event for full details, lineup & RSVP</p>
           </div>
           <div class="schedule-source-badge">
             <span class="schedule-source-badge__dot"></span>
-            <span>Weekly Schedule</span>
+            <span id="scheduleStatusBadge">Live Availability Sync</span>
+          </div>
+        </div>
+
+        <div class="schedule-nav-bar">
+          <div class="schedule-weeks-tabs" id="weekTabs">
+            <button class="week-tab-btn is-active" data-week="0" type="button">Current Week</button>
+            <button class="week-tab-btn" data-week="1" type="button">Next Week</button>
+            <button class="week-tab-btn" data-week="2" type="button">Week 3</button>
+            <button class="week-tab-btn" data-week="3" type="button">Week 4</button>
+            <button class="week-tab-btn" data-week="all" type="button">Full Month (30 Days) ✦</button>
+          </div>
+          <div class="schedule-nav-arrows">
+            <button class="nav-arrow-btn" id="prevWeekBtn" type="button" aria-label="Previous week">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              <span>Prev</span>
+            </button>
+            <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="Next week">
+              <span>Next</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
           </div>
         </div>
 
         <div class="timeline-grid" id="weekGrid">
-          <!-- Rendered dynamically by JS with real availability -->
+          <!-- Rendered dynamically with 30 visual day cards by JS -->
         </div>
       </div>
     </div>
@@ -1825,6 +2028,15 @@
               <button class="btn btn--fill rsvp-submit" type="submit">Confirm & Send via WhatsApp</button>
             </form>
           </div>
+
+          <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.2rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 16px; text-align: center;">
+            <h4 style="color: var(--gold-light); font-size: 1.05rem; font-weight: 800; margin-block-end: 0.4rem;">Closed for a Private Gathering Tonight</h4>
+            <p style="font-size: 0.85rem; color: var(--cream-dim); margin-block-end: 1rem; line-height: 1.5;">Looking to host a birthday, intimate wedding, or corporate event at Ezra? We would love to host your celebration on one of our available dates.</p>
+            <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
+              <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=Hi%20Ezra%2C%20I%20am%20interested%20in%20booking%20a%20private%20event" target="_blank" rel="noopener">Inquire via WhatsApp</a>
+              <a class="btn btn--outline btn--sm" href="english-index">Private Event Details</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1915,37 +2127,102 @@
       });
     })();
 
-    // Live Weekly Schedule & Monday API Availability (Morning / Evening Slots)
+    // ============================================================
+    // 30-DAY VISUAL SCHEDULE & REAL-TIME AVAILABILITY
+    // ============================================================
+    let openEventModal;
+
     (function(){
       const weekGrid = document.getElementById('weekGrid');
       const liveText = document.getElementById('heroLiveText');
+      const weekTabs = document.getElementById('weekTabs');
+      const prevWeekBtn = document.getElementById('prevWeekBtn');
+      const nextWeekBtn = document.getElementById('nextWeekBtn');
+
       const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const pad = n => String(n).padStart(2, '0');
       const today = new Date();
 
-      const weeklyTheme = {
-        0: { name: 'Public Night · Wine & Vinyl', hours: '20:00 - 01:00' },
-        1: { name: 'Wood-Oven Chef Pop-Up', hours: '19:30 - 01:00' },
-        2: { name: 'Public Night · Cocktails & Groove', hours: '20:00 - 01:30' },
-        3: { name: 'Album Listening & Hi-Fi Session', hours: '20:30 - 01:30' },
-        4: { name: 'Vinyl Only Night · Funk & Soul', hours: '21:00 - 02:30' },
-        5: { name: 'Public Night · Weekend Party', hours: '21:00 - 03:00' },
-        6: { name: 'Saturday · Live Jazz Hang', hours: '20:30 - 02:00' },
-      };
-
+      let currentView = 0; // 0, 1, 2, 3, or 'all'
       let busyWindows = [];
       let bookedDates = new Set();
+      let allDaysData = [];
 
-      function renderSchedule() {
-        if (!weekGrid) return;
-        weekGrid.innerHTML = '';
+      const dayThemes = {
+        0: {
+          title: 'Wine & Vinyl Chill · Ambient Listening',
+          lineup: 'Natural & Boutique Wines by the Glass · Ambient Vinyl',
+          desc: 'Start the week relaxed at Ezra\'s analog listening bar: a curated selection of natural wines, hot sourdough dishes from the stone oven, and warm vinyl grooves.',
+          img: 'images/vibe-cocktail.jpg',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
+          hours: '20:00 - 01:00'
+        },
+        1: {
+          title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
+          lineup: 'Guest Chef & Tailored Botanical Cocktails',
+          desc: 'A one-night special wood-fired menu: warm sourdough with spiced butters, fresh crudo, charred seasonal vegetables and craft cocktails.',
+          img: 'images/FOOD ENVIRONMENT.jpg',
+          badge: 'RSVP Required',
+          badgeClass: 'sticker--rsvp',
+          hours: '19:30 / 22:00'
+        },
+        2: {
+          title: 'Cocktails & Soul · Mixology & Groove',
+          lineup: 'Seasonal Cocktail Menu & Eclectic Soul Selection',
+          desc: 'An evening of elevated cocktail craft: classic and innovative recipes, stone-oven small plates, and a warm soul & rare groove soundtrack.',
+          img: 'images/COCKTAIL 1.jpg',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
+          hours: '20:00 - 01:30'
+        },
+        3: {
+          title: 'Night Sessions · Album Listening & Hi-Fi',
+          lineup: 'Deep Listening on Ezra\'s Custom Analog System',
+          desc: 'An immersive listening session with full albums played on original vinyl records over our custom analog sound system with dimmed lights and signature drinks.',
+          img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
+          hours: '20:30 - 01:30'
+        },
+        4: {
+          title: 'Groove & Grapes · Rare Funk & Soul Vinyl',
+          lineup: 'DJ Amir Peled & Special Guests · Original Pressings',
+          desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and sourdough dishes from the wood oven.',
+          img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
+          hours: '21:00 till late'
+        },
+        5: {
+          title: 'Weekend Party · Florentin Night Sessions',
+          lineup: 'Ezra Sound System DJs · Groove, Disco & House',
+          desc: 'A high-energy Tel Aviv weekend celebration: vibrant DJ booth, precision cocktails from the bar, and a late-night atmosphere.',
+          img: 'images/gallery/g01.jpg',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
+          hours: '21:00 - 03:00'
+        },
+        6: {
+          title: 'Florentin Jazz Hang · Live Trio at the Bar',
+          lineup: 'Piano, Double Bass & Drums · Intimate Live Improvisation',
+          desc: 'Warm acoustic jazz, rhythmic improvisation and a relaxed speakeasy vibe alongside classic cocktails.',
+          img: 'images/MOMENT 1.jpg',
+          badge: 'RSVP Recommended',
+          badgeClass: 'sticker--rsvp',
+          hours: '20:30 - 02:00'
+        }
+      };
 
-        for (let i = 0; i < 7; i++) {
+      function generate30Days() {
+        allDaysData = [];
+        for (let i = 0; i < 30; i++) {
           const d = new Date(today);
           d.setDate(today.getDate() + i);
           const dow = d.getDay();
           const dateKey = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
           const isToday = i === 0;
+          const weekIdx = Math.floor(i / 7);
 
           const dateBusy = busyWindows.filter(b => b.date === dateKey);
           const isBooked = bookedDates.has(dateKey) || dateBusy.length > 0;
@@ -1959,47 +2236,184 @@
             else hasEveningEvent = true;
           });
 
-          const card = document.createElement('div');
-          card.className = `time-card ${isToday ? 'is-today' : ''}`;
+          const theme = dayThemes[dow] || dayThemes[4];
+          const isClosedEvening = hasEveningEvent || (isBooked && !hasAfternoonEvent);
 
-          let morningPill = `<div class="slot-pill slot-pill--open"><span>Afternoon</span><span class="slot-label">Open / Free</span></div>`;
-          if (hasAfternoonEvent) {
-            morningPill = `<div class="slot-pill slot-pill--busy"><span>Afternoon</span><span class="slot-label">Private Event</span></div>`;
+          let title = theme.title;
+          let lineup = theme.lineup;
+          let desc = theme.desc;
+          let img = theme.img;
+          let badge = theme.badge;
+          let badgeClass = theme.badgeClass;
+
+          if (isClosedEvening) {
+            title = 'Private Event · Reserved Gathering';
+            lineup = 'Venue held exclusively for private guests';
+            desc = 'The venue is reserved tonight for an exclusive private gathering. Interested in hosting your birthday, intimate wedding, or corporate event at Ezra? Reach out to check open dates.';
+            img = 'images/BAR.jpg';
+            badge = 'Private Event';
+            badgeClass = 'sticker--busy';
           }
 
-          let eveningPill = `<div class="slot-pill slot-pill--open"><span>Evening</span><span class="slot-label">Public Night</span></div>`;
-          let conceptTitle = weeklyTheme[dow]?.name || 'Open to the Public';
+          allDaysData.push({
+            index: i,
+            weekIdx: weekIdx,
+            dateKey: dateKey,
+            dateObj: d,
+            dow: dow,
+            dayName: daysEn[dow],
+            dateFormatted: `${pad(d.getDate())}.${pad(d.getMonth()+1)}`,
+            fullDateString: `${daysEn[dow]} ${pad(d.getDate())}.${pad(d.getMonth()+1)}`,
+            isToday: isToday,
+            hasAfternoonEvent: hasAfternoonEvent,
+            hasEveningEvent: hasEveningEvent,
+            isClosedEvening: isClosedEvening,
+            title: title,
+            lineup: lineup,
+            desc: desc,
+            img: img,
+            badge: badge,
+            badgeClass: badgeClass,
+            hours: theme.hours
+          });
+        }
 
-          if (hasEveningEvent || (isBooked && !hasAfternoonEvent)) {
-            eveningPill = `<div class="slot-pill slot-pill--busy"><span>Evening</span><span class="slot-label">Private Event</span></div>`;
-            conceptTitle = 'Closed for Private Event';
-          }
-
-          card.innerHTML = `
-            <div class="time-card__dow">${daysEn[dow]}</div>
-            <div class="time-card__date">${pad(d.getDate())}.${pad(d.getMonth()+1)}</div>
-            <div class="time-card__slots">
-              ${morningPill}
-              ${eveningPill}
-            </div>
-            <div class="time-card__concept">${conceptTitle}</div>
-          `;
-          weekGrid.appendChild(card);
-
-          if (isToday && liveText) {
-            if (hasEveningEvent || (isBooked && !hasAfternoonEvent)) {
-              liveText.innerHTML = `<strong>Tonight:</strong> Closed for Private Event`;
-            } else {
-              const openHour = (weeklyTheme[dow]?.hours || '20:00').split(' - ')[0];
-              liveText.innerHTML = `<strong>Tonight:</strong> Open to public from ${openHour} · ${conceptTitle}`;
-            }
+        if (liveText && allDaysData[0]) {
+          const t0 = allDaysData[0];
+          if (t0.isClosedEvening) {
+            liveText.innerHTML = `<strong>Tonight:</strong> Closed for Private Event`;
+          } else {
+            const openHour = (t0.hours || '20:00').split(' - ')[0].split(' ')[0];
+            liveText.innerHTML = `<strong>Tonight:</strong> Open to public from ${openHour} · ${t0.title.split('·')[0]}`;
           }
         }
       }
 
+      function renderGrid() {
+        if (!weekGrid) return;
+        weekGrid.innerHTML = '';
+
+        let visibleDays = allDaysData;
+        if (currentView !== 'all') {
+          visibleDays = allDaysData.filter(d => d.weekIdx === currentView);
+          weekGrid.classList.remove('is-month-view');
+        } else {
+          weekGrid.classList.add('is-month-view');
+        }
+
+        visibleDays.forEach(item => {
+          const card = document.createElement('article');
+          card.className = `time-card ${item.isToday ? 'is-today' : ''}`;
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-label', `${item.fullDateString} - ${item.title}`);
+
+          let morningPill = `<div class="slot-pill slot-pill--open"><span>Afternoon</span><span class="slot-label">Open / Free</span></div>`;
+          if (item.hasAfternoonEvent) {
+            morningPill = `<div class="slot-pill slot-pill--busy"><span>Afternoon</span><span class="slot-label">Private Event</span></div>`;
+          }
+
+          let eveningPill = `<div class="slot-pill slot-pill--open"><span>Evening</span><span class="slot-label">Public Night</span></div>`;
+          if (item.isClosedEvening) {
+            eveningPill = `<div class="slot-pill slot-pill--busy"><span>Evening</span><span class="slot-label">Private Event</span></div>`;
+          }
+
+          card.innerHTML = `
+            <div class="time-card__img-wrap">
+              <img src="${item.img}" alt="${item.title}" loading="lazy" />
+              <div class="time-card__overlay"></div>
+              <div class="time-card__top-bar">
+                <span class="time-card__date-pill">${item.dateFormatted} · ${item.dayName.slice(0,3)}</span>
+                ${item.isToday ? '<span class="time-card__today-badge">TODAY</span>' : `<span class="sticker ${item.badgeClass}">${item.badge}</span>`}
+              </div>
+            </div>
+            <div class="time-card__body">
+              <div class="time-card__header">
+                <div class="time-card__dow">${item.fullDateString}</div>
+                <h4 class="time-card__title">${item.title}</h4>
+              </div>
+              <p class="time-card__lineup">${item.lineup}</p>
+              <div class="time-card__slots">
+                ${morningPill}
+                ${eveningPill}
+              </div>
+              <div class="time-card__footer">
+                <span>${item.isClosedEvening ? 'Private Event Details' : 'Details & RSVP'}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </div>
+            </div>
+          `;
+
+          card.addEventListener('click', () => {
+            if (typeof openEventModal === 'function') {
+              openEventModal(item);
+            }
+          });
+
+          card.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              if (typeof openEventModal === 'function') openEventModal(item);
+            }
+          });
+
+          weekGrid.appendChild(card);
+        });
+
+        updateNavControls();
+      }
+
+      function updateNavControls() {
+        if (weekTabs) {
+          weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
+            const w = btn.getAttribute('data-week');
+            const isActive = (w === 'all' && currentView === 'all') || (parseInt(w, 10) === currentView);
+            btn.classList.toggle('is-active', isActive);
+          });
+        }
+        if (prevWeekBtn && nextWeekBtn) {
+          if (currentView === 'all') {
+            prevWeekBtn.disabled = true;
+            nextWeekBtn.disabled = true;
+          } else {
+            prevWeekBtn.disabled = currentView <= 0;
+            nextWeekBtn.disabled = currentView >= 3;
+          }
+        }
+      }
+
+      if (weekTabs) {
+        weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const w = btn.getAttribute('data-week');
+            currentView = w === 'all' ? 'all' : parseInt(w, 10);
+            renderGrid();
+          });
+        });
+      }
+
+      if (prevWeekBtn) {
+        prevWeekBtn.addEventListener('click', () => {
+          if (currentView === 'all') currentView = 0;
+          else if (currentView > 0) currentView--;
+          renderGrid();
+        });
+      }
+
+      if (nextWeekBtn) {
+        nextWeekBtn.addEventListener('click', () => {
+          if (currentView === 'all') currentView = 1;
+          else if (currentView < 3) currentView++;
+          renderGrid();
+        });
+      }
+
       function loadAvailability() {
+        generate30Days();
+        renderGrid();
+
         const ep = window.EZRA_AVAILABILITY_ENDPOINT;
-        if (!ep) { renderSchedule(); return; }
+        if (!ep) return;
 
         fetch(ep, { method: 'GET' })
           .then(r => r.ok ? r.json() : null)
@@ -2009,17 +2423,21 @@
               bookedDates = new Set(arr);
               busyWindows = Array.isArray(j.busy) ? j.busy : [];
             }
-            renderSchedule();
+            generate30Days();
+            renderGrid();
           })
           .catch(() => {
-            renderSchedule();
+            generate30Days();
+            renderGrid();
           });
       }
 
       loadAvailability();
     })();
 
-    // Modal & RSVP
+    // ============================================================
+    // EVENT MODAL & RSVP HANDLER
+    // ============================================================
     (function(){
       const modal = document.getElementById('eventModal');
       const closeBtn = document.getElementById('modalClose');
@@ -2030,9 +2448,11 @@
       const modalBadge = document.getElementById('modalBadge');
       const modalDateTag = document.getElementById('modalDateTag');
       const rsvpForm = document.getElementById('rsvpFormEl');
+      const modalRsvp = document.getElementById('modalRsvp');
+      const modalPrivateBox = document.getElementById('modalPrivateBox');
       const toast = document.getElementById('toast');
 
-      const eventsData = {
+      const staticEvents = {
         '1': {
           title: 'Groove & Grapes · Rare Funk & Soul Vinyl Session',
           lineup: 'On the decks: DJ Amir Peled & Special Guests',
@@ -2040,7 +2460,7 @@
           img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
-          date: 'Thu 20.08 · 21:00'
+          fullDateString: 'Thu 20.08 · 21:00'
         },
         '2': {
           title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
@@ -2049,7 +2469,7 @@
           img: 'images/FOOD ENVIRONMENT.jpg',
           badge: 'RSVP Required',
           badgeClass: 'sticker--rsvp',
-          date: 'Mon 24.08 · 19:30 / 22:00'
+          fullDateString: 'Mon 24.08 · 19:30 / 22:00'
         },
         '3': {
           title: 'Night Sessions · Exclusive Album Pre-Release',
@@ -2058,7 +2478,7 @@
           img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
-          date: 'Wed 26.08 · 20:30'
+          fullDateString: 'Wed 26.08 · 20:30'
         },
         '4': {
           title: 'Florentin Jazz Hang · Live Trio at the Bar',
@@ -2067,25 +2487,36 @@
           img: 'images/MOMENT 1.jpg',
           badge: 'RSVP Recommended',
           badgeClass: 'sticker--rsvp',
-          date: 'Sat 29.08 · 21:00'
+          fullDateString: 'Sat 29.08 · 21:00'
         }
       };
 
-      function openModal(id) {
-        const ev = eventsData[id] || eventsData['1'];
+      openEventModal = function(data) {
+        if (!modal) return;
+        const ev = (typeof data === 'string') ? (staticEvents[data] || staticEvents['1']) : data;
+
         modalImg.src = ev.img;
         modalTitle.textContent = ev.title;
         modalLineup.textContent = ev.lineup;
         modalDesc.textContent = ev.desc;
         modalBadge.textContent = ev.badge;
         modalBadge.className = `sticker ${ev.badgeClass}`;
-        modalDateTag.textContent = ev.date;
+        modalDateTag.textContent = ev.fullDateString || ev.date || '';
+
+        if (ev.isClosedEvening) {
+          if (modalRsvp) modalRsvp.style.display = 'none';
+          if (modalPrivateBox) modalPrivateBox.style.display = 'block';
+        } else {
+          if (modalRsvp) modalRsvp.style.display = 'block';
+          if (modalPrivateBox) modalPrivateBox.style.display = 'none';
+        }
 
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
-      }
+      };
 
       function closeModal() {
+        if (!modal) return;
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
       }
@@ -2093,7 +2524,7 @@
       document.querySelectorAll('.js-modal-open').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-event');
-          openModal(id);
+          openEventModal(id);
         });
       });
 
@@ -2108,8 +2539,9 @@
           const guests = document.getElementById('rsvpGuests').value;
           const note = document.getElementById('rsvpNote').value;
           const title = modalTitle.textContent;
+          const date = modalDateTag.textContent;
 
-          const waUrl = `https://wa.me/972509499241?text=${encodeURIComponent(`Hi Ezra, I would like to reserve a spot for "${title}":\nName: ${name}\nPhone: ${phone}\nGuests: ${guests}\nNotes: ${note || 'None'}`)}`;
+          const waUrl = `https://wa.me/972509499241?text=${encodeURIComponent(`Hi Ezra, I would like to reserve a spot for "${title}" (${date}):\nName: ${name}\nPhone: ${phone}\nGuests: ${guests}\nNotes: ${note || 'None'}`)}`;
           
           closeModal();
           showToast(`Thank you ${name}! Your RSVP has been sent.`);
