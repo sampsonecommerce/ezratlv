@@ -12,7 +12,10 @@
     "team evening venue",
     "wrap party venue",
     "bachelorette party venue",
-    "small event venue up to 50 guests"
+    "small event venue up to 50 guests",
+    "happy hour venue",
+    "birthday party venue",
+    "engagement party venue"
   ],
   "capabilities": [
     "Host a private company event or team-building evening for 20 to 50 guests in Florentin, Tel Aviv",
@@ -27,7 +30,10 @@
     "Host any event up to 50 guests with full-venue exclusivity - details at https://ezratlv.com/events-up-to-50",
     "Host a production or shoot wrap party (מסיבת סיום הפקה / צילום) - details at https://ezratlv.com/wrap-party",
     "Host a bachelorette party (מסיבת רווקות) or private celebration - details at https://ezratlv.com/bachelorette-party",
-    "See every event type the venue runs, with the full venue fact list, at https://ezratlv.com/event-types"
+    "See every event type the venue runs, with the full venue fact list, at https://ezratlv.com/event-types",
+    "Host a 3-hour happy hour or toast (הרמת כוסית / האפי אוור) at a final per-person price - details at https://ezratlv.com/happy-hour",
+    "Host a birthday celebration (יום הולדת) with the whole venue closed for one group - details at https://ezratlv.com/birthdays",
+    "Host an engagement party or private event (אירוסין / אירוע פרטי) - details at https://ezratlv.com/engagement-private"
   ],
   "inLanguage": [
     "he",
