@@ -15,6 +15,11 @@ Origin: `add-event-marketing-growth` (ezra-plans hub). Content inputs - real cus
 - [x] 2.4 Write `bachelorette-party.html` - מסיבת רווקות framed inside private events; same bar
 - [x] 2.5 Strengthen `company-events.html` in place with the buyer-category phrasing the Q1 answer showed missing (small company event language); no new page, booking wizard untouched
 - [x] 2.6 Mirror the 2.5 content edits to `english-company-events.html` (existing bilingual pair stays in sync; new pages deliberately have no twins)
+- [x] 2.7 Write `event-types.html` - the סוגי אירועים hub, one card per event type, each card opening that type's own page rather than the homepage - PR #25, 2026-08-20
+- [x] 2.8 Write `happy-hour.html` - האפי אוור / ערב אחרי העבודה - PR #27, 2026-08-22
+- [x] 2.9 Write `birthdays.html` - יום הולדת - PR #27, 2026-08-22
+- [x] 2.10 Write `engagement-private.html` - אירוסין together with private events, one page because the two intents share a buyer - PR #27, 2026-08-22
+- [x] 2.11 Structure every event-type page so each atomic fact sits under its own `<h3>`, with question-shaped headings - the retrieval unit the 2026-08-20 Florentina teardown showed being quoted verbatim
 
 ## 3. Showcase posts (needs hub 3.3 selection + consent)
 
@@ -40,5 +45,5 @@ Origin: `add-event-marketing-growth` (ezra-plans hub). Content inputs - real cus
 - [x] 6.1 Phrase-presence check: grep the branch tree for each intent phrase; each found in its dedicated page's title, h1, and body
 - [x] 6.2 Pre-merge checklist from design: JSON-LD validates and matches visible content; tag parity vs ANALYTICS.md on every new page; every sitemap/llms URL resolves; boundary check - no internal material, no unconsented identification
 - [x] 6.3 Review pass for natural Hebrew: every heading and paragraph reads as spoken language; anything that exists only for phrase-matching removed
-- [x] 6.4 Single reviewed merge to `main`; after Pages deploys, verify live URLs and structured data on production - merged 2026-08-20 as PR #19 (0c9a157); all five pages 200, JSON-LD parses live, tag set present, sitemap/llms/service.json carry the four new URLs
+- [x] 6.4 Single reviewed merge to `main`; after Pages deploys, verify live URLs and structured data on production - merged 2026-08-20 as PR #19 (0c9a157); all five pages 200, JSON-LD parses live, tag set present, sitemap/llms/service.json carry the four new URLs. Shipped in three reviewed batches, not one: PR #19 (2026-08-20, the four intent pages), PR #25 (2026-08-20, the `event-types.html` hub), PR #27 (2026-08-22, happy hour, birthdays, engagement/private). Each batch was wired into `sitemap.xml`, `llms.txt`, `llms-full.txt` and `/ai/service.json` in its own merge
 - [x] 6.5 Report ship date to the hub so the post-ship query-log run (hub 4.3–4.4) is scheduled ≥2 weeks out - shipped 2026-08-20, re-run due 2026-09-03, recorded in `knowledge/marketing/geo-query-log.md`
