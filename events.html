@@ -1105,8 +1105,14 @@
     ============================================================ */
     .fmt-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 990px) {
+      .fmt-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .fmt-grid { grid-template-columns: 1fr; gap: 1rem; }
     }
     .fmt-card {
       display: flex;
@@ -2934,7 +2940,52 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 <span>קודם</span>
               </button>
-              <button class="nav-arrow-btn" id="next      <div class="fmt-grid" id="eventsList">
+              <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="ימים הבאים">
+                <span>הבא</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="schedule-slider-wrap">
+            <button class="sched-slider-arrow sched-slider-arrow--prev" id="schedSliderPrev" type="button" aria-label="אירועים קודמים">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="timeline-grid" id="weekGrid">
+              <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
+            </div>
+            <button class="sched-slider-arrow sched-slider-arrow--next" id="schedSliderNext" type="button" aria-label="אירועים הבאים">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <!-- Bottom progress bar (Clean line) -->
+          <div class="slider-progress-wrap">
+            <div class="slider-progress-bar">
+              <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Free-Floating Minimalist Speakeasy Bartender (OUTSIDE the box, on the bottom left) -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. CURATED CONCEPT SERIES & RESIDENT VIBES
+  ============================================================ -->
+  <section id="events" class="reveal">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">ערבים פתוחים</span>
+        <h2>הפורמטים הקבועים</h2>
+        <p>
+          עזרא מארח מגוון פורמטים וקונספטים שבועיים פתוחים לקהל הרחב. בחרו פורמט כדי לגלות את האופי, המוזיקה והקולינריה, או השאירו פרטים ליזום ליין / אירוע משותף.
+        </p>
+      </div>
+
+      <div class="fmt-grid" id="eventsList">
         <article class="fmt-card" data-category="tea">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -3086,15 +3137,15 @@
                 <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#liveSpotlightGrad)"/>
 
                 <!-- Acoustic Resonance Waves Expanding from Soundhole -->
-                <circle class="anim-sound-ripple-1" cx="165" cy="125" r="40" stroke="url(#guitarGoldGrad)" stroke-width="1.2" fill="none"/>
-                <circle class="anim-sound-ripple-2" cx="165" cy="125" r="40" stroke="url(#guitarGoldGrad)" stroke-width="1" fill="none"/>
+                <circle class="anim-sound-ripple-1" cx="165" cy="120" r="38" stroke="url(#guitarGoldGrad)" stroke-width="1.2" fill="none"/>
+                <circle class="anim-sound-ripple-2" cx="165" cy="120" r="38" stroke="url(#guitarGoldGrad)" stroke-width="1" fill="none"/>
 
                 <!-- Acoustic Guitar Playing Itself (Tilted Body) -->
                 <g class="anim-guitar-body">
                   <!-- Guitar Silhouette Shadow -->
-                  <path d="M 120 185 C 80 185 60 155 80 120 C 95 95 90 85 85 75 C 75 60 90 40 120 40 C 150 40 165 60 155 75 C 150 85 145 95 160 120 C 180 155 160 185 120 185 Z" transform="translate(50, 10) rotate(-22 120 110)" fill="#0d0a07" opacity="0.75"/>
+                  <path d="M 120 185 C 80 185 60 155 80 120 C 95 95 90 85 85 75 C 75 60 90 40 120 40 C 150 40 165 60 155 75 C 150 85 145 95 160 120 C 180 155 160 185 120 185 Z" transform="translate(60, 22) scale(0.85) rotate(-16 120 110)" fill="#0d0a07" opacity="0.75"/>
 
-                  <g transform="translate(35, 5) rotate(-22 120 110)">
+                  <g transform="translate(48, 15) scale(0.85) rotate(-16 120 110)">
                     <!-- Guitar Body (Figure-8 Dreadnought Shape) -->
                     <path d="M 120 185 C 75 185 55 155 75 120 C 90 95 85 82 80 72 C 72 58 88 42 120 42 C 152 42 168 58 160 72 C 155 82 150 95 165 120 C 185 155 165 185 120 185 Z" fill="url(#guitarBodyGrad)" stroke="url(#guitarGoldGrad)" stroke-width="2"/>
                     
@@ -3246,9 +3297,6 @@
                   <path d="M 36 34 Q 40 28 44 32 Q 40 38 36 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.6"/>
                   <path d="M 46 44 Q 50 38 54 42 Q 50 48 46 44 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.6"/>
                   <path d="M 28 42 Q 32 37 36 40 Q 32 46 28 42 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.6"/>
-                  
-                  <!-- Dish Tag -->
-                  <text x="40" y="78" fill="#fef08a" font-size="9" font-weight="700" text-anchor="middle" letter-spacing="1">PIZZA NAPOLETANA</text>
                 </g>
 
                 <!-- DISH 2: Sizzling Cast-Iron Skillet & Wood-Fired Steak -->
@@ -3267,9 +3315,6 @@
                   <!-- Confit Garlic & Rosemary -->
                   <circle cx="26" cy="45" r="3.5" fill="#fef08a" stroke="#ca8a04" stroke-width="0.6"/>
                   <path d="M 48 30 Q 55 24 60 28" stroke="#65a30d" stroke-width="1.4" stroke-linecap="round"/>
-                  
-                  <!-- Dish Tag -->
-                  <text x="40" y="78" fill="#fef08a" font-size="9" font-weight="700" text-anchor="middle" letter-spacing="1">WOOD-FIRED SKILLET</text>
                 </g>
 
                 <!-- DISH 3: Artisanal Focaccia & Whole Burrata Platter -->
@@ -3289,9 +3334,6 @@
                   <!-- Roasted Cherry Tomatoes & Herbs -->
                   <circle cx="22" cy="40" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.6"/>
                   <circle cx="58" cy="42" r="3.8" fill="#dc2626" stroke="#fef08a" stroke-width="0.6"/>
-                  
-                  <!-- Dish Tag -->
-                  <text x="40" y="78" fill="#fef08a" font-size="9" font-weight="700" text-anchor="middle" letter-spacing="1">BURRATA & FOCACCIA</text>
                 </g>
 
                 <!-- Rising Sizzle Steam from Food -->
