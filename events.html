@@ -93,6 +93,13 @@
       --gold:        #c49a3c;
       --gold-light:  #f5d98a;
       --gold-soft:   rgba(196, 154, 60, 0.16);
+      --gold-deep:   #8c6a21;
+
+      /* Warm metal for the record-player illustration. Neutral greys read cold
+         against this palette, the same problem the coloured category chips had. */
+      --metal:       #9c948a;
+      --metal-dim:   #5a544c;
+      --metal-dark:  #38332d;
       --line:        rgba(196, 154, 60, 0.24);
       --line-bright: rgba(196, 154, 60, 0.55);
       
@@ -263,7 +270,7 @@
       color: var(--bg) !important;
       overflow: hidden;
       border: 1.5px solid transparent;
-      background: linear-gradient(110deg, var(--gold) 0%, #e8c065 40%, #f5d98a 50%, #e8c065 60%, var(--gold) 100%);
+      background: linear-gradient(110deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
       background-size: 250% 100%;
       animation: navShimmer 2.8s ease-in-out infinite;
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -1377,7 +1384,7 @@
       width: 90px;
       height: 90px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #e5c158 0%, #c49a3c 55%, #8c6a21 100%);
+      background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold) 55%, var(--gold-deep) 100%);
       border: 3px solid #110e0a;
       box-shadow: 0 0 8px rgba(0,0,0,0.7), inset 0 0 6px rgba(0,0,0,0.4);
       display: flex;
@@ -1432,8 +1439,8 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: radial-gradient(circle, #888, #333);
-      border: 2px solid #555;
+      background: radial-gradient(circle, var(--metal), var(--metal-dark));
+      border: 2px solid var(--metal-dim);
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
     .vinyl-arm::after {
@@ -1443,7 +1450,7 @@
       inset-block-start: 12px;
       width: 4px;
       height: 95px;
-      background: linear-gradient(to bottom, #aaa, #666);
+      background: linear-gradient(to bottom, var(--metal), var(--metal-dim));
       transform-origin: top center;
       transform: rotate(-25deg);
       border-radius: 2px;
@@ -2837,6 +2844,8 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
     <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5 13.9 9 20.5 12 13.9 15 12 21.5 10.1 15 3.5 12 10.1 9 12 2.5Z"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
   </svg>
 
@@ -3000,8 +3009,8 @@
               <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
             </div>
             <div class="slider-edge-arrows" aria-hidden="true">
-              <span class="edge-arrow edge-arrow--left">❮</span>
-              <span class="edge-arrow edge-arrow--right">❯</span>
+              <span class="edge-arrow edge-arrow--left"><svg class="ico" aria-hidden="true"><use href="#i-chev-l"/></svg></span>
+              <span class="edge-arrow edge-arrow--right"><svg class="ico" aria-hidden="true"><use href="#i-chev-r"/></svg></span>
             </div>
           </div>
         </div>
@@ -3012,19 +3021,19 @@
             <defs>
               <linearGradient id="schedBeerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="25%" stop-color="#fde047"/>
-                <stop offset="65%" stop-color="#f59e0b"/>
+                <stop offset="25%" stop-color="#f5d98a"/>
+                <stop offset="65%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#b45309"/>
               </linearGradient>
               <linearGradient id="schedBrassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fef9c3"/>
-                <stop offset="45%" stop-color="#fde047"/>
-                <stop offset="75%" stop-color="#ca8a04"/>
+                <stop offset="45%" stop-color="#f5d98a"/>
+                <stop offset="75%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#78350f"/>
               </linearGradient>
               <radialGradient id="schedBartenderGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.25"/>
-                <stop offset="70%" stop-color="#ca8a04" stop-opacity="0.05"/>
+                <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.25"/>
+                <stop offset="70%" stop-color="#c49a3c" stop-opacity="0.05"/>
                 <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
               </radialGradient>
             </defs>
@@ -3034,7 +3043,7 @@
 
             <!-- Brass Beer Tap Tower (Right Side) -->
             <g transform="translate(95, 25)">
-              <rect x="-12" y="85" width="40" height="6" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+              <rect x="-12" y="85" width="40" height="6" rx="2" fill="#291807" stroke="#c49a3c" stroke-width="1"/>
               <rect x="4" y="32" width="10" height="54" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1.2"/>
               <rect x="0" y="80" width="18" height="6" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1"/>
               <path d="M 9 40 Q 9 52 -8 56" stroke="url(#schedBrassGrad)" stroke-width="5" stroke-linecap="round" fill="none"/>
@@ -3042,37 +3051,37 @@
               <!-- Animated Tap Handle -->
               <g class="anim-tap-pull">
                 <line x1="9" y1="32" x2="18" y2="4" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="18" cy="4" r="5" fill="#fde047" stroke="#78350f" stroke-width="1.2"/>
+                <circle cx="18" cy="4" r="5" fill="#f5d98a" stroke="#78350f" stroke-width="1.2"/>
               </g>
             </g>
 
             <!-- Cute, Friendly Human Bartender (Left Side) -->
             <g>
               <!-- Stylish Beret / Flat Cap -->
-              <path d="M 32 30 Q 48 18 64 26 Q 66 34 56 36 L 34 36 Z" fill="#291807" stroke="#fde047" stroke-width="1.4"/>
+              <path d="M 32 30 Q 48 18 64 26 Q 66 34 56 36 L 34 36 Z" fill="#291807" stroke="#f5d98a" stroke-width="1.4"/>
               
               <!-- Friendly Head & Face -->
-              <circle cx="48" cy="42" r="12" fill="#fde047" fill-opacity="0.25" stroke="#fde047" stroke-width="1.8"/>
+              <circle cx="48" cy="42" r="12" fill="#f5d98a" fill-opacity="0.25" stroke="#f5d98a" stroke-width="1.8"/>
               <!-- Cheerful Eye & Smile -->
               <circle cx="52" cy="40" r="1.5" fill="#fef08a"/>
               <path d="M 49 46 Q 53 49 57 46" stroke="#fef08a" stroke-width="1.4" stroke-linecap="round" fill="none"/>
               <!-- Cute French Mustache -->
-              <path d="M 46 44 Q 50 42 54 44 Q 57 42 60 44" stroke="#ca8a04" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <path d="M 46 44 Q 50 42 54 44 Q 57 42 60 44" stroke="#c49a3c" stroke-width="1.6" stroke-linecap="round" fill="none"/>
 
               <!-- Torso, Collar & Vest -->
               <path d="M 38 54 L 32 110 M 58 54 L 64 110" stroke="url(#schedBrassGrad)" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M 40 54 L 48 68 L 56 54" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
-              <circle cx="48" cy="62" r="2" fill="#f59e0b"/>
-              <circle cx="48" cy="74" r="1.8" fill="#f59e0b"/>
-              <circle cx="48" cy="86" r="1.8" fill="#f59e0b"/>
+              <path d="M 40 54 L 48 68 L 56 54" stroke="#f5d98a" stroke-width="1.6" fill="#140f0a"/>
+              <circle cx="48" cy="62" r="2" fill="#c49a3c"/>
+              <circle cx="48" cy="74" r="1.8" fill="#c49a3c"/>
+              <circle cx="48" cy="86" r="1.8" fill="#c49a3c"/>
 
               <!-- Arm pulling tap handle -->
               <path d="M 52 58 Q 72 44 104 28" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <circle cx="104" cy="28" r="3.5" fill="#fde047"/>
+              <circle cx="104" cy="28" r="3.5" fill="#f5d98a"/>
 
               <!-- Arm holding the tilted craft glass -->
               <path d="M 44 64 Q 58 84 76 92" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <circle cx="76" cy="92" r="3.5" fill="#fde047"/>
+              <circle cx="76" cy="92" r="3.5" fill="#f5d98a"/>
             </g>
 
             <!-- Continuous Flowing Amber Beer Stream -->
@@ -3082,14 +3091,14 @@
             <g transform="translate(76, 85) rotate(-18)">
               <line x1="8" y1="28" x2="8" y2="38" stroke="#fef9c3" stroke-width="2" stroke-linecap="round"/>
               <line x1="2" y1="38" x2="14" y2="38" stroke="#fef9c3" stroke-width="2" stroke-linecap="round"/>
-              <path d="M 2 4 Q 0 20 8 28 Q 16 20 14 4 Z" fill="rgba(255,255,255,0.08)" stroke="#fde047" stroke-width="1.6"/>
+              <path d="M 2 4 Q 0 20 8 28 Q 16 20 14 4 Z" fill="rgba(255,255,255,0.08)" stroke="#f5d98a" stroke-width="1.6"/>
               <path d="M 3 8 Q 1 20 8 26 Q 15 20 13 8 Z" fill="url(#schedBeerGrad)"/>
               <!-- Effervescent Micro-Bubbles -->
               <circle class="anim-beer-bubble-1" cx="6" cy="20" r="1" fill="#ffffff"/>
               <circle class="anim-beer-bubble-2" cx="10" cy="22" r="0.9" fill="#fef08a"/>
               <circle class="anim-beer-bubble-3" cx="8" cy="15" r="1" fill="#ffffff"/>
               <!-- Velvety Cream Foam Head -->
-              <ellipse class="anim-beer-foam" cx="8" cy="7" rx="7" ry="3.2" fill="#fffbeb" stroke="#fde047" stroke-width="0.9"/>
+              <ellipse class="anim-beer-foam" cx="8" cy="7" rx="7" ry="3.2" fill="#fffbeb" stroke="#f5d98a" stroke-width="0.9"/>
             </g>
           </svg>
         </div>
@@ -3346,13 +3355,13 @@
             <defs>
               <linearGradient id="saxLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="35%" stop-color="#fde047"/>
-                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="35%" stop-color="#f5d98a"/>
+                <stop offset="70%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#854d0e"/>
               </linearGradient>
               <radialGradient id="saxAuraGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
-                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+                <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
+                <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
                 <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
               </radialGradient>
             </defs>
@@ -3363,8 +3372,8 @@
             <!-- Charming, Cute & Human Saxophonist -->
             <g class="anim-flank-sax">
               <!-- Stylish Jazz Fedora -->
-              <path d="M 40 50 Q 56 34 76 42 Q 78 52 68 56 L 38 56 Z" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
-              <ellipse cx="58" cy="56" rx="22" ry="4" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
+              <path d="M 40 50 Q 56 34 76 42 Q 78 52 68 56 L 38 56 Z" fill="#291807" stroke="#f5d98a" stroke-width="1.6"/>
+              <ellipse cx="58" cy="56" rx="22" ry="4" fill="#291807" stroke="#f5d98a" stroke-width="1.6"/>
 
               <!-- Friendly Smiling Face Profile -->
               <circle cx="58" cy="62" r="10" fill="#140f0a" stroke="url(#saxLineGrad)" stroke-width="1.8"/>
@@ -3373,37 +3382,37 @@
               
               <!-- Torso, Relaxed Blazer & Body Flow -->
               <path d="M 50 72 Q 40 115 48 180 Q 54 220 58 245" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <path d="M 52 74 L 60 90 L 66 74" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
+              <path d="M 52 74 L 60 90 L 66 74" stroke="#f5d98a" stroke-width="1.6" fill="#140f0a"/>
 
               <!-- Arms holding instrument -->
               <path d="M 58 80 Q 68 108 74 130" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <circle cx="74" cy="130" r="3" fill="#fde047"/>
+              <circle cx="74" cy="130" r="3" fill="#f5d98a"/>
               <path d="M 54 92 Q 64 116 70 142" stroke="url(#saxLineGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
-              <circle cx="70" cy="142" r="3" fill="#fde047"/>
+              <circle cx="70" cy="142" r="3" fill="#f5d98a"/>
 
               <!-- Gleaming Brass Saxophone -->
-              <path d="M 64 63 Q 72 68 76 76" stroke="#fde047" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <path d="M 64 63 Q 72 68 76 76" stroke="#f5d98a" stroke-width="3" stroke-linecap="round" fill="none"/>
               <!-- Main Sax Body Tube & Loop -->
               <path d="M 76 76 Q 84 112 85 152 Q 86 195 68 204 Q 52 196 58 170" stroke="url(#saxLineGrad)" stroke-width="4" stroke-linecap="round" fill="none"/>
               <!-- Flared Horn Bell -->
-              <path d="M 58 170 Q 64 146 76 130 Q 86 136 78 162 Z" fill="url(#saxLineGrad)" stroke="#fde047" stroke-width="1.6"/>
-              <ellipse cx="74" cy="138" rx="4.5" ry="8" fill="#291807" stroke="#fde047" stroke-width="1.6" transform="rotate(-20 74 138)"/>
+              <path d="M 58 170 Q 64 146 76 130 Q 86 136 78 162 Z" fill="url(#saxLineGrad)" stroke="#f5d98a" stroke-width="1.6"/>
+              <ellipse cx="74" cy="138" rx="4.5" ry="8" fill="#291807" stroke="#f5d98a" stroke-width="1.6" transform="rotate(-20 74 138)"/>
               
               <!-- Key Inlays -->
-              <circle cx="79" cy="96" r="2" fill="#fde047"/>
-              <circle cx="82" cy="116" r="2" fill="#fde047"/>
-              <circle cx="84" cy="136" r="2" fill="#fde047"/>
+              <circle cx="79" cy="96" r="2" fill="#f5d98a"/>
+              <circle cx="82" cy="116" r="2" fill="#f5d98a"/>
+              <circle cx="84" cy="136" r="2" fill="#f5d98a"/>
             </g>
 
             <!-- Ascending Golden Music Notes -->
             <g class="anim-sax-note-1">
-              <text x="78" y="112" fill="#fde047" font-size="14" font-weight="900" opacity="0.9">♪</text>
+              <path transform="translate(78.0,107.1) scale(1.4)" fill="#f5d98a" opacity="0.9" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
             <g class="anim-sax-note-2">
-              <text x="86" y="90" fill="#ca8a04" font-size="16" font-weight="900" opacity="0.85">♫</text>
+              <path transform="translate(86.0,84.4) scale(1.6)" fill="#c49a3c" opacity="0.85" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
             <g class="anim-sax-note-3">
-              <text x="68" y="76" fill="#f59e0b" font-size="13" font-weight="900" opacity="0.9">♩</text>
+              <path transform="translate(68.0,71.5) scale(1.3)" fill="#c49a3c" opacity="0.9" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
           </svg>
         </div>
@@ -3423,9 +3432,9 @@
             </div>
 
             <div class="month-cal-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>☀️ צהריים פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>🌙 ערב פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>🌙 אירוע פרטי / תפוס</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
             </div>
           </div>
 
@@ -3450,13 +3459,13 @@
             <defs>
               <linearGradient id="drumLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="35%" stop-color="#fde047"/>
-                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="35%" stop-color="#f5d98a"/>
+                <stop offset="70%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#854d0e"/>
               </linearGradient>
               <radialGradient id="drumAuraGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
-                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+                <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
+                <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
                 <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
               </radialGradient>
             </defs>
@@ -3467,7 +3476,7 @@
             <!-- Charming, Cute & Human Drummer & Kit -->
             <g>
               <!-- Drummer Beret / Cap -->
-              <path d="M 48 54 Q 62 44 76 50 Q 78 56 68 60 L 46 58 Z" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
+              <path d="M 48 54 Q 62 44 76 50 Q 78 56 68 60 L 46 58 Z" fill="#291807" stroke="#f5d98a" stroke-width="1.6"/>
               
               <!-- Friendly Head & Smile -->
               <circle cx="62" cy="64" r="11" fill="#140f0a" stroke="url(#drumLineGrad)" stroke-width="2"/>
@@ -3483,27 +3492,27 @@
               <line x1="36" y1="167" x2="36" y2="235" stroke="#854d0e" stroke-width="2"/>
 
               <!-- Ride Cymbal (Right) -->
-              <ellipse class="anim-drum-cymbal-ring" cx="92" cy="94" rx="22" ry="6.5" stroke="#fde047" stroke-width="1.4"/>
+              <ellipse class="anim-drum-cymbal-ring" cx="92" cy="94" rx="22" ry="6.5" stroke="#f5d98a" stroke-width="1.4"/>
               <ellipse cx="92" cy="94" rx="23" ry="6" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="url(#drumLineGrad)" fill-opacity="0.3"/>
-              <circle cx="92" cy="94" r="2.4" fill="#fde047"/>
+              <circle cx="92" cy="94" r="2.4" fill="#f5d98a"/>
               <line x1="92" y1="94" x2="92" y2="235" stroke="#854d0e" stroke-width="2"/>
 
               <!-- Bass Drum (Bottom Center) -->
               <ellipse cx="62" cy="208" rx="26" ry="18" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="#140f0a" fill-opacity="0.6"/>
-              <text x="62" y="212" fill="#ca8a04" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
+              <text x="62" y="212" fill="#c49a3c" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
 
               <!-- Animated Left Arm & Drumstick (Snare Rhythm) -->
               <g class="anim-drum-arm-l">
                 <path d="M 52 94 Q 36 118 40 140" stroke="url(#drumLineGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-                <circle cx="40" cy="140" r="3" fill="#fde047"/>
-                <line x1="40" y1="140" x2="36" y2="158" stroke="#fde047" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="40" cy="140" r="3" fill="#f5d98a"/>
+                <line x1="40" y1="140" x2="36" y2="158" stroke="#f5d98a" stroke-width="2.4" stroke-linecap="round"/>
               </g>
 
               <!-- Animated Right Arm & Drumstick (Ride Cymbal Rhythm) -->
               <g class="anim-drum-arm-r">
                 <path d="M 72 94 Q 84 110 88 122" stroke="url(#drumLineGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-                <circle cx="88" cy="122" r="3" fill="#fde047"/>
-                <line x1="88" y1="122" x2="93" y2="100" stroke="#fde047" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="88" cy="122" r="3" fill="#f5d98a"/>
+                <line x1="88" y1="122" x2="93" y2="100" stroke="#f5d98a" stroke-width="2.4" stroke-linecap="round"/>
               </g>
             </g>
           </svg>
@@ -3559,13 +3568,13 @@
           <defs>
             <linearGradient id="crowdGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="30%" stop-color="#fde047"/>
-              <stop offset="70%" stop-color="#ca8a04"/>
+              <stop offset="30%" stop-color="#f5d98a"/>
+              <stop offset="70%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#854d0e"/>
             </linearGradient>
             <radialGradient id="crowdCenterGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.25"/>
-              <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.25"/>
+              <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
               <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
             </radialGradient>
           </defs>
@@ -3577,7 +3586,7 @@
           <g class="anim-dancer-1" transform="translate(110, 15)">
             <!-- Head & Hair Bun -->
             <ellipse cx="20" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <circle cx="13" cy="14" r="4" fill="#fde047"/>
+            <circle cx="13" cy="14" r="4" fill="#f5d98a"/>
             <!-- Friendly Face Profile -->
             <circle cx="23" cy="20" r="1.3" fill="#fef08a"/>
             <path d="M 22 24 Q 25 26 27 24" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
@@ -3585,8 +3594,8 @@
             <path d="M 14 30 Q 9 60 16 85 M 26 30 Q 31 60 24 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Arm Raising Cocktail Glass -->
             <path d="M 24 36 Q 38 24 44 14" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <path d="M 41 10 L 48 10 L 44 15 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.9"/>
-            <line x1="44" y1="15" x2="44" y2="20" stroke="#fde047" stroke-width="1.4"/>
+            <path d="M 41 10 L 48 10 L 44 15 Z" fill="#f5d98a" stroke="#c49a3c" stroke-width="0.9"/>
+            <line x1="44" y1="15" x2="44" y2="20" stroke="#f5d98a" stroke-width="1.4"/>
             <!-- Other Arm on Hip -->
             <path d="M 14 36 Q 4 46 8 56" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
           </g>
@@ -3595,9 +3604,9 @@
           <g class="anim-dancer-2" transform="translate(280, 10)">
             <ellipse cx="25" cy="22" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
             <!-- Headphones on head -->
-            <path d="M 15 22 Q 25 9 35 22" stroke="#fde047" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="15" cy="22" r="3" fill="#fde047"/>
-            <circle cx="35" cy="22" r="3" fill="#fde047"/>
+            <path d="M 15 22 Q 25 9 35 22" stroke="#f5d98a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="15" cy="22" r="3" fill="#f5d98a"/>
+            <circle cx="35" cy="22" r="3" fill="#f5d98a"/>
             <!-- Cheerful Smile -->
             <circle cx="25" cy="22" r="1.3" fill="#fef08a"/>
             <path d="M 23 26 Q 25 28 27 26" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
@@ -3605,16 +3614,16 @@
             <path d="M 18 32 Q 13 62 20 90 M 32 32 Q 37 62 30 90" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Both Arms Up in the Air (Joyful Party Vibe) -->
             <path d="M 18 36 Q 6 20 10 6" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="10" cy="6" r="2.5" fill="#fde047"/>
+            <circle cx="10" cy="6" r="2.5" fill="#f5d98a"/>
             <path d="M 32 36 Q 44 20 40 6" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="40" cy="6" r="2.5" fill="#fde047"/>
+            <circle cx="40" cy="6" r="2.5" fill="#f5d98a"/>
           </g>
 
           <!-- Center Retro Vinyl Disc Spinning Above Dancers -->
           <g class="anim-archive-vinyl" transform="translate(365, 20)">
             <circle cx="15" cy="15" r="14" fill="#140f0a" stroke="url(#crowdGoldGrad)" stroke-width="1.8"/>
-            <circle cx="15" cy="15" r="8" stroke="#ca8a04" stroke-width="0.9" opacity="0.6"/>
-            <circle cx="15" cy="15" r="4.5" fill="#fde047"/>
+            <circle cx="15" cy="15" r="8" stroke="#c49a3c" stroke-width="0.9" opacity="0.6"/>
+            <circle cx="15" cy="15" r="4.5" fill="#f5d98a"/>
             <circle cx="15" cy="15" r="1.5" fill="#140f0a"/>
           </g>
 
@@ -3627,16 +3636,16 @@
             <path d="M 16 30 Q 10 50 4 82 Q 22 88 40 82 Q 34 50 28 30 Z" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a" fill-opacity="0.5"/>
             <!-- Expressive Arms -->
             <path d="M 16 34 Q 4 36 0 24" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="0" cy="24" r="2.5" fill="#fde047"/>
+            <circle cx="0" cy="24" r="2.5" fill="#f5d98a"/>
             <path d="M 28 34 Q 40 28 46 16" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="46" cy="16" r="2.5" fill="#fde047"/>
+            <circle cx="46" cy="16" r="2.5" fill="#f5d98a"/>
           </g>
 
           <!-- 4. Dancer 4: Rhythm Clapping & Toasting (Far Right) -->
           <g class="anim-dancer-4" transform="translate(650, 15)">
             <ellipse cx="20" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
             <!-- Hat / Cap -->
-            <path d="M 10 16 Q 20 10 30 14" stroke="#fde047" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M 10 16 Q 20 10 30 14" stroke="#f5d98a" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Smile -->
             <path d="M 18 24 Q 21 26 23 24" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
             <!-- Torso -->
@@ -3644,24 +3653,24 @@
             <!-- Clapping Hands Motion -->
             <path d="M 14 36 Q 24 30 26 22" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
             <path d="M 26 36 Q 20 30 24 20" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="25" cy="21" r="2.8" fill="#fde047"/>
+            <circle cx="25" cy="21" r="2.8" fill="#f5d98a"/>
           </g>
 
           <!-- Sparkling Disco Stars & Notes Floating Above Crowd -->
           <g class="anim-sparkle-1">
-            <text x="60" y="24" fill="#fde047" font-size="14" font-weight="900">✦</text>
+            <path transform="translate(60.0,19.1) scale(1.0)" fill="#f5d98a" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-2">
-            <text x="200" y="16" fill="#ca8a04" font-size="12" font-weight="900">✧</text>
+            <path transform="translate(200.0,11.8) scale(0.857)" fill="#c49a3c" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-3">
-            <text x="380" y="14" fill="#fde047" font-size="16" font-weight="900">★</text>
+            <path transform="translate(380.0,8.4) scale(1.143)" fill="#f5d98a" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-4">
-            <text x="560" y="20" fill="#ca8a04" font-size="13" font-weight="900">✦</text>
+            <path transform="translate(560.0,15.4) scale(0.929)" fill="#c49a3c" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-5">
-            <text x="700" y="26" fill="#fde047" font-size="13" font-weight="900">♪</text>
+            <path transform="translate(700.0,21.4) scale(1.3)" fill="#f5d98a" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
           </g>
         </svg>
       </div>
@@ -3728,8 +3737,8 @@
           <defs>
             <linearGradient id="busBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="25%" stop-color="#fde047"/>
-              <stop offset="65%" stop-color="#ca8a04"/>
+              <stop offset="25%" stop-color="#f5d98a"/>
+              <stop offset="65%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#854d0e"/>
             </linearGradient>
           </defs>
@@ -3744,11 +3753,11 @@
           <circle cx="92" cy="30" r="3" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
           <path d="M 94 28 L 110 20 L 110 36 Z" fill="rgba(254, 240, 138, 0.35)"/>
           <!-- Wheels -->
-          <circle cx="28" cy="38" r="6" fill="#140f0a" stroke="#fde047" stroke-width="1.8"/>
-          <circle cx="28" cy="38" r="2.5" fill="#fde047"/>
-          <circle cx="75" cy="38" r="6" fill="#140f0a" stroke="#fde047" stroke-width="1.8"/>
-          <circle cx="75" cy="38" r="2.5" fill="#fde047"/>
-          <text x="48" y="32" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" font-family="sans-serif">EZRA 38</text>
+          <circle cx="28" cy="38" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="1.8"/>
+          <circle cx="28" cy="38" r="2.5" fill="#f5d98a"/>
+          <circle cx="75" cy="38" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="1.8"/>
+          <circle cx="75" cy="38" r="2.5" fill="#f5d98a"/>
+          <text x="48" y="32" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" font-family="Heebo, sans-serif">EZRA 38</text>
         </svg>
       </div>
 
@@ -3758,17 +3767,17 @@
           <defs>
             <linearGradient id="trainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="35%" stop-color="#fde047"/>
-              <stop offset="75%" stop-color="#ca8a04"/>
+              <stop offset="35%" stop-color="#f5d98a"/>
+              <stop offset="75%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#451a03"/>
             </linearGradient>
           </defs>
           <!-- Pantograph on roof -->
-          <path d="M 45 4 L 55 10 L 65 4" stroke="#fde047" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="55" y1="4" x2="55" y2="10" stroke="#fde047" stroke-width="1.5"/>
+          <path d="M 45 4 L 55 10 L 65 4" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="55" y1="4" x2="55" y2="10" stroke="#f5d98a" stroke-width="1.5"/>
           <!-- Train aerodynamic body -->
           <path d="M 10 10 L 105 10 Q 120 18 120 30 L 120 36 L 10 36 Z" fill="url(#trainGrad)" stroke="#fef08a" stroke-width="1.2"/>
-          <line x1="10" y1="24" x2="120" y2="24" stroke="#ca8a04" stroke-width="1.5"/>
+          <line x1="10" y1="24" x2="120" y2="24" stroke="#c49a3c" stroke-width="1.5"/>
           <!-- Panoramic Windows -->
           <rect x="18" y="13" width="15" height="9" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="0.8"/>
           <rect x="37" y="13" width="15" height="9" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="0.8"/>
@@ -3779,11 +3788,11 @@
           <circle cx="116" cy="28" r="3" fill="#ffffff" filter="drop-shadow(0 0 6px #ffffff)"/>
           <path d="M 118 26 L 136 18 L 136 38 Z" fill="rgba(254, 240, 138, 0.4)"/>
           <!-- Train Wheels Track -->
-          <rect x="15" y="36" width="95" height="4" rx="1" fill="#291807" stroke="#ca8a04" stroke-width="0.8"/>
-          <circle cx="28" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="50" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="75" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="95" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
+          <rect x="15" y="36" width="95" height="4" rx="1" fill="#291807" stroke="#c49a3c" stroke-width="0.8"/>
+          <circle cx="28" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="50" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="75" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="95" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -3793,8 +3802,8 @@
           <defs>
             <linearGradient id="carGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="40%" stop-color="#fde047"/>
-              <stop offset="80%" stop-color="#ca8a04"/>
+              <stop offset="40%" stop-color="#f5d98a"/>
+              <stop offset="80%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#78350f"/>
             </linearGradient>
           </defs>
@@ -3807,10 +3816,10 @@
           <circle cx="94" cy="24" r="3" fill="#ffffff" filter="drop-shadow(0 0 5px #ffffff)"/>
           <path d="M 96 22 L 115 15 L 115 32 Z" fill="rgba(254, 240, 138, 0.4)"/>
           <!-- Wheels -->
-          <circle cx="28" cy="34" r="6" fill="#140f0a" stroke="#fde047" stroke-width="2"/>
-          <circle cx="28" cy="34" r="2.5" fill="#fde047"/>
-          <circle cx="78" cy="34" r="6" fill="#140f0a" stroke="#fde047" stroke-width="2"/>
-          <circle cx="78" cy="34" r="2.5" fill="#fde047"/>
+          <circle cx="28" cy="34" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="2"/>
+          <circle cx="28" cy="34" r="2.5" fill="#f5d98a"/>
+          <circle cx="78" cy="34" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="2"/>
+          <circle cx="78" cy="34" r="2.5" fill="#f5d98a"/>
         </svg>
       </div>
 
@@ -3820,28 +3829,28 @@
           <defs>
             <linearGradient id="ufoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="35%" stop-color="#fde047"/>
-              <stop offset="70%" stop-color="#ca8a04"/>
+              <stop offset="35%" stop-color="#f5d98a"/>
+              <stop offset="70%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#3b0764"/>
             </linearGradient>
           </defs>
           <!-- Glass Dome -->
-          <ellipse cx="50" cy="18" rx="16" ry="12" fill="rgba(254, 240, 138, 0.35)" stroke="#fde047" stroke-width="1.2"/>
+          <ellipse cx="50" cy="18" rx="16" ry="12" fill="rgba(254, 240, 138, 0.35)" stroke="#f5d98a" stroke-width="1.2"/>
           <!-- Alien / Vinyl pilot inside -->
-          <circle cx="50" cy="18" r="4" fill="#fde047"/>
+          <circle cx="50" cy="18" r="4" fill="#f5d98a"/>
           <!-- Flying Saucer Disc -->
           <ellipse cx="50" cy="26" rx="42" ry="10" fill="url(#ufoGrad)" stroke="#fef08a" stroke-width="1.4"/>
           <!-- Saucer Lights -->
           <circle cx="22" cy="27" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #fff)"/>
-          <circle cx="36" cy="29" r="2" fill="#fde047" filter="drop-shadow(0 0 3px #fde047)"/>
+          <circle cx="36" cy="29" r="2" fill="#f5d98a" filter="drop-shadow(0 0 3px #f5d98a)"/>
           <circle cx="50" cy="30" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #fff)"/>
-          <circle cx="64" cy="29" r="2" fill="#fde047" filter="drop-shadow(0 0 3px #fde047)"/>
+          <circle cx="64" cy="29" r="2" fill="#f5d98a" filter="drop-shadow(0 0 3px #f5d98a)"/>
           <circle cx="78" cy="27" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #fff)"/>
           <!-- Tractor Beam / Propulsion Beam below -->
           <path d="M 38 34 L 20 48 L 80 48 L 62 34 Z" fill="rgba(254, 240, 138, 0.25)"/>
           <!-- Star Sparkles trailing behind -->
-          <text x="2" y="24" fill="#fde047" font-size="10" opacity="0.8">✦</text>
-          <text x="10" y="36" fill="#ca8a04" font-size="8" opacity="0.7">✧</text>
+          <path transform="translate(2.0,20.5) scale(0.714)" fill="#f5d98a" opacity="0.8" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
+          <path transform="translate(10.0,33.2) scale(0.571)" fill="#c49a3c" opacity="0.7" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
         </svg>
       </div>
     </div>
@@ -3925,17 +3934,17 @@
         <!-- 3 Minimalist Category Cards -->
         <div class="collab-grid">
           <div class="collab-item">
-            <div class="collab-item-ico">🍕</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg></div>
             <div class="collab-item-title">קולינריה וטאבון</div>
             <div class="collab-item-sub">שפים אורחים · פופ-אפים · ספיישלים מהטאבון</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🎧</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg></div>
             <div class="collab-item-title">מוזיקה ותקליטים</div>
             <div class="collab-item-sub">סטים על ויניל · השמעות אלבומים · הופעות חיות</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🍸</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg></div>
             <div class="collab-item-title">יין ומיקסולוגיה</div>
             <div class="collab-item-sub">ערבי יין טבעי · יקבי בוטיק · השקות קוקטיילים</div>
           </div>
@@ -4725,13 +4734,13 @@
             <div class="month-cal-slots">
               <!-- Noon Slot -->
               <button type="button" class="month-cal-slot ${hasAfternoonEvent ? 'month-cal-slot--busy' : 'month-cal-slot--free'}" data-slot="noon" aria-label="${d} ${monthsHe[calViewMonth]} צהריים: ${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע'}">
-                <span class="month-cal-slot-time">☀️ צהריים</span>
-                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע ✍️'}</span>
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים</span>
+                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>'}</span>
               </button>
 
               <!-- Night Slot -->
               <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : theme.title}">
-                <span class="month-cal-slot-time">🌙 ערב</span>
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
                 <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : theme.title.split('·')[0]}</span>
               </button>
             </div>
