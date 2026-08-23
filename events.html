@@ -79,6 +79,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
+    /* English on this page renders in Google Sans; Hebrew stays in Heebo.
+       Ordering the family list is not enough: Google Sans ships a Hebrew subset,
+       so listing it first would take the Hebrew too. The face is declared here
+       with the Latin unicode-range only, so Hebrew never matches it and falls
+       through to Heebo on its own. Google serves all four weights from one
+       variable file, so one face covers 400-700. The URL is version-pinned
+       (v70); if Google revises it the face stops matching and Latin falls back
+       to Inter, which is what this page used before. */
+    @font-face {
+      font-family: 'Google Sans';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/googlesans/v70/4UasrENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RPjIUvbQoi-E.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
     /* ============================================================
        DESIGN TOKENS & TEL AVIV NIGHTLIFE AESTHETICS
     ============================================================ */
@@ -114,7 +131,7 @@
          only Latin headings pick up the serif. */
       --font-serif:   'Cormorant Garamond', 'Heebo', serif;
       --font-display: 'Cormorant Garamond', 'Heebo', serif;
-      --font-body:    'Inter', 'Heebo', system-ui, sans-serif;
+      --font-body:    'Google Sans', 'Inter', 'Heebo', system-ui, sans-serif;
       --font-num:     'Pliant', 'Heebo', sans-serif;
 
       --section-pad:      clamp(2.5rem, 6vw, 4.5rem);
@@ -2708,9 +2725,16 @@
       align-items: center;
       gap: 0.6rem;
     }
-    /* Numerals in Pliant, matching the rest of the site. */
-    .cal__day, .month-cal-daynum, .stat-num, .time-card__date,
-    .fmt-card__when, .cal__dow, .month-cal-weekday {
+    /* Numerals in Pliant, matching the rest of the site. The calendar day numbers
+       were listed here as .month-cal-daynum, which is not a class this page ever
+       renders - the markup writes .month-cal-date-num - so every day number fell
+       back to Heebo. Pliant carries no Hebrew glyphs, so on the mixed elements
+       here (month + year, weekday + date) the Hebrew falls through to Heebo on
+       its own, exactly as Hebrew headings do against Cormorant. */
+    .cal__day, .month-cal-date-num, .month-cal-title, .stat-num,
+    .time-card__date, .time-card__date-pill, .time-card__dow,
+    .cal__slot-time, .slot-row__time, .flyer-card__date, .status-clock,
+    .cf-datebtn, .fmt-card__when, .cal__dow, .month-cal-weekday {
       font-family: var(--font-num);
       font-variant-numeric: tabular-nums;
     }
@@ -4290,15 +4314,15 @@
                 </g>
 
                 <!-- Luminous Ascending Musical Notes -->
-                <g class="anim-music-note-float-1" transform="translate(262, 65)">
+                <g transform="translate(262, 65)"><g class="anim-music-note-float-1">
                   <text fill="#fef08a" font-size="22" font-weight="900" filter="drop-shadow(0 0 4px #f59e0b)">♪</text>
-                </g>
-                <g class="anim-music-note-float-2" transform="translate(298, 42)">
+                </g></g>
+                <g transform="translate(298, 42)"><g class="anim-music-note-float-2">
                   <text fill="#c49a3c" font-size="26" font-weight="900" filter="drop-shadow(0 0 6px #c49a3c)">♫</text>
-                </g>
-                <g class="anim-music-note-float-3" transform="translate(142, 34)">
+                </g></g>
+                <g transform="translate(142, 34)"><g class="anim-music-note-float-3">
                   <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag">מומלץ להזמין מקום</span>
@@ -4436,10 +4460,10 @@
                 </g>
 
                 <!-- Floating Drifting Zen Tea Leaf -->
-                <g class="anim-tea-leaf" transform="translate(68, 80)">
+                <g transform="translate(68, 80)"><g class="anim-tea-leaf">
                   <path d="M 0 0 Q 14 -10 22 4 Q 10 12 0 0 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.9"/>
                   <line x1="0" y1="0" x2="16" y2="3" stroke="#fef08a" stroke-width="0.6"/>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
@@ -4551,11 +4575,11 @@
                 </g>
 
                 <!-- Polished Cobbler Cocktail Shaker in Background -->
-                <g class="anim-shaker-vibe" transform="translate(266, 92)">
+                <g transform="translate(266, 92)"><g class="anim-shaker-vibe">
                   <path d="M 8 15 L 24 15 L 28 84 L 4 84 Z" fill="#1c1610" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
                   <rect x="6" y="8" width="20" height="7" rx="2" fill="#241a12" stroke="url(#wineGoldGrad)" stroke-width="1.2"/>
                   <circle cx="16" cy="4" r="4" fill="url(#wineGoldGrad)"/>
-                </g>
+                </g></g>
 
                 <!-- Speakeasy Golden Sparkles -->
                 <text x="175" y="80" fill="#fef08a" font-size="12" font-weight="900" opacity="0.9">✦</text>
@@ -4684,18 +4708,18 @@
                 </g>
 
                 <!-- Floating Literary Quotation Marks & Verse Accents -->
-                <g class="anim-poem-word-1" transform="translate(58, 88)">
+                <g transform="translate(58, 88)"><g class="anim-poem-word-1">
                   <text fill="#fef08a" font-size="32" font-family="serif" font-style="italic" opacity="0.9">“</text>
-                </g>
-                <g class="anim-poem-word-2" transform="translate(38, 142)">
+                </g></g>
+                <g transform="translate(38, 142)"><g class="anim-poem-word-2">
                   <text fill="#f5d98a" font-size="9.5" font-weight="800" letter-spacing="2" opacity="0.85">✦ OPEN MIC</text>
-                </g>
-                <g class="anim-poem-word-3" transform="translate(286, 142)">
+                </g></g>
+                <g transform="translate(286, 142)"><g class="anim-poem-word-3">
                   <text fill="#c49a3c" font-size="32" font-family="serif" font-style="italic" opacity="0.9">”</text>
-                </g>
-                <g class="anim-poem-word-2" transform="translate(232, 76)">
+                </g></g>
+                <g transform="translate(232, 76)"><g class="anim-poem-word-2">
                   <text fill="#f5d98a" font-size="9.5" font-weight="800" letter-spacing="2" opacity="0.85">SPOKEN WORD ✦</text>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
@@ -6310,7 +6334,9 @@
         <div>עזרא תל אביב © 2026 · אברבנאל 38, פלורנטין, תל אביב</div>
         <div class="footer__legal">
           <a href="accessibility">הצהרת נגישות</a>
-          <a href="privacy">מדיניות פרטיות</a>
+          <a href="about">אודות</a>
+      <a href="contact">יצירת קשר</a>
+      <a href="privacy">מדיניות פרטיות</a>
           <a href="terms">תקנון ותנאי שימוש</a>
         </div>
       </div>

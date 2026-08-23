@@ -6,7 +6,9 @@ The Hebrew event-type pages on ezratlv.com - one page per real buyer intent, eac
 
 ### Requirement: One page per lost intent, in the buyer's words
 
-The site SHALL carry a dedicated Hebrew page for each of these intents, each using the buyer's own phrasing in its title, heading, and body - not synonyms the venue prefers: ערב צוות / ארוחת צוות (team evening), אירוע עד 50 איש (capacity-led), מסיבת סיום הפקה / מסיבת סיום צילום (wrap party), and מסיבת רווקות ואירועים פרטיים (private / bachelorette). The 2026-08-20 baseline showed winners state the use case in the user's exact words; ערב צוות and מסיבת סיום appear nowhere on the site today.
+The site SHALL carry a dedicated Hebrew page for each of these intents, each using the buyer's own phrasing in its title, heading, and body - not synonyms the venue prefers: ערב צוות / ארוחת צוות (team evening), אירוע עד 50 איש (capacity-led), מסיבת סיום הפקה / מסיבת סיום צילום (wrap party), מסיבת רווקות (bachelorette), האפי אוור / ערב אחרי העבודה (happy hour), יום הולדת (birthday), and אירוסין ואירועים פרטיים (engagement / private). The 2026-08-20 baseline showed winners state the use case in the user's exact words; ערב צוות and מסיבת סיום appear nowhere on the site today.
+
+One intent gets one page. אירוסין and private events share a page because they share a buyer and a booking conversation; every other intent stands alone. An intent SHALL NOT be served by an anchor on a shared page - a retrieval system cites a URL, and a section of a page about something else does not read as the answer to that intent.
 
 #### Scenario: Phrase presence
 
@@ -17,6 +19,31 @@ The site SHALL carry a dedicated Hebrew page for each of these intents, each usi
 
 - **WHEN** a reader or AI system lands on an event-type page with no other context
 - **THEN** it can answer from that page alone: who the event type suits, capacity (with the number 50 stated next to the use case), what is included (food, bar, sound, lighting, production), possible formats, the address, and how to book - with a WhatsApp CTA present
+
+### Requirement: An index page that routes to the pages, not to the homepage
+
+The site SHALL carry a Hebrew סוגי אירועים index carrying one card per event type. Each card SHALL open that type's own page.
+
+#### Scenario: Every card has a destination of its own
+
+- **WHEN** a reader opens the index and follows any card
+- **THEN** they arrive on the page dedicated to that event type, not on the homepage and not on an anchor within the index
+
+### Requirement: One fact per heading
+
+Each event-type page SHALL place every atomic fact - capacity, hours, address, what is included, what a format costs to run - under its own heading rather than inside a paragraph that bundles several. Headings SHALL be phrased as the question the fact answers.
+
+This is the mechanism, not a style preference: the 2026-08-20 teardown of a competitor being quoted verbatim in Hebrew AI answers found that the quotable unit is the heading-plus-answer block. A fact buried three sentences into a paragraph about something else is not retrievable as an answer, however true and however well written.
+
+#### Scenario: Fact granularity
+
+- **WHEN** an event-type page is reviewed before merge
+- **THEN** no heading's block contains more than one fact a reader could be asking about, and each heading reads as a question a customer would type
+
+#### Scenario: Granularity does not license keyword blocks
+
+- **WHEN** headings are split for retrievability
+- **THEN** each still reads as natural spoken Hebrew, per the requirement above - splitting is not permission to publish phrase-matching headings
 
 ### Requirement: Written as answers, not keyword blocks
 

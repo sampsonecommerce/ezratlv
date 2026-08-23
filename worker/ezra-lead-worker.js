@@ -15,6 +15,9 @@ const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
 // Open Events leads (events page inquiry with calendar) go to the Open Events board.
 const OPEN_EVENTS_BOARD = "5102602771";
+// Bumped by hand whenever this file is pasted into Cloudflare. Returned on every degraded
+// availability response so "is the deployed bundle the merged one?" is a question with an answer.
+const BUILD_ID = "2026-08-24c";
 const OPEN_EVENTS_GROUP = "topics";
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
@@ -65,7 +68,7 @@ export default {
       if (resume) return getDraft(resume, env, cors);   // public: restore a saved draft by opaque token
       const leadId = params.get("leadById");
       if (leadId) return leadById(leadId, request, env, cors);
-      return availability(env, cors);
+      return availability(request, env, cors);
     }
     if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: cors });
 
@@ -426,27 +429,34 @@ function colsByType(schema, d, notes) {
   return cols;
 }
 
-async function availability(env, cors) {
-  const TOKEN = env.MONDAY_TOKEN;
-  if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
+// Read one board's date/time columns. Asking for three boards, every group, 500 items and
+// EVERY column (including `value`, a JSON blob per cell) in a single query is what took this
+// feed down: Monday rejects the whole query on complexity, the handler logged it and returned
+// an empty feed, and an empty feed is indistinguishable from "every date is free". One board
+// per request, and only the columns that can carry a date or a time.
+async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
+  const schema = await boardSchema(boardId, TOKEN);
+  const wanted = (schema?.columns || [])
+    .filter((c) => c.type === "date" || c.type === "hour" || /שעה|שעות|סלוט|time|start|end/i.test(c.title || ""))
+    .map((c) => c.id);
+  const idsArg = wanted.length ? `(ids: ${JSON.stringify(wanted)})` : "";
+  // items_page is asked for once per BOARD, not once per group. Nesting it under groups
+  // multiplies the cost by the number of groups, which is what made this query fail.
   const query = `query {
-    boards(ids: [${AVAIL_BOARD}, ${COMPANY_BOARD}, ${OPEN_EVENTS_BOARD}]) {
+    boards(ids: [${boardId}]) {
       id
       title
-      groups {
-        id
-        title
-        items_page(limit: 500) {
-          items {
+      groups { id title }
+      items_page(limit: 100) {
+        items {
+          id
+          name
+          group { id }
+          column_values${idsArg} {
             id
-            name
-            column_values {
-              id
-              type
-              text
-              value
-              ... on DateValue { date }
-            }
+            type
+            text
+            ... on DateValue { date }
           }
         }
       }
@@ -459,8 +469,75 @@ async function availability(env, cors) {
       body: JSON.stringify({ query }),
     });
     const out = await r.json();
-    if (out.errors) { console.error("availability Monday errors:", JSON.stringify(out.errors)); return json({ booked: [], busy: [] }, 200, cors); }
-    const boards = out?.data?.boards || [];
+    if (out.errors) {
+      const msg = JSON.stringify(out.errors).slice(0, 400);
+      console.error(`availability board ${boardId} errors:`, msg);
+      if (diag) diag.push(`${boardId}: ${msg}`);
+      reasons.push(sanitizeMondayError(out.errors));
+      return null;
+    }
+    const b = out?.data?.boards?.[0];
+    if (!b) {
+      if (diag) diag.push(`${boardId}: board not returned`);
+      return null;
+    }
+    // Reshape to the groups[].items_page.items form the reader below expects, so the
+    // parsing logic underneath is untouched.
+    const byGroup = new Map((b.groups || []).map((g) => [g.id, { id: g.id, title: g.title, items_page: { items: [] } }]));
+    for (const it of (b.items_page?.items || [])) {
+      const gid = it.group?.id;
+      if (!byGroup.has(gid)) byGroup.set(gid, { id: gid, title: "", items_page: { items: [] } });
+      byGroup.get(gid).items_page.items.push(it);
+    }
+    return { id: b.id, title: b.title, groups: Array.from(byGroup.values()) };
+  } catch (e) {
+    console.error(`availability board ${boardId} failed:`, e);
+    if (diag) diag.push(`${boardId}: ${String(e).slice(0, 200)}`);
+    reasons.push("request failed");
+    return null;
+  }
+}
+
+// Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
+// doesn't exist on type 'y'") and carries no board content, so a trimmed version is
+// safe to return publicly. Anything that looks like an id, address or number is dropped
+// so this cannot become a leak if Monday ever changes its message format.
+function sanitizeMondayError(errors) {
+  let m = "";
+  try {
+    const first = Array.isArray(errors) ? errors[0] : errors;
+    m = String(first?.message || first?.error_code || JSON.stringify(first) || "");
+  } catch { m = "unreadable error"; }
+  return m
+    .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, "[email]")
+    .replace(/\b\d{6,}\b/g, "[id]")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 140) || "unknown error";
+}
+
+async function availability(request, env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ booked: [], busy: [], degraded: true, reason: "MONDAY_TOKEN is not set on this deployment", where: "env", build: BUILD_ID }, 200, cors);
+  // Secret-gated so the Monday error text is never public. Without this the only signal
+  // was an empty feed, which is indistinguishable from a genuinely free calendar.
+  const diag = calcAuthorized(request, env) ? [] : null;
+  // Collected across the three board reads and surfaced on a degraded response.
+  const reasons = [];
+  try {
+    const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
+    // Sequential on purpose: three reads at once, each preceded by a schema read, is a
+    // six-query burst against a per-minute complexity budget.
+    const boards = [];
+    for (const id of ids) {
+      const b = await fetchBoardAvailability(id, TOKEN, diag, reasons);
+      if (b) boards.push(b);
+    }
+    const missing = ids.length - boards.length;
+    if (!boards.length) {
+      console.error("availability: no board could be read; returning an empty feed.");
+      return json({ booked: [], busy: [], degraded: true, reason: reasons[0] || "unknown", where: "all-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) }, 200, cors);
+    }
     const busy = [];
     const bookedSet = new Set();
 
@@ -541,13 +618,28 @@ async function availability(env, cors) {
       }
     }
     const booked = Array.from(bookedSet);
-    return new Response(JSON.stringify({ booked, busy }), {
+    // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
+    // broken one. Without it, a failed read renders as a month of free dates.
+    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, build: BUILD_ID };
+    return new Response(JSON.stringify(body), {
       status: 200,
-      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=60", ...cors },
+      headers: {
+        "content-type": "application/json",
+        "Cache-Control": missing ? "no-store" : "public, max-age=60",
+        ...cors,
+      },
     });
   } catch (e) {
+    // This path hid the cause once already: it returned degraded with no reason, which is
+    // indistinguishable from the older build and sent us chasing the wrong thing. Anything
+    // that throws here now names itself, and `build` proves which bundle is live.
     console.error("availability failed:", e);
-    return json({ booked: [], busy: [] }, 200, cors);   // fail open
+    return json({
+      booked: [], busy: [], degraded: true,
+      reason: sanitizeMondayError([{ message: String(e && e.message || e) }]),
+      where: "availability",
+      build: BUILD_ID,
+    }, 200, cors);   // fail open, but say so
   }
 }
 
