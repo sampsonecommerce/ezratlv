@@ -522,6 +522,8 @@ async function availability(request, env, cors) {
   // Secret-gated so the Monday error text is never public. Without this the only signal
   // was an empty feed, which is indistinguishable from a genuinely free calendar.
   const diag = calcAuthorized(request, env) ? [] : null;
+  // Collected across the three board reads and surfaced on a degraded response.
+  const reasons = [];
   try {
     const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
     // Sequential on purpose: three reads at once, each preceded by a schema read, is a
