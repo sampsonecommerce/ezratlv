@@ -1791,138 +1791,104 @@
     }
 
     /* ============================================================
-       3B-1. FLANKED CALENDAR SIDES (MINIMALIST LINE-ART SAX & DRUMS)
+       3B-1. FLANKED CALENDAR SIDES (FREE-FLOATING ASYMMETRICAL ART)
     ============================================================ */
     .cal-flank-layout {
       display: flex;
-      align-items: stretch;
+      align-items: center;
       justify-content: center;
-      gap: 16px;
-      max-width: 1140px;
+      gap: 20px;
+      max-width: 1200px;
       margin: 0 auto;
       width: 100%;
-    }
-
-    .cal-flank-card {
-      width: 112px;
-      flex-shrink: 0;
-      background: linear-gradient(180deg, #18130e 0%, #100d09 100%);
-      border: 1px solid rgba(196,154,60,0.22);
-      border-radius: 18px;
-      padding: 14px 6px 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.8);
       position: relative;
-      overflow: hidden;
-      transition: all 0.3s var(--ease);
-    }
-    .cal-flank-card:hover {
-      border-color: var(--gold);
-      box-shadow: 0 15px 35px -5px rgba(196,154,60,0.15);
     }
 
-    .cal-flank-card__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.62rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      background: rgba(196,154,60,0.1);
-      border: 1px solid rgba(196,154,60,0.3);
-      padding: 2px 7px;
-      border-radius: 100px;
-      white-space: nowrap;
-    }
-    .cal-flank-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 5px rgba(74,222,128,0.8);
-      animation: dotPulse 2s infinite;
-    }
-
-    .cal-flank-svg-wrap {
-      width: 100%;
-      flex: 1;
+    .cal-flank-art {
+      width: 125px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 200px;
+      pointer-events: none;
+      user-select: none;
+      transition: all 0.3s var(--ease);
     }
+
+    /* Asymmetrical Staggered Vertical Alignment */
+    .cal-flank-art--top {
+      align-self: flex-start;
+      margin-top: 15px; /* Positioned high up next to calendar top */
+    }
+    .cal-flank-art--bottom {
+      align-self: flex-end;
+      margin-bottom: 25px; /* Positioned lower down next to calendar bottom */
+    }
+
     .cal-flank-svg {
       width: 100%;
-      height: 100%;
-      max-height: 250px;
+      height: auto;
+      max-height: 270px;
       overflow: visible;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,0.6));
     }
 
-    .cal-flank-sub {
-      font-size: 0.58rem;
-      font-weight: 800;
-      color: var(--gold-light);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.8;
-      text-align: center;
+    /* Fluid Micro-Interactions (UI/UX Pro Max) */
+    .anim-flank-sax {
+      transform-origin: 55px 210px;
+      animation: saxFluidSway 4.2s ease-in-out infinite;
     }
-
-    /* Minimalist Line-Art Animations */
-    .anim-minimal-sax {
-      transform-origin: 50px 210px;
-      animation: saxLineSway 3s ease-in-out infinite;
-    }
-    @keyframes saxLineSway {
+    @keyframes saxFluidSway {
       0%, 100% { transform: rotate(0deg); }
-      38%      { transform: rotate(-3.5deg) translateY(-2px); }
-      75%      { transform: rotate(2.5deg) translateY(1px); }
+      38%      { transform: rotate(-3.2deg) translateY(-3px); }
+      72%      { transform: rotate(2.2deg) translateY(1px); }
     }
 
-    .anim-min-note-1 { animation: noteDrift 2.5s ease-out infinite; transform-origin: 70px 90px; }
-    .anim-min-note-2 { animation: noteDrift 2.8s ease-out infinite 0.9s; transform-origin: 70px 90px; }
-    .anim-min-note-3 { animation: noteDrift 2.2s ease-out infinite 1.7s; transform-origin: 70px 90px; }
+    .anim-sax-note-1 { animation: saxNoteRise 2.8s cubic-bezier(0.2, 0.6, 0.35, 1) infinite; transform-origin: 78px 110px; }
+    .anim-sax-note-2 { animation: saxNoteRise 3.2s cubic-bezier(0.2, 0.6, 0.35, 1) infinite 0.9s; transform-origin: 86px 90px; }
+    .anim-sax-note-3 { animation: saxNoteRise 2.5s cubic-bezier(0.2, 0.6, 0.35, 1) infinite 1.8s; transform-origin: 68px 76px; }
 
-    @keyframes noteDrift {
-      0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
-      30%  { opacity: 0.95; }
-      80%  { opacity: 0.6; }
-      100% { opacity: 0; transform: translate(14px, -36px) scale(1.1); }
+    @keyframes saxNoteRise {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
+      25%  { opacity: 0.95; }
+      75%  { opacity: 0.65; }
+      100% { opacity: 0; transform: translate(16px, -42px) scale(1.15) rotate(15deg); }
     }
 
-    .anim-min-stick-left {
-      transform-origin: 48px 145px;
-      animation: stickSnareTap 0.52s ease-in-out infinite alternate;
+    .anim-drum-arm-l {
+      transform-origin: 52px 94px;
+      animation: drumArmSnareTap 0.54s ease-in-out infinite alternate;
     }
-    .anim-min-stick-right {
-      transform-origin: 66px 135px;
-      animation: stickRideTap 0.38s ease-in-out infinite alternate;
+    .anim-drum-arm-r {
+      transform-origin: 72px 94px;
+      animation: drumArmRideTap 0.4s ease-in-out infinite alternate;
     }
-    @keyframes stickSnareTap {
+    @keyframes drumArmSnareTap {
       0%   { transform: rotate(0deg); }
-      100% { transform: rotate(18deg); }
+      100% { transform: rotate(16deg); }
     }
-    @keyframes stickRideTap {
+    @keyframes drumArmRideTap {
       0%   { transform: rotate(0deg); }
-      100% { transform: rotate(-16deg); }
+      100% { transform: rotate(-14deg); }
     }
 
-    .anim-min-cymbal-pulse {
-      transform-origin: 88px 90px;
-      animation: cymbalLineRing 0.76s ease-out infinite;
+    .anim-drum-cymbal-ring {
+      transform-origin: 92px 94px;
+      animation: cymbalFluidRing 0.8s ease-out infinite;
     }
-    @keyframes cymbalLineRing {
+    @keyframes cymbalFluidRing {
       0%   { opacity: 0; transform: scale(0.7); }
-      40%  { opacity: 0.85; }
-      100% { opacity: 0; transform: scale(1.4); }
+      35%  { opacity: 0.85; }
+      100% { opacity: 0; transform: scale(1.45); }
     }
 
-    @media (max-width: 1040px) {
-      .cal-flank-card {
+    @media (max-width: 1140px) {
+      .cal-flank-art {
+        width: 100px;
+      }
+    }
+    @media (max-width: 1020px) {
+      .cal-flank-art {
         display: none;
       }
     }
@@ -2923,71 +2889,66 @@
         <p>צפו בלו״ז המלא לפי חצאי ימים — צהריים (12:00–18:00) וערב (18:00–02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
-      <!-- Calendar Flanked Layout (Saxophone on one side, Drummer on the other) -->
+      <!-- Calendar Flanked Layout (Free-Floating Musicians, Asymmetrical Staggered Heights) -->
       <div class="cal-flank-layout">
-        <!-- Right Flank (Saxophone Player - Minimalist Line Art) -->
-        <aside class="cal-flank-card" aria-hidden="true">
-          <div class="cal-flank-card__badge">
-            <span class="cal-flank-dot"></span> LIVE SAX
-          </div>
-          <div class="cal-flank-svg-wrap">
-            <svg class="cal-flank-svg" viewBox="0 0 110 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="saxLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fef9c3"/>
-                  <stop offset="40%" stop-color="#f59e0b"/>
-                  <stop offset="80%" stop-color="#c49a3c"/>
-                  <stop offset="100%" stop-color="#78350f"/>
-                </linearGradient>
-                <radialGradient id="saxSideGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
-                  <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
+        <!-- High-Positioned Musician (Saxophone Player - Free Floating) -->
+        <div class="cal-flank-art cal-flank-art--top" aria-hidden="true">
+          <svg class="cal-flank-svg cal-flank-svg--sax" viewBox="0 0 130 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="saxLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb"/>
+                <stop offset="35%" stop-color="#fde047"/>
+                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="100%" stop-color="#854d0e"/>
+              </linearGradient>
+              <radialGradient id="saxAuraGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.18"/>
+                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.04"/>
+                <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
 
-              <ellipse cx="55" cy="130" rx="45" ry="90" fill="url(#saxSideGlow)"/>
+            <!-- Warm Ambient Floating Aura -->
+            <ellipse cx="65" cy="130" rx="60" ry="100" fill="url(#saxAuraGrad)"/>
 
-              <!-- Minimalist Line-Art Saxophone Player -->
-              <g class="anim-minimal-sax">
-                <!-- Head & Hat Minimal Contour -->
-                <path d="M 38 60 Q 42 42 56 45 Q 70 48 66 65 Q 52 70 42 66 Z" stroke="url(#saxLineGrad)" stroke-width="2" fill="#140f0a"/>
-                <path d="M 28 60 Q 52 52 78 60" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/>
-                
-                <!-- Back Spine Curve & Torso Contour -->
-                <path d="M 44 68 Q 30 110 38 175 Q 44 215 50 235" stroke="url(#saxLineGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
-                <!-- Front Arm Line to Saxophone -->
-                <path d="M 54 82 Q 62 105 66 130" stroke="url(#saxLineGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
-                <path d="M 48 94 Q 58 116 62 145" stroke="url(#saxLineGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <!-- Exquisite Minimalist Single-Line Saxophonist -->
+            <g class="anim-flank-sax">
+              <!-- Fedora & Face Silhouette Contour -->
+              <path d="M 44 58 Q 50 36 68 40 Q 84 44 78 62 Q 62 68 50 64 Z" stroke="url(#saxLineGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 34 58 Q 62 50 92 58" stroke="#fde047" stroke-width="2.2" stroke-linecap="round"/>
+              
+              <!-- Spine, Torso & Lower Body Continuous Flow -->
+              <path d="M 52 66 Q 36 112 46 178 Q 52 220 58 245" stroke="url(#saxLineGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <!-- Front Arm Line to Instrument -->
+              <path d="M 64 82 Q 72 108 76 132" stroke="url(#saxLineGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <path d="M 58 96 Q 68 118 72 146" stroke="url(#saxLineGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
 
-                <!-- Sleek Curved Gold Saxophone -->
-                <!-- Mouthpiece & Neck -->
-                <path d="M 52 64 Q 60 68 64 78" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                <!-- Tube Body & Bow -->
-                <path d="M 64 78 Q 72 110 74 150 Q 76 190 60 198 Q 46 192 50 168" stroke="url(#saxLineGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-                <!-- Flared Sax Bell -->
-                <path d="M 50 168 Q 54 146 66 132 Q 74 138 68 162 Z" fill="url(#saxLineGrad)" stroke="#fef08a" stroke-width="1.2"/>
-                <ellipse cx="64" cy="138" rx="4" ry="7" fill="#451a03" stroke="#fef08a" stroke-width="1.2" transform="rotate(-20 64 138)"/>
-                
-                <!-- Key Accents -->
-                <circle cx="67" cy="95" r="1.5" fill="#fef08a"/>
-                <circle cx="70" cy="115" r="1.5" fill="#fef08a"/>
-                <circle cx="72" cy="135" r="1.5" fill="#fef08a"/>
-              </g>
+              <!-- Gleaming Brass Saxophone -->
+              <path d="M 62 62 Q 70 66 74 76" stroke="#fde047" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <!-- Main Sax Body Tube & Loop -->
+              <path d="M 74 76 Q 82 112 84 152 Q 86 195 68 204 Q 52 196 58 170" stroke="url(#saxLineGrad)" stroke-width="3.8" stroke-linecap="round" fill="none"/>
+              <!-- Flared Horn Bell -->
+              <path d="M 58 170 Q 64 146 76 130 Q 86 136 78 162 Z" fill="url(#saxLineGrad)" stroke="#fde047" stroke-width="1.4"/>
+              <ellipse cx="74" cy="138" rx="4.5" ry="8" fill="#291807" stroke="#fde047" stroke-width="1.4" transform="rotate(-20 74 138)"/>
+              
+              <!-- Key Inlays -->
+              <circle cx="78" cy="96" r="1.8" fill="#fde047"/>
+              <circle cx="81" cy="116" r="1.8" fill="#fde047"/>
+              <circle cx="83" cy="136" r="1.8" fill="#fde047"/>
+            </g>
 
-              <!-- Floating Notes from Bell -->
-              <g class="anim-min-note-1">
-                <text x="68" y="118" fill="#fef08a" font-size="13" font-weight="900">♪</text>
-              </g>
-              <g class="anim-min-note-2">
-                <text x="74" y="98" fill="#c49a3c" font-size="15" font-weight="900">♫</text>
-              </g>
-              <g class="anim-min-note-3">
-                <text x="58" y="86" fill="#f59e0b" font-size="12" font-weight="900">♩</text>
-              </g>
-            </svg>
-          </div>
-          <span class="cal-flank-sub">ANALOG SOUL</span>
-        </aside>
+            <!-- Ascending Golden Music Notes -->
+            <g class="anim-sax-note-1">
+              <text x="78" y="112" fill="#fde047" font-size="14" font-weight="900" opacity="0.9">♪</text>
+            </g>
+            <g class="anim-sax-note-2">
+              <text x="86" y="90" fill="#ca8a04" font-size="16" font-weight="900" opacity="0.85">♫</text>
+            </g>
+            <g class="anim-sax-note-3">
+              <text x="68" y="76" fill="#f59e0b" font-size="13" font-weight="900" opacity="0.9">♩</text>
+            </g>
+          </svg>
+        </div>
 
         <!-- Center: Monthly Calendar -->
         <div class="month-cal-container">
@@ -3025,68 +2986,62 @@
           </div>
         </div>
 
-        <!-- Left Flank (Drummer - Minimalist Line Art) -->
-        <aside class="cal-flank-card" aria-hidden="true">
-          <div class="cal-flank-card__badge">
-            <span class="cal-flank-dot"></span> LIVE DRUMS
-          </div>
-          <div class="cal-flank-svg-wrap">
-            <svg class="cal-flank-svg" viewBox="0 0 110 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="drumLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fef9c3"/>
-                  <stop offset="40%" stop-color="#f59e0b"/>
-                  <stop offset="80%" stop-color="#c49a3c"/>
-                  <stop offset="100%" stop-color="#78350f"/>
-                </linearGradient>
-                <radialGradient id="drumSideGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
-                  <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
+        <!-- Low-Positioned Musician (Jazz Drummer - Free Floating) -->
+        <div class="cal-flank-art cal-flank-art--bottom" aria-hidden="true">
+          <svg class="cal-flank-svg cal-flank-svg--drum" viewBox="0 0 130 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="drumLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb"/>
+                <stop offset="35%" stop-color="#fde047"/>
+                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="100%" stop-color="#854d0e"/>
+              </linearGradient>
+              <radialGradient id="drumAuraGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.18"/>
+                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.04"/>
+                <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
 
-              <ellipse cx="55" cy="130" rx="45" ry="90" fill="url(#drumSideGlow)"/>
+            <!-- Warm Ambient Floating Aura -->
+            <ellipse cx="65" cy="130" rx="60" ry="100" fill="url(#drumAuraGrad)"/>
 
-              <!-- Minimalist Line-Art Drummer & Kit -->
-              <!-- Drummer Silhouette Contour -->
-              <g>
-                <!-- Head -->
-                <ellipse cx="55" cy="66" rx="10" ry="12" stroke="url(#drumLineGrad)" stroke-width="2" fill="#140f0a"/>
-                <!-- Cap -->
-                <path d="M 46 62 Q 55 54 66 60" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round"/>
-                <!-- Torso Lines -->
-                <path d="M 45 80 L 46 150 M 65 80 L 64 150" stroke="url(#drumLineGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Exquisite Minimalist Single-Line Drummer & Kit -->
+            <g>
+              <!-- Drummer Head & Cap Contour -->
+              <ellipse cx="62" cy="62" rx="11" ry="13" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="none"/>
+              <path d="M 51 58 Q 62 48 74 55" stroke="#fde047" stroke-width="2" stroke-linecap="round"/>
+              <!-- Torso & Posture Lines -->
+              <path d="M 50 78 L 52 148 M 72 78 L 70 148" stroke="url(#drumLineGrad)" stroke-width="2" stroke-linecap="round"/>
 
-                <!-- Snare Drum (Left) -->
-                <ellipse cx="32" cy="165" rx="16" ry="6" stroke="url(#drumLineGrad)" stroke-width="2" fill="#140f0a"/>
-                <line x1="32" y1="171" x2="32" y2="235" stroke="#78350f" stroke-width="1.8"/>
+              <!-- Snare Drum (Left) -->
+              <ellipse cx="36" cy="160" rx="18" ry="7" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="#140f0a" fill-opacity="0.6"/>
+              <line x1="36" y1="167" x2="36" y2="235" stroke="#854d0e" stroke-width="2"/>
 
-                <!-- Ride Cymbal (Right) -->
-                <ellipse class="anim-min-cymbal-pulse" cx="80" cy="98" rx="20" ry="6" stroke="#fef08a" stroke-width="1.2"/>
-                <ellipse cx="80" cy="98" rx="21" ry="5.5" stroke="url(#drumLineGrad)" stroke-width="2" fill="url(#drumLineGrad)" fill-opacity="0.25"/>
-                <circle cx="80" cy="98" r="2" fill="#fef08a"/>
-                <line x1="80" y1="98" x2="80" y2="235" stroke="#78350f" stroke-width="1.8"/>
+              <!-- Ride Cymbal (Right) -->
+              <ellipse class="anim-drum-cymbal-ring" cx="92" cy="94" rx="22" ry="6.5" stroke="#fde047" stroke-width="1.4"/>
+              <ellipse cx="92" cy="94" rx="23" ry="6" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="url(#drumLineGrad)" fill-opacity="0.3"/>
+              <circle cx="92" cy="94" r="2.2" fill="#fde047"/>
+              <line x1="92" y1="94" x2="92" y2="235" stroke="#854d0e" stroke-width="2"/>
 
-                <!-- Bass Drum (Bottom) -->
-                <ellipse cx="55" cy="210" rx="24" ry="16" stroke="url(#drumLineGrad)" stroke-width="2" fill="#140f0a"/>
-                <text x="55" y="213" fill="#c49a3c" font-size="7.5" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
+              <!-- Bass Drum (Bottom Center) -->
+              <ellipse cx="62" cy="208" rx="26" ry="18" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="#140f0a" fill-opacity="0.6"/>
+              <text x="62" y="212" fill="#ca8a04" font-size="8" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
 
-                <!-- Animated Left Arm & Drumstick (Tapping Snare) -->
-                <g class="anim-min-stick-left">
-                  <path d="M 46 95 Q 32 118 36 142" stroke="url(#drumLineGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                  <line x1="36" y1="142" x2="32" y2="162" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/>
-                </g>
-
-                <!-- Animated Right Arm & Drumstick (Tapping Ride Cymbal) -->
-                <g class="anim-min-stick-right">
-                  <path d="M 64 95 Q 74 112 78 126" stroke="url(#drumLineGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                  <line x1="78" y1="126" x2="82" y2="104" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/>
-                </g>
+              <!-- Animated Left Arm & Drumstick (Snare Rhythm) -->
+              <g class="anim-drum-arm-l">
+                <path d="M 52 94 Q 36 118 40 140" stroke="url(#drumLineGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+                <line x1="40" y1="140" x2="36" y2="158" stroke="#fde047" stroke-width="2.2" stroke-linecap="round"/>
               </g>
-            </svg>
-          </div>
-          <span class="cal-flank-sub">VINYL BEATS</span>
-        </aside>
+
+              <!-- Animated Right Arm & Drumstick (Ride Cymbal Rhythm) -->
+              <g class="anim-drum-arm-r">
+                <path d="M 72 94 Q 84 110 88 122" stroke="url(#drumLineGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+                <line x1="88" y1="122" x2="93" y2="100" stroke="#fde047" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
