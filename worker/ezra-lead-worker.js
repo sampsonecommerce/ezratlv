@@ -15,6 +15,9 @@ const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
 // Open Events leads (events page inquiry with calendar) go to the Open Events board.
 const OPEN_EVENTS_BOARD = "5102602771";
+// Bumped by hand whenever this file is pasted into Cloudflare. Returned on every degraded
+// availability response so "is the deployed bundle the merged one?" is a question with an answer.
+const BUILD_ID = "2026-08-24c";
 const OPEN_EVENTS_GROUP = "topics";
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
@@ -515,7 +518,7 @@ function sanitizeMondayError(errors) {
 
 async function availability(request, env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
-  if (!TOKEN) return json({ booked: [], busy: [], degraded: true }, 200, cors);
+  if (!TOKEN) return json({ booked: [], busy: [], degraded: true, reason: "MONDAY_TOKEN is not set on this deployment", where: "env", build: BUILD_ID }, 200, cors);
   // Secret-gated so the Monday error text is never public. Without this the only signal
   // was an empty feed, which is indistinguishable from a genuinely free calendar.
   const diag = calcAuthorized(request, env) ? [] : null;
@@ -531,7 +534,7 @@ async function availability(request, env, cors) {
     const missing = ids.length - boards.length;
     if (!boards.length) {
       console.error("availability: no board could be read; returning an empty feed.");
-      return json({ booked: [], busy: [], degraded: true, reason: reasons[0] || "unknown", ...(diag ? { errors: diag } : {}) }, 200, cors);
+      return json({ booked: [], busy: [], degraded: true, reason: reasons[0] || "unknown", where: "all-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) }, 200, cors);
     }
     const busy = [];
     const bookedSet = new Set();
@@ -615,7 +618,7 @@ async function availability(request, env, cors) {
     const booked = Array.from(bookedSet);
     // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
     // broken one. Without it, a failed read renders as a month of free dates.
-    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", ...(diag ? { errors: diag } : {}) } : { booked, busy };
+    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, build: BUILD_ID };
     return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
@@ -625,8 +628,16 @@ async function availability(request, env, cors) {
       },
     });
   } catch (e) {
+    // This path hid the cause once already: it returned degraded with no reason, which is
+    // indistinguishable from the older build and sent us chasing the wrong thing. Anything
+    // that throws here now names itself, and `build` proves which bundle is live.
     console.error("availability failed:", e);
-    return json({ booked: [], busy: [], degraded: true }, 200, cors);   // fail open, but say so
+    return json({
+      booked: [], busy: [], degraded: true,
+      reason: sanitizeMondayError([{ message: String(e && e.message || e) }]),
+      where: "availability",
+      build: BUILD_ID,
+    }, 200, cors);   // fail open, but say so
   }
 }
 
