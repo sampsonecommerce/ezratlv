@@ -1809,41 +1809,62 @@
       filter: drop-shadow(0 0 10px rgba(254, 240, 138, 0.45));
     }
 
-    /* Right Side: Elegant Florentin Skyline Silhouette */
-    .transit-skyline-wrap {
+    /* Tel Aviv / Florentin Skyline Backdrop (Both Left and Right Sides across the road) */
+    .transit-skyline {
       position: absolute;
-      right: clamp(20px, 4vw, 70px);
       bottom: calc(50% + 27px);
       z-index: 1;
       pointer-events: none;
-      opacity: 0.65;
+      opacity: 0.8;
+    }
+
+    .transit-skyline--left {
+      left: 0;
+      width: clamp(280px, 32vw, 440px);
+    }
+
+    .transit-skyline--right {
+      right: 0;
+      width: clamp(280px, 32vw, 440px);
     }
 
     .transit-skyline-svg {
-      width: 220px;
-      height: 70px;
+      width: 100%;
+      height: 72px;
       display: block;
       overflow: visible;
       filter: drop-shadow(0 4px 14px rgba(0,0,0,0.9));
     }
 
-    /* Symmetrical, Realistic Art-Deco Underpass Tunnel Portals */
-    .transit-portal {
+    /* Right Side: Vintage Streetlamps on opposite sidewalk */
+    .transit-lamps-right-wrap {
       position: absolute;
+      right: clamp(20px, 4vw, 70px);
       top: 50%;
       transform: translateY(-50%);
-      width: 52px;
-      height: 76px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Symmetrical, Realistic Art-Deco Underpass Tunnel Portals (Sitting flush directly ON the road bed) */
+    .transit-portal {
+      position: absolute;
+      bottom: calc(50% - 27px);
+      width: 48px;
+      height: 66px;
       z-index: 12;
       pointer-events: none;
     }
 
     .transit-portal--left {
-      left: -26px;
+      left: -24px;
     }
 
     .transit-portal--right {
-      right: -26px;
+      right: -24px;
     }
 
     .transit-portal-svg {
@@ -1881,35 +1902,8 @@
       filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.9));
     }
 
-    /* Blinking signal beacon on the tunnel portal */
-    .transit-signal-light {
-      animation: signalBlink 2s infinite ease-in-out;
-    }
-    @keyframes signalBlink {
-      0%, 100% { fill: #ea580c; filter: drop-shadow(0 0 3px #ea580c); opacity: 0.6; }
-      50%      { fill: #fef08a; filter: drop-shadow(0 0 10px #fef08a); opacity: 1; }
-    }
-
-    /* Vehicle wrappers moving along the highway */
-    .transit-vehicle-runner {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      will-change: left, opacity, transform;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .transit-vehicle-svg {
-      display: block;
-      height: auto;
-      overflow: visible;
-      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.9));
-    }
-
     /* 36s Total Loop (9s per vehicle):
-       - Every vehicle pulls up and stops right at the Abarbanel 38 station platform (left: clamp(15px, 4vw, 55px))
+       - Every vehicle pulls up and stops right at the Abarbanel 38 station platform (left: clamp(20px, 4vw, 70px))
        - Waits for 1.3s (passenger boarding)
        - Accelerates into tunnel
        - Exits right smoothly without stopping
@@ -1922,7 +1916,7 @@
 
     .transit-vehicle--train {
       width: 560px;
-      animation: transitTrainAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation: transitTrainAcrossScreen 36s linear infinite;
       animation-delay: 9s;
     }
 
@@ -1949,24 +1943,14 @@
       }
       /* Stops at Abarbanel 38 Station Platform */
       4.8% {
-        left: clamp(15px, 4vw, 55px);
+        left: clamp(20px, 4vw, 70px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(15px, 4vw, 55px);
+      8.0% {
+        left: clamp(20px, 4vw, 70px);
         opacity: 1;
       }
-      /* Enters left tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        opacity: 1;
-      }
-      /* Exits right tunnel portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        opacity: 1;
-      }
-      /* Exits screen right smoothly */
+      /* Continuous, steady glide across the tunnel and all the way off screen right */
       23.0% {
         left: calc(100% + 190px);
         opacity: 1;
@@ -1992,35 +1976,20 @@
       }
       /* Front locomotive stops at Abarbanel 38 station platform */
       4.8% {
-        left: calc(clamp(15px, 4vw, 55px) - 400px);
+        left: calc(clamp(20px, 4vw, 70px) - 380px);
         opacity: 1;
       }
-      8.2% {
-        left: calc(clamp(15px, 4vw, 55px) - 400px);
+      8.0% {
+        left: calc(clamp(20px, 4vw, 70px) - 380px);
         opacity: 1;
       }
-      /* Front locomotive enters left tunnel portal */
-      11.5% {
-        left: calc(50% - min(510px, 48vw) - 450px);
-        opacity: 1;
-      }
-      /* Head emerges from right tunnel portal WHILE rear is still entering left portal! */
-      15.0% {
-        left: calc(50% + min(430px, 44vw) - 450px);
-        opacity: 1;
-      }
-      /* Rear carriage finishes clearing the tunnel and glides off without stopping at exit */
-      19.0% {
-        left: calc(50% + min(430px, 44vw) - 100px);
-        opacity: 1;
-      }
-      /* Entire train clears screen right */
-      23.2% {
-        left: calc(100% + 100px);
+      /* Continuous smooth glide through tunnel and exits off screen right without stopping! */
+      23.5% {
+        left: calc(100% + 600px);
         opacity: 1;
       }
       24.2% {
-        left: calc(100% + 150px);
+        left: calc(100% + 620px);
         opacity: 0;
       }
       25%, 100% {
@@ -2040,24 +2009,14 @@
       }
       /* Stops at Abarbanel 38 station platform */
       4.8% {
-        left: clamp(20px, 4.5vw, 60px);
+        left: clamp(20px, 4.5vw, 70px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(20px, 4.5vw, 60px);
+      8.0% {
+        left: clamp(20px, 4.5vw, 70px);
         opacity: 1;
       }
-      /* Enters left tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        opacity: 1;
-      }
-      /* Exits right tunnel portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        opacity: 1;
-      }
-      /* Cruises past buildings to right screen edge */
+      /* Continuous smooth glide past buildings to right screen edge */
       23.0% {
         left: calc(100% + 180px);
         opacity: 1;
@@ -2087,29 +2046,14 @@
       }
       /* Hovers over Abarbanel 38 station */
       4.8% {
-        left: clamp(15px, 4vw, 55px);
+        left: clamp(20px, 4vw, 70px);
         transform: translateY(-50%) translateY(2px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(15px, 4vw, 55px);
+      8.0% {
+        left: clamp(20px, 4vw, 70px);
         transform: translateY(-50%) translateY(-8px);
         opacity: 1;
-      }
-      /* Enters tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        transform: translateY(-50%) translateY(4px);
-        opacity: 1;
-      }
-      /* Exits right portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        transform: translateY(-50%) translateY(-10px);
-        opacity: 1;
-      }
-      20.0% {
-        transform: translateY(-50%) translateY(6px);
       }
       23.0% {
         left: calc(100% + 180px);
@@ -4506,6 +4450,77 @@
         <div class="transit-road-stripes"></div>
       </div>
 
+      <!-- Left Roadside: Tel Aviv & Florentin Skyline Silhouette (Across the road in background) -->
+      <div class="transit-skyline transit-skyline--left" aria-hidden="true">
+        <svg class="transit-skyline-svg" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skylineBldgGradL" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#24170d"/>
+              <stop offset="100%" stop-color="#0f0b07"/>
+            </linearGradient>
+            <linearGradient id="skylineWindowGradL" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#b45309" stop-opacity="0.25"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Building L1: 3-Story Bauhaus Corner Building (x: 4 to 95) -->
+          <rect x="6" y="16" width="90" height="64" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Flat Roof Pergola & Water Tank & Antenna -->
+          <line x1="4" y1="16" x2="98" y2="16" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="14" y="8" width="22" height="8" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="52" y="6" width="14" height="10" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <line x1="78" y1="16" x2="78" y2="2" stroke="#f5d98a" stroke-width="0.8"/>
+          <!-- Curved Bauhaus Balconies -->
+          <path d="M 6 34 Q 6 28 18 28 L 48 28 L 48 38 L 6 38 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="56" y="24" width="12" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="74" y="24" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 6 54 Q 6 48 18 48 L 48 48 L 48 58 L 6 58 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="56" y="44" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="74" y="44" width="12" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building L2: 2-Story Eclectic Florentin Townhouse with Pitched Terracotta Roof (x: 96 to 195) -->
+          <polygon points="94,26 146,6 198,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="98" y="26" width="98" height="54" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Chimney with smoke wisp -->
+          <rect x="174" y="2" width="8" height="14" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 178 2 Q 175 -4 180 -10" stroke="rgba(245,217,138,0.3)" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Arched Windows with Wooden Louvers -->
+          <path d="M 110 46 L 110 36 Q 118 30 126 36 L 126 46 Z" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 138 46 L 138 36 Q 146 30 154 36 L 154 46 Z" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 166 46 L 166 36 Q 174 30 182 36 L 182 46 Z" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Ground Floor: Bistro Door & Window -->
+          <rect x="108" y="56" width="36" height="18" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 156 74 L 156 55 Q 166 49 176 55 L 176 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- Building L3: 4-Story Bauhaus Apartment Block (x: 196 to 285) -->
+          <rect x="198" y="10" width="88" height="70" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Rooftop solar panels -->
+          <line x1="194" y1="10" x2="288" y2="10" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="206" y="3" width="16" height="7" rx="1" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="248" y="2" width="24" height="8" rx="1" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Grid Windows -->
+          <rect x="208" y="18" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="232" y="18" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="256" y="18" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="208" y="35" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="232" y="35" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="256" y="35" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="208" y="52" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="232" y="52" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="256" y="52" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building L4: 2-Story Artisan Villa (x: 286 to 376) -->
+          <polygon points="284,28 332,12 380,28" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="288" y="28" width="88" height="52" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Windows with flower boxes -->
+          <rect x="300" y="36" width="14" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="340" y="36" width="14" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="296" y="56" width="34" height="16" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 344 74 L 344 56 Q 354 50 364 56 L 364 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+        </svg>
+      </div>
+
       <!-- Left Roadside: Abarbanel 38 Bus Station & Vintage Streetlamps -->
       <div class="transit-station-wrap">
         <!-- Vintage Streetlamp 1 -->
@@ -4585,45 +4600,93 @@
         </svg>
       </div>
 
-      <!-- Right Roadside: Elegant Florentin Skyline Silhouette -->
-      <div class="transit-skyline-wrap" aria-hidden="true">
-        <svg class="transit-skyline-svg" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Right Roadside: Tel Aviv & Florentin Skyline Silhouette (Across the road in background) -->
+      <div class="transit-skyline transit-skyline--right" aria-hidden="true">
+        <svg class="transit-skyline-svg" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="skylineBldgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient id="skylineBldgGradR" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stop-color="#24170d"/>
               <stop offset="100%" stop-color="#0f0b07"/>
             </linearGradient>
-            <linearGradient id="skylineWindowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.75"/>
-              <stop offset="100%" stop-color="#b45309" stop-opacity="0.2"/>
+            <linearGradient id="skylineWindowGradR" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#b45309" stop-opacity="0.25"/>
             </linearGradient>
           </defs>
 
-          <!-- Building 1: Florentin Townhouse with Terracotta Roof (x: 10 to 110) -->
-          <polygon points="8,26 60,6 112,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
-          <rect x="12" y="26" width="96" height="54" fill="url(#skylineBldgGrad)" stroke="#c49a3c" stroke-width="0.8"/>
-          <!-- Chimney -->
-          <rect x="88" y="2" width="8" height="14" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
-          <!-- Windows with soft amber glow -->
-          <rect x="24" y="34" width="14" height="13" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="48" y="34" width="14" height="13" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="72" y="34" width="14" height="13" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="24" y="55" width="28" height="18" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <path d="M 68 73 L 68 54 Q 78 48 88 54 L 88 73 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Building R1: 4-Story Bauhaus Apartment Building (x: 4 to 98) -->
+          <rect x="6" y="8" width="90" height="72" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Flat Roof with Water Heater & Pergola -->
+          <line x1="4" y1="8" x2="98" y2="8" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="18" y="2" width="14" height="6" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="60" y="1" width="20" height="7" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Wrap-around Thermometer Balconies -->
+          <path d="M 6 24 Q 6 18 18 18 L 54 18 L 54 28 L 6 28 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="16" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="78" y="16" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 6 42 Q 6 36 18 36 L 54 36 L 54 46 L 6 46 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="34" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="78" y="34" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 6 60 Q 6 54 18 54 L 54 54 L 54 64 L 6 64 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="52" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="78" y="52" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
 
-          <!-- Building 2: Tel Aviv Bauhaus with Pergola & Balconies (x: 118 to 230) -->
-          <rect x="120" y="16" width="108" height="64" fill="url(#skylineBldgGrad)" stroke="#c49a3c" stroke-width="0.8"/>
-          <!-- Rooftop Pergola & Solar Tank -->
-          <line x1="116" y1="16" x2="232" y2="16" stroke="#f5d98a" stroke-width="1.2"/>
-          <rect x="130" y="8" width="18" height="8" fill="#1a1209" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="180" y="6" width="12" height="10" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
-          <!-- Curved Balconies -->
-          <path d="M 120 34 Q 120 28 132 28 L 160 28 L 160 38 L 120 38 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
-          <rect x="168" y="24" width="12" height="12" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="188" y="24" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <path d="M 120 54 Q 120 48 132 48 L 160 48 L 160 58 L 120 58 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
-          <rect x="168" y="44" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="188" y="44" width="12" height="12" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Building R2: 2-Story Florentin Villa with Terracotta Roof (x: 99 to 192) -->
+          <polygon points="96,24 145,6 194,24" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="100" y="24" width="92" height="56" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Chimney -->
+          <rect x="168" y="2" width="8" height="12" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
+          <!-- Arched Windows with Planters -->
+          <path d="M 112 44 L 112 34 Q 120 28 128 34 L 128 44 Z" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 142 44 L 142 34 Q 150 28 158 34 L 158 44 Z" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 172 44 L 172 34 Q 180 28 188 34 L 188 44 Z" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Balcony Planter -->
+          <rect x="110" y="44" width="20" height="3" rx="0.5" fill="#181109" stroke="#f5d98a" stroke-width="0.5"/>
+          <circle cx="114" cy="43" r="1.2" fill="#f43f5e"/>
+          <circle cx="120" cy="43" r="1.2" fill="#fde047"/>
+          <circle cx="126" cy="43" r="1.2" fill="#f43f5e"/>
+          <rect x="110" y="56" width="36" height="18" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 158 74 L 158 55 Q 168 49 178 55 L 178 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- Building R3: 3-Story Bauhaus Corner House (x: 193 to 284) -->
+          <rect x="194" y="14" width="88" height="66" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Pergola -->
+          <line x1="190" y1="14" x2="284" y2="14" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="204" y="6" width="18" height="8" fill="#1a1209" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="254" y="5" width="12" height="9" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 194 32 Q 194 26 206 26 L 236 26 L 236 36 L 194 36 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="244" y="22" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="264" y="22" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 194 52 Q 194 46 206 46 L 236 46 L 236 56 L 194 56 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="244" y="42" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="264" y="42" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building R4: Florentin Vinyl & Wine House (x: 285 to 376) -->
+          <polygon points="282,26 330,10 378,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="286" y="26" width="90" height="54" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="298" y="34" width="14" height="12" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="322" y="34" width="14" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="346" y="34" width="14" height="12" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="296" y="54" width="44" height="20" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 346 74 L 346 54 Q 356 48 366 54 L 366 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+        </svg>
+      </div>
+
+      <!-- Right Roadside: Vintage Streetlamps -->
+      <div class="transit-lamps-right-wrap">
+        <!-- Vintage Streetlamp 1 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 24 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="85" x2="12" y2="20" stroke="#c49a3c" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="12" cy="80" r="3.5" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 6 20 L 18 20 L 15 6 L 9 6 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="12" cy="14" r="4.5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
+        </svg>
+        <!-- Vintage Streetlamp 2 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 24 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="85" x2="12" y2="20" stroke="#c49a3c" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="12" cy="80" r="3.5" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 6 20 L 18 20 L 15 6 L 9 6 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="12" cy="14" r="4.5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
         </svg>
       </div>
 
