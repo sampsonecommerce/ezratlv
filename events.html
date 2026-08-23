@@ -2847,13 +2847,21 @@
     }
     .modal-scrim.is-open .contact-modal-box { transform: translateY(0); }
 
-    .cf-head { margin-block-end: 1.3rem; }
-    .cf-title { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800; color: var(--cream); margin-block-end: 0.35rem; }
-    .cf-sub { font-size: 0.92rem; color: var(--cream-dim); line-height: 1.6; }
+    .cf-head { margin-block-end: 1.4rem; }
+    .cf-head .eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .cf-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 500; color: var(--cream); margin-block-end: 0.5rem; line-height: 1.15; }
+    .cf-sub { font-size: 0.95rem; color: var(--cream-dim); line-height: 1.6; }
 
     .cf-form-grid { display: flex; flex-direction: column; gap: 0.9rem; }
     .cf-field { display: flex; flex-direction: column; gap: 0.35rem; }
-    .cf-field label { font-size: 0.8rem; font-weight: 700; color: var(--cream-dim); }
+    .cf-field label { font-size: 0.82rem; font-weight: 500; color: var(--cream-dim); }
     .cf-field input, .cf-field textarea, .cf-field select {
       width: 100%;
       padding: 0.7rem 0.9rem;
@@ -2861,8 +2869,8 @@
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.04);
       color: var(--cream);
-      font-family: inherit;
-      font-size: 0.9rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
       transition: border-color 0.2s var(--ease);
     }
     .cf-field input:focus, .cf-field textarea:focus, .cf-field select:focus {
@@ -2886,8 +2894,8 @@
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.03);
       color: var(--cream-dim);
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.86rem;
+      font-weight: 400;
       cursor: pointer;
       transition: all 0.2s var(--ease);
       font-family: inherit;
@@ -2897,7 +2905,7 @@
       background: var(--gold);
       color: var(--bg);
       border-color: var(--gold);
-      font-weight: 800;
+      font-weight: 600;
     }
 
     /* Calendar Date Button & Inline Calendar */
@@ -2911,9 +2919,9 @@
       border: 1px solid var(--line);
       background: rgba(196, 154, 60, 0.08);
       color: var(--cream);
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s var(--ease);
       text-align: start;
@@ -2985,7 +2993,7 @@
       justify-content: space-between;
       margin-block-end: 0.7rem;
     }
-    .cal__month { font-size: 1rem; font-weight: 800; color: var(--gold-light); }
+    .cal__month { font-size: 1rem; font-weight: 500; color: var(--gold-light); }
     .cal__nav {
       width: 30px;
       height: 30px;
@@ -3010,7 +3018,7 @@
     }
     .cal__dow {
       font-size: 0.7rem;
-      font-weight: 800;
+      font-weight: 500;
       color: var(--gold);
       padding-block: 0.25rem;
     }
@@ -3020,8 +3028,8 @@
       border: 1px solid transparent;
       background: rgba(255,255,255,0.03);
       color: var(--cream);
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.82rem;
+      font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -3086,7 +3094,10 @@
       animation: cfRing 0.9s 0.25s var(--ease) both;
     }
     @keyframes cfRing { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.6); opacity: 0; } }
-    .cf-done h3 { font-size: 1.5rem; color: var(--cream); margin-block-end: 0.4rem; }
+    /* Scoped to the form's success screen only - the .btn classes are shared
+       with the rest of the page and must keep their own weight there. */
+    .cf-done .btn, .cf-done .btn span { font-weight: 500; }
+    .cf-done h3 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 500; color: var(--cream); margin-block-end: 0.4rem; }
     .cf-done p { color: var(--cream-dim); line-height: 1.6; font-size: 0.9rem; margin-block-end: 1.4rem; }
 
     /* Animations & Scroll Reveal */
@@ -5478,7 +5489,7 @@
             <textarea id="cfNotes" name="notes" rows="2" placeholder="ספרו לנו קצת על האירוע או הבקשה שלכם..."></textarea>
           </div>
 
-          <button class="btn btn--fill btn--full" id="cfSubmitBtn" type="submit" style="margin-block-start: 0.5rem; padding: 0.85rem;">
+          <button class="btn btn--fill btn--full" id="cfSubmitBtn" type="submit" style="margin-block-start: 0.5rem; padding: 0.85rem; font-weight: 500;">
             <span>שליחת פרטים ושריון תאריך</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
