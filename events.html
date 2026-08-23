@@ -2481,9 +2481,16 @@
       align-items: center;
       gap: 0.6rem;
     }
-    /* Numerals in Pliant, matching the rest of the site. */
-    .cal__day, .month-cal-daynum, .stat-num, .time-card__date,
-    .fmt-card__when, .cal__dow, .month-cal-weekday {
+    /* Numerals in Pliant, matching the rest of the site. The calendar day numbers
+       were listed here as .month-cal-daynum, which is not a class this page ever
+       renders - the markup writes .month-cal-date-num - so every day number fell
+       back to Heebo. Pliant carries no Hebrew glyphs, so on the mixed elements
+       here (month + year, weekday + date) the Hebrew falls through to Heebo on
+       its own, exactly as Hebrew headings do against Cormorant. */
+    .cal__day, .month-cal-date-num, .month-cal-title, .stat-num,
+    .time-card__date, .time-card__date-pill, .time-card__dow,
+    .cal__slot-time, .slot-row__time, .flyer-card__date, .status-clock,
+    .cf-datebtn, .fmt-card__when, .cal__dow, .month-cal-weekday {
       font-family: var(--font-num);
       font-variant-numeric: tabular-nums;
     }
