@@ -1803,28 +1803,28 @@
     .transit-cloud {
       position: absolute;
       will-change: transform;
-      opacity: 0.7;
+      opacity: 0.65;
     }
 
     .transit-cloud--1 {
       top: 8%;
       left: 4%;
       width: 170px;
-      animation: cloudDrift1 45s ease-in-out infinite alternate;
+      animation: cloudDrift1 35s ease-in-out infinite alternate;
     }
 
     .transit-cloud--2 {
       top: 14%;
       right: 6%;
       width: 210px;
-      animation: cloudDrift2 55s ease-in-out infinite alternate;
+      animation: cloudDrift2 42s ease-in-out infinite alternate;
     }
 
     .transit-cloud--3 {
       top: 22%;
       left: 32%;
       width: 140px;
-      animation: cloudDrift1 38s ease-in-out infinite alternate-reverse;
+      animation: cloudDrift1 28s ease-in-out infinite alternate-reverse;
     }
 
     @keyframes cloudDrift1 {
@@ -1882,54 +1882,73 @@
       background: rgba(196, 154, 60, 0.28);
     }
 
-    /* Scenery (Trees, Streetlamps & Flora) along the Road */
-    .transit-scenery {
+    /* Left Side: Abarbanel 38 Bus Station & Vintage Streetlamps */
+    .transit-station-wrap {
       position: absolute;
+      left: clamp(15px, 4vw, 55px);
       top: 50%;
       transform: translateY(-50%);
       display: flex;
       align-items: flex-end;
-      gap: 24px;
+      gap: 16px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .transit-station-svg {
+      width: 110px;
+      height: 85px;
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.85));
+    }
+
+    .transit-lamp-svg {
+      width: 24px;
+      height: 80px;
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(0 0 10px rgba(254, 240, 138, 0.5));
+    }
+
+    /* Right Side: Illustrated Tel Aviv Bauhaus & Florentin Buildings */
+    .transit-buildings-wrap {
+      position: absolute;
+      right: clamp(15px, 4vw, 55px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
       z-index: 2;
       pointer-events: none;
     }
 
-    .transit-scenery--left {
-      left: clamp(12px, 3vw, 40px);
-    }
-
-    .transit-scenery--right {
-      right: clamp(12px, 3vw, 40px);
-    }
-
-    .scenery-svg {
+    .transit-buildings-svg {
+      width: 155px;
+      height: 105px;
       display: block;
       overflow: visible;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.85));
     }
 
-    .scenery-svg--palm { width: 55px; height: 85px; }
-    .scenery-svg--cypress { width: 35px; height: 85px; }
-    .scenery-svg--lamp { width: 28px; height: 80px; }
-    .scenery-svg--bush { width: 40px; height: 35px; }
-
-    /* Grand Florentin Tunnel Portals */
+    /* Symmetrical, Majestic Art-Deco Tunnel Portals */
     .transit-portal {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 58px;
+      width: 60px;
       height: 94px;
       z-index: 12;
       pointer-events: none;
     }
 
     .transit-portal--left {
-      left: -29px;
+      left: -30px;
     }
 
     .transit-portal--right {
-      right: -29px;
+      right: -30px;
     }
 
     .transit-portal-svg {
@@ -1937,12 +1956,12 @@
       height: 100%;
       display: block;
       overflow: visible;
-      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.95));
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.95));
     }
 
     /* Blinking signal beacon on the tunnel portal */
     .transit-signal-light {
-      animation: signalBlink 2.4s infinite ease-in-out;
+      animation: signalBlink 2s infinite ease-in-out;
     }
     @keyframes signalBlink {
       0%, 100% { fill: #ea580c; filter: drop-shadow(0 0 3px #ea580c); opacity: 0.6; }
@@ -1967,37 +1986,37 @@
       filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.9));
     }
 
-    /* Sequential 56s Slow & Majestic Animation cycle:
-       - 0s to 14s (0% - 25%): Bus (Florentin Vintage Bus)
-       - 14s to 28s (25% - 50%): Multi-Carriage Light Rail Train (3 Carriages)
-       - 28s to 42s (50% - 75%): Taxi / Retro Car (Tel Aviv Taxi)
-       - 42s to 56s (75% - 100%): Spaceship UFO (Retro UFO)
+    /* 36s Total Loop (9s per vehicle):
+       - 0s to 9s (0% - 25%): Bus (Florentin Vintage Bus) - stops at Abarbanel 38 station, cruises through tunnel, exits smoothly
+       - 9s to 18s (25% - 50%): Multi-Carriage Light Rail Train (3 Carriages) - stops at station, heads through, continuous head-out/tail-in immersion, exits smoothly
+       - 18s to 27s (50% - 75%): Taxi / Retro Car (Tel Aviv Taxi) - stops at station, cruises through tunnel, exits smoothly
+       - 27s to 36s (75% - 100%): Spaceship UFO (Retro UFO) - hovers at station, cruises through tunnel, exits smoothly
     */
     .transit-vehicle--bus {
       width: 135px;
-      animation: transitBusAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation: transitBusAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
       animation-delay: 0s;
     }
 
     .transit-vehicle--train {
       width: 560px;
-      animation: transitTrainAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-      animation-delay: 14s;
+      animation: transitTrainAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 9s;
     }
 
     .transit-vehicle--car {
       width: 120px;
-      animation: transitCarAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-      animation-delay: 28s;
+      animation: transitCarAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 18s;
     }
 
     .transit-vehicle--ufo {
       width: 130px;
-      animation: transitUfoAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-      animation-delay: 42s;
+      animation: transitUfoAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 27s;
     }
 
-    /* Bus Animation: 0% to 25% (14s) */
+    /* Bus Animation: 0% to 25% (9s) */
     @keyframes transitBusAcrossScreen {
       0% {
         left: -190px;
@@ -2006,74 +2025,89 @@
       1.5% {
         opacity: 1;
       }
-      /* Enters left portal of central card */
-      6.8% {
+      /* Stops at Abarbanel 38 Bus Station */
+      4.8% {
+        left: calc(50% - min(620px, 58vw));
+        opacity: 1;
+      }
+      8.0% {
+        left: calc(50% - min(620px, 58vw));
+        opacity: 1;
+      }
+      /* Enters left tunnel portal */
+      11.2% {
         left: calc(50% - min(510px, 48vw));
         opacity: 1;
       }
-      /* Exits right portal of central card */
-      14.2% {
+      /* Exits right tunnel portal smoothly without stopping */
+      16.8% {
         left: calc(50% + min(430px, 44vw));
         opacity: 1;
       }
-      /* Exits screen right */
-      22.0% {
+      /* Exits screen right smoothly */
+      22.8% {
         left: calc(100% + 190px);
         opacity: 1;
       }
-      23.5% {
+      24.2% {
         left: calc(100% + 220px);
         opacity: 0;
       }
-      24%, 100% {
+      25%, 100% {
         left: -190px;
         opacity: 0;
       }
     }
 
-    /* Multi-Carriage Train Animation: 0% to 25% of its cycle (14s)
-       Because the train is 560px wide, the front nose emerges on the right side
-       while the rear carriage is still entering from the left side!
-    */
+    /* Multi-Carriage Train Animation: 0% to 25% (9s) */
     @keyframes transitTrainAcrossScreen {
       0% {
-        left: -590px;
+        left: -600px;
         opacity: 0;
       }
       1.2% {
         opacity: 1;
       }
+      /* Front locomotive stops at Abarbanel 38 station platform */
+      4.8% {
+        left: calc(50% - min(620px, 58vw) - 450px);
+        opacity: 1;
+      }
+      8.0% {
+        left: calc(50% - min(620px, 58vw) - 450px);
+        opacity: 1;
+      }
       /* Front locomotive enters left tunnel portal */
-      5.5% {
+      11.0% {
         left: calc(50% - min(510px, 48vw) - 450px);
         opacity: 1;
       }
-      /* Head emerges from right tunnel portal WHILE rear is still entering left portal */
-      10.5% {
+      /* Head emerges from right tunnel portal WHILE rear is still entering left portal! */
+      14.5% {
         left: calc(50% + min(430px, 44vw) - 450px);
         opacity: 1;
       }
-      /* Rear carriage finishes entering and continues pulling through */
-      15.0% {
+      /* Rear carriage finishes clearing the tunnel and glides off without stopping at exit */
+      18.5% {
         left: calc(50% + min(430px, 44vw) - 100px);
         opacity: 1;
       }
-      /* Entire train clears the screen to the right */
-      22.5% {
+      /* Entire train clears screen right */
+      23.0% {
         left: calc(100% + 100px);
         opacity: 1;
       }
-      24.0% {
+      24.2% {
         left: calc(100% + 150px);
         opacity: 0;
       }
-      24.5%, 100% {
-        left: -590px;
+      25%, 100% {
+        left: -600px;
         opacity: 0;
       }
     }
 
-    /* Taxi / Car Animation: 0% to 25% (14s) */
+    /* Taxi / Car Animation: 0% to 25% (9s) */
     @keyframes transitCarAcrossScreen {
       0% {
         left: -180px;
@@ -2082,29 +2116,41 @@
       1.5% {
         opacity: 1;
       }
-      6.8% {
+      /* Pulls up and pauses at Abarbanel 38 station */
+      4.8% {
+        left: calc(50% - min(620px, 58vw));
+        opacity: 1;
+      }
+      8.0% {
+        left: calc(50% - min(620px, 58vw));
+        opacity: 1;
+      }
+      /* Enters left tunnel portal */
+      11.2% {
         left: calc(50% - min(510px, 48vw));
         opacity: 1;
       }
-      14.2% {
+      /* Exits right tunnel portal smoothly without stopping */
+      16.8% {
         left: calc(50% + min(430px, 44vw));
         opacity: 1;
       }
-      22.0% {
+      /* Cruises past Tel Aviv buildings to right screen edge */
+      22.8% {
         left: calc(100% + 180px);
         opacity: 1;
       }
-      23.5% {
+      24.2% {
         left: calc(100% + 200px);
         opacity: 0;
       }
-      24%, 100% {
+      25%, 100% {
         left: -180px;
         opacity: 0;
       }
     }
 
-    /* UFO Hovering Animation: 0% to 25% (14s) */
+    /* UFO Hovering Animation: 0% to 25% (9s) */
     @keyframes transitUfoAcrossScreen {
       0% {
         left: -180px;
@@ -2114,38 +2160,76 @@
       1.5% {
         opacity: 1;
       }
-      3.5% {
-        transform: translateY(-50%) translateY(-14px);
+      3.2% {
+        transform: translateY(-50%) translateY(-12px);
       }
-      6.8% {
+      /* Hovers over Abarbanel 38 station */
+      4.8% {
+        left: calc(50% - min(620px, 58vw));
+        transform: translateY(-50%) translateY(2px);
+        opacity: 1;
+      }
+      8.0% {
+        left: calc(50% - min(620px, 58vw));
+        transform: translateY(-50%) translateY(-8px);
+        opacity: 1;
+      }
+      /* Enters tunnel portal */
+      11.2% {
         left: calc(50% - min(510px, 48vw));
         transform: translateY(-50%) translateY(4px);
         opacity: 1;
       }
-      10.5% {
-        transform: translateY(-50%) translateY(-12px);
-      }
-      14.2% {
+      /* Exits right portal smoothly without stopping */
+      16.8% {
         left: calc(50% + min(430px, 44vw));
-        transform: translateY(-50%) translateY(6px);
+        transform: translateY(-50%) translateY(-10px);
         opacity: 1;
       }
-      18.0% {
-        transform: translateY(-50%) translateY(-14px);
+      20.0% {
+        transform: translateY(-50%) translateY(6px);
       }
-      22.0% {
+      22.8% {
         left: calc(100% + 180px);
         transform: translateY(-50%) translateY(0px);
         opacity: 1;
       }
-      23.5% {
+      24.2% {
         left: calc(100% + 200px);
         opacity: 0;
       }
-      24%, 100% {
+      25%, 100% {
         left: -180px;
         opacity: 0;
       }
+    }
+
+    /* Wheel rotation animations */
+    .anim-wheel-spin {
+      transform-origin: center;
+      animation: wheelRoll 1.4s linear infinite;
+    }
+    @keyframes wheelRoll {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Accordion connector flex bounce */
+    .anim-train-bellows {
+      animation: bellowsFlex 1.4s ease-in-out infinite alternate;
+    }
+    @keyframes bellowsFlex {
+      0%   { transform: scaleX(0.96); }
+      100% { transform: scaleX(1.04); }
+    }
+
+    /* Pulsing neon lights on the UFO */
+    .anim-ufo-light-1 { animation: ufoBlink 0.6s ease-in-out infinite alternate; }
+    .anim-ufo-light-2 { animation: ufoBlink 0.6s ease-in-out infinite 0.2s alternate; }
+    .anim-ufo-light-3 { animation: ufoBlink 0.6s ease-in-out infinite 0.4s alternate; }
+    @keyframes ufoBlink {
+      0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
+      100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
     }
 
     /* Wheel rotation animations */
@@ -4605,53 +4689,176 @@
         <div class="transit-road-stripes"></div>
       </div>
 
-      <!-- Left Roadside Scenery (Trees, Streetlamp & Bushes) -->
-      <div class="transit-scenery transit-scenery--left">
-        <!-- Tel Aviv Palm Tree -->
-        <svg class="scenery-svg scenery-svg--palm" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 35 100 Q 32 50 38 20" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 35 100 Q 32 50 38 20" stroke="#c49a3c" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-          <!-- Palm Fronds -->
-          <path d="M 38 20 Q 15 8 2 20 M 38 20 Q 22 -4 12 -8 M 38 20 Q 40 -12 44 -6 M 38 20 Q 56 -4 64 12 M 38 20 Q 64 8 68 26 M 38 20 Q 28 12 20 28 M 38 20 Q 48 16 56 30" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <!-- Left Roadside: Abarbanel 38 Bus Station & Vintage Streetlamps -->
+      <div class="transit-station-wrap">
+        <!-- Vintage Streetlamp 1 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 28 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="14" y1="95" x2="14" y2="22" stroke="#c49a3c" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="14" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 8 22 L 20 22 L 17 8 L 11 8 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="14" cy="16" r="5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
         </svg>
 
-        <!-- Ornate Gas Streetlamp with Amber Glow -->
-        <svg class="scenery-svg scenery-svg--lamp" viewBox="0 0 32 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="16" y1="95" x2="16" y2="24" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="16" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
-          <path d="M 10 24 L 22 24 L 19 10 L 13 10 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
-          <circle cx="16" cy="18" r="5" fill="#fef08a" filter="drop-shadow(0 0 7px #fef08a)"/>
+        <!-- Abarbanel 38 Bus Station Pavilion (Transit Shelter) -->
+        <svg class="transit-station-svg" viewBox="0 0 130 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="shelterRoofGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fffbeb"/>
+              <stop offset="35%" stop-color="#f5d98a"/>
+              <stop offset="75%" stop-color="#c49a3c"/>
+              <stop offset="100%" stop-color="#451a03"/>
+            </linearGradient>
+            <linearGradient id="shelterGlassGradEn" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="rgba(245,217,138,0.25)"/>
+              <stop offset="100%" stop-color="rgba(196,154,60,0.05)"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Sidewalk Pavement Platform -->
+          <rect x="0" y="80" width="130" height="14" rx="2" fill="#18120b" stroke="#c49a3c" stroke-width="1"/>
+          <line x1="0" y1="83" x2="130" y2="83" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+
+          <!-- Shelter Steel Pillars -->
+          <rect x="18" y="24" width="3.5" height="56" rx="1" fill="#c49a3c"/>
+          <rect x="94" y="24" width="3.5" height="56" rx="1" fill="#c49a3c"/>
+
+          <!-- Glass Back Panel with Subtle Grid -->
+          <rect x="20" y="26" width="76" height="54" rx="2" fill="url(#shelterGlassGradEn)" stroke="#c49a3c" stroke-width="1"/>
+          <line x1="58" y1="26" x2="58" y2="80" stroke="#f5d98a" stroke-width="0.6" stroke-dasharray="3 3"/>
+          <line x1="20" y1="53" x2="96" y2="53" stroke="#f5d98a" stroke-width="0.6" stroke-dasharray="3 3"/>
+
+          <!-- Curved Cantilevered Brass & Glass Canopy Roof -->
+          <path d="M 10 24 Q 10 12 28 12 L 105 12 Q 115 12 118 20 L 10 24 Z" fill="url(#shelterRoofGradEn)" stroke="#fffbeb" stroke-width="1"/>
+          <line x1="12" y1="22" x2="114" y2="22" stroke="#451a03" stroke-width="1.2"/>
+
+          <!-- Illuminated Station Sign: ABARBANEL 38 -->
+          <rect x="26" y="14" width="66" height="9" rx="2" fill="#0d0905" stroke="#f5d98a" stroke-width="0.8"/>
+          <circle cx="32" cy="18.5" r="2.2" fill="#fde047"/>
+          <text x="32" y="20" fill="#181109" font-size="2.8" font-weight="900" text-anchor="middle" font-family="sans-serif">🚏</text>
+          <text x="64" y="20.2" fill="#fef08a" font-size="3.8" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="0.5">ABARBANEL 38</text>
+
+          <!-- Backlit Electronic Transit Board: Lines 25, 125, 18, EZRA -->
+          <rect x="26" y="32" width="28" height="18" rx="1.5" fill="#0a0704" stroke="#ca8a04" stroke-width="0.7"/>
+          <text x="40" y="38" fill="#fde047" font-size="3" font-weight="900" font-family="sans-serif" text-anchor="middle">25 · 125 · 18</text>
+          <text x="40" y="44" fill="#38bdf8" font-size="2.8" font-weight="900" font-family="sans-serif" text-anchor="middle">EZRA SHUTTLE</text>
+          <circle cx="30" cy="47" r="1" fill="#4ade80"/>
+          <text x="42" y="48" fill="#4ade80" font-size="2.4" font-weight="700" font-family="sans-serif">ON TIME</text>
+
+          <!-- Waiting Bench with Silhouette Passenger -->
+          <rect x="62" y="58" width="28" height="3" rx="1" fill="#c49a3c"/>
+          <line x1="66" y1="61" x2="66" y2="80" stroke="#c49a3c" stroke-width="1.8"/>
+          <line x1="86" y1="61" x2="86" y2="80" stroke="#c49a3c" stroke-width="1.8"/>
+          <circle cx="74" cy="46" r="3.5" fill="#f5d98a" opacity="0.85"/>
+          <path d="M 70 50 Q 74 48 78 50 L 78 58 L 70 58 Z" fill="#c49a3c" opacity="0.85"/>
+          <circle cx="81" cy="52" r="1.5" fill="#fffbeb"/>
+
+          <!-- Street Sign Pole on the Right -->
+          <line x1="112" y1="80" x2="112" y2="28" stroke="#f5d98a" stroke-width="1.8"/>
+          <circle cx="112" cy="28" r="5" fill="#fde047" stroke="#181109" stroke-width="1"/>
+          <text x="112" y="30.5" fill="#181109" font-size="4" font-weight="900" text-anchor="middle" font-family="sans-serif">BUS</text>
         </svg>
 
-        <!-- Mediterranean Bush -->
-        <svg class="scenery-svg scenery-svg--bush" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 4 40 Q 4 12 20 12 Q 25 4 38 8 Q 48 12 46 40 Z" fill="#17120a" stroke="#c49a3c" stroke-width="1.2"/>
-          <path d="M 10 40 Q 12 22 24 22 Q 32 16 40 40 Z" fill="#241a0e" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+        <!-- Vintage Streetlamp 2 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 28 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="14" y1="95" x2="14" y2="22" stroke="#c49a3c" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="14" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 8 22 L 20 22 L 17 8 L 11 8 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="14" cy="16" r="5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
         </svg>
       </div>
 
-      <!-- Right Roadside Scenery (Cypress, Streetlamp, Palm) -->
-      <div class="transit-scenery transit-scenery--right">
-        <!-- Mediterranean Cypress Tree -->
-        <svg class="scenery-svg scenery-svg--cypress" viewBox="0 0 40 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 20 100 L 20 10" stroke="#78350f" stroke-width="2.5"/>
-          <path d="M 20 10 C 8 30 10 70 14 90 L 26 90 C 30 70 32 30 20 10 Z" fill="#15110a" stroke="#c49a3c" stroke-width="1.4"/>
-          <path d="M 20 16 C 12 35 14 65 17 82 L 23 82 C 26 65 28 35 20 16 Z" fill="#22180d" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+      <!-- Right Roadside: Illustrated Tel Aviv Bauhaus & Florentin Buildings -->
+      <div class="transit-buildings-wrap">
+        <svg class="transit-buildings-svg" viewBox="0 0 190 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bldgGoldGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fffbeb"/>
+              <stop offset="40%" stop-color="#f5d98a"/>
+              <stop offset="80%" stop-color="#c49a3c"/>
+              <stop offset="100%" stop-color="#451a03"/>
+            </linearGradient>
+            <linearGradient id="windowGlowGradEn" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#d97706" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Sidewalk line -->
+          <rect x="0" y="105" width="190" height="15" fill="#18120b" stroke="#c49a3c" stroke-width="1"/>
+
+          <!-- ================= BUILDING 1: 3-Story Bauhaus Corner Building (x: 4 to 85) ================= -->
+          <rect x="6" y="20" width="76" height="85" fill="#140f0a" stroke="url(#bldgGoldGradEn)" stroke-width="1.4"/>
+          <!-- Flat Roof Pergola & Water Tank -->
+          <line x1="4" y1="20" x2="84" y2="20" stroke="#f5d98a" stroke-width="2"/>
+          <rect x="12" y="12" width="22" height="8" fill="#1b130a" stroke="#c49a3c" stroke-width="1"/>
+          <line x1="16" y1="12" x2="16" y2="20" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="22" y1="12" x2="22" y2="20" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="28" y1="12" x2="28" y2="20" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="42" y="9" width="14" height="11" rx="2" fill="#22180e" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="58" y1="20" x2="68" y2="6" stroke="#c49a3c" stroke-width="0.8"/>
+          <line x1="72" y1="20" x2="72" y2="4" stroke="#f5d98a" stroke-width="1"/>
+          <line x1="68" y1="8" x2="76" y2="8" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="69" y1="12" x2="75" y2="12" stroke="#f5d98a" stroke-width="0.8"/>
+
+          <!-- Rounded Bauhaus Thermometer Balconies -->
+          <!-- Floor 3 -->
+          <path d="M 6 42 Q 6 36 18 36 L 42 36 L 42 48 L 6 48 Z" fill="#1d150d" stroke="#f5d98a" stroke-width="1.2"/>
+          <line x1="6" y1="44" x2="42" y2="44" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="48" y="32" width="12" height="14" rx="1.5" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="65" y="32" width="12" height="14" rx="1.5" fill="#191109" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- Floor 2 -->
+          <path d="M 6 66 Q 6 60 18 60 L 42 60 L 42 72 L 6 72 Z" fill="#1d150d" stroke="#f5d98a" stroke-width="1.2"/>
+          <line x1="6" y1="68" x2="42" y2="68" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="48" y="56" width="12" height="14" rx="1.5" fill="#191109" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="65" y="56" width="12" height="14" rx="1.5" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.8"/>
+
+          <!-- Ground Floor: Florentin Cafe with Striped Awning -->
+          <polygon points="4,82 84,82 80,88 8,88" fill="#c49a3c" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="14" y="88" width="22" height="17" rx="1" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="46" y="88" width="30" height="17" rx="1" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="61" y1="88" x2="61" y2="105" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- ================= BUILDING 2: Eclectic Florentin Townhouse (x: 90 to 184) ================= -->
+          <rect x="90" y="32" width="94" height="73" fill="#120d08" stroke="url(#bldgGoldGradEn)" stroke-width="1.4"/>
+          <rect x="88" y="28" width="98" height="4" fill="#20160d" stroke="#f5d98a" stroke-width="1"/>
+          <!-- Rooftop Water Tanks -->
+          <rect x="105" y="20" width="12" height="8" rx="1.5" fill="#1c1309" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="145" y="16" width="16" height="12" rx="2" fill="#22180e" stroke="#f5d98a" stroke-width="0.8"/>
+          <line x1="168" y1="28" x2="168" y2="10" stroke="#f5d98a" stroke-width="1"/>
+          <line x1="164" y1="14" x2="172" y2="14" stroke="#f5d98a" stroke-width="0.8"/>
+
+          <!-- Arched Windows with Wooden Louver Shutters (Floor 2) -->
+          <path d="M 98 60 L 98 48 Q 106 40 114 48 L 114 60 Z" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.9"/>
+          <rect x="94" y="46" width="4" height="14" rx="0.5" fill="#78350f" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="114" y="46" width="4" height="14" rx="0.5" fill="#78350f" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <path d="M 128 60 L 128 48 Q 137 40 146 48 L 146 60 Z" fill="#160f08" stroke="#f5d98a" stroke-width="0.9"/>
+          <rect x="125" y="54" width="24" height="8" fill="#1e150d" stroke="#f5d98a" stroke-width="1"/>
+          <line x1="129" y1="54" x2="129" y2="62" stroke="#c49a3c" stroke-width="0.7"/>
+          <line x1="137" y1="54" x2="137" y2="62" stroke="#c49a3c" stroke-width="0.7"/>
+          <line x1="145" y1="54" x2="145" y2="62" stroke="#c49a3c" stroke-width="0.7"/>
+
+          <path d="M 160 60 L 160 48 Q 168 40 176 48 L 176 60 Z" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.9"/>
+          <rect x="156" y="46" width="4" height="14" rx="0.5" fill="#78350f" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="176" y="46" width="4" height="14" rx="0.5" fill="#78350f" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Ground Floor: Record Store & Wine Vault -->
+          <rect x="96" y="76" width="34" height="29" rx="1.5" fill="url(#windowGlowGradEn)" stroke="#f5d98a" stroke-width="0.9"/>
+          <circle cx="113" cy="88" r="5" fill="#140e08" stroke="#ca8a04" stroke-width="0.8"/>
+          <circle cx="113" cy="88" r="1.5" fill="#fde047"/>
+
+          <path d="M 142 105 L 142 82 Q 152 74 162 82 L 162 105 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="158" cy="94" r="1.5" fill="#f5d98a"/>
+          <line x1="152" y1="78" x2="152" y2="105" stroke="#c49a3c" stroke-width="0.8"/>
         </svg>
 
-        <!-- Second Gas Streetlamp -->
-        <svg class="scenery-svg scenery-svg--lamp" viewBox="0 0 32 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="16" y1="95" x2="16" y2="24" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="16" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
-          <path d="M 10 24 L 22 24 L 19 10 L 13 10 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
-          <circle cx="16" cy="18" r="5" fill="#fef08a" filter="drop-shadow(0 0 7px #fef08a)"/>
-        </svg>
-
-        <!-- Tel Aviv Palm Tree -->
-        <svg class="scenery-svg scenery-svg--palm" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 35 100 Q 38 50 32 20" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 35 100 Q 38 50 32 20" stroke="#c49a3c" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-          <path d="M 32 20 Q 12 8 0 20 M 32 20 Q 18 -4 8 -8 M 32 20 Q 36 -12 40 -6 M 32 20 Q 52 -4 60 12 M 32 20 Q 60 8 66 26 M 32 20 Q 24 12 16 28 M 32 20 Q 44 16 52 30" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <!-- Vintage Streetlamp on Building Corner -->
+        <svg class="transit-lamp-svg" viewBox="0 0 28 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="14" y1="95" x2="14" y2="22" stroke="#c49a3c" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="14" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 8 22 L 20 22 L 17 8 L 11 8 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="14" cy="16" r="5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
         </svg>
       </div>
 
@@ -5036,9 +5243,9 @@
 
     <div class="wrap">
       <div class="stats-frame">
-        <!-- Grand Florentin Art-Deco Tunnel Portal (Left Entrance) -->
+        <!-- Grand Symmetrical Art-Deco Tunnel Portal (Left Entrance) -->
         <div class="transit-portal transit-portal--left" aria-hidden="true">
-          <svg class="transit-portal-svg" viewBox="0 0 58 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="transit-portal-svg" viewBox="0 0 64 96" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="portalGoldGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
@@ -5046,52 +5253,73 @@
                 <stop offset="80%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#451a03"/>
               </linearGradient>
-              <radialGradient id="tunnelDarkGradEn" cx="100%" cy="50%" r="90%">
+              <radialGradient id="tunnelDarkGradEn" cx="50%" cy="60%" r="65%">
                 <stop offset="0%" stop-color="#000000"/>
-                <stop offset="60%" stop-color="#080604"/>
+                <stop offset="70%" stop-color="#050403"/>
                 <stop offset="100%" stop-color="#140f0a"/>
               </radialGradient>
             </defs>
-            <!-- Heavy Rusticated Stone Base -->
-            <rect x="0" y="80" width="58" height="14" rx="2" fill="#181109" stroke="url(#portalGoldGradEn)" stroke-width="1.4"/>
-            <!-- Outer Arch Wall -->
-            <path d="M 0 80 L 0 34 Q 0 0 38 0 L 58 0 L 58 80 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
-            <!-- Stepped Concentric Inner Arches -->
-            <path d="M 6 80 L 6 36 Q 6 8 38 8 L 58 8 L 58 80 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.8"/>
-            <!-- Dark Deep Tunnel Void Opening -->
-            <path d="M 12 80 L 12 40 Q 12 16 42 16 L 58 16 L 58 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
-            <!-- Art-Deco Trapezoid Keystone -->
-            <polygon points="36,2 50,2 47,15 39,15" fill="url(#portalGoldGradEn)"/>
-            <!-- Wrought Iron Bracket with Glowing Amber Signal Lantern -->
-            <path d="M 43 0 Q 43 -12 28 -12 L 24 -12" stroke="url(#portalGoldGradEn)" stroke-width="2" fill="none"/>
-            <line x1="24" y1="-12" x2="24" y2="-6" stroke="url(#portalGoldGradEn)" stroke-width="1.5"/>
-            <polygon points="20,-6 28,-6 26,4 22,4" fill="#1a120a" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
-            <circle class="transit-signal-light" cx="24" cy="-1" r="4.5" fill="#ea580c"/>
-            <!-- English Vertical Inscription -->
-            <text x="30" y="72" fill="#f5d98a" font-size="5" font-weight="900" font-family="sans-serif" transform="rotate(-90 30 72)" letter-spacing="1">TUNNEL</text>
+
+            <!-- Solid Opaque Stone Backing Plate (Blocks any road lines from showing through) -->
+            <rect x="0" y="0" width="64" height="96" rx="4" fill="#0d0905" stroke="url(#portalGoldGradEn)" stroke-width="1.2"/>
+
+            <!-- Symmetrical Outer Arch Wall -->
+            <path d="M 4 96 L 4 36 Q 4 4 32 4 Q 60 4 60 36 L 60 96 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="1.8"/>
+
+            <!-- Stepped Concentric Inner Arch Moulding -->
+            <path d="M 10 96 L 10 38 Q 10 12 32 12 Q 54 12 54 38 L 54 96 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.85"/>
+
+            <!-- Dark Pitch-Black Deep Tunnel Mouth Opening -->
+            <path d="M 14 96 L 14 40 Q 14 18 32 18 Q 50 18 50 40 L 50 96 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
+
+            <!-- Heavy Rusticated Base Plinth -->
+            <rect x="2" y="82" width="60" height="14" rx="2" fill="#19120a" stroke="url(#portalGoldGradEn)" stroke-width="1.2"/>
+            <line x1="2" y1="88" x2="62" y2="88" stroke="#f5d98a" stroke-width="0.8" opacity="0.5"/>
+
+            <!-- Centered Art-Deco Trapezoid Keystone -->
+            <polygon points="26,0 38,0 36,14 28,14" fill="url(#portalGoldGradEn)"/>
+
+            <!-- Centered Top Ornate Lantern on Finial Bracket -->
+            <line x1="32" y1="0" x2="32" y2="-10" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
+            <polygon points="27,-10 37,-10 39,-18 25,-18" fill="#1b1208" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
+            <circle class="transit-signal-light" cx="32" cy="-14" r="4.5" fill="#ea580c"/>
+
+            <!-- Horizontal Gold Inscription Plaque: TUNNEL -->
+            <rect x="14" y="24" width="36" height="8" rx="1.5" fill="#0a0704" stroke="#f5d98a" stroke-width="0.8"/>
+            <text x="32" y="30" fill="#fef08a" font-size="3.8" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="0.8">TUNNEL</text>
           </svg>
         </div>
 
-        <!-- Grand Florentin Art-Deco Tunnel Portal (Right Exit) -->
+        <!-- Grand Symmetrical Art-Deco Tunnel Portal (Right Exit) -->
         <div class="transit-portal transit-portal--right" aria-hidden="true">
-          <svg class="transit-portal-svg" viewBox="0 0 58 94" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Heavy Rusticated Stone Base -->
-            <rect x="0" y="80" width="58" height="14" rx="2" fill="#181109" stroke="url(#portalGoldGradEn)" stroke-width="1.4"/>
-            <!-- Outer Arch Wall -->
-            <path d="M 58 80 L 58 34 Q 58 0 20 0 L 0 0 L 0 80 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
-            <!-- Stepped Concentric Inner Arches -->
-            <path d="M 52 80 L 52 36 Q 52 8 20 8 L 0 8 L 0 80 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.8"/>
-            <!-- Dark Deep Tunnel Void Opening -->
-            <path d="M 46 80 L 46 40 Q 46 16 16 16 L 0 16 L 0 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
-            <!-- Art-Deco Trapezoid Keystone -->
-            <polygon points="22,2 8,2 11,15 19,15" fill="url(#portalGoldGradEn)"/>
-            <!-- Wrought Iron Bracket with Glowing Amber Signal Lantern -->
-            <path d="M 15 0 Q 15 -12 30 -12 L 34 -12" stroke="url(#portalGoldGradEn)" stroke-width="2" fill="none"/>
-            <line x1="34" y1="-12" x2="34" y2="-6" stroke="url(#portalGoldGradEn)" stroke-width="1.5"/>
-            <polygon points="30,-6 38,-6 36,4 32,4" fill="#1a120a" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
-            <circle class="transit-signal-light" cx="34" cy="-1" r="4.5" fill="#ea580c"/>
-            <!-- English Vertical Inscription -->
-            <text x="28" y="72" fill="#f5d98a" font-size="5" font-weight="900" font-family="sans-serif" transform="rotate(90 28 72)" letter-spacing="1">EXIT</text>
+          <svg class="transit-portal-svg" viewBox="0 0 64 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Solid Opaque Stone Backing Plate -->
+            <rect x="0" y="0" width="64" height="96" rx="4" fill="#0d0905" stroke="url(#portalGoldGradEn)" stroke-width="1.2"/>
+
+            <!-- Symmetrical Outer Arch Wall -->
+            <path d="M 4 96 L 4 36 Q 4 4 32 4 Q 60 4 60 36 L 60 96 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="1.8"/>
+
+            <!-- Stepped Concentric Inner Arch Moulding -->
+            <path d="M 10 96 L 10 38 Q 10 12 32 12 Q 54 12 54 38 L 54 96 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.85"/>
+
+            <!-- Dark Pitch-Black Deep Tunnel Mouth Opening -->
+            <path d="M 14 96 L 14 40 Q 14 18 32 18 Q 50 18 50 40 L 50 96 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
+
+            <!-- Heavy Rusticated Base Plinth -->
+            <rect x="2" y="82" width="60" height="14" rx="2" fill="#19120a" stroke="url(#portalGoldGradEn)" stroke-width="1.2"/>
+            <line x1="2" y1="88" x2="62" y2="88" stroke="#f5d98a" stroke-width="0.8" opacity="0.5"/>
+
+            <!-- Centered Art-Deco Trapezoid Keystone -->
+            <polygon points="26,0 38,0 36,14 28,14" fill="url(#portalGoldGradEn)"/>
+
+            <!-- Centered Top Ornate Lantern on Finial Bracket -->
+            <line x1="32" y1="0" x2="32" y2="-10" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
+            <polygon points="27,-10 37,-10 39,-18 25,-18" fill="#1b1208" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
+            <circle class="transit-signal-light" cx="32" cy="-14" r="4.5" fill="#ea580c"/>
+
+            <!-- Horizontal Gold Inscription Plaque: EXIT -->
+            <rect x="14" y="24" width="36" height="8" rx="1.5" fill="#0a0704" stroke="#f5d98a" stroke-width="0.8"/>
+            <text x="32" y="30" fill="#fef08a" font-size="3.8" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="0.8">EXIT</text>
           </svg>
         </div>
         <span class="stats-frame__corner stats-frame__corner--tl" aria-hidden="true"></span>
