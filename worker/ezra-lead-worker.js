@@ -65,7 +65,7 @@ export default {
       if (resume) return getDraft(resume, env, cors);   // public: restore a saved draft by opaque token
       const leadId = params.get("leadById");
       if (leadId) return leadById(leadId, request, env, cors);
-      return availability(env, cors);
+      return availability(request, env, cors);
     }
     if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: cors });
 
@@ -431,31 +431,29 @@ function colsByType(schema, d, notes) {
 // feed down: Monday rejects the whole query on complexity, the handler logged it and returned
 // an empty feed, and an empty feed is indistinguishable from "every date is free". One board
 // per request, and only the columns that can carry a date or a time.
-async function fetchBoardAvailability(boardId, TOKEN) {
+async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
   const schema = await boardSchema(boardId, TOKEN);
   const wanted = (schema?.columns || [])
     .filter((c) => c.type === "date" || c.type === "hour" || /שעה|שעות|סלוט|time|start|end/i.test(c.title || ""))
     .map((c) => c.id);
-  // No schema, or nothing that looks like a date: fall back to all columns for this board only,
-  // so one unreadable board cannot blank the others.
   const idsArg = wanted.length ? `(ids: ${JSON.stringify(wanted)})` : "";
+  // items_page is asked for once per BOARD, not once per group. Nesting it under groups
+  // multiplies the cost by the number of groups, which is what made this query fail.
   const query = `query {
     boards(ids: [${boardId}]) {
       id
       title
-      groups {
-        id
-        title
-        items_page(limit: 500) {
-          items {
+      groups { id title }
+      items_page(limit: 100) {
+        items {
+          id
+          name
+          group { id }
+          column_values${idsArg} {
             id
-            name
-            column_values${idsArg} {
-              id
-              type
-              text
-              ... on DateValue { date }
-            }
+            type
+            text
+            ... on DateValue { date }
           }
         }
       }
@@ -469,27 +467,71 @@ async function fetchBoardAvailability(boardId, TOKEN) {
     });
     const out = await r.json();
     if (out.errors) {
-      console.error(`availability board ${boardId} errors:`, JSON.stringify(out.errors));
+      const msg = JSON.stringify(out.errors).slice(0, 400);
+      console.error(`availability board ${boardId} errors:`, msg);
+      if (diag) diag.push(`${boardId}: ${msg}`);
+      reasons.push(sanitizeMondayError(out.errors));
       return null;
     }
-    return out?.data?.boards?.[0] || null;
+    const b = out?.data?.boards?.[0];
+    if (!b) {
+      if (diag) diag.push(`${boardId}: board not returned`);
+      return null;
+    }
+    // Reshape to the groups[].items_page.items form the reader below expects, so the
+    // parsing logic underneath is untouched.
+    const byGroup = new Map((b.groups || []).map((g) => [g.id, { id: g.id, title: g.title, items_page: { items: [] } }]));
+    for (const it of (b.items_page?.items || [])) {
+      const gid = it.group?.id;
+      if (!byGroup.has(gid)) byGroup.set(gid, { id: gid, title: "", items_page: { items: [] } });
+      byGroup.get(gid).items_page.items.push(it);
+    }
+    return { id: b.id, title: b.title, groups: Array.from(byGroup.values()) };
   } catch (e) {
     console.error(`availability board ${boardId} failed:`, e);
+    if (diag) diag.push(`${boardId}: ${String(e).slice(0, 200)}`);
+    reasons.push("request failed");
     return null;
   }
 }
 
-async function availability(env, cors) {
+// Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
+// doesn't exist on type 'y'") and carries no board content, so a trimmed version is
+// safe to return publicly. Anything that looks like an id, address or number is dropped
+// so this cannot become a leak if Monday ever changes its message format.
+function sanitizeMondayError(errors) {
+  let m = "";
+  try {
+    const first = Array.isArray(errors) ? errors[0] : errors;
+    m = String(first?.message || first?.error_code || JSON.stringify(first) || "");
+  } catch { m = "unreadable error"; }
+  return m
+    .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, "[email]")
+    .replace(/\b\d{6,}\b/g, "[id]")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 140) || "unknown error";
+}
+
+async function availability(request, env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [], busy: [], degraded: true }, 200, cors);
+  // Secret-gated so the Monday error text is never public. Without this the only signal
+  // was an empty feed, which is indistinguishable from a genuinely free calendar.
+  const diag = calcAuthorized(request, env) ? [] : null;
   try {
     const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
-    const fetched = await Promise.all(ids.map((id) => fetchBoardAvailability(id, TOKEN)));
-    const boards = fetched.filter(Boolean);
+    // Sequential on purpose: three reads at once, each preceded by a schema read, is a
+    // six-query burst against a per-minute complexity budget.
+    const boards = [];
+    for (const id of ids) {
+      const b = await fetchBoardAvailability(id, TOKEN, diag, reasons);
+      if (b) boards.push(b);
+    }
     const missing = ids.length - boards.length;
     if (!boards.length) {
       console.error("availability: no board could be read; returning an empty feed.");
-      return json({ booked: [], busy: [], degraded: true }, 200, cors);
+      return json({ booked: [], busy: [], degraded: true, reason: reasons[0] || "unknown", ...(diag ? { errors: diag } : {}) }, 200, cors);
     }
     const busy = [];
     const bookedSet = new Set();
@@ -573,7 +615,7 @@ async function availability(env, cors) {
     const booked = Array.from(bookedSet);
     // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
     // broken one. Without it, a failed read renders as a month of free dates.
-    const body = missing ? { booked, busy, degraded: true } : { booked, busy };
+    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", ...(diag ? { errors: diag } : {}) } : { booked, busy };
     return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
