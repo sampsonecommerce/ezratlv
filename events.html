@@ -93,6 +93,10 @@
       --gold:        #c49a3c;
       --gold-light:  #f5d98a;
       --gold-soft:   rgba(196, 154, 60, 0.16);
+      --gold-deep:   #8c6a21;
+      --metal:       #9c948a;
+      --metal-dim:   #5a544c;
+      --metal-dark:  #38332d;
       --line:        rgba(196, 154, 60, 0.24);
       --line-bright: rgba(196, 154, 60, 0.55);
       
@@ -103,7 +107,6 @@
       --red:         #f87171;
       --red-soft:    rgba(248, 113, 113, 0.14);
       --red-border:  rgba(248, 113, 113, 0.35);
-
 
       --font-display: 'Heebo', system-ui, sans-serif;
       --font-body:    'Heebo', system-ui, sans-serif;
@@ -263,7 +266,7 @@
       color: var(--bg) !important;
       overflow: hidden;
       border: 1.5px solid transparent;
-      background: linear-gradient(110deg, var(--gold) 0%, #e8c065 40%, #f5d98a 50%, #e8c065 60%, var(--gold) 100%);
+      background: linear-gradient(110deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
       background-size: 250% 100%;
       animation: navShimmer 2.8s ease-in-out infinite;
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -530,32 +533,6 @@
       margin-inline: auto;
       text-align: center;
     }
-    .hero-live-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.45rem 1.15rem;
-      border-radius: 50px;
-      background: rgba(196, 154, 60, 0.12);
-      border: 1.2px solid rgba(196, 154, 60, 0.38);
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      margin-block-end: 1.6rem;
-      box-shadow: 0 0 25px -5px rgba(196,154,60,0.25);
-    }
-    .hero-live-pill__dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 12px var(--green);
-      animation: pulseGreen 1.8s infinite ease-in-out;
-    }
-    @keyframes pulseGreen {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
-    }
     .hero-events h1 {
       font-size: clamp(2.6rem, 6.2vw, 4.8rem);
       font-weight: 900;
@@ -596,6 +573,14 @@
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     .today-status-strip strong { color: var(--gold-light); font-weight: 700; }
+    /* The strip carries tonight's state: green when the doors are open to the
+       public, red when the night is booked. Colour lives on the clock and the
+       border, so it reads without a second flashing element above it. */
+    .today-status-strip .status-clock { color: var(--gold); transition: color 0.3s var(--ease); }
+    .today-status-strip.is-open  { border-color: var(--green-border); }
+    .today-status-strip.is-open  .status-clock { color: var(--green); }
+    .today-status-strip.is-closed { border-color: var(--red-border); }
+    .today-status-strip.is-closed .status-clock { color: var(--red); }
 
     /* ============================================================
        2. REAL-TIME 30-DAY VISUAL SCHEDULE & EVENT CARDS
@@ -729,6 +714,8 @@
       display: flex;
       gap: 1.15rem;
       overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
@@ -751,77 +738,6 @@
       margin-block-end: 0;
     }
 
-    /* Free-Floating Minimalist Speakeasy Bartender (OUTSIDE the box, on the bottom left) */
-    .sched-outside-bartender {
-      position: absolute;
-      left: -135px;
-      bottom: -10px;
-      width: 145px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
-      z-index: 10;
-      filter: drop-shadow(0 10px 25px rgba(0,0,0,0.8));
-    }
-    @media (max-width: 1280px) {
-      .sched-outside-bartender {
-        left: -80px;
-        width: 125px;
-      }
-    }
-    @media (max-width: 1100px) {
-      .sched-outside-bartender {
-        position: static;
-        margin: 1.5rem auto 0;
-        width: 135px;
-      }
-    }
-
-    .sched-bartender-svg {
-      width: 100%;
-      height: auto;
-      overflow: visible;
-    }
-
-    .anim-tap-pull {
-      transform-origin: 7px 32px;
-      animation: tapPullMotion 3.2s ease-in-out infinite alternate;
-    }
-    @keyframes tapPullMotion {
-      0%   { transform: rotate(0deg); }
-      40%  { transform: rotate(-6deg); }
-      100% { transform: rotate(-14deg); }
-    }
-
-    .anim-beer-stream {
-      animation: beerStreamFlow 1.6s ease-in-out infinite alternate;
-      transform-origin: 90px 74px;
-    }
-    @keyframes beerStreamFlow {
-      0%   { opacity: 0.82; transform: scaleY(0.96); }
-      100% { opacity: 1; transform: scaleY(1.04); }
-    }
-
-    .anim-beer-bubble-1 { animation: bubbleFloat 1.3s infinite linear; }
-    .anim-beer-bubble-2 { animation: bubbleFloat 1.6s infinite linear 0.4s; }
-    .anim-beer-bubble-3 { animation: bubbleFloat 1.4s infinite linear 0.8s; }
-    @keyframes bubbleFloat {
-      0%   { transform: translateY(0); opacity: 0; }
-      40%  { opacity: 0.95; }
-      100% { transform: translateY(-12px); opacity: 0; }
-    }
-
-    .anim-beer-foam {
-      transform-origin: 8px 7px;
-      animation: foamBreathe 2.4s ease-in-out infinite alternate;
-    }
-    @keyframes foamBreathe {
-      0%   { transform: scale(0.95); }
-      100% { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(254,240,138,0.7)); }
-    }
-
     /* Schedule Slider Wrap & Mid-Height Centered Carousel Edge Arrows */
     .schedule-slider-wrap {
       position: relative;
@@ -837,7 +753,7 @@
       border-radius: 50%;
       background: rgba(18, 13, 8, 0.92);
       border: 1.2px solid rgba(196, 154, 60, 0.45);
-      color: #fde047;
+      color: #f5d98a;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -851,7 +767,7 @@
     }
     .sched-slider-arrow:hover {
       background: rgba(30, 20, 10, 0.98);
-      border-color: #fde047;
+      border-color: #f5d98a;
       color: #ffffff;
       transform: translateY(-50%) scale(1.08);
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85), 0 0 20px rgba(253, 224, 71, 0.35);
@@ -1170,147 +1086,54 @@
       flex-wrap: wrap;
       margin-block-end: 2.8rem;
     }
-    .filter-btn {
-      padding: 0.55rem 1.25rem;
-      border-radius: 50px;
-      border: 1.2px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--cream-dim);
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s var(--ease);
-    }
-    .filter-btn:hover {
-      color: var(--cream);
-      border-color: var(--gold);
-      background: rgba(196,154,60,0.12);
-    }
-    .filter-btn.is-active {
-      background: var(--gold);
-      color: var(--bg);
-      border-color: var(--gold);
-      box-shadow: 0 4px 16px rgba(196,154,60,0.3);
-    }
 
-    .teder-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 2.2rem;
-      max-width: 1040px;
-      margin-inline: auto;
-    }
-
-    .teder-card {
-      background: linear-gradient(135deg, #18140f 0%, #110e0a 100%);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      overflow: hidden;
+    /* ============================================================
+       FORMATS GRID
+       Replaces six full-width poster cards shown one at a time. Same six
+       formats, all visible at once, roughly a third of the vertical space,
+       and gold as the only accent - the badge colours were competing with
+       each other before.
+    ============================================================ */
+    .fmt-grid {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
-      box-shadow: 0 20px 45px -15px rgba(0,0,0,0.8);
-      position: relative;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.1rem;
     }
-    .teder-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--gold);
-      box-shadow: 0 25px 60px -15px rgba(196,154,60,0.25);
-    }
-    @media (max-width: 820px) {
-      .teder-card { grid-template-columns: 1fr; }
-    }
-
-    .teder-poster {
-      position: relative;
-      aspect-ratio: 4 / 5;
-      background: #15110c;
+    .fmt-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
       overflow: hidden;
+      transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
     }
-    @media (max-width: 820px) {
-      .teder-poster { aspect-ratio: 16 / 10; max-height: 280px; }
+    .fmt-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .fmt-card__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-soft); }
+    .fmt-card__media img { width: 100%; height: 100%; object-fit: cover; }
+    .fmt-card__flag {
+      position: absolute; inset-block-start: 10px; inset-inline-start: 10px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+      padding: 0.28rem 0.6rem; border-radius: 6px;
+      background: rgba(15,13,11,0.82); color: var(--cream); border: 1px solid var(--line);
     }
-    .teder-poster img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s var(--ease);
+    .fmt-card__flag--free { color: var(--green); border-color: var(--green-border); }
+    .fmt-card__body { padding: 1.05rem 1.15rem 1.15rem; display: flex; flex-direction: column; flex: 1; }
+    .fmt-card__title {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 1.08rem; font-weight: 700; color: var(--cream); line-height: 1.3;
+      margin-block-end: 0.35rem;
     }
-    .teder-card:hover .teder-poster img { transform: scale(1.05); }
-
-    .teder-stickers {
-      position: absolute;
-      inset-block-start: 14px;
-      inset-inline-start: 14px;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      align-items: flex-start;
+    .fmt-card__title .ico { color: var(--gold); }
+    .fmt-card__when { font-size: 0.78rem; color: var(--gold); font-weight: 500; margin-block-end: 0.5rem; }
+    .fmt-card__lineup { font-size: 0.85rem; color: var(--cream-dim); line-height: 1.6; flex: 1; margin-block-end: 0.9rem; }
+    .fmt-card__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .fmt-card__link {
+      font-size: 0.82rem; font-weight: 500; color: var(--gold-light);
+      background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit;
     }
-
-    .teder-content {
-      padding: clamp(1.6rem, 3.5vw, 2.5rem);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .teder-date-badge {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0.6rem;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--gold-light);
-      margin-block-end: 0.6rem;
-    }
-    .teder-date-badge span.day-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--cream-dim);
-    }
-    .teder-title {
-      font-size: clamp(1.6rem, 2.8vw, 2.2rem);
-      font-weight: 800;
-      color: var(--cream);
-      line-height: 1.2;
-      margin-block-end: 0.5rem;
-    }
-    .teder-lineup {
-      font-size: 0.96rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-block-end: 0.9rem;
-    }
-    .teder-desc {
-      font-size: 0.94rem;
-      color: var(--cream-dim);
-      line-height: 1.65;
-      margin-block-end: 1.6rem;
-      flex: 1;
-    }
-    .teder-footer-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      padding-block-start: 1.2rem;
-      border-block-start: 1px solid rgba(196,154,60,0.18);
-    }
-    .teder-meta-chips {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.82rem;
-      color: var(--cream-dim);
-      font-weight: 600;
-    }
-    .teder-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-    }
+    .fmt-card__link--ghost { color: var(--cream-dim); }
+    .fmt-card__link:hover { color: var(--gold); }
 
     /* ============================================================
        4. SOUND & CULTURE SECTION (EZRA SOUND SYSTEM)
@@ -1391,7 +1214,7 @@
       width: 90px;
       height: 90px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #e5c158 0%, #c49a3c 55%, #8c6a21 100%);
+      background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold) 55%, var(--gold-deep) 100%);
       border: 3px solid #110e0a;
       box-shadow: 0 0 8px rgba(0,0,0,0.7), inset 0 0 6px rgba(0,0,0,0.4);
       display: flex;
@@ -1446,8 +1269,8 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: radial-gradient(circle, #888, #333);
-      border: 2px solid #555;
+      background: radial-gradient(circle, var(--metal), var(--metal-dark));
+      border: 2px solid var(--metal-dim);
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
     .vinyl-arm::after {
@@ -1457,7 +1280,7 @@
       inset-block-start: 12px;
       width: 4px;
       height: 95px;
-      background: linear-gradient(to bottom, #aaa, #666);
+      background: linear-gradient(to bottom, var(--metal), var(--metal-dim));
       transform-origin: top center;
       transform: rotate(-25deg);
       border-radius: 2px;
@@ -1679,6 +1502,16 @@
       overflow: visible;
     }
 
+    /* Paused until the tunnel scrolls into view - see the IntersectionObserver
+       at the end of the page. These keyframes animate `left`, so every frame
+       costs a layout pass; off-screen that was pure waste. */
+    .transit-tunnel-track:not(.is-visible) .transit-vehicle { animation-play-state: paused; }
+    @media (prefers-reduced-motion: reduce) {
+      .transit-vehicle, .anim-sax-note-1, .anim-sax-note-2, .anim-sax-note-3,
+      .anim-sparkle-1, .anim-sparkle-2, .anim-sparkle-3, .anim-sparkle-4, .anim-sparkle-5 {
+        animation: none !important;
+      }
+    }
     .transit-vehicle {
       position: absolute;
       bottom: 6px;
@@ -2192,12 +2025,16 @@
       .month-cal-grid {
         grid-template-columns: repeat(7, minmax(95px, 1fr));
         overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
         padding-block-end: 6px;
         -webkit-overflow-scrolling: touch;
       }
       .month-cal-weekdays {
         grid-template-columns: repeat(7, minmax(95px, 1fr));
         overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
         -webkit-overflow-scrolling: touch;
       }
     }
@@ -2889,6 +2726,112 @@
     .footer__legal { display: flex; gap: 1.2rem; }
     .footer__legal a:hover { color: var(--cream); }
   </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://ezratlv.com/events",
+      "url": "https://ezratlv.com/events",
+      "name": "מה קורה בעזרא - אירועים פתוחים לקהל",
+      "inLanguage": "he",
+      "isPartOf": {
+        "@id": "https://ezratlv.com/#website"
+      },
+      "about": {
+        "@id": "https://ezratlv.com/#organization"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ezratlv.com/events#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "איך אני יודע אם המקום פתוח היום לקהל או סגור לאירוע פרטי?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "הלוח בעמוד הזה מתעדכן בזמן אמת מול היומן שלנו. ערב שסגור לאירוע פרטי מסומן באדום, וערב פתוח מציג את שעת הפתיחה ואת הפורמט המתוכנן. גם הפס בראש העמוד מראה מה קורה הערב."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "מה מגישים לאכול ולשתות?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין טבעי ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "האוכל כשר?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "המקום אינו בהשגחת כשרות. התפריט כולו חלבי־צמחוני, בלי בשר ובלי פירות ים, אבל אנחנו לא מחזיקים תעודה ולא נציג את עצמנו ככשרים."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "איפה אתם יושבים?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "אברבנאל 38, בלב פלורנטין בתל אביב, באזור התעשייה הישן של השכונה."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "יש חניה במקום?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "אין חניה פרטית בעזרא. יש חניונים בתשלום ברחובות הסמוכים, ובשעות הערב אפשר בדרך כלל למצוא חניה כחול־לבן בסביבה."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "איך מגיעים בתחבורה ציבורית?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "הרכבת הקלה, הקו האדום, עוצרת בתחנות סלמה ואליפלט במרחק הליכה קצרה. בשעות הערב זו הדרך הכי פשוטה להגיע, במיוחד אם מתכוונים לשתות."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "הכניסה בתשלום?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ברוב הערבים הפתוחים הכניסה חופשית, על בסיס מקום פנוי. בערבים עם הופעה חיה או אירוע מיוחד מומלץ להשאיר פרטים מראש כדי לוודא שיש מקום."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "צריך להזמין מקום מראש לערב פתוח?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "לא חובה, אבל כדאי. החלל אינטימי והמקומות נגמרים בערבים עמוסים, אז אם אתם קבוצה או מגיעים לערב מסוים, השאירו פרטים ונשמור לכם מקום."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "אפשר לסגור את המקום לאירוע פרטי?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "כן, וזה עיקר מה שאנחנו עושים. אירוע אחד בערב, עד 50 אורחים, והחלל כולו נסגר לקבוצה שלכם. כל סוגי האירועים והפרטים המלאים נמצאים בעמוד סוגי אירועים."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "כמה אנשים נכנסים?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "עד 50 אורחים. רוב הקבוצות שסוגרות אצלנו אירוע פרטי הן בין 20 ל־50 איש, וזה הגודל שהמקום נבנה בשבילו."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <!-- Icon sprite. Replaces the emoji this page used to lean on: emoji render as
@@ -2915,7 +2858,6 @@
     <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5 13.9 9 20.5 12 13.9 15 12 21.5 10.1 15 3.5 12 10.1 9 12 2.5Z"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
   </svg>
-
 
   <!-- ============================================================
        NAVIGATION (WITH ALL 3 MAIN BUTTONS SIDE BY SIDE)
@@ -2978,10 +2920,6 @@
     </video>
     <div class="hero-events__overlay"></div>
     <div class="wrap hero-events__inner">
-      <div class="hero-live-pill">
-        <span class="hero-live-pill__dot"></span>
-        <span>אירועים פתוחים לקהל הרחב · פלורנטין, תל אביב</span>
-      </div>
       <h1>מה קורה בעזרא<br /><span class="gold">תקליטים, טאבון ותרבות לילה</span></h1>
       <p class="lead">
         סשנים של תקליטי ויניל נדירים, השמעות טרום-בכורה לאלבומים, פופ-אפ שפים מהטאבון, הופעות ג'אז חיות ויין טבעי בבר אינטימי בלב פלורנטין.
@@ -2991,7 +2929,7 @@
         <a class="btn btn--fill" href="#events">ליינאפ האירועים הקבועים</a>
       </div>
       <div class="today-status-strip" id="heroLiveStatus">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg class="status-clock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span id="heroLiveText">בודק סטטוס להערב...</span>
       </div>
     </div>
@@ -3085,90 +3023,6 @@
         </div>
 
         <!-- Free-Floating Minimalist Speakeasy Bartender (OUTSIDE the box, on the bottom left) -->
-        <div class="sched-outside-bartender" aria-hidden="true">
-          <svg class="sched-bartender-svg" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="schedBeerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="25%" stop-color="#fde047"/>
-                <stop offset="65%" stop-color="#f59e0b"/>
-                <stop offset="100%" stop-color="#b45309"/>
-              </linearGradient>
-              <linearGradient id="schedBrassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#fef9c3"/>
-                <stop offset="45%" stop-color="#fde047"/>
-                <stop offset="75%" stop-color="#ca8a04"/>
-                <stop offset="100%" stop-color="#78350f"/>
-              </linearGradient>
-              <radialGradient id="schedBartenderGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.25"/>
-                <stop offset="70%" stop-color="#ca8a04" stop-opacity="0.05"/>
-                <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-
-            <!-- Warm Ambient Floating Aura -->
-            <ellipse cx="80" cy="70" rx="75" ry="60" fill="url(#schedBartenderGlow)"/>
-
-            <!-- Brass Beer Tap Tower (Right Side) -->
-            <g transform="translate(95, 25)">
-              <rect x="-12" y="85" width="40" height="6" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
-              <rect x="4" y="32" width="10" height="54" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1.2"/>
-              <rect x="0" y="80" width="18" height="6" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1"/>
-              <path d="M 9 40 Q 9 52 -8 56" stroke="url(#schedBrassGrad)" stroke-width="5" stroke-linecap="round" fill="none"/>
-              
-              <!-- Animated Tap Handle -->
-              <g class="anim-tap-pull">
-                <line x1="9" y1="32" x2="18" y2="4" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="18" cy="4" r="5" fill="#fde047" stroke="#78350f" stroke-width="1.2"/>
-              </g>
-            </g>
-
-            <!-- Sleek, Sophisticated Line-Art Mixologist (No Cartoon Hats/Mustaches) -->
-            <g>
-              <!-- Clean Minimalist Head & Jaw Contour -->
-              <ellipse cx="48" cy="38" rx="10" ry="12" stroke="url(#schedBrassGrad)" stroke-width="2" fill="#140f0a"/>
-              <path d="M 42 32 Q 48 26 54 32" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-
-              <!-- Torso, Elegant Vest & Collar -->
-              <path d="M 38 52 L 32 108 M 58 52 L 64 108" stroke="url(#schedBrassGrad)" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M 40 52 L 48 66 L 56 52" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
-              <!-- Elegant Bow Tie -->
-              <polygon points="45,54 51,54 48,57" fill="#fde047"/>
-              <polygon points="45,60 51,60 48,57" fill="#fde047"/>
-              <circle cx="48" cy="57" r="1.5" fill="#ca8a04"/>
-              <!-- Vest Buttons -->
-              <circle cx="48" cy="68" r="1.8" fill="#f59e0b"/>
-              <circle cx="48" cy="80" r="1.8" fill="#f59e0b"/>
-              <circle cx="48" cy="92" r="1.8" fill="#f59e0b"/>
-
-              <!-- Arm pulling tap handle -->
-              <path d="M 52 56 Q 72 44 104 28" stroke="url(#schedBrassGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-              <circle cx="104" cy="28" r="3" fill="#fde047"/>
-
-              <!-- Arm holding the tilted craft glass -->
-              <path d="M 44 62 Q 58 82 76 90" stroke="url(#schedBrassGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-              <circle cx="76" cy="90" r="3" fill="#fde047"/>
-            </g>
-
-            <!-- Continuous Flowing Amber Beer Stream -->
-            <path class="anim-beer-stream" d="M 87 81 Q 84 90 81 99" stroke="url(#schedBeerGrad)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
-
-            <!-- Crystal Tulip Craft Beer Glass (Tilted) -->
-            <g transform="translate(76, 85) rotate(-18)">
-              <line x1="8" y1="28" x2="8" y2="38" stroke="#fef9c3" stroke-width="2" stroke-linecap="round"/>
-              <line x1="2" y1="38" x2="14" y2="38" stroke="#fef9c3" stroke-width="2" stroke-linecap="round"/>
-              <path d="M 2 4 Q 0 20 8 28 Q 16 20 14 4 Z" fill="rgba(255,255,255,0.08)" stroke="#fde047" stroke-width="1.6"/>
-              <path d="M 3 8 Q 1 20 8 26 Q 15 20 13 8 Z" fill="url(#schedBeerGrad)"/>
-              <!-- Effervescent Micro-Bubbles -->
-              <circle class="anim-beer-bubble-1" cx="6" cy="20" r="1" fill="#ffffff"/>
-              <circle class="anim-beer-bubble-2" cx="10" cy="22" r="0.9" fill="#fef08a"/>
-              <circle class="anim-beer-bubble-3" cx="8" cy="15" r="1" fill="#ffffff"/>
-              <!-- Velvety Cream Foam Head -->
-              <ellipse class="anim-beer-foam" cx="8" cy="7" rx="7" ry="3.2" fill="#fffbeb" stroke="#fde047" stroke-width="0.9"/>
-            </g>
-          </svg>
-        </div>
       </div>
     </div>
   </section>
@@ -3186,216 +3040,94 @@
         </p>
       </div>
 
-      <div class="events-nav-filter" id="eventsFilter">
-        <button class="filter-btn is-active" data-filter="tea" type="button"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg><span>בית התה של רום</span></button>
-        <button class="filter-btn" data-filter="live" type="button"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg><span>מוזיקה חיה והופעות</span></button>
-        <button class="filter-btn" data-filter="food" type="button"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg><span>פופ-אפ שפים וטאבון</span></button>
-        <button class="filter-btn" data-filter="vinyl" type="button"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg><span>השמעות אלבומים ו-Hi-Fi</span></button>
-        <button class="filter-btn" data-filter="openmic" type="button"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg><span>מיקרופון פתוח וספוקן</span></button>
-        <button class="filter-btn" data-filter="wine" type="button"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg><span>יין טבעי ומיקסולוגיה</span></button>
-      </div>
-
-      <div class="teder-feed" id="eventsList">
-        <!-- Series 1: Rom's Tea House -->
-        <article class="teder-card" data-category="tea">
-          <div class="teder-poster">
+      <div class="fmt-grid" id="eventsList">
+        <article class="fmt-card" data-category="tea">
+          <div class="fmt-card__media">
             <img src="images/Still 2025-04-02 154845_1.82.3 copy.jpg" alt="בית התה של רום בעזרא" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg><span>Tea &amp; Ambient Lounge</span></span>
-            </div>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">פורמט סלון קבוע</span>
-                <span class="day-name">· מ-19:00 אל תוך הלילה</span>
-              </div>
-              <h3 class="teder-title">בית התה של רום</h3>
-              <p class="teder-lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
-              <p class="teder-desc">
-                סלון תה חם ואינטימי המציע מגוון חליטות צמחי מרפא ייחודיות מכל העולם, עוגיות ומאפים טריים בעבודת יד, תאורה רכה ומוזיקה מדיטטיבית. מרחב רגוע ונעים למפגש קהילתי, קריאה, שיחה שקטה והתרגעות בלב פלורנטין.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg>חליטות בוטיק וטקסים</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg>וייב מרגיע וקהילתי</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="בית התה של רום" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg>בית התה של רום</h3>
+            <p class="fmt-card__when">פורמט סלון קבוע · מ-19:00 אל תוך הלילה</p>
+            <p class="fmt-card__lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="בית התה של רום" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
-
-        <!-- Series 2: Live Music & Acoustic Sessions -->
-        <article class="teder-card" data-category="live" style="display:none;">
-          <div class="teder-poster">
+        <article class="fmt-card" data-category="live">
+          <div class="fmt-card__media">
             <img src="images/MOMENT 1.jpg" alt="הופעות חיות בעזרא" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg><span>Live Acoustic &amp; Jazz</span></span>
-            </div>
+            <span class="fmt-card__flag">מומלץ להזמין מקום</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">לייב סשן שבועי</span>
-                <span class="day-name">· מ-21:00</span>
-              </div>
-              <h3 class="teder-title">מוזיקה חיה וסשנים אקוסטיים</h3>
-              <p class="teder-lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
-              <p class="teder-desc">
-                ערבי מוזיקה חיה באווירת מועדון הופעות אינטימי: הרכבי אינדי מקוריים, זמרים-יוצרים, טריו ג'אז חי על הבר וג'אם סשנים חופשיים לצד קוקטיילים מדויקים ואקוסטיקה חמה שעוטפת את החלל.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>הרכבים חיים ואינדי</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>סאונד אקוסטי חם</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="הופעה חיה / מוזיקה" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>מוזיקה חיה וסשנים אקוסטיים</h3>
+            <p class="fmt-card__when">לייב סשן שבועי · מ-21:00</p>
+            <p class="fmt-card__lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מוזיקה חיה וסשנים אקוסטיים" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
-
-        <!-- Series 3: Guest Chef Pop-Up & Taboon -->
-        <article class="teder-card" data-category="food" style="display:none;">
-          <div class="teder-poster">
+        <article class="fmt-card" data-category="food">
+          <div class="fmt-card__media">
             <img src="images/FOOD ENVIRONMENT.jpg" alt="פופ אפ שף וטאבון בעזרא" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--rsvp">בהזמנת מקום</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg><span>טאבון שף לוהט</span></span>
-            </div>
+            <span class="fmt-card__flag">בהזמנת מקום</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">ערבי קולינריה מיוחדים</span>
-                <span class="day-name">· מ-19:30</span>
-              </div>
-              <h3 class="teder-title">פופ-אפ שפים וערבי טאבון</h3>
-              <p class="teder-lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
-              <p class="teder-desc">
-                אירוח שפים מובילים לתפריטי ספיישל עונתיים מהטאבון הלוהט: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות חרוכים בגחלים, פיצות ארטיזנליות וקוקטיילים שנרקחו במיוחד לכל תפריט.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg>טאבון אבן לוהט</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>שפים אורחים</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="פופ-אפ שף / טאבון" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>פופ-אפ שפים וערבי טאבון</h3>
+            <p class="fmt-card__when">ערבי קולינריה מיוחדים · מ-19:30</p>
+            <p class="fmt-card__lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="פופ-אפ שפים וערבי טאבון" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
-
-        <!-- Series 4: Hi-Fi Vinyl & Album Listening -->
-        <article class="teder-card" data-category="vinyl" style="display:none;">
-          <div class="teder-poster">
+        <article class="fmt-card" data-category="vinyl">
+          <div class="fmt-card__media">
             <img src="images/Still 2025-04-02 154608_1.80.1 copy.jpg" alt="סלון תקליטים והשמעת אלבומים" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg><span>Hi-Fi Audio Premiere</span></span>
-            </div>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">סשן סאונד אנלוגי</span>
-                <span class="day-name">· מ-20:30</span>
-              </div>
-              <h3 class="teder-title">השמעות אלבומים וסלון תקליטים</h3>
-              <p class="teder-lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
-              <p class="teder-desc">
-                חוויית האזנה עמוקה ומרוכזת באיכות סאונד אנלוגית עשירה, תאורה עמומה ומשקאות מותאמים. השמעות טרום-בכורה לאלבומים ישראליים ובינלאומיים, ולאחריהן סשן שאלות-תשובות ושיחה פתוחה עם האמנים והמפיקים.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-speaker"/></svg>מערכת Hi-Fi אנלוגית</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>שיחה עם יוצרים</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="השמעת אלבום / תקליטים" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>השמעות אלבומים וסלון תקליטים</h3>
+            <p class="fmt-card__when">סשן סאונד אנלוגי · מ-20:30</p>
+            <p class="fmt-card__lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="השמעות אלבומים וסלון תקליטים" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
-
-        <!-- Series 5: Open Mic & Spoken Word -->
-        <article class="teder-card" data-category="openmic" style="display:none;">
-          <div class="teder-poster">
+        <article class="fmt-card" data-category="openmic">
+          <div class="fmt-card__media">
             <img src="images/BAR.jpg" alt="מיקרופון פתוח וספוקן וורד בעזרא" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--free">כניסה חופשית</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg><span>Open Mic &amp; Poetry</span></span>
-            </div>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">במה פתוחה ליוצרים</span>
-                <span class="day-name">· מ-20:00</span>
-              </div>
-              <h3 class="teder-title">מיקרופון פתוח וספוקן וורד</h3>
-              <p class="teder-lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
-              <p class="teder-desc">
-                במה פתוחה ומחבקת ליוצרים ויוצרות מכל התחומים. מרחב אמנותי אותנטי ובלתי אמצעי שבו אמנים מנוסים וחדשים עולים לשתף שירים, טקסטים, קטעי ספוקן וורד ומוזיקה מקורית מול קהל קשוב ומפרגן.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>במה פתוחה ליוצרים</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>שירה וספוקן וורד</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="מיקרופון פתוח" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>מיקרופון פתוח וספוקן וורד</h3>
+            <p class="fmt-card__when">במה פתוחה ליוצרים · מ-20:00</p>
+            <p class="fmt-card__lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מיקרופון פתוח וספוקן וורד" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
-
-        <!-- Series 6: Natural Wine & Mixology -->
-        <article class="teder-card" data-category="wine" style="display:none;">
-          <div class="teder-poster">
+        <article class="fmt-card" data-category="wine">
+          <div class="fmt-card__media">
             <img src="images/MAKING COCKTAILS.jpg" alt="יין טבעי וקוקטיילים בעזרא" loading="lazy" />
-            <div class="teder-stickers">
-              <span class="time-card__badge time-card__badge--rsvp">מומלץ להזמין מקום</span>
-              <span class="time-card__badge time-card__badge--today"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg><span>Natural Wine &amp; Drinks</span></span>
-            </div>
+            <span class="fmt-card__flag">מומלץ להזמין מקום</span>
           </div>
-          <div class="teder-content">
-            <div>
-              <div class="teder-date-badge">
-                <span class="num">סלון אלכוהול ויין</span>
-                <span class="day-name">· מ-19:00</span>
-              </div>
-              <h3 class="teder-title">ערבי יין טבעי ומיקסולוגיה</h3>
-              <p class="teder-lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
-              <p class="teder-desc">
-                מסע טעימות מודרך בין יקבים מקומיים ויינות טבעיים נדירים, לצד תפריט קוקטיילים הנרקחים מחומרי גלם עונתיים ונשנושים חמים מותאמים מהטאבון. אווירת בר יין אירופאי עם חום תל אביבי.
-              </p>
-            </div>
-            <div class="teder-footer-row">
-              <div class="teder-meta-chips">
-                <span><svg class="ico" aria-hidden="true"><use href="#i-wine"/></svg>יין טבעי ובוטיק</span>
-                <span><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>קוקטיילים עונתיים</span>
-              </div>
-              <div class="teder-actions">
-                <a class="btn btn--fill btn--sm" href="#schedule">ללוח התאריכים הקרובים</a>
-                <button class="btn btn--outline btn--sm js-open-contact" data-event-type="ערב יין / קוקטיילים" type="button">השאירו פרטים לאירוע</button>
-              </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>ערבי יין טבעי ומיקסולוגיה</h3>
+            <p class="fmt-card__when">סלון אלכוהול ויין · מ-19:00</p>
+            <p class="fmt-card__lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="ערבי יין טבעי ומיקסולוגיה" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
@@ -3411,7 +3143,7 @@
       <div class="sec-head center">
         <span class="eyebrow">Interactive Monthly Calendar</span>
         <h2>לוח אירועים וזמינות חופשי</h2>
-        <p>צפו בלו״ז המלא לפי חצאי ימים — צהריים (12:00–18:00) וערב (18:00–02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
+        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (12:00–18:00) וערב (18:00–02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
       <!-- Calendar Flanked Layout (Free-Floating Musicians, Asymmetrical Staggered Heights) -->
@@ -3422,13 +3154,13 @@
             <defs>
               <linearGradient id="saxLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="35%" stop-color="#fde047"/>
-                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="35%" stop-color="#f5d98a"/>
+                <stop offset="70%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#854d0e"/>
               </linearGradient>
               <radialGradient id="saxAuraGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
-                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+                <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
+                <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
                 <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
               </radialGradient>
             </defs>
@@ -3440,41 +3172,41 @@
             <g class="anim-flank-sax">
               <!-- Clean Minimalist Head & Neck Line -->
               <ellipse cx="58" cy="56" rx="9" ry="11" fill="#140f0a" stroke="url(#saxLineGrad)" stroke-width="2"/>
-              <path d="M 52 50 Q 58 44 64 50" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <path d="M 52 50 Q 58 44 64 50" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
               
               <!-- Torso, Relaxed Blazer & Body Flow -->
               <path d="M 50 68 Q 40 115 48 180 Q 54 220 58 245" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <path d="M 52 70 L 60 86 L 66 70" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
+              <path d="M 52 70 L 60 86 L 66 70" stroke="#f5d98a" stroke-width="1.6" fill="#140f0a"/>
 
               <!-- Arms holding instrument -->
               <path d="M 58 80 Q 68 108 74 130" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <circle cx="74" cy="130" r="3" fill="#fde047"/>
+              <circle cx="74" cy="130" r="3" fill="#f5d98a"/>
               <path d="M 54 92 Q 64 116 70 142" stroke="url(#saxLineGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
-              <circle cx="70" cy="142" r="3" fill="#fde047"/>
+              <circle cx="70" cy="142" r="3" fill="#f5d98a"/>
 
               <!-- Gleaming Brass Saxophone -->
-              <path d="M 64 63 Q 72 68 76 76" stroke="#fde047" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <path d="M 64 63 Q 72 68 76 76" stroke="#f5d98a" stroke-width="3" stroke-linecap="round" fill="none"/>
               <!-- Main Sax Body Tube & Loop -->
               <path d="M 76 76 Q 84 112 85 152 Q 86 195 68 204 Q 52 196 58 170" stroke="url(#saxLineGrad)" stroke-width="4" stroke-linecap="round" fill="none"/>
               <!-- Flared Horn Bell -->
-              <path d="M 58 170 Q 64 146 76 130 Q 86 136 78 162 Z" fill="url(#saxLineGrad)" stroke="#fde047" stroke-width="1.6"/>
-              <ellipse cx="74" cy="138" rx="4.5" ry="8" fill="#291807" stroke="#fde047" stroke-width="1.6" transform="rotate(-20 74 138)"/>
+              <path d="M 58 170 Q 64 146 76 130 Q 86 136 78 162 Z" fill="url(#saxLineGrad)" stroke="#f5d98a" stroke-width="1.6"/>
+              <ellipse cx="74" cy="138" rx="4.5" ry="8" fill="#291807" stroke="#f5d98a" stroke-width="1.6" transform="rotate(-20 74 138)"/>
               
               <!-- Key Inlays -->
-              <circle cx="79" cy="96" r="2" fill="#fde047"/>
-              <circle cx="82" cy="116" r="2" fill="#fde047"/>
-              <circle cx="84" cy="136" r="2" fill="#fde047"/>
+              <circle cx="79" cy="96" r="2" fill="#f5d98a"/>
+              <circle cx="82" cy="116" r="2" fill="#f5d98a"/>
+              <circle cx="84" cy="136" r="2" fill="#f5d98a"/>
             </g>
 
             <!-- Ascending Golden Music Notes -->
             <g class="anim-sax-note-1">
-              <text x="78" y="112" fill="#fde047" font-size="14" font-weight="900" opacity="0.9">♪</text>
+              <path transform="translate(78.0,107.1) scale(1.4)" fill="#f5d98a" opacity="0.9" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
             <g class="anim-sax-note-2">
-              <text x="86" y="90" fill="#ca8a04" font-size="16" font-weight="900" opacity="0.85">♫</text>
+              <path transform="translate(86.0,84.4) scale(1.6)" fill="#c49a3c" opacity="0.85" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
             <g class="anim-sax-note-3">
-              <text x="68" y="76" fill="#f59e0b" font-size="13" font-weight="900" opacity="0.9">♩</text>
+              <path transform="translate(68.0,71.5) scale(1.3)" fill="#c49a3c" opacity="0.9" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
             </g>
           </svg>
         </div>
@@ -3494,9 +3226,9 @@
             </div>
 
             <div class="month-cal-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>☀️ צהריים פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>🌙 ערב פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>🌙 אירוע פרטי / תפוס</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
             </div>
           </div>
 
@@ -3521,13 +3253,13 @@
             <defs>
               <linearGradient id="drumLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
-                <stop offset="35%" stop-color="#fde047"/>
-                <stop offset="70%" stop-color="#ca8a04"/>
+                <stop offset="35%" stop-color="#f5d98a"/>
+                <stop offset="70%" stop-color="#c49a3c"/>
                 <stop offset="100%" stop-color="#854d0e"/>
               </linearGradient>
               <radialGradient id="drumAuraGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
-                <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+                <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.22"/>
+                <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
                 <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
               </radialGradient>
             </defs>
@@ -3539,7 +3271,7 @@
             <g>
               <!-- Clean Minimalist Head & Posture Contour -->
               <ellipse cx="62" cy="60" rx="9.5" ry="11.5" fill="#140f0a" stroke="url(#drumLineGrad)" stroke-width="2"/>
-              <path d="M 54 54 Q 62 48 70 54" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <path d="M 54 54 Q 62 48 70 54" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
 
               <!-- Torso & Posture Lines -->
               <path d="M 50 76 L 52 146 M 74 76 L 72 146" stroke="url(#drumLineGrad)" stroke-width="2.2" stroke-linecap="round"/>
@@ -3549,27 +3281,27 @@
               <line x1="36" y1="167" x2="36" y2="235" stroke="#854d0e" stroke-width="2"/>
 
               <!-- Ride Cymbal (Right) -->
-              <ellipse class="anim-drum-cymbal-ring" cx="92" cy="94" rx="22" ry="6.5" stroke="#fde047" stroke-width="1.4"/>
+              <ellipse class="anim-drum-cymbal-ring" cx="92" cy="94" rx="22" ry="6.5" stroke="#f5d98a" stroke-width="1.4"/>
               <ellipse cx="92" cy="94" rx="23" ry="6" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="url(#drumLineGrad)" fill-opacity="0.3"/>
-              <circle cx="92" cy="94" r="2.4" fill="#fde047"/>
+              <circle cx="92" cy="94" r="2.4" fill="#f5d98a"/>
               <line x1="92" y1="94" x2="92" y2="235" stroke="#854d0e" stroke-width="2"/>
 
               <!-- Bass Drum (Bottom Center) -->
               <ellipse cx="62" cy="208" rx="26" ry="18" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="#140f0a" fill-opacity="0.6"/>
-              <text x="62" y="212" fill="#ca8a04" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
+              <text x="62" y="212" fill="#c49a3c" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
 
               <!-- Animated Left Arm & Drumstick (Snare Rhythm) -->
               <g class="anim-drum-arm-l">
                 <path d="M 52 94 Q 36 118 40 140" stroke="url(#drumLineGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-                <circle cx="40" cy="140" r="3" fill="#fde047"/>
-                <line x1="40" y1="140" x2="36" y2="158" stroke="#fde047" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="40" cy="140" r="3" fill="#f5d98a"/>
+                <line x1="40" y1="140" x2="36" y2="158" stroke="#f5d98a" stroke-width="2.4" stroke-linecap="round"/>
               </g>
 
               <!-- Animated Right Arm & Drumstick (Ride Cymbal Rhythm) -->
               <g class="anim-drum-arm-r">
                 <path d="M 72 94 Q 84 110 88 122" stroke="url(#drumLineGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-                <circle cx="88" cy="122" r="3" fill="#fde047"/>
-                <line x1="88" y1="122" x2="93" y2="100" stroke="#fde047" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="88" cy="122" r="3" fill="#f5d98a"/>
+                <line x1="88" y1="122" x2="93" y2="100" stroke="#f5d98a" stroke-width="2.4" stroke-linecap="round"/>
               </g>
             </g>
           </svg>
@@ -3588,7 +3320,7 @@
           <span class="eyebrow">הסאונד והוייב</span>
           <h3>Ezra Sound System · סאונד אנלוגי, טאבון ויין טבעי</h3>
           <p>
-            עזרא הוקם מתוך אהבה עמוקה למוזיקה אנלוגית, קולינריה מדויקת ומפגשים בלתי אמצעיים. תכננו את החלל עם אקוסטיקה חמה, תאורה לילית מלטפת ותפריט שמתכתב עם מה שמתנגן ברמקולים.
+            עזרא הוא בר פרטי בפלורנטין שנפתח בערבים מסוימים גם לקהל הרחב. בנינו מקום שנעים לשבת בו: אקוסטיקה שעובדת, תאורה שלא מסנוורת, ואוכל שיוצא מהטאבון לאורך כל הערב. בערבים הפתוחים מתארחים אצלנו תקליטנים, שפים ומוזיקאים, והכניסה בדרך כלל חופשית.
           </p>
           <a class="btn btn--fill" href="#events">בדקו את האירועים הקרובים</a>
         </div>
@@ -3625,13 +3357,13 @@
           <defs>
             <linearGradient id="crowdGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="30%" stop-color="#fde047"/>
-              <stop offset="70%" stop-color="#ca8a04"/>
+              <stop offset="30%" stop-color="#f5d98a"/>
+              <stop offset="70%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#854d0e"/>
             </linearGradient>
             <radialGradient id="crowdCenterGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.25"/>
-              <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.25"/>
+              <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.05"/>
               <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
             </radialGradient>
           </defs>
@@ -3643,13 +3375,13 @@
           <g class="anim-dancer-1" transform="translate(80, 15)">
             <!-- Clean Head Contour -->
             <ellipse cx="20" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <path d="M 14 15 Q 20 10 26 15" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M 14 15 Q 20 10 26 15" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Body & Torso Contour -->
             <path d="M 14 30 Q 9 60 16 85 M 26 30 Q 31 60 24 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Arm Raising Cocktail Flute -->
             <path d="M 24 36 Q 38 24 44 14" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <path d="M 41 10 L 48 10 L 44 15 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.9"/>
-            <line x1="44" y1="15" x2="44" y2="20" stroke="#fde047" stroke-width="1.4"/>
+            <path d="M 41 10 L 48 10 L 44 15 Z" fill="#f5d98a" stroke="#c49a3c" stroke-width="0.9"/>
+            <line x1="44" y1="15" x2="44" y2="20" stroke="#f5d98a" stroke-width="1.4"/>
             <!-- Other Arm on Hip -->
             <path d="M 14 36 Q 4 46 8 56" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
           </g>
@@ -3657,64 +3389,64 @@
           <!-- 2. Dancer 2: Grooving to Vinyl Rhythm (Center-Left) -->
           <g class="anim-dancer-2" transform="translate(290, 12)">
             <ellipse cx="25" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <path d="M 18 15 Q 25 10 32 15" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M 18 15 Q 25 10 32 15" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Torso -->
             <path d="M 18 30 Q 13 60 20 88 M 32 30 Q 37 60 30 88" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Both Arms Up in the Air (Joyful Speakeasy Vibe) -->
             <path d="M 18 34 Q 6 18 10 4" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="10" cy="4" r="2.5" fill="#fde047"/>
+            <circle cx="10" cy="4" r="2.5" fill="#f5d98a"/>
             <path d="M 32 34 Q 44 18 40 4" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="40" cy="4" r="2.5" fill="#fde047"/>
+            <circle cx="40" cy="4" r="2.5" fill="#f5d98a"/>
           </g>
 
           <!-- Center Retro Vinyl Disc Spinning Above Crowd -->
           <g class="anim-archive-vinyl" transform="translate(475, 20)">
             <circle cx="15" cy="15" r="15" fill="#140f0a" stroke="url(#crowdGoldGrad)" stroke-width="1.8"/>
-            <circle cx="15" cy="15" r="9" stroke="#ca8a04" stroke-width="0.9" opacity="0.6"/>
-            <circle cx="15" cy="15" r="4.5" fill="#fde047"/>
+            <circle cx="15" cy="15" r="9" stroke="#c49a3c" stroke-width="0.9" opacity="0.6"/>
+            <circle cx="15" cy="15" r="4.5" fill="#f5d98a"/>
             <circle cx="15" cy="15" r="1.5" fill="#140f0a"/>
           </g>
 
           <!-- 3. Dancer 3: Twirling Dancer with Glass (Center-Right) -->
           <g class="anim-dancer-3" transform="translate(670, 15)">
             <ellipse cx="22" cy="18" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <path d="M 16 13 Q 22 8 28 13" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M 16 13 Q 22 8 28 13" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Torso & Flowing Dress -->
             <path d="M 16 28 Q 10 50 4 82 Q 22 88 40 82 Q 34 50 28 28 Z" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a" fill-opacity="0.5"/>
             <!-- Expressive Arms -->
             <path d="M 16 32 Q 4 34 0 22" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="0" cy="22" r="2.5" fill="#fde047"/>
+            <circle cx="0" cy="22" r="2.5" fill="#f5d98a"/>
             <path d="M 28 32 Q 40 26 46 14" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="46" cy="14" r="2.5" fill="#fde047"/>
+            <circle cx="46" cy="14" r="2.5" fill="#f5d98a"/>
           </g>
 
           <!-- 4. Dancer 4: Rhythm Clapping (Far Right) -->
           <g class="anim-dancer-4" transform="translate(860, 15)">
             <ellipse cx="20" cy="18" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <path d="M 14 13 Q 20 8 26 13" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M 14 13 Q 20 8 26 13" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Torso -->
             <path d="M 13 28 Q 9 58 18 85 M 27 28 Q 31 58 22 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Clapping Hands Motion -->
             <path d="M 14 34 Q 24 28 26 20" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
             <path d="M 26 34 Q 20 28 24 18" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="25" cy="19" r="2.8" fill="#fde047"/>
+            <circle cx="25" cy="19" r="2.8" fill="#f5d98a"/>
           </g>
 
           <!-- Sparkling Disco Stars & Notes Floating Above Crowd -->
           <g class="anim-sparkle-1">
-            <text x="80" y="24" fill="#fde047" font-size="14" font-weight="900">✦</text>
+            <path transform="translate(80.0,19.1) scale(1.0)" fill="#f5d98a" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-2">
-            <text x="260" y="16" fill="#ca8a04" font-size="12" font-weight="900">✧</text>
+            <path transform="translate(260.0,11.8) scale(0.857)" fill="#c49a3c" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-3">
-            <text x="490" y="14" fill="#fde047" font-size="16" font-weight="900">★</text>
+            <path transform="translate(490.0,8.4) scale(1.143)" fill="#f5d98a" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-4">
-            <text x="720" y="20" fill="#ca8a04" font-size="13" font-weight="900">✦</text>
+            <path transform="translate(720.0,15.4) scale(0.929)" fill="#c49a3c" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
           </g>
           <g class="anim-sparkle-5">
-            <text x="910" y="26" fill="#fde047" font-size="13" font-weight="900">♪</text>
+            <path transform="translate(910.0,21.4) scale(1.3)" fill="#f5d98a" d="M0 0a2.2 2.2 0 1 0 2.2 2.2V-8l6-1.6v6.2a2.2 2.2 0 1 0 1.4 2V-12L0.8-9.9V0Z"/>
           </g>
         </svg>
       </div>
@@ -3781,8 +3513,8 @@
           <defs>
             <linearGradient id="busBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="25%" stop-color="#fde047"/>
-              <stop offset="65%" stop-color="#ca8a04"/>
+              <stop offset="25%" stop-color="#f5d98a"/>
+              <stop offset="65%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#854d0e"/>
             </linearGradient>
           </defs>
@@ -3797,11 +3529,11 @@
           <circle cx="92" cy="30" r="3" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
           <path d="M 94 28 L 110 20 L 110 36 Z" fill="rgba(254, 240, 138, 0.35)"/>
           <!-- Wheels -->
-          <circle cx="28" cy="38" r="6" fill="#140f0a" stroke="#fde047" stroke-width="1.8"/>
-          <circle cx="28" cy="38" r="2.5" fill="#fde047"/>
-          <circle cx="75" cy="38" r="6" fill="#140f0a" stroke="#fde047" stroke-width="1.8"/>
-          <circle cx="75" cy="38" r="2.5" fill="#fde047"/>
-          <text x="48" y="32" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" font-family="sans-serif">EZRA 38</text>
+          <circle cx="28" cy="38" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="1.8"/>
+          <circle cx="28" cy="38" r="2.5" fill="#f5d98a"/>
+          <circle cx="75" cy="38" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="1.8"/>
+          <circle cx="75" cy="38" r="2.5" fill="#f5d98a"/>
+          <text x="48" y="32" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" font-family="Heebo, sans-serif">EZRA 38</text>
         </svg>
       </div>
 
@@ -3811,17 +3543,17 @@
           <defs>
             <linearGradient id="trainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="35%" stop-color="#fde047"/>
-              <stop offset="75%" stop-color="#ca8a04"/>
+              <stop offset="35%" stop-color="#f5d98a"/>
+              <stop offset="75%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#451a03"/>
             </linearGradient>
           </defs>
           <!-- Pantograph on roof -->
-          <path d="M 45 4 L 55 10 L 65 4" stroke="#fde047" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="55" y1="4" x2="55" y2="10" stroke="#fde047" stroke-width="1.5"/>
+          <path d="M 45 4 L 55 10 L 65 4" stroke="#f5d98a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="55" y1="4" x2="55" y2="10" stroke="#f5d98a" stroke-width="1.5"/>
           <!-- Train aerodynamic body -->
           <path d="M 10 10 L 105 10 Q 120 18 120 30 L 120 36 L 10 36 Z" fill="url(#trainGrad)" stroke="#fef08a" stroke-width="1.2"/>
-          <line x1="10" y1="24" x2="120" y2="24" stroke="#ca8a04" stroke-width="1.5"/>
+          <line x1="10" y1="24" x2="120" y2="24" stroke="#c49a3c" stroke-width="1.5"/>
           <!-- Panoramic Windows -->
           <rect x="18" y="13" width="15" height="9" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="0.8"/>
           <rect x="37" y="13" width="15" height="9" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="0.8"/>
@@ -3832,11 +3564,11 @@
           <circle cx="116" cy="28" r="3" fill="#ffffff" filter="drop-shadow(0 0 6px #ffffff)"/>
           <path d="M 118 26 L 136 18 L 136 38 Z" fill="rgba(254, 240, 138, 0.4)"/>
           <!-- Train Wheels Track -->
-          <rect x="15" y="36" width="95" height="4" rx="1" fill="#291807" stroke="#ca8a04" stroke-width="0.8"/>
-          <circle cx="28" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="50" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="75" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
-          <circle cx="95" cy="38" r="4.5" fill="#140f0a" stroke="#fde047" stroke-width="1.5"/>
+          <rect x="15" y="36" width="95" height="4" rx="1" fill="#291807" stroke="#c49a3c" stroke-width="0.8"/>
+          <circle cx="28" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="50" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="75" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
+          <circle cx="95" cy="38" r="4.5" fill="#140f0a" stroke="#f5d98a" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -3846,8 +3578,8 @@
           <defs>
             <linearGradient id="carGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="40%" stop-color="#fde047"/>
-              <stop offset="80%" stop-color="#ca8a04"/>
+              <stop offset="40%" stop-color="#f5d98a"/>
+              <stop offset="80%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#78350f"/>
             </linearGradient>
           </defs>
@@ -3860,10 +3592,10 @@
           <circle cx="94" cy="24" r="3" fill="#ffffff" filter="drop-shadow(0 0 5px #ffffff)"/>
           <path d="M 96 22 L 115 15 L 115 32 Z" fill="rgba(254, 240, 138, 0.4)"/>
           <!-- Wheels -->
-          <circle cx="28" cy="34" r="6" fill="#140f0a" stroke="#fde047" stroke-width="2"/>
-          <circle cx="28" cy="34" r="2.5" fill="#fde047"/>
-          <circle cx="78" cy="34" r="6" fill="#140f0a" stroke="#fde047" stroke-width="2"/>
-          <circle cx="78" cy="34" r="2.5" fill="#fde047"/>
+          <circle cx="28" cy="34" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="2"/>
+          <circle cx="28" cy="34" r="2.5" fill="#f5d98a"/>
+          <circle cx="78" cy="34" r="6" fill="#140f0a" stroke="#f5d98a" stroke-width="2"/>
+          <circle cx="78" cy="34" r="2.5" fill="#f5d98a"/>
         </svg>
       </div>
 
@@ -3873,28 +3605,28 @@
           <defs>
             <linearGradient id="ufoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="35%" stop-color="#fde047"/>
-              <stop offset="70%" stop-color="#ca8a04"/>
+              <stop offset="35%" stop-color="#f5d98a"/>
+              <stop offset="70%" stop-color="#c49a3c"/>
               <stop offset="100%" stop-color="#3b0764"/>
             </linearGradient>
           </defs>
           <!-- Glass Dome -->
-          <ellipse cx="50" cy="18" rx="16" ry="12" fill="rgba(254, 240, 138, 0.35)" stroke="#fde047" stroke-width="1.2"/>
+          <ellipse cx="50" cy="18" rx="16" ry="12" fill="rgba(254, 240, 138, 0.35)" stroke="#f5d98a" stroke-width="1.2"/>
           <!-- Alien / Vinyl pilot inside -->
-          <circle cx="50" cy="18" r="4" fill="#fde047"/>
+          <circle cx="50" cy="18" r="4" fill="#f5d98a"/>
           <!-- Flying Saucer Disc -->
           <ellipse cx="50" cy="26" rx="42" ry="10" fill="url(#ufoGrad)" stroke="#fef08a" stroke-width="1.4"/>
           <!-- Saucer Lights -->
           <circle cx="22" cy="27" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #fff)"/>
-          <circle cx="36" cy="29" r="2" fill="#fde047" filter="drop-shadow(0 0 3px #fde047)"/>
+          <circle cx="36" cy="29" r="2" fill="#f5d98a" filter="drop-shadow(0 0 3px #f5d98a)"/>
           <circle cx="50" cy="30" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #fff)"/>
-          <circle cx="64" cy="29" r="2" fill="#fde047" filter="drop-shadow(0 0 3px #fde047)"/>
+          <circle cx="64" cy="29" r="2" fill="#f5d98a" filter="drop-shadow(0 0 3px #f5d98a)"/>
           <circle cx="78" cy="27" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #fff)"/>
           <!-- Tractor Beam / Propulsion Beam below -->
           <path d="M 38 34 L 20 48 L 80 48 L 62 34 Z" fill="rgba(254, 240, 138, 0.25)"/>
           <!-- Star Sparkles trailing behind -->
-          <text x="2" y="24" fill="#fde047" font-size="10" opacity="0.8">✦</text>
-          <text x="10" y="36" fill="#ca8a04" font-size="8" opacity="0.7">✧</text>
+          <path transform="translate(2.0,20.5) scale(0.714)" fill="#f5d98a" opacity="0.8" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
+          <path transform="translate(10.0,33.2) scale(0.571)" fill="#c49a3c" opacity="0.7" d="M0 -8 1.9 -1.9 8 0 1.9 1.9 0 8 -1.9 1.9 -8 0 -1.9 -1.9Z"/>
         </svg>
       </div>
     </div>
@@ -3905,8 +3637,8 @@
         <defs>
           <linearGradient id="portalGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#fffbeb"/>
-            <stop offset="35%" stop-color="#fde047"/>
-            <stop offset="70%" stop-color="#ca8a04"/>
+            <stop offset="35%" stop-color="#f5d98a"/>
+            <stop offset="70%" stop-color="#c49a3c"/>
             <stop offset="100%" stop-color="#854d0e"/>
           </linearGradient>
         </defs>
@@ -3914,11 +3646,11 @@
         <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68 Z" fill="#080604"/>
         <!-- Golden Arched Vault Trim -->
         <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68" stroke="url(#portalGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
         <!-- Keystone Signal Light -->
-        <circle cx="30" cy="8" r="3.5" fill="#fde047" filter="drop-shadow(0 0 5px #fde047)"/>
+        <circle cx="30" cy="8" r="3.5" fill="#f5d98a" filter="drop-shadow(0 0 5px #f5d98a)"/>
         <!-- Ground Threshold -->
-        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#c49a3c" stroke-width="1"/>
       </svg>
     </div>
 
@@ -3929,11 +3661,11 @@
         <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68 Z" fill="#080604"/>
         <!-- Golden Arched Vault Trim -->
         <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68" stroke="url(#portalGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
         <!-- Keystone Signal Light -->
-        <circle cx="30" cy="8" r="3.5" fill="#fde047" filter="drop-shadow(0 0 5px #fde047)"/>
+        <circle cx="30" cy="8" r="3.5" fill="#f5d98a" filter="drop-shadow(0 0 5px #f5d98a)"/>
         <!-- Ground Threshold -->
-        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#c49a3c" stroke-width="1"/>
       </svg>
     </div>
 
@@ -4016,17 +3748,17 @@
         <!-- 3 Minimalist Category Cards -->
         <div class="collab-grid">
           <div class="collab-item">
-            <div class="collab-item-ico">🍕</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg></div>
             <div class="collab-item-title">קולינריה וטאבון</div>
             <div class="collab-item-sub">שפים אורחים · פופ-אפים · ספיישלים מהטאבון</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🎧</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg></div>
             <div class="collab-item-title">מוזיקה ותקליטים</div>
             <div class="collab-item-sub">סטים על ויניל · השמעות אלבומים · הופעות חיות</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🍸</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg></div>
             <div class="collab-item-title">יין ומיקסולוגיה</div>
             <div class="collab-item-sub">ערבי יין טבעי · יקבי בוטיק · השקות קוקטיילים</div>
           </div>
@@ -4057,41 +3789,92 @@
       <div class="faq-list">
         <div class="faq-item is-open">
           <button class="faq-q" type="button">
-            <span>צריך להזמין מקום מראש או שאפשר פשוט להגיע?</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-a">
-            לכל אירוע מוגדר סטאטוס ברור: ערבים המסומנים כ<strong>כניסה חופשית</strong> פתוחים להגעה חופשית על בסיס מקום פנוי. באירועים מיוחדים (כמו פופ-אפ שף או השמעות מוגבלות מקום) מומלץ או נדרש שריון מקום מראש דרך הכפתור בעמוד.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-q" type="button">
             <span>איך אני יודע אם המקום פתוח היום לקהל או סגור לאירוע פרטי?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            הלוח השבועי בראש עמוד זה מתעדכן בזמן אמת. תאריכים שבהם מתקיים אירוע פרטי סגור מסומנים בבירור באדום ("אירוע סגור"), וימים פתוחים מציגים את שעות הפעילות והקונספט המתוכנן להערב.
+            הלוח בעמוד הזה מתעדכן בזמן אמת מול היומן שלנו. ערב שסגור לאירוע פרטי מסומן באדום, וערב פתוח מציג את שעת הפתיחה ואת הפורמט המתוכנן. גם הפס בראש העמוד מראה מה קורה הערב.
           </div>
         </div>
-
         <div class="faq-item">
           <button class="faq-q" type="button">
             <span>מה מגישים לאכול ולשתות?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            בר קוקטיילים עשיר, יינות טבעיים ובוטיק, בירות קרות, ומנות לוהטות מהטאבון (פוקצ'ות, מאפים מלוחים, ירקות צלויים, דגים נאים וספיישלים עונתיים).
+            אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין טבעי ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים.
           </div>
         </div>
-
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>איפה אתם יושבים ואיך מגיעים?</span>
+            <span>האוכל כשר?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            עזרא שוכן ברחוב אברבנאל 38, בלב פלורנטין בתל אביב. יש חניונים מוסדרים ברחובות אליפלט והרצל, והרכבת הקלה (הקו האדום, תחנת סלמה/אליפלט) במרחק הליכה קצרה.
+            המקום אינו בהשגחת כשרות. התפריט כולו חלבי־צמחוני, בלי בשר ובלי פירות ים, אבל אנחנו לא מחזיקים תעודה ולא נציג את עצמנו ככשרים.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>איפה אתם יושבים?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            אברבנאל 38, בלב פלורנטין בתל אביב, באזור התעשייה הישן של השכונה.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>יש חניה במקום?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            אין חניה פרטית בעזרא. יש חניונים בתשלום ברחובות הסמוכים, ובשעות הערב אפשר בדרך כלל למצוא חניה כחול־לבן בסביבה.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>איך מגיעים בתחבורה ציבורית?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            הרכבת הקלה, הקו האדום, עוצרת בתחנות סלמה ואליפלט במרחק הליכה קצרה. בשעות הערב זו הדרך הכי פשוטה להגיע, במיוחד אם מתכוונים לשתות.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>הכניסה בתשלום?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            ברוב הערבים הפתוחים הכניסה חופשית, על בסיס מקום פנוי. בערבים עם הופעה חיה או אירוע מיוחד מומלץ להשאיר פרטים מראש כדי לוודא שיש מקום.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>צריך להזמין מקום מראש לערב פתוח?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            לא חובה, אבל כדאי. החלל אינטימי והמקומות נגמרים בערבים עמוסים, אז אם אתם קבוצה או מגיעים לערב מסוים, השאירו פרטים ונשמור לכם מקום.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>אפשר לסגור את המקום לאירוע פרטי?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            כן, וזה עיקר מה שאנחנו עושים. אירוע אחד בערב, עד 50 אורחים, והחלל כולו נסגר לקבוצה שלכם. כל סוגי האירועים והפרטים המלאים נמצאים בעמוד <a href="event-types">סוגי אירועים</a>.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>כמה אנשים נכנסים?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            עד 50 אורחים. רוב הקבוצות שסוגרות אצלנו אירוע פרטי הן בין 20 ל־50 איש, וזה הגודל שהמקום נבנה בשבילו.
           </div>
         </div>
       </div>
@@ -4339,27 +4122,16 @@
       }
     })();
 
-    // Events filter
+    // Only animate what is on screen. The transit loop animates `left`, so it
+    // forces a layout pass per frame; running it while scrolled away spends
+    // battery on something nobody is looking at.
     (function(){
-      const chips = document.querySelectorAll('.filter-btn');
-      const cards = document.querySelectorAll('.teder-card');
-
-      chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-          chips.forEach(c => c.classList.remove('is-active'));
-          chip.classList.add('is-active');
-          const filter = chip.getAttribute('data-filter');
-
-          cards.forEach(card => {
-            const cat = card.getAttribute('data-category') || '';
-            if (filter === 'all' || cat.includes(filter)) {
-              card.style.display = 'grid';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        });
-      });
+      const tunnel = document.querySelector('.transit-tunnel-track');
+      if (!tunnel) return;
+      if (!('IntersectionObserver' in window)) { tunnel.classList.add('is-visible'); return; }
+      new IntersectionObserver(entries => {
+        entries.forEach(en => tunnel.classList.toggle('is-visible', en.isIntersecting));
+      }, { rootMargin: '100px' }).observe(tunnel);
     })();
 
     // ============================================================
@@ -4518,9 +4290,13 @@
           const t0 = allDaysData[0];
           if (t0.isClosedEvening) {
             liveText.innerHTML = `<strong>הערב:</strong> המקום סגור לאירוע פרטי`;
+            const strip0 = document.getElementById('heroLiveStatus');
+            if (strip0) strip0.classList.remove('is-open'), strip0.classList.add('is-closed');
           } else {
             const openHour = (t0.hours || '20:00').split(' - ')[0].split(' ')[0];
             liveText.innerHTML = `<strong>הערב:</strong> פתוח לקהל מ-${openHour} · ${t0.title.split('·')[0]}`;
+            const strip1 = document.getElementById('heroLiveStatus');
+            if (strip1) strip1.classList.remove('is-closed'), strip1.classList.add('is-open');
           }
         }
       }
@@ -4835,13 +4611,13 @@
             <div class="month-cal-slots">
               <!-- Noon Slot -->
               <button type="button" class="month-cal-slot ${hasAfternoonEvent ? 'month-cal-slot--busy' : 'month-cal-slot--free'}" data-slot="noon" aria-label="${d} ${monthsHe[calViewMonth]} צהריים: ${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע'}">
-                <span class="month-cal-slot-time">☀️ צהריים</span>
-                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע ✍️'}</span>
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים</span>
+                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>'}</span>
               </button>
 
               <!-- Night Slot -->
               <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : theme.title}">
-                <span class="month-cal-slot-time">🌙 ערב</span>
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
                 <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : theme.title.split('·')[0]}</span>
               </button>
             </div>
@@ -5061,6 +4837,26 @@
           const title = modalTitle.textContent;
           const date = modalDateTag.textContent;
 
+          // RSVPs used to open WhatsApp and record nothing, so an interested
+          // visitor who never sent the message was invisible. Now it lands on
+          // the Open Events board first, tagged apart from private bookings.
+          try {
+            fetch((window.EZRA_LEAD_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev'), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                board: '5102602771',
+                group: 'topics',
+                leadType: 'open_events',
+                name, phone, guests,
+                eventType: title,
+                notes: note || '',
+                pageUrl: location.href,
+                utm_source: new URLSearchParams(location.search).get('utm_source') || 'events_page_rsvp'
+              })
+            }).catch(() => {});
+          } catch (_) {}
+
           const waUrl = `https://wa.me/972509499241?text=${encodeURIComponent(`היי עזרא, ברצוני לשריין מקום לאירוע "${title}" (${date}):\nשם: ${name}\nטלפון: ${phone}\nמספר אנשים: ${guests}\nהערות: ${note || 'ללא'}`)}`;
           
           closeModal();
@@ -5094,7 +4890,8 @@
 
     // ============================================================
     // LEAVE DETAILS / CONTACT MODAL & INTERACTIVE CALENDAR
-    // Target Monday Board: 5102602771 (Open Events) | Group: topics (New Leads)
+    // Private-event enquiries -> Events Form board 5092854682, group topics (New Leads),
+    // via the Cloudflare worker, the same path company-events.html uses.
     // ============================================================
     let openContactModal;
 
@@ -5348,9 +5145,9 @@
           }
 
           const payload = {
-            board: '5102602771', // Open Events Monday Board
+            board: '5092854682', // Events Form board - same as homepage private leads
             group: 'topics',      // New Leads group
-            leadType: 'open_events',
+            leadType: 'private',
             name: document.getElementById('cfName')?.value || '',
             phone: document.getElementById('cfPhone')?.value || '',
             email: document.getElementById('cfEmail')?.value || '',
