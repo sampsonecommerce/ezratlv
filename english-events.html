@@ -2552,7 +2552,7 @@
       58%     { transform: scaleX(-0.8); }
       68%, 100% { transform: scaleX(1); }
     }
-    .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: fill-box; }
+    .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: view-box; }
     .anim-pizza-arm-l {
       transform-origin: 64px 111px;
       animation: armTossL 4.2s ease-in-out infinite;
@@ -4150,7 +4150,7 @@
         <!-- 2. Live Music & Acoustic Sessions -->
         <article class="fmt-card" data-category="live">
           <div class="fmt-card__media">
-               <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <!-- Spotlight & Stage Ambiance -->
                   <radialGradient id="liveSpotlightGradEn" cx="50%" cy="48%" r="52%">
@@ -4300,131 +4300,152 @@
                 <circle class="anim-sound-ripple-2" cx="176" cy="125" r="32" stroke="url(#saxGoldGradEn)" stroke-width="1.1" fill="none"/>
 
                 <!-- ============================================================
-                     INSTRUMENT 1 (LEFT: x=18 to 118): Luxury Jazz Club Drum Kit
+                     INSTRUMENT 1 (LEFT: x=13 to 128): Luxury Jazz Club Drum Kit
                      ============================================================ -->
                 <g id="drumKitGroupEn">
-                  <!-- Crash Cymbal Stand (Chrome Tripod Base & Telescopic Mast) -->
+                  <!-- Crash Cymbal Stand (Chrome Telescopic Mast & Tripod) -->
                   <g id="cymbalStandEn">
-                    <!-- Base Feet & Legs -->
-                    <line x1="62" y1="168" x2="38" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.2" stroke-linecap="round"/>
-                    <line x1="62" y1="168" x2="88" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.2" stroke-linecap="round"/>
-                    <path d="M 50 182 L 62 174 L 76 182" stroke="url(#chromeGradEn)" stroke-width="1.3" fill="none"/>
-                    <rect x="35.5" y="194" width="5" height="3" rx="1" fill="#0f172a"/>
-                    <rect x="85.5" y="194" width="5" height="3" rx="1" fill="#0f172a"/>
-                    <!-- Chrome Mast & Height Lock -->
-                    <line x1="62" y1="94" x2="62" y2="168" stroke="url(#chromeGradEn)" stroke-width="2.4"/>
-                    <rect x="59.5" y="91" width="5" height="5" rx="1" fill="url(#chromeGradEn)" stroke="#475569" stroke-width="0.5"/>
-                    <line x1="62" y1="44" x2="62" y2="91" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
+                    <line x1="45" y1="170" x2="22" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.2" stroke-linecap="round"/>
+                    <line x1="45" y1="170" x2="66" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 33 183 L 45 176 L 56 183" stroke="url(#chromeGradEn)" stroke-width="1.3" fill="none"/>
+                    <rect x="19.5" y="194" width="5" height="3" rx="1" fill="#0f172a"/>
+                    <rect x="63.5" y="194" width="5" height="3" rx="1" fill="#0f172a"/>
+                    <line x1="45" y1="95" x2="45" y2="170" stroke="url(#chromeGradEn)" stroke-width="2.4"/>
+                    <rect x="42.5" y="92" width="5" height="5" rx="1" fill="url(#chromeGradEn)" stroke="#475569" stroke-width="0.5"/>
+                    <line x1="45" y1="48" x2="45" y2="92" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
                   </g>
 
                   <!-- Spun Brass Crash Cymbal with Shimmer Vibration -->
                   <g class="anim-cymbal-shimmer">
-                    <!-- Tilter Head & Lower Felt -->
-                    <rect x="60" y="41" width="4" height="4" rx="0.8" fill="url(#chromeGradEn)"/>
-                    <ellipse cx="62" cy="40" rx="4.5" ry="1.6" fill="#1e293b" stroke="#0f172a" stroke-width="0.5" transform="rotate(-8 62 40)"/>
+                    <rect x="43" y="42" width="4" height="5" rx="1" fill="url(#chromeGradEn)"/>
+                    <ellipse cx="45" cy="41" rx="4" ry="1.5" fill="#1e293b" stroke="#0f172a" stroke-width="0.5" transform="rotate(-6 45 41)"/>
                     <!-- Spun Cymbal Disc -->
-                    <ellipse cx="62" cy="40" rx="34" ry="8.5" fill="url(#cymbalLatheGradEn)" stroke="url(#cymbalRimGradEn)" stroke-width="1.8" transform="rotate(-8 62 40)"/>
-                    <ellipse cx="62" cy="40" rx="33" ry="8" fill="none" stroke="#fffbeb" stroke-width="0.8" opacity="0.6" stroke-dasharray="14 36" transform="rotate(-8 62 40)"/>
-                    <!-- Concentric Lathe Grooves -->
-                    <ellipse cx="62" cy="40" rx="27" ry="6.8" fill="none" stroke="#fef08a" stroke-width="0.5" opacity="0.45" transform="rotate(-8 62 40)"/>
-                    <ellipse cx="62" cy="40" rx="20" ry="5" fill="none" stroke="#f59e0b" stroke-width="0.5" opacity="0.55" transform="rotate(-8 62 40)"/>
-                    <ellipse cx="62" cy="40" rx="13" ry="3.3" fill="none" stroke="#fef08a" stroke-width="0.5" opacity="0.5" transform="rotate(-8 62 40)"/>
+                    <ellipse cx="45" cy="40" rx="30" ry="7.5" fill="url(#cymbalLatheGradEn)" stroke="url(#cymbalRimGradEn)" stroke-width="1.8" transform="rotate(-6 45 40)"/>
+                    <ellipse cx="45" cy="40" rx="29" ry="7.2" fill="none" stroke="#fffbeb" stroke-width="0.8" opacity="0.6" stroke-dasharray="14 30" transform="rotate(-6 45 40)"/>
+                    <!-- Lathe Grooves -->
+                    <ellipse cx="45" cy="40" rx="23" ry="5.8" fill="none" stroke="#fef08a" stroke-width="0.5" opacity="0.5" transform="rotate(-6 45 40)"/>
+                    <ellipse cx="45" cy="40" rx="16" ry="4.0" fill="none" stroke="#f59e0b" stroke-width="0.5" opacity="0.55" transform="rotate(-6 45 40)"/>
+                    <ellipse cx="45" cy="40" rx="10" ry="2.6" fill="none" stroke="#fef08a" stroke-width="0.5" opacity="0.5" transform="rotate(-6 45 40)"/>
                     <!-- Center Raised Bell Cup -->
-                    <ellipse cx="62" cy="40" rx="7.5" ry="2.6" fill="url(#saxGoldGradEn)" stroke="#fef08a" stroke-width="0.8" transform="rotate(-8 62 40)"/>
+                    <ellipse cx="45" cy="40" rx="6" ry="2.2" fill="url(#saxGoldGradEn)" stroke="#fef08a" stroke-width="0.7" transform="rotate(-6 45 40)"/>
                     <!-- Top Felt & Brass T-Wingnut -->
-                    <ellipse cx="62" cy="38.5" rx="3" ry="1.2" fill="#334155" transform="rotate(-8 62 38.5)"/>
-                    <path d="M 59 36 Q 62 34 65 36 L 63.5 38 L 60.5 38 Z" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5" transform="rotate(-8 62 37)"/>
+                    <ellipse cx="45" cy="38.8" rx="2.8" ry="1.1" fill="#334155" transform="rotate(-6 45 38.8)"/>
+                    <path d="M 42 36.5 Q 45 34.5 48 36.5 L 46.5 38.5 L 43.5 38.5 Z" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5" transform="rotate(-6 45 37)"/>
                   </g>
 
-                  <!-- 20" Jazz Bass Kick Drum with Pulsing Beat & EZRA Crest -->
+                  <!-- 20" Jazz Bass Kick Drum with Pulsing Beat & EZRA Monogram Crest -->
                   <g class="anim-drum-beat">
-                    <!-- Outer Walnut Shell & Hoops -->
-                    <circle cx="78" cy="144" r="41" fill="url(#drumShellGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="2.4"/>
-                    <circle cx="78" cy="144" r="39" fill="none" stroke="#2e1003" stroke-width="2.8"/>
-                    <circle cx="78" cy="144" r="39" fill="none" stroke="url(#saxGoldGradEn)" stroke-width="0.8"/>
+                    <!-- Outer Walnut Shell & Counterhoop -->
+                    <circle cx="92" cy="150" r="35" fill="url(#drumShellGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="2.2"/>
+                    <circle cx="92" cy="150" r="33.2" fill="none" stroke="#2e1003" stroke-width="2.4"/>
+                    <circle cx="92" cy="150" r="33.2" fill="none" stroke="url(#saxGoldGradEn)" stroke-width="0.7"/>
                     <!-- Ebony Front Head -->
-                    <circle cx="78" cy="144" r="37.5" fill="url(#kickHeadGradEn)" stroke="#78350f" stroke-width="1"/>
-                    <!-- Mic Port Hole with Chrome Reinforcement -->
-                    <circle cx="97" cy="158" r="9" fill="#080402" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="97" cy="158" r="8.2" fill="none" stroke="#fffbeb" stroke-width="0.6" opacity="0.65"/>
+                    <circle cx="92" cy="150" r="32" fill="url(#kickHeadGradEn)" stroke="#78350f" stroke-width="0.8"/>
+                    <!-- Mic Port Hole with Chrome Reinforcement Bezel -->
+                    <circle cx="108" cy="162" r="7.5" fill="#080402" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="108" cy="162" r="6.8" fill="none" stroke="#fffbeb" stroke-width="0.5" opacity="0.6"/>
                     <!-- 8 Vintage T-Rod Tension Claws -->
-                    <circle cx="78" cy="105" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="105.5" cy="116.5" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="117" cy="144" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="105.5" cy="171.5" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="78" cy="183" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="50.5" cy="171.5" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="39" cy="144" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="50.5" cy="116.5" r="1.8" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <!-- Center EZRA Speakeasy Gold Foil Crest -->
-                    <circle cx="73" cy="136" r="14.5" fill="none" stroke="url(#saxGoldGradEn)" stroke-width="1" stroke-dasharray="2.5 1.5"/>
-                    <circle cx="73" cy="136" r="12" fill="none" stroke="#fef08a" stroke-width="0.6"/>
-                    <polygon points="73,125 73.8,127 76,127 74.2,128.2 74.8,130.2 73,129 71.2,130.2 71.8,128.2 70,127 72.2,127" fill="#fef08a"/>
-                    <text x="73" y="139" fill="url(#saxGoldGradEn)" font-size="8" font-weight="900" font-family="'Cinzel', serif, 'Arial'" text-anchor="middle" letter-spacing="1.8">EZRA</text>
-                    <text x="73" y="144" fill="#fef08a" font-size="2.6" font-weight="700" font-family="sans-serif" text-anchor="middle" letter-spacing="0.8">SPEAKEASY</text>
+                    <circle cx="92" cy="116.8" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="115.5" cy="126.5" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="125.2" cy="150" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="115.5" cy="173.5" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="92" cy="183.2" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="68.5" cy="173.5" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="58.8" cy="150" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="68.5" cy="126.5" r="1.6" fill="url(#chromeGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <!-- Center EZRA Gold Foil Speakeasy Crest -->
+                    <circle cx="88" cy="144" r="12" fill="none" stroke="url(#saxGoldGradEn)" stroke-width="0.9" stroke-dasharray="2 1.2"/>
+                    <circle cx="88" cy="144" r="10" fill="none" stroke="#fef08a" stroke-width="0.5"/>
+                    <polygon points="88,135 88.7,136.6 90.5,136.6 89,137.6 89.5,139.3 88,138.3 86.5,139.3 87,137.6 85.5,136.6 87.3,136.6" fill="#fef08a"/>
+                    <text x="88" y="147" fill="url(#saxGoldGradEn)" font-size="6.8" font-weight="900" font-family="'Cinzel', serif, 'Arial'" text-anchor="middle" letter-spacing="1.5">EZRA</text>
+                    <text x="88" y="151.2" fill="#fef08a" font-size="2.2" font-weight="700" font-family="sans-serif" text-anchor="middle" letter-spacing="0.6">SPEAKEASY</text>
                     <!-- Heavy-Duty Bass Drum Spur Legs -->
-                    <line x1="44" y1="155" x2="24" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.6" stroke-linecap="round"/>
-                    <rect x="21" y="193" width="6" height="3.5" rx="1" fill="#0f172a"/>
-                    <line x1="112" y1="155" x2="124" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.6" stroke-linecap="round"/>
-                    <rect x="121" y="193" width="6" height="3.5" rx="1" fill="#0f172a"/>
-                    <!-- Kick Pedal Linkage -->
-                    <line x1="78" y1="185" x2="78" y2="196" stroke="url(#chromeGradEn)" stroke-width="2"/>
-                    <rect x="74" y="193" width="8" height="3" rx="0.5" fill="url(#chromeGradEn)"/>
+                    <line x1="64" y1="160" x2="48" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.4" stroke-linecap="round"/>
+                    <rect x="45.5" y="193.5" width="5" height="3" rx="1" fill="#0f172a"/>
+                    <line x1="120" y1="160" x2="128" y2="196" stroke="url(#chromeGradEn)" stroke-width="2.4" stroke-linecap="round"/>
+                    <rect x="125.5" y="193.5" width="5" height="3" rx="1" fill="#0f172a"/>
+                    <!-- Kick Pedal -->
+                    <line x1="92" y1="184" x2="92" y2="196" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
+                    <rect x="88" y="193" width="8" height="3" rx="0.5" fill="url(#chromeGradEn)"/>
+                  </g>
+
+                  <!-- 10" Mounted Rack Tom Drum on Bass Drum Post -->
+                  <g id="rackTomGroupEn">
+                    <!-- Chrome Mounting Post & Brackets -->
+                    <path d="M 90 116 L 86 102 L 76 92" stroke="url(#chromeGradEn)" stroke-width="2" fill="none" stroke-linejoin="round"/>
+                    <rect x="84" y="100.5" width="4" height="3" rx="0.5" fill="url(#chromeGradEn)" stroke="#475569" stroke-width="0.4"/>
+                    <rect x="74" y="90" width="4" height="4" rx="0.5" fill="url(#chromeGradEn)"/>
+                    <!-- Shell Body -->
+                    <path d="M 63 76 L 63 88 Q 76 95 89 88 L 89 76 Q 76 83 63 76 Z" fill="url(#drumShellGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="0.9"/>
+                    <!-- Bottom Chrome Hoop -->
+                    <ellipse cx="76" cy="88" rx="13" ry="3.8" fill="none" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
+                    <!-- Chrome Mini Lugs -->
+                    <line x1="67" y1="77" x2="67" y2="87" stroke="url(#chromeGradEn)" stroke-width="1.2"/>
+                    <circle cx="67" cy="82" r="1.1" fill="url(#chromeGradEn)"/>
+                    <line x1="76" y1="79" x2="76" y2="89" stroke="url(#chromeGradEn)" stroke-width="1.2"/>
+                    <circle cx="76" cy="84" r="1.1" fill="url(#chromeGradEn)"/>
+                    <line x1="85" y1="77" x2="85" y2="87" stroke="url(#chromeGradEn)" stroke-width="1.2"/>
+                    <circle cx="85" cy="82" r="1.1" fill="url(#chromeGradEn)"/>
+                    <!-- Top Counterhoop & Batter Head -->
+                    <ellipse cx="76" cy="75" rx="13" ry="4" fill="none" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
+                    <ellipse cx="76" cy="75" rx="12.2" ry="3.6" fill="url(#snareHeadGradEn)" stroke="#cbd5e1" stroke-width="0.6"/>
+                    <ellipse cx="76" cy="75" rx="9.5" ry="2.6" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.65"/>
                   </g>
 
                   <!-- 14" Vintage Snare Drum on Basket Tripod Stand -->
                   <g id="snareAssemblyEn">
-                    <!-- Basket Stand Column & Legs -->
-                    <line x1="42" y1="154" x2="42" y2="176" stroke="url(#chromeGradEn)" stroke-width="2.2"/>
-                    <line x1="42" y1="176" x2="20" y2="196" stroke="url(#chromeGradEn)" stroke-width="1.8" stroke-linecap="round"/>
-                    <line x1="42" y1="176" x2="64" y2="196" stroke="url(#chromeGradEn)" stroke-width="1.8" stroke-linecap="round"/>
-                    <line x1="42" y1="176" x2="42" y2="194" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <path d="M 29 188 L 42 181 L 55 188" stroke="url(#chromeGradEn)" stroke-width="1" fill="none"/>
-                    <rect x="18" y="194" width="4.5" height="2.5" rx="0.8" fill="#0f172a"/>
-                    <rect x="61.5" y="194" width="4.5" height="2.5" rx="0.8" fill="#0f172a"/>
-                    <!-- Basket Arms with Rubber Grip Tips -->
-                    <path d="M 42 154 L 24 148 L 23 143" stroke="url(#chromeGradEn)" stroke-width="1.8" fill="none"/>
-                    <path d="M 42 154 L 60 148 L 61 143" stroke="url(#chromeGradEn)" stroke-width="1.8" fill="none"/>
-                    <rect x="21" y="141" width="3.5" height="3" rx="0.8" fill="#0f172a"/>
-                    <rect x="59.5" y="141" width="3.5" height="3" rx="0.8" fill="#0f172a"/>
-                    <!-- Snare Drum Body & Shell -->
-                    <ellipse cx="42" cy="144" rx="19.5" ry="5.5" fill="none" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
-                    <path d="M 22.5 125 L 22.5 144 Q 42 153 61.5 144 L 61.5 125 Q 42 134 22.5 125 Z" fill="url(#drumShellGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1"/>
+                    <!-- Basket Stand Column & Tripod Legs -->
+                    <line x1="35" y1="154" x2="35" y2="174" stroke="url(#chromeGradEn)" stroke-width="2.2"/>
+                    <line x1="35" y1="174" x2="16" y2="196" stroke="url(#chromeGradEn)" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="35" y1="174" x2="52" y2="196" stroke="url(#chromeGradEn)" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="35" y1="174" x2="35" y2="195" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
+                    <path d="M 24 186 L 35 179 L 46 186" stroke="url(#chromeGradEn)" stroke-width="1" fill="none"/>
+                    <rect x="14" y="194" width="4.5" height="2.5" rx="0.8" fill="#0f172a"/>
+                    <rect x="50" y="194" width="4.5" height="2.5" rx="0.8" fill="#0f172a"/>
+                    <!-- Basket Arms & Rubber Grip Pads -->
+                    <rect x="33" y="152" width="4" height="4" rx="0.5" fill="url(#chromeGradEn)"/>
+                    <path d="M 35 154 L 18 147 L 17 141" stroke="url(#chromeGradEn)" stroke-width="1.8" fill="none"/>
+                    <path d="M 35 154 L 52 147 L 53 141" stroke="url(#chromeGradEn)" stroke-width="1.8" fill="none"/>
+                    <rect x="15" y="139" width="3.5" height="3" rx="0.8" fill="#0f172a"/>
+                    <rect x="51.5" y="139" width="3.5" height="3" rx="0.8" fill="#0f172a"/>
+                    <!-- Snare Body & Shell -->
+                    <ellipse cx="35" cy="144" rx="18" ry="5.2" fill="none" stroke="url(#chromeGradEn)" stroke-width="1.8"/>
+                    <path d="M 17 126 L 17 144 Q 35 152 53 144 L 53 126 Q 35 134 17 126 Z" fill="url(#drumShellGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1"/>
                     <!-- Chrome Lugs & Tension Rods -->
-                    <line x1="27" y1="125" x2="27" y2="144" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="27" cy="134.5" r="1.3" fill="url(#chromeGradEn)"/>
-                    <line x1="34" y1="127" x2="34" y2="146" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="34" cy="136.5" r="1.3" fill="url(#chromeGradEn)"/>
-                    <line x1="42" y1="128" x2="42" y2="147" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="42" cy="137.5" r="1.3" fill="url(#chromeGradEn)"/>
-                    <line x1="50" y1="127" x2="50" y2="146" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="50" cy="136.5" r="1.3" fill="url(#chromeGradEn)"/>
-                    <line x1="57" y1="125" x2="57" y2="144" stroke="url(#chromeGradEn)" stroke-width="1.4"/>
-                    <circle cx="57" cy="134.5" r="1.3" fill="url(#chromeGradEn)"/>
+                    <line x1="22" y1="126" x2="22" y2="144" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="22" cy="135" r="1.2" fill="url(#chromeGradEn)"/>
+                    <line x1="28.5" y1="128" x2="28.5" y2="146" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="28.5" cy="137" r="1.2" fill="url(#chromeGradEn)"/>
+                    <line x1="35" y1="129" x2="35" y2="147" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="35" cy="138" r="1.2" fill="url(#chromeGradEn)"/>
+                    <line x1="41.5" y1="128" x2="41.5" y2="146" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="41.5" cy="137" r="1.2" fill="url(#chromeGradEn)"/>
+                    <line x1="48" y1="126" x2="48" y2="144" stroke="url(#chromeGradEn)" stroke-width="1.3"/>
+                    <circle cx="48" cy="135" r="1.2" fill="url(#chromeGradEn)"/>
                     <!-- Throw-off Strainer Lever -->
-                    <rect x="20" y="130" width="2.5" height="6" rx="0.5" fill="url(#chromeGradEn)"/>
-                    <line x1="21" y1="130" x2="19" y2="126" stroke="#fffbeb" stroke-width="1.2"/>
-                    <!-- Top Counterhoop & Coated Batter Head -->
-                    <ellipse cx="42" cy="125" rx="19.5" ry="6" fill="none" stroke="url(#chromeGradEn)" stroke-width="2"/>
-                    <ellipse cx="42" cy="125" rx="18.5" ry="5.5" fill="url(#snareHeadGradEn)" stroke="#cbd5e1" stroke-width="0.8"/>
-                    <ellipse cx="42" cy="125" rx="15" ry="4.2" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.6"/>
+                    <rect x="14.5" y="131" width="2.5" height="5.5" rx="0.5" fill="url(#chromeGradEn)"/>
+                    <line x1="15.5" y1="131" x2="13.5" y2="127" stroke="#fffbeb" stroke-width="1.2"/>
+                    <!-- Top Counterhoop & Batter Head -->
+                    <ellipse cx="35" cy="126" rx="18" ry="5.5" fill="none" stroke="url(#chromeGradEn)" stroke-width="2"/>
+                    <ellipse cx="35" cy="126" rx="17" ry="5.0" fill="url(#snareHeadGradEn)" stroke="#cbd5e1" stroke-width="0.8"/>
+                    <ellipse cx="35" cy="126" rx="13.5" ry="3.8" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.6"/>
                   </g>
 
                   <!-- Crossed Hickory Drumsticks with Sculpted Tips -->
                   <g id="drumsticksEn">
                     <!-- Stick 1 (Left-top to Right-bottom) -->
-                    <line x1="19" y1="118" x2="55" y2="137" stroke="#000000" stroke-width="1.4" opacity="0.35" stroke-linecap="round"/>
-                    <line x1="18" y1="115.5" x2="56" y2="135" stroke="#fed7aa" stroke-width="1.8" stroke-linecap="round"/>
-                    <ellipse cx="17" cy="115" rx="1.6" ry="1.1" fill="#fed7aa" transform="rotate(27 17 115)"/>
+                    <line x1="14" y1="119" x2="48" y2="138" stroke="#000000" stroke-width="1.4" opacity="0.35" stroke-linecap="round"/>
+                    <line x1="13" y1="116.5" x2="49" y2="136" stroke="#fed7aa" stroke-width="1.8" stroke-linecap="round"/>
+                    <ellipse cx="12" cy="116" rx="1.6" ry="1.1" fill="#fed7aa" transform="rotate(27 12 116)"/>
                     <!-- Stick 2 (Right-top to Left-bottom) -->
-                    <line x1="56" y1="117" x2="22" y2="138" stroke="#000000" stroke-width="1.4" opacity="0.35" stroke-linecap="round"/>
-                    <line x1="57" y1="115" x2="20" y2="136" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round"/>
-                    <ellipse cx="57" cy="115" rx="1.6" ry="1.1" fill="#fed7aa" transform="rotate(-27 57 115)"/>
+                    <line x1="49" y1="118" x2="17" y2="139" stroke="#000000" stroke-width="1.4" opacity="0.35" stroke-linecap="round"/>
+                    <line x1="50" y1="116" x2="15" y2="137" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round"/>
+                    <ellipse cx="50" cy="116" rx="1.6" ry="1.1" fill="#fed7aa" transform="rotate(-27 50 116)"/>
                   </g>
                 </g>
 
                 <!-- ============================================================
-                     INSTRUMENT 2 (CENTER: x=132 to 220): Sunburst Acoustic Guitar
+                     INSTRUMENT 2 (CENTER: x=134 to 220): Sunburst Acoustic Guitar
                      ============================================================ -->
                 <g id="guitarGroupEn" class="anim-guitar-body">
                   <!-- Dreadnought Acoustic Body -->
@@ -4521,74 +4542,100 @@
                 </g>
 
                 <!-- ============================================================
-                     INSTRUMENT 3 (RIGHT: x=252 to 345): Magnificent Gold Alto Sax
+                     INSTRUMENT 3 (RIGHT: x=247 to 344): Authentic Master Alto Saxophone
                      ============================================================ -->
                 <g id="saxGroupEn" class="anim-sax-sway">
-                  <!-- Mouthpiece, Cork & Gooseneck (Crook) -->
+                  <!-- Mouthpiece, Cork & Arched Gooseneck (Neck / Crook) -->
                   <g id="saxNeckEn">
-                    <path d="M 268 28 Q 274 26 279 29 L 278 35 L 270 34 Z" fill="#140e08" stroke="#fef08a" stroke-width="0.8"/>
-                    <rect x="272" y="29.5" width="4.5" height="5" rx="0.5" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <circle cx="274.2" cy="29" r="1" fill="#fffbeb"/>
-                    <rect x="276" y="31" width="4.5" height="4.5" rx="0.6" fill="url(#corkGradEn)" stroke="#78350f" stroke-width="0.5"/>
-                    <!-- Arched Gooseneck -->
-                    <path d="M 280 32 Q 266 30 260 46 Q 257 58 262 70 L 268 70 Q 263 56 266 46 Q 270 36 281 35 Z" fill="url(#saxGoldGradEn)" stroke="#fef08a" stroke-width="0.7"/>
-                    <path d="M 278 33.5 Q 267 33 263 46 Q 260 56 264 68" fill="none" stroke="#fffbeb" stroke-width="0.9" opacity="0.8"/>
-                    <!-- Octave Key Mechanism -->
-                    <path d="M 278 31 Q 264 28 259 44" fill="none" stroke="#fffbeb" stroke-width="1.1"/>
-                    <circle cx="277" cy="30" r="1.4" fill="url(#saxGoldGradEn)"/>
-                    <circle cx="264" cy="70" r="1.8" fill="url(#saxGoldGradEn)"/>
+                    <!-- Black Ebonite Mouthpiece -->
+                    <path d="M 260 25 L 248 29 Q 246 31 249 33 L 261 31 Z" fill="#140e08" stroke="#fef08a" stroke-width="0.7"/>
+                    <!-- Gold Ligature & Screws -->
+                    <rect x="254" y="26" width="4.5" height="5.5" rx="0.5" transform="rotate(-20 256 29)" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <circle cx="255" cy="27" r="0.9" fill="#fffbeb"/>
+                    <!-- Natural Cork Ring -->
+                    <rect x="258" y="25" width="6" height="5" rx="0.6" transform="rotate(-20 261 27.5)" fill="url(#corkGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- Smooth Arched Brass Gooseneck Tube -->
+                    <path d="M 268 62 C 269 44 277 28 263 31 L 265 25 C 283 24 277 44 276 62 Z" fill="url(#saxGoldGradEn)" stroke="#fef08a" stroke-width="0.7"/>
+                    <path d="M 270 58 C 271 42 278 28 265 29" fill="none" stroke="#fffbeb" stroke-width="0.9" opacity="0.85"/>
+                    <!-- Octave Key Lever & Pad Cup -->
+                    <path d="M 276 56 Q 284 38 276 25 Q 270 24 266 27" fill="none" stroke="#fffbeb" stroke-width="1"/>
+                    <circle cx="266" cy="27" r="1.3" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.4"/>
+                    <circle cx="278" cy="48" r="1.3" fill="url(#saxGoldGradEn)"/>
+                    <circle cx="266" cy="62" r="1.5" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.4"/>
                   </g>
 
-                  <!-- Conical Body Tube with 3D Specular Highlight -->
+                  <!-- Straight Conical Body Tube with 3D Specular Highlight -->
                   <g id="saxBodyEn">
-                    <path d="M 264 70 L 257 154 Q 265 156.5 273 154 L 270 70 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
-                    <line x1="267" y1="71" x2="265" y2="153" stroke="#fffbeb" stroke-width="1.4" opacity="0.8"/>
-                    <!-- Keywork Rods & Posts -->
-                    <line x1="259" y1="76" x2="253" y2="150" stroke="url(#saxGoldGradEn)" stroke-width="1.4"/>
-                    <line x1="271" y1="76" x2="275" y2="150" stroke="url(#saxGoldGradEn)" stroke-width="1.4"/>
-                    <!-- 6 Iridescent Mother-of-Pearl Touch Keys -->
-                    <circle cx="266" cy="82" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="265" cy="81" r="1" fill="#ffffff"/>
-                    <circle cx="265" cy="94" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="264" cy="93" r="1" fill="#ffffff"/>
-                    <circle cx="264" cy="106" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="263" cy="105" r="1" fill="#ffffff"/>
-                    <circle cx="263" cy="120" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="262" cy="119" r="1" fill="#ffffff"/>
-                    <circle cx="262" cy="132" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="261" cy="131" r="1" fill="#ffffff"/>
-                    <circle cx="261" cy="144" r="3.2" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <circle cx="260" cy="143" r="1" fill="#ffffff"/>
-                    <!-- Spatula Cluster -->
-                    <rect x="252" y="143" width="4" height="6" rx="1" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- Top Tenon Receiver Collar -->
+                    <rect x="266" y="61" width="12" height="3" rx="0.8" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- Sleek Conical Body Tube -->
+                    <path d="M 267 62 L 263 156 Q 272 158.5 281 156 L 277 62 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
+                    <!-- 3D Specular Mirror Highlight -->
+                    <line x1="272" y1="63" x2="271" y2="155" stroke="#fffbeb" stroke-width="1.4" opacity="0.85"/>
+                    <!-- Keywork Rods & Long Hinge Posts -->
+                    <line x1="264.5" y1="68" x2="260.5" y2="152" stroke="url(#saxGoldGradEn)" stroke-width="1.3"/>
+                    <line x1="278.5" y1="68" x2="282.5" y2="152" stroke="url(#saxGoldGradEn)" stroke-width="1.3"/>
+                    <!-- Palm Key Cluster (Upper Left) -->
+                    <path d="M 264 70 Q 259 72 260 76 Q 265 74 265 70 Z" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <path d="M 263 77 Q 258 79 259 83 Q 264 81 264 77 Z" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- Side Chromatic Keys (Upper Right) -->
+                    <rect x="279" y="88" width="3.5" height="5" rx="1" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <rect x="280" y="96" width="3.5" height="5" rx="1" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- 6 Iridescent Mother-of-Pearl Touch Keys (Left Hand Stack & Right Hand Stack) -->
+                    <circle cx="271" cy="74" r="3" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="270" cy="73" r="0.9" fill="#ffffff"/>
+                    <circle cx="270.5" cy="86" r="3" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="269.5" cy="85" r="0.9" fill="#ffffff"/>
+                    <circle cx="270" cy="98" r="3" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="269" cy="97" r="0.9" fill="#ffffff"/>
+                    <circle cx="269.5" cy="115" r="3.1" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="268.5" cy="114" r="0.9" fill="#ffffff"/>
+                    <circle cx="269" cy="128" r="3.1" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="268" cy="127" r="0.9" fill="#ffffff"/>
+                    <circle cx="268.5" cy="141" r="3.1" fill="url(#pearlTouchGradEn)" stroke="#78350f" stroke-width="0.7"/>
+                    <circle cx="267.5" cy="140" r="0.9" fill="#ffffff"/>
+                    <!-- Low Eb / C Pinky Spatula Table (Lower Left) -->
+                    <rect x="256" y="142" width="5" height="7" rx="1.2" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.6"/>
+                    <line x1="256" y1="145.5" x2="261" y2="145.5" stroke="#78350f" stroke-width="0.5"/>
                   </g>
 
-                  <!-- Lower Curved U-Bow (Elbow) with Cast Bow Guard -->
+                  <!-- Smooth U-Bow (Elbow) with Cast Protective Guard Ribbon -->
                   <g id="saxBowEn">
-                    <path d="M 257 154 C 251 195 298 198 306 158 L 294 156 C 288 184 268 182 273 154 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
-                    <path d="M 264 162 C 260 188 290 190 299 164" fill="none" stroke="#fffbeb" stroke-width="1" opacity="0.75"/>
-                    <path d="M 258 172 C 262 192 290 194 298 174" stroke="url(#saxGoldGradEn)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-                    <path d="M 259 172 C 263 191 289 193 297 174" stroke="#fffbeb" stroke-width="1" fill="none"/>
+                    <rect x="261" y="154" width="22" height="3" rx="0.8" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <path d="M 263 156 C 260 182 308 184 310 156 L 292 156 C 290 171 282 171 281 156 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
+                    <path d="M 269 160 C 267 178 300 179 303 160" fill="none" stroke="#fffbeb" stroke-width="1" opacity="0.8"/>
+                    <!-- Heavy Cast Bow Guard Ribbon Strip -->
+                    <path d="M 263 170 C 265 186 304 187 308 170" stroke="url(#saxGoldGradEn)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+                    <path d="M 264 170 C 266 185 303 186 307 170" stroke="#fffbeb" stroke-width="0.9" fill="none"/>
                   </g>
 
-                  <!-- Sweeping Flared Bell Horn with Hand-Engraved Scrollwork -->
+                  <!-- Flared Bell Horn with Engravings, Key Guards & Rolled Rim -->
                   <g id="saxBellEn">
-                    <path d="M 294 156 L 303 114 Q 308 94 321 84 L 336 93 Q 320 108 306 158 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
-                    <!-- Low B & Bb Key Guards -->
-                    <circle cx="299" cy="134" r="5.5" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <line x1="293" y1="134" x2="305" y2="134" stroke="#fffbeb" stroke-width="1"/>
-                    <circle cx="303" cy="148" r="6" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.8"/>
-                    <line x1="297" y1="148" x2="309" y2="148" stroke="#fffbeb" stroke-width="1"/>
-                    <!-- Vintage Hand-Engraved Floral Swirls -->
-                    <path d="M 306 142 Q 314 132 310 122 Q 306 112 316 104" fill="none" stroke="#fef08a" stroke-width="0.75" opacity="0.85"/>
-                    <path d="M 310 122 Q 318 124 316 132 Q 314 140 322 144" fill="none" stroke="#fffbeb" stroke-width="0.7" opacity="0.85"/>
-                    <path d="M 312 110 Q 318 106 322 112 Q 320 120 314 120" fill="none" stroke="#fef08a" stroke-width="0.65" opacity="0.85"/>
-                    <polygon points="314,103 315,105 317,105 315.5,106.5 316,108.5 314,107 312,108.5 312.5,106.5 311,105 313,105" fill="#fffbeb" opacity="0.9"/>
-                    <!-- Front-Facing Oval Horn Bell Opening -->
-                    <ellipse cx="328" cy="87" rx="19.5" ry="11" fill="url(#saxBellInnerGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="2.6" transform="rotate(-24 328 87)"/>
-                    <ellipse cx="328" cy="87" rx="19" ry="10.5" fill="none" stroke="#fffbeb" stroke-width="1.2" stroke-dasharray="28 32" transform="rotate(-24 328 87)"/>
-                    <ellipse cx="328" cy="87" rx="14" ry="7.5" fill="#080402" transform="rotate(-24 328 87)"/>
-                    <ellipse cx="330" cy="88" rx="10" ry="4.5" fill="url(#saxGoldGradEn)" opacity="0.5" transform="rotate(-24 328 87)"/>
+                    <!-- Bell Body Flare -->
+                    <path d="M 292 156 C 295 125 303 98 312 85 L 342 88 C 338 106 325 130 310 156 Z" fill="url(#saxBodyGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="1.2"/>
+                    <path d="M 302 150 C 308 122 316 102 322 88" fill="none" stroke="#fffbeb" stroke-width="1.4" opacity="0.85"/>
+                    <!-- Bell-to-Body Stabilizer Ring Brace -->
+                    <line x1="280" y1="114" x2="298" y2="114" stroke="url(#saxGoldGradEn)" stroke-width="2.5"/>
+                    <circle cx="280" cy="114" r="1.8" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <circle cx="298" cy="114" r="1.8" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.5"/>
+                    <!-- Low B & Low Bb Key Tone Hole Cups & Wire Guards -->
+                    <circle cx="304" cy="130" r="5.5" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.8"/>
+                    <path d="M 297 128 Q 304 125 311 128 L 311 132 Q 304 135 297 132 Z" fill="none" stroke="#fffbeb" stroke-width="1"/>
+                    <circle cx="310" cy="130" r="1.1" fill="#ef4444"/>
+                    <circle cx="307" cy="145" r="5.8" fill="url(#saxGoldGradEn)" stroke="#78350f" stroke-width="0.8"/>
+                    <path d="M 300 143 Q 307 140 314 143 L 314 147 Q 307 150 300 147 Z" fill="none" stroke="#fffbeb" stroke-width="1"/>
+                    <circle cx="313" cy="145" r="1.1" fill="#ef4444"/>
+                    <!-- Vintage Floral Hand-Engraved Scrollwork -->
+                    <path d="M 312 136 Q 320 126 316 116 Q 312 106 322 98" fill="none" stroke="#fef08a" stroke-width="0.75" opacity="0.85"/>
+                    <path d="M 316 116 Q 324 118 322 126 Q 320 134 328 138" fill="none" stroke="#fffbeb" stroke-width="0.7" opacity="0.85"/>
+                    <path d="M 318 104 Q 324 100 328 106 Q 326 114 320 114" fill="none" stroke="#fef08a" stroke-width="0.65" opacity="0.85"/>
+                    <polygon points="322,96 323,98 325,98 323.5,99.5 324,101.5 322,100 320,101.5 320.5,99.5 319,98 321,98" fill="#fffbeb" opacity="0.9"/>
+                    <polygon points="328,122 328.8,123.5 330.5,123.5 329.2,124.7 329.7,126.2 328,125.2 326.3,126.2 326.8,124.7 325.5,123.5 327.2,123.5" fill="#fef08a" opacity="0.85"/>
+                    <!-- Forward-Facing Oval Bell Opening & Rolled Lip Bead -->
+                    <ellipse cx="327" cy="86" rx="16" ry="7.5" fill="url(#saxBellInnerGradEn)" stroke="url(#saxGoldGradEn)" stroke-width="2.6" transform="rotate(-12 327 86)"/>
+                    <ellipse cx="327" cy="86" rx="15.5" ry="7" fill="none" stroke="#fffbeb" stroke-width="1.2" stroke-dasharray="24 28" transform="rotate(-12 327 86)"/>
+                    <ellipse cx="327" cy="86" rx="11" ry="5" fill="#080402" transform="rotate(-12 327 86)"/>
+                    <ellipse cx="328" cy="87" rx="7.5" ry="3" fill="url(#saxGoldGradEn)" opacity="0.5" transform="rotate(-12 327 86)"/>
                   </g>
                 </g>
 
@@ -5263,10 +5310,16 @@
                 <path d="M84 158 L 86 182"/>
                 <path d="M64 182 L 64 186 L 54 186"/>
                 <path d="M86 182 L 86 186 L 96 186"/>
-                <path class="anim-pizza-arm-l" d="M64 111 C 54 101 48 87 48 73"/>
-                <path class="anim-pizza-arm-r" d="M86 111 C 96 101 102 87 102 73"/>
-                <circle cx="48" cy="68" r="4"/>
-                <circle cx="102" cy="68" r="4"/>
+                <!-- Left Arm & Hand moving together as a unit -->
+                <g class="anim-pizza-arm-l" style="transform-origin: 64px 111px;">
+                  <path d="M64 111 C 54 101 48 87 48 73"/>
+                  <circle cx="48" cy="69" r="4"/>
+                </g>
+                <!-- Right Arm & Hand moving together as a unit -->
+                <g class="anim-pizza-arm-r" style="transform-origin: 86px 111px;">
+                  <path d="M86 111 C 96 101 102 87 102 73"/>
+                  <circle cx="102" cy="69" r="4"/>
+                </g>
               </g>
             </svg>
           </div>
