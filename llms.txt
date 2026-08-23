@@ -26,6 +26,9 @@ Ezra TLV is a private bar that opens only for your group that night. It is not a
 - [אירוע עד 50 איש בתל אביב (events-up-to-50)](https://ezratlv.com/events-up-to-50): Events up to 50 guests (Hebrew): formats by group size, full exclusivity.
 - [מסיבת סיום הפקה בתל אביב (wrap-party)](https://ezratlv.com/wrap-party): Production wrap party (Hebrew): private venue for wrap parties, up to 50.
 - [מסיבת רווקות בתל אביב (bachelorette-party)](https://ezratlv.com/bachelorette-party): Bachelorette party (Hebrew): the whole venue for one group of friends.
+- [הרמת כוסית והאפי אוור (happy-hour)](https://ezratlv.com/happy-hour): Happy hour / toast (Hebrew): the 3-hour short format, final per-person price.
+- [ימי הולדת (birthdays)](https://ezratlv.com/birthdays): Birthdays (Hebrew): the whole venue for one birthday group, up to 50.
+- [אירוסין ואירועים פרטיים (engagement-private)](https://ezratlv.com/engagement-private): Engagement parties and private events (Hebrew): whole-venue exclusivity, up to 50.
 
 ## Structured data for AI engines
 - [Organization summary (JSON)](https://ezratlv.com/ai/summary.json): entity facts, address, capacity, contact points.
