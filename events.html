@@ -79,6 +79,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
+    /* English on this page renders in Google Sans; Hebrew stays in Heebo.
+       Ordering the family list is not enough: Google Sans ships a Hebrew subset,
+       so listing it first would take the Hebrew too. The face is declared here
+       with the Latin unicode-range only, so Hebrew never matches it and falls
+       through to Heebo on its own. Google serves all four weights from one
+       variable file, so one face covers 400-700. The URL is version-pinned
+       (v70); if Google revises it the face stops matching and Latin falls back
+       to Inter, which is what this page used before. */
+    @font-face {
+      font-family: 'Google Sans';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/googlesans/v70/4UasrENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RPjIUvbQoi-E.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
     /* ============================================================
        DESIGN TOKENS & TEL AVIV NIGHTLIFE AESTHETICS
     ============================================================ */
@@ -114,7 +131,7 @@
          only Latin headings pick up the serif. */
       --font-serif:   'Cormorant Garamond', 'Heebo', serif;
       --font-display: 'Cormorant Garamond', 'Heebo', serif;
-      --font-body:    'Inter', 'Heebo', system-ui, sans-serif;
+      --font-body:    'Google Sans', 'Inter', 'Heebo', system-ui, sans-serif;
       --font-num:     'Pliant', 'Heebo', sans-serif;
 
       --section-pad:      clamp(2.5rem, 6vw, 4.5rem);
