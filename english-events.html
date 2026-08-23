@@ -1490,7 +1490,287 @@
       flex-shrink: 0;
     }
 
-    /* COLLAB */
+    /* ============================================================
+       3B. INTERACTIVE FREE-VIEW MONTHLY CALENDAR (2 SLOTS PER DAY)
+    ============================================================ */
+    .month-cal-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: #120e0a;
+      border: 1px solid var(--line-bright);
+      border-radius: 24px;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      box-shadow: 0 20px 50px -15px rgba(0,0,0,0.85);
+    }
+    .month-cal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-block-end: 1.5rem;
+      padding-block-end: 1.2rem;
+      border-block-end: 1px solid var(--line);
+    }
+    .month-cal-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .month-cal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--cream);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+    .month-cal-btn:hover {
+      background: rgba(196,154,60,0.15);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      transform: scale(1.06);
+    }
+    .month-cal-btn svg { width: 18px; height: 18px; }
+    .month-cal-title {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 800;
+      color: var(--cream);
+      min-width: 180px;
+      text-align: center;
+    }
+    .month-cal-today-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      background: rgba(196,154,60,0.1);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+    .month-cal-today-btn:hover {
+      background: var(--gold);
+      color: #110e0a;
+    }
+    .month-cal-legend {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+    }
+    .month-cal-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+    .month-cal-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .month-cal-legend-dot--free { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+    .month-cal-legend-dot--open { background: #c49a3c; box-shadow: 0 0 6px rgba(196,154,60,0.5); }
+    .month-cal-legend-dot--busy { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+
+    /* Days of Week Header */
+    .month-cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-block-end: 8px;
+      text-align: center;
+    }
+    .month-cal-weekday {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--gold);
+      padding: 0.5rem 0;
+      letter-spacing: 0.05em;
+    }
+
+    /* Grid of Days */
+    .month-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .month-cal-cell {
+      background: #16120c;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 8px;
+      min-height: 135px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.25s var(--ease);
+      position: relative;
+    }
+    .month-cal-cell.is-empty {
+      background: transparent;
+      border-color: transparent;
+      pointer-events: none;
+      min-height: 0;
+    }
+    .month-cal-cell.is-past {
+      opacity: 0.45;
+    }
+    .month-cal-cell.is-today {
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(196,154,60,0.18);
+      background: #1c160e;
+    }
+    .month-cal-cell-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block-end: 4px;
+    }
+    .month-cal-date-num {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--cream);
+    }
+    .month-cal-today-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(196,154,60,0.15);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid rgba(196,154,60,0.4);
+    }
+
+    /* 2 Half-day slots per day */
+    .month-cal-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+    .month-cal-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 6px 7px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      color: var(--cream-dim);
+      font-size: 0.72rem;
+      cursor: pointer;
+      text-align: start;
+      transition: all 0.2s var(--ease);
+      user-select: none;
+      width: 100%;
+    }
+    .month-cal-slot:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .month-cal-slot-time {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--cream-faint);
+    }
+    .month-cal-slot-status {
+      font-weight: 600;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    /* Slot States */
+    .month-cal-slot--free {
+      background: rgba(74,222,128,0.06);
+      border-color: rgba(74,222,128,0.25);
+      color: #86efac;
+    }
+    .month-cal-slot--free:hover {
+      background: rgba(74,222,128,0.12);
+      border-color: rgba(74,222,128,0.5);
+    }
+    .month-cal-slot--free .month-cal-slot-time { color: #86efac; }
+
+    .month-cal-slot--open {
+      background: rgba(196,154,60,0.1);
+      border-color: rgba(196,154,60,0.35);
+      color: var(--gold-light);
+    }
+    .month-cal-slot--open:hover {
+      background: rgba(196,154,60,0.2);
+      border-color: var(--gold);
+    }
+    .month-cal-slot--open .month-cal-slot-time { color: var(--gold); }
+
+    .month-cal-slot--busy {
+      background: rgba(239,68,68,0.06);
+      border-color: rgba(239,68,68,0.25);
+      color: #fca5a5;
+    }
+    .month-cal-slot--busy:hover {
+      background: rgba(239,68,68,0.12);
+      border-color: rgba(239,68,68,0.5);
+    }
+    .month-cal-slot--busy .month-cal-slot-time { color: #fca5a5; }
+
+    @media (max-width: 900px) {
+      .month-cal-grid {
+        grid-template-columns: repeat(7, minmax(110px, 1fr));
+        overflow-x: auto;
+        padding-block-end: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .month-cal-weekdays {
+        grid-template-columns: repeat(7, minmax(110px, 1fr));
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+    @media (max-width: 600px) {
+      .month-cal-container {
+        padding: 1rem 0.8rem;
+      }
+      .month-cal-head {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .month-cal-grid {
+        grid-template-columns: repeat(7, minmax(95px, 1fr));
+      }
+      .month-cal-cell {
+        min-height: 120px;
+        padding: 5px;
+      }
+      .month-cal-slot {
+        padding: 4px 5px;
+        font-size: 0.66rem;
+      }
+    }
+
+    /* COLLAB & CULINARY/BAR ANIMATION STAGE */
     .collab-strip {
       background: linear-gradient(135deg, #1c150e 0%, #100d09 100%);
       border: 1.5px solid var(--gold);
@@ -1504,6 +1784,131 @@
     .collab-strip h3 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-block-end: 0.9rem; }
     .collab-strip p { font-size: 1.02rem; color: var(--cream-dim); max-width: 52ch; margin-inline: auto; margin-block-end: 1.8rem; line-height: 1.7; }
     .collab-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* Chef & Bartender Animation Stage */
+    .collab-art-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.8rem;
+      width: 100%;
+      max-width: 520px;
+      height: 175px;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(196,154,60,0.18) 0%, rgba(20,16,11,0.6) 60%, transparent 80%);
+      border-radius: 20px;
+      border: 1px solid rgba(196,154,60,0.25);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.5);
+      overflow: visible;
+    }
+    .collab-svg-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .collab-svg {
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Chef Pizza Animation */
+    .anim-chef-arms {
+      transform-origin: 120px 115px;
+      animation: chefArmsMove 2.4s ease-in-out infinite;
+    }
+    @keyframes chefArmsMove {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      35%      { transform: translateY(-7px) rotate(-3deg); }
+      70%      { transform: translateY(2px) rotate(2deg); }
+    }
+
+    .anim-pizza-dough {
+      transform-origin: 120px 75px;
+      animation: pizzaTossAndSpin 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    @keyframes pizzaTossAndSpin {
+      0%   { transform: translate(0, 0) scale(0.95) rotate(0deg); opacity: 0.95; }
+      15%  { transform: translate(0, -6px) scale(1.0) rotate(45deg); }
+      45%  { transform: translate(0, -46px) scale(1.18) rotate(190deg); opacity: 1; filter: drop-shadow(0 8px 12px rgba(196,154,60,0.4)); }
+      75%  { transform: translate(0, -12px) scale(1.02) rotate(315deg); }
+      92%  { transform: translate(0, 2px) scale(0.9) rotate(355deg); }
+      100% { transform: translate(0, 0) scale(0.95) rotate(360deg); opacity: 0.95; }
+    }
+
+    .anim-flour-dust {
+      animation: flourPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes flourPulse {
+      0%, 100% { opacity: 0; transform: scale(0.6); }
+      40%, 55% { opacity: 0.8; transform: scale(1.2) translateY(-10px); }
+    }
+
+    .anim-oven-flame {
+      animation: flameFlicker 1.8s ease-in-out infinite alternate;
+      transform-origin: 60px 120px;
+    }
+    @keyframes flameFlicker {
+      0%   { opacity: 0.6; transform: scale(0.95); }
+      100% { opacity: 1.0; transform: scale(1.08); filter: drop-shadow(0 0 8px #f59e0b); }
+    }
+
+    /* Bartender Beer Animation */
+    .anim-tap-handle {
+      transform-origin: 360px 55px;
+      animation: tapPull 3s ease-in-out infinite alternate;
+    }
+    @keyframes tapPull {
+      0%, 20%  { transform: rotate(0deg); }
+      40%, 80% { transform: rotate(8deg); }
+      100%     { transform: rotate(0deg); }
+    }
+
+    .anim-beer-stream {
+      stroke-dasharray: 8 4;
+      animation: beerFlow 0.6s linear infinite;
+    }
+    @keyframes beerFlow {
+      0%   { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 24; }
+    }
+
+    .anim-beer-bubble-1 {
+      animation: bubbleFloat1 1.6s ease-in infinite;
+    }
+    .anim-beer-bubble-2 {
+      animation: bubbleFloat2 2.1s ease-in infinite 0.4s;
+    }
+    .anim-beer-bubble-3 {
+      animation: bubbleFloat3 1.8s ease-in infinite 0.8s;
+    }
+    @keyframes bubbleFloat1 {
+      0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+      40%  { opacity: 0.9; }
+      100% { transform: translateY(-28px) scale(1.2); opacity: 0; }
+    }
+    @keyframes bubbleFloat2 {
+      0%   { transform: translateY(0) scale(0.7); opacity: 0; }
+      50%  { opacity: 0.85; }
+      100% { transform: translateY(-32px) scale(1.1); opacity: 0; }
+    }
+    @keyframes bubbleFloat3 {
+      0%   { transform: translateY(0) scale(0.9); opacity: 0; }
+      40%  { opacity: 0.95; }
+      100% { transform: translateY(-26px) scale(1.3); opacity: 0; }
+    }
+
+    .anim-foam-head {
+      animation: foamBob 2.2s ease-in-out infinite alternate;
+      transform-origin: 380px 105px;
+    }
+    @keyframes foamBob {
+      0%   { transform: scaleY(0.95) scaleX(0.98); }
+      100% { transform: scaleY(1.08) scaleX(1.02); filter: drop-shadow(0 0 5px rgba(255,255,255,0.6)); }
+    }
 
     /* FAQ */
     .faq-list {
@@ -2337,6 +2742,54 @@
     </div>
   </section>
 
+  <!-- ============================================================
+       3B. MONTHLY CALENDAR FREE-VIEW (HALF DAYS: AFTERNOON & EVENING)
+  ============================================================ -->
+  <section class="section-soft" id="calendar-view">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">Interactive Monthly Calendar</span>
+        <h2>Monthly Lineup & Availability</h2>
+        <p>Explore our full schedule by half-days — Afternoon (12:00–18:00) and Evening (18:00–02:00). Click any slot to view lineup details, reserve a table or book an event.</p>
+      </div>
+
+      <div class="month-cal-container">
+        <div class="month-cal-head">
+          <div class="month-cal-nav">
+            <button class="month-cal-btn" id="monthCalPrev" type="button" aria-label="Previous Month">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <h3 class="month-cal-title" id="monthCalTitle">August 2026</h3>
+            <button class="month-cal-btn" id="monthCalNext" type="button" aria-label="Next Month">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button class="month-cal-today-btn" id="monthCalToday" type="button">Today</button>
+          </div>
+
+          <div class="month-cal-legend">
+            <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>☀️ Afternoon Free for Events</span>
+            <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>🌙 Open Public Night</span>
+            <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>🌙 Private Event / Booked</span>
+          </div>
+        </div>
+
+        <div class="month-cal-weekdays">
+          <div class="month-cal-weekday">Sun</div>
+          <div class="month-cal-weekday">Mon</div>
+          <div class="month-cal-weekday">Tue</div>
+          <div class="month-cal-weekday">Wed</div>
+          <div class="month-cal-weekday">Thu</div>
+          <div class="month-cal-weekday">Fri</div>
+          <div class="month-cal-weekday">Sat</div>
+        </div>
+
+        <div class="month-cal-grid" id="monthCalGrid">
+          <!-- Populated dynamically by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 4. SOUND SYSTEM & CULTURE -->
   <section class="section-soft" id="soundsystem">
     <div class="wrap">
@@ -2481,6 +2934,165 @@
   <section class="section-soft" id="collab">
     <div class="wrap">
       <div class="collab-strip">
+        <!-- Animated Chef & Bartender Culinary Stage -->
+        <div class="collab-art-stage">
+          <div class="collab-svg-wrap">
+            <svg class="collab-svg" viewBox="0 0 500 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Gradients -->
+                <linearGradient id="ovenGlowGradEn" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.8"/>
+                  <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#c49a3c" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="doughGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef08a"/>
+                  <stop offset="60%" stop-color="#eab308"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <linearGradient id="beerGradEn" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#fef08a"/>
+                  <stop offset="35%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <linearGradient id="brassTapEn" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef08a"/>
+                  <stop offset="50%" stop-color="#d97706"/>
+                  <stop offset="100%" stop-color="#78350f"/>
+                </linearGradient>
+                <linearGradient id="barWoodEn" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#291e14"/>
+                  <stop offset="50%" stop-color="#453324"/>
+                  <stop offset="100%" stop-color="#1f160e"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Stone Oven & Fire (Chef Background) -->
+              <path d="M 40 150 C 40 70, 150 70, 150 150 Z" fill="#1b1510" stroke="#3d2e20" stroke-width="2"/>
+              <path d="M 55 150 C 55 92, 135 92, 135 150 Z" fill="url(#ovenGlowGradEn)"/>
+              <ellipse class="anim-oven-flame" cx="95" cy="138" rx="22" ry="10" fill="#f59e0b" opacity="0.8"/>
+
+              <!-- Bar Counter & Tap Tower (Background) -->
+              <rect x="20" y="142" width="460" height="18" rx="4" fill="url(#barWoodEn)" stroke="#523e2b" stroke-width="1.5"/>
+              <rect x="25" y="139" width="450" height="4" rx="2" fill="#c49a3c" opacity="0.4"/>
+
+              <!-- CHEF (Left Character) -->
+              <!-- Chef Torso / Jacket -->
+              <path d="M 80 142 L 85 96 Q 100 90 115 96 L 120 142 Z" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+              <path d="M 92 98 L 92 142" stroke="#cbd5e1" stroke-width="1.5"/>
+              <!-- Apron Straps -->
+              <path d="M 88 110 L 112 110 L 114 142 L 86 142 Z" fill="#1e1812" stroke="#c49a3c" stroke-width="1"/>
+              <!-- Chef Head -->
+              <circle cx="100" cy="80" r="12" fill="#fbd38d"/>
+              <!-- Mustache & Smile -->
+              <path d="M 94 82 Q 100 86 106 82" stroke="#451a03" stroke-width="1.5" fill="none"/>
+              <path d="M 92 84 Q 97 81 100 84 Q 103 81 108 84" fill="#451a03"/>
+              <!-- Chef Toque (Hat) -->
+              <path d="M 88 72 L 112 72 L 116 54 Q 118 42 100 42 Q 82 42 84 54 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+              <path d="M 94 44 Q 95 65 96 72" stroke="#e2e8f0" stroke-width="1"/>
+              <path d="M 104 44 Q 105 65 106 72" stroke="#e2e8f0" stroke-width="1"/>
+
+              <!-- Chef Arms & Hands (Animated) -->
+              <g class="anim-chef-arms">
+                <!-- Left arm reaching up -->
+                <path d="M 85 100 Q 75 88 88 76 Q 96 74 94 80" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="92" cy="74" r="4" fill="#fbd38d"/>
+                <!-- Right arm reaching up -->
+                <path d="M 115 100 Q 125 88 112 76 Q 104 74 106 80" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="108" cy="74" r="4" fill="#fbd38d"/>
+              </g>
+
+              <!-- Flour Dust Particles -->
+              <g class="anim-flour-dust">
+                <circle cx="82" cy="50" r="1.5" fill="#fef08a" opacity="0.7"/>
+                <circle cx="118" cy="42" r="1.8" fill="#ffffff" opacity="0.9"/>
+                <circle cx="126" cy="62" r="1.2" fill="#fef08a" opacity="0.8"/>
+                <circle cx="74" cy="66" r="1.4" fill="#ffffff" opacity="0.6"/>
+              </g>
+
+              <!-- TOSSING PIZZA DOUGH (Animated 3D Disc) -->
+              <g class="anim-pizza-dough">
+                <!-- Outer Shadow/Edge -->
+                <ellipse cx="100" cy="58" rx="25" ry="9" fill="url(#doughGradEn)" stroke="#78350f" stroke-width="1.2"/>
+                <!-- Inner Crust Rings -->
+                <ellipse cx="100" cy="58" rx="20" ry="7" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8" opacity="0.9"/>
+                <ellipse cx="100" cy="58" rx="14" ry="4.5" fill="#fef9c3" opacity="0.7"/>
+                <!-- Artisanal Blister Spots -->
+                <circle cx="93" cy="57" r="1.5" fill="#92400e" opacity="0.7"/>
+                <circle cx="107" cy="59" r="1.2" fill="#92400e" opacity="0.7"/>
+                <circle cx="102" cy="55" r="1" fill="#78350f" opacity="0.8"/>
+              </g>
+
+              <!-- CENTER BADGE: EZRA FLORENTIN SIGN -->
+              <g transform="translate(205, 50)">
+                <rect x="0" y="0" width="90" height="70" rx="12" fill="#17120c" stroke="#c49a3c" stroke-width="1.5" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.7))"/>
+                <text x="45" y="24" fill="#c49a3c" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="2">EZRA</text>
+                <path d="M 20 30 L 70 30" stroke="#c49a3c" stroke-width="0.8" opacity="0.6"/>
+                <text x="45" y="44" fill="#fef08a" font-size="7.5" font-weight="700" text-anchor="middle">PIZZA & BEER</text>
+                <text x="45" y="56" fill="#a89a85" font-size="6.5" text-anchor="middle">FLORENTIN</text>
+              </g>
+
+              <!-- BARTENDER (Right Character) -->
+              <!-- Bartender Torso & Vest -->
+              <path d="M 390 142 L 395 96 Q 410 90 425 96 L 430 142 Z" fill="#1e1812" stroke="#c49a3c" stroke-width="1.5"/>
+              <!-- White Shirt Collar & Gold Bowtie -->
+              <path d="M 404 94 L 410 102 L 416 94 Z" fill="#ffffff"/>
+              <path d="M 407 101 L 413 101 L 410 104 Z" fill="#c49a3c"/>
+              <!-- Bartender Head -->
+              <circle cx="410" cy="80" r="12" fill="#fbd38d"/>
+              <!-- Hair & Smile -->
+              <path d="M 398 76 Q 410 66 422 74 Q 418 68 408 68 Q 400 70 398 76 Z" fill="#292524"/>
+              <path d="M 405 84 Q 410 88 415 84" stroke="#451a03" stroke-width="1.5" fill="none"/>
+
+              <!-- Beer Tap Station -->
+              <!-- Base and Tower -->
+              <rect x="338" y="112" width="16" height="30" rx="3" fill="url(#brassTapEn)" stroke="#78350f" stroke-width="1"/>
+              <rect x="342" y="70" width="8" height="42" fill="url(#brassTapEn)" stroke="#78350f" stroke-width="1"/>
+              <!-- Tap Faucet (Spout) -->
+              <path d="M 346 78 Q 346 88 358 92" stroke="url(#brassTapEn)" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <!-- Tap Handle (Animated) -->
+              <g class="anim-tap-handle">
+                <rect x="344" y="44" width="4" height="26" rx="2" fill="#1e1812" stroke="#c49a3c" stroke-width="1"/>
+                <circle cx="346" cy="44" r="5" fill="url(#brassTapEn)"/>
+              </g>
+
+              <!-- Bartender Arm pulling tap -->
+              <path d="M 396 100 Q 370 90 352 56" stroke="#1e1812" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <circle cx="352" cy="56" r="4" fill="#fbd38d"/>
+
+              <!-- Bartender Arm holding beer glass -->
+              <path d="M 420 105 Q 395 115 376 122" stroke="#1e1812" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <circle cx="376" cy="122" r="4" fill="#fbd38d"/>
+
+              <!-- LIQUID BEER STREAM (Animated) -->
+              <path class="anim-beer-stream" d="M 358 92 Q 364 104 366 122" stroke="url(#beerGradEn)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+
+              <!-- BEER GLASS & FOAM -->
+              <g transform="translate(356, 108) rotate(-14)">
+                <!-- Glass Stem & Base -->
+                <path d="M 8 32 L 8 40 M 2 40 L 14 40" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round"/>
+                <!-- Glass Body Bowl -->
+                <path d="M 2 8 Q 0 24 8 32 Q 16 24 14 8 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+                <!-- Beer Liquid Fill -->
+                <path d="M 3 12 Q 1 23 8 30 Q 15 23 13 12 Z" fill="url(#beerGradEn)"/>
+                
+                <!-- Effervescent Rising Bubbles -->
+                <circle class="anim-beer-bubble-1" cx="6" cy="26" r="0.9" fill="#ffffff"/>
+                <circle class="anim-beer-bubble-2" cx="9" cy="28" r="0.8" fill="#fef08a"/>
+                <circle class="anim-beer-bubble-3" cx="11" cy="24" r="0.9" fill="#ffffff"/>
+
+                <!-- Foam Crown / Head (Animated) -->
+                <g class="anim-foam-head">
+                  <ellipse cx="8" cy="10" rx="7" ry="3.5" fill="#ffffff"/>
+                  <circle cx="4" cy="8" r="3" fill="#ffffff"/>
+                  <circle cx="8" cy="7" r="3.5" fill="#ffffff"/>
+                  <circle cx="12" cy="8" r="3" fill="#ffffff"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+
         <span class="eyebrow">Collaborate With Us</span>
         <h3>Want to host an event, DJ or cook at Ezra?</h3>
         <p>
@@ -3180,6 +3792,162 @@
         }, { passive: true });
       }
 
+      // ============================================================
+      // INTERACTIVE FREE-VIEW MONTHLY CALENDAR (2 SLOTS PER DAY)
+      // ============================================================
+      const monthCalGrid = document.getElementById('monthCalGrid');
+      const monthCalTitle = document.getElementById('monthCalTitle');
+      const monthCalPrev = document.getElementById('monthCalPrev');
+      const monthCalNext = document.getElementById('monthCalNext');
+      const monthCalToday = document.getElementById('monthCalToday');
+
+      const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      let calViewYear = today.getFullYear();
+      let calViewMonth = today.getMonth();
+
+      function renderMonthCalendar() {
+        if (!monthCalGrid || !monthCalTitle) return;
+        monthCalTitle.textContent = `${monthsEn[calViewMonth]} ${calViewYear}`;
+
+        monthCalGrid.innerHTML = '';
+
+        const firstDay = new Date(calViewYear, calViewMonth, 1).getDay();
+        const daysInMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
+        const todayKey = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+        // Empty padding cells for start of month
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'month-cal-cell is-empty';
+          monthCalGrid.appendChild(empty);
+        }
+
+        // Days of month
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dObj = new Date(calViewYear, calViewMonth, d);
+          const dow = dObj.getDay();
+          const dateKey = `${calViewYear}-${pad(calViewMonth+1)}-${pad(d)}`;
+          const isPast = dateKey < todayKey;
+          const isToday = dateKey === todayKey;
+
+          // Cross check busy data from Monday
+          const dateBusy = busyWindows.filter(b => b.date === dateKey);
+          const isBooked = bookedDates.has(dateKey) || dateBusy.length > 0;
+
+          let hasAfternoonEvent = false;
+          let hasEveningEvent = false;
+
+          dateBusy.forEach(b => {
+            const startHour = parseInt((b.start || '00:00').split(':')[0], 10);
+            if (startHour < 18) hasAfternoonEvent = true;
+            else hasEveningEvent = true;
+          });
+
+          if (isBooked && !hasAfternoonEvent && !hasEveningEvent) {
+            hasEveningEvent = true; // default booked date to evening
+          }
+
+          const theme = dayThemes[dow] || dayThemes[4];
+          const isClosedEvening = hasEveningEvent;
+
+          // Build Cell
+          const cell = document.createElement('div');
+          cell.className = `month-cal-cell ${isPast ? 'is-past' : ''} ${isToday ? 'is-today' : ''}`;
+
+          cell.innerHTML = `
+            <div class="month-cal-cell-head">
+              <span class="month-cal-date-num">${d}</span>
+              ${isToday ? '<span class="month-cal-today-tag">Today</span>' : ''}
+            </div>
+            <div class="month-cal-slots">
+              <!-- Noon Slot -->
+              <button type="button" class="month-cal-slot ${hasAfternoonEvent ? 'month-cal-slot--busy' : 'month-cal-slot--free'}" data-slot="noon" aria-label="${d} ${monthsEn[calViewMonth]} Afternoon: ${hasAfternoonEvent ? 'Booked' : 'Available for Event'}">
+                <span class="month-cal-slot-time">☀️ Afternoon</span>
+                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'Private Event' : 'Available ✍️'}</span>
+              </button>
+
+              <!-- Night Slot -->
+              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsEn[calViewMonth]} Evening: ${isClosedEvening ? 'Private Event' : theme.title}">
+                <span class="month-cal-slot-time">🌙 Evening</span>
+                <span class="month-cal-slot-status">${isClosedEvening ? 'Private Event' : theme.title.split('·')[0]}</span>
+              </button>
+            </div>
+          `;
+
+          // Slot Clicks
+          const noonBtn = cell.querySelector('[data-slot="noon"]');
+          if (noonBtn) {
+            noonBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (typeof openContactModal === 'function') {
+                openContactModal({
+                  date: dateKey,
+                  slot: 'Afternoon (12:00–18:00)',
+                  eventType: 'Private Event'
+                });
+              }
+            });
+          }
+
+          const nightBtn = cell.querySelector('[data-slot="night"]');
+          if (nightBtn) {
+            nightBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (isClosedEvening) {
+                if (typeof openContactModal === 'function') {
+                  openContactModal({
+                    date: dateKey,
+                    slot: 'Evening (18:00–02:00)',
+                    eventType: 'Private Event'
+                  });
+                }
+              } else {
+                if (typeof openEventModal === 'function') {
+                  openEventModal({
+                    ...theme,
+                    fullDateString: `${daysEn[dow]} ${pad(d)}.${pad(calViewMonth+1)}`,
+                    dateKey: dateKey
+                  });
+                }
+              }
+            });
+          }
+
+          monthCalGrid.appendChild(cell);
+        }
+      }
+
+      if (monthCalPrev) {
+        monthCalPrev.addEventListener('click', () => {
+          calViewMonth--;
+          if (calViewMonth < 0) {
+            calViewMonth = 11;
+            calViewYear--;
+          }
+          renderMonthCalendar();
+        });
+      }
+
+      if (monthCalNext) {
+        monthCalNext.addEventListener('click', () => {
+          calViewMonth++;
+          if (calViewMonth > 11) {
+            calViewMonth = 0;
+            calViewYear++;
+          }
+          renderMonthCalendar();
+        });
+      }
+
+      if (monthCalToday) {
+        monthCalToday.addEventListener('click', () => {
+          calViewYear = today.getFullYear();
+          calViewMonth = today.getMonth();
+          renderMonthCalendar();
+        });
+      }
+
       function loadAvailability() {
         const ep = window.EZRA_AVAILABILITY_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev';
         fetch(ep, { method: 'GET' })
@@ -3192,15 +3960,18 @@
             }
             generate30Days();
             renderGrid();
+            renderMonthCalendar();
           })
           .catch(() => {
             generate30Days();
             renderGrid();
+            renderMonthCalendar();
           });
       }
 
       generate30Days();
       renderGrid();
+      renderMonthCalendar();
       loadAvailability();
 
       // Live recurring refresh every 60s and on tab focus
