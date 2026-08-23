@@ -742,6 +742,85 @@
     }
 
     /* Slider Progress & Controls Indicator */
+    .sched-bottom-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-block-start: 1.2rem;
+      position: relative;
+    }
+    .sched-bottom-wrap > .slider-progress-wrap {
+      flex: 1;
+      margin-block-start: 0;
+    }
+
+    /* Free-Floating Bartender Pouring Craft Beer (Bottom-Left Animation) */
+    .sched-bartender-art {
+      width: 145px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.7));
+    }
+    .sched-bartender-svg {
+      width: 100%;
+      height: auto;
+      max-height: 110px;
+      overflow: visible;
+    }
+
+    .anim-tap-pull {
+      transform-origin: 7px 32px;
+      animation: tapPullMotion 2.6s ease-in-out infinite alternate;
+    }
+    @keyframes tapPullMotion {
+      0%   { transform: rotate(0deg); }
+      40%  { transform: rotate(-8deg); }
+      100% { transform: rotate(-16deg); }
+    }
+
+    .anim-beer-stream {
+      animation: beerStreamFlow 1.6s ease-in-out infinite alternate;
+      transform-origin: 90px 74px;
+    }
+    @keyframes beerStreamFlow {
+      0%   { opacity: 0.82; transform: scaleY(0.96); }
+      100% { opacity: 1; transform: scaleY(1.04); }
+    }
+
+    .anim-beer-bubble-1 { animation: bubbleFloat 1.3s infinite linear; }
+    .anim-beer-bubble-2 { animation: bubbleFloat 1.6s infinite linear 0.4s; }
+    .anim-beer-bubble-3 { animation: bubbleFloat 1.4s infinite linear 0.8s; }
+    @keyframes bubbleFloat {
+      0%   { transform: translateY(0); opacity: 0; }
+      40%  { opacity: 0.95; }
+      100% { transform: translateY(-12px); opacity: 0; }
+    }
+
+    .anim-beer-foam {
+      transform-origin: 8px 7px;
+      animation: foamBreathe 2.4s ease-in-out infinite alternate;
+    }
+    @keyframes foamBreathe {
+      0%   { transform: scale(0.95); }
+      100% { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(254,240,138,0.7)); }
+    }
+
+    @media (max-width: 768px) {
+      .sched-bottom-wrap {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+      .sched-bartender-art {
+        align-self: center;
+        width: 125px;
+      }
+    }
+
     .slider-progress-wrap {
       display: flex;
       align-items: center;
@@ -1422,8 +1501,146 @@
     }
 
     /* ============================================================
-       6. LOCATION & DIRECTIONS
+       5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE
     ============================================================ */
+    .archive-crowd-stage {
+      max-width: 580px;
+      margin: 0 auto 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+    }
+    .archive-crowd-svg {
+      width: 100%;
+      height: auto;
+      max-height: 110px;
+      overflow: visible;
+      filter: drop-shadow(0 8px 22px rgba(0,0,0,0.6));
+    }
+
+    .anim-dancer-1 {
+      transform-origin: 20px 85px;
+      animation: dancerGroove1 3.2s ease-in-out infinite;
+    }
+    @keyframes dancerGroove1 {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      35%      { transform: rotate(-3.5deg) translateY(-2px); }
+      70%      { transform: rotate(3deg) translateY(1px); }
+    }
+
+    .anim-dancer-2 {
+      transform-origin: 25px 90px;
+      animation: dancerGroove2 2.6s ease-in-out infinite;
+    }
+    @keyframes dancerGroove2 {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      45%      { transform: rotate(4deg) translateY(-3px); }
+      80%      { transform: rotate(-3deg) translateY(0); }
+    }
+
+    .anim-dancer-3 {
+      transform-origin: 22px 82px;
+      animation: dancerGroove3 3.6s ease-in-out infinite;
+    }
+    @keyframes dancerGroove3 {
+      0%, 100% { transform: rotate(0deg) scaleX(1); }
+      40%      { transform: rotate(-4deg) translateY(-2px) scaleX(1.04); }
+      75%      { transform: rotate(3deg) translateY(1px) scaleX(0.97); }
+    }
+
+    .anim-dancer-4 {
+      transform-origin: 20px 85px;
+      animation: dancerGroove4 1.8s ease-in-out infinite alternate;
+    }
+    @keyframes dancerGroove4 {
+      0%   { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-3px) rotate(2.5deg); }
+    }
+
+    .anim-archive-vinyl {
+      transform-origin: 15px 15px;
+      animation: spinArchiveVinyl 6s linear infinite;
+    }
+    @keyframes spinArchiveVinyl {
+      to { transform: rotate(360deg); }
+    }
+
+    .anim-sparkle-1 { animation: starGlint 2.1s ease-in-out infinite; transform-origin: 125px 20px; }
+    .anim-sparkle-2 { animation: starGlint 2.7s ease-in-out infinite 0.6s; transform-origin: 215px 12px; }
+    .anim-sparkle-3 { animation: starGlint 2.4s ease-in-out infinite 1.2s; transform-origin: 295px 14px; }
+    .anim-sparkle-4 { animation: starGlint 2.8s ease-in-out infinite 1.8s; transform-origin: 380px 18px; }
+    .anim-sparkle-5 { animation: starGlint 2.2s ease-in-out infinite 0.9s; transform-origin: 465px 26px; }
+
+    @keyframes starGlint {
+      0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+      50%      { opacity: 1; transform: scale(1.25) rotate(20deg); filter: drop-shadow(0 0 6px rgba(254,240,138,0.8)); }
+    }
+
+    /* ============================================================
+       6. LOCATION & DIRECTIONS (GLOWING STATS-FRAME & ANIMATIONS)
+    ============================================================ */
+    @property --frame-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+    .stats-frame {
+      position: relative;
+      border-radius: 28px;
+      padding: clamp(2.6rem, 6vw, 4.6rem) clamp(1.4rem, 5vw, 3.6rem);
+      margin-block-end: clamp(2.4rem, 5vw, 3.2rem);
+      background:
+        radial-gradient(130% 70% at 50% 0%, rgba(196,154,60,0.10), transparent 58%),
+        linear-gradient(180deg, rgba(196,154,60,0.045), rgba(15,13,11,0.28));
+      border: 1px solid rgba(196,154,60,0.2);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .stats-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(from var(--frame-angle),
+        transparent 0deg, transparent 58deg,
+        var(--gold) 92deg, var(--gold-light) 112deg, var(--gold) 132deg,
+        transparent 168deg, transparent 238deg,
+        rgba(245,217,138,0.7) 272deg, var(--gold) 292deg, transparent 326deg,
+        transparent 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      animation: frameRun 8s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes frameRun { to { --frame-angle: 360deg; } }
+
+    .stats-frame__corner {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--gold);
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(196,154,60,0.45));
+    }
+    .stats-frame__corner--tl { top: 15px; left: 15px;  border-right: 0; border-bottom: 0; border-top-left-radius: 9px; }
+    .stats-frame__corner--tr { top: 15px; right: 15px; border-left: 0;  border-bottom: 0; border-top-right-radius: 9px; }
+    .stats-frame__corner--bl { bottom: 15px; left: 15px;  border-right: 0; border-top: 0; border-bottom-left-radius: 9px; }
+    .stats-frame__corner--br { bottom: 15px; right: 15px; border-left: 0;  border-top: 0; border-bottom-right-radius: 9px; }
+
+    .stats-frame > .sec-head,
+    .stats-frame > .pills-row,
+    .stats-frame > .map-container { position: relative; z-index: 1; }
+    .stats-frame > .map-container { margin-block-end: 0; }
+
+    @media (max-width: 600px) {
+      .stats-frame { border-radius: 20px; padding: 2rem 1.1rem; }
+      .stats-frame__corner { width: 16px; height: 16px; top: 11px; bottom: 11px; left: 11px; right: 11px; }
+    }
+
     .map-container {
       width: 100%;
       max-width: 1000px;
@@ -2635,14 +2852,92 @@
           </div>
         </div>
 
-        <div class="slider-progress-wrap">
-          <div class="slider-progress-bar">
-            <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
+        <!-- Schedule Bottom Bar with Slider Progress & Free-Floating Craft Bartender (Bottom-Left) -->
+        <div class="sched-bottom-wrap">
+          <div class="slider-progress-wrap">
+            <div class="slider-progress-bar">
+              <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
+            </div>
+            <span class="slider-hint-text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <span>גללו אופקית לצפייה ב-30 הימים הקרובים</span>
+            </span>
           </div>
-          <span class="slider-hint-text">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            <span>גללו אופקית לצפייה ב-30 הימים הקרובים</span>
-          </span>
+
+          <!-- Bottom-Left Craft Bartender Pouring Beer (Free-Floating Ambient Art) -->
+          <div class="sched-bartender-art" aria-hidden="true">
+            <svg class="sched-bartender-svg" viewBox="0 0 170 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="schedBeerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#fffbeb"/>
+                  <stop offset="25%" stop-color="#fde047"/>
+                  <stop offset="65%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <linearGradient id="schedBrassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef9c3"/>
+                  <stop offset="45%" stop-color="#fde047"/>
+                  <stop offset="75%" stop-color="#ca8a04"/>
+                  <stop offset="100%" stop-color="#78350f"/>
+                </linearGradient>
+                <radialGradient id="schedBartenderGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
+                  <stop offset="70%" stop-color="#ca8a04" stop-opacity="0.04"/>
+                  <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Warm Ambient Glow -->
+              <ellipse cx="85" cy="65" rx="75" ry="50" fill="url(#schedBartenderGlow)"/>
+
+              <!-- Brass Beer Tap Tower (Right Side) -->
+              <g transform="translate(100, 18)">
+                <rect x="-15" y="85" width="45" height="5" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+                <rect x="2" y="32" width="10" height="54" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1.2"/>
+                <rect x="-2" y="80" width="18" height="6" rx="2" fill="url(#schedBrassGrad)" stroke="#78350f" stroke-width="1"/>
+                <path d="M 7 40 Q 7 50 -10 54" stroke="url(#schedBrassGrad)" stroke-width="4.8" stroke-linecap="round" fill="none"/>
+                
+                <!-- Animated Tap Handle -->
+                <g class="anim-tap-pull">
+                  <line x1="7" y1="32" x2="15" y2="4" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="15" cy="4" r="4.5" fill="#fde047" stroke="#78350f" stroke-width="1"/>
+                </g>
+              </g>
+
+              <!-- Bartender Minimalist Line-Art Figure (Left Side) -->
+              <g>
+                <ellipse cx="48" cy="36" rx="9.5" ry="11" stroke="url(#schedBrassGrad)" stroke-width="2" fill="#140f0a"/>
+                <path d="M 40 32 Q 48 24 58 29" stroke="#fde047" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M 38 48 L 32 108 M 58 48 L 62 108" stroke="url(#schedBrassGrad)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 40 50 L 58 68 M 56 50 L 38 68" stroke="#ca8a04" stroke-width="1.4" stroke-linecap="round"/>
+
+                <!-- Arm pulling tap handle -->
+                <path d="M 52 52 Q 74 38 108 24" stroke="url(#schedBrassGrad)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+                <circle cx="108" cy="24" r="3.2" fill="#fde047"/>
+
+                <!-- Arm holding the tilted craft glass -->
+                <path d="M 44 58 Q 58 78 78 88" stroke="url(#schedBrassGrad)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+                <circle cx="78" cy="88" r="3.2" fill="#fde047"/>
+              </g>
+
+              <!-- Continuous Flowing Amber Beer Stream -->
+              <path class="anim-beer-stream" d="M 90 74 Q 87 84 84 94" stroke="url(#schedBeerGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+
+              <!-- Crystal Tulip Craft Beer Glass (Tilted) -->
+              <g transform="translate(80, 80) rotate(-18)">
+                <line x1="8" y1="28" x2="8" y2="38" stroke="#fef9c3" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="2" y1="38" x2="14" y2="38" stroke="#fef9c3" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 2 4 Q 0 20 8 28 Q 16 20 14 4 Z" fill="rgba(255,255,255,0.06)" stroke="#fde047" stroke-width="1.4"/>
+                <path d="M 3 8 Q 1 20 8 26 Q 15 20 13 8 Z" fill="url(#schedBeerGrad)"/>
+                <!-- Effervescent Micro-Bubbles -->
+                <circle class="anim-beer-bubble-1" cx="6" cy="20" r="0.9" fill="#ffffff"/>
+                <circle class="anim-beer-bubble-2" cx="10" cy="22" r="0.8" fill="#fef08a"/>
+                <circle class="anim-beer-bubble-3" cx="8" cy="15" r="0.9" fill="#ffffff"/>
+                <!-- Velvety Cream Foam Head -->
+                <ellipse class="anim-beer-foam" cx="8" cy="7" rx="6.5" ry="3" fill="#fffbeb" stroke="#fde047" stroke-width="0.8"/>
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -3087,6 +3382,101 @@
         <p>הצצה לערבי תקליטים, פופ-אפים ומפגשי עבר שהיו אצלנו בעזרא.</p>
       </div>
 
+      <!-- Cute, Joyful & Elegant Speakeasy Dancing Crowd Animation -->
+      <div class="archive-crowd-stage" aria-hidden="true">
+        <svg class="archive-crowd-svg" viewBox="0 0 520 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="crowdGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fffbeb"/>
+              <stop offset="30%" stop-color="#fde047"/>
+              <stop offset="70%" stop-color="#ca8a04"/>
+              <stop offset="100%" stop-color="#854d0e"/>
+            </linearGradient>
+            <radialGradient id="crowdCenterGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ca8a04" stop-opacity="0.22"/>
+              <stop offset="60%" stop-color="#ca8a04" stop-opacity="0.04"/>
+              <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Warm Stage Spotlight Glow -->
+          <ellipse cx="260" cy="50" rx="210" ry="45" fill="url(#crowdCenterGlow)"/>
+
+          <!-- 1. Dancer 1: Swaying with Toasting Cocktail Glass (Far Left) -->
+          <g class="anim-dancer-1" transform="translate(60, 10)">
+            <ellipse cx="20" cy="20" rx="8" ry="9.5" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <!-- Body & Torso Contour -->
+            <path d="M 12 30 Q 8 60 16 85 M 28 30 Q 32 60 24 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Arm Raising Cocktail Glass -->
+            <path d="M 26 36 Q 38 24 44 14" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 41 10 L 48 10 L 44 15 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.8"/>
+            <line x1="44" y1="15" x2="44" y2="20" stroke="#fde047" stroke-width="1.2"/>
+            <!-- Other Arm on Hip -->
+            <path d="M 14 36 Q 4 46 8 56" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          </g>
+
+          <!-- 2. Dancer 2: Hands in the Air Grooving to Vinyl Beats (Center-Left) -->
+          <g class="anim-dancer-2" transform="translate(160, 5)">
+            <ellipse cx="25" cy="22" rx="8" ry="9.5" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <!-- Headphones on head -->
+            <path d="M 15 22 Q 25 10 35 22" stroke="#fde047" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="15" cy="22" r="2.8" fill="#fde047"/>
+            <circle cx="35" cy="22" r="2.8" fill="#fde047"/>
+            <!-- Torso -->
+            <path d="M 18 32 Q 14 62 20 90 M 32 32 Q 36 62 30 90" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Both Arms Up in the Air (Joyful Party Vibe) -->
+            <path d="M 18 36 Q 6 22 10 8" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 32 36 Q 44 22 40 8" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+
+          <!-- Center Retro Vinyl Disc Spinning Above Dancers -->
+          <g class="anim-archive-vinyl" transform="translate(245, 12)">
+            <circle cx="15" cy="15" r="14" fill="#140f0a" stroke="url(#crowdGoldGrad)" stroke-width="1.6"/>
+            <circle cx="15" cy="15" r="8" stroke="#ca8a04" stroke-width="0.8" opacity="0.6"/>
+            <circle cx="15" cy="15" r="4.5" fill="#fde047"/>
+            <circle cx="15" cy="15" r="1.5" fill="#140f0a"/>
+          </g>
+
+          <!-- 3. Dancer 3: Cheerful Twirling Dancer (Center-Right) -->
+          <g class="anim-dancer-3" transform="translate(300, 8)">
+            <ellipse cx="22" cy="20" rx="8" ry="9.5" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <!-- Torso & Flowing Dress / Shirt -->
+            <path d="M 16 30 Q 10 50 4 82 Q 22 88 40 82 Q 34 50 28 30 Z" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a" fill-opacity="0.5"/>
+            <!-- Expressive Arms -->
+            <path d="M 16 34 Q 4 36 0 24" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 28 34 Q 40 28 46 16" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+
+          <!-- 4. Dancer 4: Rhythm Clapping & Toasting (Far Right) -->
+          <g class="anim-dancer-4" transform="translate(400, 10)">
+            <ellipse cx="20" cy="20" rx="8" ry="9.5" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <!-- Torso -->
+            <path d="M 13 30 Q 10 58 18 85 M 27 30 Q 30 58 22 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Clapping Hands Motion -->
+            <path d="M 14 36 Q 24 30 26 22" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 26 36 Q 20 30 24 20" stroke="url(#crowdGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="25" cy="21" r="2.2" fill="#fde047"/>
+          </g>
+
+          <!-- Sparkling Disco Stars & Notes Floating Above Crowd -->
+          <g class="anim-sparkle-1">
+            <text x="120" y="24" fill="#fde047" font-size="14" font-weight="900">✦</text>
+          </g>
+          <g class="anim-sparkle-2">
+            <text x="210" y="16" fill="#ca8a04" font-size="12" font-weight="900">✧</text>
+          </g>
+          <g class="anim-sparkle-3">
+            <text x="290" y="18" fill="#fde047" font-size="15" font-weight="900">★</text>
+          </g>
+          <g class="anim-sparkle-4">
+            <text x="375" y="22" fill="#ca8a04" font-size="13" font-weight="900">✦</text>
+          </g>
+          <g class="anim-sparkle-5">
+            <text x="460" y="30" fill="#fde047" font-size="12" font-weight="900">♪</text>
+          </g>
+        </svg>
+      </div>
+
       <div class="flyers-grid">
         <div class="flyer-card">
           <div class="flyer-card__img">
@@ -3140,53 +3530,60 @@
   ============================================================ -->
   <section id="location">
     <div class="wrap">
-      <div class="sec-head center">
-        <span class="eyebrow">דרכי הגעה</span>
-        <h2>איך מגיעים</h2>
-        <p>
-          אברבנאל 38, פלורנטין, תל אביב · בלב הסצינה של דרום העיר, עם גישה נוחה ברגל, ברכב ובתחבורה ציבורית.
-        </p>
-      </div>
+      <div class="stats-frame">
+        <span class="stats-frame__corner stats-frame__corner--tl" aria-hidden="true"></span>
+        <span class="stats-frame__corner stats-frame__corner--tr" aria-hidden="true"></span>
+        <span class="stats-frame__corner stats-frame__corner--bl" aria-hidden="true"></span>
+        <span class="stats-frame__corner stats-frame__corner--br" aria-hidden="true"></span>
 
-      <div class="pills-row" id="locationPills">
-        <span class="pill">
-          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          אברבנאל 38, פלורנטין
-        </span>
-        <span class="pill">
-          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          3 דקות הליכה מהרכבת הקלה (תחנת אליפלט / סלמה)
-        </span>
-        <span class="pill">
-          <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          חניונים קרובים: חניון אליפלט וחניון רבי רביע
-        </span>
-      </div>
+        <div class="sec-head center">
+          <span class="eyebrow">דרכי הגעה</span>
+          <h2>איך מגיעים</h2>
+          <p>
+            אברבנאל 38, פלורנטין, תל אביב · בלב הסצינה של דרום העיר, עם גישה נוחה ברגל, ברכב ובתחבורה ציבורית.
+          </p>
+        </div>
 
-      <div class="map-container">
-        <iframe
-          src="https://maps.google.com/maps?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&hl=iw&z=17&t=m&output=embed"
-          width="100%"
-          height="350"
-          style="border:0; filter: grayscale(100%) invert(90%) contrast(1.2);"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
-        ></iframe>
-        <div class="map-nav">
-          <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
-            <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
-            <span class="map-nav__lbl">Google Maps</span>
-          </a>
-          <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
-            <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
-            <span class="map-nav__lbl">Waze</span>
-          </a>
-          <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
-            <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
-            <span class="map-nav__lbl">Moovit</span>
-          </a>
+        <div class="pills-row" id="locationPills">
+          <span class="pill">
+            <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            אברבנאל 38, פלורנטין
+          </span>
+          <span class="pill">
+            <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            3 דקות הליכה מהרכבת הקלה (תחנת אליפלט / סלמה)
+          </span>
+          <span class="pill">
+            <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            חניונים קרובים: חניון אליפלט וחניון רבי רביע
+          </span>
+        </div>
+
+        <div class="map-container">
+          <iframe
+            src="https://maps.google.com/maps?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&hl=iw&z=17&t=m&output=embed"
+            width="100%"
+            height="350"
+            style="border:0; filter: grayscale(100%) invert(90%) contrast(1.2);"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
+          ></iframe>
+          <div class="map-nav">
+            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
+              <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
+              <span class="map-nav__lbl">Google Maps</span>
+            </a>
+            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
+              <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
+              <span class="map-nav__lbl">Waze</span>
+            </a>
+            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
+              <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
+              <span class="map-nav__lbl">Moovit</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
