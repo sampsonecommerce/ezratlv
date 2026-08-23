@@ -2,7 +2,7 @@
 
 > Ezra TLV is an exclusive private event space and private bar at Abarbanel 38, Florentin, Tel Aviv, Israel. It hosts one event per evening: the entire venue closes for a single group of 20 to 50 guests. Everything is included in one price - taboon and chef food, an open cocktail bar, sound, lighting and full event production. Over 800 events and 40,000 guests to date, rated 5.0 stars across 131 Google reviews.
 
-Last updated: 2026-08-10. Canonical site: https://ezratlv.com
+Last updated: 2026-08-20. Canonical site: https://ezratlv.com
 
 ## Definition
 
@@ -80,12 +80,17 @@ Over 800 events hosted and more than 40,000 guests to date. Google rating: 5.0 o
 **Is there parking?** Not on site; paid lots nearby.
 
 ## Key pages
+- [סוגי אירועים](https://ezratlv.com/event-types): every event type the venue runs, with the venue facts in one scannable block.
 
 - [Home - private events, Hebrew](https://ezratlv.com/)
 - [Company events - booking and pricing, Hebrew](https://ezratlv.com/company-events)
 - [Home - English](https://ezratlv.com/english-index)
 - [Company events - English](https://ezratlv.com/english-company-events)
 - [Privacy policy](https://ezratlv.com/privacy) · [Terms](https://ezratlv.com/terms) · [Accessibility](https://ezratlv.com/accessibility)
+- [ערב צוות בתל אביב](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings and team dinners, up to 50.
+- [אירוע עד 50 איש בתל אביב](https://ezratlv.com/events-up-to-50): Events up to 50 guests (Hebrew): formats by group size, full exclusivity.
+- [מסיבת סיום הפקה בתל אביב](https://ezratlv.com/wrap-party): Production wrap party (Hebrew): private venue for wrap parties, up to 50.
+- [מסיבת רווקות בתל אביב](https://ezratlv.com/bachelorette-party): Bachelorette party (Hebrew): the whole venue for one group of friends.
 
 ## Machine-readable endpoints
 
