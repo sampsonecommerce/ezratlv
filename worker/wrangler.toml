@@ -1,0 +1,23 @@
+# Deploy config for the `ezra-lead` Worker.
+#
+# This file exists so the worker deploys from CI on a push to `main` instead of
+# being pasted into the Cloudflare dashboard. See
+# .github/workflows/deploy-worker.yml.
+#
+# `name` must stay exactly `ezra-lead` — it is what serves
+# https://ezra-lead.yeheli.workers.dev, which the site's forms and the events
+# calendar both call. Renaming it creates a second worker and orphans the live one.
+name = "ezra-lead"
+main = "ezra-lead-worker.js"
+
+# Fetch + JSON only; no runtime feature here depends on a recent compat date.
+compatibility_date = "2025-05-05"
+
+# Keep serving ezra-lead.yeheli.workers.dev.
+workers_dev = true
+
+# The three secrets (MONDAY_TOKEN, CALC_SECRET, META_CAPI_TOKEN) are set in the
+# Cloudflare dashboard and are NOT declared here — tokens never enter this repo,
+# which is public. `keep_vars` stops a deploy from clearing dashboard-set values
+# just because this file does not list them.
+keep_vars = true

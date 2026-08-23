@@ -1,0 +1,68 @@
+name: Deploy ezra-lead worker
+
+# The worker used to reach production only by being pasted into the Cloudflare
+# dashboard, so `main` and production could disagree silently. This deploys it
+# on push and then asks the live worker what it is running.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ezra-lead
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Gate. Validates every field the worker asks Monday for against Monday's
+      # real Board/Group/Column field sets. An invalid field fails the whole
+      # GraphQL query and empties the calendar, which is how the feed shipped
+      # broken on 2026-08-20 and stayed broken. Needs no network and no secrets.
+      - name: Availability contract test
+        run: node worker/test/availability.test.mjs
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+
+      # "Is the deployed bundle the merged one?" — answered here, not guessed.
+      - name: Verify the live worker is this commit's build
+        run: |
+          expected=$(sed -n 's/^const BUILD_ID = "\(.*\)";$/\1/p' worker/ezra-lead-worker.js | head -1)
+          if [ -z "$expected" ]; then
+            echo "could not read BUILD_ID out of worker/ezra-lead-worker.js"
+            exit 1
+          fi
+          echo "expecting build: $expected"
+          for attempt in 1 2 3 4 5 6; do
+            body=$(curl -fsS --max-time 20 https://ezra-lead.yeheli.workers.dev || echo '')
+            live=$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(j.build||"");}catch(e){console.log("");}})')
+            echo "attempt $attempt -> build=${live:-<none>}"
+            if [ "$live" = "$expected" ]; then
+              degraded=$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(j.degraded?(j.reason||"degraded"):"");}catch(e){console.log("unparseable response");}})')
+              if [ -n "$degraded" ]; then
+                echo "deployed, but the feed is degraded: $degraded"
+                exit 1
+              fi
+              echo "live worker is $expected and not degraded"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "the live worker never reported build $expected"
+          exit 1

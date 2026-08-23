@@ -3,9 +3,13 @@
 // The site's forms POST here cross-origin. Once the domain moves to Cloudflare Pages, the
 // forms go back to same-origin /api/submit-lead and this worker can be deleted.
 //
-// Deploy: Cloudflare dashboard -> Workers & Pages -> Create Worker -> paste this -> Deploy.
-// Secrets (Settings -> Variables): MONDAY_TOKEN (scoped, leave unset while Monday is paused),
-// META_CAPI_TOKEN. Never put tokens in this file.
+// Deploy: automatic. A push to `main` that touches worker/ runs
+// .github/workflows/deploy-worker.yml, which runs the availability test, deploys with
+// wrangler (worker/wrangler.toml), then reads the live worker back to confirm the
+// deployed build is this commit's. Pasting into the dashboard is no longer the route.
+// Secrets (Settings -> Variables, dashboard-managed): MONDAY_TOKEN (scoped, leave unset
+// while Monday is paused), CALC_SECRET, META_CAPI_TOKEN. Never put tokens in this file;
+// `keep_vars` in wrangler.toml stops a deploy from clearing them.
 //
 // Hardening: CORS is locked to the site origins below; a honeypot field (`hp`) is silently
 // dropped; add a Cloudflare Rate Limiting rule on this worker's route for extra protection.
@@ -15,8 +19,9 @@ const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
 // Open Events leads (events page inquiry with calendar) go to the Open Events board.
 const OPEN_EVENTS_BOARD = "5102602771";
-// Bumped by hand whenever this file is pasted into Cloudflare. Returned on every degraded
-// availability response so "is the deployed bundle the merged one?" is a question with an answer.
+// Bump this in any commit that changes worker behaviour. It is returned on every response,
+// and the deploy workflow refuses to pass until the live worker reports this exact value —
+// so "is the deployed bundle the merged one?" is a question with an answer.
 const BUILD_ID = "2026-08-24d";
 const OPEN_EVENTS_GROUP = "topics";
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
