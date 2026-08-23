@@ -17,7 +17,7 @@ const PRIVATE_GROUP = "group_mm18zcww";
 const OPEN_EVENTS_BOARD = "5102602771";
 // Bumped by hand whenever this file is pasted into Cloudflare. Returned on every degraded
 // availability response so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-24c";
+const BUILD_ID = "2026-08-24d";
 const OPEN_EVENTS_GROUP = "topics";
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
@@ -445,7 +445,6 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
   const query = `query {
     boards(ids: [${boardId}]) {
       id
-      title
       groups { id title }
       items_page(limit: 100) {
         items {
@@ -489,7 +488,7 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
       if (!byGroup.has(gid)) byGroup.set(gid, { id: gid, title: "", items_page: { items: [] } });
       byGroup.get(gid).items_page.items.push(it);
     }
-    return { id: b.id, title: b.title, groups: Array.from(byGroup.values()) };
+    return { id: b.id, groups: Array.from(byGroup.values()) };
   } catch (e) {
     console.error(`availability board ${boardId} failed:`, e);
     if (diag) diag.push(`${boardId}: ${String(e).slice(0, 200)}`);
