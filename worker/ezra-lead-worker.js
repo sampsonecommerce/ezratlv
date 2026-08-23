@@ -444,6 +444,7 @@ async function availability(env, cors) {
               id
               type
               text
+              value
               ... on DateValue { date }
             }
           }
@@ -463,6 +464,20 @@ async function availability(env, cors) {
     const busy = [];
     const bookedSet = new Set();
 
+    const normalizeDate = (val, text) => {
+      if (val && /^\d{4}-\d{2}-\d{2}$/.test(String(val).trim())) return String(val).trim();
+      if (text) {
+        const t = String(text).trim();
+        if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
+        const d = new Date(t);
+        if (!isNaN(d.getTime())) {
+          const pad = (n) => String(n).padStart(2, "0");
+          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        }
+      }
+      return null;
+    };
+
     for (const b of boards) {
       for (const g of (b.groups || [])) {
         const gTitle = (g.title || "").toLowerCase();
@@ -474,6 +489,7 @@ async function availability(env, cors) {
           gTitle.includes("booked") ||
           gTitle.includes("deal") ||
           gTitle.includes("pre payment") ||
+          gTitle.includes("prepayment") ||
           gTitle.includes("proposal") ||
           gTitle.includes("agreement") ||
           AVAIL_GROUPS.includes(gId) ||
@@ -483,30 +499,40 @@ async function availability(env, cors) {
 
         for (const it of (g.items_page?.items || [])) {
           const cv = {};
-          let itemDate = null;
+          let discoveredDate = null;
+          let timeSlotText = "";
+
           (it.column_values || []).forEach((c) => {
             cv[c.id] = c;
-            if (!itemDate && c.date) itemDate = c.date;
-            if (!itemDate && c.type === "date" && c.text && /^\d{4}-\d{2}-\d{2}$/.test(c.text.trim())) {
-              itemDate = c.text.trim();
+            if (!discoveredDate) {
+              discoveredDate = normalizeDate(c.date, c.text);
+            }
+            const txt = (c.text || "").toLowerCase();
+            if (txt.includes("צהריים") || txt.includes("ערב") || txt.includes("גמיש") || txt.includes("בוקר") || txt.includes(":")) {
+              timeSlotText += " " + txt;
             }
           });
 
-          // Check standard date column or any discovered date
-          const date = cv[DATE_COL]?.date || itemDate;
+          const date = normalizeDate(cv[DATE_COL]?.date, cv[DATE_COL]?.text) || discoveredDate;
           if (!date) continue;
 
           let start = parseHourText(cv[HOUR_START_COL]?.text);
           let end = parseHourText(cv[HOUR_END_COL]?.text);
           if (!start || !end) {
-            const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || "");
+            const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || timeSlotText);
             if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; }
           }
 
-          // If no specific hour was chosen for a closed date item, treat it as evening / full day booked
           if (!start || !end) {
-            start = "18:00";
-            end = "02:00";
+            if (timeSlotText.includes("צהריים") && !timeSlotText.includes("ערב")) {
+              start = "12:00"; end = "18:00";
+            } else if (timeSlotText.includes("ערב") && !timeSlotText.includes("צהריים")) {
+              start = "18:00"; end = "02:00";
+            } else {
+              // Both afternoon & evening booked (full day)
+              busy.push({ date, start: "12:00", end: "18:00" });
+              start = "18:00"; end = "02:00";
+            }
           }
 
           busy.push({ date, start, end });

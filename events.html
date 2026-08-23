@@ -1659,99 +1659,310 @@
       line-height: 1.45;
     }
 
-    /* Past events. The markup for this grid shipped with no styles at all, so the
-       cards fell back to raw block flow: full-bleed images, the fact list stacked
-       one term per line, no card frame. Same visual language as the flyer cards
-       above, but laid out side-on because each card carries a fact list. */
-    .past-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: clamp(1rem, 2vw, 1.5rem);
+    /* ============================================================
+       5. PAST EVENTS SLIDER & ARCHIVE GALLERY MODAL
+    ============================================================ */
+    .past-slider-wrap {
+      position: relative;
+      width: 100%;
       margin-block-end: clamp(2rem, 4vw, 3rem);
     }
-    @media (max-width: 860px) { .past-grid { grid-template-columns: 1fr; } }
+    .past-slider-track {
+      display: flex;
+      gap: 1.15rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-block: 0.5rem 1.2rem;
+      padding-inline: 0.25rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .past-slider-track::-webkit-scrollbar { display: none; }
 
-    .past-card {
-      display: grid;
-      grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+    .past-slider-arrow {
+      position: absolute;
+      top: 45%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(18, 13, 8, 0.92);
+      border: 1.2px solid rgba(196, 154, 60, 0.45);
+      color: #f5d98a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 12;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+      transition: all 0.25s var(--ease);
+    }
+    .past-slider-arrow:hover {
+      background: rgba(30, 20, 10, 0.98);
+      border-color: #f5d98a;
+      color: #ffffff;
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85), 0 0 16px rgba(253, 224, 71, 0.3);
+    }
+    .past-slider-arrow--prev { left: -18px; }
+    .past-slider-arrow--next { right: -18px; }
+    @media (max-width: 1100px) {
+      .past-slider-arrow--prev { left: 4px; }
+      .past-slider-arrow--next { right: 4px; }
+    }
+
+    .past-slide-card {
+      flex: 0 0 calc((100% - (2 * 1.15rem)) / 3);
+      width: calc((100% - (2 * 1.15rem)) / 3);
+      min-width: 270px;
+      max-width: 360px;
+      scroll-snap-align: start;
       background: #14100b;
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
-      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
+      text-align: start;
     }
-    .past-card:hover { transform: translateY(-4px); border-color: var(--gold); }
-    @media (max-width: 520px) {
-      .past-card { grid-template-columns: 1fr; }
-      .past-card__img { aspect-ratio: 4 / 3; }
+    .past-slide-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: 0 14px 34px -10px rgba(0,0,0,0.85), 0 0 18px rgba(196,154,60,0.18);
+    }
+    @media (max-width: 900px) {
+      .past-slide-card {
+        flex: 0 0 calc((100% - 1.15rem) / 2);
+        width: calc((100% - 1.15rem) / 2);
+        min-width: 250px;
+      }
+    }
+    @media (max-width: 600px) {
+      .past-slide-card {
+        flex: 0 0 85%;
+        width: 85%;
+        min-width: 240px;
+      }
     }
 
-    /* Side-on, the image column has to fill whatever height the body sets, so the
-       picture is taken out of flow rather than given an aspect ratio of its own.
-       Stacked, there is no body beside it and the ratio comes back. */
-    .past-card__img { position: relative; overflow: hidden; }
-    .past-card__img img {
-      position: absolute;
-      inset: 0;
+    .past-slide-card__img {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+    .past-slide-card__img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: grayscale(25%);
+      filter: grayscale(20%);
       transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
     }
-    .past-card:hover .past-card__img img { transform: scale(1.06); filter: none; }
-    .past-card__kind {
+    .past-slide-card:hover .past-slide-card__img img {
+      transform: scale(1.06);
+      filter: none;
+    }
+    .past-slide-card__kind {
       position: absolute;
-      inset-block-start: 0.55rem;
-      inset-inline-start: 0.55rem;
-      padding: 0.2rem 0.55rem;
+      top: 0.65rem;
+      inset-inline-start: 0.65rem;
+      padding: 0.22rem 0.6rem;
       border: 1px solid var(--line-bright);
       border-radius: 100px;
-      background: rgba(11, 9, 7, 0.82);
+      background: rgba(11, 9, 7, 0.85);
+      backdrop-filter: blur(6px);
       color: var(--gold-light);
-      font-size: 0.66rem;
-      font-weight: 500;
+      font-size: 0.68rem;
+      font-weight: 600;
       letter-spacing: 0.03em;
       white-space: nowrap;
     }
-
-    .past-card__body {
+    .past-slide-card__body {
       display: flex;
       flex-direction: column;
-      gap: 0.32rem;
-      padding: clamp(0.9rem, 1.6vw, 1.15rem);
+      gap: 0.35rem;
+      padding: 1.1rem;
+      flex: 1;
     }
-    .past-card__date { font-size: 0.78rem; color: var(--gold); }
-    .past-card__title {
+    .past-slide-card__date {
+      font-family: var(--font-num);
+      font-size: 0.76rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .past-slide-card__title {
       font-family: var(--font-serif);
-      font-size: 1.05rem;
-      font-weight: 600;
+      font-size: 1.12rem;
+      font-weight: 700;
       line-height: 1.3;
       color: var(--cream);
     }
-    .past-card__desc { font-size: 0.84rem; line-height: 1.5; color: var(--cream-dim); }
+    .past-slide-card__desc {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: var(--cream-dim);
+      margin-block-start: 0.15rem;
+    }
 
-    /* margin-block-start: auto pins the facts to the bottom, so the rules line up
-       across a row whatever the description length. */
-    .past-facts {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.5rem;
-      margin: auto 0 0;
-      padding-block-start: 0.75rem;
-      border-block-start: 1px solid var(--line);
+    /* 6th Card: "לחצו לעוד" / לכל אירועי העבר */
+    .past-slide-card--more {
+      background: linear-gradient(145deg, #1a140d 0%, #120d08 100%);
+      border: 1.5px dashed rgba(196, 154, 60, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 280px;
     }
-    .past-fact dt {
-      margin-block-end: 0.12rem;
-      font-size: 0.66rem;
-      letter-spacing: 0.06em;
-      color: var(--cream-faint);
+    .past-slide-card--more:hover {
+      border-style: solid;
+      border-color: var(--gold-light);
+      background: linear-gradient(145deg, #241b10 0%, #17110a 100%);
     }
-    .past-fact dd {
-      margin: 0;
-      font-family: var(--font-num);
-      font-size: 0.9rem;
+    .past-slide-card__more-inner {
+      padding: 1.8rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .past-more-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(196, 154, 60, 0.12);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-block-end: 0.3rem;
+      transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .past-slide-card--more:hover .past-more-icon {
+      transform: scale(1.1) rotate(6deg);
+      background: var(--gold);
+      color: #110e0a;
+    }
+    .past-more-icon svg { width: 24px; height: 24px; }
+    .past-more-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .past-more-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
       color: var(--cream);
+    }
+    .past-more-desc {
+      font-size: 0.82rem;
+      color: var(--cream-dim);
+      line-height: 1.45;
+      max-width: 220px;
+    }
+    .past-more-btn {
+      margin-block-start: 0.5rem;
+      pointer-events: none;
+    }
+
+    /* Archive Gallery Modal */
+    .archive-gallery-box {
+      width: min(94vw, 980px);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #14100b;
+      border: 1px solid var(--line-bright);
+      border-radius: 24px;
+      padding: clamp(1.4rem, 3vw, 2.2rem);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+      position: relative;
+    }
+    .archive-gallery-head {
+      margin-block-end: 1.5rem;
+      padding-block-end: 1rem;
+      border-block-end: 1px solid var(--line);
+      text-align: start;
+    }
+    .archive-gallery-title {
+      font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+      font-weight: 800;
+      color: var(--cream);
+      margin-block: 0.2rem 0.4rem;
+    }
+    .archive-gallery-desc {
+      font-size: 0.88rem;
+      color: var(--cream-dim);
+    }
+    .archive-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .archive-gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border: 1px solid var(--line);
+      background: #1a140d;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+    }
+    .archive-gallery-item:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: var(--gold);
+    }
+    .archive-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s var(--ease);
+    }
+    .archive-gallery-item:hover img {
+      transform: scale(1.08);
+    }
+    .archive-gallery-overlay {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      padding: 0.6rem 0.75rem;
+      background: linear-gradient(0deg, rgba(14,10,7,0.95) 0%, rgba(14,10,7,0.7) 60%, transparent 100%);
+      color: var(--cream);
+      text-align: start;
+    }
+    .archive-gallery-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+      margin-block-end: 0.15rem;
+    }
+    .archive-gallery-overlay h4 {
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+      color: var(--cream);
+    }
+    .archive-gallery-overlay p {
+      font-size: 0.72rem;
+      color: var(--cream-dim);
+      margin: 0.1rem 0 0 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ============================================================
@@ -2193,17 +2404,6 @@
       }
     }
 
-    /* Wheel rotation animations */
-    .anim-wheel-spin {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: wheelRoll 1.4s linear infinite;
-    }
-    @keyframes wheelRoll {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
     /* Accordion connector flex bounce */
     .anim-train-bellows {
       animation: bellowsFlex 1.4s ease-in-out infinite alternate;
@@ -2217,71 +2417,13 @@
     .anim-ufo-light-1 { animation: ufoBlink 0.6s ease-in-out infinite alternate; }
     .anim-ufo-light-2 { animation: ufoBlink 0.6s ease-in-out infinite 0.2s alternate; }
     .anim-ufo-light-3 { animation: ufoBlink 0.6s ease-in-out infinite 0.4s alternate; }
-    @keyframes ufoBlink {
-      0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
-      100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
-    }
-
-    /* Wheel rotation animations */
-    .anim-wheel-spin {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: wheelRoll 1.4s linear infinite;
-    }
-    @keyframes wheelRoll {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    /* Accordion connector flex bounce */
-    .anim-train-bellows {
-      animation: bellowsFlex 1.4s ease-in-out infinite alternate;
-    }
-    @keyframes bellowsFlex {
-      0%   { transform: scaleX(0.96); }
-      100% { transform: scaleX(1.04); }
-    }
-
-    /* Pulsing neon lights on the UFO */
-    .anim-ufo-light-1 { animation: ufoBlink 0.6s ease-in-out infinite alternate; }
-    .anim-ufo-light-2 { animation: ufoBlink 0.6s ease-in-out infinite 0.2s alternate; }
-    .anim-ufo-light-3 { animation: ufoBlink 0.6s ease-in-out infinite 0.4s alternate; }
-    @keyframes ufoBlink {
-      0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
-      100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
-    }
-
-    /* Wheel rotation animations */
-    .anim-wheel-spin {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: wheelRoll 2.2s linear infinite;
-    }
-    @keyframes wheelRoll {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    /* Accordion connector flex bounce */
-    .anim-train-bellows {
-      animation: bellowsFlex 1.8s ease-in-out infinite alternate;
-    }
-    @keyframes bellowsFlex {
-      0%   { transform: scaleX(0.96); }
-      100% { transform: scaleX(1.04); }
-    }
-
-    /* Pulsing neon lights on the UFO */
-    .anim-ufo-light-1 { animation: ufoBlink 0.8s ease-in-out infinite alternate; }
-    .anim-ufo-light-2 { animation: ufoBlink 0.8s ease-in-out infinite 0.25s alternate; }
-    .anim-ufo-light-3 { animation: ufoBlink 0.8s ease-in-out infinite 0.5s alternate; }
     @keyframes ufoBlink {
       0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
       100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .transit-vehicle-runner, .anim-wheel-spin, .transit-signal-light, .anim-ufo-light-1, .anim-ufo-light-2, .anim-ufo-light-3,
+      .transit-vehicle-runner, .transit-signal-light, .anim-ufo-light-1, .anim-ufo-light-2, .anim-ufo-light-3,
       .anim-sax-figure, .anim-sax-key, .anim-sax-note,
       .anim-pizza-dough, .anim-pizza-spin, .anim-pizza-arm-l, .anim-pizza-arm-r, .anim-pizza-flour {
         animation: none !important;
@@ -2425,36 +2567,60 @@
       100% { opacity: 0;    transform: translate(-10px, -46px) scale(1.05); }
     }
 
+    /* Pizza chef toss animation cycle:
+       0%-25%: Dough rests in hands for 1s.
+       28%-32%: Quick dip anticipation.
+       42%-58%: Dough tossed high in air with full spin and hang-time.
+       68%-74%: Dough caught cleanly back in hands.
+       78%-100%: Holds in chef's hands for 1s before repeating. */
     .anim-pizza-dough {
       transform-box: fill-box;
       transform-origin: center;
-      animation: doughToss 2.8s ease-in-out infinite;
+      animation: doughTossCycle 4.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
     }
-    @keyframes doughToss {
-      0%, 100% { transform: translateY(0) scaleX(1); }
-      45%      { transform: translateY(-16px) scaleX(0.94); }
+    @keyframes doughTossCycle {
+      0%, 25%   { transform: translateY(0) scale(1); }
+      30%       { transform: translateY(3px) scale(1.03); }
+      44%       { transform: translateY(-44px) scale(1.06); }
+      58%       { transform: translateY(-46px) scale(1); }
+      70%       { transform: translateY(0) scale(0.96); }
+      74%       { transform: translateY(2px) scale(1); }
+      78%, 100% { transform: translateY(0) scale(1); }
     }
-    /* The dough is a flat ellipse, so rotating it would read as a tumble. Spinning the
-       toppings inside a still outline is what reads as a disc turning in the air. */
     .anim-pizza-spin {
       transform-box: fill-box;
       transform-origin: center;
-      animation: doughSpin 2.8s linear infinite;
+      animation: doughSpinCycle 4.2s linear infinite;
     }
-    @keyframes doughSpin { to { transform: rotate(360deg); } }
+    @keyframes doughSpinCycle {
+      0%, 25%   { transform: rotate(0deg); }
+      40%, 65%  { transform: rotate(360deg); }
+      72%, 100% { transform: rotate(360deg); }
+    }
     .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: fill-box; transform-origin: 50% 100%; }
-    .anim-pizza-arm-l { animation: armLiftL 2.8s ease-in-out infinite; }
-    .anim-pizza-arm-r { animation: armLiftR 2.8s ease-in-out infinite; }
-    @keyframes armLiftL { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(-3.5deg); } }
-    @keyframes armLiftR { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(3.5deg); } }
+    .anim-pizza-arm-l { animation: armTossL 4.2s ease-in-out infinite; }
+    .anim-pizza-arm-r { animation: armTossR 4.2s ease-in-out infinite; }
+    @keyframes armTossL {
+      0%, 25%   { transform: rotate(0deg); }
+      30%       { transform: rotate(5deg); }
+      44%, 60%  { transform: rotate(-10deg); }
+      70%, 100% { transform: rotate(0deg); }
+    }
+    @keyframes armTossR {
+      0%, 25%   { transform: rotate(0deg); }
+      30%       { transform: rotate(-5deg); }
+      44%, 60%  { transform: rotate(10deg); }
+      70%, 100% { transform: rotate(0deg); }
+    }
     .anim-pizza-flour { transform-box: fill-box; transform-origin: center; opacity: 0; }
-    .anim-pizza-flour-1 { animation: flourFall 2.8s ease-in infinite; }
-    .anim-pizza-flour-2 { animation: flourFall 2.8s ease-in 0.9s infinite; }
-    .anim-pizza-flour-3 { animation: flourFall 2.8s ease-in 1.7s infinite; }
+    .anim-pizza-flour-1 { animation: flourFall 4.2s ease-in infinite; }
+    .anim-pizza-flour-2 { animation: flourFall 4.2s ease-in 1.2s infinite; }
+    .anim-pizza-flour-3 { animation: flourFall 4.2s ease-in 2.4s infinite; }
     @keyframes flourFall {
-      0%   { opacity: 0;   transform: translateY(-6px); }
-      25%  { opacity: 0.9; }
-      100% { opacity: 0;   transform: translateY(34px); }
+      0%, 30% { opacity: 0;   transform: translateY(-6px); }
+      45%     { opacity: 0.9; }
+      70%     { opacity: 0;   transform: translateY(34px); }
+      100%    { opacity: 0;   transform: translateY(34px); }
     }
 
     .month-cal-container {
@@ -3639,6 +3805,11 @@
               <h3 id="scheduleHeading">לוח אירועים וימי פתיחה</h3>
               <p id="scheduleSubhead">חודש קדימה · לחצו על אירוע לפרטים מלאים, ליינאפ ושריון מקום</p>
             </div>
+            <div class="month-cal-legend schedule-legend">
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
+            </div>
             <div class="schedule-source-badge">
               <span class="schedule-source-badge__dot"></span>
               <span id="scheduleStatusBadge">סנכרון זמינות חי</span>
@@ -3730,6 +3901,12 @@
                     <stop offset="85%" stop-color="#78350f"/>
                     <stop offset="100%" stop-color="#291807"/>
                   </linearGradient>
+                  <linearGradient id="peelWoodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2e1d10"/>
+                    <stop offset="40%" stop-color="#452c1a"/>
+                    <stop offset="80%" stop-color="#331f12"/>
+                    <stop offset="100%" stop-color="#1f130a"/>
+                  </linearGradient>
                 </defs>
 
                 <!-- Warm Glowing Oven Fire Aura -->
@@ -3759,13 +3936,19 @@
                   <path class="anim-tabun-flame-3" d="M 60 142 Q 66 110 76 98 Q 82 120 86 142 Z" fill="url(#flameGrad)"/>
                 </g>
 
-                <!-- 2. Chef's Handcrafted Wooden Pizza Peel / Board -->
-                <g transform="translate(155, 96)">
-                  <!-- Peel Handle Extending Left into Oven -->
-                  <line x1="-12" y1="56" x2="-85" y2="56" stroke="url(#foodGoldGrad)" stroke-width="5" stroke-linecap="round"/>
-                  <line x1="-12" y1="56" x2="-85" y2="56" stroke="#24190f" stroke-width="2.5" stroke-linecap="round"/>
-                  <!-- Serving Board / Paddle Head -->
-                  <path d="M -12 40 L 142 40 Q 158 40 158 56 Q 158 72 142 72 L -12 72 Z" fill="#24190f" stroke="url(#foodGoldGrad)" stroke-width="1.6"/>
+                <!-- 2. Chef's Handcrafted Wooden Pizza Peel / Shovel (מרדה עץ לטאבון) -->
+                <g transform="translate(148, 96)">
+                  <!-- Long Ash Wood Handle Extending Deep into Oven -->
+                  <line x1="-15" y1="56" x2="-88" y2="56" stroke="url(#foodGoldGrad)" stroke-width="5" stroke-linecap="round"/>
+                  <line x1="-15" y1="56" x2="-88" y2="56" stroke="#24190f" stroke-width="2.5" stroke-linecap="round"/>
+                  
+                  <!-- Curved Wooden Peel Paddle Head with Beveled Edge -->
+                  <path d="M -15 28 L 84 28 Q 106 28 106 56 Q 106 84 84 84 L -15 84 Q -26 56 -15 28 Z" fill="url(#peelWoodGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
+                  <!-- Wood Grain & Brass Rivets -->
+                  <line x1="-5" y1="40" x2="80" y2="40" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
+                  <line x1="-5" y1="72" x2="80" y2="72" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
+                  <circle cx="-6" cy="38" r="1.6" fill="#fef08a"/>
+                  <circle cx="-6" cy="74" r="1.6" fill="#fef08a"/>
                 </g>
 
                 <!-- 3. ROTATING SIGNATURE GOURMET DISHES (Smooth 10.5s CSS Cycle) -->
@@ -3849,7 +4032,7 @@
           </div>
         </article>
 
-        <!-- 2. מוזיקה חיה וסשנים אקוסטיים -->
+        <!-- 2. מוזיקה חיה וסשנים אקוסטיים (עם גיטרה, סקסופון, טמבורין וקונטרבס) -->
         <article class="fmt-card" data-category="live">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -3860,6 +4043,11 @@
                     <stop offset="25%" stop-color="#f59e0b"/>
                     <stop offset="65%" stop-color="#92400e"/>
                     <stop offset="100%" stop-color="#1c130b"/>
+                  </linearGradient>
+                  <linearGradient id="saxGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fef08a"/>
+                    <stop offset="45%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#78350f"/>
                   </linearGradient>
                   <radialGradient id="liveSpotlightGrad" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.28"/>
@@ -3880,7 +4068,24 @@
                 <circle class="anim-sound-ripple-1" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.4" fill="none"/>
                 <circle class="anim-sound-ripple-2" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.1" fill="none"/>
 
-                <!-- Complete Angled Acoustic Dreadnought Guitar (Safe from all borders) -->
+                <!-- INSTRUMENT 1: Vintage Alto Saxophone (Left Side) -->
+                <g transform="translate(36, 62) rotate(14 40 60)">
+                  <!-- Curved Body Tube & Bow -->
+                  <path d="M 14 18 C 14 52 20 86 36 104 C 48 116 64 114 70 98 C 76 82 70 64 54 56 L 46 50" stroke="url(#saxGoldGrad)" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                  <!-- Flared Bell with Inner Glow -->
+                  <ellipse cx="70" cy="94" rx="15" ry="9" fill="#1b1208" stroke="url(#saxGoldGrad)" stroke-width="2.2" transform="rotate(-30 70 94)"/>
+                  <ellipse cx="70" cy="94" rx="11" ry="5.5" fill="#f5d98a" opacity="0.35" transform="rotate(-30 70 94)"/>
+                  <!-- Pearl Key Cups & Rods -->
+                  <circle cx="23" cy="48" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="27" cy="60" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="32" cy="74" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="38" cy="88" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <!-- Neck & Mouthpiece -->
+                  <path d="M 14 18 Q 10 4 18 0" stroke="url(#saxGoldGrad)" stroke-width="2.4" fill="none"/>
+                  <rect x="18" y="-2" width="7" height="4.5" rx="1" fill="#140e08" stroke="#f5d98a" stroke-width="0.8"/>
+                </g>
+
+                <!-- INSTRUMENT 2: Complete Sunburst Acoustic Dreadnought Guitar (Center) -->
                 <g class="anim-guitar-body">
                   <!-- Guitar Body Cast Shadow -->
                   <g transform="translate(68, 26) scale(0.72) rotate(-22 120 110)" fill="#0a0805" opacity="0.7">
@@ -3889,7 +4094,7 @@
 
                   <!-- Main Guitar Group -->
                   <g transform="translate(56, 18) scale(0.72) rotate(-22 120 110)">
-                    <!-- 1. Guitar Body (Sunburst Dreadnought) -->
+                    <!-- Guitar Body -->
                     <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z" fill="url(#guitarBodyGrad)" stroke="url(#guitarGoldGrad)" stroke-width="2.4"/>
                     
                     <!-- Inner Purfling & Binding Inlay -->
@@ -3914,7 +4119,7 @@
                     <circle cx="130" cy="161" r="1.6" fill="#fef08a"/>
                     <circle cx="137" cy="161" r="1.6" fill="#fef08a"/>
 
-                    <!-- 2. Mahogany Neck & Rosewood Fretboard -->
+                    <!-- Mahogany Neck & Rosewood Fretboard -->
                     <rect x="111" y="-30" width="18" height="98" fill="url(#fretboardWood)" stroke="url(#guitarGoldGrad)" stroke-width="1.5"/>
                     
                     <!-- Nickel/Gold Frets -->
@@ -3925,24 +4130,16 @@
                     <line x1="111" y1="42" x2="129" y2="42" stroke="#f5d98a" stroke-width="1.1"/>
                     <line x1="111" y1="62" x2="129" y2="62" stroke="#f5d98a" stroke-width="1.1"/>
 
-                    <!-- Mother-of-Pearl Inlay Position Markers -->
-                    <circle cx="120" cy="1" r="2.2" fill="#fffbeb"/>
-                    <circle cx="120" cy="33" r="2.2" fill="#fffbeb"/>
-                    <circle cx="116" cy="52" r="1.6" fill="#fffbeb"/>
-                    <circle cx="124" cy="52" r="1.6" fill="#fffbeb"/>
-
                     <!-- Bone Nut -->
                     <rect x="110" y="-32" width="20" height="3" rx="1" fill="#fffbeb" stroke="#c49a3c" stroke-width="0.6"/>
 
-                    <!-- 3. COMPLETE HEADSTOCK WITH 6 GOLD TUNING PEGS (NO CLIPPING!) -->
+                    <!-- Complete Headstock with 6 Gold Tuning Pegs -->
                     <g transform="translate(108, -68)">
-                      <!-- Carved Crown Headstock Body -->
                       <path d="M 3 36 L 0 6 Q 12 0 24 6 L 21 36 Z" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.6"/>
                       <path d="M 6 32 L 3 10 Q 12 5 21 10 L 18 32 Z" fill="#2a1b0f" stroke="#c49a3c" stroke-width="0.8" opacity="0.6"/>
-                      <!-- Brand Inlay Logo -->
                       <circle cx="12" cy="16" r="2.5" fill="url(#guitarGoldGrad)"/>
                       
-                      <!-- Left Side Tuning Pegs (E, A, D) -->
+                      <!-- Left Pegs -->
                       <line x1="0" y1="12" x2="-6" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="-8" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
                       <line x1="1" y1="20" x2="-5" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
@@ -3950,7 +4147,7 @@
                       <line x1="2" y1="28" x2="-4" y2="28" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="-6" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
 
-                      <!-- Right Side Tuning Pegs (G, B, high E) -->
+                      <!-- Right Pegs -->
                       <line x1="24" y1="12" x2="30" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="32" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
                       <line x1="23" y1="20" x2="29" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
@@ -3959,7 +4156,7 @@
                       <ellipse cx="30" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
                     </g>
 
-                    <!-- 4. 6 Bronze Vibrating Strings from Bridge to Nut -->
+                    <!-- 6 Bronze Vibrating Strings -->
                     <line class="anim-guitar-string-1" x1="112" y1="-30" x2="103" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
                     <line class="anim-guitar-string-2" x1="115" y1="-30" x2="110" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.3"/>
                     <line class="anim-guitar-string-3" x1="118" y1="-30" x2="117" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.2"/>
@@ -3969,14 +4166,28 @@
                   </g>
                 </g>
 
-                <!-- Luminous Ascending Musical Notes (Right Side) -->
-                <g class="anim-music-note-float-1" transform="translate(245, 95)">
+                <!-- INSTRUMENT 3: Handcrafted Wooden Tambourine with Brass Jingles (Right Side) -->
+                <g transform="translate(235, 108) rotate(-16 35 35)">
+                  <!-- Wooden Frame & Skin Head -->
+                  <ellipse cx="35" cy="35" rx="30" ry="17" fill="#1b140d" stroke="url(#guitarGoldGrad)" stroke-width="2.2"/>
+                  <ellipse cx="35" cy="35" rx="24" ry="13" fill="#241a10" stroke="#f5d98a" stroke-width="0.8" opacity="0.75"/>
+                  <!-- Brass Jingles (Zills) -->
+                  <ellipse cx="9" cy="28" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <ellipse cx="11" cy="42" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <ellipse cx="61" cy="28" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <ellipse cx="59" cy="42" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <ellipse cx="35" cy="19" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <ellipse cx="35" cy="51" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                </g>
+
+                <!-- Luminous Ascending Musical Notes -->
+                <g class="anim-music-note-float-1" transform="translate(252, 75)">
                   <text fill="#fef08a" font-size="22" font-weight="900" filter="drop-shadow(0 0 4px #f59e0b)">♪</text>
                 </g>
-                <g class="anim-music-note-float-2" transform="translate(285, 68)">
+                <g class="anim-music-note-float-2" transform="translate(290, 52)">
                   <text fill="#c49a3c" font-size="26" font-weight="900" filter="drop-shadow(0 0 6px #c49a3c)">♫</text>
                 </g>
-                <g class="anim-music-note-float-3" transform="translate(205, 42)">
+                <g class="anim-music-note-float-3" transform="translate(195, 36)">
                   <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
                 </g>
               </svg>
@@ -4172,7 +4383,7 @@
                 <rect x="35" y="176" width="290" height="18" rx="4.5" fill="#17110a" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
                 <line x1="45" y1="180" x2="315" y2="180" stroke="#c49a3c" stroke-width="0.8" opacity="0.4"/>
 
-                <!-- Tilted Natural Wine Bottle (Left - Safely within bounds) -->
+                <!-- Tilted Natural Wine Bottle -->
                 <g transform="translate(64, 42) rotate(38)">
                   <!-- Dark Glass Bottle Body -->
                   <rect x="0" y="24" width="28" height="70" rx="5" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
@@ -4255,7 +4466,7 @@
           </div>
         </article>
 
-        <!-- 5. מיקרופון פתוח וספוקן וורד -->
+        <!-- 5. מיקרופון פתוח וספוקן וורד (גלי קול סימטריים ונוצה שלמה ובולטת) -->
         <article class="fmt-card" data-category="openmic">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -4283,11 +4494,10 @@
                 <polygon points="120,0 220,0 295,225 65,225" fill="url(#spotlightCone)"/>
                 <ellipse cx="170" cy="115" rx="130" ry="80" fill="url(#micGlowGrad)"/>
 
-                <!-- Concentric Spoken Word Broadcast Resonance Waves -->
-                <path class="anim-voice-wave-1" d="M 125 55 A 45 45 0 0 0 125 125" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-1" d="M 215 55 A 45 45 0 0 1 215 125" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-2" d="M 105 40 A 70 70 0 0 0 105 140" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-2" d="M 235 40 A 70 70 0 0 1 235 140" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <!-- Perfectly Symmetrical Spoken Word Acoustic Sound Waves -->
+                <circle class="anim-voice-wave-1" cx="170" cy="92" r="38" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-dasharray="8 6" fill="none"/>
+                <circle class="anim-voice-wave-2" cx="170" cy="92" r="56" stroke="url(#micGoldGrad)" stroke-width="1.3" stroke-dasharray="10 8" fill="none"/>
+                <circle class="anim-voice-wave-1" cx="170" cy="92" r="76" stroke="url(#micGoldGrad)" stroke-width="1.0" stroke-dasharray="12 10" fill="none" opacity="0.6"/>
 
                 <!-- Vintage 1950s Shure 55-Style Ribbed Stage Microphone -->
                 <g transform="translate(145, 42)">
@@ -4316,23 +4526,30 @@
                   <line x1="25" y1="22" x2="25" y2="72" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
                 </g>
 
-                <!-- Floating Poetic Feather Quill Pen -->
-                <g class="anim-quill-float" transform="translate(62, 72)">
-                  <path d="M 0 45 C 10 30 15 15 35 0 C 30 18 24 32 10 46 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1"/>
-                  <path d="M 0 45 L 35 0" stroke="#140f0a" stroke-width="1"/>
-                  <!-- Glowing Ink Droplet -->
-                  <circle cx="0" cy="46" r="2.2" fill="#fef08a" filter="drop-shadow(0 0 3px #fef08a)"/>
+                <!-- Fully Visible Elegant Golden Feather Quill Pen (Left Side) -->
+                <g class="anim-quill-float" transform="translate(48, 58) rotate(-18 35 45)">
+                  <!-- Full Quill Feather Body -->
+                  <path d="M 6 82 C 16 56 26 30 62 4 C 54 36 42 62 16 84 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1.4"/>
+                  <!-- Central Rachis / Quill Shaft Line -->
+                  <line x1="6" y1="82" x2="62" y2="4" stroke="#1c130b" stroke-width="1.6"/>
+                  <!-- Feather Vane Slits -->
+                  <line x1="22" y1="64" x2="14" y2="68" stroke="#78350f" stroke-width="1"/>
+                  <line x1="32" y1="48" x2="22" y2="54" stroke="#78350f" stroke-width="1"/>
+                  <line x1="42" y1="32" x2="32" y2="38" stroke="#78350f" stroke-width="1"/>
+                  <!-- Golden Ink Droplet at Nib -->
+                  <circle cx="5" cy="84" r="3.2" fill="#fef08a" filter="drop-shadow(0 0 5px #fef08a)"/>
+                  <circle cx="5" cy="84" r="1.4" fill="#ffffff"/>
                 </g>
 
                 <!-- Floating Verse Quotation Marks & Literary Sparkles -->
-                <g class="anim-poem-word-1" transform="translate(82, 115)">
-                  <text fill="#fef08a" font-size="20" font-family="serif" font-style="italic" opacity="0.9">“</text>
+                <g class="anim-poem-word-1" transform="translate(86, 120)">
+                  <text fill="#fef08a" font-size="22" font-family="serif" font-style="italic" opacity="0.9">“</text>
                 </g>
                 <g class="anim-poem-word-2" transform="translate(242, 88)">
                   <text fill="#f5d98a" font-size="14" font-family="serif" font-style="italic" opacity="0.85">✦ spoken</text>
                 </g>
-                <g class="anim-poem-word-3" transform="translate(268, 134)">
-                  <text fill="#c49a3c" font-size="20" font-family="serif" font-style="italic" opacity="0.9">”</text>
+                <g class="anim-poem-word-3" transform="translate(272, 136)">
+                  <text fill="#c49a3c" font-size="22" font-family="serif" font-style="italic" opacity="0.9">”</text>
                 </g>
               </svg>
             </div>
@@ -4349,7 +4566,7 @@
           </div>
         </article>
 
-        <!-- 6. השמעות אלבומים וסלון תקליטים -->
+        <!-- 6. השמעות אלבומים וסלון תקליטים (פטיפון ממורכז, תקליט מסתובב ואקוולייזר בפינה) -->
         <article class="fmt-card" data-category="vinyl">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -4372,11 +4589,11 @@
                 <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#fmtVinylAura)"/>
 
                 <!-- Audiophile Turntable Deck Chassis (Contained safely) -->
-                <rect x="42" y="32" width="276" height="162" rx="14" fill="#140f0a" stroke="url(#deckGoldGrad)" stroke-width="2"/>
-                <rect x="49" y="39" width="262" height="148" rx="10" fill="#1b150f" stroke="#78350f" stroke-width="0.9" opacity="0.6"/>
+                <rect x="36" y="30" width="288" height="165" rx="14" fill="#140f0a" stroke="url(#deckGoldGrad)" stroke-width="2"/>
+                <rect x="43" y="37" width="274" height="151" rx="10" fill="#1b150f" stroke="#78350f" stroke-width="0.9" opacity="0.6"/>
 
                 <!-- Turntable Deck Controls (Left Panel) -->
-                <g transform="translate(58, 48)">
+                <g transform="translate(52, 46)">
                   <!-- Power Knob with Strobe Light -->
                   <circle cx="12" cy="12" r="8.5" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.3"/>
                   <circle cx="12" cy="12" r="3.2" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
@@ -4388,47 +4605,54 @@
                   <text x="12" y="82" fill="#c49a3c" font-size="6" font-weight="700" text-anchor="middle">33⅓</text>
                 </g>
 
-                <!-- 7-Band Equalizer Spectrum Analyzer Bars (Top Right) -->
-                <g transform="translate(228, 48)">
-                  <line class="anim-eq-bar-1" x1="0" y1="24" x2="0" y2="5" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-2" x1="6" y1="24" x2="6" y2="2" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-3" x1="12" y1="24" x2="12" y2="8" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-4" x1="18" y1="24" x2="18" y2="0" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-5" x1="24" y1="24" x2="24" y2="6" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-6" x1="30" y1="24" x2="30" y2="3" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-7" x1="36" y1="24" x2="36" y2="10" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- 7-Band Equalizer Spectrum Analyzer Bars (Top Right Corner - 100% In-Bounds) -->
+                <g transform="translate(222, 44)">
+                  <rect x="-4" y="-4" width="50" height="34" rx="4" fill="#0d0905" stroke="url(#deckGoldGrad)" stroke-width="0.8"/>
+                  <line class="anim-eq-bar-1" x1="2" y1="24" x2="2" y2="6" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-2" x1="8" y1="24" x2="8" y2="2" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-3" x1="14" y1="24" x2="14" y2="9" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-4" x1="20" y1="24" x2="20" y2="0" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-5" x1="26" y1="24" x2="26" y2="7" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-6" x1="32" y1="24" x2="32" y2="3" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-7" x1="38" y1="24" x2="38" y2="11" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
                 </g>
 
-                <!-- Heavy Aluminum Circular Platter Base -->
-                <circle cx="165" cy="115" r="68" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
+                <!-- Heavy Aluminum Circular Platter Base (Centered at 160, 115) -->
+                <circle cx="160" cy="115" r="66" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
 
-                <!-- Spinning Vinyl Record (6s Linear Smooth Spin) -->
-                <g class="anim-fmt-vinyl-spin" style="transform-origin: 165px 115px;">
+                <!-- Spinning Vinyl Record (Centered at 160, 115) -->
+                <g class="anim-fmt-vinyl-spin" style="transform-origin: 160px 115px;">
                   <!-- Vinyl Disc Body -->
-                  <circle cx="160" cy="112" r="30" stroke="#1f1a14" stroke-width="1" fill="none"/>
+                  <circle cx="160" cy="115" r="60" fill="#120e0a" stroke="#2a1f14" stroke-width="1.5"/>
+                  
+                  <!-- Micro-Groove Audio Tracks -->
+                  <circle cx="160" cy="115" r="54" stroke="#1f1812" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="115" r="46" stroke="#2a2016" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="115" r="38" stroke="#1f1812" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="115" r="30" stroke="#2a2016" stroke-width="0.8" fill="none"/>
                   
                   <!-- Light Reflection Birefringence Sectors -->
-                  <path d="M 160 112 L 120 67 A 64 64 0 0 1 150 49 Z" fill="rgba(255,255,255,0.07)"/>
-                  <path d="M 160 112 L 200 157 A 64 64 0 0 1 170 175 Z" fill="rgba(255,255,255,0.07)"/>
+                  <path d="M 160 115 L 120 70 A 60 60 0 0 1 150 55 Z" fill="rgba(255,255,255,0.06)"/>
+                  <path d="M 160 115 L 200 160 A 60 60 0 0 1 170 175 Z" fill="rgba(255,255,255,0.06)"/>
 
                   <!-- Antique Gold Center Label -->
-                  <circle cx="160" cy="112" r="24" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
-                  <text x="160" y="109" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
-                  <text x="160" y="117" fill="#140f0a" font-size="4" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
+                  <circle cx="160" cy="115" r="22" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
+                  <text x="160" y="112" fill="#140f0a" font-size="6" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
+                  <text x="160" y="120" fill="#140f0a" font-size="3.8" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
                   <!-- Spindle Center Hole -->
-                  <circle cx="160" cy="112" r="3.5" fill="#140f0a"/>
+                  <circle cx="160" cy="115" r="3.2" fill="#140f0a"/>
                 </g>
 
                 <!-- S-Shaped Precision Tonearm with Counterweight & Stylus -->
                 <g class="anim-tonearm-drift">
-                  <circle cx="265" cy="62" r="14" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.6"/>
-                  <circle cx="265" cy="62" r="6" fill="#f5d98a"/>
-                  <rect x="258" y="41" width="14" height="12" rx="2.5" fill="url(#deckGoldGrad)" stroke="#140f0a" stroke-width="1"/>
-                  <!-- Curved S-Arm Pipe -->
-                  <path d="M 265 62 Q 260 97 240 117 Q 225 132 202 127" stroke="url(#deckGoldGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-                  <!-- Cartridge Headshell & Needle Tracking in Groove -->
-                  <rect x="191" y="121" width="14" height="8" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="1.2" transform="rotate(-15 191 121)"/>
-                  <circle cx="193" cy="129" r="1.5" fill="#fef08a"/>
+                  <circle cx="258" cy="65" r="13" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.6"/>
+                  <circle cx="258" cy="65" r="5.5" fill="#f5d98a"/>
+                  <rect x="251" y="45" width="14" height="11" rx="2.5" fill="url(#deckGoldGrad)" stroke="#140f0a" stroke-width="1"/>
+                  <!-- Curved S-Arm Pipe Tracking Towards Platter -->
+                  <path d="M 258 65 Q 252 98 234 118 Q 220 132 198 126" stroke="url(#deckGoldGrad)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+                  <!-- Cartridge Headshell & Needle in Groove -->
+                  <rect x="187" y="120" width="14" height="8" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="1.2" transform="rotate(-15 187 120)"/>
+                  <circle cx="189" cy="128" r="1.5" fill="#fef08a"/>
                 </g>
               </svg>
             </div>
@@ -4544,12 +4768,12 @@
               </defs>
               <g stroke="url(#calDecoGoldPizza)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <g class="anim-pizza-dough">
-                  <ellipse cx="75" cy="40" rx="34" ry="10"/>
-                  <ellipse cx="75" cy="40" rx="24" ry="6.5" stroke-width="1.4"/>
-                  <g class="anim-pizza-spin" stroke-width="1.4">
-                    <circle cx="62" cy="38" r="1.8"/>
-                    <circle cx="87" cy="42" r="1.8"/>
-                    <circle cx="76" cy="35" r="1.6"/>
+                  <ellipse cx="75" cy="68" rx="34" ry="10"/>
+                  <ellipse cx="75" cy="68" rx="24" ry="6.5" stroke-width="1.4"/>
+                  <g class="anim-pizza-spin" stroke-width="1.4" style="transform-origin: 75px 68px;">
+                    <circle cx="62" cy="66" r="1.8"/>
+                    <circle cx="87" cy="70" r="1.8"/>
+                    <circle cx="76" cy="63" r="1.6"/>
                   </g>
                 </g>
                 <path d="M60 84 C 57 71 70 64 77 71 C 86 63 95 72 90 84 Z"/>
@@ -4621,89 +4845,97 @@
       <!-- Level meter. Replaces the drawn crowd, dancers, drummer and sax:
            a meter says "live music in this room" without asking an
            illustration to carry it. transform/opacity only. -->
-      <div class="past-grid">
-        <article class="past-card">
-          <div class="past-card__img"><img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" /><span class="past-card__kind">ערב תקליטים</span></div>
-          <div class="past-card__body">
-            <p class="past-card__date num">14.08.2026</p>
-            <h4 class="past-card__title">Rare Disco & Funk Night</h4>
-            <p class="past-card__desc">סט משלושה תקליטנים על ויניל בלבד, דיסקו ופאנק משנות ה־70 וה־80.</p>
-            <dl class="past-facts"><div class="past-fact"><dt>קהל</dt><dd>~70</dd></div><div class="past-fact"><dt>נמשך עד</dt><dd>02:00</dd></div><div class="past-fact"><dt>כניסה</dt><dd>חופשית</dd></div></dl>
-          </div>
-        </article>
-        <article class="past-card">
-          <div class="past-card__img"><img src="images/gallery/g02.jpg" alt="Napoli in Florentin" loading="lazy" /><span class="past-card__kind">פופ-אפ שף</span></div>
-          <div class="past-card__body">
-            <p class="past-card__date num">07.08.2026</p>
-            <h4 class="past-card__title">Napoli in Florentin</h4>
-            <p class="past-card__desc">ערב פיצה נפוליטנית מהטאבון, עם בצק שתסס 48 שעות ובירה קרה מהחבית.</p>
-            <dl class="past-facts"><div class="past-fact"><dt>מנות</dt><dd>9</dd></div><div class="past-fact"><dt>שף אורח</dt><dd>כן</dd></div><div class="past-fact"><dt>כניסה</dt><dd>בהזמנה</dd></div></dl>
-          </div>
-        </article>
-        <article class="past-card">
-          <div class="past-card__img"><img src="images/gallery/g03.jpg" alt="Cocktails & Soul" loading="lazy" /><span class="past-card__kind">ערב בר</span></div>
-          <div class="past-card__body">
-            <p class="past-card__date num">30.07.2026</p>
-            <h4 class="past-card__title">Cocktails & Soul</h4>
-            <p class="past-card__desc">תפריט קוקטיילים עונתי בהשקה, לצד סול וריתם אנד בלוז על הפטיפון.</p>
-            <dl class="past-facts"><div class="past-fact"><dt>קוקטיילים</dt><dd>6 חדשים</dd></div><div class="past-fact"><dt>קהל</dt><dd>~50</dd></div><div class="past-fact"><dt>כניסה</dt><dd>חופשית</dd></div></dl>
-          </div>
-        </article>
-        <article class="past-card">
-          <div class="past-card__img"><img src="images/gallery/g04.jpg" alt="Indie Premiere Session" loading="lazy" /><span class="past-card__kind">השמעת אלבום</span></div>
-          <div class="past-card__body">
-            <p class="past-card__date num">21.07.2026</p>
-            <h4 class="past-card__title">Indie Premiere Session</h4>
-            <p class="past-card__desc">השמעה מוקדמת של אלבום אינדי לפני היציאה, עם שיחה עם היוצרים.</p>
-            <dl class="past-facts"><div class="past-fact"><dt>פורמט</dt><dd>ויניל</dd></div><div class="past-fact"><dt>קהל</dt><dd>~40</dd></div><div class="past-fact"><dt>כניסה</dt><dd>בהרשמה</dd></div></dl>
-          </div>
-        </article>
-      </div>
+      <!-- Past Events Horizontal Slider (5 authentic event cards + 6th 'לחצו לעוד' card) -->
+      <div class="past-slider-wrap">
+        <button class="sched-slider-arrow sched-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="אירועים קודמים">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        
+        <div class="past-slider-track" id="pastSliderTrack">
+          <!-- Slide 1 -->
+          <article class="past-slide-card js-open-archive" data-index="0">
+            <div class="past-slide-card__img">
+              <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
+              <span class="past-slide-card__tag">ערב תקליטים</span>
+            </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">14.08.2026</div>
+              <h4 class="past-slide-card__title">Rare Disco & Funk Night</h4>
+              <p class="past-slide-card__desc">סט משלושה תקליטנים על ויניל בלבד, דיסקו ופאנק מקוריים לצד סאוורים מיוחדים.</p>
+            </div>
+          </article>
 
-      <div class="flyers-grid">
-        <div class="flyer-card">
-          <div class="flyer-card__img">
-            <img src="images/gallery/g01.jpg" alt="ערב דיסקו תקליטים" loading="lazy" />
-          </div>
-          <div class="flyer-card__body">
-            <div class="flyer-card__date">14.08.2026</div>
-            <h4 class="flyer-card__title">Rare Disco & Funk Night</h4>
-            <p class="flyer-card__desc">הדפסות מקוריות משנת 1978 לצד סאוורים מיוחדים.</p>
+          <!-- Slide 2 -->
+          <article class="past-slide-card js-open-archive" data-index="1">
+            <div class="past-slide-card__img">
+              <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
+              <span class="past-slide-card__tag">פופ-אפ שף</span>
+            </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">07.08.2026</div>
+              <h4 class="past-slide-card__title">Napoli in Florentin</h4>
+              <p class="past-slide-card__desc">פיצות שף פריכות מהטאבון, בצק מחמצת שתסס 48 שעות ובירה קרה מהחבית.</p>
+            </div>
+          </article>
+
+          <!-- Slide 3 -->
+          <article class="past-slide-card js-open-archive" data-index="2">
+            <div class="past-slide-card__img">
+              <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
+              <span class="past-slide-card__tag">ערב בר ומיקסולוגיה</span>
+            </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">30.07.2026</div>
+              <h4 class="past-slide-card__title">Cocktails & Soul</h4>
+              <p class="past-slide-card__desc">השקת תפריט קוקטיילים עונתי, טעימות מודרכות ומוזיקת סול על פטיפון.</p>
+            </div>
+          </article>
+
+          <!-- Slide 4 -->
+          <article class="past-slide-card js-open-archive" data-index="3">
+            <div class="past-slide-card__img">
+              <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
+              <span class="past-slide-card__tag">השמעת אלבום</span>
+            </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">21.07.2026</div>
+              <h4 class="past-slide-card__title">Indie Premiere Session</h4>
+              <p class="past-slide-card__desc">השמעה מוקדמת של אלבום אינדי לפני היציאה, בליווי שיחה אינטימית עם היוצרים.</p>
+            </div>
+          </article>
+
+          <!-- Slide 5 -->
+          <article class="past-slide-card js-open-archive" data-index="4">
+            <div class="past-slide-card__img">
+              <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
+              <span class="past-slide-card__tag">מוזיקה חיה</span>
+            </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">12.07.2026</div>
+              <h4 class="past-slide-card__title">Acoustic Speakeasy Jam</h4>
+              <p class="past-slide-card__desc">טריו ג'אז וסשן אקוסטי חי לאור נרות, עם אירוח אמנים בהפתעה.</p>
+            </div>
+          </article>
+
+          <!-- Slide 6: Dedicated 'לחצו לעוד' Card -->
+          <div class="past-slide-card past-slide-card--more js-open-archive" data-index="all" role="button" tabindex="0">
+            <div class="past-slide-card__more-content">
+              <div class="past-slide-card__more-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <h4 class="past-slide-card__more-title">לכל אירועי העבר</h4>
+              <p class="past-slide-card__more-sub">לחצו לפתיחת גלריית האירועים והכרזות המלאה של עזרא</p>
+              <span class="past-slide-card__more-btn">
+                <span>צפייה בגלריה המלאה</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              </span>
+            </div>
           </div>
         </div>
 
-        <div class="flyer-card">
-          <div class="flyer-card__img">
-            <img src="images/FOOD CLOSE UP.jpg" alt="פופ-אפ פיצות נפוליטניות" loading="lazy" />
-          </div>
-          <div class="flyer-card__body">
-            <div class="flyer-card__date">07.08.2026</div>
-            <h4 class="flyer-card__title">Napoli in Florentin</h4>
-            <p class="flyer-card__desc">פיצות פריכות מהטאבון ובירה קרה מהחבית.</p>
-          </div>
-        </div>
-
-        <div class="flyer-card">
-          <div class="flyer-card__img">
-            <img src="images/MAKING COCKTAILS.jpg" alt="מיקסולוגיה וג'אז" loading="lazy" />
-          </div>
-          <div class="flyer-card__body">
-            <div class="flyer-card__date">30.07.2026</div>
-            <h4 class="flyer-card__title">Cocktails & Soul</h4>
-            <p class="flyer-card__desc">השקת תפריט עונתי עם טעימות מודרכות.</p>
-          </div>
-        </div>
-
-        <div class="flyer-card">
-          <div class="flyer-card__img">
-            <img src="images/MOMENT 2.jpg" alt="השמעת אלבום אינדי" loading="lazy" />
-          </div>
-          <div class="flyer-card__body">
-            <div class="flyer-card__date">21.07.2026</div>
-            <h4 class="flyer-card__title">Indie Premiere Session</h4>
-            <p class="flyer-card__desc">השמעת טרום בכורה מרוכזת בפורמט ויניל.</p>
-          </div>
-        </div>
+        <button class="sched-slider-arrow sched-slider-arrow--next" id="pastSliderNext" type="button" aria-label="אירועים הבאים">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -5044,19 +5276,14 @@
           <!-- Rear Red Tail Light -->
           <rect x="7" y="32" width="2" height="6" rx="0.5" fill="#ef4444" filter="drop-shadow(0 0 3px #ef4444)"/>
 
-          <!-- Rotating Front & Rear Wheels -->
-          <g class="anim-wheel-spin" style="transform-origin: 30px 42px;">
+          <!-- Front & Rear Wheels -->
+          <g>
             <circle cx="30" cy="42" r="7.5" fill="#100c08" stroke="#f5d98a" stroke-width="2"/>
             <circle cx="30" cy="42" r="3.2" fill="#ca8a04"/>
-            <line x1="30" y1="35" x2="30" y2="49" stroke="#fffbeb" stroke-width="0.8"/>
-            <line x1="23" y1="42" x2="37" y2="42" stroke="#fffbeb" stroke-width="0.8"/>
           </g>
-
-          <g class="anim-wheel-spin" style="transform-origin: 96px 42px;">
+          <g>
             <circle cx="96" cy="42" r="7.5" fill="#100c08" stroke="#f5d98a" stroke-width="2"/>
             <circle cx="96" cy="42" r="3.2" fill="#ca8a04"/>
-            <line x1="96" y1="35" x2="96" y2="49" stroke="#fffbeb" stroke-width="0.8"/>
-            <line x1="89" y1="42" x2="103" y2="42" stroke="#fffbeb" stroke-width="0.8"/>
           </g>
         </svg>
       </div>
@@ -5109,22 +5336,14 @@
 
             <!-- Undercarriage Bogies -->
             <rect x="18" y="40" width="152" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
-            <g class="anim-wheel-spin" style="transform-origin: 35px 43px;">
-              <circle cx="35" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="35" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 55px 43px;">
-              <circle cx="55" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="55" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 130px 43px;">
-              <circle cx="130" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="130" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 150px 43px;">
-              <circle cx="150" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="150" cy="43" r="2" fill="#ca8a04"/>
-            </g>
+            <circle cx="35" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="35" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="55" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="55" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="130" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="130" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="150" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="150" cy="43" r="2" fill="#ca8a04"/>
           </g>
 
           <!-- ================= ACCORDION GANGWAY 1 (x: 175 to 192) ================= -->
@@ -5157,22 +5376,14 @@
 
             <!-- Undercarriage Bogies -->
             <rect x="198" y="40" width="161" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
-            <g class="anim-wheel-spin" style="transform-origin: 215px 43px;">
-              <circle cx="215" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="215" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 235px 43px;">
-              <circle cx="235" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="235" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 320px 43px;">
-              <circle cx="320" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="320" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 340px 43px;">
-              <circle cx="340" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="340" cy="43" r="2" fill="#ca8a04"/>
-            </g>
+            <circle cx="215" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="215" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="235" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="235" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="320" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="320" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="340" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="340" cy="43" r="2" fill="#ca8a04"/>
           </g>
 
           <!-- ================= ACCORDION GANGWAY 2 (x: 365 to 382) ================= -->
@@ -5214,22 +5425,14 @@
 
             <!-- Undercarriage Bogies -->
             <rect x="388" y="40" width="148" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
-            <g class="anim-wheel-spin" style="transform-origin: 405px 43px;">
-              <circle cx="405" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="405" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 425px 43px;">
-              <circle cx="425" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="425" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 495px 43px;">
-              <circle cx="495" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="495" cy="43" r="2" fill="#ca8a04"/>
-            </g>
-            <g class="anim-wheel-spin" style="transform-origin: 515px 43px;">
-              <circle cx="515" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-              <circle cx="515" cy="43" r="2" fill="#ca8a04"/>
-            </g>
+            <circle cx="405" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="405" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="425" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="425" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="495" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="495" cy="43" r="2" fill="#ca8a04"/>
+            <circle cx="515" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="515" cy="43" r="2" fill="#ca8a04"/>
           </g>
         </svg>
       </div>
@@ -5286,18 +5489,13 @@
           <rect x="11" y="30" width="2" height="5" rx="0.5" fill="#ef4444" filter="drop-shadow(0 0 3px #ef4444)"/>
 
           <!-- Wheels -->
-          <g class="anim-wheel-spin" style="transform-origin: 32px 40px;">
+          <g>
             <circle cx="32" cy="40" r="7" fill="#100c08" stroke="#fef08a" stroke-width="2"/>
             <circle cx="32" cy="40" r="2.8" fill="#ca8a04"/>
-            <line x1="32" y1="33" x2="32" y2="47" stroke="#ffffff" stroke-width="0.8"/>
-            <line x1="25" y1="40" x2="39" y2="40" stroke="#ffffff" stroke-width="0.8"/>
           </g>
-
-          <g class="anim-wheel-spin" style="transform-origin: 88px 40px;">
+          <g>
             <circle cx="88" cy="40" r="7" fill="#100c08" stroke="#fef08a" stroke-width="2"/>
             <circle cx="88" cy="40" r="2.8" fill="#ca8a04"/>
-            <line x1="88" y1="33" x2="88" y2="47" stroke="#ffffff" stroke-width="0.8"/>
-            <line x1="81" y1="40" x2="95" y2="40" stroke="#ffffff" stroke-width="0.8"/>
           </g>
         </svg>
       </div>
@@ -5853,6 +6051,86 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       8C. PAST EVENTS FULL GALLERY MODAL (גלריית אירועי עבר)
+  ============================================================ -->
+  <div class="modal-scrim" id="archiveGalleryModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="archive-gallery-box">
+      <button class="modal-close" id="archiveGalleryClose" type="button" aria-label="סגירת גלריה"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <div class="archive-gallery-head">
+        <span class="eyebrow">ארכיון עזרא</span>
+        <h3 class="archive-gallery-title">גלריית אירועים והפקות עבר</h3>
+        <p class="archive-gallery-desc">הצצה לערבים, הופעות, סטים והפקות קולינריות שהתקיימו בחלל של עזרא בפלורנטין.</p>
+      </div>
+      <div class="archive-gallery-grid">
+        <div class="archive-gallery-item">
+          <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">14.08.2026</span>
+            <h4>Rare Disco & Funk Night</h4>
+            <p>ערב תקליטים · דיסקו ופאנק</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">07.08.2026</span>
+            <h4>Napoli in Florentin</h4>
+            <p>פופ-אפ שף · פיצות טאבון</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">30.07.2026</span>
+            <h4>Cocktails & Soul</h4>
+            <p>סלון מיקסולוגיה · מוזיקת סול</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">21.07.2026</span>
+            <h4>Indie Premiere Session</h4>
+            <p>השמעת אלבום ויניל ושיחה</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">12.07.2026</span>
+            <h4>Acoustic Speakeasy Jam</h4>
+            <p>טריו ג'אז וסשן אקוסטי</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/gallery/g02.jpg" alt="Natural Wine Salon" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">04.07.2026</span>
+            <h4>Natural Wine Salon</h4>
+            <p>ערב יין טבעי וגבינות בוטיק</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/gallery/g03.jpg" alt="Poetry & Beats" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">26.06.2026</span>
+            <h4>Poetry & Beats</h4>
+            <p>מיקרופון פתוח וספוקן וורד</p>
+          </div>
+        </div>
+        <div class="archive-gallery-item">
+          <img src="images/BAR.jpg" alt="Vinyl Collectors Meet" loading="lazy" />
+          <div class="archive-gallery-overlay">
+            <span class="archive-gallery-tag">18.06.2026</span>
+            <h4>Vinyl Collectors Meet</h4>
+            <p>מפגש אספני תקליטים ודיג'ייז</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Message -->
   <div class="toast" id="toast">ההודעה נשלחה בהצלחה!</div>
 
@@ -6228,11 +6506,11 @@
 
           const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="הצהריים סגורים לאירוע"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
 
           card.innerHTML = `
@@ -6272,13 +6550,21 @@
             });
           }
 
+          const afternoonBusyEl = card.querySelector('[data-action="notice-afternoon"]');
+          if (afternoonBusyEl) {
+            afternoonBusyEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              showNotice('הצהריים האלה כבר תפוסים',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או יום אחר שמסומן בירוק.`);
+            });
+          }
+
           const eveningBusyEl = card.querySelector('[data-action="contact-evening"]');
           if (eveningBusyEl) {
             eveningBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
-              if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
-              }
+              showNotice('הערב הזה כבר שמור',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
             });
           }
 
@@ -6294,9 +6580,8 @@
 
           card.addEventListener('click', () => {
             if (item.isClosedEvening) {
-              if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
-              }
+              showNotice('הערב הזה כבר שמור',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
             } else {
               if (typeof openEventModal === 'function') {
                 openEventModal(item);
@@ -6308,7 +6593,8 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               if (item.isClosedEvening) {
-                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
+                showNotice('הערב הזה כבר שמור',
+                  `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
               } else {
                 if (typeof openEventModal === 'function') openEventModal(item);
               }
@@ -7195,6 +7481,57 @@
           if (!isOpen) item.classList.add('is-open');
         });
       });
+    })();
+
+    // ============================================================
+    // PAST EVENTS HORIZONTAL SLIDER & GALLERY MODAL
+    // ============================================================
+    (function(){
+      const pastTrack = document.getElementById('pastSliderTrack');
+      const pastPrev = document.getElementById('pastSliderPrev');
+      const pastNext = document.getElementById('pastSliderNext');
+      const archiveModal = document.getElementById('archiveGalleryModal');
+      const archiveClose = document.getElementById('archiveGalleryClose');
+
+      if (pastTrack && pastPrev) {
+        pastPrev.addEventListener('click', () => {
+          const cardW = pastTrack.querySelector('.past-slide-card')?.offsetWidth || 280;
+          pastTrack.scrollBy({ left: -(cardW + 18), behavior: 'smooth' });
+        });
+      }
+
+      if (pastTrack && pastNext) {
+        pastNext.addEventListener('click', () => {
+          const cardW = pastTrack.querySelector('.past-slide-card')?.offsetWidth || 280;
+          pastTrack.scrollBy({ left: (cardW + 18), behavior: 'smooth' });
+        });
+      }
+
+      document.querySelectorAll('.js-open-archive').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (archiveModal) {
+            archiveModal.classList.add('is-open');
+            archiveModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+          }
+        });
+      });
+
+      if (archiveClose && archiveModal) {
+        archiveClose.addEventListener('click', () => {
+          archiveModal.classList.remove('is-open');
+          archiveModal.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('modal-open');
+        });
+        archiveModal.addEventListener('click', (e) => {
+          if (e.target === archiveModal) {
+            archiveModal.classList.remove('is-open');
+            archiveModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+          }
+        });
+      }
     })();
   </script>
 
