@@ -1188,7 +1188,6 @@
 
     /* Live Music / Acoustic Guitar Animations */
     .anim-guitar-body {
-      transform-box: fill-box;
       animation: guitarGentlyStrum 4s ease-in-out infinite alternate;
       transform-origin: 160px 142px;
     }
@@ -1207,12 +1206,10 @@
       100% { transform: translateY(-0.8px); opacity: 1; stroke: #fffbeb; }
     }
     .anim-sound-ripple-1 {
-      transform-box: fill-box;
       animation: soundRippleExpand 3.2s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
       transform-origin: 168px 138px;
     }
     .anim-sound-ripple-2 {
-      transform-box: fill-box;
       animation: soundRippleExpand 3.2s cubic-bezier(0.1, 0.7, 0.3, 1) 1.6s infinite;
       transform-origin: 168px 138px;
     }
@@ -1232,12 +1229,9 @@
     }
 
     /* Chef Pop-Up & Tabun Oven Animations */
-    .anim-tabun-flame-1 {
-      transform-box: fill-box; animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: 108px 180px; }
-    .anim-tabun-flame-2 {
-      transform-box: fill-box; animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: 130px 180px; }
-    .anim-tabun-flame-3 {
-      transform-box: fill-box; animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: 86px 180px; }
+    .anim-tabun-flame-1 { animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: 108px 180px; }
+    .anim-tabun-flame-2 { animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: 130px 180px; }
+    .anim-tabun-flame-3 { animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: 86px 180px; }
     .anim-tabun-spark-1 { animation: sparkDrift 2.4s ease-out infinite; }
     .anim-tabun-spark-2 { animation: sparkDrift 2.8s ease-out 1.2s infinite; }
     @keyframes tabunFlicker {
@@ -1251,17 +1245,14 @@
     }
     /* Rotating / Cycling Dishes in Tabun: 10.5s total cycle (3.5s per dish) */
     .anim-dish-cycle-1 {
-      transform-box: fill-box;
       animation: dishCycle1 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       transform-origin: 248px 156px;
     }
     .anim-dish-cycle-2 {
-      transform-box: fill-box;
       animation: dishCycle2 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       transform-origin: 248px 156px;
     }
     .anim-dish-cycle-3 {
-      transform-box: fill-box;
       animation: dishCycle3 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       transform-origin: 248px 156px;
     }
@@ -1293,7 +1284,6 @@
 
     /* Hi-Fi Vinyl & Album Listening Animations */
     .anim-fmt-vinyl-spin {
-      transform-box: fill-box;
       animation: spinVinyl 6s linear infinite;
       transform-origin: 160px 112px;
       will-change: transform;
@@ -1303,7 +1293,6 @@
       to { transform: rotate(360deg); }
     }
     .anim-tonearm-drift {
-      transform-box: fill-box;
       animation: tonearmDrift 8s ease-in-out infinite alternate;
       transform-origin: 270px 60px;
     }
@@ -1330,7 +1319,6 @@
       100% { transform: scaleY(1); opacity: 0.98; }
     }
     .anim-vu-needle {
-      transform-box: fill-box;
       animation: vuMeterBounce 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
       transform-origin: 64px 85px;
     }
@@ -1343,12 +1331,10 @@
 
     /* Open Mic & Spoken Word Animations */
     .anim-voice-wave-1 {
-      transform-box: fill-box;
       animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
       transform-origin: 180px 80px;
     }
     .anim-voice-wave-2 {
-      transform-box: fill-box;
       animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) 1.5s infinite;
       transform-origin: 180px 80px;
     }
@@ -1358,7 +1344,6 @@
       100% { transform: scale(1.55); opacity: 0; }
     }
     .anim-quill-float {
-      transform-box: fill-box;
       animation: quillFloat 3.8s ease-in-out infinite alternate;
       transform-origin: 80px 105px;
     }
@@ -3960,7 +3945,7 @@
 
                 <!-- 3. ROTATING SIGNATURE GOURMET DISHES (Smooth 10.5s CSS Cycle) -->
                 <!-- DISH 1: Artisanal Neapolitan Margherita Pizza -->
-                <g class="anim-dish-cycle-1" transform="translate(195, 96)">
+                <g transform="translate(195, 96)"><g class="anim-dish-cycle-1">
                   <!-- Wood-Fired Crust Base with Puffy Cornicione -->
                   <ellipse cx="42" cy="40" rx="40" ry="25" fill="url(#crustGrad)" stroke="#fef08a" stroke-width="1.5"/>
                   <!-- Charred Leopard Spots -->
@@ -3981,10 +3966,10 @@
                   <path d="M 36 34 Q 41 27 46 32 Q 41 39 36 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
                   <path d="M 48 44 Q 53 37 58 42 Q 53 49 48 44 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
                   <path d="M 27 43 Q 32 37 37 41 Q 32 48 27 43 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
+                </g></g>
 
                 <!-- DISH 2: Sizzling Cast-Iron Skillet & Wood-Fired Tagliata Steak -->
-                <g class="anim-dish-cycle-2" transform="translate(195, 96)">
+                <g transform="translate(195, 96)"><g class="anim-dish-cycle-2">
                   <!-- Skillet Body -->
                   <ellipse cx="42" cy="40" rx="38" ry="23" fill="#120e0a" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
                   <ellipse cx="42" cy="40" rx="32" ry="18" fill="#241a12"/>
@@ -3999,10 +3984,10 @@
                   <!-- Confit Garlic Bulb & Rosemary Sprig -->
                   <circle cx="26" cy="46" r="3.8" fill="#fef08a" stroke="#ca8a04" stroke-width="0.7"/>
                   <path d="M 50 29 Q 58 23 64 27" stroke="#65a30d" stroke-width="1.6" stroke-linecap="round"/>
-                </g>
+                </g></g>
 
                 <!-- DISH 3: Puffed Tabun Focaccia & Whole Burrata Platter -->
-                <g class="anim-dish-cycle-3" transform="translate(195, 96)">
+                <g transform="translate(195, 96)"><g class="anim-dish-cycle-3">
                   <!-- Focaccia Crust with Olive Oil Dimples -->
                   <ellipse cx="42" cy="40" rx="40" ry="24" fill="url(#crustGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.5"/>
                   <circle cx="24" cy="33" r="2.8" fill="#854d0e"/>
@@ -4017,13 +4002,13 @@
                   <!-- Roasted Heirloom Cherry Tomatoes -->
                   <circle cx="22" cy="41" r="4.2" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
                   <circle cx="62" cy="43" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
+                </g></g>
 
                 <!-- Rising Sizzle & Aromatic Steam from Food -->
-                <g class="anim-dish-steam" transform="translate(238, 110)">
+                <g transform="translate(238, 110)"><g class="anim-dish-steam">
                   <path d="M 0 0 Q -8 -12 2 -22 Q 12 -32 0 -42" stroke="url(#foodGoldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
                   <path d="M 16 -2 Q 24 -14 15 -26 Q 6 -38 18 -48" stroke="url(#foodGoldGrad)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag">בהזמנת מקום</span>
@@ -4188,15 +4173,15 @@
                 </g>
 
                 <!-- Luminous Ascending Musical Notes -->
-                <g class="anim-music-note-float-1" transform="translate(252, 75)">
+                <g transform="translate(252, 75)"><g class="anim-music-note-float-1">
                   <text fill="#fef08a" font-size="22" font-weight="900" filter="drop-shadow(0 0 4px #f59e0b)">♪</text>
-                </g>
-                <g class="anim-music-note-float-2" transform="translate(290, 52)">
+                </g></g>
+                <g transform="translate(290, 52)"><g class="anim-music-note-float-2">
                   <text fill="#c49a3c" font-size="26" font-weight="900" filter="drop-shadow(0 0 6px #c49a3c)">♫</text>
-                </g>
-                <g class="anim-music-note-float-3" transform="translate(195, 36)">
+                </g></g>
+                <g transform="translate(195, 36)"><g class="anim-music-note-float-3">
                   <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag">מומלץ להזמין מקום</span>
@@ -4334,10 +4319,10 @@
                 </g>
 
                 <!-- Floating Drifting Zen Tea Leaf -->
-                <g class="anim-tea-leaf" transform="translate(68, 80)">
+                <g transform="translate(68, 80)"><g class="anim-tea-leaf">
                   <path d="M 0 0 Q 14 -10 22 4 Q 10 12 0 0 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.9"/>
                   <line x1="0" y1="0" x2="16" y2="3" stroke="#fef08a" stroke-width="0.6"/>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
@@ -4449,11 +4434,11 @@
                 </g>
 
                 <!-- Polished Cobbler Cocktail Shaker in Background -->
-                <g class="anim-shaker-vibe" transform="translate(266, 92)">
+                <g transform="translate(266, 92)"><g class="anim-shaker-vibe">
                   <path d="M 8 15 L 24 15 L 28 84 L 4 84 Z" fill="#1c1610" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
                   <rect x="6" y="8" width="20" height="7" rx="2" fill="#241a12" stroke="url(#wineGoldGrad)" stroke-width="1.2"/>
                   <circle cx="16" cy="4" r="4" fill="url(#wineGoldGrad)"/>
-                </g>
+                </g></g>
 
                 <!-- Speakeasy Golden Sparkles -->
                 <text x="175" y="80" fill="#fef08a" font-size="12" font-weight="900" opacity="0.9">✦</text>
@@ -4534,7 +4519,7 @@
                 </g>
 
                 <!-- Fully Visible Elegant Golden Feather Quill Pen (Left Side) -->
-                <g class="anim-quill-float" transform="translate(48, 58) rotate(-18 35 45)">
+                <g transform="translate(48, 58) rotate(-18 35 45)"><g class="anim-quill-float">
                   <!-- Full Quill Feather Body -->
                   <path d="M 6 82 C 16 56 26 30 62 4 C 54 36 42 62 16 84 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1.4"/>
                   <!-- Central Rachis / Quill Shaft Line -->
@@ -4546,18 +4531,18 @@
                   <!-- Golden Ink Droplet at Nib -->
                   <circle cx="5" cy="84" r="3.2" fill="#fef08a" filter="drop-shadow(0 0 5px #fef08a)"/>
                   <circle cx="5" cy="84" r="1.4" fill="#ffffff"/>
-                </g>
+                </g></g>
 
                 <!-- Floating Verse Quotation Marks & Literary Sparkles -->
-                <g class="anim-poem-word-1" transform="translate(86, 120)">
+                <g transform="translate(86, 120)"><g class="anim-poem-word-1">
                   <text fill="#fef08a" font-size="22" font-family="serif" font-style="italic" opacity="0.9">“</text>
-                </g>
-                <g class="anim-poem-word-2" transform="translate(242, 88)">
+                </g></g>
+                <g transform="translate(242, 88)"><g class="anim-poem-word-2">
                   <text fill="#f5d98a" font-size="14" font-family="serif" font-style="italic" opacity="0.85">✦ spoken</text>
-                </g>
-                <g class="anim-poem-word-3" transform="translate(272, 136)">
+                </g></g>
+                <g transform="translate(272, 136)"><g class="anim-poem-word-3">
                   <text fill="#c49a3c" font-size="22" font-family="serif" font-style="italic" opacity="0.9">”</text>
-                </g>
+                </g></g>
               </svg>
             </div>
             <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
