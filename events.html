@@ -2186,9 +2186,12 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .transit-vehicle-runner, .anim-wheel-spin, .transit-signal-light, .anim-ufo-light-1, .anim-ufo-light-2, .anim-ufo-light-3 {
+      .transit-vehicle-runner, .anim-wheel-spin, .transit-signal-light, .anim-ufo-light-1, .anim-ufo-light-2, .anim-ufo-light-3,
+      .anim-sax-figure, .anim-sax-key, .anim-sax-note,
+      .anim-pizza-dough, .anim-pizza-spin, .anim-pizza-arm-l, .anim-pizza-arm-r, .anim-pizza-flour {
         animation: none !important;
       }
+      .anim-sax-note, .anim-pizza-flour { opacity: 0.6; }
     }
 
     .map-container {
@@ -2280,6 +2283,85 @@
     /* ============================================================
        3B. INTERACTIVE FREE-VIEW MONTHLY CALENDAR (COMPACT -25%)
     ============================================================ */
+    /* Calendar side figures. A saxophonist and a pizzaiolo in gold line art, set in the
+       gutters beside the month calendar rather than inside its frame. The gutter is about
+       115px at 1200px wide, so the figures are 138px and sit 34px into the wrap padding;
+       below 1200px there is no gutter left and they are dropped rather than squeezed.
+       transform/opacity only, and every animated node sets transform-box, because an SVG
+       transform-origin resolves against the whole canvas otherwise. */
+    .cal-stage { position: relative; }
+    .cal-deco {
+      position: absolute;
+      width: 138px;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .cal-deco__svg { display: block; width: 100%; height: auto; }
+    .cal-deco--sax   { top: -26px; right: -34px; }
+    .cal-deco--pizza { bottom: -20px; left: -34px; }
+    @media (max-width: 1199px) { .cal-deco { display: none; } }
+
+    .anim-sax-figure {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: saxSway 3.6s ease-in-out infinite alternate;
+    }
+    @keyframes saxSway {
+      from { transform: rotate(-1.6deg); }
+      to   { transform: rotate(1.8deg); }
+    }
+    .anim-sax-key { transform-box: fill-box; transform-origin: center; }
+    .anim-sax-key-1 { animation: saxKey 1.6s ease-in-out infinite; }
+    .anim-sax-key-2 { animation: saxKey 1.6s ease-in-out 0.2s infinite; }
+    .anim-sax-key-3 { animation: saxKey 1.6s ease-in-out 0.4s infinite; }
+    .anim-sax-key-4 { animation: saxKey 1.6s ease-in-out 0.6s infinite; }
+    @keyframes saxKey {
+      0%, 70%, 100% { opacity: 0.35; transform: scale(1); }
+      20%           { opacity: 1;    transform: scale(1.35); }
+    }
+    .anim-sax-note { transform-box: fill-box; transform-origin: center; opacity: 0; }
+    .anim-sax-note-1 { animation: saxNote 3.4s ease-out infinite; }
+    .anim-sax-note-2 { animation: saxNote 3.4s ease-out 1.1s infinite; }
+    .anim-sax-note-3 { animation: saxNote 3.4s ease-out 2.2s infinite; }
+    @keyframes saxNote {
+      0%   { opacity: 0;    transform: translate(0, 0) scale(0.7); }
+      18%  { opacity: 0.95; }
+      70%  { opacity: 0.5; }
+      100% { opacity: 0;    transform: translate(-10px, -46px) scale(1.05); }
+    }
+
+    .anim-pizza-dough {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: doughToss 2.8s ease-in-out infinite;
+    }
+    @keyframes doughToss {
+      0%, 100% { transform: translateY(0) scaleX(1); }
+      45%      { transform: translateY(-16px) scaleX(0.94); }
+    }
+    /* The dough is a flat ellipse, so rotating it would read as a tumble. Spinning the
+       toppings inside a still outline is what reads as a disc turning in the air. */
+    .anim-pizza-spin {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: doughSpin 2.8s linear infinite;
+    }
+    @keyframes doughSpin { to { transform: rotate(360deg); } }
+    .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: fill-box; transform-origin: 50% 100%; }
+    .anim-pizza-arm-l { animation: armLiftL 2.8s ease-in-out infinite; }
+    .anim-pizza-arm-r { animation: armLiftR 2.8s ease-in-out infinite; }
+    @keyframes armLiftL { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(-3.5deg); } }
+    @keyframes armLiftR { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(3.5deg); } }
+    .anim-pizza-flour { transform-box: fill-box; transform-origin: center; opacity: 0; }
+    .anim-pizza-flour-1 { animation: flourFall 2.8s ease-in infinite; }
+    .anim-pizza-flour-2 { animation: flourFall 2.8s ease-in 0.9s infinite; }
+    .anim-pizza-flour-3 { animation: flourFall 2.8s ease-in 1.7s infinite; }
+    @keyframes flourFall {
+      0%   { opacity: 0;   transform: translateY(-6px); }
+      25%  { opacity: 0.9; }
+      100% { opacity: 0;   transform: translateY(34px); }
+    }
+
     .month-cal-container {
       max-width: 885px;
       margin: 0 auto;
@@ -4282,6 +4364,44 @@
         <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (12:00-18:00) וערב (18:00-02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
+        <div class="cal-stage">
+          <div class="cal-deco cal-deco--sax" aria-hidden="true">
+            <svg class="cal-deco__svg" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="calDecoGoldSax" x1="1" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f5d98a"/>
+                  <stop offset="55%" stop-color="#c49a3c"/>
+                  <stop offset="100%" stop-color="#8a6a24"/>
+                </linearGradient>
+              </defs>
+              <g class="anim-sax-figure" stroke="url(#calDecoGoldSax)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="100" cy="34" r="12"/>
+                <path d="M100 46 L 99 54"/>
+                <path d="M99 54 C 90 58 86 70 87 84 L 89 118 C 90 127 96 131 102 131 C 109 131 114 126 114 118 L 113 84 C 113 70 108 58 99 54 Z"/>
+                <path d="M95 131 L 93 170"/>
+                <path d="M109 131 L 111 170"/>
+                <path d="M93 170 L 93 175 L 83 175"/>
+                <path d="M111 170 L 111 175 L 101 175"/>
+                <path d="M92 64 C 84 70 76 76 70 83"/>
+                <path d="M110 78 C 100 88 82 96 68 101"/>
+                <path d="M93 42 L 85 47"/>
+                <path d="M85 47 C 75 53 69 63 67 75 L 63 106 C 61 118 51 125 42 121 C 33 117 30 107 34 99"/>
+                <path d="M34 99 C 31 84 23 70 11 63"/>
+                <path d="M43 104 C 41 88 34 76 24 70"/>
+                <ellipse cx="17" cy="66" rx="9" ry="5" transform="rotate(-38 17 66)"/>
+                <circle class="anim-sax-key anim-sax-key-1" cx="68" cy="80" r="2.6"/>
+                <circle class="anim-sax-key anim-sax-key-2" cx="66" cy="90" r="2.6"/>
+                <circle class="anim-sax-key anim-sax-key-3" cx="65" cy="99" r="2.6"/>
+                <circle class="anim-sax-key anim-sax-key-4" cx="64" cy="108" r="2.6"/>
+              </g>
+              <g stroke="url(#calDecoGoldSax)" stroke-width="2" stroke-linecap="round">
+                <g class="anim-sax-note anim-sax-note-1"><circle cx="30" cy="48" r="3.6"/><path d="M33.6 47 L 33.6 33 C 38 35 40 38 39 42"/></g>
+                <g class="anim-sax-note anim-sax-note-2"><circle cx="47" cy="40" r="3"/><path d="M50 39 L 50 27"/></g>
+                <g class="anim-sax-note anim-sax-note-3"><circle cx="18" cy="34" r="2.6"/><path d="M20.6 33 L 20.6 22"/></g>
+              </g>
+            </svg>
+          </div>
+
         <!-- Center: Monthly Calendar -->
         <div class="month-cal-container">
           <div class="month-cal-head">
@@ -4315,6 +4435,47 @@
 
           <div class="month-cal-grid" id="monthCalGrid">
             <!-- Populated dynamically by JavaScript -->
+          </div>
+        </div>
+
+          <div class="cal-deco cal-deco--pizza" aria-hidden="true">
+            <svg class="cal-deco__svg" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="calDecoGoldPizza" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f5d98a"/>
+                  <stop offset="55%" stop-color="#c49a3c"/>
+                  <stop offset="100%" stop-color="#8a6a24"/>
+                </linearGradient>
+              </defs>
+              <g stroke="url(#calDecoGoldPizza)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <g class="anim-pizza-dough">
+                  <ellipse cx="75" cy="40" rx="34" ry="10"/>
+                  <ellipse cx="75" cy="40" rx="24" ry="6.5" stroke-width="1.4"/>
+                  <g class="anim-pizza-spin" stroke-width="1.4">
+                    <circle cx="62" cy="38" r="1.8"/>
+                    <circle cx="87" cy="42" r="1.8"/>
+                    <circle cx="76" cy="35" r="1.6"/>
+                  </g>
+                </g>
+                <path d="M60 84 C 57 71 70 64 77 71 C 86 63 95 72 90 84 Z"/>
+                <path d="M60 85 L 90 85"/>
+                <circle cx="75" cy="97" r="11"/>
+                <path d="M64 107 C 58 111 55 123 56 137 L 58 158 L 92 158 L 94 137 C 95 123 92 111 86 107 Z"/>
+                <path d="M66 158 L 64 182"/>
+                <path d="M84 158 L 86 182"/>
+                <path d="M64 182 L 64 186 L 54 186"/>
+                <path d="M86 182 L 86 186 L 96 186"/>
+                <path class="anim-pizza-arm-l" d="M64 111 C 54 101 48 87 48 73"/>
+                <path class="anim-pizza-arm-r" d="M86 111 C 96 101 102 87 102 73"/>
+                <circle cx="48" cy="68" r="4"/>
+                <circle cx="102" cy="68" r="4"/>
+              </g>
+              <g stroke="url(#calDecoGoldPizza)" stroke-width="1.4" stroke-linecap="round">
+                <path class="anim-pizza-flour anim-pizza-flour-1" d="M56 55 L 56 61"/>
+                <path class="anim-pizza-flour anim-pizza-flour-2" d="M94 57 L 94 63"/>
+                <path class="anim-pizza-flour anim-pizza-flour-3" d="M75 59 L 75 64"/>
+              </g>
+            </svg>
           </div>
         </div>
 
