@@ -1782,11 +1782,59 @@
       width: 100%;
       top: 50%;
       transform: translateY(-50%);
-      height: 80px;
+      height: 90px;
       z-index: 2;
       pointer-events: none;
       display: flex;
       align-items: center;
+    }
+
+    /* Ambient Night Sky Backdrop with Drifting Clouds */
+    .transit-sky-backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .transit-cloud {
+      position: absolute;
+      will-change: transform;
+      opacity: 0.7;
+    }
+
+    .transit-cloud--1 {
+      top: 8%;
+      left: 4%;
+      width: 170px;
+      animation: cloudDrift1 45s ease-in-out infinite alternate;
+    }
+
+    .transit-cloud--2 {
+      top: 14%;
+      right: 6%;
+      width: 210px;
+      animation: cloudDrift2 55s ease-in-out infinite alternate;
+    }
+
+    .transit-cloud--3 {
+      top: 22%;
+      left: 32%;
+      width: 140px;
+      animation: cloudDrift1 38s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes cloudDrift1 {
+      0%   { transform: translateX(-20px) translateY(0); }
+      100% { transform: translateX(35px) translateY(-6px); }
+    }
+
+    @keyframes cloudDrift2 {
+      0%   { transform: translateX(25px) translateY(0); }
+      100% { transform: translateX(-30px) translateY(8px); }
     }
 
     /* The asphalt road with rails & dashed lane lines */
@@ -1794,22 +1842,22 @@
       position: absolute;
       left: 0;
       width: 100%;
-      height: 52px;
-      background: linear-gradient(180deg, #140f0a 0%, #0a0705 100%);
-      border-top: 1.5px solid rgba(196, 154, 60, 0.28);
-      border-bottom: 1.5px solid rgba(196, 154, 60, 0.28);
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.85), 0 0 24px rgba(196,154,60,0.06);
+      height: 56px;
+      background: linear-gradient(180deg, #150f0a 0%, #090604 100%);
+      border-top: 1.5px solid rgba(196, 154, 60, 0.35);
+      border-bottom: 1.5px solid rgba(196, 154, 60, 0.35);
+      box-shadow: inset 0 0 18px rgba(0,0,0,0.9), 0 0 30px rgba(196,154,60,0.08);
     }
 
     /* Tram rails */
     .transit-rails {
       position: absolute;
-      top: 11px;
+      top: 12px;
       left: 0;
       width: 100%;
-      height: 30px;
-      border-top: 1px dashed rgba(245, 217, 138, 0.22);
-      border-bottom: 1px dashed rgba(245, 217, 138, 0.22);
+      height: 32px;
+      border-top: 1.2px dashed rgba(245, 217, 138, 0.28);
+      border-bottom: 1.2px dashed rgba(245, 217, 138, 0.28);
     }
 
     /* Dashed yellow road median */
@@ -1820,8 +1868,8 @@
       width: 100%;
       height: 2px;
       transform: translateY(-50%);
-      background: repeating-linear-gradient(90deg, #f5d98a 0px, #f5d98a 18px, transparent 18px, transparent 36px);
-      opacity: 0.35;
+      background: repeating-linear-gradient(90deg, #f5d98a 0px, #f5d98a 22px, transparent 22px, transparent 44px);
+      opacity: 0.4;
     }
 
     /* Overhead power catenary wire */
@@ -1831,42 +1879,74 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: rgba(196, 154, 60, 0.22);
+      background: rgba(196, 154, 60, 0.28);
     }
 
-    /* Art-Deco Tunnel Portals anchored to the sides of the central frame */
+    /* Scenery (Trees, Streetlamps & Flora) along the Road */
+    .transit-scenery {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: flex-end;
+      gap: 24px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .transit-scenery--left {
+      left: clamp(12px, 3vw, 40px);
+    }
+
+    .transit-scenery--right {
+      right: clamp(12px, 3vw, 40px);
+    }
+
+    .scenery-svg {
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
+    }
+
+    .scenery-svg--palm { width: 55px; height: 85px; }
+    .scenery-svg--cypress { width: 35px; height: 85px; }
+    .scenery-svg--lamp { width: 28px; height: 80px; }
+    .scenery-svg--bush { width: 40px; height: 35px; }
+
+    /* Grand Florentin Tunnel Portals */
     .transit-portal {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 52px;
-      height: 80px;
+      width: 58px;
+      height: 94px;
       z-index: 12;
       pointer-events: none;
     }
 
     .transit-portal--left {
-      left: -26px;
+      left: -29px;
     }
 
     .transit-portal--right {
-      right: -26px;
+      right: -29px;
     }
 
     .transit-portal-svg {
       width: 100%;
       height: 100%;
       display: block;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
+      overflow: visible;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.95));
     }
 
     /* Blinking signal beacon on the tunnel portal */
     .transit-signal-light {
-      animation: signalBlink 2s infinite ease-in-out;
+      animation: signalBlink 2.4s infinite ease-in-out;
     }
     @keyframes signalBlink {
       0%, 100% { fill: #ea580c; filter: drop-shadow(0 0 3px #ea580c); opacity: 0.6; }
-      50%      { fill: #fef08a; filter: drop-shadow(0 0 8px #fef08a); opacity: 1; }
+      50%      { fill: #fef08a; filter: drop-shadow(0 0 10px #fef08a); opacity: 1; }
     }
 
     /* Vehicle wrappers moving along the highway */
@@ -1884,40 +1964,117 @@
       display: block;
       height: auto;
       overflow: visible;
-      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.85));
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.9));
     }
 
-    /* Sequential 32s Animation across screen:
-       - 0s to 8s: Bus (Bus)
-       - 8s to 16s: Light Rail Train (Tram)
-       - 16s to 24s: Taxi / Car (Taxi)
-       - 24s to 32s: Spaceship UFO (Spaceship)
+    /* Sequential 56s Slow & Majestic Animation cycle:
+       - 0s to 14s (0% - 25%): Bus (Florentin Vintage Bus)
+       - 14s to 28s (25% - 50%): Multi-Carriage Light Rail Train (3 Carriages)
+       - 28s to 42s (50% - 75%): Taxi / Retro Car (Tel Aviv Taxi)
+       - 42s to 56s (75% - 100%): Spaceship UFO (Retro UFO)
     */
     .transit-vehicle--bus {
-      width: 130px;
-      animation: transitAcrossScreen 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      width: 135px;
+      animation: transitBusAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
       animation-delay: 0s;
     }
 
     .transit-vehicle--train {
-      width: 155px;
-      animation: transitAcrossScreen 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      animation-delay: 8s;
+      width: 560px;
+      animation: transitTrainAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 14s;
     }
 
     .transit-vehicle--car {
-      width: 115px;
-      animation: transitAcrossScreen 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      animation-delay: 16s;
+      width: 120px;
+      animation: transitCarAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 28s;
     }
 
     .transit-vehicle--ufo {
-      width: 125px;
-      animation: transitUfoAcrossScreen 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      animation-delay: 24s;
+      width: 130px;
+      animation: transitUfoAcrossScreen 56s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 42s;
     }
 
-    @keyframes transitAcrossScreen {
+    /* Bus Animation: 0% to 25% (14s) */
+    @keyframes transitBusAcrossScreen {
+      0% {
+        left: -190px;
+        opacity: 0;
+      }
+      1.5% {
+        opacity: 1;
+      }
+      /* Enters left portal of central card */
+      6.8% {
+        left: calc(50% - min(510px, 48vw));
+        opacity: 1;
+      }
+      /* Exits right portal of central card */
+      14.2% {
+        left: calc(50% + min(430px, 44vw));
+        opacity: 1;
+      }
+      /* Exits screen right */
+      22.0% {
+        left: calc(100% + 190px);
+        opacity: 1;
+      }
+      23.5% {
+        left: calc(100% + 220px);
+        opacity: 0;
+      }
+      24%, 100% {
+        left: -190px;
+        opacity: 0;
+      }
+    }
+
+    /* Multi-Carriage Train Animation: 0% to 25% of its cycle (14s)
+       Because the train is 560px wide, the front nose emerges on the right side
+       while the rear carriage is still entering from the left side!
+    */
+    @keyframes transitTrainAcrossScreen {
+      0% {
+        left: -590px;
+        opacity: 0;
+      }
+      1.2% {
+        opacity: 1;
+      }
+      /* Front locomotive enters left tunnel portal */
+      5.5% {
+        left: calc(50% - min(510px, 48vw) - 450px);
+        opacity: 1;
+      }
+      /* Head emerges from right tunnel portal WHILE rear is still entering left portal */
+      10.5% {
+        left: calc(50% + min(430px, 44vw) - 450px);
+        opacity: 1;
+      }
+      /* Rear carriage finishes entering and continues pulling through */
+      15.0% {
+        left: calc(50% + min(430px, 44vw) - 100px);
+        opacity: 1;
+      }
+      /* Entire train clears the screen to the right */
+      22.5% {
+        left: calc(100% + 100px);
+        opacity: 1;
+      }
+      24.0% {
+        left: calc(100% + 150px);
+        opacity: 0;
+      }
+      24.5%, 100% {
+        left: -590px;
+        opacity: 0;
+      }
+    }
+
+    /* Taxi / Car Animation: 0% to 25% (14s) */
+    @keyframes transitCarAcrossScreen {
       0% {
         left: -180px;
         opacity: 0;
@@ -1925,31 +2082,29 @@
       1.5% {
         opacity: 1;
       }
-      /* Approaching left tunnel portal: entering tunnel at left edge of card */
-      6.5% {
-        left: calc(50% - min(480px, 46vw));
+      6.8% {
+        left: calc(50% - min(510px, 48vw));
         opacity: 1;
       }
-      /* Driving inside tunnel under central card: hidden for ~2.6s */
-      14.5% {
-        left: calc(50% + min(420px, 42vw));
+      14.2% {
+        left: calc(50% + min(430px, 44vw));
         opacity: 1;
       }
-      /* Emerging from right tunnel portal and continuing across right side of screen */
-      22.5% {
+      22.0% {
         left: calc(100% + 180px);
         opacity: 1;
       }
-      24.5% {
+      23.5% {
         left: calc(100% + 200px);
         opacity: 0;
       }
-      25%, 100% {
+      24%, 100% {
         left: -180px;
         opacity: 0;
       }
     }
 
+    /* UFO Hovering Animation: 0% to 25% (14s) */
     @keyframes transitUfoAcrossScreen {
       0% {
         left: -180px;
@@ -1960,34 +2115,34 @@
         opacity: 1;
       }
       3.5% {
-        transform: translateY(-50%) translateY(-12px);
+        transform: translateY(-50%) translateY(-14px);
       }
-      6.5% {
-        left: calc(50% - min(480px, 46vw));
+      6.8% {
+        left: calc(50% - min(510px, 48vw));
         transform: translateY(-50%) translateY(4px);
         opacity: 1;
       }
       10.5% {
-        transform: translateY(-50%) translateY(-10px);
+        transform: translateY(-50%) translateY(-12px);
       }
-      14.5% {
-        left: calc(50% + min(420px, 42vw));
+      14.2% {
+        left: calc(50% + min(430px, 44vw));
         transform: translateY(-50%) translateY(6px);
         opacity: 1;
       }
-      18.5% {
-        transform: translateY(-50%) translateY(-12px);
+      18.0% {
+        transform: translateY(-50%) translateY(-14px);
       }
-      22.5% {
+      22.0% {
         left: calc(100% + 180px);
         transform: translateY(-50%) translateY(0px);
         opacity: 1;
       }
-      24.5% {
+      23.5% {
         left: calc(100% + 200px);
         opacity: 0;
       }
-      25%, 100% {
+      24%, 100% {
         left: -180px;
         opacity: 0;
       }
@@ -1996,18 +2151,30 @@
     /* Wheel rotation animations */
     .anim-wheel-spin {
       transform-origin: center;
-      animation: wheelRoll 1.4s linear infinite;
+      animation: wheelRoll 2.2s linear infinite;
     }
     @keyframes wheelRoll {
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
 
+    /* Accordion connector flex bounce */
+    .anim-train-bellows {
+      animation: bellowsFlex 1.8s ease-in-out infinite alternate;
+    }
+    @keyframes bellowsFlex {
+      0%   { transform: scaleX(0.96); }
+      100% { transform: scaleX(1.04); }
+    }
+
     /* Pulsing neon lights on the UFO */
-    .anim-ufo-light-1 { animation: ufoBlink 0.6s ease-in-out infinite alternate; }
-    .anim-ufo-light-2 { animation: ufoBlink 0.6s ease-in-out infinite 0.2s alternate; }
-    .anim-ufo-light-3 { animation: ufoBlink 0.6s ease-in-out infinite 0.4s alternate; }
+    .anim-ufo-light-1 { animation: ufoBlink 0.8s ease-in-out infinite alternate; }
+    .anim-ufo-light-2 { animation: ufoBlink 0.8s ease-in-out infinite 0.25s alternate; }
+    .anim-ufo-light-3 { animation: ufoBlink 0.8s ease-in-out infinite 0.5s alternate; }
     @keyframes ufoBlink {
+      0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
+      100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
+    }
       0%   { opacity: 0.4; filter: drop-shadow(0 0 2px #fff); }
       100% { opacity: 1;   filter: drop-shadow(0 0 6px #fde047); }
     }
@@ -4411,12 +4578,81 @@
        6. LOCATION & DIRECTIONS + TRANSIT TUNNEL TRACK
   ============================================================ -->
   <section class="location-section" id="location">
+    <!-- Ambient Night Sky Backdrop with Drifting Clouds -->
+    <div class="transit-sky-backdrop" aria-hidden="true">
+      <div class="transit-cloud transit-cloud--1">
+        <svg viewBox="0 0 170 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 15 35 Q 25 15 50 20 Q 72 6 98 18 Q 124 10 148 28 Q 160 38 145 45 Q 120 48 30 48 Q 10 48 15 35 Z" fill="rgba(196,154,60,0.05)" stroke="rgba(245,217,138,0.22)" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="transit-cloud transit-cloud--2">
+        <svg viewBox="0 0 210 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 20 42 Q 35 16 68 24 Q 95 8 130 20 Q 162 12 192 32 Q 204 46 182 54 Q 135 56 42 56 Q 12 56 20 42 Z" fill="rgba(196,154,60,0.04)" stroke="rgba(245,217,138,0.18)" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="transit-cloud transit-cloud--3">
+        <svg viewBox="0 0 140 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 12 32 Q 24 14 48 18 Q 70 6 96 16 Q 120 12 130 28 Q 136 40 118 44 Q 75 45 28 45 Q 8 45 12 32 Z" fill="rgba(196,154,60,0.04)" stroke="rgba(245,217,138,0.18)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+
     <!-- TRANSIT HIGHWAY & TUNNEL SYSTEM RUNNING BEHIND CENTRAL CARD -->
     <div class="transit-highway-system" aria-hidden="true">
       <div class="transit-overhead-wire"></div>
       <div class="transit-road-bed">
         <div class="transit-rails"></div>
         <div class="transit-road-stripes"></div>
+      </div>
+
+      <!-- Left Roadside Scenery (Trees, Streetlamp & Bushes) -->
+      <div class="transit-scenery transit-scenery--left">
+        <!-- Tel Aviv Palm Tree -->
+        <svg class="scenery-svg scenery-svg--palm" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 35 100 Q 32 50 38 20" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 35 100 Q 32 50 38 20" stroke="#c49a3c" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+          <!-- Palm Fronds -->
+          <path d="M 38 20 Q 15 8 2 20 M 38 20 Q 22 -4 12 -8 M 38 20 Q 40 -12 44 -6 M 38 20 Q 56 -4 64 12 M 38 20 Q 64 8 68 26 M 38 20 Q 28 12 20 28 M 38 20 Q 48 16 56 30" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+
+        <!-- Ornate Gas Streetlamp with Amber Glow -->
+        <svg class="scenery-svg scenery-svg--lamp" viewBox="0 0 32 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="16" y1="95" x2="16" y2="24" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="16" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 10 24 L 22 24 L 19 10 L 13 10 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="16" cy="18" r="5" fill="#fef08a" filter="drop-shadow(0 0 7px #fef08a)"/>
+        </svg>
+
+        <!-- Mediterranean Bush -->
+        <svg class="scenery-svg scenery-svg--bush" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 4 40 Q 4 12 20 12 Q 25 4 38 8 Q 48 12 46 40 Z" fill="#17120a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 10 40 Q 12 22 24 22 Q 32 16 40 40 Z" fill="#241a0e" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+        </svg>
+      </div>
+
+      <!-- Right Roadside Scenery (Cypress, Streetlamp, Palm) -->
+      <div class="transit-scenery transit-scenery--right">
+        <!-- Mediterranean Cypress Tree -->
+        <svg class="scenery-svg scenery-svg--cypress" viewBox="0 0 40 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 20 100 L 20 10" stroke="#78350f" stroke-width="2.5"/>
+          <path d="M 20 10 C 8 30 10 70 14 90 L 26 90 C 30 70 32 30 20 10 Z" fill="#15110a" stroke="#c49a3c" stroke-width="1.4"/>
+          <path d="M 20 16 C 12 35 14 65 17 82 L 23 82 C 26 65 28 35 20 16 Z" fill="#22180d" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+        </svg>
+
+        <!-- Second Gas Streetlamp -->
+        <svg class="scenery-svg scenery-svg--lamp" viewBox="0 0 32 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="16" y1="95" x2="16" y2="24" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="16" cy="90" r="4" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 10 24 L 22 24 L 19 10 L 13 10 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="16" cy="18" r="5" fill="#fef08a" filter="drop-shadow(0 0 7px #fef08a)"/>
+        </svg>
+
+        <!-- Tel Aviv Palm Tree -->
+        <svg class="scenery-svg scenery-svg--palm" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 35 100 Q 38 50 32 20" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 35 100 Q 38 50 32 20" stroke="#c49a3c" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+          <path d="M 32 20 Q 12 8 0 20 M 32 20 Q 18 -4 8 -8 M 32 20 Q 36 -12 40 -6 M 32 20 Q 52 -4 60 12 M 32 20 Q 60 8 66 26 M 32 20 Q 24 12 16 28 M 32 20 Q 44 16 52 30" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
       </div>
 
       <!-- 1. VINTAGE BUS (FLORENTIN VINTAGE BUS - EZRA 38 SHUTTLE) -->
@@ -4501,9 +4737,9 @@
         </svg>
       </div>
 
-      <!-- 2. LIGHT RAIL TRAIN (TEL AVIV RED LINE TRAM) -->
+      <!-- 2. MULTI-CARRIAGE LIGHT RAIL TRAIN (3 CARRIAGES WITH ACCORDION BELLOWS) -->
       <div class="transit-vehicle-runner transit-vehicle--train">
-        <svg class="transit-vehicle-svg" viewBox="0 0 160 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="transit-vehicle-svg" viewBox="0 0 560 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="trainBodyGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#ffffff"/>
@@ -4523,61 +4759,153 @@
             </linearGradient>
           </defs>
 
-          <!-- Forward Beam Cone -->
-          <polygon points="144,36 160,20 160,50" fill="url(#trainBeamGradEn)"/>
+          <!-- Forward Beam Cone on Front Locomotive -->
+          <polygon points="544,36 560,20 560,50" fill="url(#trainBeamGradEn)"/>
 
-          <!-- Train Shadow -->
-          <ellipse cx="78" cy="49" rx="68" ry="4" fill="#000000" opacity="0.6"/>
+          <!-- Continuous Under-Train Shadow -->
+          <ellipse cx="280" cy="49" rx="270" ry="4" fill="#000000" opacity="0.6"/>
 
-          <!-- Pantograph touching overhead catenary wire -->
-          <path d="M 60 4 L 75 10 L 90 4" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round"/>
-          <line x1="75" y1="4" x2="75" y2="10" stroke="#f5d98a" stroke-width="1.6"/>
-          <circle cx="75" cy="4" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 3px #ffffff)"/>
+          <!-- ================= CARRIAGE 3: REAR COACH (x: 10 to 175) ================= -->
+          <g id="trainCarriageRearEn">
+            <path d="M 12 16 Q 12 12 20 12 L 175 12 L 175 40 L 12 40 Z" fill="url(#trainBodyGradEn)" stroke="#fef08a" stroke-width="1.3"/>
+            <path d="M 12 28 L 175 28 L 175 36 L 12 36 Z" fill="url(#trainRedLineGradEn)"/>
+            <line x1="12" y1="27" x2="175" y2="27" stroke="#fef08a" stroke-width="0.7"/>
 
-          <!-- Streamlined Light Rail Train Car Body -->
-          <path d="M 12 12 L 126 12 Q 146 20 146 34 L 146 40 L 12 40 Z" fill="url(#trainBodyGradEn)" stroke="#fef08a" stroke-width="1.4"/>
-          
-          <!-- Signature Red Line Accent Stripe -->
-          <path d="M 12 28 L 132 28 Q 142 31 144 36 L 12 36 Z" fill="url(#trainRedLineGradEn)"/>
-          <line x1="12" y1="27" x2="134" y2="27" stroke="#fef08a" stroke-width="0.7"/>
+            <!-- Red Rear LED Tail Lights -->
+            <rect x="11" y="28" width="3" height="8" rx="1" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
 
-          <!-- Panoramic Glass Windows -->
-          <rect x="20" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
-          <rect x="42" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
-          <rect x="64" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
-          <rect x="86" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
-          
-          <!-- Front Cabin Wraparound Glass -->
-          <path d="M 108 16 L 128 16 Q 140 21 140 28 L 108 28 Z" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
-          <circle cx="118" cy="22" r="3" fill="#fef08a"/>
+            <!-- Windows -->
+            <rect x="25" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="47" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="69" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="91" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="113" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="135" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="157" y="16" width="14" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
 
-          <!-- Station Destination Display -->
-          <rect x="110" y="13" width="22" height="4.5" rx="1" fill="#0a0805" stroke="#fef08a" stroke-width="0.5"/>
-          <text x="121" y="16.6" fill="#fef08a" font-size="3.2" font-weight="900" text-anchor="middle" font-family="sans-serif">ELIFELET</text>
-
-          <!-- Triple Modern LED Headlights -->
-          <circle cx="142" cy="34" r="3.2" fill="#ffffff" filter="drop-shadow(0 0 6px #ffffff)"/>
-          <circle cx="138" cy="37" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
-          <circle cx="144" cy="38" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
-
-          <!-- Undercarriage Bogies & Rail Wheels -->
-          <rect x="18" y="40" width="118" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
-          
-          <g class="anim-wheel-spin" style="transform-origin: 32px 43px;">
-            <circle cx="32" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-            <circle cx="32" cy="43" r="2" fill="#ca8a04"/>
+            <!-- Undercarriage Bogies -->
+            <rect x="18" y="40" width="152" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
+            <g class="anim-wheel-spin" style="transform-origin: 35px 43px;">
+              <circle cx="35" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="35" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 55px 43px;">
+              <circle cx="55" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="55" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 130px 43px;">
+              <circle cx="130" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="130" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 150px 43px;">
+              <circle cx="150" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="150" cy="43" r="2" fill="#ca8a04"/>
+            </g>
           </g>
-          <g class="anim-wheel-spin" style="transform-origin: 52px 43px;">
-            <circle cx="52" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-            <circle cx="52" cy="43" r="2" fill="#ca8a04"/>
+
+          <!-- ================= ACCORDION GANGWAY 1 (x: 175 to 192) ================= -->
+          <g id="trainBellows1En" class="anim-train-bellows" style="transform-origin: 184px 26px;">
+            <rect x="175" y="14" width="17" height="26" rx="2" fill="#140e08" stroke="#ca8a04" stroke-width="1"/>
+            <line x1="179" y1="14" x2="179" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
+            <line x1="183" y1="14" x2="183" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
+            <line x1="188" y1="14" x2="188" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
           </g>
-          <g class="anim-wheel-spin" style="transform-origin: 94px 43px;">
-            <circle cx="94" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-            <circle cx="94" cy="43" r="2" fill="#ca8a04"/>
+
+          <!-- ================= CARRIAGE 2: MIDDLE COACH WITH PANTOGRAPH (x: 192 to 365) ================= -->
+          <g id="trainCarriageMidEn">
+            <!-- Roof Pantograph touching catenary wire -->
+            <path d="M 265 4 L 280 10 L 295 4" stroke="#f5d98a" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="280" y1="4" x2="280" y2="10" stroke="#f5d98a" stroke-width="1.6"/>
+            <circle cx="280" cy="4" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 3px #ffffff)"/>
+
+            <rect x="192" y="12" width="173" height="28" fill="url(#trainBodyGradEn)" stroke="#fef08a" stroke-width="1.3"/>
+            <rect x="192" y="28" width="173" height="8" fill="url(#trainRedLineGradEn)"/>
+            <line x1="192" y1="27" x2="365" y2="27" stroke="#fef08a" stroke-width="0.7"/>
+
+            <!-- Mid Windows -->
+            <rect x="200" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="222" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="244" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="266" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="288" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="310" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="332" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+
+            <!-- Undercarriage Bogies -->
+            <rect x="198" y="40" width="161" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
+            <g class="anim-wheel-spin" style="transform-origin: 215px 43px;">
+              <circle cx="215" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="215" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 235px 43px;">
+              <circle cx="235" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="235" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 320px 43px;">
+              <circle cx="320" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="320" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 340px 43px;">
+              <circle cx="340" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="340" cy="43" r="2" fill="#ca8a04"/>
+            </g>
           </g>
-          <g class="anim-wheel-spin" style="transform-origin: 114px 43px;">
-            <circle cx="114" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
-            <circle cx="114" cy="43" r="2" fill="#ca8a04"/>
+
+          <!-- ================= ACCORDION GANGWAY 2 (x: 365 to 382) ================= -->
+          <g id="trainBellows2En" class="anim-train-bellows" style="transform-origin: 374px 26px;">
+            <rect x="365" y="14" width="17" height="26" rx="2" fill="#140e08" stroke="#ca8a04" stroke-width="1"/>
+            <line x1="369" y1="14" x2="369" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
+            <line x1="373" y1="14" x2="373" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
+            <line x1="378" y1="14" x2="378" y2="40" stroke="#f5d98a" stroke-width="1.2"/>
+          </g>
+
+          <!-- ================= CARRIAGE 1: FRONT LOCOMOTIVE (x: 382 to 546) ================= -->
+          <g id="trainCarriageFrontEn">
+            <!-- Aerodynamic Locomotive Body -->
+            <path d="M 382 12 L 526 12 Q 546 20 546 34 L 546 40 L 382 40 Z" fill="url(#trainBodyGradEn)" stroke="#fef08a" stroke-width="1.4"/>
+            
+            <!-- Red Line Stripe -->
+            <path d="M 382 28 L 532 28 Q 542 31 544 36 L 382 36 Z" fill="url(#trainRedLineGradEn)"/>
+            <line x1="382" y1="27" x2="534" y2="27" stroke="#fef08a" stroke-width="0.7"/>
+
+            <!-- Windows -->
+            <rect x="390" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="412" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="434" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="456" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <rect x="478" y="16" width="16" height="10" rx="2" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+
+            <!-- Front Driver Wraparound Glass -->
+            <path d="M 508 16 L 528 16 Q 540 21 540 28 L 508 28 Z" fill="#0d0a07" stroke="#fef08a" stroke-width="0.8"/>
+            <circle cx="518" cy="22" r="3" fill="#fef08a"/>
+
+            <!-- Station Display -->
+            <rect x="510" y="13" width="22" height="4.5" rx="1" fill="#0a0805" stroke="#fef08a" stroke-width="0.5"/>
+            <text x="521" y="16.6" fill="#fef08a" font-size="3.2" font-weight="900" text-anchor="middle" font-family="sans-serif">ELIFELET</text>
+
+            <!-- Triple LED Headlights -->
+            <circle cx="542" cy="34" r="3.2" fill="#ffffff" filter="drop-shadow(0 0 6px #ffffff)"/>
+            <circle cx="538" cy="37" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
+            <circle cx="544" cy="38" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
+
+            <!-- Undercarriage Bogies -->
+            <rect x="388" y="40" width="148" height="4" rx="1" fill="#1b140d" stroke="#ca8a04" stroke-width="0.8"/>
+            <g class="anim-wheel-spin" style="transform-origin: 405px 43px;">
+              <circle cx="405" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="405" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 425px 43px;">
+              <circle cx="425" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="425" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 495px 43px;">
+              <circle cx="495" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="495" cy="43" r="2" fill="#ca8a04"/>
+            </g>
+            <g class="anim-wheel-spin" style="transform-origin: 515px 43px;">
+              <circle cx="515" cy="43" r="5" fill="#100c08" stroke="#f5d98a" stroke-width="1.6"/>
+              <circle cx="515" cy="43" r="2" fill="#ca8a04"/>
+            </g>
           </g>
         </svg>
       </div>
@@ -4708,9 +5036,9 @@
 
     <div class="wrap">
       <div class="stats-frame">
-        <!-- Left Tunnel Portal (Entrance) -->
+        <!-- Grand Florentin Art-Deco Tunnel Portal (Left Entrance) -->
         <div class="transit-portal transit-portal--left" aria-hidden="true">
-          <svg class="transit-portal-svg" viewBox="0 0 52 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="transit-portal-svg" viewBox="0 0 58 94" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="portalGoldGradEn" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#fffbeb"/>
@@ -4719,40 +5047,53 @@
                 <stop offset="100%" stop-color="#451a03"/>
               </linearGradient>
               <radialGradient id="tunnelDarkGradEn" cx="100%" cy="50%" r="90%">
-                <stop offset="0%" stop-color="#020202"/>
+                <stop offset="0%" stop-color="#000000"/>
                 <stop offset="60%" stop-color="#080604"/>
                 <stop offset="100%" stop-color="#140f0a"/>
               </radialGradient>
             </defs>
-            <!-- Stone / Brick Archway -->
-            <path d="M 0 80 L 0 32 Q 0 0 36 0 L 52 0 L 52 80 Z" fill="#17110a" stroke="url(#portalGoldGradEn)" stroke-width="1.8"/>
-            <!-- Pitch Black Tunnel Mouth Opening -->
-            <path d="M 10 80 L 10 36 Q 10 12 38 12 L 52 12 L 52 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
-            <!-- Art-Deco Keystone -->
-            <polygon points="34,2 48,2 45,14 37,14" fill="url(#portalGoldGradEn)"/>
-            <!-- Blinking Amber Lantern Signal Light -->
-            <circle class="transit-signal-light" cx="41" cy="8" r="3" fill="#ea580c"/>
-            <text x="24" y="74" fill="#c49a3c" font-size="5" font-weight="700" font-family="sans-serif" transform="rotate(-90 24 74)">TUNNEL</text>
+            <!-- Heavy Rusticated Stone Base -->
+            <rect x="0" y="80" width="58" height="14" rx="2" fill="#181109" stroke="url(#portalGoldGradEn)" stroke-width="1.4"/>
+            <!-- Outer Arch Wall -->
+            <path d="M 0 80 L 0 34 Q 0 0 38 0 L 58 0 L 58 80 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
+            <!-- Stepped Concentric Inner Arches -->
+            <path d="M 6 80 L 6 36 Q 6 8 38 8 L 58 8 L 58 80 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.8"/>
+            <!-- Dark Deep Tunnel Void Opening -->
+            <path d="M 12 80 L 12 40 Q 12 16 42 16 L 58 16 L 58 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
+            <!-- Art-Deco Trapezoid Keystone -->
+            <polygon points="36,2 50,2 47,15 39,15" fill="url(#portalGoldGradEn)"/>
+            <!-- Wrought Iron Bracket with Glowing Amber Signal Lantern -->
+            <path d="M 43 0 Q 43 -12 28 -12 L 24 -12" stroke="url(#portalGoldGradEn)" stroke-width="2" fill="none"/>
+            <line x1="24" y1="-12" x2="24" y2="-6" stroke="url(#portalGoldGradEn)" stroke-width="1.5"/>
+            <polygon points="20,-6 28,-6 26,4 22,4" fill="#1a120a" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
+            <circle class="transit-signal-light" cx="24" cy="-1" r="4.5" fill="#ea580c"/>
+            <!-- English Vertical Inscription -->
+            <text x="30" y="72" fill="#f5d98a" font-size="5" font-weight="900" font-family="sans-serif" transform="rotate(-90 30 72)" letter-spacing="1">TUNNEL</text>
           </svg>
         </div>
 
-        <!-- Right Tunnel Portal (Exit) -->
+        <!-- Grand Florentin Art-Deco Tunnel Portal (Right Exit) -->
         <div class="transit-portal transit-portal--right" aria-hidden="true">
-          <svg class="transit-portal-svg" viewBox="0 0 52 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Stone / Brick Archway -->
-            <path d="M 52 80 L 52 32 Q 52 0 16 0 L 0 0 L 0 80 Z" fill="#17110a" stroke="url(#portalGoldGradEn)" stroke-width="1.8"/>
-            <!-- Pitch Black Tunnel Mouth Opening -->
-            <path d="M 42 80 L 42 36 Q 42 12 14 12 L 0 12 L 0 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
-            <!-- Art-Deco Keystone -->
-            <polygon points="18,2 4,2 7,14 15,14" fill="url(#portalGoldGradEn)"/>
-            <!-- Blinking Amber Lantern Signal Light -->
-            <circle class="transit-signal-light" cx="11" cy="8" r="3" fill="#ea580c"/>
-            <text x="28" y="74" fill="#c49a3c" font-size="5" font-weight="700" font-family="sans-serif" transform="rotate(90 28 74)">EXIT</text>
+          <svg class="transit-portal-svg" viewBox="0 0 58 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Heavy Rusticated Stone Base -->
+            <rect x="0" y="80" width="58" height="14" rx="2" fill="#181109" stroke="url(#portalGoldGradEn)" stroke-width="1.4"/>
+            <!-- Outer Arch Wall -->
+            <path d="M 58 80 L 58 34 Q 58 0 20 0 L 0 0 L 0 80 Z" fill="#140f0a" stroke="url(#portalGoldGradEn)" stroke-width="2"/>
+            <!-- Stepped Concentric Inner Arches -->
+            <path d="M 52 80 L 52 36 Q 52 8 20 8 L 0 8 L 0 80 Z" stroke="#c49a3c" stroke-width="1.2" fill="none" opacity="0.8"/>
+            <!-- Dark Deep Tunnel Void Opening -->
+            <path d="M 46 80 L 46 40 Q 46 16 16 16 L 0 16 L 0 80 Z" fill="url(#tunnelDarkGradEn)" stroke="#78350f" stroke-width="1"/>
+            <!-- Art-Deco Trapezoid Keystone -->
+            <polygon points="22,2 8,2 11,15 19,15" fill="url(#portalGoldGradEn)"/>
+            <!-- Wrought Iron Bracket with Glowing Amber Signal Lantern -->
+            <path d="M 15 0 Q 15 -12 30 -12 L 34 -12" stroke="url(#portalGoldGradEn)" stroke-width="2" fill="none"/>
+            <line x1="34" y1="-12" x2="34" y2="-6" stroke="url(#portalGoldGradEn)" stroke-width="1.5"/>
+            <polygon points="30,-6 38,-6 36,4 32,4" fill="#1a120a" stroke="url(#portalGoldGradEn)" stroke-width="1"/>
+            <circle class="transit-signal-light" cx="34" cy="-1" r="4.5" fill="#ea580c"/>
+            <!-- English Vertical Inscription -->
+            <text x="28" y="72" fill="#f5d98a" font-size="5" font-weight="900" font-family="sans-serif" transform="rotate(90 28 72)" letter-spacing="1">EXIT</text>
           </svg>
         </div>
-
-    <div class="wrap">
-      <div class="stats-frame">
         <span class="stats-frame__corner stats-frame__corner--tl" aria-hidden="true"></span>
         <span class="stats-frame__corner stats-frame__corner--tr" aria-hidden="true"></span>
         <span class="stats-frame__corner stats-frame__corner--bl" aria-hidden="true"></span>
