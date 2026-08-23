@@ -426,11 +426,21 @@ function colsByType(schema, d, notes) {
   return cols;
 }
 
-async function availability(env, cors) {
-  const TOKEN = env.MONDAY_TOKEN;
-  if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
+// Read one board's date/time columns. Asking for three boards, every group, 500 items and
+// EVERY column (including `value`, a JSON blob per cell) in a single query is what took this
+// feed down: Monday rejects the whole query on complexity, the handler logged it and returned
+// an empty feed, and an empty feed is indistinguishable from "every date is free". One board
+// per request, and only the columns that can carry a date or a time.
+async function fetchBoardAvailability(boardId, TOKEN) {
+  const schema = await boardSchema(boardId, TOKEN);
+  const wanted = (schema?.columns || [])
+    .filter((c) => c.type === "date" || c.type === "hour" || /שעה|שעות|סלוט|time|start|end/i.test(c.title || ""))
+    .map((c) => c.id);
+  // No schema, or nothing that looks like a date: fall back to all columns for this board only,
+  // so one unreadable board cannot blank the others.
+  const idsArg = wanted.length ? `(ids: ${JSON.stringify(wanted)})` : "";
   const query = `query {
-    boards(ids: [${AVAIL_BOARD}, ${COMPANY_BOARD}, ${OPEN_EVENTS_BOARD}]) {
+    boards(ids: [${boardId}]) {
       id
       title
       groups {
@@ -440,11 +450,10 @@ async function availability(env, cors) {
           items {
             id
             name
-            column_values {
+            column_values${idsArg} {
               id
               type
               text
-              value
               ... on DateValue { date }
             }
           }
@@ -459,8 +468,29 @@ async function availability(env, cors) {
       body: JSON.stringify({ query }),
     });
     const out = await r.json();
-    if (out.errors) { console.error("availability Monday errors:", JSON.stringify(out.errors)); return json({ booked: [], busy: [] }, 200, cors); }
-    const boards = out?.data?.boards || [];
+    if (out.errors) {
+      console.error(`availability board ${boardId} errors:`, JSON.stringify(out.errors));
+      return null;
+    }
+    return out?.data?.boards?.[0] || null;
+  } catch (e) {
+    console.error(`availability board ${boardId} failed:`, e);
+    return null;
+  }
+}
+
+async function availability(env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ booked: [], busy: [], degraded: true }, 200, cors);
+  try {
+    const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
+    const fetched = await Promise.all(ids.map((id) => fetchBoardAvailability(id, TOKEN)));
+    const boards = fetched.filter(Boolean);
+    const missing = ids.length - boards.length;
+    if (!boards.length) {
+      console.error("availability: no board could be read; returning an empty feed.");
+      return json({ booked: [], busy: [], degraded: true }, 200, cors);
+    }
     const busy = [];
     const bookedSet = new Set();
 
@@ -541,13 +571,20 @@ async function availability(env, cors) {
       }
     }
     const booked = Array.from(bookedSet);
-    return new Response(JSON.stringify({ booked, busy }), {
+    // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
+    // broken one. Without it, a failed read renders as a month of free dates.
+    const body = missing ? { booked, busy, degraded: true } : { booked, busy };
+    return new Response(JSON.stringify(body), {
       status: 200,
-      headers: { "content-type": "application/json", "Cache-Control": "public, max-age=60", ...cors },
+      headers: {
+        "content-type": "application/json",
+        "Cache-Control": missing ? "no-store" : "public, max-age=60",
+        ...cors,
+      },
     });
   } catch (e) {
     console.error("availability failed:", e);
-    return json({ booked: [], busy: [] }, 200, cors);   // fail open
+    return json({ booked: [], busy: [], degraded: true }, 200, cors);   // fail open, but say so
   }
 }
 
