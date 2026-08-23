@@ -751,12 +751,12 @@
       margin-block-end: 0;
     }
 
-    /* Free-Floating Cute Bartender Pouring Craft Beer (OUTSIDE the box, on the bottom left) */
+    /* Free-Floating Minimalist Speakeasy Bartender (OUTSIDE the box, on the bottom left) */
     .sched-outside-bartender {
       position: absolute;
-      left: -140px;
-      bottom: -15px;
-      width: 155px;
+      left: -135px;
+      bottom: -10px;
+      width: 145px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -768,14 +768,14 @@
     @media (max-width: 1280px) {
       .sched-outside-bartender {
         left: -80px;
-        width: 130px;
+        width: 125px;
       }
     }
     @media (max-width: 1100px) {
       .sched-outside-bartender {
         position: static;
         margin: 1.5rem auto 0;
-        width: 140px;
+        width: 135px;
       }
     }
 
@@ -787,12 +787,12 @@
 
     .anim-tap-pull {
       transform-origin: 7px 32px;
-      animation: tapPullMotion 2.6s ease-in-out infinite alternate;
+      animation: tapPullMotion 3.2s ease-in-out infinite alternate;
     }
     @keyframes tapPullMotion {
       0%   { transform: rotate(0deg); }
-      40%  { transform: rotate(-8deg); }
-      100% { transform: rotate(-16deg); }
+      40%  { transform: rotate(-6deg); }
+      100% { transform: rotate(-14deg); }
     }
 
     .anim-beer-stream {
@@ -822,12 +822,62 @@
       100% { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(254,240,138,0.7)); }
     }
 
-    /* Slider Progress & Subtle Edge Arrows */
+    /* Schedule Slider Wrap & Mid-Height Centered Carousel Edge Arrows */
+    .schedule-slider-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .sched-slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(18, 13, 8, 0.92);
+      border: 1.2px solid rgba(196, 154, 60, 0.45);
+      color: #fde047;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 12;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 10px rgba(196, 154, 60, 0.18);
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+      animation: subtleArrowBreath 4s ease-in-out infinite;
+    }
+    .sched-slider-arrow:hover {
+      background: rgba(30, 20, 10, 0.98);
+      border-color: #fde047;
+      color: #ffffff;
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85), 0 0 20px rgba(253, 224, 71, 0.35);
+    }
+    .sched-slider-arrow:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    .sched-slider-arrow--prev {
+      left: -20px;
+    }
+    .sched-slider-arrow--next {
+      right: -20px;
+    }
+    @media (max-width: 1100px) {
+      .sched-slider-arrow--prev { left: 4px; }
+      .sched-slider-arrow--next { right: 4px; }
+    }
+    @keyframes subtleArrowBreath {
+      0%, 100% { box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 8px rgba(196, 154, 60, 0.12); }
+      50%      { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 0 16px rgba(196, 154, 60, 0.28); }
+    }
+
+    /* Slider Progress Bar (Clean line without cluttered bottom arrows) */
     .slider-progress-wrap {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1.2rem;
       margin-block-start: 1rem;
       padding-inline: 0.5rem;
     }
@@ -848,42 +898,6 @@
       border-radius: 4px;
       box-shadow: 0 0 10px rgba(196, 154, 60, 0.6);
       transition: width 0.2s ease, inset-inline-start 0.2s ease;
-    }
-
-    .slider-edge-arrows {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      user-select: none;
-      flex-shrink: 0;
-    }
-    .edge-arrow {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(196,154,60,0.1);
-      border: 1px solid rgba(196,154,60,0.28);
-      color: var(--gold-light);
-      font-size: 0.72rem;
-      font-weight: 800;
-      transition: all 0.25s var(--ease);
-    }
-    .edge-arrow--left {
-      animation: arrowPulseLeft 2.2s ease-in-out infinite;
-    }
-    .edge-arrow--right {
-      animation: arrowPulseRight 2.2s ease-in-out infinite 1.1s;
-    }
-    @keyframes arrowPulseLeft {
-      0%, 100% { transform: translateX(0); opacity: 0.55; }
-      50%      { transform: translateX(-3px); opacity: 1; border-color: var(--gold); background: rgba(196,154,60,0.2); }
-    }
-    @keyframes arrowPulseRight {
-      0%, 100% { transform: translateX(0); opacity: 0.55; }
-      50%      { transform: translateX(3px); opacity: 1; border-color: var(--gold); background: rgba(196,154,60,0.2); }
     }
 
     /* Rich Visual Time Card (Slider Card - 4 across on Desktop) */
@@ -1531,77 +1545,79 @@
     }
 
     /* ============================================================
-       5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE (SPACED & CUTE)
+       5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE (SPACED & BEAUTIFULLY ARRANGED)
     ============================================================ */
     .archive-crowd-stage {
-      max-width: 820px;
-      margin: 0 auto 2rem;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto 2.2rem;
       display: flex;
       align-items: center;
       justify-content: center;
       pointer-events: none;
       user-select: none;
+      padding-inline: 1rem;
     }
     .archive-crowd-svg {
       width: 100%;
       height: auto;
-      max-height: 125px;
+      max-height: 120px;
       overflow: visible;
       filter: drop-shadow(0 8px 24px rgba(0,0,0,0.65));
     }
 
     .anim-dancer-1 {
-      transform-origin: 110px 85px;
+      transform-origin: 80px 85px;
       animation: dancerGroove1 3.2s ease-in-out infinite;
     }
     @keyframes dancerGroove1 {
       0%, 100% { transform: rotate(0deg) translateY(0); }
-      35%      { transform: rotate(-3.5deg) translateY(-2px); }
-      70%      { transform: rotate(3deg) translateY(1px); }
+      35%      { transform: rotate(-3deg) translateY(-2px); }
+      70%      { transform: rotate(2.5deg) translateY(1px); }
     }
 
     .anim-dancer-2 {
-      transform-origin: 280px 90px;
+      transform-origin: 300px 90px;
       animation: dancerGroove2 2.6s ease-in-out infinite;
     }
     @keyframes dancerGroove2 {
       0%, 100% { transform: rotate(0deg) translateY(0); }
-      45%      { transform: rotate(4deg) translateY(-3px); }
-      80%      { transform: rotate(-3deg) translateY(0); }
+      45%      { transform: rotate(3.5deg) translateY(-3px); }
+      80%      { transform: rotate(-2.5deg) translateY(0); }
     }
 
     .anim-dancer-3 {
-      transform-origin: 480px 82px;
+      transform-origin: 680px 82px;
       animation: dancerGroove3 3.6s ease-in-out infinite;
     }
     @keyframes dancerGroove3 {
       0%, 100% { transform: rotate(0deg) scaleX(1); }
-      40%      { transform: rotate(-4deg) translateY(-2px) scaleX(1.04); }
-      75%      { transform: rotate(3deg) translateY(1px) scaleX(0.97); }
+      40%      { transform: rotate(-3.5deg) translateY(-2px) scaleX(1.03); }
+      75%      { transform: rotate(2.5deg) translateY(1px) scaleX(0.97); }
     }
 
     .anim-dancer-4 {
-      transform-origin: 650px 85px;
-      animation: dancerGroove4 1.8s ease-in-out infinite alternate;
+      transform-origin: 880px 85px;
+      animation: dancerGroove4 2s ease-in-out infinite alternate;
     }
     @keyframes dancerGroove4 {
       0%   { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(-3px) rotate(2.5deg); }
+      100% { transform: translateY(-3px) rotate(2deg); }
     }
 
     .anim-archive-vinyl {
-      transform-origin: 380px 38px;
+      transform-origin: 490px 32px;
       animation: spinArchiveVinyl 6s linear infinite;
     }
     @keyframes spinArchiveVinyl {
       to { transform: rotate(360deg); }
     }
 
-    .anim-sparkle-1 { animation: starGlint 2.1s ease-in-out infinite; transform-origin: 60px 20px; }
-    .anim-sparkle-2 { animation: starGlint 2.7s ease-in-out infinite 0.6s; transform-origin: 200px 14px; }
-    .anim-sparkle-3 { animation: starGlint 2.4s ease-in-out infinite 1.2s; transform-origin: 380px 10px; }
-    .anim-sparkle-4 { animation: starGlint 2.8s ease-in-out infinite 1.8s; transform-origin: 560px 16px; }
-    .anim-sparkle-5 { animation: starGlint 2.2s ease-in-out infinite 0.9s; transform-origin: 700px 22px; }
+    .anim-sparkle-1 { animation: starGlint 2.1s ease-in-out infinite; transform-origin: 80px 20px; }
+    .anim-sparkle-2 { animation: starGlint 2.7s ease-in-out infinite 0.6s; transform-origin: 260px 14px; }
+    .anim-sparkle-3 { animation: starGlint 2.4s ease-in-out infinite 1.2s; transform-origin: 490px 10px; }
+    .anim-sparkle-4 { animation: starGlint 2.8s ease-in-out infinite 1.8s; transform-origin: 720px 16px; }
+    .anim-sparkle-5 { animation: starGlint 2.2s ease-in-out infinite 0.9s; transform-origin: 900px 22px; }
 
     @keyframes starGlint {
       0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
@@ -1609,7 +1625,7 @@
     }
 
     /* ============================================================
-       6. LOCATION TRANSIT TUNNEL SYSTEM (BUS -> TRAIN -> CAR -> SPACESHIP)
+       6. LOCATION TRANSIT TUNNEL SYSTEM WITH ART-DECO PORTALS
     ============================================================ */
     .location-section {
       position: relative;
@@ -1620,10 +1636,10 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: clamp(50px, 10vw, 95px);
+      bottom: clamp(48px, 9.5vw, 92px);
       height: 60px;
       pointer-events: none;
-      z-index: 1; /* Underneath stats-frame which is z-index: 5 */
+      z-index: 2;
       overflow: hidden;
     }
 
@@ -1631,31 +1647,52 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: 6px;
+      bottom: 8px;
       height: 2px;
-      background: linear-gradient(90deg, transparent 0%, rgba(196,154,60,0.18) 20%, rgba(196,154,60,0.45) 50%, rgba(196,154,60,0.18) 80%, transparent 100%);
+      background: linear-gradient(90deg, transparent 0%, rgba(196,154,60,0.18) 15%, rgba(196,154,60,0.45) 50%, rgba(196,154,60,0.18) 85%, transparent 100%);
+    }
+
+    /* Art-Deco Tunnel Entrance & Exit Portals */
+    .transit-tunnel-portal {
+      position: absolute;
+      bottom: clamp(44px, 9vw, 86px);
+      width: 58px;
+      height: 68px;
+      z-index: 6;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 4px 18px rgba(0,0,0,0.85));
+    }
+    .transit-tunnel-portal--entry {
+      left: calc(50% - min(540px, 46vw) - 34px);
+    }
+    .transit-tunnel-portal--exit {
+      right: calc(50% - min(540px, 46vw) - 34px);
+    }
+    @media (max-width: 900px) {
+      .transit-tunnel-portal--entry { left: 4px; }
+      .transit-tunnel-portal--exit { right: 4px; }
+    }
+    .tunnel-arch-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
     }
 
     .transit-vehicle {
       position: absolute;
-      bottom: 4px;
+      bottom: 6px;
       left: -180px;
       width: 110px;
-      height: 50px;
+      height: 48px;
       opacity: 0;
       pointer-events: none;
       user-select: none;
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.8));
     }
-    .transit-vehicle--train {
-      width: 130px;
-    }
-    .transit-vehicle--car {
-      width: 100px;
-    }
-    .transit-vehicle--ufo {
-      width: 100px;
-    }
+    .transit-vehicle--train { width: 130px; }
+    .transit-vehicle--car   { width: 100px; }
+    .transit-vehicle--ufo   { width: 100px; }
     .vehicle-svg {
       width: 100%;
       height: 100%;
@@ -1664,10 +1701,10 @@
 
     /* 
       Continuous Loop (32s total: 8s per vehicle).
-      Left edge to box left = 0% to 26% (~2.1s).
-      Underneath stats-frame box (hidden in tunnel) = 26% to 52% (~2.1s).
-      Box right edge to screen right exit = 52% to 78% (~2.1s).
-      Offscreen reset = 78% to 100%.
+      Approach track (left of portal) = 0% to 23%.
+      Portal entry & Complete subterranean disappearance under box = 24% to 50% (opacity: 0).
+      Portal exit & driving across right track = 51% to 74%.
+      Offscreen reset = 75% to 100%.
     */
     .transit-vehicle--bus   { animation: transitTunnelLoop 32s linear infinite 0s; }
     .transit-vehicle--train { animation: transitTunnelLoop 32s linear infinite 8s; }
@@ -1678,17 +1715,34 @@
       0% {
         left: -160px;
         opacity: 0;
-        transform: translateY(0);
       }
       2% {
         opacity: 1;
       }
-      75% {
+      22% {
+        left: calc(50% - min(540px, 46vw) - 60px);
+        opacity: 1;
+      }
+      25% {
+        left: calc(50% - min(540px, 46vw) + 15px);
+        opacity: 0;
+      }
+      26%, 49% {
+        opacity: 0;
+      }
+      50% {
+        left: calc(50% + min(540px, 46vw) - 30px);
+        opacity: 0;
+      }
+      53% {
+        left: calc(50% + min(540px, 46vw) + 20px);
+        opacity: 1;
+      }
+      74% {
         left: calc(100% + 60px);
         opacity: 1;
-        transform: translateY(0);
       }
-      76%, 100% {
+      75%, 100% {
         left: calc(100% + 60px);
         opacity: 0;
       }
@@ -1698,20 +1752,42 @@
       0% {
         left: -160px;
         opacity: 0;
-        transform: translateY(0);
+        transform: translateY(0) rotate(0deg);
       }
       2% {
         opacity: 1;
       }
-      18% { transform: translateY(-8px) rotate(-3deg); }
-      38% { transform: translateY(4px) rotate(2deg); }
-      58% { transform: translateY(-10px) rotate(-2deg); }
-      75% {
+      12% { transform: translateY(-8px) rotate(-3deg); }
+      22% {
+        left: calc(50% - min(540px, 46vw) - 60px);
+        opacity: 1;
+        transform: translateY(-4px) rotate(2deg);
+      }
+      25% {
+        left: calc(50% - min(540px, 46vw) + 15px);
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+      }
+      26%, 49% {
+        opacity: 0;
+      }
+      50% {
+        left: calc(50% + min(540px, 46vw) - 30px);
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+      }
+      53% {
+        left: calc(50% + min(540px, 46vw) + 20px);
+        opacity: 1;
+        transform: translateY(-6px) rotate(-2deg);
+      }
+      64% { transform: translateY(4px) rotate(2deg); }
+      74% {
         left: calc(100% + 60px);
         opacity: 1;
         transform: translateY(0) rotate(0deg);
       }
-      76%, 100% {
+      75%, 100% {
         left: calc(100% + 60px);
         opacity: 0;
       }
@@ -2989,24 +3065,26 @@
           </div>
 
           <div class="schedule-slider-wrap">
+            <button class="sched-slider-arrow sched-slider-arrow--prev" id="schedSliderPrev" type="button" aria-label="אירועים קודמים">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
             <div class="timeline-grid" id="weekGrid">
               <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
             </div>
+            <button class="sched-slider-arrow sched-slider-arrow--next" id="schedSliderNext" type="button" aria-label="אירועים הבאים">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
           </div>
 
-          <!-- Bottom progress bar with edge arrows (NO text) -->
+          <!-- Bottom progress bar (Clean line) -->
           <div class="slider-progress-wrap">
             <div class="slider-progress-bar">
               <div class="slider-progress-bar__thumb" id="scheduleProgressThumb"></div>
             </div>
-            <div class="slider-edge-arrows" aria-hidden="true">
-              <span class="edge-arrow edge-arrow--left">❮</span>
-              <span class="edge-arrow edge-arrow--right">❯</span>
-            </div>
           </div>
         </div>
 
-        <!-- Free-Floating Cute Bartender Pouring Craft Beer (OUTSIDE the box, on the bottom left) -->
+        <!-- Free-Floating Minimalist Speakeasy Bartender (OUTSIDE the box, on the bottom left) -->
         <div class="sched-outside-bartender" aria-hidden="true">
           <svg class="sched-bartender-svg" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -3046,33 +3124,31 @@
               </g>
             </g>
 
-            <!-- Cute, Friendly Human Bartender (Left Side) -->
+            <!-- Sleek, Sophisticated Line-Art Mixologist (No Cartoon Hats/Mustaches) -->
             <g>
-              <!-- Stylish Beret / Flat Cap -->
-              <path d="M 32 30 Q 48 18 64 26 Q 66 34 56 36 L 34 36 Z" fill="#291807" stroke="#fde047" stroke-width="1.4"/>
-              
-              <!-- Friendly Head & Face -->
-              <circle cx="48" cy="42" r="12" fill="#fde047" fill-opacity="0.25" stroke="#fde047" stroke-width="1.8"/>
-              <!-- Cheerful Eye & Smile -->
-              <circle cx="52" cy="40" r="1.5" fill="#fef08a"/>
-              <path d="M 49 46 Q 53 49 57 46" stroke="#fef08a" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-              <!-- Cute French Mustache -->
-              <path d="M 46 44 Q 50 42 54 44 Q 57 42 60 44" stroke="#ca8a04" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <!-- Clean Minimalist Head & Jaw Contour -->
+              <ellipse cx="48" cy="38" rx="10" ry="12" stroke="url(#schedBrassGrad)" stroke-width="2" fill="#140f0a"/>
+              <path d="M 42 32 Q 48 26 54 32" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
 
-              <!-- Torso, Collar & Vest -->
-              <path d="M 38 54 L 32 110 M 58 54 L 64 110" stroke="url(#schedBrassGrad)" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M 40 54 L 48 68 L 56 54" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
-              <circle cx="48" cy="62" r="2" fill="#f59e0b"/>
-              <circle cx="48" cy="74" r="1.8" fill="#f59e0b"/>
-              <circle cx="48" cy="86" r="1.8" fill="#f59e0b"/>
+              <!-- Torso, Elegant Vest & Collar -->
+              <path d="M 38 52 L 32 108 M 58 52 L 64 108" stroke="url(#schedBrassGrad)" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M 40 52 L 48 66 L 56 52" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
+              <!-- Elegant Bow Tie -->
+              <polygon points="45,54 51,54 48,57" fill="#fde047"/>
+              <polygon points="45,60 51,60 48,57" fill="#fde047"/>
+              <circle cx="48" cy="57" r="1.5" fill="#ca8a04"/>
+              <!-- Vest Buttons -->
+              <circle cx="48" cy="68" r="1.8" fill="#f59e0b"/>
+              <circle cx="48" cy="80" r="1.8" fill="#f59e0b"/>
+              <circle cx="48" cy="92" r="1.8" fill="#f59e0b"/>
 
               <!-- Arm pulling tap handle -->
-              <path d="M 52 58 Q 72 44 104 28" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <circle cx="104" cy="28" r="3.5" fill="#fde047"/>
+              <path d="M 52 56 Q 72 44 104 28" stroke="url(#schedBrassGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <circle cx="104" cy="28" r="3" fill="#fde047"/>
 
               <!-- Arm holding the tilted craft glass -->
-              <path d="M 44 64 Q 58 84 76 92" stroke="url(#schedBrassGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-              <circle cx="76" cy="92" r="3.5" fill="#fde047"/>
+              <path d="M 44 62 Q 58 82 76 90" stroke="url(#schedBrassGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <circle cx="76" cy="90" r="3" fill="#fde047"/>
             </g>
 
             <!-- Continuous Flowing Amber Beer Stream -->
@@ -3360,20 +3436,15 @@
             <!-- Warm Ambient Floating Aura -->
             <ellipse cx="65" cy="130" rx="60" ry="100" fill="url(#saxAuraGrad)"/>
 
-            <!-- Charming, Cute & Human Saxophonist -->
+            <!-- Sleek, Sophisticated Saxophonist Silhouette (No Hats / Cartoon Faces) -->
             <g class="anim-flank-sax">
-              <!-- Stylish Jazz Fedora -->
-              <path d="M 40 50 Q 56 34 76 42 Q 78 52 68 56 L 38 56 Z" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
-              <ellipse cx="58" cy="56" rx="22" ry="4" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
-
-              <!-- Friendly Smiling Face Profile -->
-              <circle cx="58" cy="62" r="10" fill="#140f0a" stroke="url(#saxLineGrad)" stroke-width="1.8"/>
-              <circle cx="62" cy="60" r="1.3" fill="#fef08a"/>
-              <path d="M 60 64 Q 63 67 66 64" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+              <!-- Clean Minimalist Head & Neck Line -->
+              <ellipse cx="58" cy="56" rx="9" ry="11" fill="#140f0a" stroke="url(#saxLineGrad)" stroke-width="2"/>
+              <path d="M 52 50 Q 58 44 64 50" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
               
               <!-- Torso, Relaxed Blazer & Body Flow -->
-              <path d="M 50 72 Q 40 115 48 180 Q 54 220 58 245" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-              <path d="M 52 74 L 60 90 L 66 74" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
+              <path d="M 50 68 Q 40 115 48 180 Q 54 220 58 245" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+              <path d="M 52 70 L 60 86 L 66 70" stroke="#fde047" stroke-width="1.6" fill="#140f0a"/>
 
               <!-- Arms holding instrument -->
               <path d="M 58 80 Q 68 108 74 130" stroke="url(#saxLineGrad)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
@@ -3464,19 +3535,14 @@
             <!-- Warm Ambient Floating Aura -->
             <ellipse cx="65" cy="130" rx="60" ry="100" fill="url(#drumAuraGrad)"/>
 
-            <!-- Charming, Cute & Human Drummer & Kit -->
+            <!-- Sleek Minimalist Jazz Drummer & Kit (No Caps / Cartoon Faces) -->
             <g>
-              <!-- Drummer Beret / Cap -->
-              <path d="M 48 54 Q 62 44 76 50 Q 78 56 68 60 L 46 58 Z" fill="#291807" stroke="#fde047" stroke-width="1.6"/>
-              
-              <!-- Friendly Head & Smile -->
-              <circle cx="62" cy="64" r="11" fill="#140f0a" stroke="url(#drumLineGrad)" stroke-width="2"/>
-              <circle cx="60" cy="62" r="1.3" fill="#fef08a"/>
-              <circle cx="68" cy="62" r="1.3" fill="#fef08a"/>
-              <path d="M 61 68 Q 64 71 67 68" stroke="#fef08a" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+              <!-- Clean Minimalist Head & Posture Contour -->
+              <ellipse cx="62" cy="60" rx="9.5" ry="11.5" fill="#140f0a" stroke="url(#drumLineGrad)" stroke-width="2"/>
+              <path d="M 54 54 Q 62 48 70 54" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none"/>
 
               <!-- Torso & Posture Lines -->
-              <path d="M 50 78 L 52 148 M 74 78 L 72 148" stroke="url(#drumLineGrad)" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M 50 76 L 52 146 M 74 76 L 72 146" stroke="url(#drumLineGrad)" stroke-width="2.2" stroke-linecap="round"/>
 
               <!-- Snare Drum (Left) -->
               <ellipse cx="36" cy="160" rx="18" ry="7" stroke="url(#drumLineGrad)" stroke-width="2.2" fill="#140f0a" fill-opacity="0.6"/>
@@ -3553,9 +3619,9 @@
         <p>הצצה לערבי תקליטים, פופ-אפים ומפגשי עבר שהיו אצלנו בעזרא.</p>
       </div>
 
-      <!-- Cute, Joyful & Elegant Speakeasy Dancing Crowd Animation (Spaced & Charming) -->
+      <!-- Cute, Joyful & Elegant Speakeasy Dancing Crowd Animation (Generously Spaced & Sophisticated) -->
       <div class="archive-crowd-stage" aria-hidden="true">
-        <svg class="archive-crowd-svg" viewBox="0 0 760 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="archive-crowd-svg" viewBox="0 0 980 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="crowdGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#fffbeb"/>
@@ -3571,19 +3637,16 @@
           </defs>
 
           <!-- Warm Stage Spotlight Glow -->
-          <ellipse cx="380" cy="55" rx="340" ry="50" fill="url(#crowdCenterGlow)"/>
+          <ellipse cx="490" cy="60" rx="460" ry="50" fill="url(#crowdCenterGlow)"/>
 
-          <!-- 1. Dancer 1: Swaying with Toasting Cocktail Glass (Far Left) -->
-          <g class="anim-dancer-1" transform="translate(110, 15)">
-            <!-- Head & Hair Bun -->
+          <!-- 1. Dancer 1: Toasting Flute (Far Left - Side-by-Side Position) -->
+          <g class="anim-dancer-1" transform="translate(80, 15)">
+            <!-- Clean Head Contour -->
             <ellipse cx="20" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <circle cx="13" cy="14" r="4" fill="#fde047"/>
-            <!-- Friendly Face Profile -->
-            <circle cx="23" cy="20" r="1.3" fill="#fef08a"/>
-            <path d="M 22 24 Q 25 26 27 24" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+            <path d="M 14 15 Q 20 10 26 15" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Body & Torso Contour -->
             <path d="M 14 30 Q 9 60 16 85 M 26 30 Q 31 60 24 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
-            <!-- Arm Raising Cocktail Glass -->
+            <!-- Arm Raising Cocktail Flute -->
             <path d="M 24 36 Q 38 24 44 14" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
             <path d="M 41 10 L 48 10 L 44 15 Z" fill="#fde047" stroke="#ca8a04" stroke-width="0.9"/>
             <line x1="44" y1="15" x2="44" y2="20" stroke="#fde047" stroke-width="1.4"/>
@@ -3591,77 +3654,67 @@
             <path d="M 14 36 Q 4 46 8 56" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
           </g>
 
-          <!-- 2. Dancer 2: Hands in the Air Grooving to Vinyl Beats (Center-Left) -->
-          <g class="anim-dancer-2" transform="translate(280, 10)">
-            <ellipse cx="25" cy="22" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <!-- Headphones on head -->
-            <path d="M 15 22 Q 25 9 35 22" stroke="#fde047" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="15" cy="22" r="3" fill="#fde047"/>
-            <circle cx="35" cy="22" r="3" fill="#fde047"/>
-            <!-- Cheerful Smile -->
-            <circle cx="25" cy="22" r="1.3" fill="#fef08a"/>
-            <path d="M 23 26 Q 25 28 27 26" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+          <!-- 2. Dancer 2: Grooving to Vinyl Rhythm (Center-Left) -->
+          <g class="anim-dancer-2" transform="translate(290, 12)">
+            <ellipse cx="25" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <path d="M 18 15 Q 25 10 32 15" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Torso -->
-            <path d="M 18 32 Q 13 62 20 90 M 32 32 Q 37 62 30 90" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
-            <!-- Both Arms Up in the Air (Joyful Party Vibe) -->
-            <path d="M 18 36 Q 6 20 10 6" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="10" cy="6" r="2.5" fill="#fde047"/>
-            <path d="M 32 36 Q 44 20 40 6" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="40" cy="6" r="2.5" fill="#fde047"/>
+            <path d="M 18 30 Q 13 60 20 88 M 32 30 Q 37 60 30 88" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Both Arms Up in the Air (Joyful Speakeasy Vibe) -->
+            <path d="M 18 34 Q 6 18 10 4" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="10" cy="4" r="2.5" fill="#fde047"/>
+            <path d="M 32 34 Q 44 18 40 4" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="40" cy="4" r="2.5" fill="#fde047"/>
           </g>
 
-          <!-- Center Retro Vinyl Disc Spinning Above Dancers -->
-          <g class="anim-archive-vinyl" transform="translate(365, 20)">
-            <circle cx="15" cy="15" r="14" fill="#140f0a" stroke="url(#crowdGoldGrad)" stroke-width="1.8"/>
-            <circle cx="15" cy="15" r="8" stroke="#ca8a04" stroke-width="0.9" opacity="0.6"/>
+          <!-- Center Retro Vinyl Disc Spinning Above Crowd -->
+          <g class="anim-archive-vinyl" transform="translate(475, 20)">
+            <circle cx="15" cy="15" r="15" fill="#140f0a" stroke="url(#crowdGoldGrad)" stroke-width="1.8"/>
+            <circle cx="15" cy="15" r="9" stroke="#ca8a04" stroke-width="0.9" opacity="0.6"/>
             <circle cx="15" cy="15" r="4.5" fill="#fde047"/>
             <circle cx="15" cy="15" r="1.5" fill="#140f0a"/>
           </g>
 
-          <!-- 3. Dancer 3: Cheerful Twirling Dancer (Center-Right) -->
-          <g class="anim-dancer-3" transform="translate(480, 12)">
-            <ellipse cx="22" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <!-- Smile -->
-            <path d="M 20 23 Q 23 26 25 23" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-            <!-- Torso & Flowing Dress / Shirt -->
-            <path d="M 16 30 Q 10 50 4 82 Q 22 88 40 82 Q 34 50 28 30 Z" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a" fill-opacity="0.5"/>
+          <!-- 3. Dancer 3: Twirling Dancer with Glass (Center-Right) -->
+          <g class="anim-dancer-3" transform="translate(670, 15)">
+            <ellipse cx="22" cy="18" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <path d="M 16 13 Q 22 8 28 13" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <!-- Torso & Flowing Dress -->
+            <path d="M 16 28 Q 10 50 4 82 Q 22 88 40 82 Q 34 50 28 28 Z" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a" fill-opacity="0.5"/>
             <!-- Expressive Arms -->
-            <path d="M 16 34 Q 4 36 0 24" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="0" cy="24" r="2.5" fill="#fde047"/>
-            <path d="M 28 34 Q 40 28 46 16" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="46" cy="16" r="2.5" fill="#fde047"/>
+            <path d="M 16 32 Q 4 34 0 22" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="0" cy="22" r="2.5" fill="#fde047"/>
+            <path d="M 28 32 Q 40 26 46 14" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="46" cy="14" r="2.5" fill="#fde047"/>
           </g>
 
-          <!-- 4. Dancer 4: Rhythm Clapping & Toasting (Far Right) -->
-          <g class="anim-dancer-4" transform="translate(650, 15)">
-            <ellipse cx="20" cy="20" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
-            <!-- Hat / Cap -->
-            <path d="M 10 16 Q 20 10 30 14" stroke="#fde047" stroke-width="1.8" stroke-linecap="round"/>
-            <!-- Smile -->
-            <path d="M 18 24 Q 21 26 23 24" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+          <!-- 4. Dancer 4: Rhythm Clapping (Far Right) -->
+          <g class="anim-dancer-4" transform="translate(860, 15)">
+            <ellipse cx="20" cy="18" rx="8.5" ry="10" stroke="url(#crowdGoldGrad)" stroke-width="1.8" fill="#140f0a"/>
+            <path d="M 14 13 Q 20 8 26 13" stroke="#fde047" stroke-width="1.5" stroke-linecap="round" fill="none"/>
             <!-- Torso -->
-            <path d="M 13 30 Q 9 58 18 85 M 27 30 Q 31 58 22 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M 13 28 Q 9 58 18 85 M 27 28 Q 31 58 22 85" stroke="url(#crowdGoldGrad)" stroke-width="1.8" stroke-linecap="round"/>
             <!-- Clapping Hands Motion -->
-            <path d="M 14 36 Q 24 30 26 22" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <path d="M 26 36 Q 20 30 24 20" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <circle cx="25" cy="21" r="2.8" fill="#fde047"/>
+            <path d="M 14 34 Q 24 28 26 20" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M 26 34 Q 20 28 24 18" stroke="url(#crowdGoldGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="25" cy="19" r="2.8" fill="#fde047"/>
           </g>
 
           <!-- Sparkling Disco Stars & Notes Floating Above Crowd -->
           <g class="anim-sparkle-1">
-            <text x="60" y="24" fill="#fde047" font-size="14" font-weight="900">✦</text>
+            <text x="80" y="24" fill="#fde047" font-size="14" font-weight="900">✦</text>
           </g>
           <g class="anim-sparkle-2">
-            <text x="200" y="16" fill="#ca8a04" font-size="12" font-weight="900">✧</text>
+            <text x="260" y="16" fill="#ca8a04" font-size="12" font-weight="900">✧</text>
           </g>
           <g class="anim-sparkle-3">
-            <text x="380" y="14" fill="#fde047" font-size="16" font-weight="900">★</text>
+            <text x="490" y="14" fill="#fde047" font-size="16" font-weight="900">★</text>
           </g>
           <g class="anim-sparkle-4">
-            <text x="560" y="20" fill="#ca8a04" font-size="13" font-weight="900">✦</text>
+            <text x="720" y="20" fill="#ca8a04" font-size="13" font-weight="900">✦</text>
           </g>
           <g class="anim-sparkle-5">
-            <text x="700" y="26" fill="#fde047" font-size="13" font-weight="900">♪</text>
+            <text x="910" y="26" fill="#fde047" font-size="13" font-weight="900">♪</text>
           </g>
         </svg>
       </div>
@@ -3844,6 +3897,44 @@
           <text x="10" y="36" fill="#ca8a04" font-size="8" opacity="0.7">✧</text>
         </svg>
       </div>
+    </div>
+
+    <!-- Golden Art-Deco Tunnel Entrance Portal (Left Edge) -->
+    <div class="transit-tunnel-portal transit-tunnel-portal--entry" aria-hidden="true">
+      <svg class="tunnel-arch-svg" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="portalGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fffbeb"/>
+            <stop offset="35%" stop-color="#fde047"/>
+            <stop offset="70%" stop-color="#ca8a04"/>
+            <stop offset="100%" stop-color="#854d0e"/>
+          </linearGradient>
+        </defs>
+        <!-- Dark Tunnel Void -->
+        <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68 Z" fill="#080604"/>
+        <!-- Golden Arched Vault Trim -->
+        <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68" stroke="url(#portalGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <!-- Keystone Signal Light -->
+        <circle cx="30" cy="8" r="3.5" fill="#fde047" filter="drop-shadow(0 0 5px #fde047)"/>
+        <!-- Ground Threshold -->
+        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <!-- Golden Art-Deco Tunnel Exit Portal (Right Edge) -->
+    <div class="transit-tunnel-portal transit-tunnel-portal--exit" aria-hidden="true">
+      <svg class="tunnel-arch-svg" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dark Tunnel Void -->
+        <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68 Z" fill="#080604"/>
+        <!-- Golden Arched Vault Trim -->
+        <path d="M 6 68 L 6 30 Q 6 4 30 4 Q 54 4 54 30 L 54 68" stroke="url(#portalGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <path d="M 12 68 L 12 32 Q 12 12 30 12 Q 48 12 48 32 L 48 68" stroke="#fde047" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.8"/>
+        <!-- Keystone Signal Light -->
+        <circle cx="30" cy="8" r="3.5" fill="#fde047" filter="drop-shadow(0 0 5px #fde047)"/>
+        <!-- Ground Threshold -->
+        <rect x="2" y="65" width="56" height="4" rx="2" fill="#291807" stroke="#ca8a04" stroke-width="1"/>
+      </svg>
     </div>
 
     <div class="wrap">
@@ -4609,6 +4700,9 @@
       }
 
       // Slider scroll arrow buttons
+      const schedSliderPrev = document.getElementById('schedSliderPrev');
+      const schedSliderNext = document.getElementById('schedSliderNext');
+
       if (prevWeekBtn) {
         prevWeekBtn.addEventListener('click', () => {
           if (!weekGrid) return;
@@ -4622,6 +4716,22 @@
           if (!weekGrid) return;
           const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
           weekGrid.scrollBy({ left: -(cardW + 18) * 2, behavior: 'smooth' });
+        });
+      }
+
+      if (schedSliderPrev) {
+        schedSliderPrev.addEventListener('click', () => {
+          if (!weekGrid) return;
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: -(cardW + 18) * 2, behavior: 'smooth' });
+        });
+      }
+
+      if (schedSliderNext) {
+        schedSliderNext.addEventListener('click', () => {
+          if (!weekGrid) return;
+          const cardW = weekGrid.querySelector('.time-card')?.offsetWidth || 280;
+          weekGrid.scrollBy({ left: (cardW + 18) * 2, behavior: 'smooth' });
         });
       }
 
