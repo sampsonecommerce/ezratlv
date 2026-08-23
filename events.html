@@ -1161,104 +1161,111 @@
       transform-origin: center bottom;
     }
     @keyframes teaSteamRise {
-      0% { transform: translateY(0) scale(0.95); opacity: 0; }
-      25% { opacity: 0.85; }
-      75% { opacity: 0.6; }
-      100% { transform: translateY(-22px) scale(1.18); opacity: 0; }
+      0% { transform: translateY(0) scale(0.92); opacity: 0; }
+      30% { opacity: 0.9; }
+      75% { opacity: 0.55; }
+      100% { transform: translateY(-24px) scale(1.2); opacity: 0; }
     }
     .anim-tea-stream {
       stroke-dasharray: 8 4;
-      animation: teaStreamFlow 1.2s linear infinite;
+      animation: teaStreamFlow 1.1s linear infinite;
     }
     @keyframes teaStreamFlow {
       to { stroke-dashoffset: -24; }
     }
     .anim-tea-leaf {
-      animation: teaLeafSway 4.5s ease-in-out infinite alternate;
+      animation: teaLeafSway 4.8s ease-in-out infinite alternate;
       transform-origin: center;
     }
     @keyframes teaLeafSway {
       0% { transform: translateY(0) rotate(-6deg); }
-      100% { transform: translateY(-8px) rotate(10deg); }
+      100% { transform: translateY(-9px) rotate(12deg); }
     }
 
     /* Live Music / Acoustic Guitar Animations */
     .anim-guitar-body {
-      animation: guitarGentlyStrum 3.8s ease-in-out infinite alternate;
-      transform-origin: 180px 140px;
+      animation: guitarGentlyStrum 4s ease-in-out infinite alternate;
+      transform-origin: 160px 142px;
     }
     @keyframes guitarGentlyStrum {
-      0% { transform: rotate(-1deg); }
-      100% { transform: rotate(1.5deg); }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(1.2deg); }
     }
     .anim-guitar-string-1 { animation: guitarStringPulse 0.18s ease-in-out infinite alternate; }
-    .anim-guitar-string-2 { animation: guitarStringPulse 0.24s ease-in-out 0.05s infinite alternate; }
-    .anim-guitar-string-3 { animation: guitarStringPulse 0.20s ease-in-out 0.1s infinite alternate; }
-    .anim-guitar-string-4 { animation: guitarStringPulse 0.16s ease-in-out 0.03s infinite alternate; }
-    .anim-guitar-string-5 { animation: guitarStringPulse 0.22s ease-in-out 0.08s infinite alternate; }
-    .anim-guitar-string-6 { animation: guitarStringPulse 0.19s ease-in-out 0.02s infinite alternate; }
+    .anim-guitar-string-2 { animation: guitarStringPulse 0.24s ease-in-out 0.04s infinite alternate; }
+    .anim-guitar-string-3 { animation: guitarStringPulse 0.20s ease-in-out 0.08s infinite alternate; }
+    .anim-guitar-string-4 { animation: guitarStringPulse 0.16s ease-in-out 0.02s infinite alternate; }
+    .anim-guitar-string-5 { animation: guitarStringPulse 0.22s ease-in-out 0.06s infinite alternate; }
+    .anim-guitar-string-6 { animation: guitarStringPulse 0.19s ease-in-out 0.01s infinite alternate; }
     @keyframes guitarStringPulse {
       0% { transform: translateY(0); opacity: 0.85; }
-      100% { transform: translateY(-0.8px); opacity: 1; stroke: #fef08a; }
+      100% { transform: translateY(-0.8px); opacity: 1; stroke: #fffbeb; }
     }
     .anim-sound-ripple-1 {
-      animation: soundRippleExpand 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
-      transform-origin: 165px 125px;
+      animation: soundRippleExpand 3.2s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
+      transform-origin: 168px 138px;
     }
     .anim-sound-ripple-2 {
-      animation: soundRippleExpand 3s cubic-bezier(0.1, 0.7, 0.3, 1) 1.5s infinite;
-      transform-origin: 165px 125px;
+      animation: soundRippleExpand 3.2s cubic-bezier(0.1, 0.7, 0.3, 1) 1.6s infinite;
+      transform-origin: 168px 138px;
     }
     @keyframes soundRippleExpand {
-      0% { transform: scale(0.6); opacity: 0.8; }
-      80% { opacity: 0.3; }
-      100% { transform: scale(1.6); opacity: 0; }
+      0% { transform: scale(0.5); opacity: 0.85; }
+      75% { opacity: 0.3; }
+      100% { transform: scale(1.65); opacity: 0; }
     }
     .anim-music-note-float-1 { animation: musicNoteAscend 4.2s ease-out infinite; }
     .anim-music-note-float-2 { animation: musicNoteAscend 3.8s ease-out 1.4s infinite; }
     .anim-music-note-float-3 { animation: musicNoteAscend 4.5s ease-out 2.2s infinite; }
     @keyframes musicNoteAscend {
       0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
-      30% { opacity: 0.9; }
-      80% { opacity: 0.7; }
-      100% { transform: translate(12px, -32px) scale(1.15); opacity: 0; }
+      30% { opacity: 0.95; }
+      80% { opacity: 0.65; }
+      100% { transform: translate(15px, -36px) scale(1.15); opacity: 0; }
     }
 
     /* Chef Pop-Up & Tabun Oven Animations */
-    .anim-tabun-flame-1 { animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: 110px 105px; }
-    .anim-tabun-flame-2 { animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: 125px 95px; }
-    .anim-tabun-flame-3 { animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: 95px 100px; }
+    .anim-tabun-flame-1 { animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: 108px 180px; }
+    .anim-tabun-flame-2 { animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: 130px 180px; }
+    .anim-tabun-flame-3 { animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: 86px 180px; }
+    .anim-tabun-spark-1 { animation: sparkDrift 2.4s ease-out infinite; }
+    .anim-tabun-spark-2 { animation: sparkDrift 2.8s ease-out 1.2s infinite; }
     @keyframes tabunFlicker {
-      0% { transform: scaleY(0.9) skewX(-2deg); opacity: 0.85; }
-      100% { transform: scaleY(1.15) skewX(3deg); opacity: 1; }
+      0% { transform: scaleY(0.9) skewX(-2deg); opacity: 0.88; }
+      100% { transform: scaleY(1.18) skewX(3deg); opacity: 1; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)); }
+    }
+    @keyframes sparkDrift {
+      0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+      40% { opacity: 1; }
+      100% { transform: translate(-12px, -35px) scale(1.1); opacity: 0; }
     }
     /* Rotating / Cycling Dishes in Tabun: 10.5s total cycle (3.5s per dish) */
     .anim-dish-cycle-1 {
-      animation: dishCycle1 10.5s ease-in-out infinite;
-      transform-origin: 235px 135px;
+      animation: dishCycle1 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 248px 156px;
     }
     .anim-dish-cycle-2 {
-      animation: dishCycle2 10.5s ease-in-out infinite;
-      transform-origin: 235px 135px;
+      animation: dishCycle2 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 248px 156px;
     }
     .anim-dish-cycle-3 {
-      animation: dishCycle3 10.5s ease-in-out infinite;
-      transform-origin: 235px 135px;
+      animation: dishCycle3 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 248px 156px;
     }
     @keyframes dishCycle1 {
       0%, 28% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      33%, 95% { opacity: 0; transform: scale(0.9) translateY(6px); pointer-events: none; }
+      33%, 95% { opacity: 0; transform: scale(0.88) translateY(8px); pointer-events: none; }
       100% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
     }
     @keyframes dishCycle2 {
-      0%, 28% { opacity: 0; transform: scale(0.9) translateY(6px); pointer-events: none; }
+      0%, 28% { opacity: 0; transform: scale(0.88) translateY(8px); pointer-events: none; }
       33%, 61% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      66%, 100% { opacity: 0; transform: scale(0.9) translateY(6px); pointer-events: none; }
+      66%, 100% { opacity: 0; transform: scale(0.88) translateY(8px); pointer-events: none; }
     }
     @keyframes dishCycle3 {
-      0%, 61% { opacity: 0; transform: scale(0.9) translateY(6px); pointer-events: none; }
+      0%, 61% { opacity: 0; transform: scale(0.88) translateY(8px); pointer-events: none; }
       66%, 95% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      100% { opacity: 0; transform: scale(0.9) translateY(6px); pointer-events: none; }
+      100% { opacity: 0; transform: scale(0.88) translateY(8px); pointer-events: none; }
     }
     .anim-dish-steam {
       animation: dishSteam 2.8s ease-out infinite;
@@ -1266,23 +1273,27 @@
     }
     @keyframes dishSteam {
       0% { transform: translateY(0) scale(0.9); opacity: 0; }
-      30% { opacity: 0.75; }
-      100% { transform: translateY(-18px) scale(1.15); opacity: 0; }
+      35% { opacity: 0.85; }
+      100% { transform: translateY(-24px) scale(1.2); opacity: 0; }
     }
 
     /* Hi-Fi Vinyl & Album Listening Animations */
     .anim-fmt-vinyl-spin {
       animation: spinVinyl 6s linear infinite;
-      transform-origin: 180px 115px;
+      transform-origin: 160px 112px;
       will-change: transform;
+    }
+    @keyframes spinVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     .anim-tonearm-drift {
       animation: tonearmDrift 8s ease-in-out infinite alternate;
-      transform-origin: 285px 55px;
+      transform-origin: 270px 60px;
     }
     @keyframes tonearmDrift {
       0% { transform: rotate(0deg); }
-      100% { transform: rotate(4deg); }
+      100% { transform: rotate(3.5deg); }
     }
     .anim-eq-bar-1 { animation: eqBounce 0.8s ease-in-out infinite alternate; transform-origin: bottom; }
     .anim-eq-bar-2 { animation: eqBounce 1.1s ease-in-out 0.2s infinite alternate; transform-origin: bottom; }
@@ -1292,31 +1303,41 @@
     .anim-eq-bar-6 { animation: eqBounce 1.2s ease-in-out 0.5s infinite alternate; transform-origin: bottom; }
     .anim-eq-bar-7 { animation: eqBounce 0.75s ease-in-out 0.15s infinite alternate; transform-origin: bottom; }
     @keyframes eqBounce {
-      0% { transform: scaleY(0.25); opacity: 0.5; }
-      100% { transform: scaleY(1); opacity: 0.95; }
+      0% { transform: scaleY(0.22); opacity: 0.45; }
+      100% { transform: scaleY(1); opacity: 0.98; }
+    }
+    .anim-vu-needle {
+      animation: vuMeterBounce 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+      transform-origin: 64px 85px;
+    }
+    @keyframes vuMeterBounce {
+      0% { transform: rotate(-24deg); }
+      30% { transform: rotate(8deg); }
+      60% { transform: rotate(-10deg); }
+      100% { transform: rotate(18deg); }
     }
 
     /* Open Mic & Spoken Word Animations */
     .anim-voice-wave-1 {
       animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
-      transform-origin: 170px 90px;
+      transform-origin: 180px 80px;
     }
     .anim-voice-wave-2 {
       animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) 1.5s infinite;
-      transform-origin: 170px 90px;
+      transform-origin: 180px 80px;
     }
     @keyframes voiceWavePulse {
-      0% { transform: scale(0.6); opacity: 0.85; }
+      0% { transform: scale(0.65); opacity: 0.9; }
       75% { opacity: 0.35; }
-      100% { transform: scale(1.5); opacity: 0; }
+      100% { transform: scale(1.55); opacity: 0; }
     }
     .anim-quill-float {
-      animation: quillFloat 3.6s ease-in-out infinite alternate;
-      transform-origin: center;
+      animation: quillFloat 3.8s ease-in-out infinite alternate;
+      transform-origin: 80px 105px;
     }
     @keyframes quillFloat {
       0% { transform: translateY(0) rotate(-4deg); }
-      100% { transform: translateY(-8px) rotate(6deg); }
+      100% { transform: translateY(-10px) rotate(6deg); }
     }
     .anim-poem-word-1 { animation: poemDrift 4.5s ease-out infinite; }
     .anim-poem-word-2 { animation: poemDrift 4.8s ease-out 1.6s infinite; }
@@ -1325,13 +1346,13 @@
       0% { transform: translate(0, 0) scale(0.85); opacity: 0; }
       25% { opacity: 0.9; }
       80% { opacity: 0.6; }
-      100% { transform: translate(-15px, -26px) scale(1.1); opacity: 0; }
+      100% { transform: translate(-14px, -28px) scale(1.12); opacity: 0; }
     }
 
     /* Natural Wine & Mixology Animations */
     .anim-wine-stream {
       stroke-dasharray: 6 3;
-      animation: wineStreamFlow 0.9s linear infinite;
+      animation: wineStreamFlow 0.85s linear infinite;
     }
     @keyframes wineStreamFlow {
       to { stroke-dashoffset: -18; }
@@ -1341,27 +1362,16 @@
       transform-origin: center;
     }
     @keyframes wineLiquidWave {
-      0% { transform: rotate(-2deg) scaleY(0.95); }
-      100% { transform: rotate(2deg) scaleY(1.05); }
-    }
-    .anim-shaker-vibe {
-      animation: shakerRhythm 2.4s ease-in-out infinite;
-      transform-origin: 290px 145px;
-    }
-    @keyframes shakerRhythm {
-      0%, 100% { transform: rotate(0deg); }
-      20% { transform: rotate(-3deg) translateY(-2px); }
-      40% { transform: rotate(3deg) translateY(1px); }
-      60% { transform: rotate(-2deg) translateY(-1px); }
-      80% { transform: rotate(2deg); }
+      0% { transform: rotate(-2deg) scaleY(0.96); }
+      100% { transform: rotate(2deg) scaleY(1.04); }
     }
     .anim-cocktail-bubble-1 { animation: bubbleAscend 2.5s ease-in-out infinite; }
     .anim-cocktail-bubble-2 { animation: bubbleAscend 2.9s ease-in-out 1s infinite; }
     .anim-cocktail-bubble-3 { animation: bubbleAscend 3.2s ease-in-out 0.5s infinite; }
     @keyframes bubbleAscend {
       0% { transform: translateY(0); opacity: 0; }
-      30% { opacity: 0.8; }
-      100% { transform: translateY(-16px); opacity: 0; }
+      35% { opacity: 0.85; }
+      100% { transform: translateY(-18px); opacity: 0; }
     }
 
     .fmt-card__flag {
@@ -1799,41 +1809,62 @@
       filter: drop-shadow(0 0 10px rgba(254, 240, 138, 0.45));
     }
 
-    /* Right Side: Elegant Florentin Skyline Silhouette */
-    .transit-skyline-wrap {
+    /* Tel Aviv / Florentin Skyline Backdrop (Both Left and Right Sides across the road) */
+    .transit-skyline {
       position: absolute;
-      right: clamp(20px, 4vw, 70px);
       bottom: calc(50% + 27px);
       z-index: 1;
       pointer-events: none;
-      opacity: 0.65;
+      opacity: 0.8;
+    }
+
+    .transit-skyline--left {
+      left: 0;
+      width: clamp(280px, 32vw, 440px);
+    }
+
+    .transit-skyline--right {
+      right: 0;
+      width: clamp(280px, 32vw, 440px);
     }
 
     .transit-skyline-svg {
-      width: 220px;
-      height: 70px;
+      width: 100%;
+      height: 72px;
       display: block;
       overflow: visible;
       filter: drop-shadow(0 4px 14px rgba(0,0,0,0.9));
     }
 
-    /* Symmetrical, Realistic Art-Deco Underpass Tunnel Portals */
-    .transit-portal {
+    /* Right Side: Vintage Streetlamps on opposite sidewalk */
+    .transit-lamps-right-wrap {
       position: absolute;
+      right: clamp(20px, 4vw, 70px);
       top: 50%;
       transform: translateY(-50%);
-      width: 52px;
-      height: 76px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Symmetrical, Realistic Art-Deco Underpass Tunnel Portals (Sitting flush directly ON the road bed) */
+    .transit-portal {
+      position: absolute;
+      bottom: calc(50% - 27px);
+      width: 48px;
+      height: 66px;
       z-index: 12;
       pointer-events: none;
     }
 
     .transit-portal--left {
-      left: -26px;
+      left: -24px;
     }
 
     .transit-portal--right {
-      right: -26px;
+      right: -24px;
     }
 
     .transit-portal-svg {
@@ -1871,35 +1902,8 @@
       filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.9));
     }
 
-    /* Blinking signal beacon on the tunnel portal */
-    .transit-signal-light {
-      animation: signalBlink 2s infinite ease-in-out;
-    }
-    @keyframes signalBlink {
-      0%, 100% { fill: #ea580c; filter: drop-shadow(0 0 3px #ea580c); opacity: 0.6; }
-      50%      { fill: #fef08a; filter: drop-shadow(0 0 10px #fef08a); opacity: 1; }
-    }
-
-    /* Vehicle wrappers moving along the highway */
-    .transit-vehicle-runner {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      will-change: left, opacity, transform;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .transit-vehicle-svg {
-      display: block;
-      height: auto;
-      overflow: visible;
-      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.9));
-    }
-
     /* 36s Total Loop (9s per vehicle):
-       - Every vehicle pulls up and stops right at the Abarbanel 38 station platform (left: clamp(15px, 4vw, 55px))
+       - Every vehicle pulls up and stops right at the Abarbanel 38 station platform (left: clamp(20px, 4vw, 70px))
        - Waits for 1.3s (passenger boarding)
        - Accelerates into tunnel
        - Exits right smoothly without stopping
@@ -1912,7 +1916,7 @@
 
     .transit-vehicle--train {
       width: 560px;
-      animation: transitTrainAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation: transitTrainAcrossScreen 36s linear infinite;
       animation-delay: 9s;
     }
 
@@ -1939,24 +1943,14 @@
       }
       /* Stops at Abarbanel 38 Station Platform */
       4.8% {
-        left: clamp(15px, 4vw, 55px);
+        left: clamp(20px, 4vw, 70px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(15px, 4vw, 55px);
+      8.0% {
+        left: clamp(20px, 4vw, 70px);
         opacity: 1;
       }
-      /* Enters left tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        opacity: 1;
-      }
-      /* Exits right tunnel portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        opacity: 1;
-      }
-      /* Exits screen right smoothly */
+      /* Continuous, steady glide across the tunnel and all the way off screen right */
       23.0% {
         left: calc(100% + 190px);
         opacity: 1;
@@ -1982,35 +1976,20 @@
       }
       /* Front locomotive stops at Abarbanel 38 station platform */
       4.8% {
-        left: calc(clamp(15px, 4vw, 55px) - 400px);
+        left: calc(clamp(20px, 4vw, 70px) - 380px);
         opacity: 1;
       }
-      8.2% {
-        left: calc(clamp(15px, 4vw, 55px) - 400px);
+      8.0% {
+        left: calc(clamp(20px, 4vw, 70px) - 380px);
         opacity: 1;
       }
-      /* Front locomotive enters left tunnel portal */
-      11.5% {
-        left: calc(50% - min(510px, 48vw) - 450px);
-        opacity: 1;
-      }
-      /* Head emerges from right tunnel portal WHILE rear is still entering left portal! */
-      15.0% {
-        left: calc(50% + min(430px, 44vw) - 450px);
-        opacity: 1;
-      }
-      /* Rear carriage finishes clearing the tunnel and glides off without stopping at exit */
-      19.0% {
-        left: calc(50% + min(430px, 44vw) - 100px);
-        opacity: 1;
-      }
-      /* Entire train clears screen right */
-      23.2% {
-        left: calc(100% + 100px);
+      /* Continuous smooth glide through tunnel and exits off screen right without stopping! */
+      23.5% {
+        left: calc(100% + 600px);
         opacity: 1;
       }
       24.2% {
-        left: calc(100% + 150px);
+        left: calc(100% + 620px);
         opacity: 0;
       }
       25%, 100% {
@@ -2030,24 +2009,14 @@
       }
       /* Stops at Abarbanel 38 station platform */
       4.8% {
-        left: clamp(20px, 4.5vw, 60px);
+        left: clamp(20px, 4.5vw, 70px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(20px, 4.5vw, 60px);
+      8.0% {
+        left: clamp(20px, 4.5vw, 70px);
         opacity: 1;
       }
-      /* Enters left tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        opacity: 1;
-      }
-      /* Exits right tunnel portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        opacity: 1;
-      }
-      /* Cruises past buildings to right screen edge */
+      /* Continuous smooth glide past buildings to right screen edge */
       23.0% {
         left: calc(100% + 180px);
         opacity: 1;
@@ -2077,29 +2046,14 @@
       }
       /* Hovers over Abarbanel 38 station */
       4.8% {
-        left: clamp(15px, 4vw, 55px);
+        left: clamp(20px, 4vw, 70px);
         transform: translateY(-50%) translateY(2px);
         opacity: 1;
       }
-      8.2% {
-        left: clamp(15px, 4vw, 55px);
+      8.0% {
+        left: clamp(20px, 4vw, 70px);
         transform: translateY(-50%) translateY(-8px);
         opacity: 1;
-      }
-      /* Enters tunnel portal */
-      11.8% {
-        left: calc(50% - min(510px, 48vw));
-        transform: translateY(-50%) translateY(4px);
-        opacity: 1;
-      }
-      /* Exits right portal smoothly without stopping */
-      17.2% {
-        left: calc(50% + min(430px, 44vw));
-        transform: translateY(-50%) translateY(-10px);
-        opacity: 1;
-      }
-      20.0% {
-        transform: translateY(-50%) translateY(6px);
       }
       23.0% {
         left: calc(100% + 180px);
@@ -3522,7 +3476,307 @@
       </div>
 
       <div class="fmt-grid" id="eventsList">
-        <!-- 1. בית התה של רום -->
+        <!-- 1. פופ-אפ שפים וערבי טאבון -->
+        <article class="fmt-card" data-category="food">
+          <div class="fmt-card__media">
+            <div class="fmt-anim-scene" aria-hidden="true">
+              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="tabunGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fffbeb"/>
+                    <stop offset="35%" stop-color="#f5d98a"/>
+                    <stop offset="70%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#78350f"/>
+                  </linearGradient>
+                  <linearGradient id="tabunFlameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stop-color="#991b1b"/>
+                    <stop offset="30%" stop-color="#ea580c"/>
+                    <stop offset="65%" stop-color="#f59e0b"/>
+                    <stop offset="90%" stop-color="#fef08a"/>
+                    <stop offset="100%" stop-color="#ffffff"/>
+                  </linearGradient>
+                  <radialGradient id="tabunAuraGrad" cx="35%" cy="58%" r="55%">
+                    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.38"/>
+                    <stop offset="45%" stop-color="#b91c1c" stop-opacity="0.14"/>
+                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="tabunWoodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#451a03"/>
+                    <stop offset="50%" stop-color="#2a1408"/>
+                    <stop offset="100%" stop-color="#180c04"/>
+                  </linearGradient>
+                  <linearGradient id="tabunCrustGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fed7aa"/>
+                    <stop offset="45%" stop-color="#d97706"/>
+                    <stop offset="85%" stop-color="#78350f"/>
+                    <stop offset="100%" stop-color="#291807"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Warm Glowing Oven Fire Aura -->
+                <ellipse cx="120" cy="125" rx="115" ry="80" fill="url(#tabunAuraGrad)"/>
+
+                <!-- Dome Stone Tabun (Oven Architecture) -->
+                <g transform="translate(24, 38)">
+                  <!-- Exterior Tabun Masonry Dome -->
+                  <path d="M 8 152 Q 8 18 96 18 Q 184 18 184 152 Z" fill="#18120b" stroke="url(#tabunGoldGrad)" stroke-width="2"/>
+                  <path d="M 22 152 Q 22 32 96 32 Q 170 32 170 152" stroke="#78350f" stroke-width="1.4" fill="none" stroke-dasharray="8 4"/>
+                  <path d="M 36 152 Q 36 46 96 46 Q 156 46 156 152" stroke="#c49a3c" stroke-width="0.8" fill="none" stroke-dasharray="6 4" opacity="0.6"/>
+                  
+                  <!-- Tabun Chimney Flue -->
+                  <polygon points="90,16 102,16 100,32 92,32" fill="#2a1b0f" stroke="url(#tabunGoldGrad)" stroke-width="1"/>
+                  <path d="M 96 14 Q 90 4 98 -4 Q 106 -12 100 -20" stroke="url(#tabunGoldGrad)" stroke-width="1.2" fill="none" opacity="0.6" stroke-linecap="round"/>
+
+                  <!-- Deep Oven Hearth Mouth -->
+                  <path d="M 42 152 Q 42 62 96 62 Q 150 62 150 152 Z" fill="#0d0804" stroke="url(#tabunGoldGrad)" stroke-width="1.8"/>
+                  
+                  <!-- Glowing Ember Bed & Stone Floor -->
+                  <ellipse cx="96" cy="144" rx="48" ry="11" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.2"/>
+                  <ellipse cx="96" cy="145" rx="36" ry="6" fill="#ef4444" opacity="0.6"/>
+                  <circle cx="82" cy="146" r="1.5" fill="#fef08a"/>
+                  <circle cx="110" cy="144" r="1.8" fill="#fef08a"/>
+                  <circle cx="95" cy="147" r="1.2" fill="#fffbeb"/>
+                  
+                  <!-- Layered Animated Fire Flames -->
+                  <path class="anim-tabun-flame-1" d="M 76 146 Q 68 102 86 86 Q 92 114 102 144 Z" fill="url(#tabunFlameGrad)"/>
+                  <path class="anim-tabun-flame-2" d="M 92 146 Q 98 92 114 74 Q 120 102 128 144 Z" fill="url(#tabunFlameGrad)"/>
+                  <path class="anim-tabun-flame-3" d="M 60 146 Q 66 110 76 98 Q 82 120 86 146 Z" fill="url(#tabunFlameGrad)"/>
+                  
+                  <!-- Floating Embers / Sparks -->
+                  <circle class="anim-tabun-spark-1" cx="88" cy="120" r="1.6" fill="#fef08a"/>
+                  <circle class="anim-tabun-spark-2" cx="112" cy="108" r="1.4" fill="#fffbeb"/>
+                </g>
+
+                <!-- Wooden Pizza Peel (Sliding into Oven) -->
+                <g transform="translate(138, 126)">
+                  <!-- Peel Handle extending left into oven -->
+                  <line x1="2" y1="30" x2="-62" y2="30" stroke="url(#tabunGoldGrad)" stroke-width="4.5" stroke-linecap="round"/>
+                  <line x1="2" y1="30" x2="-62" y2="30" stroke="#3b1d0c" stroke-width="2.5" stroke-linecap="round"/>
+                  <!-- Wooden Paddle Board -->
+                  <path d="M 0 10 L 175 10 Q 192 10 192 30 Q 192 50 175 50 L 0 50 Z" fill="url(#tabunWoodGrad)" stroke="url(#tabunGoldGrad)" stroke-width="1.6"/>
+                  <line x1="15" y1="18" x2="165" y2="18" stroke="#78350f" stroke-width="0.8" opacity="0.6"/>
+                  <line x1="15" y1="42" x2="165" y2="42" stroke="#78350f" stroke-width="0.8" opacity="0.6"/>
+                </g>
+
+                <!-- 3 ROTATING SIGNATURE CHEF DISHES (Seamless CSS Cycling) -->
+
+                <!-- Dish 1: Crispy Neapolitan Margherita Pizza -->
+                <g class="anim-dish-cycle-1" transform="translate(205, 126)">
+                  <!-- Crust with Leopard Spots -->
+                  <ellipse cx="44" cy="30" rx="42" ry="25" fill="url(#tabunCrustGrad)" stroke="#fef08a" stroke-width="1.5"/>
+                  <ellipse cx="20" cy="20" rx="3.5" ry="2.2" fill="#1c130b"/>
+                  <ellipse cx="68" cy="38" rx="4.2" ry="2.6" fill="#1c130b"/>
+                  <ellipse cx="72" cy="21" rx="3.2" ry="2" fill="#1c130b"/>
+                  <ellipse cx="18" cy="39" rx="2.8" ry="1.6" fill="#1c130b"/>
+                  <!-- Rich San Marzano Tomato Sauce -->
+                  <ellipse cx="44" cy="30" rx="32" ry="18" fill="#b91c1c"/>
+                  <!-- Melted Buffalo Mozzarella with Golden Scorch -->
+                  <ellipse cx="34" cy="28" rx="9" ry="5.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
+                  <ellipse cx="52" cy="32" rx="10" ry="6.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
+                  <ellipse cx="46" cy="24" rx="7" ry="4.5" fill="#fffbeb"/>
+                  <!-- Fresh Green Basil Leaves -->
+                  <path d="M 38 24 Q 43 17 48 22 Q 43 29 38 24 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                  <path d="M 50 34 Q 55 27 60 32 Q 55 39 50 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                  <path d="M 29 33 Q 34 27 39 31 Q 34 38 29 33 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                </g>
+
+                <!-- Dish 2: Sizzling Cast-Iron Skillet & Tagliata Steak -->
+                <g class="anim-dish-cycle-2" transform="translate(205, 126)">
+                  <!-- Heavy Cast-Iron Skillet & Helper Handle -->
+                  <ellipse cx="44" cy="30" rx="40" ry="24" fill="#120e0a" stroke="url(#tabunGoldGrad)" stroke-width="1.8"/>
+                  <ellipse cx="44" cy="30" rx="34" ry="19" fill="#241a12"/>
+                  <rect x="-4" y="27" width="8" height="6" rx="2" fill="#120e0a" stroke="url(#tabunGoldGrad)" stroke-width="1.2"/>
+                  <!-- Thick-cut Tagliata Beef Steak with Diamond Char Lines -->
+                  <path d="M 24 26 Q 38 14 62 22 Q 67 38 52 43 Q 28 41 24 26 Z" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.1"/>
+                  <line x1="30" y1="22" x2="46" y2="38" stroke="#1c130b" stroke-width="2.2"/>
+                  <line x1="38" y1="20" x2="54" y2="36" stroke="#1c130b" stroke-width="2.2"/>
+                  <line x1="46" y1="18" x2="60" y2="32" stroke="#1c130b" stroke-width="2.2"/>
+                  <!-- Roasted Garlic Bulb & Rosemary Sprig -->
+                  <circle cx="28" cy="36" r="3.8" fill="#fef08a" stroke="#ca8a04" stroke-width="0.7"/>
+                  <path d="M 52 19 Q 60 13 66 17" stroke="#65a30d" stroke-width="1.6" stroke-linecap="round"/>
+                </g>
+
+                <!-- Dish 3: Tabun Burrata & Cherry Tomato Focaccia Platter -->
+                <g class="anim-dish-cycle-3" transform="translate(205, 126)">
+                  <!-- Dimpled Golden Focaccia Base -->
+                  <ellipse cx="44" cy="30" rx="42" ry="25" fill="url(#tabunCrustGrad)" stroke="url(#tabunGoldGrad)" stroke-width="1.5"/>
+                  <circle cx="26" cy="23" r="2.8" fill="#854d0e"/>
+                  <circle cx="62" cy="24" r="2.8" fill="#854d0e"/>
+                  <circle cx="30" cy="37" r="2.8" fill="#854d0e"/>
+                  <circle cx="58" cy="38" r="2.8" fill="#854d0e"/>
+                  <!-- Whole Creamy Burrata Pouch -->
+                  <ellipse cx="44" cy="28" rx="15" ry="12" fill="#fffbeb" stroke="#fef08a" stroke-width="1.1"/>
+                  <ellipse cx="44" cy="19" rx="4.5" ry="3" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.9"/>
+                  <!-- Blistered Sweet Cherry Tomatoes -->
+                  <circle cx="24" cy="31" r="4.2" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
+                  <circle cx="64" cy="33" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
+                </g>
+
+                <!-- Rising Gourmet Steam Wisps -->
+                <g class="anim-dish-steam" transform="translate(248, 140)">
+                  <path d="M 0 0 Q -8 -12 2 -22 Q 12 -32 0 -42" stroke="url(#tabunGoldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
+                  <path d="M 16 -2 Q 24 -14 15 -26 Q 6 -38 18 -48" stroke="url(#tabunGoldGrad)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
+                </g>
+              </svg>
+            </div>
+            <span class="fmt-card__flag">בהזמנת מקום</span>
+          </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>פופ-אפ שפים וערבי טאבון</h3>
+            <p class="fmt-card__when">ערבי קולינריה מיוחדים · מ-19:30</p>
+            <p class="fmt-card__lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="פופ-אפ שפים וערבי טאבון" type="button">להשאיר פרטים</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. מוזיקה חיה וסשנים אקוסטיים -->
+        <article class="fmt-card" data-category="live">
+          <div class="fmt-card__media">
+            <div class="fmt-anim-scene" aria-hidden="true">
+              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="guitarSunburst" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fffbeb"/>
+                    <stop offset="25%" stop-color="#f59e0b"/>
+                    <stop offset="65%" stop-color="#92400e"/>
+                    <stop offset="100%" stop-color="#1c130b"/>
+                  </linearGradient>
+                  <linearGradient id="guitarGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fffbeb"/>
+                    <stop offset="35%" stop-color="#f5d98a"/>
+                    <stop offset="75%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#78350f"/>
+                  </linearGradient>
+                  <radialGradient id="liveSpotlightGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.28"/>
+                    <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="fretboardWoodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2a1b0f"/>
+                    <stop offset="50%" stop-color="#181109"/>
+                    <stop offset="100%" stop-color="#2a1b0f"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Warm Concert Spotlight Aura -->
+                <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#liveSpotlightGrad)"/>
+
+                <!-- Concentric Acoustic Resonance Sound Waves -->
+                <circle class="anim-sound-ripple-1" cx="168" cy="138" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.4" fill="none"/>
+                <circle class="anim-sound-ripple-2" cx="168" cy="138" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.1" fill="none"/>
+
+                <!-- Complete Vintage Dreadnought Acoustic Guitar (Tilted -22deg, Perfectly In-Bounds) -->
+                <g class="anim-guitar-body">
+                  <!-- Guitar Drop Shadow -->
+                  <g transform="translate(162, 144) rotate(-22) scale(0.68)" fill="#070503" opacity="0.75">
+                    <path d="M 0 95 C -55 95 -75 60 -52 25 C -36 -2 -42 -16 -48 -26 C -56 -42 -40 -58 0 -58 C 40 -58 56 -42 48 -26 C 42 -16 36 -2 52 25 C 75 60 55 95 0 95 Z"/>
+                  </g>
+
+                  <g transform="translate(154, 138) rotate(-22) scale(0.68)">
+                    <!-- Dreadnought Body (Sunburst Finish) -->
+                    <path d="M 0 95 C -55 95 -75 60 -52 25 C -36 -2 -42 -16 -48 -26 C -56 -42 -40 -58 0 -58 C 40 -58 56 -42 48 -26 C 42 -16 36 -2 52 25 C 75 60 55 95 0 95 Z" fill="url(#guitarSunburst)" stroke="url(#guitarGoldGrad)" stroke-width="2.5"/>
+                    <!-- Inner Purfling Line -->
+                    <path d="M 0 88 C -48 88 -66 56 -46 25 C -32 0 -38 -12 -43 -22 C -50 -36 -36 -50 0 -50 C 36 -50 50 -36 43 -22 C 38 -12 32 0 46 25 C 66 56 48 88 0 88 Z" fill="none" stroke="#f5d98a" stroke-width="0.9" opacity="0.65"/>
+                    
+                    <!-- Vintage Tortoiseshell Pickguard -->
+                    <path d="M 5 20 C 25 20 35 35 30 58 C 20 58 8 45 5 20 Z" fill="#451a03" stroke="#78350f" stroke-width="0.8" opacity="0.85"/>
+
+                    <!-- Soundhole with Triple Pearl / Gold Rosette -->
+                    <circle cx="0" cy="20" r="22" fill="#0d0a07" stroke="url(#guitarGoldGrad)" stroke-width="2.5"/>
+                    <circle cx="0" cy="20" r="26" fill="none" stroke="#fef08a" stroke-width="1.2" stroke-dasharray="3 2"/>
+                    <circle cx="0" cy="20" r="29" fill="none" stroke="#c49a3c" stroke-width="0.8"/>
+
+                    <!-- Rosewood Bridge & Bone Saddle with 6 Pins -->
+                    <rect x="-24" y="58" width="48" height="14" rx="3.5" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
+                    <line x1="-18" y1="62" x2="18" y2="62" stroke="#fffbeb" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="-15" cy="67" r="1.6" fill="#fef08a"/>
+                    <circle cx="-9" cy="67" r="1.6" fill="#fef08a"/>
+                    <circle cx="-3" cy="67" r="1.6" fill="#fef08a"/>
+                    <circle cx="3" cy="67" r="1.6" fill="#fef08a"/>
+                    <circle cx="9" cy="67" r="1.6" fill="#fef08a"/>
+                    <circle cx="15" cy="67" r="1.6" fill="#fef08a"/>
+
+                    <!-- Bound Fretboard & Frets -->
+                    <rect x="-9" y="-120" width="18" height="98" fill="url(#fretboardWoodGrad)" stroke="url(#guitarGoldGrad)" stroke-width="1.5"/>
+                    <line x1="-9" y1="-108" x2="9" y2="-108" stroke="#f5d98a" stroke-width="1.1"/>
+                    <line x1="-9" y1="-96" x2="9" y2="-96" stroke="#f5d98a" stroke-width="1.1"/>
+                    <line x1="-9" y1="-82" x2="9" y2="-82" stroke="#f5d98a" stroke-width="1.1"/>
+                    <line x1="-9" y1="-66" x2="9" y2="-66" stroke="#f5d98a" stroke-width="1.1"/>
+                    <line x1="-9" y1="-48" x2="9" y2="-48" stroke="#f5d98a" stroke-width="1.1"/>
+                    <line x1="-9" y1="-28" x2="9" y2="-28" stroke="#f5d98a" stroke-width="1.1"/>
+                    
+                    <!-- Fret Position Dot Markers (Pearloid) -->
+                    <circle cx="0" cy="-89" r="2.2" fill="#fffbeb"/>
+                    <circle cx="0" cy="-57" r="2.2" fill="#fffbeb"/>
+                    <circle cx="-4" cy="-38" r="1.6" fill="#fffbeb"/>
+                    <circle cx="4" cy="-38" r="1.6" fill="#fffbeb"/>
+
+                    <!-- Bone Nut -->
+                    <rect x="-10" y="-122" width="20" height="3.5" rx="1" fill="#fffbeb" stroke="#c49a3c" stroke-width="0.6"/>
+
+                    <!-- Complete Vintage Headstock with 6 Gold Tuning Pegs (Fully Inside Safe Area) -->
+                    <g transform="translate(-11, -162)">
+                      <path d="M 2 40 L 0 6 Q 11 0 22 6 L 20 40 Z" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.6"/>
+                      <path d="M 5 36 L 3 10 Q 11 5 19 10 L 17 36 Z" fill="#2a1b0f" stroke="#c49a3c" stroke-width="0.8" opacity="0.6"/>
+                      <circle cx="11" cy="18" r="2.5" fill="url(#guitarGoldGrad)"/>
+                      
+                      <!-- 3 Left Gold Tuning Pegs -->
+                      <line x1="0" y1="12" x2="-6" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="-8" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                      <line x1="1" y1="21" x2="-5" y2="21" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="-7" cy="21" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                      <line x1="2" y1="30" x2="-4" y2="30" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="-6" cy="30" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                      
+                      <!-- 3 Right Gold Tuning Pegs -->
+                      <line x1="22" y1="12" x2="28" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="30" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                      <line x1="21" y1="21" x2="27" y2="21" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="29" cy="21" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                      <line x1="20" y1="30" x2="26" y2="30" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <ellipse cx="28" cy="30" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
+                    </g>
+
+                    <!-- 6 Vibrating Gold Acoustic Strings -->
+                    <line class="anim-guitar-string-1" x1="-7" y1="-120" x2="-15" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
+                    <line class="anim-guitar-string-2" x1="-4" y1="-120" x2="-9" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="1.3"/>
+                    <line class="anim-guitar-string-3" x1="-1" y1="-120" x2="-3" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="1.2"/>
+                    <line class="anim-guitar-string-4" x1="2" y1="-120" x2="3" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="1.1"/>
+                    <line class="anim-guitar-string-5" x1="5" y1="-120" x2="9" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="1.0"/>
+                    <line class="anim-guitar-string-6" x1="8" y1="-120" x2="15" y2="62" stroke="url(#guitarGoldGrad)" stroke-width="0.9"/>
+                  </g>
+                </g>
+
+                <!-- Ascending Musical Notes -->
+                <g class="anim-music-note-float-1" transform="translate(245, 95)">
+                  <text fill="#fef08a" font-size="22" font-weight="900">♪</text>
+                </g>
+                <g class="anim-music-note-float-2" transform="translate(285, 68)">
+                  <text fill="#c49a3c" font-size="26" font-weight="900">♫</text>
+                </g>
+                <g class="anim-music-note-float-3" transform="translate(208, 42)">
+                  <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
+                </g>
+              </svg>
+            </div>
+            <span class="fmt-card__flag">מומלץ להזמין מקום</span>
+          </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>מוזיקה חיה וסשנים אקוסטיים</h3>
+            <p class="fmt-card__when">לייב סשן שבועי · מ-21:00</p>
+            <p class="fmt-card__lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מוזיקה חיה וסשנים אקוסטיים" type="button">להשאיר פרטים</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. בית התה של רום -->
         <article class="fmt-card" data-category="tea">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -3580,27 +3834,32 @@
                 <!-- Handcrafted Porcelain Teapot (Gongfu Cha) -->
                 <g transform="translate(82, 58)">
                   <ellipse cx="62" cy="110" rx="46" ry="9" fill="#0c0a07" opacity="0.75"/>
+                  <!-- Arched Overhead Handle -->
                   <path d="M 24 56 Q 62 -4 100 56" stroke="url(#teaGoldGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
                   <path d="M 42 16 L 82 16" stroke="#fef08a" stroke-width="2" stroke-dasharray="3 2" fill="none"/>
                   <circle cx="24" cy="56" r="3" fill="#f5d98a" stroke="#18120b" stroke-width="1"/>
                   <circle cx="100" cy="56" r="3" fill="#f5d98a" stroke="#18120b" stroke-width="1"/>
+                  <!-- Teapot Porcelain Body -->
                   <ellipse cx="62" cy="74" rx="44" ry="36" fill="url(#porcelainGrad)" stroke="url(#teaGoldGrad)" stroke-width="2"/>
                   <path d="M 38 74 Q 50 60 62 74 Q 74 88 86 74" stroke="#c49a3c" stroke-width="1.2" stroke-linecap="round" fill="none"/>
                   <circle cx="62" cy="74" r="7" stroke="#f5d98a" stroke-width="0.8" fill="none"/>
                   <circle cx="62" cy="74" r="3" fill="#c49a3c"/>
+                  <!-- Gooseneck Spout -->
                   <path d="M 100 78 Q 124 70 130 52 Q 124 48 118 52 Q 100 66 94 72 Z" fill="url(#porcelainGrad)" stroke="url(#teaGoldGrad)" stroke-width="1.8"/>
+                  <!-- Porcelain Lid & Finial Knob -->
                   <ellipse cx="62" cy="42" rx="22" ry="8" fill="url(#porcelainGrad)" stroke="url(#teaGoldGrad)" stroke-width="1.8"/>
                   <ellipse cx="62" cy="34" rx="6" ry="6" fill="url(#teaGoldGrad)" stroke="#18120b" stroke-width="1"/>
                   <circle cx="62" cy="32" r="2" fill="#ffffff"/>
+                  <!-- Rising Kettle Steam -->
                   <g class="anim-tea-steam-1">
                     <path d="M 62 26 Q 54 12 66 0 Q 78 -12 70 -24" stroke="url(#teaGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.85"/>
                   </g>
                 </g>
 
-                <!-- Amber Tea Stream -->
+                <!-- Continuous Amber Tea Stream (Flowing into Primary Cup) -->
                 <path class="anim-tea-stream" d="M 210 110 Q 232 125 240 148" stroke="url(#teaLiquidGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
 
-                <!-- Primary Tea Tasting Bowl -->
+                <!-- Primary Tea Tasting Bowl (Cha Bei) -->
                 <g transform="translate(225, 134)">
                   <ellipse cx="18" cy="28" rx="20" ry="6" fill="#0c0a07" opacity="0.6"/>
                   <ellipse cx="18" cy="26" rx="22" ry="5" fill="#18120b" stroke="url(#teaGoldGrad)" stroke-width="1.2"/>
@@ -3611,7 +3870,7 @@
                   </g>
                 </g>
 
-                <!-- Secondary Aroma Cup -->
+                <!-- Secondary Aroma Cup (Wen Xiang Bei) -->
                 <g transform="translate(268, 142)">
                   <ellipse cx="14" cy="22" rx="15" ry="4.5" fill="#0c0a07" opacity="0.5"/>
                   <ellipse cx="14" cy="20" rx="16" ry="4" fill="#18120b" stroke="url(#teaGoldGrad)" stroke-width="1"/>
@@ -3622,7 +3881,7 @@
                   </g>
                 </g>
 
-                <!-- Floating Zen Tea Leaf -->
+                <!-- Floating Zen Green Tea Leaf -->
                 <g class="anim-tea-leaf" transform="translate(68, 80)">
                   <path d="M 0 0 Q 14 -10 22 4 Q 10 12 0 0 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.9"/>
                   <line x1="0" y1="0" x2="16" y2="3" stroke="#fef08a" stroke-width="0.6"/>
@@ -3642,447 +3901,7 @@
           </div>
         </article>
 
-        <!-- 2. מוזיקה חיה וסשנים אקוסטיים -->
-        <article class="fmt-card" data-category="live">
-          <div class="fmt-card__media">
-            <div class="fmt-anim-scene" aria-hidden="true">
-              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="guitarBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb"/>
-                    <stop offset="25%" stop-color="#f59e0b"/>
-                    <stop offset="65%" stop-color="#92400e"/>
-                    <stop offset="100%" stop-color="#1c130b"/>
-                  </linearGradient>
-                  <linearGradient id="guitarGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb"/>
-                    <stop offset="35%" stop-color="#f5d98a"/>
-                    <stop offset="75%" stop-color="#c49a3c"/>
-                    <stop offset="100%" stop-color="#78350f"/>
-                  </linearGradient>
-                  <radialGradient id="liveSpotlightGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.28"/>
-                    <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.06"/>
-                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                  </radialGradient>
-                  <linearGradient id="fretboardWood" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#2a1b0f"/>
-                    <stop offset="50%" stop-color="#181109"/>
-                    <stop offset="100%" stop-color="#2a1b0f"/>
-                  </linearGradient>
-                </defs>
-
-                <!-- Warm Concert Spotlight Aura -->
-                <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#liveSpotlightGrad)"/>
-
-                <!-- Acoustic Resonance Waves -->
-                <circle class="anim-sound-ripple-1" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.4" fill="none"/>
-                <circle class="anim-sound-ripple-2" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.1" fill="none"/>
-
-                <!-- Complete Acoustic Dreadnought Guitar (Full Headstock, No Clipping) -->
-                <g class="anim-guitar-body">
-                  <!-- Guitar Shadow -->
-                  <g transform="translate(68, 26) scale(0.72) rotate(-22 120 110)" fill="#0a0805" opacity="0.7">
-                    <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z"/>
-                  </g>
-
-                  <g transform="translate(56, 18) scale(0.72) rotate(-22 120 110)">
-                    <!-- Guitar Body -->
-                    <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z" fill="url(#guitarBodyGrad)" stroke="url(#guitarGoldGrad)" stroke-width="2.4"/>
-                    <path d="M 120 183 C 76 183 58 152 77 121 C 91 97 86 85 81 75 C 73 60 87 45 120 45 C 153 45 167 60 159 75 C 154 85 149 97 163 121 C 182 152 164 183 120 183 Z" fill="none" stroke="#f5d98a" stroke-width="0.9" opacity="0.65"/>
-                    <path d="M 125 110 C 145 110 155 125 150 148 C 140 148 128 135 125 110 Z" fill="#451a03" stroke="#78350f" stroke-width="0.8" opacity="0.85"/>
-
-                    <!-- Soundhole with Triple Rosette -->
-                    <circle cx="120" cy="115" r="22" fill="#0d0a07" stroke="url(#guitarGoldGrad)" stroke-width="2.5"/>
-                    <circle cx="120" cy="115" r="26" fill="none" stroke="#fef08a" stroke-width="1.2" stroke-dasharray="3 2"/>
-                    <circle cx="120" cy="115" r="29" fill="none" stroke="#c49a3c" stroke-width="0.8"/>
-
-                    <!-- Bridge & Pins -->
-                    <rect x="96" y="152" width="48" height="14" rx="3.5" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
-                    <line x1="102" y1="156" x2="138" y2="156" stroke="#fffbeb" stroke-width="1.5" stroke-linecap="round"/>
-                    <circle cx="103" cy="161" r="1.6" fill="#fef08a"/>
-                    <circle cx="110" cy="161" r="1.6" fill="#fef08a"/>
-                    <circle cx="117" cy="161" r="1.6" fill="#fef08a"/>
-                    <circle cx="123" cy="161" r="1.6" fill="#fef08a"/>
-                    <circle cx="130" cy="161" r="1.6" fill="#fef08a"/>
-                    <circle cx="137" cy="161" r="1.6" fill="#fef08a"/>
-
-                    <!-- Neck & Fretboard -->
-                    <rect x="111" y="-30" width="18" height="98" fill="url(#fretboardWood)" stroke="url(#guitarGoldGrad)" stroke-width="1.5"/>
-                    <line x1="111" y1="-18" x2="129" y2="-18" stroke="#f5d98a" stroke-width="1.1"/>
-                    <line x1="111" y1="-6" x2="129" y2="-6" stroke="#f5d98a" stroke-width="1.1"/>
-                    <line x1="111" y1="8" x2="129" y2="8" stroke="#f5d98a" stroke-width="1.1"/>
-                    <line x1="111" y1="24" x2="129" y2="24" stroke="#f5d98a" stroke-width="1.1"/>
-                    <line x1="111" y1="42" x2="129" y2="42" stroke="#f5d98a" stroke-width="1.1"/>
-                    <line x1="111" y1="62" x2="129" y2="62" stroke="#f5d98a" stroke-width="1.1"/>
-                    <circle cx="120" cy="1" r="2.2" fill="#fffbeb"/>
-                    <circle cx="120" cy="33" r="2.2" fill="#fffbeb"/>
-                    <circle cx="116" cy="52" r="1.6" fill="#fffbeb"/>
-                    <circle cx="124" cy="52" r="1.6" fill="#fffbeb"/>
-                    <rect x="110" y="-32" width="20" height="3" rx="1" fill="#fffbeb" stroke="#c49a3c" stroke-width="0.6"/>
-
-                    <!-- Complete Headstock with 6 Tuning Pegs -->
-                    <g transform="translate(108, -68)">
-                      <path d="M 3 36 L 0 6 Q 12 0 24 6 L 21 36 Z" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.6"/>
-                      <path d="M 6 32 L 3 10 Q 12 5 21 10 L 18 32 Z" fill="#2a1b0f" stroke="#c49a3c" stroke-width="0.8" opacity="0.6"/>
-                      <circle cx="12" cy="16" r="2.5" fill="url(#guitarGoldGrad)"/>
-                      <!-- Left Pegs -->
-                      <line x1="0" y1="12" x2="-6" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="-8" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="1" y1="20" x2="-5" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="-7" cy="20" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="2" y1="28" x2="-4" y2="28" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="-6" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <!-- Right Pegs -->
-                      <line x1="24" y1="12" x2="30" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="32" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="23" y1="20" x2="29" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="31" cy="20" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="22" y1="28" x2="28" y2="28" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
-                      <ellipse cx="30" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                    </g>
-
-                    <!-- Strings -->
-                    <line class="anim-guitar-string-1" x1="112" y1="-30" x2="103" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
-                    <line class="anim-guitar-string-2" x1="115" y1="-30" x2="110" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.3"/>
-                    <line class="anim-guitar-string-3" x1="118" y1="-30" x2="117" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.2"/>
-                    <line class="anim-guitar-string-4" x1="122" y1="-30" x2="123" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.1"/>
-                    <line class="anim-guitar-string-5" x1="125" y1="-30" x2="130" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.0"/>
-                    <line class="anim-guitar-string-6" x1="128" y1="-30" x2="137" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="0.9"/>
-                  </g>
-                </g>
-
-                <!-- Musical Notes -->
-                <g class="anim-music-note-float-1" transform="translate(245, 95)">
-                  <text fill="#fef08a" font-size="22" font-weight="900">♪</text>
-                </g>
-                <g class="anim-music-note-float-2" transform="translate(285, 68)">
-                  <text fill="#c49a3c" font-size="26" font-weight="900">♫</text>
-                </g>
-                <g class="anim-music-note-float-3" transform="translate(205, 42)">
-                  <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
-                </g>
-              </svg>
-            </div>
-            <span class="fmt-card__flag">מומלץ להזמין מקום</span>
-          </div>
-          <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>מוזיקה חיה וסשנים אקוסטיים</h3>
-            <p class="fmt-card__when">לייב סשן שבועי · מ-21:00</p>
-            <p class="fmt-card__lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
-            <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מוזיקה חיה וסשנים אקוסטיים" type="button">להשאיר פרטים</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- 3. פופ-אפ שפים וערבי טאבון -->
-        <article class="fmt-card" data-category="food">
-          <div class="fmt-card__media">
-            <div class="fmt-anim-scene" aria-hidden="true">
-              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="foodGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb"/>
-                    <stop offset="35%" stop-color="#f5d98a"/>
-                    <stop offset="70%" stop-color="#c49a3c"/>
-                    <stop offset="100%" stop-color="#78350f"/>
-                  </linearGradient>
-                  <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-                    <stop offset="0%" stop-color="#991b1b"/>
-                    <stop offset="35%" stop-color="#ea580c"/>
-                    <stop offset="70%" stop-color="#f59e0b"/>
-                    <stop offset="92%" stop-color="#fef08a"/>
-                    <stop offset="100%" stop-color="#ffffff"/>
-                  </linearGradient>
-                  <radialGradient id="tabunGlowGrad" cx="35%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.36"/>
-                    <stop offset="60%" stop-color="#b91c1c" stop-opacity="0.09"/>
-                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                  </radialGradient>
-                  <linearGradient id="crustGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fed7aa"/>
-                    <stop offset="45%" stop-color="#d97706"/>
-                    <stop offset="85%" stop-color="#78350f"/>
-                    <stop offset="100%" stop-color="#291807"/>
-                  </linearGradient>
-                </defs>
-
-                <!-- Warm Glowing Oven Fire Aura -->
-                <ellipse cx="130" cy="115" rx="115" ry="80" fill="url(#tabunGlowGrad)"/>
-
-                <!-- 1. Wood-Fired Stone & Terracotta Oven (Tabun) -->
-                <g transform="translate(26, 42)">
-                  <path d="M 8 148 Q 8 18 96 18 Q 184 18 184 148 Z" fill="#18120b" stroke="url(#foodGoldGrad)" stroke-width="2"/>
-                  <path d="M 22 148 Q 22 32 96 32 Q 170 32 170 148" stroke="#78350f" stroke-width="1.4" fill="none" stroke-dasharray="8 4"/>
-                  <path d="M 36 148 Q 36 46 96 46 Q 156 46 156 148" stroke="#c49a3c" stroke-width="0.8" fill="none" stroke-dasharray="6 4" opacity="0.6"/>
-                  <polygon points="90,16 102,16 100,32 92,32" fill="#2a1b0f" stroke="url(#foodGoldGrad)" stroke-width="1"/>
-                  <path d="M 40 148 Q 40 58 96 58 Q 152 58 152 148 Z" fill="#0d0804" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
-                  <ellipse cx="96" cy="140" rx="48" ry="11" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.2"/>
-                  <ellipse cx="96" cy="141" rx="36" ry="6" fill="#ef4444" opacity="0.6"/>
-                  <!-- 3 Dancing Flames -->
-                  <path class="anim-tabun-flame-1" d="M 76 142 Q 68 102 86 86 Q 92 114 102 140 Z" fill="url(#flameGrad)"/>
-                  <path class="anim-tabun-flame-2" d="M 92 142 Q 98 92 114 76 Q 120 102 128 140 Z" fill="url(#flameGrad)"/>
-                  <path class="anim-tabun-flame-3" d="M 60 142 Q 66 110 76 98 Q 82 120 86 142 Z" fill="url(#flameGrad)"/>
-                </g>
-
-                <!-- 2. Chef's Wooden Pizza Peel -->
-                <g transform="translate(155, 96)">
-                  <line x1="-12" y1="56" x2="-85" y2="56" stroke="url(#foodGoldGrad)" stroke-width="5" stroke-linecap="round"/>
-                  <line x1="-12" y1="56" x2="-85" y2="56" stroke="#24190f" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M -12 40 L 142 40 Q 158 40 158 56 Q 158 72 142 72 L -12 72 Z" fill="#24190f" stroke="url(#foodGoldGrad)" stroke-width="1.6"/>
-                </g>
-
-                <!-- 3. ROTATING SIGNATURE GOURMET DISHES (Placed Directly on Peel) -->
-                <!-- DISH 1: Neapolitan Margherita Pizza -->
-                <g class="anim-dish-cycle-1" transform="translate(195, 96)">
-                  <ellipse cx="42" cy="40" rx="40" ry="25" fill="url(#crustGrad)" stroke="#fef08a" stroke-width="1.5"/>
-                  <ellipse cx="20" cy="30" rx="3.5" ry="2.2" fill="#1c130b"/>
-                  <ellipse cx="64" cy="48" rx="4.2" ry="2.6" fill="#1c130b"/>
-                  <ellipse cx="68" cy="31" rx="3.2" ry="2" fill="#1c130b"/>
-                  <ellipse cx="18" cy="49" rx="2.8" ry="1.6" fill="#1c130b"/>
-                  <ellipse cx="42" cy="40" rx="30" ry="18" fill="#b91c1c"/>
-                  <ellipse cx="32" cy="38" rx="9" ry="5.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
-                  <ellipse cx="50" cy="42" rx="10" ry="6.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
-                  <ellipse cx="44" cy="34" rx="7" ry="4.5" fill="#fffbeb"/>
-                  <path d="M 36 34 Q 41 27 46 32 Q 41 39 36 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                  <path d="M 48 44 Q 53 37 58 42 Q 53 49 48 44 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                  <path d="M 27 43 Q 32 37 37 41 Q 32 48 27 43 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
-
-                <!-- DISH 2: Sizzling Cast-Iron Skillet & Tagliata Steak -->
-                <g class="anim-dish-cycle-2" transform="translate(195, 96)">
-                  <ellipse cx="42" cy="40" rx="38" ry="23" fill="#120e0a" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
-                  <ellipse cx="42" cy="40" rx="32" ry="18" fill="#241a12"/>
-                  <path d="M 22 36 Q 36 24 60 32 Q 65 48 50 53 Q 26 51 22 36 Z" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.1"/>
-                  <line x1="28" y1="32" x2="44" y2="48" stroke="#1c130b" stroke-width="2.2"/>
-                  <line x1="36" y1="30" x2="52" y2="46" stroke="#1c130b" stroke-width="2.2"/>
-                  <line x1="44" y1="28" x2="58" y2="42" stroke="#1c130b" stroke-width="2.2"/>
-                  <circle cx="26" cy="46" r="3.8" fill="#fef08a" stroke="#ca8a04" stroke-width="0.7"/>
-                  <path d="M 50 29 Q 58 23 64 27" stroke="#65a30d" stroke-width="1.6" stroke-linecap="round"/>
-                </g>
-
-                <!-- DISH 3: Tabun Focaccia & Whole Burrata Platter -->
-                <g class="anim-dish-cycle-3" transform="translate(195, 96)">
-                  <ellipse cx="42" cy="40" rx="40" ry="24" fill="url(#crustGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.5"/>
-                  <circle cx="24" cy="33" r="2.8" fill="#854d0e"/>
-                  <circle cx="60" cy="34" r="2.8" fill="#854d0e"/>
-                  <circle cx="28" cy="47" r="2.8" fill="#854d0e"/>
-                  <circle cx="56" cy="48" r="2.8" fill="#854d0e"/>
-                  <ellipse cx="42" cy="38" rx="15" ry="12" fill="#fffbeb" stroke="#fef08a" stroke-width="1.1"/>
-                  <ellipse cx="42" cy="29" rx="4.5" ry="3" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.9"/>
-                  <circle cx="22" cy="41" r="4.2" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
-                  <circle cx="62" cy="43" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
-
-                <!-- Rising Steam -->
-                <g class="anim-dish-steam" transform="translate(238, 110)">
-                  <path d="M 0 0 Q -8 -12 2 -22 Q 12 -32 0 -42" stroke="url(#foodGoldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
-                  <path d="M 16 -2 Q 24 -14 15 -26 Q 6 -38 18 -48" stroke="url(#foodGoldGrad)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
-                </g>
-              </svg>
-            </div>
-            <span class="fmt-card__flag">בהזמנת מקום</span>
-          </div>
-          <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>פופ-אפ שפים וערבי טאבון</h3>
-            <p class="fmt-card__when">ערבי קולינריה מיוחדים · מ-19:30</p>
-            <p class="fmt-card__lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
-            <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="פופ-אפ שפים וערבי טאבון" type="button">להשאיר פרטים</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- 4. השמעות אלבומים וסלון תקליטים -->
-        <article class="fmt-card" data-category="vinyl">
-          <div class="fmt-card__media">
-            <div class="fmt-anim-scene" aria-hidden="true">
-              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="deckGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb"/>
-                    <stop offset="35%" stop-color="#f5d98a"/>
-                    <stop offset="70%" stop-color="#c49a3c"/>
-                    <stop offset="100%" stop-color="#78350f"/>
-                  </linearGradient>
-                  <radialGradient id="fmtVinylAura" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.26"/>
-                    <stop offset="65%" stop-color="#c49a3c" stop-opacity="0.05"/>
-                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                  </radialGradient>
-                  <linearGradient id="labelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fef08a"/>
-                    <stop offset="50%" stop-color="#d97706"/>
-                    <stop offset="100%" stop-color="#92400e"/>
-                  </linearGradient>
-                </defs>
-
-                <!-- Warm Vinyl Sound Aura -->
-                <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#fmtVinylAura)"/>
-
-                <!-- Audiophile Turntable Plinth -->
-                <rect x="42" y="32" width="276" height="162" rx="14" fill="#140f0a" stroke="url(#deckGoldGrad)" stroke-width="2"/>
-                <rect x="49" y="39" width="262" height="148" rx="10" fill="#1b150f" stroke="#78350f" stroke-width="0.9" opacity="0.6"/>
-
-                <!-- Turntable Deck Controls (Left Panel) -->
-                <g transform="translate(58, 48)">
-                  <circle cx="12" cy="12" r="8.5" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.3"/>
-                  <circle cx="12" cy="12" r="3.2" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
-                  <text x="12" y="28" fill="#c49a3c" font-size="6" font-weight="700" text-anchor="middle">ON/OFF</text>
-
-                  <rect x="5" y="44" width="14" height="28" rx="3.5" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.1"/>
-                  <rect x="7" y="46" width="10" height="11" rx="2" fill="#f5d98a"/>
-                  <text x="12" y="82" fill="#c49a3c" font-size="6" font-weight="700" text-anchor="middle">33⅓</text>
-                </g>
-
-                <!-- 7-Band Equalizer Spectrum Analyzer Bars (Top Right) -->
-                <g transform="translate(228, 48)">
-                  <line class="anim-eq-bar-1" x1="0" y1="24" x2="0" y2="5" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-2" x1="6" y1="24" x2="6" y2="2" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-3" x1="12" y1="24" x2="12" y2="8" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-4" x1="18" y1="24" x2="18" y2="0" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-5" x1="24" y1="24" x2="24" y2="6" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-6" x1="30" y1="24" x2="30" y2="3" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
-                  <line class="anim-eq-bar-7" x1="36" y1="24" x2="36" y2="10" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
-                </g>
-
-                <!-- Heavy Aluminum Platter -->
-                <circle cx="165" cy="115" r="68" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
-
-                <!-- Spinning Vinyl Record -->
-                <g class="anim-fmt-vinyl-spin" style="transform-origin: 165px 115px;">
-                  <circle cx="165" cy="115" r="64" fill="#0d0a07"/>
-                  <circle cx="165" cy="115" r="60" stroke="#2a2218" stroke-width="0.8" fill="none"/>
-                  <circle cx="165" cy="115" r="54" stroke="#1f1a14" stroke-width="1.2" fill="none"/>
-                  <circle cx="165" cy="115" r="48" stroke="#2a2218" stroke-width="0.8" fill="none"/>
-                  <circle cx="165" cy="115" r="42" stroke="#1f1a14" stroke-width="1" fill="none"/>
-                  <circle cx="165" cy="115" r="36" stroke="#2a2218" stroke-width="0.8" fill="none"/>
-                  <circle cx="165" cy="115" r="30" stroke="#1f1a14" stroke-width="1" fill="none"/>
-                  
-                  <path d="M 165 115 L 125 70 A 64 64 0 0 1 155 52 Z" fill="rgba(255,255,255,0.07)"/>
-                  <path d="M 165 115 L 205 160 A 64 64 0 0 1 175 178 Z" fill="rgba(255,255,255,0.07)"/>
-
-                  <circle cx="165" cy="115" r="24" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
-                  <text x="165" y="112" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
-                  <text x="165" y="120" fill="#140f0a" font-size="4" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
-                  <circle cx="165" cy="115" r="3.5" fill="#140f0a"/>
-                </g>
-
-                <!-- S-Shaped Precision Tonearm -->
-                <g class="anim-tonearm-drift">
-                  <circle cx="265" cy="65" r="14" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.6"/>
-                  <circle cx="265" cy="65" r="6" fill="#f5d98a"/>
-                  <rect x="258" y="44" width="14" height="12" rx="2.5" fill="url(#deckGoldGrad)" stroke="#140f0a" stroke-width="1"/>
-                  <path d="M 265 65 Q 260 100 240 120 Q 225 135 205 130" stroke="url(#deckGoldGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-                  <rect x="194" y="124" width="14" height="8" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="1.2" transform="rotate(-15 194 124)"/>
-                  <circle cx="196" cy="132" r="1.5" fill="#fef08a" filter="drop-shadow(0 0 3px #fef08a)"/>
-                </g>
-              </svg>
-            </div>
-            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
-          </div>
-          <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>השמעות אלבומים וסלון תקליטים</h3>
-            <p class="fmt-card__when">סשן סאונד אנלוגי · מ-20:30</p>
-            <p class="fmt-card__lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
-            <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="השמעות אלבומים וסלון תקליטים" type="button">להשאיר פרטים</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- 5. מיקרופון פתוח וספוקן וורד -->
-        <article class="fmt-card" data-category="openmic">
-          <div class="fmt-card__media">
-            <div class="fmt-anim-scene" aria-hidden="true">
-              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="micGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb"/>
-                    <stop offset="35%" stop-color="#f5d98a"/>
-                    <stop offset="70%" stop-color="#c49a3c"/>
-                    <stop offset="100%" stop-color="#78350f"/>
-                  </linearGradient>
-                  <linearGradient id="spotlightCone" x1="0%" y1="0%" x2="60%" y2="100%">
-                    <stop offset="0%" stop-color="#f5d98a" stop-opacity="0.28"/>
-                    <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.06"/>
-                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                  </linearGradient>
-                  <radialGradient id="micGlowGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.26"/>
-                    <stop offset="70%" stop-color="#c49a3c" stop-opacity="0.04"/>
-                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
-                  </radialGradient>
-                </defs>
-
-                <!-- Angled Stage Spotlight Beam -->
-                <polygon points="120,0 220,0 295,225 65,225" fill="url(#spotlightCone)"/>
-                <ellipse cx="170" cy="115" rx="130" ry="80" fill="url(#micGlowGrad)"/>
-
-                <!-- Concentric Spoken Word Broadcast Resonance Waves -->
-                <path class="anim-voice-wave-1" d="M 125 55 A 45 45 0 0 0 125 125" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-1" d="M 215 55 A 45 45 0 0 1 215 125" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-2" d="M 105 40 A 70 70 0 0 0 105 140" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-                <path class="anim-voice-wave-2" d="M 235 40 A 70 70 0 0 1 235 140" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-
-                <!-- Vintage 1950s Shure 55-Style Ribbed Stage Microphone -->
-                <g transform="translate(145, 42)">
-                  <line x1="25" y1="100" x2="25" y2="155" stroke="url(#micGoldGrad)" stroke-width="4" stroke-linecap="round"/>
-                  <ellipse cx="25" cy="155" rx="28" ry="6" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <rect x="18" y="102" width="14" height="10" rx="2.5" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.3"/>
-                  
-                  <ellipse cx="25" cy="72" rx="28" ry="10" fill="none" stroke="url(#micGoldGrad)" stroke-width="1.8"/>
-                  <line x1="0" y1="72" x2="10" y2="72" stroke="#fef08a" stroke-width="1.5"/>
-                  <line x1="40" y1="72" x2="50" y2="72" stroke="#fef08a" stroke-width="1.5"/>
-
-                  <rect x="10" y="22" width="30" height="50" rx="14" fill="#17120c" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
-                  
-                  <line x1="13" y1="30" x2="37" y2="30" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="11" y1="36" x2="39" y2="36" stroke="#fef08a" stroke-width="1.6"/>
-                  <line x1="10" y1="42" x2="40" y2="42" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="10" y1="48" x2="40" y2="48" stroke="#fef08a" stroke-width="1.6"/>
-                  <line x1="10" y1="54" x2="40" y2="54" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="13" y1="60" x2="37" y2="60" stroke="#fef08a" stroke-width="1.6"/>
-                  <line x1="25" y1="22" x2="25" y2="72" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
-                </g>
-
-                <!-- Floating Poetic Feather Quill Pen -->
-                <g class="anim-quill-float" transform="translate(62, 72)">
-                  <path d="M 0 45 C 10 30 15 15 35 0 C 30 18 24 32 10 46 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1"/>
-                  <path d="M 0 45 L 35 0" stroke="#140f0a" stroke-width="1"/>
-                  <circle cx="0" cy="46" r="2.2" fill="#fef08a" filter="drop-shadow(0 0 3px #fef08a)"/>
-                </g>
-
-                <!-- Floating Verse Quotation Marks & Literary Elements -->
-                <g class="anim-poem-word-1" transform="translate(82, 115)">
-                  <text fill="#fef08a" font-size="20" font-family="serif" font-style="italic" opacity="0.9">“</text>
-                </g>
-                <g class="anim-poem-word-2" transform="translate(242, 88)">
-                  <text fill="#f5d98a" font-size="14" font-family="serif" font-style="italic" opacity="0.85">✦ spoken</text>
-                </g>
-                <g class="anim-poem-word-3" transform="translate(268, 134)">
-                  <text fill="#c49a3c" font-size="20" font-family="serif" font-style="italic" opacity="0.9">”</text>
-                </g>
-              </svg>
-            </div>
-            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
-          </div>
-          <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>מיקרופון פתוח וספוקן וורד</h3>
-            <p class="fmt-card__when">במה פתוחה ליוצרים · מ-20:00</p>
-            <p class="fmt-card__lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
-            <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מיקרופון פתוח וספוקן וורד" type="button">להשאיר פרטים</button>
-            </div>
-          </div>
-        </article>
-
-        <!-- 6. ערבי יין טבעי ומיקסולוגיה -->
+        <!-- 4. ערבי יין טבעי ומיקסולוגיה -->
         <article class="fmt-card" data-category="wine">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -4115,67 +3934,82 @@
                 <!-- Warm Speakeasy Bar Aura -->
                 <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#barAuraGrad)"/>
 
-                <!-- Walnut Bar Counter Base -->
-                <rect x="35" y="176" width="290" height="18" rx="4.5" fill="#17110a" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
-                <line x1="45" y1="180" x2="315" y2="180" stroke="#c49a3c" stroke-width="0.8" opacity="0.4"/>
-
-                <!-- Tilted Natural Wine Bottle (Left - Safely within bounds) -->
-                <g transform="translate(64, 42) rotate(38)">
-                  <rect x="0" y="24" width="28" height="70" rx="5" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
-                  <path d="M 0 24 L 7 10 L 7 0 L 21 0 L 21 10 L 28 24 Z" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
-                  <rect x="7" y="0" width="14" height="6" rx="1" fill="#be123c"/>
-                  
-                  <rect x="3" y="36" width="22" height="38" rx="2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <line x1="5" y1="46" x2="23" y2="46" stroke="#120a06" stroke-width="1.2"/>
-                  <line x1="5" y1="53" x2="19" y2="53" stroke="#120a06" stroke-width="0.8"/>
-                  <text x="14" y="65" fill="#be123c" font-size="4.5" font-weight="900" text-anchor="middle">NATUR</text>
+                <!-- Dark Walnut & Marble Bar Counter (No Floating Shelves, Clean Horizon) -->
+                <g transform="translate(30, 172)">
+                  <rect x="0" y="0" width="300" height="22" rx="4.5" fill="#17110a" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
+                  <line x1="10" y1="5" x2="290" y2="5" stroke="#c49a3c" stroke-width="0.9" opacity="0.45"/>
                 </g>
 
-                <!-- Flowing Stream of Ruby Natural Wine -->
-                <path class="anim-wine-stream" d="M 126 84 Q 140 100 144 125" stroke="url(#wineRedGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-
-                <!-- Central Bordeaux Crystal Wine Glass -->
-                <g transform="translate(124, 105)">
-                  <ellipse cx="20" cy="71" rx="15" ry="3.5" fill="#0d0905" stroke="url(#wineGoldGrad)" stroke-width="1.3"/>
-                  <line x1="20" y1="45" x2="20" y2="71" stroke="url(#wineGoldGrad)" stroke-width="1.8"/>
+                <!-- Natural Wine Bottle (Ezra Vins Naturels - Tilted within safe canvas) -->
+                <g transform="translate(68, 48) rotate(36)">
+                  <!-- Dark Amber Bottle Glass Body -->
+                  <rect x="0" y="24" width="28" height="70" rx="5" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
+                  <path d="M 0 24 L 7 10 L 7 0 L 21 0 L 21 10 L 28 24 Z" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
+                  <!-- Wax Dipped Seal -->
+                  <rect x="7" y="0" width="14" height="6" rx="1" fill="#be123c"/>
                   
-                  <path d="M 4 8 Q 2 35 20 45 Q 38 35 36 8 Z" fill="rgba(255,255,255,0.05)" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
-                  
-                  <path class="anim-wine-surface" d="M 6 22 Q 20 28 34 22 Q 36 34 20 44 Q 4 34 6 22 Z" fill="url(#wineRedGrad)"/>
-                  <ellipse class="anim-wine-surface" cx="20" cy="22" rx="14" ry="4" fill="#fda4af" opacity="0.6"/>
+                  <!-- Minimalist Textured Natural Wine Label -->
+                  <rect x="3" y="34" width="22" height="42" rx="2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                  <text x="14" y="45" fill="#140f0a" font-size="4" font-weight="900" text-anchor="middle" letter-spacing="0.5">EZRA</text>
+                  <line x1="5" y1="48" x2="23" y2="48" stroke="#120a06" stroke-width="0.8"/>
+                  <text x="14" y="56" fill="#be123c" font-size="3" font-weight="800" text-anchor="middle">VINS</text>
+                  <text x="14" y="62" fill="#be123c" font-size="2.6" font-weight="800" text-anchor="middle">NATURELS</text>
+                  <line x1="5" y1="66" x2="23" y2="66" stroke="#120a06" stroke-width="0.6"/>
+                  <text x="14" y="72" fill="#140f0a" font-size="2.4" font-weight="700" text-anchor="middle">BIO</text>
+                </g>
 
+                <!-- Cascading Flow of Ruby Natural Wine Stream -->
+                <path class="anim-wine-stream" d="M 132 92 Q 146 108 148 132" stroke="url(#wineRedGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+                <!-- Crystal Bordeaux Wine Glass (Center) -->
+                <g transform="translate(128, 108)">
+                  <!-- Glass Base & Stem -->
+                  <ellipse cx="20" cy="68" rx="15" ry="3.5" fill="#0d0905" stroke="url(#wineGoldGrad)" stroke-width="1.3"/>
+                  <line x1="20" y1="42" x2="20" y2="68" stroke="url(#wineGoldGrad)" stroke-width="1.8"/>
+                  
+                  <!-- Crystal Bowl Outline -->
+                  <path d="M 4 8 Q 2 34 20 42 Q 38 34 36 8 Z" fill="rgba(255,255,255,0.05)" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
+                  
+                  <!-- Ruby Wine Liquid with Surface Wave -->
+                  <path class="anim-wine-surface" d="M 6 22 Q 20 28 34 22 Q 36 34 20 41 Q 4 34 6 22 Z" fill="url(#wineRedGrad)"/>
+                  <ellipse class="anim-wine-surface" cx="20" cy="22" rx="14" ry="3.8" fill="#fda4af" opacity="0.6"/>
+
+                  <!-- Subtle Sparkling Micro-bubbles -->
                   <circle class="anim-cocktail-bubble-1" cx="16" cy="32" r="1.1" fill="#ffffff"/>
                   <circle class="anim-cocktail-bubble-2" cx="24" cy="28" r="0.9" fill="#fde047"/>
                 </g>
 
                 <!-- Artisanal Cocktail Coupe Glass (Right) -->
-                <g transform="translate(196, 110)">
-                  <ellipse cx="25" cy="66" rx="16" ry="3.5" fill="#0d0905" stroke="url(#wineGoldGrad)" stroke-width="1.3"/>
-                  <line x1="25" y1="36" x2="25" y2="66" stroke="url(#wineGoldGrad)" stroke-width="1.8"/>
+                <g transform="translate(204, 114)">
+                  <!-- Coupe Base & Slender Stem -->
+                  <ellipse cx="25" cy="62" rx="16" ry="3.5" fill="#0d0905" stroke="url(#wineGoldGrad)" stroke-width="1.3"/>
+                  <line x1="25" y1="34" x2="25" y2="62" stroke="url(#wineGoldGrad)" stroke-width="1.8"/>
                   
-                  <path d="M 2 10 Q 5 35 25 36 Q 45 35 48 10 Z" fill="rgba(255,255,255,0.06)" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
+                  <!-- Wide Coupe Bowl -->
+                  <path d="M 2 10 Q 5 33 25 34 Q 45 33 48 10 Z" fill="rgba(255,255,255,0.06)" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
                   
-                  <path d="M 5 15 Q 25 24 45 15 Q 42 33 25 35 Q 8 33 5 15 Z" fill="url(#cocktailAmberGrad)"/>
+                  <!-- Golden-Amber Cocktail Liquid -->
+                  <path d="M 5 15 Q 25 24 45 15 Q 42 31 25 33 Q 8 31 5 15 Z" fill="url(#cocktailAmberGrad)"/>
                   
-                  <!-- Candied Orange Wheel Garnish -->
+                  <!-- Dehydrated Candied Orange Wheel Garnish -->
                   <ellipse cx="44" cy="10" rx="9" ry="9" fill="#ea580c" stroke="#fef08a" stroke-width="1.1"/>
                   <circle cx="44" cy="10" r="6" stroke="#fef08a" stroke-width="0.6" fill="none" stroke-dasharray="2 2"/>
                   <line x1="44" y1="1" x2="44" y2="19" stroke="#fef08a" stroke-width="0.6"/>
                   <line x1="35" y1="10" x2="53" y2="10" stroke="#fef08a" stroke-width="0.6"/>
 
+                  <!-- Effervescent Bubble -->
                   <circle class="anim-cocktail-bubble-3" cx="22" cy="24" r="1.1" fill="#ffffff"/>
                 </g>
 
-                <!-- Polished Cobbler Cocktail Shaker in Background -->
-                <g class="anim-shaker-vibe" transform="translate(266, 92)">
-                  <path d="M 8 15 L 24 15 L 28 84 L 4 84 Z" fill="#1c1610" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
-                  <rect x="6" y="8" width="20" height="7" rx="2" fill="#241a12" stroke="url(#wineGoldGrad)" stroke-width="1.2"/>
-                  <circle cx="16" cy="4" r="4" fill="url(#wineGoldGrad)"/>
+                <!-- Brass Japanese Jigger / Bar Tool in Background -->
+                <g transform="translate(276, 128)">
+                  <polygon points="4,0 16,0 12,18 18,36 2,36 8,18" fill="#241a10" stroke="url(#wineGoldGrad)" stroke-width="1.2"/>
+                  <line x1="7" y1="18" x2="13" y2="18" stroke="#fef08a" stroke-width="1.2"/>
                 </g>
 
-                <!-- Speakeasy Sparkles -->
-                <text x="175" y="80" fill="#fef08a" font-size="12" font-weight="900" opacity="0.9">✦</text>
-                <text x="245" y="70" fill="#c49a3c" font-size="10" font-weight="900" opacity="0.8">✧</text>
+                <!-- Speakeasy Ambient Sparkles -->
+                <text x="175" y="78" fill="#fef08a" font-size="12" font-weight="900" opacity="0.9">✦</text>
+                <text x="252" y="70" fill="#c49a3c" font-size="10" font-weight="900" opacity="0.8">✧</text>
               </svg>
             </div>
             <span class="fmt-card__flag">מומלץ להזמין מקום</span>
@@ -4187,6 +4021,230 @@
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
               <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="ערבי יין טבעי ומיקסולוגיה" type="button">להשאיר פרטים</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. מיקרופון פתוח וספוקן וורד -->
+        <article class="fmt-card" data-category="openmic">
+          <div class="fmt-card__media">
+            <div class="fmt-anim-scene" aria-hidden="true">
+              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="micGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fffbeb"/>
+                    <stop offset="35%" stop-color="#f5d98a"/>
+                    <stop offset="70%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#78350f"/>
+                  </linearGradient>
+                  <linearGradient id="micChromeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f5d98a"/>
+                    <stop offset="30%" stop-color="#ffffff"/>
+                    <stop offset="70%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#2a1e12"/>
+                  </linearGradient>
+                  <linearGradient id="spotlightConeGrad" x1="0%" y1="0%" x2="60%" y2="100%">
+                    <stop offset="0%" stop-color="#f5d98a" stop-opacity="0.28"/>
+                    <stop offset="60%" stop-color="#c49a3c" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                  </linearGradient>
+                  <radialGradient id="micGlowGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.26"/>
+                    <stop offset="70%" stop-color="#c49a3c" stop-opacity="0.04"/>
+                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- Overhead Theatrical Cone Spotlight -->
+                <polygon points="135,0 225,0 305,225 55,225" fill="url(#spotlightConeGrad)"/>
+                <ellipse cx="180" cy="120" rx="130" ry="80" fill="url(#micGlowGrad)"/>
+
+                <!-- Concentric Spoken Word Broadcast Resonance Waves -->
+                <path class="anim-voice-wave-1" d="M 135 60 A 45 45 0 0 0 135 130" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <path class="anim-voice-wave-1" d="M 225 60 A 45 45 0 0 1 225 130" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <path class="anim-voice-wave-2" d="M 115 45 A 70 70 0 0 0 115 145" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <path class="anim-voice-wave-2" d="M 245 45 A 70 70 0 0 1 245 145" stroke="url(#micGoldGrad)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+
+                <!-- Vintage Iconic Shure 55-Style Ribbed Stage Microphone -->
+                <g transform="translate(155, 45)">
+                  <!-- Heavy Stand & Cast-Iron Stage Base -->
+                  <line x1="25" y1="102" x2="25" y2="152" stroke="url(#micGoldGrad)" stroke-width="4" stroke-linecap="round"/>
+                  <ellipse cx="25" cy="152" rx="28" ry="6" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <rect x="18" y="104" width="14" height="10" rx="2.5" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.3"/>
+                  
+                  <!-- Swivel Neck Yoke & Knurled Screws -->
+                  <ellipse cx="25" cy="74" rx="28" ry="10" fill="none" stroke="url(#micGoldGrad)" stroke-width="1.8"/>
+                  <circle cx="-1" cy="74" r="3" fill="#fef08a" stroke="#78350f" stroke-width="0.8"/>
+                  <circle cx="51" cy="74" r="3" fill="#fef08a" stroke="#78350f" stroke-width="0.8"/>
+
+                  <!-- Microphone Outer Shell with Art-Deco Contours -->
+                  <path d="M 10 32 C 10 18 16 14 25 14 C 34 14 40 18 40 32 L 38 68 C 38 74 32 76 25 76 C 18 76 12 74 12 68 Z" fill="#17120c" stroke="url(#micChromeGrad)" stroke-width="2.2"/>
+                  
+                  <!-- Iconic Horizontal Grille Louvers & Inner Acoustic Cloth -->
+                  <line x1="14" y1="24" x2="36" y2="24" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="12" y1="30" x2="38" y2="30" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="11" y1="36" x2="39" y2="36" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="10" y1="42" x2="40" y2="42" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="10" y1="48" x2="40" y2="48" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="11" y1="54" x2="39" y2="54" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="13" y1="60" x2="37" y2="60" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="15" y1="66" x2="35" y2="66" stroke="#fef08a" stroke-width="1.6"/>
+                  
+                  <!-- Vertical Chrome Center Spline Rib -->
+                  <line x1="25" y1="14" x2="25" y2="76" stroke="url(#micChromeGrad)" stroke-width="2.4"/>
+                </g>
+
+                <!-- Floating Poetic Feather Quill Pen with Glowing Ink Drop -->
+                <g class="anim-quill-float" transform="translate(68, 70)">
+                  <path d="M 0 45 C 10 30 15 15 35 0 C 30 18 24 32 10 46 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1"/>
+                  <path d="M 0 45 L 35 0" stroke="#140f0a" stroke-width="1"/>
+                  <!-- Glowing Golden Ink Drop -->
+                  <circle cx="0" cy="46" r="2.2" fill="#fef08a"/>
+                </g>
+
+                <!-- Floating Verse Quotation Marks & Literary Elements -->
+                <g class="anim-poem-word-1" transform="translate(86, 120)">
+                  <text fill="#fef08a" font-size="22" font-family="serif" font-style="italic" opacity="0.9">“</text>
+                </g>
+                <g class="anim-poem-word-2" transform="translate(244, 90)">
+                  <text fill="#f5d98a" font-size="13" font-family="serif" font-style="italic" letter-spacing="1" opacity="0.85">✦ spoken</text>
+                </g>
+                <g class="anim-poem-word-3" transform="translate(272, 138)">
+                  <text fill="#c49a3c" font-size="22" font-family="serif" font-style="italic" opacity="0.9">”</text>
+                </g>
+              </svg>
+            </div>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
+          </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>מיקרופון פתוח וספוקן וורד</h3>
+            <p class="fmt-card__when">במה פתוחה ליוצרים · מ-20:00</p>
+            <p class="fmt-card__lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="מיקרופון פתוח וספוקן וורד" type="button">להשאיר פרטים</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. השמעות אלבומים וסלון תקליטים -->
+        <article class="fmt-card" data-category="vinyl">
+          <div class="fmt-card__media">
+            <div class="fmt-anim-scene" aria-hidden="true">
+              <svg class="fmt-anim-svg" viewBox="0 0 360 225" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="deckGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fffbeb"/>
+                    <stop offset="35%" stop-color="#f5d98a"/>
+                    <stop offset="70%" stop-color="#c49a3c"/>
+                    <stop offset="100%" stop-color="#78350f"/>
+                  </linearGradient>
+                  <radialGradient id="fmtVinylAura" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.26"/>
+                    <stop offset="65%" stop-color="#c49a3c" stop-opacity="0.05"/>
+                    <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="labelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fef08a"/>
+                    <stop offset="50%" stop-color="#d97706"/>
+                    <stop offset="100%" stop-color="#92400e"/>
+                  </linearGradient>
+                  <linearGradient id="vuGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#fef08a"/>
+                    <stop offset="70%" stop-color="#f59e0b"/>
+                    <stop offset="90%" stop-color="#ef4444"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Warm Vinyl Sound Aura -->
+                <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#fmtVinylAura)"/>
+
+                <!-- Audiophile Turntable Plinth Chassis -->
+                <rect x="36" y="28" width="288" height="168" rx="12" fill="#140f0a" stroke="url(#deckGoldGrad)" stroke-width="2"/>
+                <rect x="44" y="36" width="272" height="152" rx="9" fill="#1b150f" stroke="#78350f" stroke-width="0.9" opacity="0.6"/>
+
+                <!-- Turntable Deck Controls (Left Panel) -->
+                <g transform="translate(52, 44)">
+                  <!-- Rotary ON/OFF Switch with Ruby Indicator Light -->
+                  <circle cx="12" cy="12" r="8.5" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.3"/>
+                  <circle cx="12" cy="12" r="3.2" fill="#ef4444"/>
+                  <text x="12" y="28" fill="#c49a3c" font-size="6" font-weight="700" text-anchor="middle">ON/OFF</text>
+
+                  <!-- Speed Selector -->
+                  <rect x="5" y="42" width="14" height="28" rx="3.5" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.1"/>
+                  <rect x="7" y="44" width="10" height="11" rx="2" fill="#f5d98a"/>
+                  <text x="12" y="80" fill="#c49a3c" font-size="6" font-weight="700" text-anchor="middle">33⅓</text>
+
+                  <!-- Backlit Vintage VU Volume Meter (Bottom Left) -->
+                  <g transform="translate(-2, 92)">
+                    <rect x="0" y="0" width="30" height="18" rx="3" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="1"/>
+                    <rect x="2" y="2" width="26" height="14" rx="2" fill="#451a03" opacity="0.6"/>
+                    <path d="M 4 12 Q 15 7 26 12" stroke="url(#vuGrad)" stroke-width="1.2" fill="none"/>
+                    <!-- Animated VU Needle -->
+                    <line class="anim-vu-needle" x1="15" y1="15" x2="20" y2="4" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                  </g>
+                </g>
+
+                <!-- 7-Band Equalizer Spectrum Analyzer Bars (Top Right) -->
+                <g transform="translate(236, 44)">
+                  <line class="anim-eq-bar-1" x1="0" y1="24" x2="0" y2="5" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-2" x1="6" y1="24" x2="6" y2="2" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-3" x1="12" y1="24" x2="12" y2="8" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-4" x1="18" y1="24" x2="18" y2="0" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-5" x1="24" y1="24" x2="24" y2="6" stroke="#f5d98a" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-6" x1="30" y1="24" x2="30" y2="3" stroke="#c49a3c" stroke-width="2.5" stroke-linecap="round"/>
+                  <line class="anim-eq-bar-7" x1="36" y1="24" x2="36" y2="10" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+                </g>
+
+                <!-- Heavy Aluminum Platter -->
+                <circle cx="160" cy="112" r="68" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
+
+                <!-- Spinning 12" Vinyl Record with Sound Grooves & Light Sheen -->
+                <g class="anim-fmt-vinyl-spin" style="transform-origin: 160px 112px;">
+                  <!-- Vinyl Disc Body -->
+                  <circle cx="160" cy="112" r="64" fill="#0d0a07"/>
+                  <!-- Micro-groove Rings -->
+                  <circle cx="160" cy="112" r="60" stroke="#2a2218" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="112" r="54" stroke="#1f1a14" stroke-width="1.2" fill="none"/>
+                  <circle cx="160" cy="112" r="48" stroke="#2a2218" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="112" r="42" stroke="#1f1a14" stroke-width="1" fill="none"/>
+                  <circle cx="160" cy="112" r="36" stroke="#2a2218" stroke-width="0.8" fill="none"/>
+                  <circle cx="160" cy="112" r="30" stroke="#1f1a14" stroke-width="1" fill="none"/>
+                  
+                  <!-- Light Reflection Birefringence Sectors -->
+                  <path d="M 160 112 L 120 67 A 64 64 0 0 1 150 49 Z" fill="rgba(255,255,255,0.07)"/>
+                  <path d="M 160 112 L 200 157 A 64 64 0 0 1 170 175 Z" fill="rgba(255,255,255,0.07)"/>
+
+                  <!-- Antique Gold Center Label -->
+                  <circle cx="160" cy="112" r="24" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
+                  <text x="160" y="109" fill="#140f0a" font-size="6.5" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
+                  <text x="160" y="117" fill="#140f0a" font-size="4" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
+                  <!-- Spindle Center Hole -->
+                  <circle cx="160" cy="112" r="3.5" fill="#140f0a"/>
+                </g>
+
+                <!-- S-Shaped Precision Tonearm with Counterweight & Stylus -->
+                <g class="anim-tonearm-drift">
+                  <circle cx="265" cy="62" r="14" fill="#110d08" stroke="url(#deckGoldGrad)" stroke-width="1.6"/>
+                  <circle cx="265" cy="62" r="6" fill="#f5d98a"/>
+                  <rect x="258" y="41" width="14" height="12" rx="2.5" fill="url(#deckGoldGrad)" stroke="#140f0a" stroke-width="1"/>
+                  <!-- Curved S-Arm Pipe -->
+                  <path d="M 265 62 Q 260 97 240 117 Q 225 132 202 127" stroke="url(#deckGoldGrad)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+                  <!-- Cartridge Headshell & Needle Tracking in Groove -->
+                  <rect x="191" y="121" width="14" height="8" rx="2" fill="#140f0a" stroke="#fef08a" stroke-width="1.2" transform="rotate(-15 191 121)"/>
+                  <circle cx="193" cy="129" r="1.5" fill="#fef08a"/>
+                </g>
+              </svg>
+            </div>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
+          </div>
+          <div class="fmt-card__body">
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>השמעות אלבומים וסלון תקליטים</h3>
+            <p class="fmt-card__when">סשן סאונד אנלוגי · מ-20:30</p>
+            <p class="fmt-card__lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
+            <div class="fmt-card__actions">
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="השמעות אלבומים וסלון תקליטים" type="button">להשאיר פרטים</button>
             </div>
           </div>
         </article>
@@ -4392,6 +4450,77 @@
         <div class="transit-road-stripes"></div>
       </div>
 
+      <!-- Left Roadside: Tel Aviv & Florentin Skyline Silhouette (Across the road in background) -->
+      <div class="transit-skyline transit-skyline--left" aria-hidden="true">
+        <svg class="transit-skyline-svg" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skylineBldgGradL" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#24170d"/>
+              <stop offset="100%" stop-color="#0f0b07"/>
+            </linearGradient>
+            <linearGradient id="skylineWindowGradL" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#b45309" stop-opacity="0.25"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Building L1: 3-Story Bauhaus Corner Building (x: 4 to 95) -->
+          <rect x="6" y="16" width="90" height="64" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Flat Roof Pergola & Water Tank & Antenna -->
+          <line x1="4" y1="16" x2="98" y2="16" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="14" y="8" width="22" height="8" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="52" y="6" width="14" height="10" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <line x1="78" y1="16" x2="78" y2="2" stroke="#f5d98a" stroke-width="0.8"/>
+          <!-- Curved Bauhaus Balconies -->
+          <path d="M 6 34 Q 6 28 18 28 L 48 28 L 48 38 L 6 38 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="56" y="24" width="12" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="74" y="24" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 6 54 Q 6 48 18 48 L 48 48 L 48 58 L 6 58 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="56" y="44" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="74" y="44" width="12" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building L2: 2-Story Eclectic Florentin Townhouse with Pitched Terracotta Roof (x: 96 to 195) -->
+          <polygon points="94,26 146,6 198,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="98" y="26" width="98" height="54" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Chimney with smoke wisp -->
+          <rect x="174" y="2" width="8" height="14" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 178 2 Q 175 -4 180 -10" stroke="rgba(245,217,138,0.3)" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Arched Windows with Wooden Louvers -->
+          <path d="M 110 46 L 110 36 Q 118 30 126 36 L 126 46 Z" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 138 46 L 138 36 Q 146 30 154 36 L 154 46 Z" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 166 46 L 166 36 Q 174 30 182 36 L 182 46 Z" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Ground Floor: Bistro Door & Window -->
+          <rect x="108" y="56" width="36" height="18" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 156 74 L 156 55 Q 166 49 176 55 L 176 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- Building L3: 4-Story Bauhaus Apartment Block (x: 196 to 285) -->
+          <rect x="198" y="10" width="88" height="70" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Rooftop solar panels -->
+          <line x1="194" y1="10" x2="288" y2="10" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="206" y="3" width="16" height="7" rx="1" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="248" y="2" width="24" height="8" rx="1" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Grid Windows -->
+          <rect x="208" y="18" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="232" y="18" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="256" y="18" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="208" y="35" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="232" y="35" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="256" y="35" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="208" y="52" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="232" y="52" width="14" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="256" y="52" width="14" height="11" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building L4: 2-Story Artisan Villa (x: 286 to 376) -->
+          <polygon points="284,28 332,12 380,28" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="288" y="28" width="88" height="52" fill="url(#skylineBldgGradL)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Windows with flower boxes -->
+          <rect x="300" y="36" width="14" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="340" y="36" width="14" height="12" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="296" y="56" width="34" height="16" rx="1" fill="url(#skylineWindowGradL)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 344 74 L 344 56 Q 354 50 364 56 L 364 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+        </svg>
+      </div>
+
       <!-- Left Roadside: Abarbanel 38 Bus Station & Vintage Streetlamps -->
       <div class="transit-station-wrap">
         <!-- Vintage Streetlamp 1 -->
@@ -4471,45 +4600,93 @@
         </svg>
       </div>
 
-      <!-- Right Roadside: Elegant Florentin Skyline Silhouette -->
-      <div class="transit-skyline-wrap" aria-hidden="true">
-        <svg class="transit-skyline-svg" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Right Roadside: Tel Aviv & Florentin Skyline Silhouette (Across the road in background) -->
+      <div class="transit-skyline transit-skyline--right" aria-hidden="true">
+        <svg class="transit-skyline-svg" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="skylineBldgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient id="skylineBldgGradR" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stop-color="#24170d"/>
               <stop offset="100%" stop-color="#0f0b07"/>
             </linearGradient>
-            <linearGradient id="skylineWindowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.75"/>
-              <stop offset="100%" stop-color="#b45309" stop-opacity="0.2"/>
+            <linearGradient id="skylineWindowGradR" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#b45309" stop-opacity="0.25"/>
             </linearGradient>
           </defs>
 
-          <!-- Building 1: Florentin Townhouse with Terracotta Roof (x: 10 to 110) -->
-          <polygon points="8,26 60,6 112,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
-          <rect x="12" y="26" width="96" height="54" fill="url(#skylineBldgGrad)" stroke="#c49a3c" stroke-width="0.8"/>
-          <!-- Chimney -->
-          <rect x="88" y="2" width="8" height="14" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
-          <!-- Windows with soft amber glow -->
-          <rect x="24" y="34" width="14" height="13" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="48" y="34" width="14" height="13" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="72" y="34" width="14" height="13" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="24" y="55" width="28" height="18" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <path d="M 68 73 L 68 54 Q 78 48 88 54 L 88 73 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Building R1: 4-Story Bauhaus Apartment Building (x: 4 to 98) -->
+          <rect x="6" y="8" width="90" height="72" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Flat Roof with Water Heater & Pergola -->
+          <line x1="4" y1="8" x2="98" y2="8" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="18" y="2" width="14" height="6" fill="#1b1208" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="60" y="1" width="20" height="7" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Wrap-around Thermometer Balconies -->
+          <path d="M 6 24 Q 6 18 18 18 L 54 18 L 54 28 L 6 28 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="16" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="78" y="16" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 6 42 Q 6 36 18 36 L 54 36 L 54 46 L 6 46 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="34" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="78" y="34" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 6 60 Q 6 54 18 54 L 54 54 L 54 64 L 6 64 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="62" y="52" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="78" y="52" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
 
-          <!-- Building 2: Tel Aviv Bauhaus with Pergola & Balconies (x: 118 to 230) -->
-          <rect x="120" y="16" width="108" height="64" fill="url(#skylineBldgGrad)" stroke="#c49a3c" stroke-width="0.8"/>
-          <!-- Rooftop Pergola & Solar Tank -->
-          <line x1="116" y1="16" x2="232" y2="16" stroke="#f5d98a" stroke-width="1.2"/>
-          <rect x="130" y="8" width="18" height="8" fill="#1a1209" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="180" y="6" width="12" height="10" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
-          <!-- Curved Balconies -->
-          <path d="M 120 34 Q 120 28 132 28 L 160 28 L 160 38 L 120 38 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
-          <rect x="168" y="24" width="12" height="12" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
-          <rect x="188" y="24" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <path d="M 120 54 Q 120 48 132 48 L 160 48 L 160 58 L 120 58 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
-          <rect x="168" y="44" width="12" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
-          <rect x="188" y="44" width="12" height="12" rx="1" fill="url(#skylineWindowGrad)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Building R2: 2-Story Florentin Villa with Terracotta Roof (x: 99 to 192) -->
+          <polygon points="96,24 145,6 194,24" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="100" y="24" width="92" height="56" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Chimney -->
+          <rect x="168" y="2" width="8" height="12" fill="#181109" stroke="#c49a3c" stroke-width="0.6"/>
+          <!-- Arched Windows with Planters -->
+          <path d="M 112 44 L 112 34 Q 120 28 128 34 L 128 44 Z" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 142 44 L 142 34 Q 150 28 158 34 L 158 44 Z" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 172 44 L 172 34 Q 180 28 188 34 L 188 44 Z" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <!-- Balcony Planter -->
+          <rect x="110" y="44" width="20" height="3" rx="0.5" fill="#181109" stroke="#f5d98a" stroke-width="0.5"/>
+          <circle cx="114" cy="43" r="1.2" fill="#f43f5e"/>
+          <circle cx="120" cy="43" r="1.2" fill="#fde047"/>
+          <circle cx="126" cy="43" r="1.2" fill="#f43f5e"/>
+          <rect x="110" y="56" width="36" height="18" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 158 74 L 158 55 Q 168 49 178 55 L 178 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+
+          <!-- Building R3: 3-Story Bauhaus Corner House (x: 193 to 284) -->
+          <rect x="194" y="14" width="88" height="66" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <!-- Pergola -->
+          <line x1="190" y1="14" x2="284" y2="14" stroke="#f5d98a" stroke-width="1.2"/>
+          <rect x="204" y="6" width="18" height="8" fill="#1a1209" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="254" y="5" width="12" height="9" rx="1.5" fill="#20150d" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 194 32 Q 194 26 206 26 L 236 26 L 236 36 L 194 36 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="244" y="22" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="264" y="22" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <path d="M 194 52 Q 194 46 206 46 L 236 46 L 236 56 L 194 56 Z" fill="#181109" stroke="#f5d98a" stroke-width="0.8"/>
+          <rect x="244" y="42" width="12" height="11" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="264" y="42" width="12" height="11" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+
+          <!-- Building R4: Florentin Vinyl & Wine House (x: 285 to 376) -->
+          <polygon points="282,26 330,10 378,26" fill="#7c2d12" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="286" y="26" width="90" height="54" fill="url(#skylineBldgGradR)" stroke="#c49a3c" stroke-width="0.8"/>
+          <rect x="298" y="34" width="14" height="12" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="322" y="34" width="14" height="12" rx="1" fill="#150f0a" stroke="#c49a3c" stroke-width="0.6"/>
+          <rect x="346" y="34" width="14" height="12" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <rect x="296" y="54" width="44" height="20" rx="1" fill="url(#skylineWindowGradR)" stroke="#f5d98a" stroke-width="0.6"/>
+          <path d="M 346 74 L 346 54 Q 356 48 366 54 L 366 74 Z" fill="#120c07" stroke="#c49a3c" stroke-width="0.8"/>
+        </svg>
+      </div>
+
+      <!-- Right Roadside: Vintage Streetlamps -->
+      <div class="transit-lamps-right-wrap">
+        <!-- Vintage Streetlamp 1 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 24 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="85" x2="12" y2="20" stroke="#c49a3c" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="12" cy="80" r="3.5" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 6 20 L 18 20 L 15 6 L 9 6 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="12" cy="14" r="4.5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
+        </svg>
+        <!-- Vintage Streetlamp 2 -->
+        <svg class="transit-lamp-svg" viewBox="0 0 24 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="12" y1="85" x2="12" y2="20" stroke="#c49a3c" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="12" cy="80" r="3.5" fill="#140f0a" stroke="#c49a3c" stroke-width="1.2"/>
+          <path d="M 6 20 L 18 20 L 15 6 L 9 6 Z" fill="#1b1208" stroke="#f5d98a" stroke-width="1.2"/>
+          <circle cx="12" cy="14" r="4.5" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)"/>
         </svg>
       </div>
 
