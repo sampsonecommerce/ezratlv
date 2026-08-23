@@ -5425,5 +5425,45 @@
       });
     })();
   </script>
+
+  <script>
+    // ============================================================
+    // ESC closes what is open
+    // index.html and company-events.html already do this; this page had no
+    // Escape handling at all, so the X was the only way out of a popup.
+    // Layered innermost-first: the date picker inside the enquiry form closes
+    // before the form it sits in, so one press never throws away a half-filled
+    // enquiry the way closing the whole modal would.
+    // ============================================================
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.key !== 'Esc' && e.keyCode !== 27) return;
+
+      // 1. the availability calendar, if it is open inside the enquiry modal
+      var cal = document.getElementById('cfCal');
+      if (cal && !cal.hidden) {
+        cal.hidden = true;
+        var dateBtn = document.getElementById('cfDateBtn');
+        if (dateBtn) { dateBtn.setAttribute('aria-expanded', 'false'); dateBtn.focus(); }
+        return;
+      }
+
+      // 2. whichever modal is open - same state change the X button makes
+      var open = document.querySelector('.modal-scrim.is-open');
+      if (open) {
+        open.classList.remove('is-open');
+        open.setAttribute('aria-hidden', 'true');
+        if (cal) cal.hidden = true;
+        return;
+      }
+
+      // 3. the mobile menu
+      var nav = document.getElementById('nav');
+      if (nav && nav.getAttribute('data-menu') === 'open') {
+        nav.setAttribute('data-menu', 'closed');
+        var burger = nav.querySelector('.nav__burger');
+        if (burger) { burger.setAttribute('aria-expanded', 'false'); burger.focus(); }
+      }
+    });
+  </script>
 </body>
 </html>

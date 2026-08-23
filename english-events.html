@@ -3365,7 +3365,7 @@
       <div class="sec-head center">
         <span class="eyebrow">Interactive Monthly Calendar</span>
         <h2>Monthly Lineup & Availability</h2>
-        <p>Explore our full schedule by half-days — Afternoon (12:00–18:00) and Evening (18:00–02:00). Click any slot to view lineup details, reserve a table or book an event.</p>
+        <p>Explore our full schedule by half-days - Afternoon (12:00-18:00) and Evening (18:00-02:00). Click any slot to view lineup details, reserve a table or book an event.</p>
       </div>
 
       <!-- Calendar Flanked Layout (Free-Floating Musicians, Asymmetrical Staggered Heights) -->
@@ -4168,11 +4168,11 @@
           <div class="cf-field">
             <label>Preferred Time Slot</label>
             <div class="cf-pills" id="cfSlotPills">
-              <button type="button" class="cf-pill is-active" data-val="Evening (18:00–02:00)">Evening (18:00–02:00)</button>
-              <button type="button" class="cf-pill" data-val="Afternoon (12:00–18:00)">Afternoon (12:00–18:00)</button>
+              <button type="button" class="cf-pill is-active" data-val="Evening (18:00-02:00)">Evening (18:00-02:00)</button>
+              <button type="button" class="cf-pill" data-val="Afternoon (12:00-18:00)">Afternoon (12:00-18:00)</button>
               <button type="button" class="cf-pill" data-val="Flexible">Flexible</button>
             </div>
-            <input type="hidden" id="cfSlot" name="slot" value="Evening (18:00–02:00)" />
+            <input type="hidden" id="cfSlot" name="slot" value="Evening (18:00-02:00)" />
           </div>
 
           <div class="cf-field">
@@ -4522,12 +4522,12 @@
           }
 
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="Click to book or hold afternoon"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Available ✍️</span></div>`;
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="Click to book or hold afternoon"><div class="slot-row__time"><span class="slot-row__time-icon">☀️</span><span>Afternoon (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Available ✍️</span></div>`;
 
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="Click for private event inquiry"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
-            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="Click for details and RSVP"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Public (${openHour})</span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="Click for private event inquiry"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event</span></div>`
+            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="Click for details and RSVP"><div class="slot-row__time"><span class="slot-row__time-icon">🌙</span><span>Evening (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Public (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -4561,7 +4561,7 @@
             afternoonEl.addEventListener('click', (e) => {
               e.stopPropagation();
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'Afternoon (12:00–18:00)', eventType: 'Private Event' });
+                openContactModal({ date: item.dateKey, slot: 'Afternoon (12:00-18:00)', eventType: 'Private Event' });
               }
             });
           }
@@ -4571,7 +4571,7 @@
             eveningBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'Evening (18:00–02:00)', eventType: 'Private Event' });
+                openContactModal({ date: item.dateKey, slot: 'Evening (18:00-02:00)', eventType: 'Private Event' });
               }
             });
           }
@@ -4589,7 +4589,7 @@
           card.addEventListener('click', () => {
             if (item.isClosedEvening) {
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'Evening (18:00–02:00)', eventType: 'Private Event' });
+                openContactModal({ date: item.dateKey, slot: 'Evening (18:00-02:00)', eventType: 'Private Event' });
               }
             } else {
               if (typeof openEventModal === 'function') {
@@ -4602,7 +4602,7 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               if (item.isClosedEvening) {
-                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'Evening (18:00–02:00)', eventType: 'Private Event' });
+                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'Evening (18:00-02:00)', eventType: 'Private Event' });
               } else {
                 if (typeof openEventModal === 'function') openEventModal(item);
               }
@@ -4786,7 +4786,7 @@
               if (typeof openContactModal === 'function') {
                 openContactModal({
                   date: dateKey,
-                  slot: 'Afternoon (12:00–18:00)',
+                  slot: 'Afternoon (12:00-18:00)',
                   eventType: 'Private Event'
                 });
               }
@@ -4801,7 +4801,7 @@
                 if (typeof openContactModal === 'function') {
                   openContactModal({
                     date: dateKey,
-                    slot: 'Evening (18:00–02:00)',
+                    slot: 'Evening (18:00-02:00)',
                     eventType: 'Private Event'
                   });
                 }
@@ -5406,6 +5406,46 @@
         });
       });
     })();
+  </script>
+
+  <script>
+    // ============================================================
+    // ESC closes what is open
+    // index.html and company-events.html already do this; this page had no
+    // Escape handling at all, so the X was the only way out of a popup.
+    // Layered innermost-first: the date picker inside the enquiry form closes
+    // before the form it sits in, so one press never throws away a half-filled
+    // enquiry the way closing the whole modal would.
+    // ============================================================
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.key !== 'Esc' && e.keyCode !== 27) return;
+
+      // 1. the availability calendar, if it is open inside the enquiry modal
+      var cal = document.getElementById('cfCal');
+      if (cal && !cal.hidden) {
+        cal.hidden = true;
+        var dateBtn = document.getElementById('cfDateBtn');
+        if (dateBtn) { dateBtn.setAttribute('aria-expanded', 'false'); dateBtn.focus(); }
+        return;
+      }
+
+      // 2. whichever modal is open - same state change the X button makes
+      var open = document.querySelector('.modal-scrim.is-open');
+      if (open) {
+        open.classList.remove('is-open');
+        open.setAttribute('aria-hidden', 'true');
+        if (cal) cal.hidden = true;
+        return;
+      }
+
+      // 3. the mobile menu
+      var nav = document.getElementById('nav');
+      if (nav && nav.getAttribute('data-menu') === 'open') {
+        nav.setAttribute('data-menu', 'closed');
+        var burger = nav.querySelector('.nav__burger');
+        if (burger) { burger.setAttribute('aria-expanded', 'false'); burger.focus(); }
+      }
+    });
   </script>
 </body>
 </html>
