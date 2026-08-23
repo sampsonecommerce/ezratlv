@@ -443,5 +443,33 @@
       setCookie('ezra_utm_term',     qs.get('utm_term'));
     })();
   </script>
+
+  <!-- Every WorkForms CTA on the site hard-coded utm_source=Website, so a lead
+       from ChatGPT, from Google Ads and from a poster all arrived on Monday as
+       "Website" and could not be told apart. The real source is already stored
+       above; this reads it back and puts it on the link, so the form carries
+       where the visitor actually came from. An explicit utm_source in the URL
+       still wins - it is the more direct signal. utm_content records which page
+       produced the click. -->
+  <script>
+    (function(){
+      const qs = new URLSearchParams(location.search);
+      const cookie = (n) => {
+        const m = document.cookie.match('(?:^|; )' + n + '=([^;]*)');
+        return m ? decodeURIComponent(m[1]) : '';
+      };
+      const src  = qs.get('utm_source')   || cookie('ezra_utm_source');
+      const camp = qs.get('utm_campaign') || cookie('ezra_utm_campaign');
+      const page = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '') || 'index';
+      document.querySelectorAll('a[href*="wkf.ms"]').forEach((a) => {
+        let u;
+        try { u = new URL(a.href); } catch (e) { return; }
+        if (src)  u.searchParams.set('utm_source', src);
+        if (camp) u.searchParams.set('utm_campaign', camp);
+        if (!u.searchParams.get('utm_content')) u.searchParams.set('utm_content', page);
+        a.href = u.toString();
+      });
+    })();
+  </script>
 </body>
 </html>
