@@ -248,11 +248,32 @@ export default {
       create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
     }`;
     const board = (isOpenEvents || isNewsletter) ? OPEN_EVENTS_BOARD : isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
-    const group = (isOpenEvents || isNewsletter) ? (d.group || OPEN_EVENTS_GROUP)
+    let group = (isOpenEvents || isNewsletter) ? (d.group || OPEN_EVENTS_GROUP)
                 : isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? DRAFTS_GROUP
                 : GRP_IN_AGREEMENT;
+    // A column ID belongs to a board, not to this worker. The map above was written against the
+    // Events Form and Company Events boards; Open Events is a separate board with its own IDs, and
+    // create_item rejects the whole mutation if it is handed even one ID the board does not have -
+    // which is how an Open Events lead was lost. So ask the target board what it actually has and
+    // send only that. For Open Events we cannot guess IDs at all, so we map by column type instead.
+    const schema = await boardSchema(board, TOKEN);
+    let cols2 = cols;
+    if (schema) {
+      if (isOpenEvents || isNewsletter) cols2 = colsByType(schema, d, notes);
+      const known = new Set(schema.columns.map((c) => c.id));
+      const unknown = Object.keys(cols2).filter((k) => !known.has(k));
+      if (unknown.length) {
+        console.warn(`Board ${board} has no column(s): ${unknown.join(", ")} - dropped so the lead still saves.`);
+        cols2 = { ...cols2 };
+        unknown.forEach((k) => delete cols2[k]);
+      }
+      if (group && !schema.groups.includes(group)) {
+        console.warn(`Board ${board} has no group "${group}" - creating in the board default group.`);
+        group = null;
+      }
+    }
     // item name: company for ALL lead types; fall back to person if no company
     const displayName = String(d.company || d.name || "ליד מהאתר");
     const variables = {
@@ -262,7 +283,7 @@ export default {
       // already signals that, and this same name feeds the generated contract - a literal "abandoned"
       // label there would be wrong once the lead comes back and books.
       name: (isCustom ? "שיחת אפיון · " : "") + displayName.slice(0, 230),
-      cols: JSON.stringify(cols),
+      cols: JSON.stringify(cols2),
     };
 
     try {
@@ -278,7 +299,7 @@ export default {
       // same information is already in the notes blob.
       if (out.errors) {
         console.error("Monday API errors (attempt 1):", JSON.stringify(out.errors));
-        const retryCols = { ...cols };
+        const retryCols = { ...cols2 };
         delete retryCols.single_select943s5p9;   // time of event
         delete retryCols.single_selecta6erdt9;   // event type
         delete retryCols.color_mm18ym70;         // status
@@ -338,6 +359,73 @@ function parseHourText(text) {
   if (h > 23) return null;
   return String(h).padStart(2, "0") + ":" + m[2];
 }
+// Board schema lookup, so a lead is never lost to a column ID that belongs to a different board.
+// Cached per isolate: the shape of a board changes far more slowly than leads arrive.
+const _schemaCache = new Map();
+async function boardSchema(board, TOKEN) {
+  if (_schemaCache.has(board)) return _schemaCache.get(board);
+  const query = `query { boards(ids: [${board}]) { columns { id title type settings_str } groups { id } } }`;
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    const out = await r.json();
+    if (out.errors) { console.error("boardSchema Monday errors:", JSON.stringify(out.errors)); return null; }
+    const b = out?.data?.boards?.[0];
+    if (!b) return null;
+    const schema = { columns: b.columns || [], groups: (b.groups || []).map((g) => g.id) };
+    _schemaCache.set(board, schema);
+    return schema;
+  } catch (e) {
+    // A schema lookup failure must not cost us the lead: the caller falls back to sending the map
+    // unfiltered, which is exactly the behaviour we had before.
+    console.error("boardSchema failed:", e);
+    return null;
+  }
+}
+
+// Build column values for a board whose IDs we do not know, by matching on column type. Anything we
+// cannot place is not lost - the notes blob already carries every field in full.
+function colsByType(schema, d, notes) {
+  const cols = {};
+  const first = (t) => schema.columns.find((c) => c.type === t)?.id;
+  const email = first("email");
+  if (email && d.email) cols[email] = { email: String(d.email), text: String(d.email) };
+  const phone = first("phone");
+  if (phone && d.phone) cols[phone] = { phone: String(d.phone), countryShortName: "IL" };
+  const date = first("date");
+  if (date && d.date) cols[date] = { date: d.date };
+  const num = first("numbers");
+  if (num && d.guests != null && d.guests !== "") cols[num] = String(d.guests);
+  const nameCol = schema.columns.find((c) => c.type === "text" && /שם|name/i.test(c.title || ""));
+  if (nameCol && d.name) cols[nameCol.id] = String(d.name);
+  // Status only if the board already defines the label. create_labels_if_missing is false, so an
+  // invented label would fail the create - the very thing this function exists to prevent.
+  const statusCol = schema.columns.find((c) => c.type === "status" || c.type === "color");
+  if (statusCol) {
+    try {
+      const labels = Object.values(JSON.parse(statusCol.settings_str || "{}").labels || {});
+      const want = ["New Lead", "ליד חדש", "New"].find((l) => labels.includes(l));
+      if (want) cols[statusCol.id] = { label: want };
+    } catch { /* unreadable settings: skip the status, keep the lead */ }
+  }
+  // The notes blob is the safety net, so write it last and fold in any contact detail that did not
+  // find a column of its own. A lead with the phone number only in free text is still a lead; a
+  // lead with the phone number nowhere is not.
+  const long = first("long_text");
+  if (long) {
+    const spare = [
+      (!email && d.email) ? `אימייל: ${d.email}` : "",
+      (!phone && d.phone) ? `טלפון: ${d.phone}` : "",
+      (!nameCol && d.name) ? `שם: ${d.name}` : "",
+    ].filter(Boolean);
+    cols[long] = { text: spare.length ? notes + "\n" + spare.join("\n") : notes };
+  }
+  return cols;
+}
+
 async function availability(env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [], busy: [] }, 200, cors);
