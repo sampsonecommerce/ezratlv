@@ -1233,11 +1233,11 @@
 
     /* Chef Pop-Up & Tabun Oven Animations */
     .anim-tabun-flame-1 {
-      transform-box: fill-box; animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: 108px 180px; }
+      transform-box: fill-box; animation: tabunFlicker 1.8s ease-in-out infinite alternate; transform-origin: center bottom; }
     .anim-tabun-flame-2 {
-      transform-box: fill-box; animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: 130px 180px; }
+      transform-box: fill-box; animation: tabunFlicker 1.4s ease-in-out 0.4s infinite alternate; transform-origin: center bottom; }
     .anim-tabun-flame-3 {
-      transform-box: fill-box; animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: 86px 180px; }
+      transform-box: fill-box; animation: tabunFlicker 1.6s ease-in-out 0.8s infinite alternate; transform-origin: center bottom; }
     .anim-tabun-spark-1 { animation: sparkDrift 2.4s ease-out infinite; }
     .anim-tabun-spark-2 { animation: sparkDrift 2.8s ease-out 1.2s infinite; }
     @keyframes tabunFlicker {
@@ -1247,23 +1247,32 @@
     @keyframes sparkDrift {
       0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
       40% { opacity: 1; }
-      100% { transform: translate(-12px, -35px) scale(1.1); opacity: 0; }
+      100% { transform: translate(12px, -35px) scale(1.1); opacity: 0; }
+    }
+    .anim-tabun-peel {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: peelGlide 5s ease-in-out infinite alternate;
+    }
+    @keyframes peelGlide {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(10px); }
     }
     /* Rotating / Cycling Dishes in Tabun: 10.5s total cycle (3.5s per dish) */
     .anim-dish-cycle-1 {
       transform-box: fill-box;
       animation: dishCycle1 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 248px 156px;
+      transform-origin: center;
     }
     .anim-dish-cycle-2 {
       transform-box: fill-box;
       animation: dishCycle2 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 248px 156px;
+      transform-origin: center;
     }
     .anim-dish-cycle-3 {
       transform-box: fill-box;
       animation: dishCycle3 10.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 248px 156px;
+      transform-origin: center;
     }
     @keyframes dishCycle1 {
       0%, 28% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
@@ -1294,8 +1303,8 @@
     /* Hi-Fi Vinyl & Album Listening Animations */
     .anim-fmt-vinyl-spin {
       transform-box: fill-box;
+      transform-origin: center;
       animation: spinVinyl 6s linear infinite;
-      transform-origin: 160px 112px;
       will-change: transform;
     }
     @keyframes spinVinyl {
@@ -1305,7 +1314,7 @@
     .anim-tonearm-drift {
       transform-box: fill-box;
       animation: tonearmDrift 8s ease-in-out infinite alternate;
-      transform-origin: 270px 60px;
+      transform-origin: center;
     }
     @keyframes tonearmDrift {
       0% { transform: rotate(0deg); }
@@ -1332,7 +1341,7 @@
     .anim-vu-needle {
       transform-box: fill-box;
       animation: vuMeterBounce 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
-      transform-origin: 64px 85px;
+      transform-origin: center;
     }
     @keyframes vuMeterBounce {
       0% { transform: rotate(-24deg); }
@@ -1344,27 +1353,18 @@
     /* Open Mic & Spoken Word Animations */
     .anim-voice-wave-1 {
       transform-box: fill-box;
-      animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
-      transform-origin: 180px 80px;
+      animation: voiceWavePulse 2.8s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
+      transform-origin: center;
     }
     .anim-voice-wave-2 {
       transform-box: fill-box;
-      animation: voiceWavePulse 3s cubic-bezier(0.1, 0.7, 0.3, 1) 1.5s infinite;
-      transform-origin: 180px 80px;
+      animation: voiceWavePulse 2.8s cubic-bezier(0.1, 0.7, 0.3, 1) 1.4s infinite;
+      transform-origin: center;
     }
     @keyframes voiceWavePulse {
-      0% { transform: scale(0.65); opacity: 0.9; }
-      75% { opacity: 0.35; }
-      100% { transform: scale(1.55); opacity: 0; }
-    }
-    .anim-quill-float {
-      transform-box: fill-box;
-      animation: quillFloat 3.8s ease-in-out infinite alternate;
-      transform-origin: 80px 105px;
-    }
-    @keyframes quillFloat {
-      0% { transform: translateY(0) rotate(-4deg); }
-      100% { transform: translateY(-10px) rotate(6deg); }
+      0% { transform: scale(0.6); opacity: 0.85; }
+      70% { opacity: 0.3; }
+      100% { transform: scale(1.6); opacity: 0; }
     }
     .anim-poem-word-1 { animation: poemDrift 4.5s ease-out infinite; }
     .anim-poem-word-2 { animation: poemDrift 4.8s ease-out 1.6s infinite; }
@@ -2567,60 +2567,76 @@
       100% { opacity: 0;    transform: translate(-10px, -46px) scale(1.05); }
     }
 
-    /* Pizza chef toss animation cycle:
-       0%-25%: Dough rests in hands for 1s.
-       28%-32%: Quick dip anticipation.
-       42%-58%: Dough tossed high in air with full spin and hang-time.
-       68%-74%: Dough caught cleanly back in hands.
-       78%-100%: Holds in chef's hands for 1s before repeating. */
+    /* Pizza chef acrobatic toss animation cycle:
+       0%-24%: Dough rests across chef's hands for 1s.
+       28%: Gather & quick dip anticipation.
+       40%-52%: Upward spin, high apex hang-time.
+       60%-68%: Smooth gravitational drop into chef's hands.
+       70%-74%: Soft cushion compression catch.
+       78%-100%: Holds in chef's hands before next toss. */
     .anim-pizza-dough {
       transform-box: fill-box;
       transform-origin: center;
-      animation: doughTossCycle 4.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+      animation: pizzaAcrobaticToss 4.2s ease-in-out infinite;
     }
-    @keyframes doughTossCycle {
-      0%, 25%   { transform: translateY(0) scale(1); }
-      30%       { transform: translateY(3px) scale(1.03); }
-      44%       { transform: translateY(-44px) scale(1.06); }
-      58%       { transform: translateY(-46px) scale(1); }
-      70%       { transform: translateY(0) scale(0.96); }
-      74%       { transform: translateY(2px) scale(1); }
-      78%, 100% { transform: translateY(0) scale(1); }
+    @keyframes pizzaAcrobaticToss {
+      0%, 24% {
+        transform: translateY(0) rotate(0deg) scale(1, 1);
+      }
+      28% {
+        transform: translateY(4px) rotate(-12deg) scale(1.05, 0.95);
+      }
+      40% {
+        transform: translateY(-38px) rotate(180deg) scale(0.96, 1.04);
+      }
+      48% {
+        transform: translateY(-46px) rotate(360deg) scale(1.03, 0.98);
+      }
+      58% {
+        transform: translateY(-24px) rotate(540deg) scale(0.98, 1.02);
+      }
+      68% {
+        transform: translateY(2px) rotate(720deg) scale(1.06, 0.94);
+      }
+      74% {
+        transform: translateY(0) rotate(720deg) scale(1, 1);
+      }
+      100% {
+        transform: translateY(0) rotate(720deg) scale(1, 1);
+      }
     }
-    .anim-pizza-spin {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: doughSpinCycle 4.2s linear infinite;
+    .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: fill-box; }
+    .anim-pizza-arm-l {
+      transform-origin: 64px 111px;
+      animation: armTossL 4.2s ease-in-out infinite;
     }
-    @keyframes doughSpinCycle {
-      0%, 25%   { transform: rotate(0deg); }
-      40%, 65%  { transform: rotate(360deg); }
-      72%, 100% { transform: rotate(360deg); }
+    .anim-pizza-arm-r {
+      transform-origin: 86px 111px;
+      animation: armTossR 4.2s ease-in-out infinite;
     }
-    .anim-pizza-arm-l, .anim-pizza-arm-r { transform-box: fill-box; transform-origin: 50% 100%; }
-    .anim-pizza-arm-l { animation: armTossL 4.2s ease-in-out infinite; }
-    .anim-pizza-arm-r { animation: armTossR 4.2s ease-in-out infinite; }
     @keyframes armTossL {
-      0%, 25%   { transform: rotate(0deg); }
-      30%       { transform: rotate(5deg); }
-      44%, 60%  { transform: rotate(-10deg); }
-      70%, 100% { transform: rotate(0deg); }
+      0%, 24%  { transform: rotate(0deg); }
+      28%      { transform: rotate(6deg); }
+      40%, 54% { transform: rotate(-12deg); }
+      68%      { transform: rotate(4deg); }
+      74%, 100%{ transform: rotate(0deg); }
     }
     @keyframes armTossR {
-      0%, 25%   { transform: rotate(0deg); }
-      30%       { transform: rotate(-5deg); }
-      44%, 60%  { transform: rotate(10deg); }
-      70%, 100% { transform: rotate(0deg); }
+      0%, 24%  { transform: rotate(0deg); }
+      28%      { transform: rotate(-6deg); }
+      40%, 54% { transform: rotate(12deg); }
+      68%      { transform: rotate(-4deg); }
+      74%, 100%{ transform: rotate(0deg); }
     }
     .anim-pizza-flour { transform-box: fill-box; transform-origin: center; opacity: 0; }
     .anim-pizza-flour-1 { animation: flourFall 4.2s ease-in infinite; }
-    .anim-pizza-flour-2 { animation: flourFall 4.2s ease-in 1.2s infinite; }
-    .anim-pizza-flour-3 { animation: flourFall 4.2s ease-in 2.4s infinite; }
+    .anim-pizza-flour-2 { animation: flourFall 4.2s ease-in 0.4s infinite; }
+    .anim-pizza-flour-3 { animation: flourFall 4.2s ease-in 0.8s infinite; }
     @keyframes flourFall {
-      0%, 30% { opacity: 0;   transform: translateY(-6px); }
-      45%     { opacity: 0.9; }
-      70%     { opacity: 0;   transform: translateY(34px); }
-      100%    { opacity: 0;   transform: translateY(34px); }
+      0%, 36%   { opacity: 0;   transform: translateY(-8px) scale(0.7); }
+      44%       { opacity: 0.9; transform: translateY(0) scale(1); }
+      60%       { opacity: 0.3; transform: translateY(12px) scale(1.1); }
+      68%, 100% { opacity: 0;   transform: translateY(18px) scale(1.2); }
     }
 
     .month-cal-container {
@@ -3916,11 +3932,11 @@
                   </linearGradient>
                 </defs>
 
-                <!-- Warm Glowing Oven Fire Aura -->
-                <ellipse cx="130" cy="115" rx="115" ry="80" fill="url(#tabunGlowGrad)"/>
+                <!-- Warm Glowing Oven Fire Aura (Right side) -->
+                <ellipse cx="235" cy="115" rx="115" ry="80" fill="url(#tabunGlowGrad)"/>
 
-                <!-- 1. Authentic Wood-Fired Stone & Terracotta Oven (Tabun) -->
-                <g transform="translate(26, 42)">
+                <!-- 1. Authentic Wood-Fired Stone & Terracotta Tabun Oven (Right Side) -->
+                <g transform="translate(150, 42)">
                   <!-- Stone Dome Outer Silhouette -->
                   <path d="M 8 148 Q 8 18 96 18 Q 184 18 184 148 Z" fill="#18120b" stroke="url(#foodGoldGrad)" stroke-width="2"/>
                   <!-- Brick Arch Texture Lines -->
@@ -3941,88 +3957,92 @@
                   <path class="anim-tabun-flame-1" d="M 76 142 Q 68 102 86 86 Q 92 114 102 140 Z" fill="url(#flameGrad)"/>
                   <path class="anim-tabun-flame-2" d="M 92 142 Q 98 92 114 76 Q 120 102 128 140 Z" fill="url(#flameGrad)"/>
                   <path class="anim-tabun-flame-3" d="M 60 142 Q 66 110 76 98 Q 82 120 86 142 Z" fill="url(#flameGrad)"/>
+
+                  <!-- Sparks drifting into air -->
+                  <circle class="anim-tabun-spark-1" cx="88" cy="90" r="1.8" fill="#fef08a"/>
+                  <circle class="anim-tabun-spark-2" cx="112" cy="78" r="1.4" fill="#f59e0b"/>
                 </g>
 
-                <!-- 2. Chef's Handcrafted Wooden Pizza Peel / Shovel (מרדה עץ לטאבון) -->
-                <g transform="translate(148, 96)">
-                  <!-- Long Ash Wood Handle Extending Deep into Oven -->
-                  <line x1="-15" y1="56" x2="-88" y2="56" stroke="url(#foodGoldGrad)" stroke-width="5" stroke-linecap="round"/>
-                  <line x1="-15" y1="56" x2="-88" y2="56" stroke="#24190f" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- 2. Chef's Wooden Peel with Handle on Left & Food Directly on Paddle -->
+                <g class="anim-tabun-peel" transform="translate(18, 90)">
+                  <!-- Long Ash Wood Handle Extending to the Left -->
+                  <line x1="12" y1="48" x2="98" y2="48" stroke="url(#foodGoldGrad)" stroke-width="5" stroke-linecap="round"/>
+                  <line x1="12" y1="48" x2="98" y2="48" stroke="#24190f" stroke-width="2.6" stroke-linecap="round"/>
                   
-                  <!-- Curved Wooden Peel Paddle Head with Beveled Edge -->
-                  <path d="M -15 28 L 84 28 Q 106 28 106 56 Q 106 84 84 84 L -15 84 Q -26 56 -15 28 Z" fill="url(#peelWoodGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
-                  <!-- Wood Grain & Brass Rivets -->
-                  <line x1="-5" y1="40" x2="80" y2="40" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
-                  <line x1="-5" y1="72" x2="80" y2="72" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
-                  <circle cx="-6" cy="38" r="1.6" fill="#fef08a"/>
-                  <circle cx="-6" cy="74" r="1.6" fill="#fef08a"/>
-                </g>
+                  <!-- Curved Wooden Peel Paddle Head with Beveled Front -->
+                  <path d="M 95 20 L 195 20 Q 216 20 216 48 Q 216 76 195 76 L 95 76 Q 84 48 95 20 Z" fill="url(#peelWoodGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
+                  <!-- Wood Grain Lines & Brass Rivets -->
+                  <line x1="102" y1="32" x2="190" y2="32" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
+                  <line x1="102" y1="64" x2="190" y2="64" stroke="#f5d98a" stroke-width="0.8" opacity="0.35"/>
+                  <circle cx="98" cy="30" r="1.6" fill="#fef08a"/>
+                  <circle cx="98" cy="66" r="1.6" fill="#fef08a"/>
 
-                <!-- 3. ROTATING SIGNATURE GOURMET DISHES (Smooth 10.5s CSS Cycle) -->
-                <!-- DISH 1: Artisanal Neapolitan Margherita Pizza -->
-                <g class="anim-dish-cycle-1" transform="translate(195, 96)">
-                  <!-- Wood-Fired Crust Base with Puffy Cornicione -->
-                  <ellipse cx="42" cy="40" rx="40" ry="25" fill="url(#crustGrad)" stroke="#fef08a" stroke-width="1.5"/>
-                  <!-- Charred Leopard Spots -->
-                  <ellipse cx="20" cy="30" rx="3.5" ry="2.2" fill="#1c130b"/>
-                  <ellipse cx="64" cy="48" rx="4.2" ry="2.6" fill="#1c130b"/>
-                  <ellipse cx="68" cy="31" rx="3.2" ry="2" fill="#1c130b"/>
-                  <ellipse cx="18" cy="49" rx="2.8" ry="1.6" fill="#1c130b"/>
-                  
-                  <!-- Rich San Marzano Tomato Sauce -->
-                  <ellipse cx="42" cy="40" rx="30" ry="18" fill="#b91c1c"/>
-                  
-                  <!-- Melted Fresh Fior di Latte Mozzarella Pearls -->
-                  <ellipse cx="32" cy="38" rx="9" ry="5.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
-                  <ellipse cx="50" cy="42" rx="10" ry="6.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
-                  <ellipse cx="44" cy="34" rx="7" ry="4.5" fill="#fffbeb"/>
-                  
-                  <!-- Fresh Green Basil Leaves -->
-                  <path d="M 36 34 Q 41 27 46 32 Q 41 39 36 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                  <path d="M 48 44 Q 53 37 58 42 Q 53 49 48 44 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                  <path d="M 27 43 Q 32 37 37 41 Q 32 48 27 43 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
+                  <!-- 3. ROTATING SIGNATURE GOURMET DISHES (Sitting directly ON the Peel Paddle) -->
+                  <!-- DISH 1: Artisanal Neapolitan Margherita Pizza -->
+                  <g class="anim-dish-cycle-1" transform="translate(112, 8)">
+                    <!-- Wood-Fired Crust Base with Puffy Cornicione -->
+                    <ellipse cx="42" cy="40" rx="40" ry="24" fill="url(#crustGrad)" stroke="#fef08a" stroke-width="1.5"/>
+                    <!-- Charred Leopard Spots -->
+                    <ellipse cx="20" cy="30" rx="3.5" ry="2.2" fill="#1c130b"/>
+                    <ellipse cx="64" cy="48" rx="4.2" ry="2.6" fill="#1c130b"/>
+                    <ellipse cx="68" cy="31" rx="3.2" ry="2" fill="#1c130b"/>
+                    <ellipse cx="18" cy="49" rx="2.8" ry="1.6" fill="#1c130b"/>
+                    
+                    <!-- Rich San Marzano Tomato Sauce -->
+                    <ellipse cx="42" cy="40" rx="30" ry="17" fill="#b91c1c"/>
+                    
+                    <!-- Melted Fresh Fior di Latte Mozzarella Pearls -->
+                    <ellipse cx="32" cy="38" rx="9" ry="5.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
+                    <ellipse cx="50" cy="42" rx="10" ry="6.5" fill="#fffbeb" stroke="#fef08a" stroke-width="0.8"/>
+                    <ellipse cx="44" cy="34" rx="7" ry="4.5" fill="#fffbeb"/>
+                    
+                    <!-- Fresh Green Basil Leaves -->
+                    <path d="M 36 34 Q 41 27 46 32 Q 41 39 36 34 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                    <path d="M 48 44 Q 53 37 58 42 Q 53 49 48 44 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                    <path d="M 27 43 Q 32 37 37 41 Q 32 48 27 43 Z" fill="#65a30d" stroke="#fef08a" stroke-width="0.7"/>
+                  </g>
 
-                <!-- DISH 2: Sizzling Cast-Iron Skillet & Wood-Fired Tagliata Steak -->
-                <g class="anim-dish-cycle-2" transform="translate(195, 96)">
-                  <!-- Skillet Body -->
-                  <ellipse cx="42" cy="40" rx="38" ry="23" fill="#120e0a" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
-                  <ellipse cx="42" cy="40" rx="32" ry="18" fill="#241a12"/>
-                  
-                  <!-- Seared Prime Charcoal Steak -->
-                  <path d="M 22 36 Q 36 24 60 32 Q 65 48 50 53 Q 26 51 22 36 Z" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.1"/>
-                  <!-- Diamond Sear Marks -->
-                  <line x1="28" y1="32" x2="44" y2="48" stroke="#1c130b" stroke-width="2.2"/>
-                  <line x1="36" y1="30" x2="52" y2="46" stroke="#1c130b" stroke-width="2.2"/>
-                  <line x1="44" y1="28" x2="58" y2="42" stroke="#1c130b" stroke-width="2.2"/>
-                  
-                  <!-- Confit Garlic Bulb & Rosemary Sprig -->
-                  <circle cx="26" cy="46" r="3.8" fill="#fef08a" stroke="#ca8a04" stroke-width="0.7"/>
-                  <path d="M 50 29 Q 58 23 64 27" stroke="#65a30d" stroke-width="1.6" stroke-linecap="round"/>
-                </g>
+                  <!-- DISH 2: Sizzling Cast-Iron Skillet & Wood-Fired Tagliata Steak -->
+                  <g class="anim-dish-cycle-2" transform="translate(112, 8)">
+                    <!-- Skillet Body -->
+                    <ellipse cx="42" cy="40" rx="38" ry="22" fill="#120e0a" stroke="url(#foodGoldGrad)" stroke-width="1.8"/>
+                    <ellipse cx="42" cy="40" rx="32" ry="17" fill="#241a12"/>
+                    
+                    <!-- Seared Prime Charcoal Steak -->
+                    <path d="M 22 36 Q 36 24 60 32 Q 65 48 50 53 Q 26 51 22 36 Z" fill="#7f1d1d" stroke="#f59e0b" stroke-width="1.1"/>
+                    <!-- Diamond Sear Marks -->
+                    <line x1="28" y1="32" x2="44" y2="48" stroke="#1c130b" stroke-width="2.2"/>
+                    <line x1="36" y1="30" x2="52" y2="46" stroke="#1c130b" stroke-width="2.2"/>
+                    <line x1="44" y1="28" x2="58" y2="42" stroke="#1c130b" stroke-width="2.2"/>
+                    
+                    <!-- Confit Garlic Bulb & Rosemary Sprig -->
+                    <circle cx="26" cy="46" r="3.8" fill="#fef08a" stroke="#ca8a04" stroke-width="0.7"/>
+                    <path d="M 50 29 Q 58 23 64 27" stroke="#65a30d" stroke-width="1.6" stroke-linecap="round"/>
+                  </g>
 
-                <!-- DISH 3: Puffed Tabun Focaccia & Whole Burrata Platter -->
-                <g class="anim-dish-cycle-3" transform="translate(195, 96)">
-                  <!-- Focaccia Crust with Olive Oil Dimples -->
-                  <ellipse cx="42" cy="40" rx="40" ry="24" fill="url(#crustGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.5"/>
-                  <circle cx="24" cy="33" r="2.8" fill="#854d0e"/>
-                  <circle cx="60" cy="34" r="2.8" fill="#854d0e"/>
-                  <circle cx="28" cy="47" r="2.8" fill="#854d0e"/>
-                  <circle cx="56" cy="48" r="2.8" fill="#854d0e"/>
-                  
-                  <!-- Creamy Whole Burrata Crown -->
-                  <ellipse cx="42" cy="38" rx="15" ry="12" fill="#fffbeb" stroke="#fef08a" stroke-width="1.1"/>
-                  <ellipse cx="42" cy="29" rx="4.5" ry="3" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.9"/>
-                  
-                  <!-- Roasted Heirloom Cherry Tomatoes -->
-                  <circle cx="22" cy="41" r="4.2" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
-                  <circle cx="62" cy="43" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
-                </g>
+                  <!-- DISH 3: Puffed Tabun Focaccia & Whole Burrata Platter -->
+                  <g class="anim-dish-cycle-3" transform="translate(112, 8)">
+                    <!-- Focaccia Crust with Olive Oil Dimples -->
+                    <ellipse cx="42" cy="40" rx="40" ry="23" fill="url(#crustGrad)" stroke="url(#foodGoldGrad)" stroke-width="1.5"/>
+                    <circle cx="24" cy="33" r="2.8" fill="#854d0e"/>
+                    <circle cx="60" cy="34" r="2.8" fill="#854d0e"/>
+                    <circle cx="28" cy="47" r="2.8" fill="#854d0e"/>
+                    <circle cx="56" cy="48" r="2.8" fill="#854d0e"/>
+                    
+                    <!-- Creamy Whole Burrata Crown -->
+                    <ellipse cx="42" cy="38" rx="15" ry="11" fill="#fffbeb" stroke="#fef08a" stroke-width="1.1"/>
+                    <ellipse cx="42" cy="29" rx="4.5" ry="3" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.9"/>
+                    
+                    <!-- Roasted Heirloom Cherry Tomatoes -->
+                    <circle cx="22" cy="41" r="4.2" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
+                    <circle cx="62" cy="43" r="4" fill="#dc2626" stroke="#fef08a" stroke-width="0.7"/>
+                  </g>
 
-                <!-- Rising Sizzle & Aromatic Steam from Food -->
-                <g class="anim-dish-steam" transform="translate(238, 110)">
-                  <path d="M 0 0 Q -8 -12 2 -22 Q 12 -32 0 -42" stroke="url(#foodGoldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
-                  <path d="M 16 -2 Q 24 -14 15 -26 Q 6 -38 18 -48" stroke="url(#foodGoldGrad)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
+                  <!-- Rising Sizzle & Aromatic Steam from Food -->
+                  <g class="anim-dish-steam" transform="translate(155, 22)">
+                    <path d="M 0 0 Q -8 -12 2 -22 Q 12 -32 0 -42" stroke="url(#foodGoldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
+                    <path d="M 16 -2 Q 24 -14 15 -26 Q 6 -38 18 -48" stroke="url(#foodGoldGrad)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
+                  </g>
                 </g>
               </svg>
             </div>
@@ -4051,6 +4071,12 @@
                     <stop offset="65%" stop-color="#92400e"/>
                     <stop offset="100%" stop-color="#1c130b"/>
                   </linearGradient>
+                  <linearGradient id="bassBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fed7aa"/>
+                    <stop offset="30%" stop-color="#b45309"/>
+                    <stop offset="70%" stop-color="#78350f"/>
+                    <stop offset="100%" stop-color="#181109"/>
+                  </linearGradient>
                   <linearGradient id="saxGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#fef08a"/>
                     <stop offset="45%" stop-color="#c49a3c"/>
@@ -4072,37 +4098,49 @@
                 <ellipse cx="180" cy="115" rx="140" ry="85" fill="url(#liveSpotlightGrad)"/>
 
                 <!-- Acoustic Resonance Waves Radiating from Soundhole -->
-                <circle class="anim-sound-ripple-1" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.4" fill="none"/>
-                <circle class="anim-sound-ripple-2" cx="178" cy="128" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.1" fill="none"/>
+                <circle class="anim-sound-ripple-1" cx="172" cy="122" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.4" fill="none"/>
+                <circle class="anim-sound-ripple-2" cx="172" cy="122" r="32" stroke="url(#guitarGoldGrad)" stroke-width="1.1" fill="none"/>
 
-                <!-- INSTRUMENT 1: Vintage Alto Saxophone (Left Side) -->
-                <g transform="translate(36, 62) rotate(14 40 60)">
-                  <!-- Curved Body Tube & Bow -->
-                  <path d="M 14 18 C 14 52 20 86 36 104 C 48 116 64 114 70 98 C 76 82 70 64 54 56 L 46 50" stroke="url(#saxGoldGrad)" stroke-width="3.2" stroke-linecap="round" fill="none"/>
-                  <!-- Flared Bell with Inner Glow -->
-                  <ellipse cx="70" cy="94" rx="15" ry="9" fill="#1b1208" stroke="url(#saxGoldGrad)" stroke-width="2.2" transform="rotate(-30 70 94)"/>
-                  <ellipse cx="70" cy="94" rx="11" ry="5.5" fill="#f5d98a" opacity="0.35" transform="rotate(-30 70 94)"/>
-                  <!-- Pearl Key Cups & Rods -->
-                  <circle cx="23" cy="48" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
-                  <circle cx="27" cy="60" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
-                  <circle cx="32" cy="74" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
-                  <circle cx="38" cy="88" r="2.2" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
-                  <!-- Neck & Mouthpiece -->
-                  <path d="M 14 18 Q 10 4 18 0" stroke="url(#saxGoldGrad)" stroke-width="2.4" fill="none"/>
-                  <rect x="18" y="-2" width="7" height="4.5" rx="1" fill="#140e08" stroke="#f5d98a" stroke-width="0.8"/>
+                <!-- INSTRUMENT 1: Upright Acoustic Jazz Double Bass (Left Side) -->
+                <g transform="translate(38, 32) rotate(8 35 85)">
+                  <!-- Bass Body -->
+                  <path d="M 32 165 C 10 165 2 135 14 105 C 22 85 16 75 12 66 C 8 50 20 38 38 38 C 56 38 68 50 64 66 C 60 75 54 85 62 105 C 74 135 66 165 32 165 Z" fill="url(#bassBodyGrad)" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
+                  
+                  <!-- Classic F-Holes -->
+                  <path d="M 22 88 Q 18 102 24 116 Q 22 108 20 100 Q 22 92 26 88" stroke="#181109" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                  <path d="M 22 88 Q 18 102 24 116" stroke="#fef08a" stroke-width="0.8" fill="none"/>
+                  <path d="M 54 88 Q 58 102 52 116 Q 54 108 56 100 Q 54 92 50 88" stroke="#181109" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                  <path d="M 54 88 Q 58 102 52 116" stroke="#fef08a" stroke-width="0.8" fill="none"/>
+
+                  <!-- Wooden Bridge & Tailpiece -->
+                  <rect x="28" y="112" width="20" height="5" rx="1.5" fill="#f5d98a" stroke="#78350f" stroke-width="0.6"/>
+                  <polygon points="32,132 44,132 40,162 36,162" fill="#140e08" stroke="#f5d98a" stroke-width="0.8"/>
+                  
+                  <!-- Long Ebony Fingerboard & Neck -->
+                  <rect x="34" y="-8" width="8" height="85" fill="#140e08" stroke="url(#saxGoldGrad)" stroke-width="1"/>
+                  
+                  <!-- Carved Violin Scroll & Pegbox -->
+                  <path d="M 33 -8 Q 31 -24 38 -28 Q 45 -28 43 -16 Q 37 -12 37 -8" stroke="url(#saxGoldGrad)" stroke-width="1.8" fill="#2a1b0f"/>
+                  <circle cx="38" cy="-22" r="3" fill="#fef08a"/>
+                  <!-- 4 Tuning Machines -->
+                  <line x1="28" y1="-18" x2="33" y2="-18" stroke="#fef08a" stroke-width="1.5"/>
+                  <line x1="28" y1="-12" x2="33" y2="-12" stroke="#fef08a" stroke-width="1.5"/>
+                  <line x1="43" y1="-18" x2="48" y2="-18" stroke="#fef08a" stroke-width="1.5"/>
+                  <line x1="43" y1="-12" x2="48" y2="-12" stroke="#fef08a" stroke-width="1.5"/>
+                  
+                  <!-- 4 Bass Strings -->
+                  <line x1="35" y1="-16" x2="34" y2="132" stroke="#fffbeb" stroke-width="1.1" opacity="0.85"/>
+                  <line x1="37" y1="-16" x2="36.5" y2="132" stroke="#f5d98a" stroke-width="1.0" opacity="0.85"/>
+                  <line x1="39" y1="-16" x2="39.5" y2="132" stroke="#f5d98a" stroke-width="0.9" opacity="0.85"/>
+                  <line x1="41" y1="-16" x2="42" y2="132" stroke="#fffbeb" stroke-width="0.8" opacity="0.85"/>
                 </g>
 
                 <!-- INSTRUMENT 2: Complete Sunburst Acoustic Dreadnought Guitar (Center) -->
                 <g class="anim-guitar-body">
-                  <!-- Guitar Body Cast Shadow -->
-                  <g transform="translate(68, 26) scale(0.72) rotate(-22 120 110)" fill="#0a0805" opacity="0.7">
-                    <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z"/>
-                  </g>
-
                   <!-- Main Guitar Group -->
-                  <g transform="translate(56, 18) scale(0.72) rotate(-22 120 110)">
+                  <g transform="translate(68, 20) scale(0.68) rotate(-16 120 110)">
                     <!-- Guitar Body -->
-                    <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z" fill="url(#guitarBodyGrad)" stroke="url(#guitarGoldGrad)" stroke-width="2.4"/>
+                    <path d="M 120 190 C 70 190 48 155 70 118 C 86 92 80 78 74 68 C 65 52 82 36 120 36 C 158 36 175 52 166 68 C 160 78 154 92 170 118 C 192 155 170 190 120 190 Z" fill="url(#guitarBodyGrad)" stroke="url(#saxGoldGrad)" stroke-width="2.4"/>
                     
                     <!-- Inner Purfling & Binding Inlay -->
                     <path d="M 120 183 C 76 183 58 152 77 121 C 91 97 86 85 81 75 C 73 60 87 45 120 45 C 153 45 167 60 159 75 C 154 85 149 97 163 121 C 182 152 164 183 120 183 Z" fill="none" stroke="#f5d98a" stroke-width="0.9" opacity="0.65"/>
@@ -4111,12 +4149,12 @@
                     <path d="M 125 110 C 145 110 155 125 150 148 C 140 148 128 135 125 110 Z" fill="#451a03" stroke="#78350f" stroke-width="0.8" opacity="0.85"/>
 
                     <!-- Soundhole with Triple Rosette Rings -->
-                    <circle cx="120" cy="115" r="22" fill="#0d0a07" stroke="url(#guitarGoldGrad)" stroke-width="2.5"/>
+                    <circle cx="120" cy="115" r="22" fill="#0d0a07" stroke="url(#saxGoldGrad)" stroke-width="2.5"/>
                     <circle cx="120" cy="115" r="26" fill="none" stroke="#fef08a" stroke-width="1.2" stroke-dasharray="3 2"/>
                     <circle cx="120" cy="115" r="29" fill="none" stroke="#c49a3c" stroke-width="0.8"/>
 
                     <!-- Wooden Bridge & Saddle -->
-                    <rect x="96" y="152" width="48" height="14" rx="3.5" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
+                    <rect x="96" y="152" width="48" height="14" rx="3.5" fill="#1b1208" stroke="url(#saxGoldGrad)" stroke-width="1.4"/>
                     <line x1="102" y1="156" x2="138" y2="156" stroke="#fffbeb" stroke-width="1.5" stroke-linecap="round"/>
                     <!-- Bridge Pins -->
                     <circle cx="103" cy="161" r="1.6" fill="#fef08a"/>
@@ -4127,7 +4165,7 @@
                     <circle cx="137" cy="161" r="1.6" fill="#fef08a"/>
 
                     <!-- Mahogany Neck & Rosewood Fretboard -->
-                    <rect x="111" y="-30" width="18" height="98" fill="url(#fretboardWood)" stroke="url(#guitarGoldGrad)" stroke-width="1.5"/>
+                    <rect x="111" y="-30" width="18" height="98" fill="url(#fretboardWood)" stroke="url(#saxGoldGrad)" stroke-width="1.5"/>
                     
                     <!-- Nickel/Gold Frets -->
                     <line x1="111" y1="-18" x2="129" y2="-18" stroke="#f5d98a" stroke-width="1.1"/>
@@ -4142,59 +4180,62 @@
 
                     <!-- Complete Headstock with 6 Gold Tuning Pegs -->
                     <g transform="translate(108, -68)">
-                      <path d="M 3 36 L 0 6 Q 12 0 24 6 L 21 36 Z" fill="#1b1208" stroke="url(#guitarGoldGrad)" stroke-width="1.6"/>
+                      <path d="M 3 36 L 0 6 Q 12 0 24 6 L 21 36 Z" fill="#1b1208" stroke="url(#saxGoldGrad)" stroke-width="1.6"/>
                       <path d="M 6 32 L 3 10 Q 12 5 21 10 L 18 32 Z" fill="#2a1b0f" stroke="#c49a3c" stroke-width="0.8" opacity="0.6"/>
-                      <circle cx="12" cy="16" r="2.5" fill="url(#guitarGoldGrad)"/>
+                      <circle cx="12" cy="16" r="2.5" fill="url(#saxGoldGrad)"/>
                       
                       <!-- Left Pegs -->
-                      <line x1="0" y1="12" x2="-6" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="0" y1="12" x2="-6" y2="12" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="-8" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="1" y1="20" x2="-5" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="1" y1="20" x2="-5" y2="20" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="-7" cy="20" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="2" y1="28" x2="-4" y2="28" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="2" y1="28" x2="-4" y2="28" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="-6" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
 
                       <!-- Right Pegs -->
-                      <line x1="24" y1="12" x2="30" y2="12" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="24" y1="12" x2="30" y2="12" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="32" cy="12" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="23" y1="20" x2="29" y2="20" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="23" y1="20" x2="29" y2="20" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="31" cy="20" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
-                      <line x1="22" y1="28" x2="28" y2="28" stroke="url(#guitarGoldGrad)" stroke-width="1.8"/>
+                      <line x1="22" y1="28" x2="28" y2="28" stroke="url(#saxGoldGrad)" stroke-width="1.8"/>
                       <ellipse cx="30" cy="28" rx="2.5" ry="4" fill="#fef08a" stroke="#78350f" stroke-width="0.6"/>
                     </g>
 
                     <!-- 6 Bronze Vibrating Strings -->
-                    <line class="anim-guitar-string-1" x1="112" y1="-30" x2="103" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.4"/>
-                    <line class="anim-guitar-string-2" x1="115" y1="-30" x2="110" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.3"/>
-                    <line class="anim-guitar-string-3" x1="118" y1="-30" x2="117" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.2"/>
-                    <line class="anim-guitar-string-4" x1="122" y1="-30" x2="123" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.1"/>
-                    <line class="anim-guitar-string-5" x1="125" y1="-30" x2="130" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="1.0"/>
-                    <line class="anim-guitar-string-6" x1="128" y1="-30" x2="137" y2="156" stroke="url(#guitarGoldGrad)" stroke-width="0.9"/>
+                    <line class="anim-guitar-string-1" x1="112" y1="-30" x2="103" y2="156" stroke="url(#saxGoldGrad)" stroke-width="1.4"/>
+                    <line class="anim-guitar-string-2" x1="115" y1="-30" x2="110" y2="156" stroke="url(#saxGoldGrad)" stroke-width="1.3"/>
+                    <line class="anim-guitar-string-3" x1="118" y1="-30" x2="117" y2="156" stroke="url(#saxGoldGrad)" stroke-width="1.2"/>
+                    <line class="anim-guitar-string-4" x1="122" y1="-30" x2="123" y2="156" stroke="url(#saxGoldGrad)" stroke-width="1.1"/>
+                    <line class="anim-guitar-string-5" x1="125" y1="-30" x2="130" y2="156" stroke="url(#saxGoldGrad)" stroke-width="1.0"/>
+                    <line class="anim-guitar-string-6" x1="128" y1="-30" x2="137" y2="156" stroke="url(#saxGoldGrad)" stroke-width="0.9"/>
                   </g>
                 </g>
 
-                <!-- INSTRUMENT 3: Handcrafted Wooden Tambourine with Brass Jingles (Right Side) -->
-                <g transform="translate(235, 108) rotate(-16 35 35)">
-                  <!-- Wooden Frame & Skin Head -->
-                  <ellipse cx="35" cy="35" rx="30" ry="17" fill="#1b140d" stroke="url(#guitarGoldGrad)" stroke-width="2.2"/>
-                  <ellipse cx="35" cy="35" rx="24" ry="13" fill="#241a10" stroke="#f5d98a" stroke-width="0.8" opacity="0.75"/>
-                  <!-- Brass Jingles (Zills) -->
-                  <ellipse cx="9" cy="28" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <ellipse cx="11" cy="42" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <ellipse cx="61" cy="28" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <ellipse cx="59" cy="42" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <ellipse cx="35" cy="19" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
-                  <ellipse cx="35" cy="51" rx="4" ry="2.2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
+                <!-- INSTRUMENT 3: Polished Brass Alto Saxophone (Right Side) -->
+                <g transform="translate(238, 48) rotate(-8 30 75)">
+                  <!-- Curved Body Tube & Bow -->
+                  <path d="M 16 14 C 16 54 22 92 38 114 C 52 128 72 124 78 106 C 84 88 78 68 60 58 L 52 52" stroke="url(#saxGoldGrad)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+                  <!-- Flared Bell with Inner Gold Glow -->
+                  <ellipse cx="78" cy="102" rx="16" ry="10" fill="#1b1208" stroke="url(#saxGoldGrad)" stroke-width="2.2" transform="rotate(-30 78 102)"/>
+                  <ellipse cx="78" cy="102" rx="12" ry="6" fill="#f5d98a" opacity="0.4" transform="rotate(-30 78 102)"/>
+                  <!-- Pearl Key Cups & Rods -->
+                  <circle cx="26" cy="46" r="2.4" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="30" cy="60" r="2.4" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="36" cy="76" r="2.4" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <circle cx="43" cy="92" r="2.4" fill="#fffbeb" stroke="#ca8a04" stroke-width="0.8"/>
+                  <!-- Neck & Mouthpiece -->
+                  <path d="M 16 14 Q 12 -2 22 -6" stroke="url(#saxGoldGrad)" stroke-width="2.6" fill="none"/>
+                  <rect x="22" y="-9" width="8" height="5" rx="1" fill="#140e08" stroke="#f5d98a" stroke-width="0.8"/>
                 </g>
 
                 <!-- Luminous Ascending Musical Notes -->
-                <g class="anim-music-note-float-1" transform="translate(252, 75)">
+                <g class="anim-music-note-float-1" transform="translate(258, 65)">
                   <text fill="#fef08a" font-size="22" font-weight="900" filter="drop-shadow(0 0 4px #f59e0b)">♪</text>
                 </g>
-                <g class="anim-music-note-float-2" transform="translate(290, 52)">
+                <g class="anim-music-note-float-2" transform="translate(295, 42)">
                   <text fill="#c49a3c" font-size="26" font-weight="900" filter="drop-shadow(0 0 6px #c49a3c)">♫</text>
                 </g>
-                <g class="anim-music-note-float-3" transform="translate(195, 36)">
+                <g class="anim-music-note-float-3" transform="translate(142, 34)">
                   <text fill="#f5d98a" font-size="18" font-weight="900">♩</text>
                 </g>
               </svg>
@@ -4497,66 +4538,56 @@
                   </radialGradient>
                 </defs>
 
-                <!-- Angled Stage Spotlight Beam -->
-                <polygon points="120,0 220,0 295,225 65,225" fill="url(#spotlightCone)"/>
-                <ellipse cx="170" cy="115" rx="130" ry="80" fill="url(#micGlowGrad)"/>
+                <!-- Symmetrical Center Stage Spotlight Beam -->
+                <polygon points="140,0 220,0 285,225 75,225" fill="url(#spotlightCone)"/>
+                <ellipse cx="180" cy="115" rx="130" ry="80" fill="url(#micGlowGrad)"/>
 
-                <!-- Perfectly Symmetrical Spoken Word Acoustic Sound Waves -->
-                <circle class="anim-voice-wave-1" cx="170" cy="92" r="38" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-dasharray="8 6" fill="none"/>
-                <circle class="anim-voice-wave-2" cx="170" cy="92" r="56" stroke="url(#micGoldGrad)" stroke-width="1.3" stroke-dasharray="10 8" fill="none"/>
-                <circle class="anim-voice-wave-1" cx="170" cy="92" r="76" stroke="url(#micGoldGrad)" stroke-width="1.0" stroke-dasharray="12 10" fill="none" opacity="0.6"/>
+                <!-- Perfectly Symmetrical Spoken Word Acoustic Sound Waves Centered on Capsule -->
+                <circle class="anim-voice-wave-1" cx="180" cy="74" r="32" stroke="url(#micGoldGrad)" stroke-width="1.6" stroke-dasharray="8 6" fill="none"/>
+                <circle class="anim-voice-wave-2" cx="180" cy="74" r="52" stroke="url(#micGoldGrad)" stroke-width="1.3" stroke-dasharray="10 8" fill="none"/>
+                <circle class="anim-voice-wave-1" cx="180" cy="74" r="74" stroke="url(#micGoldGrad)" stroke-width="1.0" stroke-dasharray="12 10" fill="none" opacity="0.6"/>
 
-                <!-- Vintage 1950s Shure 55-Style Ribbed Stage Microphone -->
-                <g transform="translate(145, 42)">
-                  <!-- Telescopic Stand & Base -->
-                  <line x1="25" y1="100" x2="25" y2="155" stroke="url(#micGoldGrad)" stroke-width="4" stroke-linecap="round"/>
-                  <ellipse cx="25" cy="155" rx="28" ry="6" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <rect x="18" y="102" width="14" height="10" rx="2.5" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.3"/>
+                <!-- Vintage 1950s Shure 55-Style Ribbed Stage Microphone (Centered at x=180) -->
+                <g transform="translate(155, 34)">
+                  <!-- Telescopic Stand & Weighted Circular Base -->
+                  <line x1="25" y1="92" x2="25" y2="152" stroke="url(#micGoldGrad)" stroke-width="4" stroke-linecap="round"/>
+                  <ellipse cx="25" cy="152" rx="30" ry="7" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.8"/>
+                  <ellipse cx="25" cy="152" rx="18" ry="4" fill="#1e160f" stroke="#f5d98a" stroke-width="0.8" opacity="0.6"/>
+                  <rect x="18" y="94" width="14" height="11" rx="2.5" fill="#140f0a" stroke="url(#micGoldGrad)" stroke-width="1.3"/>
                   
-                  <!-- Articulated Mechanical Shock Mount -->
-                  <ellipse cx="25" cy="72" rx="28" ry="10" fill="none" stroke="url(#micGoldGrad)" stroke-width="1.8"/>
-                  <line x1="0" y1="72" x2="10" y2="72" stroke="#fef08a" stroke-width="1.5"/>
-                  <line x1="40" y1="72" x2="50" y2="72" stroke="#fef08a" stroke-width="1.5"/>
+                  <!-- Articulated Mechanical Shock Mount Swivel -->
+                  <ellipse cx="25" cy="68" rx="26" ry="9" fill="none" stroke="url(#micGoldGrad)" stroke-width="1.8"/>
+                  <line x1="0" y1="68" x2="9" y2="68" stroke="#fef08a" stroke-width="1.5"/>
+                  <line x1="41" y1="68" x2="50" y2="68" stroke="#fef08a" stroke-width="1.5"/>
 
                   <!-- Ribbed Microphone Capsule Body -->
-                  <rect x="10" y="22" width="30" height="50" rx="14" fill="#17120c" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
+                  <rect x="10" y="16" width="30" height="52" rx="14" fill="#17120c" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
                   
-                  <!-- Horizontal Grille Louvers / Louver Slats -->
-                  <line x1="13" y1="30" x2="37" y2="30" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="11" y1="36" x2="39" y2="36" stroke="#fef08a" stroke-width="1.6"/>
-                  <line x1="10" y1="42" x2="40" y2="42" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="10" y1="48" x2="40" y2="48" stroke="#fef08a" stroke-width="1.6"/>
-                  <line x1="10" y1="54" x2="40" y2="54" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
-                  <line x1="13" y1="60" x2="37" y2="60" stroke="#fef08a" stroke-width="1.6"/>
+                  <!-- Horizontal Grille Louvers / Slats -->
+                  <line x1="13" y1="24" x2="37" y2="24" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="11" y1="30" x2="39" y2="30" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="10" y1="36" x2="40" y2="36" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="10" y1="42" x2="40" y2="42" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="10" y1="48" x2="40" y2="48" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
+                  <line x1="11" y1="54" x2="39" y2="54" stroke="#fef08a" stroke-width="1.6"/>
+                  <line x1="13" y1="60" x2="37" y2="60" stroke="url(#micGoldGrad)" stroke-width="1.6"/>
                   
                   <!-- Vertical Center Chrome Spine -->
-                  <line x1="25" y1="22" x2="25" y2="72" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
+                  <line x1="25" y1="16" x2="25" y2="68" stroke="url(#micGoldGrad)" stroke-width="2.2"/>
                 </g>
 
-                <!-- Fully Visible Elegant Golden Feather Quill Pen (Left Side) -->
-                <g class="anim-quill-float" transform="translate(48, 58) rotate(-18 35 45)">
-                  <!-- Full Quill Feather Body -->
-                  <path d="M 6 82 C 16 56 26 30 62 4 C 54 36 42 62 16 84 Z" fill="url(#micGoldGrad)" stroke="#fef08a" stroke-width="1.4"/>
-                  <!-- Central Rachis / Quill Shaft Line -->
-                  <line x1="6" y1="82" x2="62" y2="4" stroke="#1c130b" stroke-width="1.6"/>
-                  <!-- Feather Vane Slits -->
-                  <line x1="22" y1="64" x2="14" y2="68" stroke="#78350f" stroke-width="1"/>
-                  <line x1="32" y1="48" x2="22" y2="54" stroke="#78350f" stroke-width="1"/>
-                  <line x1="42" y1="32" x2="32" y2="38" stroke="#78350f" stroke-width="1"/>
-                  <!-- Golden Ink Droplet at Nib -->
-                  <circle cx="5" cy="84" r="3.2" fill="#fef08a" filter="drop-shadow(0 0 5px #fef08a)"/>
-                  <circle cx="5" cy="84" r="1.4" fill="#ffffff"/>
+                <!-- Floating Literary Quotation Marks & Verse Accents -->
+                <g class="anim-poem-word-1" transform="translate(62, 90)">
+                  <text fill="#fef08a" font-size="28" font-family="serif" font-style="italic" opacity="0.9">“</text>
                 </g>
-
-                <!-- Floating Verse Quotation Marks & Literary Sparkles -->
-                <g class="anim-poem-word-1" transform="translate(86, 120)">
-                  <text fill="#fef08a" font-size="22" font-family="serif" font-style="italic" opacity="0.9">“</text>
+                <g class="anim-poem-word-2" transform="translate(42, 140)">
+                  <text fill="#f5d98a" font-size="9" font-weight="800" letter-spacing="1.5" opacity="0.8">✦ OPEN MIC</text>
                 </g>
-                <g class="anim-poem-word-2" transform="translate(242, 88)">
-                  <text fill="#f5d98a" font-size="14" font-family="serif" font-style="italic" opacity="0.85">✦ spoken</text>
+                <g class="anim-poem-word-3" transform="translate(282, 140)">
+                  <text fill="#c49a3c" font-size="28" font-family="serif" font-style="italic" opacity="0.9">”</text>
                 </g>
-                <g class="anim-poem-word-3" transform="translate(272, 136)">
-                  <text fill="#c49a3c" font-size="22" font-family="serif" font-style="italic" opacity="0.9">”</text>
+                <g class="anim-poem-word-2" transform="translate(234, 76)">
+                  <text fill="#f5d98a" font-size="9" font-weight="800" letter-spacing="1.5" opacity="0.85">SPOKEN WORD ✦</text>
                 </g>
               </svg>
             </div>
@@ -4624,30 +4655,33 @@
                   <line class="anim-eq-bar-7" x1="38" y1="24" x2="38" y2="11" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
                 </g>
 
-                <!-- Heavy Aluminum Circular Platter Base (Centered at 160, 115) -->
-                <circle cx="160" cy="115" r="66" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
+                <!-- Heavy Aluminum Circular Platter Base (Centered at 155, 115) -->
+                <circle cx="155" cy="115" r="66" fill="#0d0a07" stroke="url(#deckGoldGrad)" stroke-width="2"/>
 
-                <!-- Spinning Vinyl Record (Centered at 160, 115) -->
-                <g class="anim-fmt-vinyl-spin" style="transform-origin: 160px 115px;">
-                  <!-- Vinyl Disc Body -->
-                  <circle cx="160" cy="115" r="60" fill="#120e0a" stroke="#2a1f14" stroke-width="1.5"/>
-                  
-                  <!-- Micro-Groove Audio Tracks -->
-                  <circle cx="160" cy="115" r="54" stroke="#1f1812" stroke-width="0.8" fill="none"/>
-                  <circle cx="160" cy="115" r="46" stroke="#2a2016" stroke-width="0.8" fill="none"/>
-                  <circle cx="160" cy="115" r="38" stroke="#1f1812" stroke-width="0.8" fill="none"/>
-                  <circle cx="160" cy="115" r="30" stroke="#2a2016" stroke-width="0.8" fill="none"/>
-                  
-                  <!-- Light Reflection Birefringence Sectors -->
-                  <path d="M 160 115 L 120 70 A 60 60 0 0 1 150 55 Z" fill="rgba(255,255,255,0.06)"/>
-                  <path d="M 160 115 L 200 160 A 60 60 0 0 1 170 175 Z" fill="rgba(255,255,255,0.06)"/>
+                <!-- Spinning Vinyl Record (Centered at 155, 115 with 100% On-Axis Rotation) -->
+                <g transform="translate(155, 115)">
+                  <g class="anim-fmt-vinyl-spin">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"/>
+                    <!-- Vinyl Disc Body -->
+                    <circle cx="0" cy="0" r="60" fill="#120e0a" stroke="#2a1f14" stroke-width="1.5"/>
+                    
+                    <!-- Micro-Groove Audio Tracks -->
+                    <circle cx="0" cy="0" r="54" stroke="#1f1812" stroke-width="0.8" fill="none"/>
+                    <circle cx="0" cy="0" r="46" stroke="#2a2016" stroke-width="0.8" fill="none"/>
+                    <circle cx="0" cy="0" r="38" stroke="#1f1812" stroke-width="0.8" fill="none"/>
+                    <circle cx="0" cy="0" r="30" stroke="#2a2016" stroke-width="0.8" fill="none"/>
+                    
+                    <!-- Light Reflection Birefringence Sectors -->
+                    <path d="M 0 0 L -40 -45 A 60 60 0 0 1 -10 -59 Z" fill="rgba(255,255,255,0.06)"/>
+                    <path d="M 0 0 L 40 45 A 60 60 0 0 1 10 59 Z" fill="rgba(255,255,255,0.06)"/>
 
-                  <!-- Antique Gold Center Label -->
-                  <circle cx="160" cy="115" r="22" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
-                  <text x="160" y="112" fill="#140f0a" font-size="6" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
-                  <text x="160" y="120" fill="#140f0a" font-size="3.8" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
-                  <!-- Spindle Center Hole -->
-                  <circle cx="160" cy="115" r="3.2" fill="#140f0a"/>
+                    <!-- Antique Gold Center Label -->
+                    <circle cx="0" cy="0" r="22" fill="url(#labelGrad)" stroke="#110e0a" stroke-width="1.6"/>
+                    <text x="0" y="-3" fill="#140f0a" font-size="6" font-weight="900" text-anchor="middle" letter-spacing="1">EZRA</text>
+                    <text x="0" y="5" fill="#140f0a" font-size="3.8" font-weight="700" text-anchor="middle">33⅓ RPM · TLV</text>
+                    <!-- Spindle Center Hole -->
+                    <circle cx="0" cy="0" r="3.2" fill="#140f0a"/>
+                  </g>
                 </g>
 
                 <!-- S-Shaped Precision Tonearm with Counterweight & Stylus -->
@@ -4774,14 +4808,12 @@
                 </linearGradient>
               </defs>
               <g stroke="url(#calDecoGoldPizza)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <g class="anim-pizza-dough">
+                <g class="anim-pizza-dough" style="transform-origin: 75px 68px;">
                   <ellipse cx="75" cy="68" rx="34" ry="10"/>
                   <ellipse cx="75" cy="68" rx="24" ry="6.5" stroke-width="1.4"/>
-                  <g class="anim-pizza-spin" stroke-width="1.4" style="transform-origin: 75px 68px;">
-                    <circle cx="62" cy="66" r="1.8"/>
-                    <circle cx="87" cy="70" r="1.8"/>
-                    <circle cx="76" cy="63" r="1.6"/>
-                  </g>
+                  <circle cx="62" cy="66" r="1.8"/>
+                  <circle cx="87" cy="70" r="1.8"/>
+                  <circle cx="76" cy="63" r="1.6"/>
                 </g>
                 <path d="M60 84 C 57 71 70 64 77 71 C 86 63 95 72 90 84 Z"/>
                 <path d="M60 85 L 90 85"/>
