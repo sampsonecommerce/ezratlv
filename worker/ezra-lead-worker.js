@@ -94,11 +94,16 @@ export default {
 
     const isCustom = d.leadType === "custom";
     const isPrivate = d.leadType === "private";
+    const isNewsletter = d.leadType === "newsletter";
     const isOpenEvents = d.leadType === "open_events" || d.board === "5102602771";
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
-    let notes = isOpenEvents ? [
+    let notes = isNewsletter ? [
+      "סוג פנייה: הרשמה לעדכונים על ערבים פתוחים (ניוזלטר)",
+      `נושא: ${d.eventType || "-"}`,
+      "★ לא ליד מכירות - בקשה לקבל עדכון על אירועים",
+    ].filter(Boolean).join("\n") : isOpenEvents ? [
       "סוג פנייה: ליד מעמוד אירועים פתוחים (Open Events)",
       `סוג אירוע: ${d.eventType || "-"}`,
       `תאריך מבוקש: ${d.date || "-"}`,
@@ -174,9 +179,16 @@ export default {
     const isPackage = !d.leadType;   // website booking lead (no leadType)
     // Summary blob: company board -> Lead Summary (long_text_mm4t4fjb); private board lacks that
     // column, so keep the blob in long_textlwbyhlq0 there (private path unchanged).
-    if (isPrivate || isOpenEvents) cols.long_textlwbyhlq0 = { text: notes };
+    if (isPrivate || isOpenEvents || isNewsletter) cols.long_textlwbyhlq0 = { text: notes };
     else           cols.long_text_mm4t4fjb = { text: notes };
-    const timeOfEvent = d.menu ? timeLabel : (d.eventTime || d.slot || "");
+    const rawSlot = String(d.eventTime || d.slot || "");
+    // "ערב (18:00-02:00)" is not a label on the board; "ערב" is. Anything we do
+    // not recognise (e.g. "גמיש") is left off the status and stays in the notes.
+    const slotLabel = /צהריים/.test(rawSlot) ? "צהריים"
+                    : /ערב/.test(rawSlot)    ? "ערב"
+                    : /^(צהריים|ערב)$/.test(rawSlot.trim()) ? rawSlot.trim()
+                    : "";
+    const timeOfEvent = d.menu ? timeLabel : slotLabel;
     if (timeOfEvent) cols.single_select943s5p9 = { label: timeOfEvent };
     // Total: package leads -> Total Price (Packages) text only; non-package leads keep the Custom
     // price columns (reserved for in-Monday calc). CAPI value reads d.estTotal directly, not the column.
@@ -197,7 +209,7 @@ export default {
     // Contact Name (the person) for company-board lead types. The column lives only on the Company
     // Events board; private leads go to the Events Form board (5092854682) which lacks it, so skip
     // them to avoid a create_item error and to never touch that board.
-    if (!isPrivate && d.name) cols.text_mm4the60 = String(d.name);                  // Contact Name = person
+    if (!isPrivate && !isNewsletter && d.name) cols.text_mm4the60 = String(d.name);                  // Contact Name = person
     // ad attribution → dedicated columns (company board only; private board lacks them). source/campaign
     // already map to short_textgjnrhjdi/short_textoant7hbw above.
     if (!isPrivate && d.utm_content) cols.text_mm53a533 = String(d.utm_content);    // ad group (Google) / adset (Facebook)
@@ -235,8 +247,8 @@ export default {
     const query = `mutation ($board: ID!, $group: String, $name: String!, $cols: JSON!) {
       create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
     }`;
-    const board = isOpenEvents ? OPEN_EVENTS_BOARD : isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
-    const group = isOpenEvents ? (d.group || OPEN_EVENTS_GROUP)
+    const board = (isOpenEvents || isNewsletter) ? OPEN_EVENTS_BOARD : isPrivate ? PRIVATE_BOARD : COMPANY_BOARD;
+    const group = (isOpenEvents || isNewsletter) ? (d.group || OPEN_EVENTS_GROUP)
                 : isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? DRAFTS_GROUP
@@ -259,10 +271,29 @@ export default {
         headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
         body: JSON.stringify({ query, variables }),
       });
-      const out = await r.json();
+      let out = await r.json();
+      // A lead must never be lost to a label the board does not happen to have.
+      // create_labels_if_missing is false by design, so if the only problem is a
+      // status value we do not recognise, drop those columns and try again - the
+      // same information is already in the notes blob.
       if (out.errors) {
-        console.error("Monday API errors:", JSON.stringify(out.errors));
-        return json({ ok: false, error: out.errors }, 502, cors);
+        console.error("Monday API errors (attempt 1):", JSON.stringify(out.errors));
+        const retryCols = { ...cols };
+        delete retryCols.single_select943s5p9;   // time of event
+        delete retryCols.single_selecta6erdt9;   // event type
+        delete retryCols.color_mm18ym70;         // status
+        const r2 = await fetch("https://api.monday.com/v2", {
+          method: "POST",
+          headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+          body: JSON.stringify({ query, variables: { ...variables, cols: JSON.stringify(retryCols) } }),
+        });
+        const out2 = await r2.json();
+        if (!out2.errors) {
+          console.warn("Lead saved on retry without status columns.");
+          return json({ ok: true, id: out2.data?.create_item?.id, degraded: true }, 200, cors);
+        }
+        console.error("Monday API errors (attempt 2):", JSON.stringify(out2.errors));
+        return json({ ok: false, error: out2.errors }, 502, cors);
       }
       return json({ ok: true, id: out.data?.create_item?.id }, 200, cors);
     } catch (e) {
