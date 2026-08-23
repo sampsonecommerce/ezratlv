@@ -76,7 +76,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
@@ -108,8 +108,14 @@
       --red-soft:    rgba(248, 113, 113, 0.14);
       --red-border:  rgba(248, 113, 113, 0.35);
 
-      --font-display: 'Heebo', system-ui, sans-serif;
-      --font-body:    'Heebo', system-ui, sans-serif;
+      /* Same three roles index.html and company-events.html use, so this page
+         stops being the odd one out. Cormorant carries no Hebrew glyphs, so
+         Hebrew headings fall through to Heebo exactly as they do site-wide;
+         only Latin headings pick up the serif. */
+      --font-serif:   'Cormorant Garamond', 'Heebo', serif;
+      --font-display: 'Cormorant Garamond', 'Heebo', serif;
+      --font-body:    'Inter', 'Heebo', system-ui, sans-serif;
+      --font-num:     'Pliant', 'Heebo', sans-serif;
 
       --section-pad:      clamp(2.5rem, 6vw, 4.5rem);
       --maxw:  1180px;
@@ -167,7 +173,7 @@
     .ico--fill { fill: currentColor; stroke: none; }
     .ico--lg { width: 1.15em; height: 1.15em; }
 
-    .num { font-family: var(--font-body); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: embed; }
+    .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: embed; }
 
     /* ============================================================
        NAVIGATION BAR (100% IDENTICAL SIZING ACROSS ALL PAGES)
@@ -1803,6 +1809,12 @@
       align-items: center;
       gap: 0.6rem;
     }
+    /* Numerals in Pliant, matching the rest of the site. */
+    .cal__day, .month-cal-daynum, .stat-num, .time-card__date,
+    .fmt-card__when, .cal__dow, .month-cal-weekday {
+      font-family: var(--font-num);
+      font-variant-numeric: tabular-nums;
+    }
     .month-cal-btn {
       display: inline-flex;
       align-items: center;
@@ -2544,6 +2556,55 @@
       padding: 0.9rem;
     }
     .cf-cal[hidden] { display: none !important; }
+
+    /* --- Calendar day: two independent halves ------------------------------
+       Each cell reports afternoon and evening separately. A day is only
+       unbookable when both halves are taken; one busy half leaves the other
+       selectable, which is how the venue actually works. */
+    .cal__day { position: relative; }
+    .cal__day-num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+    .cal__day-bar {
+      position: absolute; inset-inline: 6px; inset-block-end: 5px;
+      height: 3px; display: flex; gap: 2px; pointer-events: none;
+    }
+    .cal__day-bar i {
+      flex: 1; border-radius: 2px; background: var(--gold);
+      opacity: 0.55; transition: opacity 0.2s var(--ease);
+    }
+    .cal__day-bar i.taken { background: var(--red); opacity: 0.85; }
+    .cal__day.is-selected .cal__day-bar i { opacity: 1; }
+    .cal__day.is-past .cal__day-bar { display: none; }
+
+    /* --- Slot picker, inside the calendar --------------------------------- */
+    .cal__slots { margin-block-start: 0.85rem; }
+    .cal__slots-hint {
+      font-size: 0.8rem; color: var(--cream-faint); text-align: center;
+      margin: 0; padding-block: 0.4rem;
+    }
+    .cal__slots-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
+    .cal__slot {
+      display: flex; flex-direction: column; align-items: center; gap: 0.12rem;
+      padding: 0.55rem 0.4rem; border-radius: 10px; cursor: pointer;
+      background: rgba(240,235,224,0.04);
+      border: 1px solid var(--line);
+      color: var(--cream-dim); font-family: inherit;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .cal__slot:hover:not(:disabled) { border-color: var(--gold); color: var(--cream); }
+    .cal__slot.is-active {
+      background: var(--gold); border-color: var(--gold); color: var(--bg);
+    }
+    .cal__slot.is-active .cal__slot-time { color: var(--bg); opacity: 0.75; }
+    .cal__slot:disabled { opacity: 0.4; cursor: not-allowed; }
+    .cal__slot-name { font-size: 0.86rem; font-weight: 500; }
+    .cal__slot-time { font-size: 0.68rem; color: var(--cream-faint); }
+    .cal__slot-state { font-size: 0.62rem; color: var(--red); min-height: 0.8em; }
+    .cal__slot:disabled .cal__slot-state::after { content: 'תפוס'; }
+
+    .cal__legend-bar { display: inline-flex; gap: 2px; width: 18px; height: 3px; }
+    .cal__legend-bar i { flex: 1; border-radius: 2px; background: var(--gold); opacity: 0.55; }
+    .cal__legend-bar i.taken { background: var(--red); opacity: 0.85; }
+
     .cal__head {
       display: flex;
       align-items: center;
@@ -3143,7 +3204,7 @@
       <div class="sec-head center">
         <span class="eyebrow">Interactive Monthly Calendar</span>
         <h2>לוח אירועים וזמינות חופשי</h2>
-        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (12:00–18:00) וערב (18:00–02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
+        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (12:00-18:00) וערב (18:00-02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
       <!-- Calendar Flanked Layout (Free-Floating Musicians, Asymmetrical Staggered Heights) -->
@@ -4003,21 +4064,32 @@
                 </button>
               </div>
               <div class="cal__grid" id="cfCalGrid"></div>
+              <div class="cal__slots" id="cfCalSlots" aria-live="polite">
+                <p class="cal__slots-hint" id="cfSlotsHint">בחרו תאריך כדי לראות אילו שעות פנויות</p>
+                <div class="cal__slots-row" id="cfSlotsRow" hidden>
+                  <button type="button" class="cal__slot" data-slot="afternoon" data-val="צהריים (12:00-18:00)">
+                    <span class="cal__slot-name">צהריים</span>
+                    <span class="cal__slot-time num">12:00-18:00</span>
+                    <span class="cal__slot-state"></span>
+                  </button>
+                  <button type="button" class="cal__slot" data-slot="evening" data-val="ערב (18:00-02:00)">
+                    <span class="cal__slot-name">ערב</span>
+                    <span class="cal__slot-time num">18:00-02:00</span>
+                    <span class="cal__slot-state"></span>
+                  </button>
+                  <button type="button" class="cal__slot" data-slot="any" data-val="גמיש">
+                    <span class="cal__slot-name">גמיש</span>
+                    <span class="cal__slot-time">כל שעה שתתאים</span>
+                    <span class="cal__slot-state"></span>
+                  </button>
+                </div>
+              </div>
+              <input type="hidden" id="cfSlot" name="slot" value="" />
               <div class="cal__legend">
-                <div class="cal__legend-item"><span class="cal__legend-dot cal__legend-dot--free"></span><span>פנוי לשריון</span></div>
-                <div class="cal__legend-item"><span class="cal__legend-dot cal__legend-dot--busy"></span><span>תפוס / אירוע</span></div>
+                <div class="cal__legend-item"><span class="cal__legend-bar"><i></i><i></i></span><span>צהריים / ערב</span></div>
+                <div class="cal__legend-item"><span class="cal__legend-bar"><i class="taken"></i><i></i></span><span>חלק מהיום תפוס</span></div>
               </div>
             </div>
-          </div>
-
-          <div class="cf-field">
-            <label>חלק היום המועדף</label>
-            <div class="cf-pills" id="cfSlotPills">
-              <button type="button" class="cf-pill is-active" data-val="ערב (18:00–02:00)">ערב (18:00–02:00)</button>
-              <button type="button" class="cf-pill" data-val="צהריים (12:00–18:00)">צהריים (12:00–18:00)</button>
-              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
-            </div>
-            <input type="hidden" id="cfSlot" name="slot" value="ערב (18:00–02:00)" />
           </div>
 
           <div class="cf-field">
@@ -4368,12 +4440,12 @@
 
           const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00–18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
+            ? `<div class="slot-row slot-row--busy"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>סגור לאירוע</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
-            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00–02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים על אירועים פרטיים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>שמור לאירוע פרטי</span></div>`
+            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -4407,7 +4479,7 @@
             afternoonEl.addEventListener('click', (e) => {
               e.stopPropagation();
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'צהריים (12:00–18:00)', eventType: 'אירוע פרטי' });
+                openContactModal({ date: item.dateKey, slot: 'צהריים (12:00-18:00)', eventType: 'אירוע פרטי' });
               }
             });
           }
@@ -4417,7 +4489,7 @@
             eveningBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'ערב (18:00–02:00)', eventType: 'אירוע פרטי' });
+                openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
               }
             });
           }
@@ -4435,7 +4507,7 @@
           card.addEventListener('click', () => {
             if (item.isClosedEvening) {
               if (typeof openContactModal === 'function') {
-                openContactModal({ date: item.dateKey, slot: 'ערב (18:00–02:00)', eventType: 'אירוע פרטי' });
+                openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
               }
             } else {
               if (typeof openEventModal === 'function') {
@@ -4448,7 +4520,7 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               if (item.isClosedEvening) {
-                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'ערב (18:00–02:00)', eventType: 'אירוע פרטי' });
+                if (typeof openContactModal === 'function') openContactModal({ date: item.dateKey, slot: 'ערב (18:00-02:00)', eventType: 'אירוע פרטי' });
               } else {
                 if (typeof openEventModal === 'function') openEventModal(item);
               }
@@ -4631,7 +4703,7 @@
               if (typeof openContactModal === 'function') {
                 openContactModal({
                   date: dateKey,
-                  slot: 'צהריים (12:00–18:00)',
+                  slot: 'צהריים (12:00-18:00)',
                   eventType: 'אירוע פרטי'
                 });
               }
@@ -4646,7 +4718,7 @@
                 if (typeof openContactModal === 'function') {
                   openContactModal({
                     date: dateKey,
-                    slot: 'ערב (18:00–02:00)',
+                    slot: 'ערב (18:00-02:00)',
                     eventType: 'אירוע פרטי'
                   });
                 }
@@ -4919,19 +4991,91 @@
 
       let viewDate = new Date();
       let selectedIso = '';
-      let bookedDatesSet = new Set();
+      let selectedSlot = '';
+      // date -> { afternoon: bool, evening: bool }, true meaning taken
+      let slotMap = Object.create(null);
 
-      // Fetch availability for calendar
+      const AFTERNOON = [12 * 60, 18 * 60];
+      const EVENING   = [18 * 60, 26 * 60];   // 18:00 to 02:00 the next day
+
+      const toMins = t => {
+        const m = /^(\d{1,2}):(\d{2})/.exec(String(t || ''));
+        return m ? (+m[1]) * 60 + (+m[2]) : null;
+      };
+
+      // A booking is stored as a window, not as a whole day. Overlap it against
+      // each half so an afternoon event never blacks out that evening.
+      function markBusy(date, start, end) {
+        let s = toMins(start), e = toMins(end);
+        if (s === null || e === null) { s = EVENING[0]; e = EVENING[1]; }
+        if (e <= s) e += 24 * 60;                       // window crosses midnight
+        const rec = slotMap[date] || (slotMap[date] = { afternoon: false, evening: false });
+        const hits = (blk) => s < blk[1] && e > blk[0];
+        if (hits(AFTERNOON)) rec.afternoon = true;
+        if (hits(EVENING))   rec.evening = true;
+      }
+
       fetch('https://ezra-lead.yeheli.workers.dev', { method: 'GET' })
         .then(r => r.ok ? r.json() : null)
         .then(j => {
-          if (j) {
-            const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
-            bookedDatesSet = new Set(arr);
-            renderCalendar();
-          }
+          if (!j) return;
+          slotMap = Object.create(null);
+          (Array.isArray(j.busy) ? j.busy : []).forEach(b => {
+            if (b && b.date) markBusy(b.date, b.start, b.end);
+          });
+          // A date listed as booked with no window at all is treated as a full day
+          (Array.isArray(j) ? j : (j.booked || j.dates || [])).forEach(d => {
+            if (!slotMap[d]) slotMap[d] = { afternoon: true, evening: true };
+          });
+          renderCalendar();
+          if (selectedIso) renderSlots(selectedIso);
         })
         .catch(() => {});
+
+      const slotsRow  = document.getElementById('cfSlotsRow');
+      const slotsHint = document.getElementById('cfSlotsHint');
+      const slotInputEl = document.getElementById('cfSlot');
+
+      function renderSlots(dateKey) {
+        if (!slotsRow) return;
+        const rec = slotMap[dateKey] || { afternoon: false, evening: false };
+        slotsRow.hidden = false;
+        if (slotsHint) slotsHint.hidden = true;
+        const free = {};
+        slotsRow.querySelectorAll('.cal__slot').forEach(btn => {
+          const kind = btn.getAttribute('data-slot');
+          const taken = kind === 'afternoon' ? rec.afternoon
+                      : kind === 'evening'   ? rec.evening
+                      : (rec.afternoon && rec.evening);
+          btn.disabled = taken;
+          btn.classList.remove('is-active');
+          if (!taken) free[kind] = btn;
+        });
+        // Evening is the venue's usual booking, so it wins when it is open;
+        // otherwise fall back to whatever half is left.
+        const firstFree = free.evening || free.afternoon || free.any || null;
+        if (firstFree) {
+          firstFree.classList.add('is-active');
+          selectedSlot = firstFree.getAttribute('data-val');
+          if (slotInputEl) slotInputEl.value = selectedSlot;
+        } else {
+          selectedSlot = '';
+          if (slotInputEl) slotInputEl.value = '';
+        }
+        updateDateLabel();
+      }
+
+      if (slotsRow) {
+        slotsRow.addEventListener('click', e => {
+          const btn = e.target.closest('.cal__slot');
+          if (!btn || btn.disabled) return;
+          slotsRow.querySelectorAll('.cal__slot').forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          selectedSlot = btn.getAttribute('data-val');
+          if (slotInputEl) slotInputEl.value = selectedSlot;
+          updateDateLabel();
+        });
+      }
 
       function renderCalendar() {
         if (!calGrid || !calMonth) return;
@@ -4964,19 +5108,38 @@
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'cal__day';
-          btn.textContent = d;
+          const dnum = document.createElement('span');
+          dnum.className = 'cal__day-num';
+          dnum.textContent = d;
+          btn.appendChild(dnum);
 
           const isPast = dayKey < todayKey;
-          const isBooked = bookedDatesSet.has(dayKey);
+          const rec = slotMap[dayKey] || { afternoon: false, evening: false };
+          const fullyBooked = rec.afternoon && rec.evening;
           const isSelected = dayKey === selectedIso;
+
+          // the two halves, drawn under the day number
+          if (!isPast) {
+            const bar = document.createElement('span');
+            bar.className = 'cal__day-bar';
+            const a = document.createElement('i');
+            const e = document.createElement('i');
+            if (rec.afternoon) a.className = 'taken';
+            if (rec.evening) e.className = 'taken';
+            bar.appendChild(a); bar.appendChild(e);
+            btn.appendChild(bar);
+          }
 
           if (isPast) {
             btn.classList.add('is-past');
             btn.disabled = true;
-          } else if (isBooked) {
+          } else if (fullyBooked) {
             btn.classList.add('is-booked');
-            btn.title = 'תאריך תפוס לאירוע';
+            btn.title = 'כל היום תפוס';
           } else {
+            btn.title = rec.afternoon ? 'הצהריים תפוסים, הערב פנוי'
+                      : rec.evening   ? 'הערב תפוס, הצהריים פנויים'
+                      : 'פנוי לשריון';
             btn.addEventListener('click', () => {
               selectDate(dayKey, `${d} ב${monthsHe[month]} ${year}`);
             });
@@ -4995,12 +5158,23 @@
 
       function selectDate(isoKey, displayStr) {
         selectedIso = isoKey;
+        renderSlots(isoKey);
         dateInput.value = isoKey;
-        dateLabel.textContent = displayStr;
         dateBtn.classList.remove('is-empty');
-        cal.hidden = true;
-        dateBtn.setAttribute('aria-expanded', 'false');
+        // The slot picker lives inside the calendar now, so closing on date
+        // select would hide the half of the choice that is still unmade.
+        // It stays open; the button caption carries date and slot together.
         renderCalendar();
+        updateDateLabel(displayStr);
+      }
+
+      let lastDisplay = '';
+      function updateDateLabel(displayStr) {
+        if (displayStr) lastDisplay = displayStr;
+        if (!lastDisplay) return;
+        const slot = (slotInputEl && slotInputEl.value) || '';
+        const short = slot.replace(/\s*\([^)]*\)/, '');
+        dateLabel.textContent = short ? `${lastDisplay} · ${short}` : lastDisplay;
       }
 
       if (dateBtn) {
