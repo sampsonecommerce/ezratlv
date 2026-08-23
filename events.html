@@ -1791,169 +1791,199 @@
     }
 
     /* ============================================================
-       7. COLLAB BANNER & HIGH-FIDELITY CULINARY/BAR STAGE
+       3B-1. JAZZ BAND ANIMATION (SAXOPHONE & DRUMMER)
+    ============================================================ */
+    .cal-jazz-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 885px;
+      margin: 0 auto 1.4rem;
+      height: 125px;
+      background: radial-gradient(ellipse at 50% 50%, rgba(196,154,60,0.12) 0%, rgba(18,14,10,0.85) 70%, #0d0a07 100%);
+      border: 1px solid rgba(196,154,60,0.25);
+      border-radius: 18px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.7), 0 10px 25px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .cal-jazz-svg {
+      width: 100%;
+      max-width: 580px;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Saxophone Player Animations */
+    .anim-sax-player {
+      transform-origin: 95px 115px;
+      animation: saxSway 3s ease-in-out infinite;
+    }
+    @keyframes saxSway {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      35%      { transform: rotate(-3.5deg) translateY(-2px); }
+      70%      { transform: rotate(2.5deg) translateY(1px); }
+    }
+
+    .anim-jazz-note-1 { animation: noteFloatUp 2.4s ease-out infinite; transform-origin: 140px 45px; }
+    .anim-jazz-note-2 { animation: noteFloatUp 2.8s ease-out infinite 0.7s; transform-origin: 140px 45px; }
+    .anim-jazz-note-3 { animation: noteFloatUp 2.2s ease-out infinite 1.4s; transform-origin: 140px 45px; }
+
+    @keyframes noteFloatUp {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(0deg); }
+      25%  { opacity: 0.95; }
+      80%  { opacity: 0.7; }
+      100% { opacity: 0; transform: translate(22px, -34px) scale(1.2) rotate(25deg); }
+    }
+
+    /* Drummer Animations */
+    .anim-drummer-arm-l {
+      transform-origin: 465px 70px;
+      animation: drummerSnareHit 0.55s ease-in-out infinite alternate;
+    }
+    .anim-drummer-arm-r {
+      transform-origin: 485px 65px;
+      animation: drummerRideHit 0.38s ease-in-out infinite alternate;
+    }
+    @keyframes drummerSnareHit {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(15deg); }
+    }
+    @keyframes drummerRideHit {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(-14deg); }
+    }
+
+    .anim-cymbal-wave {
+      transform-origin: 520px 42px;
+      animation: cymbalPulse 0.76s ease-out infinite;
+    }
+    @keyframes cymbalPulse {
+      0%   { opacity: 0; transform: scale(0.8); }
+      40%  { opacity: 0.85; }
+      100% { opacity: 0; transform: scale(1.4); }
+    }
+
+    .anim-drum-soundwave {
+      animation: soundwaveBreathe 1.8s ease-in-out infinite alternate;
+      transform-origin: 295px 65px;
+    }
+    @keyframes soundwaveBreathe {
+      0%   { opacity: 0.45; transform: scale(0.96); }
+      100% { opacity: 0.95; transform: scale(1.04); filter: drop-shadow(0 0 6px rgba(196,154,60,0.6)); }
+    }
+
+    /* ============================================================
+       7. COLLAB BANNER (CLEAN, MINIMALIST & SLEEK)
     ============================================================ */
     .collab-strip {
       background: linear-gradient(135deg, #1c150e 0%, #100d09 100%);
       border: 1.5px solid var(--gold);
       border-radius: 24px;
-      padding: clamp(2.2rem, 4.5vw, 3.8rem) clamp(1.5rem, 4vw, 3rem);
+      padding: clamp(2rem, 4vw, 3.2rem) clamp(1.4rem, 3.5vw, 2.8rem);
       text-align: center;
-      max-width: 900px;
+      max-width: 885px;
       margin-inline: auto;
       box-shadow: 0 20px 50px -15px rgba(0,0,0,0.85);
     }
-    .collab-strip h3 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-block-end: 0.9rem; }
-    .collab-strip p { font-size: 1.02rem; color: var(--cream-dim); max-width: 52ch; margin-inline: auto; margin-block-end: 1.8rem; line-height: 1.7; }
+
+    .collab-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.95rem;
+      border-radius: 100px;
+      background: rgba(196,154,60,0.1);
+      border: 1px solid rgba(196,154,60,0.35);
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-block-end: 1.2rem;
+      letter-spacing: 0.04em;
+    }
+    .collab-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 6px rgba(74,222,128,0.7);
+      animation: dotPulse 2s infinite;
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .collab-strip h3 { font-size: clamp(1.6rem, 2.8vw, 2.2rem); margin-block-end: 0.8rem; color: var(--cream); }
+    .collab-strip p { font-size: 0.98rem; color: var(--cream-dim); max-width: 54ch; margin-inline: auto; margin-block-end: 1.6rem; line-height: 1.7; }
+
+    /* 3 Minimalist Collaboration Cards */
+    .collab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-block-end: 1.8rem;
+      text-align: center;
+    }
+    .collab-item {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.2rem 1rem;
+      transition: all 0.3s var(--ease);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .collab-item:hover {
+      background: rgba(196,154,60,0.08);
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    }
+    .collab-item-ico {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(196,154,60,0.12);
+      border: 1px solid rgba(196,154,60,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      font-size: 1.3rem;
+      transition: all 0.3s var(--ease);
+    }
+    .collab-item:hover .collab-item-ico {
+      background: var(--gold);
+      color: #110e0a;
+      transform: scale(1.08);
+    }
+    .collab-item-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--cream);
+    }
+    .collab-item-sub {
+      font-size: 0.76rem;
+      color: var(--cream-dim);
+      line-height: 1.4;
+    }
+
     .collab-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
 
-    /* High-Fidelity Culinary Art Stage */
-    .collab-art-stage {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.8rem;
-      width: 100%;
-      max-width: 580px;
-      height: 195px;
-      position: relative;
-      background: radial-gradient(ellipse at 50% 60%, rgba(196,154,60,0.14) 0%, rgba(20,16,11,0.7) 65%, #0d0a07 100%);
-      border-radius: 20px;
-      border: 1px solid rgba(196,154,60,0.3);
-      box-shadow: inset 0 0 35px rgba(0,0,0,0.8), 0 12px 35px rgba(0,0,0,0.6);
-      overflow: visible;
-    }
-    .collab-svg-wrap {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .collab-svg {
-      width: 100%;
-      max-width: 560px;
-      height: 100%;
-      overflow: visible;
-    }
-
-    /* REALISTIC PIZZA CHEF & DOUGH TOSS ANIMATION (Matching Video Dynamics) */
-    .anim-chef-body {
-      transform-origin: 105px 150px;
-      animation: chefBodyBreathing 2.8s ease-in-out infinite;
-    }
-    @keyframes chefBodyBreathing {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      30%      { transform: translateY(2px) rotate(0.5deg); }
-      70%      { transform: translateY(-2px) rotate(-0.5deg); }
-    }
-
-    .anim-chef-arm-l {
-      transform-origin: 90px 105px;
-      animation: chefArmLeftLaunch 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-    .anim-chef-arm-r {
-      transform-origin: 115px 105px;
-      animation: chefArmRightLaunch 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-    @keyframes chefArmLeftLaunch {
-      0%   { transform: rotate(0deg) translateY(0); }
-      20%  { transform: rotate(-8deg) translateY(3px); }
-      45%  { transform: rotate(14deg) translateY(-14px); } /* Toss upwards */
-      70%  { transform: rotate(-4deg) translateY(-4px); }  /* Receive */
-      100% { transform: rotate(0deg) translateY(0); }
-    }
-    @keyframes chefArmRightLaunch {
-      0%   { transform: rotate(0deg) translateY(0); }
-      22%  { transform: rotate(-10deg) translateY(4px); }
-      48%  { transform: rotate(16deg) translateY(-16px); } /* Flick launch */
-      72%  { transform: rotate(-3deg) translateY(-5px); }  /* Catch */
-      100% { transform: rotate(0deg) translateY(0); }
-    }
-
-    /* Realistic 3D Pizza Dough Flight & Spin (Parabolic launch + hover + perspective spin) */
-    .anim-pizza-disc-flight {
-      transform-origin: 105px 65px;
-      animation: realPizzaParabolicFlight 2.8s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-    }
-    @keyframes realPizzaParabolicFlight {
-      0%   { transform: translateY(12px) scale(0.92) rotate(0deg); opacity: 0.95; }
-      18%  { transform: translateY(8px) scale(0.96) rotate(15deg); }
-      45%  { transform: translateY(-52px) scale(1.15) rotate(180deg); opacity: 1; filter: drop-shadow(0 14px 18px rgba(196,154,60,0.5)); }
-      68%  { transform: translateY(-40px) scale(1.12) rotate(270deg); }
-      88%  { transform: translateY(-4px) scale(0.98) rotate(340deg); }
-      100% { transform: translateY(12px) scale(0.92) rotate(360deg); opacity: 0.95; }
-    }
-
-    /* Internal Texture High-Speed Spin inside the Dough */
-    .anim-dough-spin-surface {
-      transform-origin: 105px 65px;
-      animation: doughFastSurfaceSpin 0.7s linear infinite;
-    }
-    @keyframes doughFastSurfaceSpin {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Fine Flour Dust Cloud Dispersing */
-    .anim-flour-cloud {
-      animation: flourVaporDisperse 2.8s ease-out infinite;
-      transform-origin: 105px 60px;
-    }
-    @keyframes flourVaporDisperse {
-      0%   { opacity: 0; transform: scale(0.5); }
-      42%  { opacity: 0.9; transform: scale(1.3) translateY(-18px); }
-      70%  { opacity: 0.4; transform: scale(1.6) translateY(-28px); }
-      100% { opacity: 0; transform: scale(1.8) translateY(-35px); }
-    }
-
-    /* Wood-Fired Oven Fire Radiance */
-    .anim-oven-embers {
-      animation: ovenFireGlow 2s ease-in-out infinite alternate;
-      transform-origin: 45px 135px;
-    }
-    @keyframes ovenFireGlow {
-      0%   { opacity: 0.65; transform: scale(0.96); }
-      100% { opacity: 1.0; transform: scale(1.08); filter: drop-shadow(0 0 12px #ea580c); }
-    }
-
-    /* CRAFT BARTENDER & REALISTIC BEER FLOW */
-    .anim-bartender-pull {
-      transform-origin: 410px 60px;
-      animation: tapPullArc 3.2s ease-in-out infinite alternate;
-    }
-    @keyframes tapPullArc {
-      0%, 15%  { transform: rotate(0deg); }
-      35%, 85% { transform: rotate(10deg); }
-      100%     { transform: rotate(0deg); }
-    }
-
-    .anim-beer-stream-flow {
-      stroke-dasharray: 6 3;
-      animation: continuousLaminarStream 0.45s linear infinite;
-    }
-    @keyframes continuousLaminarStream {
-      0%   { stroke-dashoffset: 0; }
-      100% { stroke-dashoffset: 18; }
-    }
-
-    .anim-effervescence-1 { animation: carbBubbleRise 1.4s ease-in infinite; }
-    .anim-effervescence-2 { animation: carbBubbleRise 1.9s ease-in infinite 0.3s; }
-    .anim-effervescence-3 { animation: carbBubbleRise 1.6s ease-in infinite 0.7s; }
-    .anim-effervescence-4 { animation: carbBubbleRise 2.1s ease-in infinite 1.1s; }
-    @keyframes carbBubbleRise {
-      0%   { transform: translateY(0) scale(0.7); opacity: 0; }
-      35%  { opacity: 0.9; }
-      100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
-    }
-
-    .anim-beer-foam-head {
-      animation: foamBreathePulse 2.4s ease-in-out infinite alternate;
-      transform-origin: 382px 108px;
-    }
-    @keyframes foamBreathePulse {
-      0%   { transform: scaleY(0.96) scaleX(0.98); }
-      100% { transform: scaleY(1.1) scaleX(1.03); filter: drop-shadow(0 0 6px rgba(255,255,255,0.7)); }
+    @media (max-width: 700px) {
+      .collab-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+      .collab-item {
+        flex-direction: row;
+        text-align: start;
+        padding: 0.9rem 1rem;
+        gap: 0.9rem;
+      }
     }
 
     /* ============================================================
@@ -2839,6 +2869,173 @@
         <p>צפו בלו״ז המלא לפי חצאי ימים — צהריים (12:00–18:00) וערב (18:00–02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
+      <!-- Live Jazz Music Animation Stage (Saxophone Player & Drummer) -->
+      <div class="cal-jazz-stage" aria-hidden="true">
+        <svg class="cal-jazz-svg" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="saxGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="40%" stop-color="#f59e0b"/>
+              <stop offset="80%" stop-color="#b45309"/>
+              <stop offset="100%" stop-color="#78350f"/>
+            </linearGradient>
+            <linearGradient id="cymbalGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#fef9c3"/>
+              <stop offset="50%" stop-color="#eab308"/>
+              <stop offset="100%" stop-color="#78350f"/>
+            </linearGradient>
+            <linearGradient id="drumShellGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2d2218"/>
+              <stop offset="50%" stop-color="#18130e"/>
+              <stop offset="100%" stop-color="#0a0805"/>
+            </linearGradient>
+            <radialGradient id="stageSpotlight" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c49a3c" stop-opacity="0.25"/>
+              <stop offset="70%" stop-color="#1a140d" stop-opacity="0.05"/>
+              <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Stage Spotlights -->
+          <circle cx="100" cy="60" r="55" fill="url(#stageSpotlight)"/>
+          <circle cx="500" cy="60" r="55" fill="url(#stageSpotlight)"/>
+
+          <!-- ================= 1. SAXOPHONE PLAYER (LEFT) ================= -->
+          <g class="anim-sax-player">
+            <!-- Musician Silhouette Body -->
+            <path d="M 65 118 L 72 78 Q 86 72 98 78 L 105 118 Z" fill="#140f0a" stroke="#2a2016" stroke-width="1.2"/>
+            <!-- Collar / Scarf Detail -->
+            <path d="M 80 77 L 85 86 L 90 77 Z" fill="#c49a3c" opacity="0.8"/>
+            
+            <!-- Head & Fedora Hat (Tilted back in soulful jazz groove) -->
+            <path d="M 76 68 Q 74 56 84 50 Q 94 48 98 56 Q 100 64 96 70 Q 86 73 76 68 Z" fill="#18130e"/>
+            <!-- Fedora Brim & Crown -->
+            <path d="M 66 54 Q 84 46 106 50 L 100 48 Q 84 42 70 50 Z" fill="#090806"/>
+            <path d="M 74 50 Q 76 36 90 38 Q 96 40 95 49 Z" fill="#0d0a07"/>
+            <path d="M 75 48 L 95 48" stroke="#c49a3c" stroke-width="1.2" opacity="0.9"/> <!-- Gold hat ribbon -->
+
+            <!-- Hands & Fingers on Keys -->
+            <!-- Left Hand -->
+            <path d="M 82 82 Q 95 80 102 75" stroke="#2a2016" stroke-width="4.5" stroke-linecap="round"/>
+            <!-- Right Hand -->
+            <path d="M 86 92 Q 104 88 114 84" stroke="#2a2016" stroke-width="4.5" stroke-linecap="round"/>
+
+            <!-- Brass Saxophone (Curved Body, Neck, Bell) -->
+            <!-- Neck & Mouthpiece -->
+            <path d="M 88 64 Q 96 66 102 74" stroke="url(#saxGoldGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="87" cy="63" r="1.5" fill="#140f0a"/> <!-- Mouthpiece -->
+            <!-- Saxophone Main Tube Body -->
+            <path d="M 102 74 L 115 98 Q 120 108 130 102 Q 138 96 136 78" stroke="url(#saxGoldGrad)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <!-- Saxophone Bell (Flared Opening) -->
+            <path d="M 132 82 Q 138 72 144 68 Q 146 76 138 84 Z" fill="url(#saxGoldGrad)" stroke="#78350f" stroke-width="0.8"/>
+            <ellipse cx="140" cy="74" rx="4.5" ry="8" fill="#451a03" stroke="url(#saxGoldGrad)" stroke-width="1.2" transform="rotate(-25 140 74)"/>
+            <!-- Key Rods & Touchpieces -->
+            <line x1="105" y1="78" x2="114" y2="94" stroke="#fef08a" stroke-width="1.2"/>
+            <circle cx="106" cy="80" r="1.4" fill="#fef08a"/>
+            <circle cx="110" cy="86" r="1.4" fill="#fef08a"/>
+            <circle cx="113" cy="92" r="1.4" fill="#fef08a"/>
+          </g>
+
+          <!-- Floating Golden Jazz Notes from Sax Bell -->
+          <g class="anim-jazz-note-1">
+            <text x="144" y="58" fill="#c49a3c" font-size="14" font-weight="900">♪</text>
+          </g>
+          <g class="anim-jazz-note-2">
+            <text x="150" y="44" fill="#fef08a" font-size="16" font-weight="900">♫</text>
+          </g>
+          <g class="anim-jazz-note-3">
+            <text x="136" y="34" fill="#f59e0b" font-size="13" font-weight="900">♩</text>
+          </g>
+
+          <!-- ================= CENTER: LIVE GROOVES BADGE & EQUALIZER ================= -->
+          <g transform="translate(225, 24)">
+            <!-- Subtle Gold Accent Frame -->
+            <rect x="0" y="0" width="150" height="72" rx="14" fill="#140f0a" stroke="rgba(196,154,60,0.3)" stroke-width="1.2"/>
+            <text x="75" y="24" fill="#c49a3c" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="2">EZRA SESSIONS</text>
+            <text x="75" y="38" fill="#fef08a" font-size="7.5" font-weight="700" text-anchor="middle" letter-spacing="0.5">LIVE JAZZ &amp; GROOVE</text>
+            
+            <!-- Animated Soundwave EQ Bars -->
+            <g class="anim-drum-soundwave" transform="translate(42, 46)">
+              <rect x="0" y="6" width="3" height="10" rx="1.5" fill="#c49a3c"/>
+              <rect x="6" y="2" width="3" height="14" rx="1.5" fill="#fef08a"/>
+              <rect x="12" y="8" width="3" height="8" rx="1.5" fill="#c49a3c"/>
+              <rect x="18" y="0" width="3" height="16" rx="1.5" fill="#f59e0b"/>
+              <rect x="24" y="5" width="3" height="11" rx="1.5" fill="#fef08a"/>
+              <rect x="30" y="9" width="3" height="7" rx="1.5" fill="#c49a3c"/>
+              <rect x="36" y="3" width="3" height="13" rx="1.5" fill="#f59e0b"/>
+              <rect x="42" y="7" width="3" height="9" rx="1.5" fill="#fef08a"/>
+              <rect x="48" y="1" width="3" height="15" rx="1.5" fill="#c49a3c"/>
+              <rect x="54" y="6" width="3" height="10" rx="1.5" fill="#fef08a"/>
+              <rect x="60" y="10" width="3" height="6" rx="1.5" fill="#c49a3c"/>
+            </g>
+          </g>
+
+          <!-- ================= 2. JAZZ DRUMMER & KIT (RIGHT) ================= -->
+          <!-- Vintage Drum Kit Hardware -->
+          <!-- Bass Drum (Kick) with EZRA Logo -->
+          <g transform="translate(470, 68)">
+            <ellipse cx="26" cy="30" rx="26" ry="18" fill="url(#drumShellGrad)" stroke="url(#cymbalGoldGrad)" stroke-width="2"/>
+            <text x="26" y="33" fill="#c49a3c" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1.5">EZRA</text>
+            <text x="26" y="41" fill="#78350f" font-size="5" font-weight="700" text-anchor="middle">TLV</text>
+          </g>
+
+          <!-- Snare Drum (Center-Left of Drummer) -->
+          <g transform="translate(452, 75)">
+            <ellipse cx="14" cy="8" rx="15" ry="6" fill="#f8fafc" stroke="url(#cymbalGoldGrad)" stroke-width="1.5"/>
+            <rect x="0" y="8" width="28" height="10" rx="2" fill="url(#drumShellGrad)" stroke="#451a03" stroke-width="1"/>
+            <!-- Snare Stand -->
+            <line x1="14" y1="18" x2="14" y2="40" stroke="#78350f" stroke-width="2"/>
+            <line x1="14" y1="36" x2="4" y2="42" stroke="#78350f" stroke-width="1.5"/>
+            <line x1="14" y1="36" x2="24" y2="42" stroke="#78350f" stroke-width="1.5"/>
+          </g>
+
+          <!-- Hi-Hat Cymbals (Far Left of Kit) -->
+          <g transform="translate(440, 52)">
+            <ellipse cx="10" cy="12" rx="14" ry="3.5" fill="url(#cymbalGoldGrad)" stroke="#78350f" stroke-width="0.8"/>
+            <ellipse cx="10" cy="14" rx="14" ry="3.5" fill="url(#cymbalGoldGrad)" stroke="#78350f" stroke-width="0.8"/>
+            <!-- Hi-Hat Stand -->
+            <line x1="10" y1="14" x2="10" y2="64" stroke="#78350f" stroke-width="2"/>
+          </g>
+
+          <!-- Ride Cymbal (Top Right of Kit) -->
+          <g transform="translate(520, 36)">
+            <!-- Animated Sound Shockwave Ring -->
+            <ellipse class="anim-cymbal-wave" cx="16" cy="6" rx="18" ry="6" fill="none" stroke="#fef08a" stroke-width="1.2"/>
+            <!-- Polished Gold Cymbal Disc -->
+            <ellipse cx="16" cy="6" rx="20" ry="5.5" fill="url(#cymbalGoldGrad)" stroke="#78350f" stroke-width="1"/>
+            <circle cx="16" cy="6" r="2.2" fill="#78350f"/>
+            <!-- Cymbal Stand -->
+            <line x1="16" y1="6" x2="16" y2="78" stroke="#78350f" stroke-width="2"/>
+            <line x1="16" y1="68" x2="6" y2="80" stroke="#78350f" stroke-width="1.5"/>
+            <line x1="16" y1="68" x2="26" y2="80" stroke="#78350f" stroke-width="1.5"/>
+          </g>
+
+          <!-- Drummer Musician Figure -->
+          <g>
+            <!-- Torso & Posture -->
+            <path d="M 482 118 L 486 74 Q 498 68 510 74 L 514 118 Z" fill="#140f0a" stroke="#2a2016" stroke-width="1.2"/>
+            <!-- Head looking at Snare/Ride -->
+            <circle cx="498" cy="58" r="10" fill="#18130e"/>
+            <!-- Drummer Cap / Hair -->
+            <path d="M 490 54 Q 498 46 508 52 Q 502 46 492 48 Z" fill="#090806"/>
+            
+            <!-- Drummer Left Arm with Drumstick (Tapping Snare) -->
+            <g class="anim-drummer-arm-l">
+              <path d="M 488 78 Q 474 86 464 82" stroke="#2a2016" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <!-- Drumstick striking snare -->
+              <line x1="464" y1="82" x2="456" y2="80" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/>
+            </g>
+
+            <!-- Drummer Right Arm with Drumstick (Tapping Ride Cymbal) -->
+            <g class="anim-drummer-arm-r">
+              <path d="M 508 78 Q 522 70 530 52" stroke="#2a2016" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <!-- Drumstick tapping ride cymbal -->
+              <line x1="530" y1="52" x2="534" y2="42" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
       <div class="month-cal-container">
         <div class="month-cal-head">
           <div class="month-cal-nav">
@@ -3023,248 +3220,40 @@
   </section>
 
   <!-- ============================================================
-       7. COLLAB & CURATORS
+       7. COLLAB & CURATORS (CLEAN & MINIMALIST)
   ============================================================ -->
   <section class="section-soft" id="collab">
     <div class="wrap">
       <div class="collab-strip">
-        <!-- High-Fidelity Realistic Culinary & Craft Bar Animation Stage -->
-        <div class="collab-art-stage">
-          <div class="collab-svg-wrap">
-            <svg class="collab-svg" viewBox="0 0 560 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <!-- Gradients & Shaders -->
-                <radialGradient id="ovenFireRadial" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#fbbf24" stop-opacity="1"/>
-                  <stop offset="40%" stop-color="#f97316" stop-opacity="0.85"/>
-                  <stop offset="75%" stop-color="#dc2626" stop-opacity="0.5"/>
-                  <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0"/>
-                </radialGradient>
+        <div class="collab-badge-pill">
+          <span class="collab-badge-dot"></span>
+          יוזמות תרבות, מוזיקה וקולינריה
+        </div>
 
-                <linearGradient id="doughRealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fef08a"/>
-                  <stop offset="35%" stop-color="#fcd34d"/>
-                  <stop offset="70%" stop-color="#d97706"/>
-                  <stop offset="100%" stop-color="#92400e"/>
-                </linearGradient>
+        <h3>רוצים ליזום אירוע, לתקלט או לבשל בעזרא?</h3>
+        <p>
+          עזרא הוא בית פתוח לאמנים, תקליטנים, שפים ויוצרים. אנחנו תמיד שמחים לחבר בין קולינריה מדויקת, סאונד אנלוגי ואנשים טובים.
+        </p>
 
-                <linearGradient id="doughCrustRim" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#fef9c3"/>
-                  <stop offset="50%" stop-color="#eab308"/>
-                  <stop offset="100%" stop-color="#78350f"/>
-                </linearGradient>
-
-                <linearGradient id="beerLagerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#fef08a"/>
-                  <stop offset="30%" stop-color="#f59e0b"/>
-                  <stop offset="85%" stop-color="#d97706"/>
-                  <stop offset="100%" stop-color="#78350f"/>
-                </linearGradient>
-
-                <linearGradient id="brassMetalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fef9c3"/>
-                  <stop offset="30%" stop-color="#f59e0b"/>
-                  <stop offset="70%" stop-color="#b45309"/>
-                  <stop offset="100%" stop-color="#78350f"/>
-                </linearGradient>
-
-                <linearGradient id="skinShade" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fed7aa"/>
-                  <stop offset="60%" stop-color="#fba868"/>
-                  <stop offset="100%" stop-color="#ea580c"/>
-                </linearGradient>
-
-                <linearGradient id="apronSlate" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#334155"/>
-                  <stop offset="50%" stop-color="#1e293b"/>
-                  <stop offset="100%" stop-color="#0f172a"/>
-                </linearGradient>
-
-                <linearGradient id="counterSmokedOak" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#1f160e"/>
-                  <stop offset="50%" stop-color="#3b2b1d"/>
-                  <stop offset="100%" stop-color="#150e08"/>
-                </linearGradient>
-              </defs>
-
-              <!-- ================= BACKGROUND ARCHITECTURE ================= -->
-              <!-- Wood-Fired Brick Oven (Left) -->
-              <path d="M 24 165 C 24 75, 138 75, 138 165 Z" fill="#18130e" stroke="#3d2c1c" stroke-width="2"/>
-              <path d="M 36 165 C 36 94, 126 94, 126 165 Z" fill="#0d0906" stroke="#2a1e13" stroke-width="1.5"/>
-              
-              <!-- Oven Glowing Fire Hearth -->
-              <ellipse class="anim-oven-embers" cx="81" cy="155" rx="35" ry="16" fill="url(#ovenFireRadial)"/>
-              <path class="anim-oven-embers" d="M 60 162 Q 72 135 81 142 Q 92 130 102 162 Z" fill="#f59e0b" opacity="0.9"/>
-              <path class="anim-oven-embers" d="M 70 162 Q 81 140 86 146 Q 94 138 98 162 Z" fill="#fef08a" opacity="0.85"/>
-
-              <!-- Bar Counter Across Bottom -->
-              <rect x="15" y="156" width="530" height="22" rx="4" fill="url(#counterSmokedOak)" stroke="#4d3824" stroke-width="1.5"/>
-              <rect x="18" y="154" width="524" height="4" rx="2" fill="#c49a3c" opacity="0.45"/>
-
-              <!-- ================= 1. THE PIZZA CHEF (LEFT) ================= -->
-              <!-- Chef Torso, Head & Apron -->
-              <g class="anim-chef-body">
-                <!-- Shirt Body -->
-                <path d="M 78 156 L 82 108 Q 98 102 114 108 L 118 156 Z" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
-                
-                <!-- Slate Denim Apron -->
-                <path d="M 85 116 L 111 116 L 114 156 L 82 156 Z" fill="url(#apronSlate)" stroke="#475569" stroke-width="1.2"/>
-                <!-- Leather Harness Cross-Straps -->
-                <path d="M 88 108 L 94 116 M 108 108 L 102 116" stroke="#b45309" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="94" cy="116" r="1.8" fill="#fef08a"/>
-                <circle cx="102" cy="116" r="1.8" fill="#fef08a"/>
-                <!-- Utility Towel in Pocket -->
-                <path d="M 88 132 L 98 132 L 96 146 L 90 144 Z" fill="#f8fafc" opacity="0.75"/>
-
-                <!-- Neck & Face Profile (Looking Upwards at 40° towards dough) -->
-                <path d="M 94 108 L 94 98 L 104 98 L 104 108 Z" fill="url(#skinShade)"/>
-                <!-- Head / Jaw / Profile -->
-                <path d="M 90 94 Q 88 82 96 74 Q 106 72 112 80 Q 115 88 111 96 Q 102 100 90 94 Z" fill="url(#skinShade)"/>
-                <!-- Focused Facial Features & Smile -->
-                <path d="M 104 82 Q 108 84 106 88" stroke="#431407" stroke-width="1.2" fill="none"/>
-                <path d="M 102 90 Q 107 92 110 88" stroke="#431407" stroke-width="1.4" fill="none"/>
-                
-                <!-- Backward Black Bandana / Cap -->
-                <path d="M 91 80 Q 95 70 108 72 Q 114 74 113 82 Q 104 76 91 80 Z" fill="#09090b" stroke="#27272a" stroke-width="1"/>
-                <path d="M 89 82 Q 85 86 83 94 Q 87 90 91 88 Z" fill="#09090b"/>
-              </g>
-
-              <!-- Chef Left Arm & Hand (Athletic Launch & Catch Motion) -->
-              <g class="anim-chef-arm-l">
-                <path d="M 84 110 Q 72 96 82 80 Q 88 74 91 82 Q 84 94 92 110 Z" fill="url(#skinShade)" stroke="#7c2d12" stroke-width="0.8"/>
-                <!-- Left Hand & Agile Open Fingers -->
-                <circle cx="85" cy="77" r="4.5" fill="url(#skinShade)"/>
-                <path d="M 82 76 Q 84 68 88 72" stroke="#7c2d12" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M 85 75 Q 88 66 91 71" stroke="#7c2d12" stroke-width="1.5" stroke-linecap="round"/>
-              </g>
-
-              <!-- Chef Right Arm & Hand (Upward Spin Launch Motion) -->
-              <g class="anim-chef-arm-r">
-                <path d="M 112 110 Q 124 96 114 80 Q 108 74 105 82 Q 112 94 104 110 Z" fill="url(#skinShade)" stroke="#7c2d12" stroke-width="0.8"/>
-                <!-- Right Hand & Flicking Fingers -->
-                <circle cx="111" cy="77" r="4.5" fill="url(#skinShade)"/>
-                <path d="M 114 76 Q 112 68 108 72" stroke="#7c2d12" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M 111 75 Q 108 66 105 71" stroke="#7c2d12" stroke-width="1.5" stroke-linecap="round"/>
-              </g>
-
-              <!-- Dispersing Flour Cloud & Ambient Micro-Glow -->
-              <g class="anim-flour-cloud">
-                <circle cx="78" cy="42" r="1.6" fill="#ffffff" opacity="0.9"/>
-                <circle cx="122" cy="34" r="2.2" fill="#fef08a" opacity="0.85"/>
-                <circle cx="132" cy="56" r="1.4" fill="#ffffff" opacity="0.75"/>
-                <circle cx="68" cy="62" r="1.8" fill="#fef08a" opacity="0.8"/>
-                <circle cx="102" cy="24" r="1.5" fill="#ffffff" opacity="0.95"/>
-              </g>
-
-              <!-- ================= 3D PIZZA DOUGH IN FLIGHT ================= -->
-              <!-- True Parabolic Ascent & 3D Perspective Flight Stage -->
-              <g class="anim-pizza-disc-flight">
-                <!-- Dough 3D Tilted Perspective Base -->
-                <ellipse cx="98" cy="58" rx="34" ry="11" fill="url(#doughRealGrad)" stroke="url(#doughCrustRim)" stroke-width="2" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.5))"/>
-                
-                <!-- Internal Spinning Surface with Stretch Rings & Artisanal Blisters -->
-                <g class="anim-dough-spin-surface">
-                  <ellipse cx="98" cy="58" rx="27" ry="8" fill="#fef08a" stroke="#ca8a04" stroke-width="1" opacity="0.85"/>
-                  <ellipse cx="98" cy="58" rx="18" ry="5" fill="#fef9c3" opacity="0.75"/>
-                  <!-- Authentic Wood-Oven Blister Spots -->
-                  <circle cx="86" cy="56" r="2.2" fill="#78350f" opacity="0.8"/>
-                  <circle cx="108" cy="60" r="1.8" fill="#92400e" opacity="0.8"/>
-                  <circle cx="102" cy="54" r="1.5" fill="#78350f" opacity="0.9"/>
-                  <circle cx="92" cy="61" r="1.6" fill="#92400e" opacity="0.75"/>
-                  <!-- Radiating Yeast Dough Spiral Texture -->
-                  <path d="M 88 57 Q 98 52 108 58" stroke="#ca8a04" stroke-width="0.8" opacity="0.6" fill="none"/>
-                  <path d="M 92 60 Q 98 63 104 56" stroke="#ca8a04" stroke-width="0.8" opacity="0.6" fill="none"/>
-                </g>
-              </g>
-
-              <!-- ================= CENTER DIVIDER: EZRA EMBLEM ================= -->
-              <g transform="translate(230, 48)">
-                <rect x="0" y="0" width="100" height="74" rx="14" fill="#140f0a" stroke="url(#brassMetalGrad)" stroke-width="1.6" filter="drop-shadow(0 6px 14px rgba(0,0,0,0.8))"/>
-                <text x="50" y="24" fill="#c49a3c" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="2.5">EZRA</text>
-                <path d="M 18 31 L 82 31" stroke="url(#brassMetalGrad)" stroke-width="0.8" opacity="0.7"/>
-                <text x="50" y="46" fill="#fef08a" font-size="7.5" font-weight="700" text-anchor="middle" letter-spacing="0.5">WOOD OVEN & TAP</text>
-                <text x="50" y="60" fill="#a89a85" font-size="6.8" font-weight="500" text-anchor="middle" letter-spacing="1">FLORENTIN</text>
-              </g>
-
-              <!-- ================= 2. THE CRAFT BARTENDER (RIGHT) ================= -->
-              <!-- Brass Draft Beer Tower -->
-              <g transform="translate(370, 72)">
-                <!-- Tower Flange Base -->
-                <rect x="0" y="52" width="18" height="32" rx="3" fill="url(#brassMetalGrad)" stroke="#78350f" stroke-width="1"/>
-                <!-- Tower Column -->
-                <rect x="4" y="10" width="10" height="46" fill="url(#brassMetalGrad)" stroke="#78350f" stroke-width="1"/>
-                <!-- Curved Gooseneck Spout -->
-                <path d="M 9 18 Q 9 30 24 34" stroke="url(#brassMetalGrad)" stroke-width="5.5" stroke-linecap="round" fill="none"/>
-                
-                <!-- Animated Pull Tap Handle -->
-                <g class="anim-bartender-pull">
-                  <rect x="7" y="-22" width="4.5" height="28" rx="2" fill="#1e1812" stroke="url(#brassMetalGrad)" stroke-width="1"/>
-                  <circle cx="9" cy="-22" r="5.5" fill="url(#brassMetalGrad)"/>
-                </g>
-              </g>
-
-              <!-- Bartender Figure -->
-              <g>
-                <!-- Shirt Torso -->
-                <path d="M 436 156 L 440 106 Q 456 100 472 106 L 476 156 Z" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
-                <!-- Leather Bartender Harness & Apron -->
-                <path d="M 443 114 L 469 114 L 472 156 L 440 156 Z" fill="#291e14" stroke="#78350f" stroke-width="1.2"/>
-                <path d="M 448 106 L 452 114 M 464 106 L 460 114" stroke="#c49a3c" stroke-width="1.8" stroke-linecap="round"/>
-                
-                <!-- Neck & Focused Bartender Profile -->
-                <path d="M 452 106 L 452 96 L 462 96 L 462 106 Z" fill="url(#skinShade)"/>
-                <!-- Head looking attentively at the glass -->
-                <path d="M 448 94 Q 446 80 456 74 Q 466 72 472 80 Q 475 88 470 96 Q 460 100 448 94 Z" fill="url(#skinShade)"/>
-                <!-- Groomed Mustache & Profile -->
-                <path d="M 450 82 Q 454 80 458 84" stroke="#1c1917" stroke-width="1.8" stroke-linecap="round"/>
-                <path d="M 451 88 Q 456 86 460 88" fill="#1c1917"/>
-                <!-- Hair -->
-                <path d="M 454 74 Q 466 66 475 76 Q 470 70 460 70 Z" fill="#1c1917"/>
-
-                <!-- Left Arm Pulling Tap Handle -->
-                <path d="M 444 110 Q 418 96 386 64" stroke="url(#skinShade)" stroke-width="7" stroke-linecap="round" fill="none"/>
-                <circle cx="386" cy="64" r="4.5" fill="url(#skinShade)"/>
-
-                <!-- Right Arm Holding Beer Glass Under Tap -->
-                <path d="M 466 114 Q 442 126 414 134" stroke="url(#skinShade)" stroke-width="7" stroke-linecap="round" fill="none"/>
-                <circle cx="414" cy="134" r="4.5" fill="url(#skinShade)"/>
-              </g>
-
-              <!-- Continuous Laminar Amber Beer Stream -->
-              <path class="anim-beer-stream-flow" d="M 394 106 Q 401 118 404 135" stroke="url(#beerLagerGrad)" stroke-width="4.2" stroke-linecap="round" fill="none"/>
-
-              <!-- Crystal Tulip Craft Beer Glass with Rising Bubbles & Rich Foam -->
-              <g transform="translate(392, 120) rotate(-18)">
-                <!-- Glass Stem & Flat Foot Base -->
-                <path d="M 12 38 L 12 48 M 4 48 L 20 48" stroke="rgba(255,255,255,0.7)" stroke-width="2.2" stroke-linecap="round"/>
-                <!-- Crystal Glass Body Outline -->
-                <path d="M 3 8 Q 0 28 12 38 Q 24 28 21 8 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
-                <!-- Liquid Amber Craft Beer Fill -->
-                <path d="M 4 12 Q 1 27 12 36 Q 23 27 20 12 Z" fill="url(#beerLagerGrad)"/>
-                
-                <!-- Effervescent Streaming Micro-Bubbles -->
-                <circle class="anim-effervescence-1" cx="8" cy="30" r="1.1" fill="#ffffff"/>
-                <circle class="anim-effervescence-2" cx="13" cy="33" r="1.0" fill="#fef08a"/>
-                <circle class="anim-effervescence-3" cx="16" cy="28" r="1.1" fill="#ffffff"/>
-                <circle class="anim-effervescence-4" cx="11" cy="24" r="0.9" fill="#fef08a"/>
-
-                <!-- Rich Velvety Nitro/Draft Foam Head -->
-                <g class="anim-beer-foam-head">
-                  <ellipse cx="12" cy="10" rx="10" ry="4.5" fill="#ffffff"/>
-                  <circle cx="6" cy="8" r="4.2" fill="#ffffff"/>
-                  <circle cx="12" cy="6.5" r="4.8" fill="#ffffff"/>
-                  <circle cx="18" cy="8" r="4.2" fill="#ffffff"/>
-                </g>
-              </g>
-            </svg>
+        <!-- 3 Minimalist Category Cards -->
+        <div class="collab-grid">
+          <div class="collab-item">
+            <div class="collab-item-ico">🍕</div>
+            <div class="collab-item-title">קולינריה וטאבון</div>
+            <div class="collab-item-sub">שפים אורחים · פופ-אפים · ספיישלים מהטאבון</div>
+          </div>
+          <div class="collab-item">
+            <div class="collab-item-ico">🎧</div>
+            <div class="collab-item-title">מוזיקה ותקליטים</div>
+            <div class="collab-item-sub">סטים על ויניל · השמעות אלבומים · הופעות חיות</div>
+          </div>
+          <div class="collab-item">
+            <div class="collab-item-ico">🍸</div>
+            <div class="collab-item-title">יין ומיקסולוגיה</div>
+            <div class="collab-item-sub">ערבי יין טבעי · יקבי בוטיק · השקות קוקטיילים</div>
           </div>
         </div>
 
-        <span class="eyebrow">יוזמים אירוע</span>
-        <h3>רוצים ליזום אירוע, לתקלט או לבשל בעזרא?</h3>
-        <p>
-          אנחנו תמיד שמחים לארח תקליטנים, שפים אורחים, מוזיקאים ויוזמות קהילתיות שמתאימות לווייב של עזרא. דברו איתנו ונבנה ערב ביחד.
-        </p>
         <div class="collab-actions">
           <a class="btn btn--green" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%94%D7%A6%D7%99%D7%A2%20%D7%A9%D7%99%D7%AA%D7%95%D7%A3%20%D7%A4%D7%A2%D7%95%D7%9C%D7%94%20%D7%90%D7%95%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%91%D7%A2%D7%96%D7%A8%D7%90" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
