@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-25b";
+const BUILD_ID = "2026-08-25c";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -78,7 +78,10 @@ const SRC = {
   notes:     "long_textlwbyhlq0",     // Additional notes or special requests
 };
 // Belt and braces on top of the allow-list above: drop any notes line that talks about money.
-const MONEY_LINE = /₪|\bILS\b|\bNIS\b|מחיר|עלות|תשלום|מקדמה|הנחה|סה"כ|סהכ/;
+// Hebrew inflects, and a substring match on the singular does not cover the plural: "העלויות"
+// does not contain "עלות" (ע-ל-ו-י-ו-ת against ע-ל-ו-ת), which is how "אשמח לדעת מה העלויות"
+// survived the first live run. Match stems, and spell out both apostrophes used for ש"ח.
+const MONEY_LINE = /₪|\bILS\b|\bNIS\b|\bprice\b|ש"ח|ש״ח|שקל|מחיר|עלות|עלוי|תשלומ|תשלום|מקדמ|הנחה|הנחת|סה"כ|סה״כ|סהכ|מע"מ|מע״מ|פרייס|תקציב/;
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
 const COMPANY_BOARD = "5099350637";
