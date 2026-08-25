@@ -26,13 +26,19 @@ map covers both.
 | Meaning | Source | Open Events |
 |---|---|---|
 | Event date | `date5bab58wj` | `date_mm6djw2v` |
-| Start / End time | `hour_mm1q610q` / `hour_mm1qa44s` | `hour_mm6dy9b6` / `hour_mm6d1kst` |
+| Start / End time | `hour_mm1q610q` / `hour_mm1qa44s` | `hour_mm6j2kcg` / `hour_mm6d1kst` |
 | Start-End text | `text_mm4t1h0s`, else `text_mm2km76j` | `text_mm6d8r2y` |
 | Event type | `single_selecta6erdt9` | `color_mm6dn79a` |
 | Time of day | `single_select943s5p9` | `color_mm6dh5pe` |
 | Guests | `numeric_mm1qj01x`, else `number0kzol2wl` | `numeric_mm6d85m` |
 | Notes | `long_textlwbyhlq0` | `long_text_mm6d2npw` |
 | Provenance | `<boardId>:<itemId>` | `Source Item` (new text column) |
+
+Start Time is `hour_mm6j2kcg`, not the board's original `hour_mm6dy9b6`. Monday
+exposes no mutation that moves a column - only `create_column(after_column_id)` -
+so restoring the `Start Time | End Time | Start-End` order the other boards use
+meant creating the column anew in position. The original is retired in place and
+still holds its values; deleting it is a separate, deliberate step.
 
 Status labels are validated against the live Open Events board before they are
 sent. `create_labels_if_missing` stays `false`, so an unrecognised event type

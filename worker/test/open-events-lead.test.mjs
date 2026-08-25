@@ -41,7 +41,7 @@ const COLUMNS = [
   { id: "numeric_mm6d85m", title: "Estimated number of guests", type: "numbers", settings_str: "{}" },
   { id: "email_mm6dwhjs", title: "Email address", type: "email", settings_str: "{}" },
   { id: "numeric_mm6dgny5", title: "Discount amount", type: "numbers", settings_str: "{}" },
-  { id: "hour_mm6dy9b6", title: "Start Time", type: "hour", settings_str: "{}" },
+  { id: "hour_mm6j2kcg", title: "Start Time", type: "hour", settings_str: "{}" },
   { id: "text_mm6dreje", title: "gclid", type: "text", settings_str: "{}" },
   { id: "text_mm6dkmdg", title: "Campaign Name", type: "text", settings_str: "{}" },
   { id: "text_mm6d2cwt", title: "Online campaign I.D(לחבר!)", type: "text", settings_str: "{}" },
@@ -127,7 +127,7 @@ if (created) {
   check(c.text_mm6d2cwt === "adgroup_7", "Online campaign I.D not written");
   check(c.text_mm6dreje === "Cj0KTEST", "gclid not written");
   check(c.boolean_mm6d7ret?.checked === "true", "Marketing Approval not ticked");
-  check(c.hour_mm6dy9b6?.hour === 18 && c.hour_mm6d1kst?.hour === 2, "start/end hour not parsed from the slot");
+  check(c.hour_mm6j2kcg?.hour === 18 && c.hour_mm6d1kst?.hour === 2, "start/end hour not parsed from the slot");
   check(c.text_mm6d8r2y === "18:00-02:00", `Start-End is ${JSON.stringify(c.text_mm6d8r2y)}`);
   // The old type-matching builder wrote the customer's name here, because "Campaign Name" matches /name/i.
   check(c.text_mm6dkmdg !== "דנה כהן", "customer name written into the Campaign Name column");
