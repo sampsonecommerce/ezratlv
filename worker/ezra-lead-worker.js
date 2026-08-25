@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-25c";
+const BUILD_ID = "2026-08-25e";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -49,7 +49,10 @@ const OE = {
   status:    "color_mm6d8eqs",        // Status (status) - has a "New Lead" label
   timeOf:    "color_mm6dh5pe",        // Time of event (status): בוקר / צהריים / ערב / גמיש
   notes:     "long_text_mm6d2npw",    // Additional notes or special requests
-  startHour: "hour_mm6dy9b6",         // Start Time
+  // Monday has no mutation that moves a column, only create_column(after_column_id), so putting
+  // Start Time back beside End Time meant creating it anew in the right place. The old column
+  // (hour_mm6dy9b6) sat 22 columns away from End Time and is retired, not yet deleted.
+  startHour: "hour_mm6j2kcg",         // Start Time
   endHour:   "hour_mm6d1kst",         // End Time
   slotText:  "text_mm6d8r2y",         // Start-End
   source:    "text_mm6da5k0",         // Traffic Source
@@ -660,12 +663,24 @@ function mirrorFields(src, labels) {
     date:      (src.cv[SRC.date]?.date || t(SRC.date) || "").trim(),
     startHour: t(SRC.startHour),
     endHour:   t(SRC.endHour),
-    slotText:  pick(SRC.slotText, SRC.slotAlt),
+    // The Start-End text column is only ever filled for leads the website created; staff entering
+    // an event by hand use the two hour pickers and leave it blank. Derive it from them, so the
+    // column reads "20:00-01:00" instead of nothing on every hand-entered booking.
+    slotText:  pick(SRC.slotText, SRC.slotAlt) || slotFromHours(t(SRC.startHour), t(SRC.endHour)),
     eventType,
     timeOf,
     guests:    pick(SRC.guests, SRC.guestsAlt),
     notes:     stripMoney(t(SRC.notes)),
   };
+}
+
+// Two hour-picker values -> "20:00-01:00". Empty unless both ends are known: half a range is more
+// misleading on a calendar than no range at all.
+function slotFromHours(startText, endText) {
+  const a = hourValue(startText), b = hourValue(endText);
+  if (!a || !b) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(a.hour)}:${pad(a.minute)}-${pad(b.hour)}:${pad(b.minute)}`;
 }
 
 // "06:00 PM" -> {hour:18, minute:0}. Monday renders hour columns in 12-hour form but only accepts
