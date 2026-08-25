@@ -40,6 +40,13 @@ jobs:
       - name: Open Events lead routing test
         run: node worker/test/open-events-lead.test.mjs
 
+      # Gate. The mirror sync writes to and deletes from a live board on a cron,
+      # so its ownership rule is not allowed to regress: it may only touch items
+      # carrying a Source Item value. Runs against a stateful mock of all three
+      # boards, no network and no secrets.
+      - name: Mirror sync test
+        run: node worker/test/mirror-sync.test.mjs
+
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
