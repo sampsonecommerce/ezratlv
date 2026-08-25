@@ -33,6 +33,13 @@ jobs:
       - name: Availability contract test
         run: node worker/test/availability.test.mjs
 
+      # Gate. Drives a real /events enquiry through the worker against a mock of the
+      # live Open Events board. Catches the 2026-08-25 class of bug: a group id that
+      # does not exist on the board, which Monday accepts silently and files into
+      # "תאריכים תפוסים" instead of New Leads.
+      - name: Open Events lead routing test
+        run: node worker/test/open-events-lead.test.mjs
+
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
