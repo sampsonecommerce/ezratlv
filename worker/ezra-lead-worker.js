@@ -22,8 +22,42 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-24d";
-const OPEN_EVENTS_GROUP = "topics";
+const BUILD_ID = "2026-08-25a";
+// "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
+// never checked, and exists on none of our three boards - so every Open Events lead failed the
+// group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
+// against the live board: New Leads is group_mm6djw93.
+const OPEN_EVENTS_GROUP = "group_mm6djw93";
+// Groups on the Open Events board that mean a date is genuinely taken. New Leads is deliberately
+// absent: an inbound enquiry must not blank out its own requested date for every other visitor.
+const OPEN_AVAIL_GROUPS = [
+  "group_mm6d3y71",   // תאריכים תפוסים
+  "group_mm6dfrqr",   // Pre Payment
+  "group_mm6dt6jt",   // Proposal Sent
+  "group_mm6dvqnj",   // Closed Deals
+];
+// Open Events has its own column ids, read from the live board on 2026-08-25. Before this they were
+// guessed by column *type*, which wrote the customer name into "Campaign Name" (its title matches
+// /name/i) and left gclid, traffic source, campaign, consent and status empty.
+const OE = {
+  name:      "name",
+  phone:     "phone_mm6dxgj2",        // Phone number
+  email:     "email_mm6dwhjs",        // Email address
+  date:      "date_mm6djw2v",         // Requested event date
+  guests:    "numeric_mm6d85m",       // Estimated number of guests
+  eventType: "color_mm6dn79a",        // Event type (status)
+  status:    "color_mm6d8eqs",        // Status (status) - has a "New Lead" label
+  timeOf:    "color_mm6dh5pe",        // Time of event (status): בוקר / צהריים / ערב / גמיש
+  notes:     "long_text_mm6d2npw",    // Additional notes or special requests
+  startHour: "hour_mm6dy9b6",         // Start Time
+  endHour:   "hour_mm6d1kst",         // End Time
+  slotText:  "text_mm6d8r2y",         // Start-End
+  source:    "text_mm6da5k0",         // Traffic Source
+  campaign:  "text_mm6dkmdg",         // Campaign Name
+  adGroup:   "text_mm6d2cwt",         // Online campaign I.D
+  gclid:     "text_mm6dreje",         // gclid
+  consent:   "boolean_mm6d7ret",      // Marketing Approval
+};
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
 const COMPANY_BOARD = "5099350637";
@@ -269,7 +303,12 @@ export default {
     const schema = await boardSchema(board, TOKEN);
     let cols2 = cols;
     if (schema) {
-      if (isOpenEvents || isNewsletter) cols2 = colsByType(schema, d, notes);
+      if (isOpenEvents || isNewsletter) {
+        cols2 = openEventsCols(schema, d, notes, isNewsletter);
+        // Only if the board has been restructured out from under us: keep the type-matching
+        // heuristic as a last resort rather than saving a lead with nothing but a name on it.
+        if (!Object.keys(cols2).length) cols2 = colsByType(schema, d, notes);
+      }
       const known = new Set(schema.columns.map((c) => c.id));
       const unknown = Object.keys(cols2).filter((k) => !known.has(k));
       if (unknown.length) {
@@ -278,8 +317,14 @@ export default {
         unknown.forEach((k) => delete cols2[k]);
       }
       if (group && !schema.groups.includes(group)) {
-        console.warn(`Board ${board} has no group "${group}" - creating in the board default group.`);
-        group = null;
+        // Falling through to the board default group is wrong on Open Events: its default group is
+        // "תאריכים תפוסים", so a bad group id turns a lead into a blocked date. Browsers also cache
+        // events.html, so the retired "topics" id keeps arriving for a while after a deploy. Prefer
+        // this worker's own constant, and only give up on the group if that is invalid too.
+        const fallback = (board === OPEN_EVENTS_BOARD && schema.groups.includes(OPEN_EVENTS_GROUP))
+          ? OPEN_EVENTS_GROUP : null;
+        console.warn(`Board ${board} has no group "${group}" - using ${fallback || "the board default group"}.`);
+        group = fallback;
       }
     }
     // item name: company for ALL lead types; fall back to person if no company
@@ -394,6 +439,73 @@ async function boardSchema(board, TOKEN) {
   }
 }
 
+// Column values for the Open Events board, written against its real column ids (see OE above).
+// Status labels are still checked against the live board before they are sent: create_labels_if_missing
+// is false, so an invented label fails the whole create_item and loses the lead.
+function openEventsCols(schema, d, notes, isNewsletter) {
+  const cols = {};
+  const byId = new Map((schema?.columns || []).map((c) => [c.id, c]));
+  const has = (id) => byId.has(id);
+  const labelsOf = (id) => {
+    try { return Object.values(JSON.parse(byId.get(id)?.settings_str || "{}").labels || {}); }
+    catch { return []; }
+  };
+  // Write a status only when the board already defines that exact label; otherwise fall back to the
+  // first candidate it does define, and if none, leave the column alone. The notes blob has it all.
+  const status = (id, ...candidates) => {
+    if (!has(id)) return;
+    const labels = labelsOf(id);
+    const want = candidates.find((l) => l && labels.includes(l));
+    if (want) cols[id] = { label: want };
+  };
+
+  if (has(OE.email) && d.email)  cols[OE.email] = { email: String(d.email), text: String(d.email) };
+  if (has(OE.phone) && d.phone)  cols[OE.phone] = { phone: String(d.phone), countryShortName: "IL" };
+  if (has(OE.date)  && d.date)   cols[OE.date]  = { date: d.date };
+  if (has(OE.guests) && d.guests != null && d.guests !== "") cols[OE.guests] = String(d.guests);
+
+  // Event type: exact match against whatever the board defines today, so adding a label in Monday
+  // starts routing that type correctly with no redeploy. Anything unmatched lands on "אחר" and the
+  // customer's own wording stays verbatim in the notes.
+  status(OE.eventType, String(d.eventType || "").trim(), "אחר");
+  status(OE.status, "New Lead", "ליד חדש", "New");
+
+  const raw = String(d.eventTime || d.slot || "");
+  const timeOf = /צהריים/.test(raw) ? "צהריים"
+               : /ערב/.test(raw)    ? "ערב"
+               : /בוקר/.test(raw)   ? "בוקר"
+               : /גמיש/.test(raw)   ? "גמיש"
+               : "";
+  if (timeOf) status(OE.timeOf, timeOf);
+
+  // "צהריים (12:00-18:00)" -> hour columns 12:00 and 18:00, and a clean "12:00-18:00" text.
+  const hm = [...raw.matchAll(/(\d{1,2}):(\d{2})/g)].map((m) => ({ hour: +m[1], minute: +m[2] }));
+  if (has(OE.startHour) && hm[0]) cols[OE.startHour] = hm[0];
+  if (has(OE.endHour)   && hm[1]) cols[OE.endHour]   = hm[1];
+  const pad = (n) => String(n).padStart(2, "0");
+  const fmt = (t) => `${pad(t.hour)}:${pad(t.minute)}`;
+  if (has(OE.slotText) && hm.length) cols[OE.slotText] = hm.slice(0, 2).map(fmt).join("-");
+
+  // Ad attribution, the whole point of parity with the company board.
+  if (has(OE.source)   && d.utm_source)   cols[OE.source]   = String(d.utm_source);
+  if (has(OE.campaign) && d.utm_campaign) cols[OE.campaign] = String(d.utm_campaign);
+  if (has(OE.adGroup)  && d.utm_content)  cols[OE.adGroup]  = String(d.utm_content);
+  if (has(OE.gclid)    && d.gclid)        cols[OE.gclid]    = String(d.gclid);
+  if (has(OE.consent)  && d.consent)      cols[OE.consent]  = { checked: "true" };
+
+  // Safety net, last: anything that found no column of its own is still readable on the item.
+  if (has(OE.notes)) {
+    const spare = [
+      (!has(OE.email) && d.email) ? `אימייל: ${d.email}` : "",
+      (!has(OE.phone) && d.phone) ? `טלפון: ${d.phone}` : "",
+      d.name ? `שם איש הקשר: ${d.name}` : "",
+      isNewsletter ? "" : `סוג אירוע כפי שנבחר באתר: ${d.eventType || "-"}`,
+    ].filter(Boolean);
+    cols[OE.notes] = { text: spare.length ? notes + "\n" + spare.join("\n") : notes };
+  }
+  return cols;
+}
+
 // Build column values for a board whose IDs we do not know, by matching on column type. Anything we
 // cannot place is not lost - the notes blob already carries every field in full.
 function colsByType(schema, d, notes) {
@@ -407,7 +519,9 @@ function colsByType(schema, d, notes) {
   if (date && d.date) cols[date] = { date: d.date };
   const num = first("numbers");
   if (num && d.guests != null && d.guests !== "") cols[num] = String(d.guests);
-  const nameCol = schema.columns.find((c) => c.type === "text" && /שם|name/i.test(c.title || ""));
+  // Anchored on purpose: an unanchored /name/i also matches "Campaign Name", which is how the
+  // customer's name ended up in the campaign column on the Open Events board.
+  const nameCol = schema.columns.find((c) => c.type === "text" && /^(שם|שם מלא|שם הלקוח|name|full name|contact name|customer name)$/i.test((c.title || "").trim()));
   if (nameCol && d.name) cols[nameCol.id] = String(d.name);
   // Status only if the board already defines the label. create_labels_if_missing is false, so an
   // invented label would fail the create - the very thing this function exists to prevent.
@@ -574,9 +688,13 @@ async function availability(request, env, cors) {
           gTitle.includes("proposal") ||
           gTitle.includes("agreement") ||
           AVAIL_GROUPS.includes(gId) ||
-          COMPANY_AVAIL_GROUPS.includes(gId);
+          COMPANY_AVAIL_GROUPS.includes(gId) ||
+          OPEN_AVAIL_GROUPS.includes(gId);
 
-        if (!isClosedGroup && b.id !== OPEN_EVENTS_BOARD) continue;
+        // Every board is filtered to its booked groups. The Open Events board used to be exempt
+        // from this - every group counted, New Leads included - so a single inbound enquiry marked
+        // its own requested date unavailable to everyone else the moment it arrived.
+        if (!isClosedGroup) continue;
 
         for (const it of (g.items_page?.items || [])) {
           const cv = {};
