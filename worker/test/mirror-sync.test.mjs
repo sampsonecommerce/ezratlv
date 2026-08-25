@@ -52,6 +52,10 @@ const NOTES = [
   "מקדמה 1,500 ₪ שולמה",
   "צריך מקרן ומסך",
   "סה\"כ 12,000 ILS כולל בר",
+  // Real note from the first live run. The plural inflects away from the singular stem, so a
+  // substring match on "עלות" does not see it.
+  "אשמח לדעת מה העלויות ולראות תפריט לדוגמא",
+  "מחירון לפי ראש 350 ש\"ח",
 ].join("\n");
 
 const srcItem = (id, name, groupId, groupTitle, over = {}) => ({
@@ -169,7 +173,7 @@ if (m) {
   check(m.cv.hour_mm6dy9b6?.text === "06:00 PM", `start hour is ${JSON.stringify(m.cv.hour_mm6dy9b6?.text)}`);
   const notes = m.cv.long_text_mm6d2npw?.text || "";
   check(notes.includes("מנה עיקרית טבעונית") && notes.includes("מקרן"), "non-money notes were lost");
-  check(!/₪|ILS|מקדמה|סה"כ/.test(notes), `money survived into the mirrored notes: ${JSON.stringify(notes)}`);
+  check(!/₪|ILS|מקדמה|סה"כ|עלוי|מחירון|ש"ח/.test(notes), `money survived into the mirrored notes: ${JSON.stringify(notes)}`);
   check(!Object.keys(m.cv).some((id) => /price|numeric_mm1|text_mm1f43ad|text_mm1g6c5r/.test(id)), "a price column was written");
 }
 
