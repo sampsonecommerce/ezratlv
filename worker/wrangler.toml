@@ -21,3 +21,10 @@ workers_dev = true
 # which is public. `keep_vars` stops a deploy from clearing dashboard-set values
 # just because this file does not list them.
 keep_vars = true
+
+# Mirror sync: reconciles committed events from Events Form / Company Events onto the Open Events
+# board, money stripped. Every 15 minutes. The public calendar does not depend on this cadence -
+# availability reads the source boards live on each request - so a missed run leaves the board
+# stale, never the site wrong. The same code is reachable at `?sync=1` behind CALC_SECRET.
+[triggers]
+crons = ["*/15 * * * *"]
