@@ -64,7 +64,7 @@ const srcItem = (id, name, groupId, groupTitle, over = {}) => ({
     date5bab58wj: { text: "2026-11-20", date: "2026-11-20" },
     hour_mm1q610q: { text: "06:00 PM" },
     hour_mm1qa44s: { text: "02:00 AM" },
-    text_mm4t1h0s: { text: "18:00-02:00" },
+    text_mm4t1h0s: { text: "" },   // blank on every hand-entered booking - derived from the hours
     single_selecta6erdt9: { text: "אירוע חברה" },
     single_select943s5p9: { text: "ערב" },
     numeric_mm1qj01x: { text: "40" },
@@ -169,7 +169,8 @@ if (m) {
   check(m.cv.color_mm6dn79a?.text === "אירוע חברה", "event type not mirrored");
   check(m.cv.color_mm6dh5pe?.text === "ערב", "time of event not mirrored");
   check(m.cv.numeric_mm6d85m?.text === "40", "guest count not mirrored");
-  check(m.cv.text_mm6d8r2y?.text === "18:00-02:00", "start-end not mirrored");
+  check(m.cv.text_mm6d8r2y?.text === "18:00-02:00",
+    `Start-End is ${JSON.stringify(m.cv.text_mm6d8r2y?.text)} - should be derived from the hour pickers`);
   check(m.cv.hour_mm6dy9b6?.text === "06:00 PM", `start hour is ${JSON.stringify(m.cv.hour_mm6dy9b6?.text)}`);
   const notes = m.cv.long_text_mm6d2npw?.text || "";
   check(notes.includes("מנה עיקרית טבעונית") && notes.includes("מקרן"), "non-money notes were lost");
