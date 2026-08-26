@@ -819,6 +819,19 @@
       color: #86efac;
       border-color: rgba(34, 197, 94, 0.6);
     }
+    .hero-card__pill--today {
+      background: rgba(220, 38, 38, 0.24);
+      color: #fecaca;
+      border-color: rgba(239, 68, 68, 0.7);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+      font-weight: 800;
+    }
+    .hero-card__pill--tomorrow {
+      background: rgba(234, 179, 8, 0.18);
+      color: #fef08a;
+      border-color: rgba(234, 179, 8, 0.55);
+      font-weight: 800;
+    }
     .hero-slider__card-title {
       font-size: clamp(1.25rem, 2.4vw, 1.6rem);
       font-weight: 900;
@@ -7548,7 +7561,7 @@
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
-        function getUpcomingDateStringEn(dayOfWeek, customPrefix) {
+        function getUpcomingDateInfoEn(dayOfWeek, customPrefix) {
           const now = new Date();
           const d = new Date(now);
           const currentDow = now.getDay();
@@ -7557,15 +7570,31 @@
           const padNum = (n) => String(n).padStart(2, '0');
           const dateFormatted = `${padNum(d.getDate())}.${padNum(d.getMonth() + 1)}`;
           const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          const prefix = customPrefix || daysEn[dayOfWeek];
-          return `${prefix} ${dateFormatted}`;
+          const baseDay = customPrefix || daysEn[dayOfWeek];
+
+          let prefix = baseDay;
+          let datePillClass = '';
+
+          if (diff === 0) {
+            prefix = `🔴 TONIGHT · ${baseDay}`;
+            datePillClass = 'hero-card__pill--today';
+          } else if (diff === 1) {
+            prefix = `TOMORROW · ${baseDay}`;
+            datePillClass = 'hero-card__pill--tomorrow';
+          }
+
+          return {
+            diff,
+            datePill: `${prefix} ${dateFormatted}`,
+            datePillClass
+          };
         }
 
-        const spotlightEvents = [
+        const eventsConfig = [
           {
             id: 'sunday-live',
             dow: 0,
-            datePill: getUpcomingDateStringEn(0, 'Sunday'),
+            customPrefix: 'Sunday',
             timePill: '20:00',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7573,13 +7602,12 @@
             title: 'Moss Town · Tel Aviv Debut Live Show',
             lineup: 'Moss Town · Instrumental Psychedelia, Groove & Rock-Jazz',
             desc: 'Moss Town live at Ezra\'s salon for a debut Tel Aviv concert! Instrumental psychedelia, heavy groove, vintage 70s rhythms and rock-jazz with natural wine and signature cocktails.',
-            img: 'images/MOMENT 1.jpg',
-            get fullDateString() { return this.datePill; }
+            img: 'images/MOMENT 1.jpg'
           },
           {
             id: 'tuesday-chef',
             dow: 2,
-            datePill: getUpcomingDateStringEn(2, 'Tuesday'),
+            customPrefix: 'Tuesday',
             timePill: '19:30 & 22:00',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7587,13 +7615,12 @@
             title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
             lineup: 'Guest Chef & Tailored Botanical Cocktails',
             desc: 'A one-night culinary special from the wood-fired oven: artisan sourdough, crudo, charred seasonal dishes and tailored cocktails.',
-            img: 'images/FOOD ENVIRONMENT.jpg',
-            get fullDateString() { return this.datePill; }
+            img: 'images/FOOD ENVIRONMENT.jpg'
           },
           {
             id: 'wednesday-listening',
             dow: 3,
-            datePill: getUpcomingDateStringEn(3, 'Wednesday'),
+            customPrefix: 'Wednesday',
             timePill: '20:30',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7601,13 +7628,12 @@
             title: 'Night Sessions · Album Listening & Hi-Fi',
             lineup: 'Deep Listening on Ezra\'s Custom Analog System',
             desc: 'An immersive listening session with full albums played on original vinyl records over our custom analog sound system with dimmed lights and signature drinks.',
-            img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg'
           },
           {
             id: 'thursday-groove',
             dow: 4,
-            datePill: getUpcomingDateStringEn(4, 'Thursday'),
+            customPrefix: 'Thursday',
             timePill: '21:00',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7615,13 +7641,12 @@
             title: 'Groove & Grapes · Rare Funk & Soul Vinyl',
             lineup: 'DJ Amir Peled & Special Guests · Original Pressings',
             desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and sourdough dishes from the wood oven.',
-            img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg'
           },
           {
             id: 'saturday-jazz',
             dow: 6,
-            datePill: getUpcomingDateStringEn(6, 'Saturday'),
+            customPrefix: 'Saturday',
             timePill: '20:30',
             badgePill: 'RSVP Recommended',
             badgeClass: 'sticker--rsvp',
@@ -7629,10 +7654,20 @@
             title: 'Florentin Jazz Hang · Live Trio at the Bar',
             lineup: 'Piano, Double Bass & Drums · Intimate Live Improvisation',
             desc: 'Warm acoustic jazz, rhythmic improvisation and a relaxed speakeasy vibe alongside classic cocktails.',
-            img: 'images/vibe-cocktail.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/vibe-cocktail.jpg'
           }
         ];
+
+        const spotlightEvents = eventsConfig.map(cfg => {
+          const dateInfo = getUpcomingDateInfoEn(cfg.dow, cfg.customPrefix);
+          return {
+            ...cfg,
+            diff: dateInfo.diff,
+            datePill: dateInfo.datePill,
+            datePillClass: dateInfo.datePillClass,
+            get fullDateString() { return this.datePill; }
+          };
+        }).sort((a, b) => a.diff - b.diff);
 
         let currentIndex = 0;
         let slideInterval = null;
@@ -7655,7 +7690,7 @@
 
         function updateCardContent(ev) {
           cardMeta.innerHTML = `
-            <span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
+            <span class="hero-card__pill ${ev.datePillClass || ''}"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
             <span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-clock"/></svg>${ev.timePill}</span>
             <span class="hero-card__pill ${ev.pillClass || ''}">${ev.badgePill}</span>
           `;
