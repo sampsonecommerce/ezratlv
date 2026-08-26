@@ -4473,7 +4473,7 @@
           </div>
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>פופ-אפ שפים וערבי טאבון</h3>
-            <p class="fmt-card__when">ערבי קולינריה מיוחדים · מ-19:30</p>
+            <p class="fmt-card__when">ערבי קולינריה מיוחדים</p>
             <p class="fmt-card__lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
@@ -4761,7 +4761,7 @@
           </div>
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>מוזיקה חיה וסשנים אקוסטיים</h3>
-            <p class="fmt-card__when">לייב סשן שבועי · מ-21:00</p>
+            <p class="fmt-card__when">לייב סשן שבועי</p>
             <p class="fmt-card__lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
@@ -6885,13 +6885,13 @@
 
       const dayThemes = {
         0: {
-          title: 'Live Session · הופעה חיה וסשן אקוסטי',
-          lineup: 'מוזיקה חיה, הרכבים מקוריים וסשנים אקוסטיים',
-          desc: 'הופעה חיה וסשן מוזיקלי אינטימי בסלון של עזרא: הרכבים מקוריים, סשנים אקוסטיים מרגשים, תאורה חמה וקוקטיילים שנרקחו במיוחד לערב זה.',
+          title: 'מוס טאון · הופעת בכורה בתל אביב',
+          lineup: 'Moss Town · פסיכדליה אינסטרומנטלית, גרוב, רוק וג\'אז',
+          desc: 'מוס טאון (Moss Town) מגיעים לסלון של עזרא להופעת בכורה מחשמלת בתל אביב! הרכב פסיכדליה אינסטרומנטלית, גרוב עמוק, מקצבי סבנטיז ורוק-ג\'אז לצד תפריט יין טבעי וקוקטיילים.',
           img: 'images/MOMENT 1.jpg',
           badge: 'כניסה חופשית',
           badgeClass: 'sticker--free',
-          hours: '20:30 - 01:00'
+          hours: '20:00 - 01:00'
         },
         1: {
           title: 'Wine & Vinyl Lounge · סלון יין וויניל',
@@ -6905,10 +6905,10 @@
         2: {
           title: 'Fire & Dough · פופ-אפ שף מהטאבון',
           lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
-          desc: 'תפריט ספיישלים ייחודי מהטאבון: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות עונתיים חרוכים וקוקטיילים שנרקחו במיוחד לערב זה.',
+          desc: 'ערב קולינרי מיוחד: תפריט ספיישלים ייחודי מהטאבון עם מנות גחלים, דגים נאים, לחמי מחמצת וקוקטיילים שנרקחו במיוחד לערב זה.',
           img: 'images/FOOD ENVIRONMENT.jpg',
-          badge: 'בהזמנת מקום',
-          badgeClass: 'sticker--rsvp',
+          badge: 'כניסה חופשית',
+          badgeClass: 'sticker--free',
           hours: '19:30 / 22:00'
         },
         3: {
@@ -7628,29 +7628,29 @@
             id: 'sunday-live',
             dow: 0,
             datePill: getUpcomingDateString(0, 'יום ראשון'),
-            timePill: '20:30',
+            timePill: '20:00',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
             pillClass: 'hero-card__pill--free',
-            title: 'Live Acoustic Session · הופעה חיה וסשן אקוסטי',
-            lineup: 'מוזיקה חיה, הרכבים מקוריים וסשנים אקוסטיים אינטימיים',
-            desc: 'סשן מוזיקלי אינטימי בסלון של עזרא: הרכבים מקוריים, סשנים אקוסטיים מרגשים, תאורה חמה וקוקטיילים שנרקחו במיוחד לערב זה.',
+            title: 'מוס טאון · הופעת בכורה בתל אביב',
+            lineup: 'Moss Town · פסיכדליה אינסטרומנטלית, גרוב, רוק וג\'אז',
+            desc: 'מוס טאון (Moss Town) מגיעים לסלון של עזרא להופעת בכורה מחשמלת בתל אביב! הרכב פסיכדליה אינסטרומנטלית, גרוב עמוק, מקצבי סבנטיז ורוק-ג\'אז לצד תפריט יין טבעי וקוקטיילים.',
             img: 'images/MOMENT 1.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            get fullDateString() { return this.datePill; }
           },
           {
             id: 'tuesday-chef',
             dow: 2,
             datePill: getUpcomingDateString(2, 'יום שלישי'),
             timePill: '19:30 & 22:00',
-            badgePill: 'בהזמנת מקום',
-            badgeClass: 'sticker--rsvp',
-            pillClass: 'hero-card__pill--rsvp',
+            badgePill: 'כניסה חופשית',
+            badgeClass: 'sticker--free',
+            pillClass: 'hero-card__pill--free',
             title: 'Fire & Dough · פופ-אפ שף מהטאבון',
             lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
-            desc: 'תפריט ספיישלים ייחודי מהטאבון: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות עונתיים חרוכים וקוקטיילים שנרקחו במיוחד לערב זה.',
+            desc: 'ערב קולינרי מיוחד: תפריט ספיישלים ייחודי מהטאבון עם מנות גחלים, דגים נאים, לחמי מחמצת וקוקטיילים שנרקחו במיוחד לערב זה.',
             img: 'images/FOOD ENVIRONMENT.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            get fullDateString() { return this.datePill; }
           },
           {
             id: 'wednesday-listening',

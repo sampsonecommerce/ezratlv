@@ -4493,7 +4493,7 @@
           </div>
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>Chef Pop-ups & Tabun Nights</h3>
-            <p class="fmt-card__when">Culinary Evenings · From 19:30</p>
+            <p class="fmt-card__when">Culinary Evenings</p>
             <p class="fmt-card__lineup">Guest Chefs from Top Restaurants · Artisan Neapolitan Pizza & Wood-Fired Dishes</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
@@ -4780,7 +4780,7 @@
           </div>
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>Live Music & Acoustic Sessions</h3>
-            <p class="fmt-card__when">Weekly Live Sessions · From 21:00</p>
+            <p class="fmt-card__when">Weekly Live Sessions</p>
             <p class="fmt-card__lineup">Original Ensembles · Jazz Trios · Acoustic Sessions & Open Jam</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
@@ -6780,13 +6780,13 @@
 
       const dayThemes = {
         0: {
-          title: 'Live Acoustic Session · Live Music',
-          lineup: 'Live Original Sets & Acoustic Sessions',
-          desc: 'An intimate live music session at Ezra: original singer-songwriter ensembles, acoustic soundscapes, dimmed lighting and signature cocktails.',
+          title: 'Moss Town · Tel Aviv Debut Live Show',
+          lineup: 'Moss Town · Instrumental Psychedelia, Groove & Rock-Jazz',
+          desc: 'Moss Town live at Ezra\'s salon for a debut Tel Aviv concert! Instrumental psychedelia, heavy groove, vintage 70s rhythms and rock-jazz with natural wine and signature cocktails.',
           img: 'images/MOMENT 1.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
-          hours: '20:30 - 01:00'
+          hours: '20:00 - 01:00'
         },
         1: {
           title: 'Wine & Vinyl Lounge · Ambient Listening',
@@ -6800,10 +6800,10 @@
         2: {
           title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
           lineup: 'Guest Chef & Tailored Botanical Cocktails',
-          desc: 'A one-night special wood-fired menu: warm sourdough with spiced butters, fresh crudo, charred seasonal vegetables and craft cocktails.',
+          desc: 'A one-night culinary special from the wood-fired oven: artisan sourdough, crudo, charred seasonal dishes and tailored cocktails.',
           img: 'images/FOOD ENVIRONMENT.jpg',
-          badge: 'RSVP Required',
-          badgeClass: 'sticker--rsvp',
+          badge: 'Free Entry',
+          badgeClass: 'sticker--free',
           hours: '19:30 / 22:00'
         },
         3: {
@@ -7551,29 +7551,29 @@
             id: 'sunday-live',
             dow: 0,
             datePill: getUpcomingDateStringEn(0, 'Sunday'),
-            timePill: '20:30',
+            timePill: '20:00',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
             pillClass: 'hero-card__pill--free',
-            title: 'Live Acoustic Session · Live Music',
-            lineup: 'Live Original Sets & Acoustic Sessions',
-            desc: 'An intimate live music session at Ezra: original singer-songwriter ensembles, acoustic soundscapes, dimmed lighting and signature cocktails.',
+            title: 'Moss Town · Tel Aviv Debut Live Show',
+            lineup: 'Moss Town · Instrumental Psychedelia, Groove & Rock-Jazz',
+            desc: 'Moss Town live at Ezra\'s salon for a debut Tel Aviv concert! Instrumental psychedelia, heavy groove, vintage 70s rhythms and rock-jazz with natural wine and signature cocktails.',
             img: 'images/MOMENT 1.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            get fullDateString() { return this.datePill; }
           },
           {
             id: 'tuesday-chef',
             dow: 2,
             datePill: getUpcomingDateStringEn(2, 'Tuesday'),
             timePill: '19:30 & 22:00',
-            badgePill: 'RSVP Required',
-            badgeClass: 'sticker--rsvp',
-            pillClass: 'hero-card__pill--rsvp',
+            badgePill: 'Free Entry',
+            badgeClass: 'sticker--free',
+            pillClass: 'hero-card__pill--free',
             title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
             lineup: 'Guest Chef & Tailored Botanical Cocktails',
-            desc: 'A one-night special wood-fired menu: warm sourdough with spiced butters, fresh crudo, charred seasonal vegetables and craft cocktails.',
+            desc: 'A one-night culinary special from the wood-fired oven: artisan sourdough, crudo, charred seasonal dishes and tailored cocktails.',
             img: 'images/FOOD ENVIRONMENT.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            get fullDateString() { return this.datePill; }
           },
           {
             id: 'wednesday-listening',
