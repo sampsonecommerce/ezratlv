@@ -2027,179 +2027,6 @@
       color: var(--cream-faint);
       line-height: 1.45;
     }
-
-    /* ============================================================
-       5. PAST EVENTS SLIDER & ARCHIVE GALLERY MODAL
-    ============================================================ */
-    .past-slider-wrap {
-      position: relative;
-      width: 100%;
-      margin-block-end: clamp(2rem, 4vw, 3rem);
-    }
-    .past-slider-track {
-      display: flex;
-      gap: 1.15rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-block: 0.5rem 1.2rem;
-      padding-inline: 0.25rem;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      -webkit-overflow-scrolling: touch;
-    }
-    .past-slider-track::-webkit-scrollbar { display: none; }
-
-    .past-slider-arrow {
-      position: absolute;
-      top: 45%;
-      transform: translateY(-50%);
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(18, 13, 8, 0.92);
-      border: 1.2px solid rgba(196, 154, 60, 0.45);
-      color: #f5d98a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 12;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
-      transition: all 0.25s var(--ease);
-    }
-    .past-slider-arrow:hover {
-      background: rgba(30, 20, 10, 0.98);
-      border-color: #f5d98a;
-      color: #ffffff;
-      transform: translateY(-50%) scale(1.08);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85), 0 0 16px rgba(253, 224, 71, 0.3);
-    }
-    .past-slider-arrow--prev { left: -18px; }
-    .past-slider-arrow--next { right: -18px; }
-    @media (max-width: 1100px) {
-      .past-slider-arrow--prev { left: 4px; }
-      .past-slider-arrow--next { right: 4px; }
-    }
-
-    .past-slide-card {
-      flex: 0 0 calc((100% - (2 * 1.15rem)) / 3);
-      width: calc((100% - (2 * 1.15rem)) / 3);
-      min-width: 270px;
-      max-width: 360px;
-      scroll-snap-align: start;
-      background: #14100b;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
-      text-align: start;
-    }
-    .past-slide-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--gold);
-      box-shadow: 0 14px 34px -10px rgba(0,0,0,0.85), 0 0 18px rgba(196,154,60,0.18);
-    }
-    @media (max-width: 900px) {
-      .past-slide-card {
-        flex: 0 0 calc((100% - 1.15rem) / 2);
-        width: calc((100% - 1.15rem) / 2);
-        min-width: 250px;
-      }
-    }
-    @media (max-width: 600px) {
-      .past-slide-card {
-        flex: 0 0 85%;
-        width: 85%;
-        min-width: 240px;
-      }
-    }
-
-    .past-slide-card__img {
-      position: relative;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-    }
-    .past-slide-card__img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(20%);
-      transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
-    }
-    .past-slide-card:hover .past-slide-card__img img {
-      transform: scale(1.06);
-      filter: none;
-    }
-    .past-slide-card__kind {
-      position: absolute;
-      top: 0.65rem;
-      inset-inline-start: 0.65rem;
-      padding: 0.22rem 0.6rem;
-      border: 1px solid var(--line-bright);
-      border-radius: 100px;
-      background: rgba(11, 9, 7, 0.85);
-      backdrop-filter: blur(6px);
-      color: var(--gold-light);
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      white-space: nowrap;
-    }
-    .past-slide-card__body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      padding: 1.1rem;
-      flex: 1;
-    }
-    .past-slide-card__date {
-      font-family: var(--font-num);
-      font-size: 0.76rem;
-      color: var(--gold);
-      font-weight: 700;
-    }
-    .past-slide-card__title {
-      font-family: var(--font-serif);
-      font-size: 1.12rem;
-      font-weight: 700;
-      line-height: 1.3;
-      color: var(--cream);
-    }
-    .past-slide-card__desc {
-      font-size: 0.84rem;
-      line-height: 1.5;
-      color: var(--cream-dim);
-      margin-block-start: 0.15rem;
-    }
-
-    /* 6th Card: "לחצו לעוד" / לכל אירועי העבר */
-    .past-slide-card--more {
-      background: linear-gradient(145deg, #1a140d 0%, #120d08 100%);
-      border: 1.5px dashed rgba(196, 154, 60, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 280px;
-    }
-    .past-slide-card--more:hover {
-      border-style: solid;
-      border-color: var(--gold-light);
-      background: linear-gradient(145deg, #241b10 0%, #17110a 100%);
-    }
-    .past-slide-card__more-inner {
-      padding: 1.8rem 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.65rem;
-    }
     .past-more-icon {
       width: 52px;
       height: 52px;
@@ -2212,11 +2039,6 @@
       justify-content: center;
       margin-block-end: 0.3rem;
       transition: transform 0.3s var(--ease), background 0.3s var(--ease);
-    }
-    .past-slide-card--more:hover .past-more-icon {
-      transform: scale(1.1) rotate(6deg);
-      background: var(--gold);
-      color: #110e0a;
     }
     .past-more-icon svg { width: 24px; height: 24px; }
     .past-more-badge {
@@ -2241,97 +2063,6 @@
     .past-more-btn {
       margin-block-start: 0.5rem;
       pointer-events: none;
-    }
-
-    /* Archive Gallery Modal */
-    .archive-gallery-box {
-      width: min(94vw, 980px);
-      max-height: 90vh;
-      overflow-y: auto;
-      background: #14100b;
-      border: 1px solid var(--line-bright);
-      border-radius: 24px;
-      padding: clamp(1.4rem, 3vw, 2.2rem);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
-      position: relative;
-    }
-    .archive-gallery-head {
-      margin-block-end: 1.5rem;
-      padding-block-end: 1rem;
-      border-block-end: 1px solid var(--line);
-      text-align: start;
-    }
-    .archive-gallery-title {
-      font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-      font-weight: 800;
-      color: var(--cream);
-      margin-block: 0.2rem 0.4rem;
-    }
-    .archive-gallery-desc {
-      font-size: 0.88rem;
-      color: var(--cream-dim);
-    }
-    .archive-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .archive-gallery-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      border: 1px solid var(--line);
-      background: #1a140d;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
-    }
-    .archive-gallery-item:hover {
-      transform: translateY(-3px) scale(1.02);
-      border-color: var(--gold);
-    }
-    .archive-gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s var(--ease);
-    }
-    .archive-gallery-item:hover img {
-      transform: scale(1.08);
-    }
-    .archive-gallery-overlay {
-      position: absolute;
-      inset-inline: 0;
-      bottom: 0;
-      padding: 0.6rem 0.75rem;
-      background: linear-gradient(0deg, rgba(14,10,7,0.95) 0%, rgba(14,10,7,0.7) 60%, transparent 100%);
-      color: var(--cream);
-      text-align: start;
-    }
-    .archive-gallery-tag {
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-      margin-block-end: 0.15rem;
-    }
-    .archive-gallery-overlay h4 {
-      font-size: 0.84rem;
-      font-weight: 700;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 0;
-      color: var(--cream);
-    }
-    .archive-gallery-overlay p {
-      font-size: 0.72rem;
-      color: var(--cream-dim);
-      margin: 0.1rem 0 0 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     /* ============================================================
@@ -4145,7 +3876,6 @@
       <a href="#schedule">השבוע בעזרא</a>
       <a href="#events">אירועים קרובים</a>
       <a href="#soundsystem">סאונד & וייב</a>
-      <a href="#archive">ארכיון</a>
       <a href="#location">דרכי הגעה</a>
       <a href="#collab">יוזמים אירוע</a>
       <a href="#faq">שאלות נפוצות</a>
@@ -4169,7 +3899,6 @@
       <a class="nav__menu-link" href="#schedule">השבוע בעזרא (לוח חי)</a>
       <a class="nav__menu-link" href="#events">אירועים קרובים</a>
       <a class="nav__menu-link" href="#soundsystem">סאונד & טאבון</a>
-      <a class="nav__menu-link" href="#archive">ארכיון פוסטרים</a>
       <a class="nav__menu-link" href="#location">דרכי הגעה</a>
       <a class="nav__menu-link" href="#collab">יוזמים אירוע / שת״פ</a>
       <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
@@ -5473,110 +5202,6 @@
   <!-- ============================================================
        5. FLYERS & PAST EVENTS ARCHIVE
   ============================================================ -->
-  <section id="archive">
-    <div class="wrap">
-      <div class="sec-head center">
-        <span class="eyebrow">אירועים שהיו</span>
-        <h2>מה כבר היה כאן</h2>
-        <p>הערבים האחרונים שהתקיימו בעזרא, עם מי ניגן, מה הוגש וכמה אנשים היו. זה הקצב שאנחנו עובדים בו.</p>
-      </div>
-      <!-- Level meter. Replaces the drawn crowd, dancers, drummer and sax:
-           a meter says "live music in this room" without asking an
-           illustration to carry it. transform/opacity only. -->
-      <!-- Past Events Horizontal Slider (5 authentic event cards + 6th 'לחצו לעוד' card) -->
-      <div class="past-slider-wrap">
-        <button class="sched-slider-arrow sched-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="אירועים קודמים">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        
-        <div class="past-slider-track" id="pastSliderTrack">
-          <!-- Slide 1 -->
-          <article class="past-slide-card js-open-archive" data-index="0">
-            <div class="past-slide-card__img">
-              <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
-              <span class="past-slide-card__tag">ערב תקליטים</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">14.08.2026</div>
-              <h4 class="past-slide-card__title">Rare Disco & Funk Night</h4>
-              <p class="past-slide-card__desc">סט משלושה תקליטנים על ויניל בלבד, דיסקו ופאנק מקוריים לצד סאוורים מיוחדים.</p>
-            </div>
-          </article>
-
-          <!-- Slide 2 -->
-          <article class="past-slide-card js-open-archive" data-index="1">
-            <div class="past-slide-card__img">
-              <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-              <span class="past-slide-card__tag">פופ-אפ שף</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">07.08.2026</div>
-              <h4 class="past-slide-card__title">Napoli in Florentin</h4>
-              <p class="past-slide-card__desc">פיצות שף פריכות מהטאבון, בצק מחמצת שתסס 48 שעות ובירה קרה מהחבית.</p>
-            </div>
-          </article>
-
-          <!-- Slide 3 -->
-          <article class="past-slide-card js-open-archive" data-index="2">
-            <div class="past-slide-card__img">
-              <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-              <span class="past-slide-card__tag">ערב בר ומיקסולוגיה</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">30.07.2026</div>
-              <h4 class="past-slide-card__title">Cocktails & Soul</h4>
-              <p class="past-slide-card__desc">השקת תפריט קוקטיילים עונתי, טעימות מודרכות ומוזיקת סול על פטיפון.</p>
-            </div>
-          </article>
-
-          <!-- Slide 4 -->
-          <article class="past-slide-card js-open-archive" data-index="3">
-            <div class="past-slide-card__img">
-              <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-              <span class="past-slide-card__tag">השמעת אלבום</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">21.07.2026</div>
-              <h4 class="past-slide-card__title">Indie Premiere Session</h4>
-              <p class="past-slide-card__desc">השמעה מוקדמת של אלבום אינדי לפני היציאה, בליווי שיחה אינטימית עם היוצרים.</p>
-            </div>
-          </article>
-
-          <!-- Slide 5 -->
-          <article class="past-slide-card js-open-archive" data-index="4">
-            <div class="past-slide-card__img">
-              <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
-              <span class="past-slide-card__tag">מוזיקה חיה</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">12.07.2026</div>
-              <h4 class="past-slide-card__title">Acoustic Speakeasy Jam</h4>
-              <p class="past-slide-card__desc">טריו ג'אז וסשן אקוסטי חי לאור נרות, עם אירוח אמנים בהפתעה.</p>
-            </div>
-          </article>
-
-          <!-- Slide 6: Dedicated 'לחצו לעוד' Card -->
-          <div class="past-slide-card past-slide-card--more js-open-archive" data-index="all" role="button" tabindex="0">
-            <div class="past-slide-card__more-content">
-              <div class="past-slide-card__more-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              </div>
-              <h4 class="past-slide-card__more-title">לכל אירועי העבר</h4>
-              <p class="past-slide-card__more-sub">לחצו לפתיחת גלריית האירועים והכרזות המלאה של עזרא</p>
-              <span class="past-slide-card__more-btn">
-                <span>צפייה בגלריה המלאה</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <button class="sched-slider-arrow sched-slider-arrow--next" id="pastSliderNext" type="button" aria-label="אירועים הבאים">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-      </div>
-    </div>
-  </section>
 
   <!-- ============================================================
        6. LOCATION & DIRECTIONS (דרכי הגעה) + TRANSIT TUNNEL TRACK
@@ -6722,82 +6347,6 @@
   <!-- ============================================================
        8C. PAST EVENTS FULL GALLERY MODAL (גלריית אירועי עבר)
   ============================================================ -->
-  <div class="modal-scrim" id="archiveGalleryModal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="archive-gallery-box">
-      <button class="modal-close" id="archiveGalleryClose" type="button" aria-label="סגירת גלריה"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
-      <div class="archive-gallery-head">
-        <span class="eyebrow">ארכיון עזרא</span>
-        <h3 class="archive-gallery-title">גלריית אירועים והפקות עבר</h3>
-        <p class="archive-gallery-desc">הצצה לערבים, הופעות, סטים והפקות קולינריות שהתקיימו בחלל של עזרא בפלורנטין.</p>
-      </div>
-      <div class="archive-gallery-grid">
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">14.08.2026</span>
-            <h4>Rare Disco & Funk Night</h4>
-            <p>ערב תקליטים · דיסקו ופאנק</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">07.08.2026</span>
-            <h4>Napoli in Florentin</h4>
-            <p>פופ-אפ שף · פיצות טאבון</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">30.07.2026</span>
-            <h4>Cocktails & Soul</h4>
-            <p>סלון מיקסולוגיה · מוזיקת סול</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">21.07.2026</span>
-            <h4>Indie Premiere Session</h4>
-            <p>השמעת אלבום ויניל ושיחה</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">12.07.2026</span>
-            <h4>Acoustic Speakeasy Jam</h4>
-            <p>טריו ג'אז וסשן אקוסטי</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g02.jpg" alt="Natural Wine Salon" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">04.07.2026</span>
-            <h4>Natural Wine Salon</h4>
-            <p>ערב יין טבעי וגבינות בוטיק</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g03.jpg" alt="Poetry & Beats" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">26.06.2026</span>
-            <h4>Poetry & Beats</h4>
-            <p>מיקרופון פתוח וספוקן וורד</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/BAR.jpg" alt="Vinyl Collectors Meet" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">18.06.2026</span>
-            <h4>Vinyl Collectors Meet</h4>
-            <p>מפגש אספני תקליטים ודיג'ייז</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Toast Message -->
   <div class="toast" id="toast">ההודעה נשלחה בהצלחה!</div>
@@ -8647,56 +8196,6 @@
       });
     })();
 
-    // ============================================================
-    // PAST EVENTS HORIZONTAL SLIDER & GALLERY MODAL
-    // ============================================================
-    (function(){
-      const pastTrack = document.getElementById('pastSliderTrack');
-      const pastPrev = document.getElementById('pastSliderPrev');
-      const pastNext = document.getElementById('pastSliderNext');
-      const archiveModal = document.getElementById('archiveGalleryModal');
-      const archiveClose = document.getElementById('archiveGalleryClose');
-
-      if (pastTrack && pastPrev) {
-        pastPrev.addEventListener('click', () => {
-          const cardW = pastTrack.querySelector('.past-slide-card')?.offsetWidth || 280;
-          pastTrack.scrollBy({ left: -(cardW + 18), behavior: 'smooth' });
-        });
-      }
-
-      if (pastTrack && pastNext) {
-        pastNext.addEventListener('click', () => {
-          const cardW = pastTrack.querySelector('.past-slide-card')?.offsetWidth || 280;
-          pastTrack.scrollBy({ left: (cardW + 18), behavior: 'smooth' });
-        });
-      }
-
-      document.querySelectorAll('.js-open-archive').forEach(el => {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (archiveModal) {
-            archiveModal.classList.add('is-open');
-            archiveModal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('modal-open');
-          }
-        });
-      });
-
-      if (archiveClose && archiveModal) {
-        archiveClose.addEventListener('click', () => {
-          archiveModal.classList.remove('is-open');
-          archiveModal.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('modal-open');
-        });
-        archiveModal.addEventListener('click', (e) => {
-          if (e.target === archiveModal) {
-            archiveModal.classList.remove('is-open');
-            archiveModal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('modal-open');
-          }
-        });
-      }
-    })();
   </script>
 
   <script>
