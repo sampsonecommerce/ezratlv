@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-26c";
+const BUILD_ID = "2026-08-26d";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -459,6 +459,21 @@ export default {
         group = fallback;
       }
     }
+    // A Monday "when the status column changes to X" trigger does not fire for a value that arrives
+    // inside create_item. The two automations that hand a music lead to Moshe are exactly that
+    // shape, so an Event type written at creation is right on the board and routed to nobody.
+    // Verified on 2026-08-26 against the live board: an item created with "הופעה" kept an empty
+    // Owner; changing the same item to "מסיבת השמעה" filled Owner with Moshe within seconds.
+    //
+    // So write it as a second call. Deferring every Open Events label, not only the two the
+    // automations watch, keeps this correct for whatever gets automated on that column next.
+    let deferredType = null;
+    if (board === OPEN_EVENTS_BOARD && cols2[OE.eventType]) {
+      deferredType = cols2[OE.eventType];
+      cols2 = { ...cols2 };
+      delete cols2[OE.eventType];
+    }
+
     // item name: company for ALL lead types; fall back to person if no company
     const displayName = isRsvp
       ? "שריון · " + String(d.name || "ללא שם")
@@ -498,12 +513,16 @@ export default {
         const out2 = await r2.json();
         if (!out2.errors) {
           console.warn("Lead saved on retry without status columns.");
-          return json({ ok: true, id: out2.data?.create_item?.id, degraded: true }, 200, cors);
+          const id2 = out2.data?.create_item?.id;
+          const typed2 = await setEventType(id2, board, deferredType, TOKEN);
+          return json({ ok: true, id: id2, degraded: true, ...(deferredType ? { eventType: typed2 ? "set" : "failed" } : {}) }, 200, cors);
         }
         console.error("Monday API errors (attempt 2):", JSON.stringify(out2.errors));
         return json({ ok: false, error: out2.errors }, 502, cors);
       }
-      return json({ ok: true, id: out.data?.create_item?.id }, 200, cors);
+      const id = out.data?.create_item?.id;
+      const typed = await setEventType(id, board, deferredType, TOKEN);
+      return json({ ok: true, id, ...(deferredType ? { eventType: typed ? "set" : "failed" } : {}) }, 200, cors);
     } catch (e) {
       console.error("submit-lead failed:", e);
       return json({ ok: false, error: String(e) }, 502, cors);
@@ -549,6 +568,32 @@ function parseHourText(text) {
 // Board schema lookup, so a lead is never lost to a column ID that belongs to a different board.
 // Cached per isolate: the shape of a board changes far more slowly than leads arrive.
 const _schemaCache = new Map();
+// Writes the Event type onto a lead that was deliberately created without one, so the change fires
+// the board's status automations. Never fails the lead: the item already exists, and the customer's
+// own wording for the event is in the notes blob either way. Two attempts, then give up loudly.
+async function setEventType(itemId, board, value, TOKEN) {
+  if (!itemId || !value) return true;
+  const query = `mutation ($board: ID!, $item: ID!, $col: String!, $value: JSON!) {
+    change_column_value(board_id: $board, item_id: $item, column_id: $col, value: $value, create_labels_if_missing: false) { id }
+  }`;
+  const variables = { board, item: String(itemId), col: OE.eventType, value: JSON.stringify(value) };
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const r = await fetch("https://api.monday.com/v2", {
+        method: "POST",
+        headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+        body: JSON.stringify({ query, variables }),
+      });
+      const out = await r.json();
+      if (!out.errors) return true;
+      console.error(`Event type not set on item ${itemId} (attempt ${attempt}):`, JSON.stringify(out.errors));
+    } catch (e) {
+      console.error(`Event type not set on item ${itemId} (attempt ${attempt}):`, String(e));
+    }
+  }
+  return false;
+}
+
 async function boardSchema(board, TOKEN) {
   if (_schemaCache.has(board)) return _schemaCache.get(board);
   const query = `query { boards(ids: [${board}]) { columns { id title type settings_str } groups { id } } }`;
