@@ -34,4 +34,13 @@
 - [x] 5.4 Test: an item with no `Source Item` survives a sync in every group
 - [x] 5.5 Test: a notes blob carrying `₪` lines arrives with them stripped
 - [x] 5.6 Gate the tests in `deploy-worker.yml` before the deploy step
-- [ ] 5.7 Run once against the live board and read the result back
+- [x] 5.7 Run once against the live board and read the result back - first cron
+      run 2026-08-25 12:30 created 30 mirrors, all in `תאריכים תפוסים`, all
+      carrying `Source Item`; the one hand-made item on the board was untouched
+
+## 6. Found by the first live run
+
+- [x] 6.1 Hebrew inflects: `עלויות` does not contain `עלות`, so the money filter
+      missed the plural. Widened to stems plus the forms the boards actually use
+- [x] 6.2 `Start-End` is blank on every hand-entered booking - staff use the two
+      hour pickers - so it is derived from them rather than copied empty
