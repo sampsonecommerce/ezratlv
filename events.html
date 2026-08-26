@@ -7439,8 +7439,11 @@
           // something with a name. The month grid would otherwise contradict the card above it.
           const published = ezraPublished.get(dateKey) || null;
           const isClosedEvening = hasEveningEvent && !published;
+          // A published evening is named; a format night is named by its format; a night with
+          // neither is simply free, and says so in the same words as the noon slot beside it.
           const nightLabel = published ? (published.title || '').split('·')[0].trim()
-                           : fmt.name;
+                           : EZRA_FORMATS[dow] ? fmt.name
+                           : 'פנוי לאירוע';
 
           // Build Cell
           const cell = document.createElement('div');
