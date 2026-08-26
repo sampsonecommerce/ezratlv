@@ -3,9 +3,13 @@
 // The site's forms POST here cross-origin. Once the domain moves to Cloudflare Pages, the
 // forms go back to same-origin /api/submit-lead and this worker can be deleted.
 //
-// Deploy: Cloudflare dashboard -> Workers & Pages -> Create Worker -> paste this -> Deploy.
-// Secrets (Settings -> Variables): MONDAY_TOKEN (scoped, leave unset while Monday is paused),
-// META_CAPI_TOKEN. Never put tokens in this file.
+// Deploy: automatic. A push to `main` that touches worker/ runs
+// .github/workflows/deploy-worker.yml, which runs the availability test, deploys with
+// wrangler (worker/wrangler.toml), then reads the live worker back to confirm the
+// deployed build is this commit's. Pasting into the dashboard is no longer the route.
+// Secrets (Settings -> Variables, dashboard-managed): MONDAY_TOKEN (scoped, leave unset
+// while Monday is paused), CALC_SECRET, META_CAPI_TOKEN. Never put tokens in this file;
+// `keep_vars` in wrangler.toml stops a deploy from clearing them.
 //
 // Hardening: CORS is locked to the site origins below; a honeypot field (`hp`) is silently
 // dropped; add a Cloudflare Rate Limiting rule on this worker's route for extra protection.
@@ -15,10 +19,97 @@ const PRIVATE_BOARD = "5092854682";
 const PRIVATE_GROUP = "group_mm18zcww";
 // Open Events leads (events page inquiry with calendar) go to the Open Events board.
 const OPEN_EVENTS_BOARD = "5102602771";
-// Bumped by hand whenever this file is pasted into Cloudflare. Returned on every degraded
-// availability response so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-24c";
-const OPEN_EVENTS_GROUP = "topics";
+// Bump this in any commit that changes worker behaviour. It is returned on every response,
+// and the deploy workflow refuses to pass until the live worker reports this exact value —
+// so "is the deployed bundle the merged one?" is a question with an answer.
+const BUILD_ID = "2026-08-26b";
+// "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
+// never checked, and exists on none of our three boards - so every Open Events lead failed the
+// group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
+// against the live board: New Leads is group_mm6djw93.
+const OPEN_EVENTS_GROUP = "group_mm6djw93";
+// Groups on the Open Events board that mean a date is genuinely taken. New Leads is deliberately
+// absent: an inbound enquiry must not blank out its own requested date for every other visitor.
+const OPEN_AVAIL_GROUPS = [
+  "group_mm6d3y71",   // תאריכים תפוסים
+  "group_mm6dfrqr",   // Pre Payment
+  "group_mm6dt6jt",   // Proposal Sent
+  "group_mm6dvqnj",   // Closed Deals
+];
+// Open Events has its own column ids, read from the live board on 2026-08-25. Before this they were
+// guessed by column *type*, which wrote the customer name into "Campaign Name" (its title matches
+// /name/i) and left gclid, traffic source, campaign, consent and status empty.
+const OE = {
+  name:      "name",
+  phone:     "phone_mm6dxgj2",        // Phone number
+  email:     "email_mm6dwhjs",        // Email address
+  date:      "date_mm6djw2v",         // Requested event date
+  guests:    "numeric_mm6d85m",       // Estimated number of guests
+  eventType: "color_mm6dn79a",        // Event type (status)
+  status:    "color_mm6d8eqs",        // Status (status) - has a "New Lead" label
+  timeOf:    "color_mm6dh5pe",        // Time of event (status): בוקר / צהריים / ערב / גמיש
+  notes:     "long_text_mm6d2npw",    // Additional notes or special requests
+  // Monday has no mutation that moves a column, only create_column(after_column_id), so putting
+  // Start Time back beside End Time meant creating it anew in the right place. The old column
+  // (hour_mm6dy9b6) sat 22 columns away from End Time and is retired, not yet deleted.
+  startHour: "hour_mm6j2kcg",         // Start Time
+  endHour:   "hour_mm6d1kst",         // End Time
+  slotText:  "text_mm6d8r2y",         // Start-End
+  source:    "text_mm6da5k0",         // Traffic Source
+  campaign:  "text_mm6dkmdg",         // Campaign Name
+  adGroup:   "text_mm6d2cwt",         // Online campaign I.D
+  gclid:     "text_mm6dreje",         // gclid
+  consent:   "boolean_mm6d7ret",      // Marketing Approval
+  sourceItem:"text_mm6jn3tz",         // Source Item - "<boardId>:<itemId>", set by the mirror sync
+};
+// What makes a committed date a *published* event rather than a merely blocked one. Added to the
+// Open Events board on 2026-08-26; every id below was read back from the live board, not guessed.
+// A private birthday and a public chef evening sit in the same committed group and are told apart
+// by nothing else, so PUB.publish is the entire safety mechanism: unticked means the site shows the
+// date as taken and says nothing whatsoever about it. Default-off, so a new booking cannot become
+// public by accident - only by somebody ticking a box.
+//
+// The mirror sync writes none of these: change_multiple_column_values only sets the keys it is
+// handed, so hand-written public copy survives every sync pass. It does not survive the source
+// event leaving its committed group, which deletes the mirror item outright.
+const PUB = {
+  publish:  "boolean_mm6k8swg",       // Publish to site (checkbox) - the flag
+  title:    "text_mm6kpbzk",          // Public title
+  subtitle: "text_mm6k9g72",          // Public subtitle
+  desc:     "long_text_mm6kwzwk",     // Public description
+  // Repo-relative image paths, comma separated, first one is the card image. Deliberately not a
+  // Monday file column: a file uploaded to Monday is served behind a Monday login, so the public
+  // site cannot render it.
+  images:   "text_mm6km603",          // Public images
+  link:     "link_mm6k9nqy",          // Public link (Instagram)
+  entry:    "color_mm6kapv3",         // Entry (status)
+  rounds:   "text_mm6ktfbq",          // Seating rounds - "19:00,19:30,20:00"
+};
+// Committed events from the two working boards are mirrored onto Open Events, money stripped, so
+// there is one money-free answer to "what is happening at Ezra and when". Mirrors live in
+// "תאריכים תפוסים" and are owned entirely by the sync - see SRC and syncMirror below.
+const MIRROR_GROUP = "group_mm6d3y71";
+// Both source boards happen to use the same column ids for every field the mirror needs, so one
+// map covers both. Anything not listed here is not copied: money cannot leak by omission.
+const SRC = {
+  date:      "date5bab58wj",          // Requested event date
+  startHour: "hour_mm1q610q",         // Start Time
+  endHour:   "hour_mm1qa44s",         // End Time
+  slotText:  "text_mm4t1h0s",         // Start-End (Text) - Company Events
+  slotAlt:   "text_mm2km76j",         // Start-End - Events Form
+  eventType: "single_selecta6erdt9",  // Event type
+  timeOf:    "single_select943s5p9",  // Time of event
+  guests:    "numeric_mm1qj01x",      // Guest Count
+  guestsAlt: "number0kzol2wl",        // Estimated number of guests
+  notes:     "long_textlwbyhlq0",     // Additional notes or special requests
+  origin:    "text_mm6ktd3a",         // Source Item on Events Form - "5102602771:<itemId>" when the
+                                      // item was promoted from an Open Events lead (see below)
+};
+// Belt and braces on top of the allow-list above: drop any notes line that talks about money.
+// Hebrew inflects, and a substring match on the singular does not cover the plural: "העלויות"
+// does not contain "עלות" (ע-ל-ו-י-ו-ת against ע-ל-ו-ת), which is how "אשמח לדעת מה העלויות"
+// survived the first live run. Match stems, and spell out both apostrophes used for ש"ח.
+const MONEY_LINE = /₪|\bILS\b|\bNIS\b|\bprice\b|ש"ח|ש״ח|שקל|מחיר|עלות|עלוי|תשלומ|תשלום|מקדמ|הנחה|הנחת|סה"כ|סה״כ|סהכ|מע"מ|מע״מ|פרייס|תקציב/;
 // All company-events leads (booking flow, custom 450+ consultation, abandoned) go to the
 // dedicated "Company Events Form" board, each into its matching pipeline group.
 const COMPANY_BOARD = "5099350637";
@@ -55,6 +146,17 @@ const ALLOWED_ORIGINS = [
 ];
 
 export default {
+  // Cron. Reconciles the Open Events board against the two working boards - see syncMirror. The
+  // public calendar does not depend on this running: availability reads the source boards live on
+  // every request, so a missed run leaves the board stale, never the site wrong.
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(
+      syncMirror(env)
+        .then((r) => console.log("mirror sync:", JSON.stringify(r)))
+        .catch((e) => console.error("mirror sync failed:", e)),
+    );
+  },
+
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
     const cors = corsHeaders(origin);
@@ -68,6 +170,12 @@ export default {
       if (resume) return getDraft(resume, env, cors);   // public: restore a saved draft by opaque token
       const leadId = params.get("leadById");
       if (leadId) return leadById(leadId, request, env, cors);
+      // Manual mirror run, same code the cron calls. Secret-gated: it writes to a board, and its
+      // result names source item ids. Used to verify a deploy without waiting for the schedule.
+      if (params.get("sync") === "1") {
+        if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401, cors);
+        return json(await syncMirror(env), 200, cors);
+      }
       return availability(request, env, cors);
     }
     if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: cors });
@@ -98,7 +206,12 @@ export default {
     const isCustom = d.leadType === "custom";
     const isPrivate = d.leadType === "private";
     const isNewsletter = d.leadType === "newsletter";
-    const isOpenEvents = d.leadType === "open_events" || d.board === "5102602771";
+    // A seat held at a published evening. It is an Open Events lead in every mechanical respect -
+    // same board, same New Leads group - and differs only in what the notes say and in never
+    // carrying a price. New Leads is deliberately not a committed group, so holding a seat at an
+    // evening cannot mark that evening's date unavailable to anyone else.
+    const isRsvp = d.leadType === "rsvp";
+    const isOpenEvents = d.leadType === "open_events" || isRsvp || d.board === "5102602771";
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
@@ -106,6 +219,15 @@ export default {
       "סוג פנייה: הרשמה לעדכונים על ערבים פתוחים (ניוזלטר)",
       `נושא: ${d.eventType || "-"}`,
       "★ לא ליד מכירות - בקשה לקבל עדכון על אירועים",
+    ].filter(Boolean).join("\n") : isRsvp ? [
+      "סוג פנייה: שריון מקום לערב פתוח (מעמוד האירועים)",
+      `האירוע: ${d.eventTitle || "-"}`,
+      `תאריך: ${d.date || "-"}`,
+      d.round ? `סבב ישיבה: ${d.round}` : "",
+      `סועדים: ${d.guests ?? "-"}`,
+      d.notes ? `הערות: ${d.notes}` : "",
+      `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
+      "★ שריון מקום - לחזור ללקוח ולאשר",
     ].filter(Boolean).join("\n") : isOpenEvents ? [
       "סוג פנייה: ליד מעמוד אירועים פתוחים (Open Events)",
       `סוג אירוע: ${d.eventType || "-"}`,
@@ -264,7 +386,12 @@ export default {
     const schema = await boardSchema(board, TOKEN);
     let cols2 = cols;
     if (schema) {
-      if (isOpenEvents || isNewsletter) cols2 = colsByType(schema, d, notes);
+      if (isOpenEvents || isNewsletter) {
+        cols2 = openEventsCols(schema, d, notes, isNewsletter);
+        // Only if the board has been restructured out from under us: keep the type-matching
+        // heuristic as a last resort rather than saving a lead with nothing but a name on it.
+        if (!Object.keys(cols2).length) cols2 = colsByType(schema, d, notes);
+      }
       const known = new Set(schema.columns.map((c) => c.id));
       const unknown = Object.keys(cols2).filter((k) => !known.has(k));
       if (unknown.length) {
@@ -273,12 +400,20 @@ export default {
         unknown.forEach((k) => delete cols2[k]);
       }
       if (group && !schema.groups.includes(group)) {
-        console.warn(`Board ${board} has no group "${group}" - creating in the board default group.`);
-        group = null;
+        // Falling through to the board default group is wrong on Open Events: its default group is
+        // "תאריכים תפוסים", so a bad group id turns a lead into a blocked date. Browsers also cache
+        // events.html, so the retired "topics" id keeps arriving for a while after a deploy. Prefer
+        // this worker's own constant, and only give up on the group if that is invalid too.
+        const fallback = (board === OPEN_EVENTS_BOARD && schema.groups.includes(OPEN_EVENTS_GROUP))
+          ? OPEN_EVENTS_GROUP : null;
+        console.warn(`Board ${board} has no group "${group}" - using ${fallback || "the board default group"}.`);
+        group = fallback;
       }
     }
     // item name: company for ALL lead types; fall back to person if no company
-    const displayName = String(d.company || d.name || "ליד מהאתר");
+    const displayName = isRsvp
+      ? "שריון · " + String(d.name || "ללא שם")
+      : String(d.company || d.name || "ליד מהאתר");
     const variables = {
       board,
       group,
@@ -389,6 +524,73 @@ async function boardSchema(board, TOKEN) {
   }
 }
 
+// Column values for the Open Events board, written against its real column ids (see OE above).
+// Status labels are still checked against the live board before they are sent: create_labels_if_missing
+// is false, so an invented label fails the whole create_item and loses the lead.
+function openEventsCols(schema, d, notes, isNewsletter) {
+  const cols = {};
+  const byId = new Map((schema?.columns || []).map((c) => [c.id, c]));
+  const has = (id) => byId.has(id);
+  const labelsOf = (id) => {
+    try { return Object.values(JSON.parse(byId.get(id)?.settings_str || "{}").labels || {}); }
+    catch { return []; }
+  };
+  // Write a status only when the board already defines that exact label; otherwise fall back to the
+  // first candidate it does define, and if none, leave the column alone. The notes blob has it all.
+  const status = (id, ...candidates) => {
+    if (!has(id)) return;
+    const labels = labelsOf(id);
+    const want = candidates.find((l) => l && labels.includes(l));
+    if (want) cols[id] = { label: want };
+  };
+
+  if (has(OE.email) && d.email)  cols[OE.email] = { email: String(d.email), text: String(d.email) };
+  if (has(OE.phone) && d.phone)  cols[OE.phone] = { phone: String(d.phone), countryShortName: "IL" };
+  if (has(OE.date)  && d.date)   cols[OE.date]  = { date: d.date };
+  if (has(OE.guests) && d.guests != null && d.guests !== "") cols[OE.guests] = String(d.guests);
+
+  // Event type: exact match against whatever the board defines today, so adding a label in Monday
+  // starts routing that type correctly with no redeploy. Anything unmatched lands on "אחר" and the
+  // customer's own wording stays verbatim in the notes.
+  status(OE.eventType, String(d.eventType || "").trim(), "אחר");
+  status(OE.status, "New Lead", "ליד חדש", "New");
+
+  const raw = String(d.eventTime || d.slot || "");
+  const timeOf = /צהריים/.test(raw) ? "צהריים"
+               : /ערב/.test(raw)    ? "ערב"
+               : /בוקר/.test(raw)   ? "בוקר"
+               : /גמיש/.test(raw)   ? "גמיש"
+               : "";
+  if (timeOf) status(OE.timeOf, timeOf);
+
+  // "צהריים (12:00-18:00)" -> hour columns 12:00 and 18:00, and a clean "12:00-18:00" text.
+  const hm = [...raw.matchAll(/(\d{1,2}):(\d{2})/g)].map((m) => ({ hour: +m[1], minute: +m[2] }));
+  if (has(OE.startHour) && hm[0]) cols[OE.startHour] = hm[0];
+  if (has(OE.endHour)   && hm[1]) cols[OE.endHour]   = hm[1];
+  const pad = (n) => String(n).padStart(2, "0");
+  const fmt = (t) => `${pad(t.hour)}:${pad(t.minute)}`;
+  if (has(OE.slotText) && hm.length) cols[OE.slotText] = hm.slice(0, 2).map(fmt).join("-");
+
+  // Ad attribution, the whole point of parity with the company board.
+  if (has(OE.source)   && d.utm_source)   cols[OE.source]   = String(d.utm_source);
+  if (has(OE.campaign) && d.utm_campaign) cols[OE.campaign] = String(d.utm_campaign);
+  if (has(OE.adGroup)  && d.utm_content)  cols[OE.adGroup]  = String(d.utm_content);
+  if (has(OE.gclid)    && d.gclid)        cols[OE.gclid]    = String(d.gclid);
+  if (has(OE.consent)  && d.consent)      cols[OE.consent]  = { checked: "true" };
+
+  // Safety net, last: anything that found no column of its own is still readable on the item.
+  if (has(OE.notes)) {
+    const spare = [
+      (!has(OE.email) && d.email) ? `אימייל: ${d.email}` : "",
+      (!has(OE.phone) && d.phone) ? `טלפון: ${d.phone}` : "",
+      d.name ? `שם איש הקשר: ${d.name}` : "",
+      isNewsletter ? "" : `סוג אירוע כפי שנבחר באתר: ${d.eventType || "-"}`,
+    ].filter(Boolean);
+    cols[OE.notes] = { text: spare.length ? notes + "\n" + spare.join("\n") : notes };
+  }
+  return cols;
+}
+
 // Build column values for a board whose IDs we do not know, by matching on column type. Anything we
 // cannot place is not lost - the notes blob already carries every field in full.
 function colsByType(schema, d, notes) {
@@ -402,7 +604,9 @@ function colsByType(schema, d, notes) {
   if (date && d.date) cols[date] = { date: d.date };
   const num = first("numbers");
   if (num && d.guests != null && d.guests !== "") cols[num] = String(d.guests);
-  const nameCol = schema.columns.find((c) => c.type === "text" && /שם|name/i.test(c.title || ""));
+  // Anchored on purpose: an unanchored /name/i also matches "Campaign Name", which is how the
+  // customer's name ended up in the campaign column on the Open Events board.
+  const nameCol = schema.columns.find((c) => c.type === "text" && /^(שם|שם מלא|שם הלקוח|name|full name|contact name|customer name)$/i.test((c.title || "").trim()));
   if (nameCol && d.name) cols[nameCol.id] = String(d.name);
   // Status only if the board already defines the label. create_labels_if_missing is false, so an
   // invented label would fail the create - the very thing this function exists to prevent.
@@ -429,6 +633,283 @@ function colsByType(schema, d, notes) {
   return cols;
 }
 
+// ---------------------------------------------------------------------------------------------
+// Mirror: committed events from Events Form and Company Events, money stripped, onto Open Events.
+//
+// The sync owns exactly the items carrying a Source Item value and nothing else. An item with that
+// column empty is somebody's own work - a website enquiry promoted by hand, an event typed straight
+// onto the board - and is never created, updated or removed here, whatever group it sits in.
+// ---------------------------------------------------------------------------------------------
+
+// Read every item on a board with the given columns, following the cursor to the end.
+async function fetchItems(boardId, TOKEN, columnIds) {
+  const idsArg = columnIds?.length ? `(ids: ${JSON.stringify(columnIds)})` : "";
+  const FIELDS = `
+        id
+        name
+        group { id title }
+        column_values${idsArg} { id text ... on DateValue { date } }`;
+  const ask = async (query) => {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    return r.json();
+  };
+  const first = await ask(`query { boards(ids: [${boardId}]) { items_page(limit: 100) { cursor items {${FIELDS}
+      } } } }`);
+  if (first.errors) throw new Error(`board ${boardId}: ${JSON.stringify(first.errors).slice(0, 300)}`);
+  const page = first?.data?.boards?.[0]?.items_page;
+  const items = [...(page?.items || [])];
+  let cursor = page?.cursor || null;
+  for (let i = 0; cursor && i < 20; i++) {
+    const more = await ask(`query { next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) { cursor items {${FIELDS}
+      } } }`);
+    if (more.errors) throw new Error(`board ${boardId} page ${i + 2}: ${JSON.stringify(more.errors).slice(0, 300)}`);
+    items.push(...(more?.data?.next_items_page?.items || []));
+    cursor = more?.data?.next_items_page?.cursor || null;
+  }
+  return items.map((it) => {
+    const cv = {};
+    for (const c of (it.column_values || [])) cv[c.id] = c;
+    return { id: it.id, name: it.name, groupId: it.group?.id || "", groupTitle: it.group?.title || "", cv };
+  });
+}
+
+// Notes minus anything that talks about money. Line by line, so one price line does not cost the
+// whole note - "40 people, vegan main, projector" survives; "מקדמה 1,500 ₪" does not.
+function stripMoney(text) {
+  return String(text || "")
+    .split("\n")
+    .filter((line) => !MONEY_LINE.test(line))
+    .join("\n")
+    .trim();
+}
+
+// The money-free shape of one source event, as text, so a mirror can be compared to its source
+// without caring how Monday formats a date or an hour.
+function mirrorFields(src, labels) {
+  const t = (id) => (src.cv[id]?.text || "").trim();
+  const pick = (a, b) => t(a) || t(b);
+  // An event type the Open Events board does not define falls back to "אחר": create_labels_if_missing
+  // is false, so sending an unknown label would fail the write and lose the mirror entirely.
+  const rawType = t(SRC.eventType);
+  const eventType = labels.eventType.includes(rawType) ? rawType
+                  : labels.eventType.includes("אחר") ? "אחר" : "";
+  const rawTimeOf = t(SRC.timeOf);
+  const timeOf = labels.timeOf.includes(rawTimeOf) ? rawTimeOf : "";
+  return {
+    name:      src.name || "אירוע",
+    date:      (src.cv[SRC.date]?.date || t(SRC.date) || "").trim(),
+    startHour: t(SRC.startHour),
+    endHour:   t(SRC.endHour),
+    // The Start-End text column is only ever filled for leads the website created; staff entering
+    // an event by hand use the two hour pickers and leave it blank. Derive it from them, so the
+    // column reads "20:00-01:00" instead of nothing on every hand-entered booking.
+    slotText:  pick(SRC.slotText, SRC.slotAlt) || slotFromHours(t(SRC.startHour), t(SRC.endHour)),
+    eventType,
+    timeOf,
+    guests:    pick(SRC.guests, SRC.guestsAlt),
+    notes:     stripMoney(t(SRC.notes)),
+  };
+}
+
+// Two hour-picker values -> "20:00-01:00". Empty unless both ends are known: half a range is more
+// misleading on a calendar than no range at all.
+function slotFromHours(startText, endText) {
+  const a = hourValue(startText), b = hourValue(endText);
+  if (!a || !b) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(a.hour)}:${pad(a.minute)}-${pad(b.hour)}:${pad(b.minute)}`;
+}
+
+// "06:00 PM" -> {hour:18, minute:0}. Monday renders hour columns in 12-hour form but only accepts
+// 24-hour numbers back.
+function hourValue(text) {
+  const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i.exec(String(text || "").trim());
+  if (!m) return null;
+  let hour = +m[1];
+  const ampm = (m[3] || "").toUpperCase();
+  if (ampm === "PM" && hour !== 12) hour += 12;
+  if (ampm === "AM" && hour === 12) hour = 0;
+  return { hour, minute: +m[2] };
+}
+
+function mirrorColumnValues(f, key) {
+  const cols = { [OE.sourceItem]: key };
+  if (f.date)      cols[OE.date] = { date: f.date };
+  if (f.eventType) cols[OE.eventType] = { label: f.eventType };
+  if (f.timeOf)    cols[OE.timeOf] = { label: f.timeOf };
+  if (f.guests)    cols[OE.guests] = String(f.guests);
+  if (f.slotText)  cols[OE.slotText] = f.slotText;
+  const sh = hourValue(f.startHour), eh = hourValue(f.endHour);
+  if (sh) cols[OE.startHour] = sh;
+  if (eh) cols[OE.endHour] = eh;
+  cols[OE.notes] = { text: f.notes };
+  return cols;
+}
+
+// What an existing mirror currently holds, in the same shape mirrorFields returns, so the two can
+// be compared directly and an unchanged event costs no write.
+function mirrorCurrent(item) {
+  const t = (id) => (item.cv[id]?.text || "").trim();
+  return {
+    name:      item.name || "",
+    date:      (item.cv[OE.date]?.date || t(OE.date) || "").trim(),
+    startHour: t(OE.startHour),
+    endHour:   t(OE.endHour),
+    slotText:  t(OE.slotText),
+    eventType: t(OE.eventType),
+    timeOf:    t(OE.timeOf),
+    guests:    t(OE.guests),
+    notes:     t(OE.notes),
+  };
+}
+
+function sameFields(a, b) {
+  const hv = (x) => { const h = hourValue(x); return h ? `${h.hour}:${h.minute}` : ""; };
+  return a.name === b.name &&
+    a.date === b.date &&
+    hv(a.startHour) === hv(b.startHour) &&
+    hv(a.endHour) === hv(b.endHour) &&
+    a.slotText === b.slotText &&
+    a.eventType === b.eventType &&
+    a.timeOf === b.timeOf &&
+    String(a.guests) === String(b.guests) &&
+    a.notes === b.notes;
+}
+
+async function mondayMutate(query, variables, TOKEN) {
+  const r = await fetch("https://api.monday.com/v2", {
+    method: "POST",
+    headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+    body: JSON.stringify({ query, variables }),
+  });
+  const out = await r.json();
+  if (out.errors) throw new Error(JSON.stringify(out.errors).slice(0, 300));
+  return out.data;
+}
+
+async function syncMirror(env) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { ok: false, error: "MONDAY_TOKEN is not set on this deployment" };
+
+  const target = await boardSchema(OPEN_EVENTS_BOARD, TOKEN);
+  if (!target) return { ok: false, error: "could not read the Open Events board schema" };
+  if (!target.columns.some((c) => c.id === OE.sourceItem)) {
+    // Without the provenance column the sync cannot tell its own items from anyone else's, and the
+    // removal step would be free to delete real work. Refuse rather than guess.
+    return { ok: false, error: `Open Events board has no "${OE.sourceItem}" column - refusing to sync` };
+  }
+  const labelsOf = (id) => {
+    try { return Object.values(JSON.parse(target.columns.find((c) => c.id === id)?.settings_str || "{}").labels || {}); }
+    catch { return []; }
+  };
+  const labels = { eventType: labelsOf(OE.eventType), timeOf: labelsOf(OE.timeOf) };
+
+  // What should exist.
+  const srcColumns = Object.values(SRC);
+  const desired = new Map();
+  for (const boardId of [AVAIL_BOARD, COMPANY_BOARD]) {
+    for (const it of await fetchItems(boardId, TOKEN, srcColumns)) {
+      if (!isCommittedGroup(it.groupTitle, it.groupId, boardId)) continue;
+      // An item promoted from an Open Events lead carries its origin in Source Item. Mirroring it
+      // back would put the same event on Open Events twice - once as the lead that started it,
+      // once as a mirror of its own promoted copy. The lead is the original; skip the copy.
+      // ANY non-empty value skips: the column exists solely for this marker, and the Monday UI's
+      // create-item recipe may only manage a bare item id rather than the "5102602771:<id>" form.
+      if ((it.cv[SRC.origin]?.text || "").trim()) continue;
+      const f = mirrorFields(it, labels);
+      if (!f.date) continue;   // an event with no date cannot hold a slot on a calendar
+      desired.set(`${boardId}:${it.id}`, f);
+    }
+  }
+
+  // What does exist. Only items carrying a Source Item are ours.
+  const mirrorColumns = [OE.sourceItem, OE.date, OE.startHour, OE.endHour, OE.slotText,
+                         OE.eventType, OE.timeOf, OE.guests, OE.notes];
+  const existing = new Map();
+  for (const it of await fetchItems(OPEN_EVENTS_BOARD, TOKEN, mirrorColumns)) {
+    const key = (it.cv[OE.sourceItem]?.text || "").trim();
+    if (!key) continue;
+    existing.set(key, it);
+  }
+
+  const CREATE = `mutation ($board: ID!, $group: String!, $name: String!, $cols: JSON!) {
+    create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
+  }`;
+  const UPDATE = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
+    change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols) { id }
+  }`;
+  const RENAME = `mutation ($board: ID!, $item: ID!, $name: JSON!) {
+    change_column_value(board_id: $board, item_id: $item, column_id: "name", value: $name) { id }
+  }`;
+  const REMOVE = `mutation ($item: ID!) { delete_item(item_id: $item) { id } }`;
+
+  const out = { ok: true, scanned: desired.size, created: 0, updated: 0, removed: 0, failed: [] };
+  const group = target.groups.includes(MIRROR_GROUP) ? MIRROR_GROUP : null;
+
+  for (const [key, f] of desired) {
+    const cols = JSON.stringify(mirrorColumnValues(f, key));
+    const mirror = existing.get(key);
+    try {
+      if (!mirror) {
+        await mondayMutate(CREATE, { board: OPEN_EVENTS_BOARD, group, name: f.name.slice(0, 230), cols }, TOKEN);
+        out.created++;
+      } else if (!sameFields(f, mirrorCurrent(mirror))) {
+        await mondayMutate(UPDATE, { board: OPEN_EVENTS_BOARD, item: mirror.id, cols }, TOKEN);
+        if (mirror.name !== f.name) {
+          await mondayMutate(RENAME, { board: OPEN_EVENTS_BOARD, item: mirror.id, name: JSON.stringify(f.name.slice(0, 230)) }, TOKEN);
+        }
+        out.updated++;
+      }
+    } catch (e) {
+      console.error(`mirror ${key} failed:`, e);
+      out.failed.push(key);
+    }
+  }
+
+  // Anything of ours whose source is no longer committed - cancelled, moved back to a lead group,
+  // or deleted outright. delete_item lands in Monday's recycle bin, recoverable for 30 days.
+  for (const [key, mirror] of existing) {
+    if (desired.has(key)) continue;
+    try {
+      await mondayMutate(REMOVE, { item: mirror.id }, TOKEN);
+      out.removed++;
+    } catch (e) {
+      console.error(`mirror removal ${key} failed:`, e);
+      out.failed.push(key);
+    }
+  }
+  return out;
+}
+
+// One definition of "this group means the date is taken", shared by the availability feed and the
+// mirror sync. Two copies of this rule would let the public calendar and the Open Events board
+// disagree about the same booking, which is exactly the confusion the board exists to end.
+// The id lists are board-scoped on purpose. Group ids are NOT unique across boards: group_mm18zcww
+// is "New Leads" on Events Form and "Packages (In Agreement Process)" on Company Events. Checking
+// every list against every board therefore marked Events Form's New Leads as committed - so every
+// private homepage lead was blocking its own requested date on the public calendar.
+function isCommittedGroup(title, id, boardId) {
+  const t = (title || "").toLowerCase();
+  if (t.includes("תפוס") ||
+      t.includes("סגור") ||
+      t.includes("closed") ||
+      t.includes("booked") ||
+      t.includes("deal") ||
+      t.includes("pre payment") ||
+      t.includes("prepayment") ||
+      t.includes("proposal") ||
+      t.includes("agreement")) return true;
+  const b = String(boardId || "");
+  if (b === AVAIL_BOARD)        return AVAIL_GROUPS.includes(id);
+  if (b === COMPANY_BOARD)      return COMPANY_AVAIL_GROUPS.includes(id);
+  if (b === OPEN_EVENTS_BOARD)  return OPEN_AVAIL_GROUPS.includes(id);
+  return false;
+}
+
 // Read one board's date/time columns. Asking for three boards, every group, 500 items and
 // EVERY column (including `value`, a JSON blob per cell) in a single query is what took this
 // feed down: Monday rejects the whole query on complexity, the handler logged it and returned
@@ -442,13 +923,7 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
   const idsArg = wanted.length ? `(ids: ${JSON.stringify(wanted)})` : "";
   // items_page is asked for once per BOARD, not once per group. Nesting it under groups
   // multiplies the cost by the number of groups, which is what made this query fail.
-  const query = `query {
-    boards(ids: [${boardId}]) {
-      id
-      title
-      groups { id title }
-      items_page(limit: 100) {
-        items {
+  const ITEM_FIELDS = `
           id
           name
           group { id }
@@ -457,18 +932,37 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
             type
             text
             ... on DateValue { date }
-          }
+          }`;
+  // items_page returns one page. Events Form holds 226 items against the 100 this used to ask for,
+  // so 126 bookings were invisible to the calendar - dates read as free because nobody paged.
+  const firstQuery = `query {
+    boards(ids: [${boardId}]) {
+      id
+      groups { id title }
+      items_page(limit: 100) {
+        cursor
+        items {${ITEM_FIELDS}
         }
       }
     }
   }`;
-  try {
+  const pageQuery = (cursor) => `query {
+    next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) {
+      cursor
+      items {${ITEM_FIELDS}
+      }
+    }
+  }`;
+  const ask = async (query) => {
     const r = await fetch("https://api.monday.com/v2", {
       method: "POST",
       headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
       body: JSON.stringify({ query }),
     });
-    const out = await r.json();
+    return r.json();
+  };
+  try {
+    const out = await ask(firstQuery);
     if (out.errors) {
       const msg = JSON.stringify(out.errors).slice(0, 400);
       console.error(`availability board ${boardId} errors:`, msg);
@@ -481,6 +975,24 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
       if (diag) diag.push(`${boardId}: board not returned`);
       return null;
     }
+    // Walk the rest of the pages. Bounded so a cursor bug cannot spin: 20 pages is 2000 items,
+    // an order of magnitude above the largest board, and running out of pages is logged, not
+    // swallowed - a silently truncated calendar is what this whole block exists to stop.
+    const items = [...(b.items_page?.items || [])];
+    let cursor = b.items_page?.cursor || null;
+    for (let page = 0; cursor && page < 20; page++) {
+      const more = await ask(pageQuery(cursor));
+      if (more.errors) {
+        const msg = JSON.stringify(more.errors).slice(0, 400);
+        console.error(`availability board ${boardId} page ${page + 2} errors:`, msg);
+        if (diag) diag.push(`${boardId} page ${page + 2}: ${msg}`);
+        break;
+      }
+      items.push(...(more?.data?.next_items_page?.items || []));
+      cursor = more?.data?.next_items_page?.cursor || null;
+    }
+    if (cursor) console.warn(`availability board ${boardId}: stopped paging with a cursor still open`);
+    b.items_page = { items };
     // Reshape to the groups[].items_page.items form the reader below expects, so the
     // parsing logic underneath is untouched.
     const byGroup = new Map((b.groups || []).map((g) => [g.id, { id: g.id, title: g.title, items_page: { items: [] } }]));
@@ -489,13 +1001,120 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
       if (!byGroup.has(gid)) byGroup.set(gid, { id: gid, title: "", items_page: { items: [] } });
       byGroup.get(gid).items_page.items.push(it);
     }
-    return { id: b.id, title: b.title, groups: Array.from(byGroup.values()) };
+    return { id: b.id, groups: Array.from(byGroup.values()) };
   } catch (e) {
     console.error(`availability board ${boardId} failed:`, e);
     if (diag) diag.push(`${boardId}: ${String(e).slice(0, 200)}`);
     reasons.push("request failed");
     return null;
   }
+}
+
+// The published half of the feed: what is on at Ezra, for the public to read. Everything here is
+// content somebody typed into the Public * columns on purpose. Nothing is derived from a lead, a
+// name or a note, because those belong to customers - `/events` showed six invented weekday
+// templates before this, which was fiction but at least nobody's fiction in particular.
+//
+// Two rules this function exists to keep:
+//   1. Unticked publishes nothing. Not the title, not the notes, not the customer's name.
+//   2. A published event still holds its date on the calendar. Publishing changes how a taken
+//      evening is *described*, never whether it is taken.
+async function fetchPublicEvents(TOKEN) {
+  const ids = [PUB.publish, PUB.title, PUB.subtitle, PUB.desc, PUB.images, PUB.link,
+               PUB.entry, PUB.rounds, OE.date, OE.startHour, OE.endHour];
+  const ITEM_FIELDS = `
+        id
+        name
+        column_values(ids: ${JSON.stringify(ids)}) {
+          id
+          text
+          value
+          ... on DateValue { date }
+        }`;
+  const ask = async (query) => {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    return r.json();
+  };
+  const first = `query { boards(ids: [${OPEN_EVENTS_BOARD}]) { items_page(limit: 100) { cursor items {${ITEM_FIELDS}
+  } } } }`;
+  const more = (cursor) => `query { next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) { cursor items {${ITEM_FIELDS}
+  } } }`;
+
+  const items = [];
+  try {
+    const out = await ask(first);
+    if (out.errors) {
+      console.error("public events read errors:", JSON.stringify(out.errors).slice(0, 300));
+      return null;
+    }
+    const page = out?.data?.boards?.[0]?.items_page;
+    if (!page) return null;
+    items.push(...(page.items || []));
+    // Same paging discipline as the availability read: items_page returns one page, and a board
+    // that outgrows 100 items would otherwise start dropping published evenings without a word.
+    let cursor = page.cursor || null;
+    for (let p = 0; cursor && p < 20; p++) {
+      const nxt = await ask(more(cursor));
+      if (nxt.errors) { console.error("public events page errors:", JSON.stringify(nxt.errors).slice(0, 300)); break; }
+      items.push(...(nxt?.data?.next_items_page?.items || []));
+      cursor = nxt?.data?.next_items_page?.cursor || null;
+    }
+  } catch (e) {
+    console.error("public events read failed:", e);
+    return null;
+  }
+
+  const events = [];
+  for (const it of items) {
+    const cv = {};
+    (it.column_values || []).forEach((c) => { cv[c.id] = c; });
+    let checked = false;
+    try { checked = JSON.parse(cv[PUB.publish]?.value || "{}").checked === true; } catch { checked = false; }
+    if (!checked) continue;
+
+    const date = (cv[OE.date]?.date || cv[OE.date]?.text || "").trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;   // an event with no date has nowhere to appear
+
+    const txt = (id) => (cv[id]?.text || "").trim();
+    const start = parseHourText(cv[OE.startHour]?.text) || "";
+    const end   = parseHourText(cv[OE.endHour]?.text) || "";
+    const rounds = txt(PUB.rounds).split(",").map((s) => s.trim()).filter((s) => /^\d{1,2}:\d{2}$/.test(s));
+    // Repo-relative only. An absolute URL here would let a board edit point the site's own <img>
+    // at any host on the internet, which is not a power a Monday column should have.
+    const images = txt(PUB.images).split(",").map((s) => s.trim())
+      .filter((s) => s && !/^[a-z]+:/i.test(s) && !s.startsWith("//") && !s.includes(".."));
+    let link = "", linkText = "";
+    try {
+      const raw = JSON.parse(cv[PUB.link]?.value || "{}");
+      const u = raw.url || txt(PUB.link);
+      // https only: this value becomes an href on a public page, and a board column should not be
+      // able to hand a visitor a javascript: or http: destination.
+      if (/^https:\/\//i.test(u)) { link = u; linkText = String(raw.text || "").trim(); }
+    } catch { link = ""; }
+
+    events.push({
+      date,
+      title: txt(PUB.title) || it.name,
+      subtitle: txt(PUB.subtitle),
+      desc: txt(PUB.desc),
+      images,
+      link,
+      linkText,
+      entry: txt(PUB.entry),
+      rounds,
+      // Doors: the first seating round if there is one, otherwise the event's start hour. A
+      // sit-down evening opens when the first table does, not when the venue's slot begins.
+      doors: rounds[0] || start,
+      start,
+      end,
+    });
+  }
+  events.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return events;
 }
 
 // Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
@@ -557,22 +1176,10 @@ async function availability(request, env, cors) {
 
     for (const b of boards) {
       for (const g of (b.groups || [])) {
-        const gTitle = (g.title || "").toLowerCase();
-        const gId = g.id || "";
-        // Check if group represents closed / booked / taken dates
-        const isClosedGroup = gTitle.includes("תפוס") ||
-          gTitle.includes("סגור") ||
-          gTitle.includes("closed") ||
-          gTitle.includes("booked") ||
-          gTitle.includes("deal") ||
-          gTitle.includes("pre payment") ||
-          gTitle.includes("prepayment") ||
-          gTitle.includes("proposal") ||
-          gTitle.includes("agreement") ||
-          AVAIL_GROUPS.includes(gId) ||
-          COMPANY_AVAIL_GROUPS.includes(gId);
-
-        if (!isClosedGroup && b.id !== OPEN_EVENTS_BOARD) continue;
+        // Every board is filtered to its booked groups. The Open Events board used to be exempt
+        // from this - every group counted, New Leads included - so a single inbound enquiry marked
+        // its own requested date unavailable to everyone else the moment it arrived.
+        if (!isCommittedGroup(g.title, g.id, b.id)) continue;
 
         for (const it of (g.items_page?.items || [])) {
           const cv = {};
@@ -618,9 +1225,24 @@ async function availability(request, env, cors) {
       }
     }
     const booked = Array.from(bookedSet);
+    // A committed event and its Open Events mirror are the same booking read twice. `booked` is a
+    // Set so dates are unaffected, but `busy` would carry the slot twice over.
+    const seenSlot = new Set();
+    const busyUnique = busy.filter((b2) => {
+      const k = `${b2.date}|${b2.start}|${b2.end}`;
+      if (seenSlot.has(k)) return false;
+      seenSlot.add(k);
+      return true;
+    });
+    busy.length = 0;
+    busy.push(...busyUnique);
     // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
     // broken one. Without it, a failed read renders as a month of free dates.
-    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, build: BUILD_ID };
+    // Published events ride the same response the calendar already fetches: one request, one
+    // cache entry, and no window where the page knows a date is taken but not yet why. A failed
+    // read is an empty list, never a thrown request - the calendar is the part that must not break.
+    const published = (await fetchPublicEvents(TOKEN)) || [];
+    const body = missing ? { booked, busy, public: published, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, public: published, build: BUILD_ID };
     return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
