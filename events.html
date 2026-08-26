@@ -7606,10 +7606,24 @@
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
+        function getUpcomingDateString(dayOfWeek, customPrefix) {
+          const now = new Date();
+          const d = new Date(now);
+          const currentDow = now.getDay();
+          let diff = (dayOfWeek - currentDow + 7) % 7;
+          d.setDate(now.getDate() + diff);
+          const padNum = (n) => String(n).padStart(2, '0');
+          const dateFormatted = `${padNum(d.getDate())}.${padNum(d.getMonth() + 1)}`;
+          const daysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+          const prefix = customPrefix || (dayOfWeek === 6 ? 'מוצ״ש' : `יום ${daysHe[dayOfWeek]}`);
+          return `${prefix} ${dateFormatted}`;
+        }
+
         const spotlightEvents = [
           {
             id: 'sunday-live',
-            datePill: 'יום ראשון הקרוב',
+            dow: 0,
+            datePill: getUpcomingDateString(0, 'יום ראשון'),
             timePill: '20:30',
             badgePill: 'מומלץ להזמין מקום',
             badgeClass: 'sticker--rsvp',
@@ -7618,11 +7632,12 @@
             lineup: 'מוזיקה חיה, הרכבים מקוריים וסשנים אקוסטיים אינטימיים',
             desc: 'סשן מוזיקלי אינטימי בסלון של עזרא: הרכבים מקוריים, סשנים אקוסטיים מרגשים, תאורה חמה וקוקטיילים שנרקחו במיוחד לערב זה.',
             img: 'images/MOMENT 1.jpg',
-            fullDateString: 'יום ראשון הקרוב · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'tuesday-chef',
-            datePill: 'יום שלישי',
+            dow: 2,
+            datePill: getUpcomingDateString(2, 'יום שלישי'),
             timePill: '19:30 & 22:00',
             badgePill: 'בהזמנת מקום',
             badgeClass: 'sticker--rsvp',
@@ -7631,11 +7646,12 @@
             lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
             desc: 'תפריט ספיישלים ייחודי מהטאבון: לחמי מחמצת חמים עם חמאות מתובלות, דגים נאים, ירקות עונתיים חרוכים וקוקטיילים שנרקחו במיוחד לערב זה.',
             img: 'images/FOOD ENVIRONMENT.jpg',
-            fullDateString: 'יום שלישי · 19:30 / 22:00'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'wednesday-listening',
-            datePill: 'יום רביעי',
+            dow: 3,
+            datePill: getUpcomingDateString(3, 'יום רביעי'),
             timePill: '20:30',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7644,11 +7660,12 @@
             lineup: 'האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא',
             desc: 'חוויית האזנה עמוקה לאלבומים שלמים בפורמט ויניל מקורי במערכת הסאונד המותאמת אישית של עזרא. תאורה עמומה, משקאות מותאמים וסאונד צלול.',
             img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-            fullDateString: 'יום רביעי · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'thursday-groove',
-            datePill: 'יום חמישי',
+            dow: 4,
+            datePill: getUpcomingDateString(4, 'יום חמישי'),
             timePill: '21:00',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7657,11 +7674,12 @@
             lineup: 'DJ Amir Peled & Special Guests · תקליטים מקוריים',
             desc: 'סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי.',
             img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-            fullDateString: 'יום חמישי · 21:00'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'saturday-jazz',
-            datePill: 'מוצ״ש',
+            dow: 6,
+            datePill: getUpcomingDateString(6, 'מוצ״ש'),
             timePill: '20:30',
             badgePill: 'מומלץ להזמין מקום',
             badgeClass: 'sticker--rsvp',
@@ -7670,7 +7688,7 @@
             lineup: 'פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי',
             desc: 'סשן ג\'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין.',
             img: 'images/vibe-cocktail.jpg',
-            fullDateString: 'מוצ״ש · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           }
         ];
 
