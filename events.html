@@ -472,6 +472,15 @@
     .sticker--free    { background: var(--green); color: #061e12; font-weight: 900; }
     .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 900; }
     /* A recurring format, not a particular evening: quieter than an announced event on purpose. */
+    /* The hero renders nothing until the board has answered. Painting the weekday formats first
+       and swapping them for the real evening a moment later reads as the page changing its mind -
+       and the thing it briefly asserts ("ערב מוזיקה · ימי ראשון") is the least true version. The
+       frame and its photo stay, so nothing moves when the copy arrives. */
+    .hero-slider__card.is-awaiting-board .hero-slider__card-body,
+    .hero-slider__card.is-awaiting-board .hero-slider__dots,
+    .hero-slider__card.is-awaiting-board .hero-slider__progress { opacity: 0; }
+    .hero-slider__card .hero-slider__card-body,
+    .hero-slider__card .hero-slider__dots { transition: opacity .28s ease; }
     .sticker--format  { background: rgba(255,255,255,.14); color: #fff; font-weight: 800; }
 
     /* TICKER MARQUEE */
@@ -3960,7 +3969,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
-        <div class="hero-slider__card" id="heroSliderCard" role="button" tabindex="0" aria-label="לפרטים מלאים ושריון מקום">
+        <div class="hero-slider__card is-awaiting-board" id="heroSliderCard" role="button" tabindex="0" aria-label="לפרטים מלאים ושריון מקום">
           <!-- Background Slides Track (Directly in Card) -->
           <div class="hero-slider__slides" id="heroSliderSlides"></div>
 
@@ -6479,8 +6488,8 @@
     // room is simply not open unless somebody books it. Said gently: no event tonight, and the
     // date can be yours.
     const EZRA_NO_FORMAT = {
-      name: 'אין אירוע הערב',
-      lineup: 'עזרא נח בין ערב לערב',
+      name: 'פנוי לאירוע פרטי',
+      lineup: 'אין ערב ציבורי בתאריך הזה',
       desc: 'לא מתוכנן ערב ציבורי בתאריך הזה. רוצים את עזרא לעצמכם? אפשר לסגור את החלל לאירוע פרטי, יום הולדת או ערב חברה - השאירו פרטים ונחזור אליכם.',
       img: 'images/BAR.jpg',
     };
@@ -6686,7 +6695,7 @@
           } else if (!t0.published && !EZRA_FORMATS[t0.dow]) {
             // Nothing on the board and no recurring format: the room is closed tonight. Gentle -
             // an invitation to book the date, not a shut door.
-            liveText.innerHTML = `<strong>הערב:</strong> אין אירוע · אפשר לסגור את עזרא לאירוע פרטי`;
+            liveText.innerHTML = `<strong>הערב:</strong> פנוי לאירוע פרטי`;
             const strip2 = document.getElementById('heroLiveStatus');
             if (strip2) strip2.classList.remove('is-open'), strip2.classList.add('is-closed');
           } else {
@@ -6768,9 +6777,15 @@
             ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="הצהריים סגורים לאירוע"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
+          // Three states, not two. "Not closed" is not the same as "open to the public": on a
+          // night with nothing on the board and no recurring format the room simply is not open,
+          // and the green "פתוח לקהל" row was announcing a public evening that does not exist.
+          const eveningIsPublic = !!item.published || !!EZRA_FORMATS[item.dow];
           let eveningRow = item.isClosedEvening
             ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
-            : `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פתוח לקהל (${openHour})</span></div>`;
+            : eveningIsPublic
+            ? `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>${item.published ? `פתוח לקהל (${openHour})` : 'פתוח לקהל'}</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים ושריון הערב"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -7029,7 +7044,7 @@
               </button>
 
               <!-- Night Slot -->
-              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
+              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : (published || EZRA_FORMATS[dow]) ? 'month-cal-slot--open' : 'month-cal-slot--free'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
                 <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
                 <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : nightLabel}</span>
               </button>
@@ -7640,13 +7655,25 @@
           });
         }
 
-        renderSlides();
-        startAutoPlay();
+        // First paint waits for the board, so the first thing the hero says is the true thing.
+        // paintHero is idempotent: whichever of the feed and the timeout arrives first wins, and
+        // later feed updates still re-render (an event unpublished or its copy edited mid-session).
+        const heroCard = document.getElementById('heroSliderCard');
+        let heroPainted = false;
+        function paintHero() {
+          buildSpotlight();
+          renderSlides();
+          if (!heroPainted) {
+            heroPainted = true;
+            startAutoPlay();
+            if (heroCard) heroCard.classList.remove('is-awaiting-board');
+          }
+        }
 
-        // The feed lands a moment after first paint, and again on every refresh. Rebuilding
-        // from scratch is cheap here (at most five slides) and keeps the hero honest if an
-        // event is unpublished or its copy edited on the board mid-session.
-        onEzraPublished(() => { buildSpotlight(); renderSlides(); });
+        // A feed that never answers must not leave the hero blank: after this the weekday formats
+        // are the honest best available, since they claim a pattern rather than an evening.
+        const heroFallbackTimer = setTimeout(paintHero, 1500);
+        onEzraPublished(() => { clearTimeout(heroFallbackTimer); paintHero(); });
       })();
     })();
 
