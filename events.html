@@ -7728,8 +7728,11 @@
         modalTitle.textContent = ev.title;
         modalLineup.textContent = ev.lineup;
         modalDesc.textContent = ev.desc;
-        modalBadge.textContent = ev.badge;
-        modalBadge.className = `sticker ${ev.badgeClass}`;
+        // The hero slider names this field badgePill and the day cards name it badge. The
+        // modal is opened from both, and reading only one of them left every hero-opened
+        // modal with an empty coloured pill where the entry type should be.
+        modalBadge.textContent = ev.badge || ev.badgePill || '';
+        modalBadge.className = `sticker ${ev.badgeClass || 'sticker--free'}`;
         modalDateTag.textContent = ev.fullDateString || ev.date || '';
 
         renderGallery(pub ? pub.images : null);
@@ -8017,6 +8020,7 @@
                 datePill: `יום ${heroDaysHe[when.getDay()]} ${heroPad(d)}.${heroPad(m)}`,
                 timePill: ev.doors || ev.start || '',
                 badgePill: ev.entry || 'פתוח לקהל',
+                badge: ev.entry || 'פתוח לקהל',
                 badgeClass: rsvp ? 'sticker--rsvp' : 'sticker--free',
                 pillClass: rsvp ? 'hero-card__pill--rsvp' : 'hero-card__pill--free',
                 title: ev.title,
