@@ -471,6 +471,8 @@
     .sticker--listen { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--line); }
     .sticker--free    { background: var(--green); color: #061e12; font-weight: 900; }
     .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 900; }
+    /* A recurring format, not a particular evening: quieter than an announced event on purpose. */
+    .sticker--format  { background: rgba(255,255,255,.14); color: #fff; font-weight: 800; }
 
     /* TICKER MARQUEE */
     .ticker-strip {
@@ -6895,6 +6897,32 @@
     // back to its weekday template, which says what a Tuesday at Ezra is usually like and
     // claims nothing about this particular Tuesday.
     // ============================================================
+    // Recurring formats. A format is what a given weeknight IS at Ezra, not what is on.
+    // Deliberately carries no act name, no hour and no date: those belong to an INSTANCE, and an
+    // instance only ever comes from the board. Moss Town was a one-off show hardcoded as every
+    // Sunday, so from the week after it played the page would have announced it forever.
+    // A weekday absent from this map has no public format, and the page claims nothing about it.
+    const EZRA_FORMATS = {
+      0: {
+        name: 'ערב מוזיקה',
+        lineup: 'הופעה חיה או סט ויניל',
+        desc: 'ימי ראשון בעזרא הם ערבי מוזיקה - לפעמים הופעה חיה, לפעמים סט ויניל. מי מנגן משתנה משבוע לשבוע; כשיש ערב מסוים בתאריך הזה הוא יופיע כאן.',
+        img: 'images/MOMENT 1.jpg',
+      },
+      2: {
+        name: 'פופ-אפ שף',
+        lineup: 'שף אורח מהטאבון',
+        desc: 'ימי שלישי הם ערבי פופ-אפ שף - שף אורח משתלט על הטאבון לערב אחד. השף והתפריט משתנים; כשיש ערב מסוים בתאריך הזה הוא יופיע כאן.',
+        img: 'images/FOOD ENVIRONMENT.jpg',
+      },
+    };
+    // What a night with no format and no published event is: available, and nothing more.
+    const EZRA_NO_FORMAT = {
+      name: 'הסלון של עזרא',
+      lineup: '',
+      desc: 'אין ערב ציבורי שמוכרז לתאריך הזה. החלל פנוי ואפשר לסגור אותו לאירוע פרטי - השאירו פרטים ונחזור אליכם.',
+      img: 'images/BAR.jpg',
+    };
     let ezraPublished = new Map();
     const ezraPublishedSubscribers = [];
     function onEzraPublished(fn) { ezraPublishedSubscribers.push(fn); if (ezraPublished.size) fn(); }
@@ -6999,71 +7027,6 @@
       let bookedDates = new Set();
       let allDaysData = [];
 
-      const dayThemes = {
-        0: {
-          title: 'מוס טאון · הופעת בכורה בתל אביב',
-          lineup: 'Moss Town · פסיכדליה אינסטרומנטלית, גרוב, רוק וג\'אז',
-          desc: 'מוס טאון (Moss Town) מגיעים לסלון של עזרא להופעת בכורה מחשמלת בתל אביב! הרכב פסיכדליה אינסטרומנטלית, גרוב עמוק, מקצבי סבנטיז ורוק-ג\'אז לצד תפריט יין טבעי וקוקטיילים.',
-          img: 'images/MOMENT 1.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '20:00 - 01:00'
-        },
-        1: {
-          title: 'Wine & Vinyl Lounge · סלון יין וויניל',
-          lineup: 'יינות טבעיים בכוסות & פסקול ויניל אנלוגי',
-          desc: 'ערב רגוע בסלון של עזרא: מבחר יינות טבעיים ובוטיק פתוחים בכוסות, פוקצ\'ות טריות מהטאבון, תאורה חמה ומוזיקה אנלוגית נעימה.',
-          img: 'images/vibe-cocktail.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '20:00 - 01:00'
-        },
-        2: {
-          title: 'Fire & Dough · פופ-אפ שף מהטאבון',
-          lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
-          desc: 'ערב קולינרי מיוחד: תפריט ספיישלים ייחודי מהטאבון עם מנות גחלים, דגים נאים, לחמי מחמצת וקוקטיילים שנרקחו במיוחד לערב זה.',
-          img: 'images/FOOD ENVIRONMENT.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '19:30 / 22:00'
-        },
-        3: {
-          title: 'Night Sessions · השמעות אלבומים & Hi-Fi',
-          lineup: 'האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא',
-          desc: 'חוויית האזנה עמוקה לאלבומים שלמים בפורמט ויניל מקורי במערכת הסאונד המותאמת אישית של עזרא. תאורה עמומה, משקאות מותאמים וסאונד צלול.',
-          img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '20:30 - 01:30'
-        },
-        4: {
-          title: 'Groove & Grapes · סשן פאנק & סול ויניל',
-          lineup: 'DJ Amir Peled & Special Guests · תקליטים מקוריים',
-          desc: 'סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי.',
-          img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '21:00 עד אחרון הלקוחות'
-        },
-        5: {
-          title: 'Weekend Party · מסיבת סופ״ש בעזרא',
-          lineup: 'Ezra Sound System DJs · גרוב, דיסקו & האוס',
-          desc: 'מסיבת סופ״ש תל אביבית סוחפת: עמדת דיג\'יי מלאה חיים, קוקטיילים מדויקים מהבר ואווירה לוהטת עד השעות הקטנות של הלילה.',
-          img: 'images/gallery/g01.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          hours: '21:00 - 03:00'
-        },
-        6: {
-          title: 'Florentin Jazz Hang · טריו ג\'אז חי על הבר',
-          lineup: 'פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי',
-          desc: 'סשן ג\'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין.',
-          img: 'images/MOMENT 1.jpg',
-          badge: 'מומלץ להזמין מקום',
-          badgeClass: 'sticker--rsvp',
-          hours: '20:30 - 02:00'
-        }
-      };
 
       function generate30Days() {
         allDaysData = [];
@@ -7087,26 +7050,29 @@
             else hasEveningEvent = true;
           });
 
-          const theme = dayThemes[dow] || dayThemes[4];
+          // The format of this weeknight, or nothing if it has no public format.
+          const fmt = EZRA_FORMATS[dow] || EZRA_NO_FORMAT;
           const published = ezraPublished.get(dateKey) || null;
           // A published evening is booked exactly the way a private one is, so without this it
           // renders as "אירוע סגור · שמור לאירוע פרטי" - which is how Moss Town and the chef
           // evening were being announced on Instagram and hidden on our own page.
           const isClosedEvening = !published && (hasEveningEvent || (isBooked && !hasAfternoonEvent));
 
-          let title = theme.title;
-          let lineup = theme.lineup;
-          let desc = theme.desc;
-          let img = theme.img;
-          let badge = theme.badge;
-          let badgeClass = theme.badgeClass;
-          let hours = theme.hours;
+          let title = fmt.name;
+          let lineup = fmt.lineup;
+          let desc = fmt.desc;
+          let img = fmt.img;
+          // A format is not an instance, so it gets no entry badge and no hours. Those are facts
+          // about a particular evening and only the board knows them.
+          let badge = EZRA_FORMATS[dow] ? 'פורמט קבוע' : 'פנוי לאירוע פרטי';
+          let badgeClass = EZRA_FORMATS[dow] ? 'sticker--format' : 'sticker--free';
+          let hours = '';
 
           if (published) {
-            title = published.title || theme.title;
-            lineup = published.subtitle || theme.lineup;
-            desc = published.desc || theme.desc;
-            img = (published.images && published.images[0]) || theme.img;
+            title = published.title || fmt.name;
+            lineup = published.subtitle || fmt.lineup;
+            desc = published.desc || fmt.desc;
+            img = (published.images && published.images[0]) || fmt.img;
             badge = published.entry || 'פתוח לקהל';
             // "בהזמנת מקום" is the one entry type that asks something of the visitor, so it
             // keeps the RSVP styling. Everything else reads as an open door.
@@ -7122,7 +7088,7 @@
             img = 'images/BAR.jpg';
             badge = 'סגור לאירוע פרטי';
             badgeClass = 'sticker--busy';
-            hours = theme.hours;
+            hours = '';
           }
 
           allDaysData.push({
@@ -7468,13 +7434,13 @@
             hasEveningEvent = true; // default booked date to evening
           }
 
-          const theme = dayThemes[dow] || dayThemes[4];
+          const fmt = EZRA_FORMATS[dow] || EZRA_NO_FORMAT;
           // Same rule as the 30-day strip: a published evening is taken, but it is taken by
           // something with a name. The month grid would otherwise contradict the card above it.
           const published = ezraPublished.get(dateKey) || null;
           const isClosedEvening = hasEveningEvent && !published;
           const nightLabel = published ? (published.title || '').split('·')[0].trim()
-                           : theme.title.split('·')[0];
+                           : fmt.name;
 
           // Build Cell
           const cell = document.createElement('div');
@@ -7533,10 +7499,10 @@
                 if (typeof openEventModal === 'function') {
                   const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
                   openEventModal(published ? {
-                    title: published.title || theme.title,
-                    lineup: published.subtitle || theme.lineup,
-                    desc: published.desc || theme.desc,
-                    img: (published.images && published.images[0]) || theme.img,
+                    title: published.title || fmt.name,
+                    lineup: published.subtitle || fmt.lineup,
+                    desc: published.desc || fmt.desc,
+                    img: (published.images && published.images[0]) || fmt.img,
                     badge: published.entry || 'פתוח לקהל',
                     badgeClass: /הזמנ|כרטיס/.test(published.entry || '') ? 'sticker--rsvp' : 'sticker--free',
                     fullDateString: when,
@@ -7637,44 +7603,6 @@
       const modalPrivateBox = document.getElementById('modalPrivateBox');
       const toast = document.getElementById('toast');
 
-      const staticEvents = {
-        '1': {
-          title: 'Groove & Grapes · סשן תקליטי פאנק וסול נדירים',
-          lineup: 'בעמדה: DJ Amir Peled & Special Guests',
-          desc: 'סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי. הכניסה חופשית על בסיס מקום פנוי.',
-          img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          fullDateString: 'יום חמישי 20.08 · 21:00'
-        },
-        '2': {
-          title: 'Fire & Dough · פופ-אפ שף אורח מהטאבון',
-          lineup: 'שף אורח: איתי לב (לשעבר פרא / הבסטה) & קוקטיילים מותאמים',
-          desc: 'תפריט ספיישלים ייחודי מהטאבון: לחמי מחמצת חמים, דגים נאים, ירקות עונתיים חרוכים וקוקטיילים שנרקחו במיוחד לערב זה. מספר המקומות מוגבל ל-45 סועדים.',
-          img: 'images/FOOD ENVIRONMENT.jpg',
-          badge: 'בהזמנת מקום',
-          badgeClass: 'sticker--rsvp',
-          fullDateString: 'יום שני 24.08 · 19:30 / 22:00'
-        },
-        '3': {
-          title: 'Night Sessions · השמעת בכורה לאלבום חדש',
-          lineup: 'האזנה מרוכזת במערכת הסאונד של עזרא + שיחה עם היוצרים',
-          desc: 'חוויית האזנה מרוכזת באיכות סאונד אנלוגית עמוקה, תאורה עמומה ומשקאות מותאמים. לאחר ההשמעה שיחה פתוחה וסשן שאלות-תשובות עם האמנים והמפיקים.',
-          img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-          badge: 'כניסה חופשית',
-          badgeClass: 'sticker--free',
-          fullDateString: 'יום רביעי 26.08 · 20:30'
-        },
-        '4': {
-          title: 'Florentin Jazz Hang · טריו ג\'אז חי על הבר',
-          lineup: 'פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי',
-          desc: 'סשן ג\'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין.',
-          img: 'images/MOMENT 1.jpg',
-          badge: 'מומלץ להזמין מקום',
-          badgeClass: 'sticker--rsvp',
-          fullDateString: 'מוצ״ש 29.08 · 21:00'
-        }
-      };
 
       const galleryEl  = document.getElementById('modalGallery');
       const artistLink = document.getElementById('modalArtistLink');
@@ -7738,7 +7666,10 @@
 
       openEventModal = function(data) {
         if (!modal) return;
-        const ev = (typeof data === 'string') ? (staticEvents[data] || staticEvents['1']) : data;
+        // Objects only. This used to accept a string id into a table of four invented evenings,
+        // reachable through a `.js-modal-open` selector that matches nothing in the markup.
+        if (!data || typeof data !== 'object') return;
+        const ev = data;
         const pub = ev.published || null;
 
         const note = document.getElementById('modalEntryNote');
@@ -7873,13 +7804,6 @@
         modal.setAttribute('aria-hidden', 'true');
       }
 
-      document.querySelectorAll('.js-modal-open').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-event');
-          openEventModal(id);
-        });
-      });
-
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
@@ -7952,83 +7876,31 @@
           };
         }
 
-        const eventsConfig = [
-          {
-            id: 'sunday-live',
-            dow: 0,
-            customPrefix: 'יום ראשון',
-            timePill: '20:00',
-            badgePill: 'כניסה חופשית',
-            badgeClass: 'sticker--free',
-            pillClass: 'hero-card__pill--free',
-            title: 'מוס טאון · הופעת בכורה בתל אביב',
-            lineup: 'Moss Town · פסיכדליה אינסטרומנטלית, גרוב, רוק וג\'אז',
-            desc: 'מוס טאון (Moss Town) מגיעים לסלון של עזרא להופעת בכורה מחשמלת בתל אביב! הרכב פסיכדליה אינסטרומנטלית, גרוב עמוק, מקצבי סבנטיז ורוק-ג\'אז לצד תפריט יין טבעי וקוקטיילים.',
-            img: 'images/MOMENT 1.jpg'
-          },
-          {
-            id: 'tuesday-chef',
-            dow: 2,
-            customPrefix: 'יום שלישי',
-            timePill: '19:30 & 22:00',
-            badgePill: 'כניסה חופשית',
-            badgeClass: 'sticker--free',
-            pillClass: 'hero-card__pill--free',
-            title: 'Fire & Dough · פופ-אפ שף מהטאבון',
-            lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
-            desc: 'ערב קולינרי מיוחד: תפריט ספיישלים ייחודי מהטאבון עם מנות גחלים, דגים נאים, לחמי מחמצת וקוקטיילים שנרקחו במיוחד לערב זה.',
-            img: 'images/FOOD ENVIRONMENT.jpg'
-          },
-          {
-            id: 'wednesday-listening',
-            dow: 3,
-            customPrefix: 'יום רביעי',
-            timePill: '20:30',
-            badgePill: 'כניסה חופשית',
-            badgeClass: 'sticker--free',
-            pillClass: 'hero-card__pill--free',
-            title: 'Night Sessions · השמעות אלבומים & Hi-Fi',
-            lineup: 'האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא',
-            desc: 'חוויית האזנה עמוקה לאלבומים שלמים בפורמט ויניל מקורי במערכת הסאונד המותאמת אישית של עזרא. תאורה עמומה, משקאות מותאמים וסאונד צלול.',
-            img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg'
-          },
-          {
-            id: 'thursday-groove',
-            dow: 4,
-            customPrefix: 'יום חמישי',
-            timePill: '21:00',
-            badgePill: 'כניסה חופשית',
-            badgeClass: 'sticker--free',
-            pillClass: 'hero-card__pill--free',
-            title: 'Groove & Grapes · סשן פאנק & סול ויניל',
-            lineup: 'DJ Amir Peled & Special Guests · תקליטים מקוריים',
-            desc: 'סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי.',
-            img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg'
-          },
-          {
-            id: 'saturday-jazz',
-            dow: 6,
-            customPrefix: 'מוצ״ש',
-            timePill: '20:30',
-            badgePill: 'מומלץ להזמין מקום',
-            badgeClass: 'sticker--rsvp',
-            pillClass: 'hero-card__pill--rsvp',
-            title: 'Florentin Jazz Hang · טריו ג\'אז חי על הבר',
-            lineup: 'פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי',
-            desc: 'סשן ג\'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין.',
-            img: 'images/vibe-cocktail.jpg'
-          }
-        ];
+        // Fallback for when the board has published nothing upcoming. These are FORMATS, so they
+        // carry a weekday ("ימי ראשון") rather than a date, and no time and no act name - a hero
+        // card is the most believed thing on the page, and a date pill on a format is a claim
+        // about an evening nobody has booked yet. The five hardcoded slides that used to live
+        // here each carried a real upcoming date, and one of them announced Moss Town every
+        // Sunday for ever.
+        const FORMAT_DAYS_HE = { 0: 'ימי ראשון', 2: 'ימי שלישי' };
 
         function getUpcomingFallbackSpotlight() {
-          return eventsConfig.map(cfg => {
-            const dateInfo = getUpcomingDateInfo(cfg.dow, cfg.customPrefix);
+          return Object.keys(FORMAT_DAYS_HE).map((dow) => {
+            const fmt = EZRA_FORMATS[dow];
             return {
-              ...cfg,
-              diff: dateInfo.diff,
-              datePill: dateInfo.datePill,
-              datePillClass: dateInfo.datePillClass,
-              get fullDateString() { return this.datePill; }
+              diff: Number(dow),
+              datePill: FORMAT_DAYS_HE[dow],
+              datePillClass: '',
+              timePill: '',          // a format has no hour
+              badgePill: 'פורמט קבוע',
+              badge: 'פורמט קבוע',
+              badgeClass: 'sticker--format',
+              pillClass: '',
+              title: fmt.name,
+              lineup: fmt.lineup,
+              desc: fmt.desc,
+              img: fmt.img,
+              fullDateString: FORMAT_DAYS_HE[dow],
             };
           }).sort((a, b) => a.diff - b.diff);
         }
@@ -8107,8 +7979,8 @@
         function updateCardContent(ev) {
           cardMeta.innerHTML = `
             <span class="hero-card__pill ${ev.datePillClass || ''}"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
-            <span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-clock"/></svg>${ev.timePill}</span>
-            <span class="hero-card__pill ${ev.pillClass || ''}">${ev.badgePill}</span>
+            ${ev.timePill ? `<span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-clock"/></svg>${ev.timePill}</span>` : ''}
+            ${ev.badgePill ? `<span class="hero-card__pill ${ev.pillClass || ''}">${ev.badgePill}</span>` : ''}
           `;
           cardTitle.textContent = ev.title;
           cardLineup.textContent = ev.lineup;
