@@ -481,6 +481,7 @@
     .hero-slider__card.is-awaiting-board .hero-slider__progress { opacity: 0; }
     .hero-slider__card .hero-slider__card-body,
     .hero-slider__card .hero-slider__dots { transition: opacity .28s ease; }
+    .fmt-card[role="button"] { cursor: pointer; }
     .sticker--format  { background: rgba(255,255,255,.14); color: #fff; font-weight: 800; }
 
     /* TICKER MARQUEE */
@@ -2884,8 +2885,8 @@
       height: 7px;
       border-radius: 50%;
     }
-    .month-cal-legend-dot--free { background: #4ade80; box-shadow: 0 0 5px rgba(74,222,128,0.5); }
-    .month-cal-legend-dot--open { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
+    .month-cal-legend-dot--free { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
+    .month-cal-legend-dot--open { background: #34d399; box-shadow: 0 0 5px rgba(52,211,153,0.5); }
     .month-cal-legend-dot--busy { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.5); }
 
     /* Days of Week Header */
@@ -3006,9 +3007,9 @@
     }
     /* Slot States */
     .month-cal-slot--free {
-      background: rgba(74,222,128,0.06);
-      border-color: rgba(74,222,128,0.25);
-      color: #86efac;
+      background: rgba(196,154,60,0.1);
+      border-color: rgba(196,154,60,0.35);
+      color: var(--gold-light);
     }
     .month-cal-slot--free:hover {
       background: rgba(74,222,128,0.12);
@@ -3017,9 +3018,9 @@
     .month-cal-slot--free .month-cal-slot-time { color: #86efac; }
 
     .month-cal-slot--open {
-      background: rgba(196,154,60,0.1);
-      border-color: rgba(196,154,60,0.35);
-      color: var(--gold-light);
+      background: rgba(52,211,153,0.1);
+      border-color: rgba(52,211,153,0.35);
+      color: #34d399;
     }
     .month-cal-slot--open:hover {
       background: rgba(196,154,60,0.2);
@@ -4289,7 +4290,7 @@
             <p class="fmt-card__lineup">שפים אורחים ממיטב המסעדות · פיצות שף ומנות גחלים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="פופ-אפ שפים וערבי טאבון" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="פופ-אפ שפים וערבי טאבון" data-interest="food" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -4577,7 +4578,7 @@
             <p class="fmt-card__lineup">הרכבים מקוריים · טריו ג'אז · סשנים אקוסטיים וג'אם פתוח</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="מוזיקה חיה וסשנים אקוסטיים" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="מוזיקה חיה וסשנים אקוסטיים" data-interest="music" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -4718,7 +4719,7 @@
             <p class="fmt-card__lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="בית התה של רום" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="בית התה של רום" data-interest="tea" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -4838,7 +4839,7 @@
             <p class="fmt-card__lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי יין טבעי ומיקסולוגיה" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי יין טבעי ומיקסולוגיה" data-interest="wine" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -4960,7 +4961,7 @@
             <p class="fmt-card__lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="מיקרופון פתוח וספוקן וורד" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="מיקרופון פתוח וספוקן וורד" data-interest="spoken_word" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -5066,7 +5067,7 @@
             <p class="fmt-card__lineup">האזנה מרוכזת באלבומים נדירים · מערכת אנלוגית ייחודית · שיחה עם יוצרים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="השמעות אלבומים וסלון תקליטים" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="השמעות אלבומים וסלון תקליטים" data-interest="vinyl" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -6187,7 +6188,7 @@
                next one, not booking a seat. -->
           <div class="rsvp-box" id="modalInfoBox">
             <p class="rsvp-note" id="modalEntryNote"></p>
-            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" type="button">עדכנו אותי על ערבים כאלה</button>
+            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" data-interest="open_events" type="button">עדכנו אותי על ערבים כאלה</button>
           </div>
 
           <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.3rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 18px; text-align: center;">
@@ -6222,8 +6223,8 @@
         <form id="nlForm" class="cf-form-grid" style="margin-block-start: 1.2rem;">
           <div class="cf-field"><label for="nlName">שם</label><input id="nlName" name="name" type="text" placeholder="השם שלכם" required /></div>
           <div class="cf-field"><label for="nlPhone">טלפון</label><input id="nlPhone" name="phone" type="tel" placeholder="050-0000000" required /></div>
-          <div class="cf-field"><label for="nlEmail">אימייל</label><input id="nlEmail" name="email" type="email" placeholder="name@example.com" /></div>
           <input type="hidden" id="nlTopic" name="topic" />
+          <input type="hidden" id="nlInterest" name="interest" />
           <button class="btn btn--fill btn--full" type="submit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">עדכנו אותי</button>
         </form>
       </div>
@@ -6525,11 +6526,43 @@
       m.addEventListener('click', e => { if (e.target === m) close(); });
     })();
 
+    // The whole format card is the target, not just the small ghost button inside it. Somebody
+    // reading "מוזיקה חיה" and wanting to hear about the next one aims at the card.
+    function ezraOpenNewsletterFrom(el) {
+      if (typeof openNewsletter !== 'function') return;
+      openNewsletter(el.getAttribute('data-topic') || '', el.getAttribute('data-interest') || '');
+    }
+    function ezraNewsletterTarget(node) {
+      const btn = node.closest('.js-newsletter');
+      if (btn) return btn;
+      const card = node.closest('.fmt-card');
+      // "לתאריכים הקרובים" is a real link to the schedule and must keep working.
+      if (!card || node.closest('a')) return null;
+      return card.querySelector('.js-newsletter');
+    }
     document.addEventListener('click', e => {
-      const b = e.target.closest('.js-newsletter');
-      if (!b) return;
+      const target = ezraNewsletterTarget(e.target);
+      if (!target) return;
       e.preventDefault();
-      if (typeof openNewsletter === 'function') openNewsletter(b.getAttribute('data-topic') || '');
+      ezraOpenNewsletterFrom(target);
+    });
+    // Keyboard parity: the cards are announced as buttons below, so they must answer like buttons.
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest && e.target.closest('.fmt-card');
+      if (!card || e.target.closest('a, button')) return;
+      const target = card.querySelector('.js-newsletter');
+      if (!target) return;
+      e.preventDefault();
+      ezraOpenNewsletterFrom(target);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fmt-card').forEach((card) => {
+        if (!card.querySelector('.js-newsletter')) return;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'עדכנו אותי על ' + (card.querySelector('.fmt-card__title')?.textContent || '').trim());
+      });
     });
 
     let openNewsletter;
@@ -6540,9 +6573,11 @@
       const done = document.getElementById('nlDone');
       const wrap = document.getElementById('nlWrap');
       const close = () => { m.classList.remove('is-open'); m.setAttribute('aria-hidden', 'true'); };
-      openNewsletter = function (topic) {
+      openNewsletter = function (topic, interest) {
         const t = document.getElementById('nlTopic');
         if (t) t.value = topic || '';
+        const iv = document.getElementById('nlInterest');
+        if (iv) iv.value = interest || '';
         const label = document.getElementById('nlTopicLabel');
         if (label) { label.textContent = topic || ''; label.hidden = !topic; }
         if (wrap) wrap.hidden = false;
@@ -6555,15 +6590,25 @@
       if (form) {
         form.addEventListener('submit', e => {
           e.preventDefault();
+          // Name and phone only. This is a "tell me when the next one is" signup, not an
+          // enquiry, so asking for a third field costs signups and buys nothing we use.
+          const qs = new URLSearchParams(location.search);
+          const interest = document.getElementById('nlInterest').value || '';
+          const topic = document.getElementById('nlTopic').value || '';
           const payload = {
             leadType: 'newsletter',
             name: document.getElementById('nlName').value || '',
             phone: document.getElementById('nlPhone').value || '',
-            email: document.getElementById('nlEmail').value || '',
-            eventType: document.getElementById('nlTopic').value || 'עדכונים על ערבים פתוחים',
-            notes: 'הרשמה לעדכונים על אירועים פתוחים לקהל',
+            eventType: topic || 'עדכונים על ערבים פתוחים',
+            notes: 'הרשמה לעדכונים על אירועים פתוחים לקהל'
+              + (topic ? '\nמעוניין/ת ב: ' + topic : ''),
             pageUrl: location.href,
-            utm_source: new URLSearchParams(location.search).get('utm_source') || 'events_page_newsletter'
+            // Which card they signed up from is the whole point: somebody who asked about music
+            // nights is not the same list as somebody who asked about the chef pop-ups. It rides
+            // in utm_content, which the worker already writes to a real column on the board.
+            utm_source: qs.get('utm_source') || 'events_page',
+            utm_campaign: qs.get('utm_campaign') || 'newsletter',
+            utm_content: qs.get('utm_content') || interest,
           };
           fetch((window.EZRA_LEAD_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev'), {
             method: 'POST',
