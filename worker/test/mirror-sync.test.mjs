@@ -76,7 +76,13 @@ const srcItem = (id, name, groupId, groupTitle, over = {}) => ({
 const DB = {
   [FORM]: {
     groups: [{ id: "group_mm18zcww", title: "New Leads" }, { id: "group_mm18mks7", title: "Closed Deals" }],
-    columns: [], items: [srcItem("111", "חברת אלפא", "group_mm18mks7", "Closed Deals")],
+    columns: [], items: [
+      srcItem("111", "חברת אלפא", "group_mm18mks7", "Closed Deals"),
+      // Promoted from an Open Events lead: committed, but carries the origin marker. Mirroring it
+      // back to Open Events would duplicate the lead that created it.
+      srcItem("112", "הופעת אינדי (מקודם מ-Open Events)", "group_mm18mks7", "Closed Deals",
+        { text_mm6ktd3a: { text: "5102602771:555" } }),
+    ],
   },
   [COMPANY]: {
     groups: [{ id: "group_mm4rtvy5", title: "Packages (Asked For Follow Up!)" }, { id: "group_mm187fg9", title: "Agreement Sent (Active For 24h)" }],
@@ -177,6 +183,11 @@ if (m) {
   check(!/₪|ILS|מקדמה|סה"כ|עלוי|מחירון|ש"ח/.test(notes), `money survived into the mirrored notes: ${JSON.stringify(notes)}`);
   check(!Object.keys(m.cv).some((id) => /price|numeric_mm1|text_mm1f43ad|text_mm1g6c5r/.test(id)), "a price column was written");
 }
+
+// 1b. The promoted copy is committed but origin-marked: it must not come back as a mirror.
+check(!mirrors().some((x) => x.cv.text_mm6jn3tz.text === `${FORM}:112`),
+  "a promoted Open Events lead was mirrored back to Open Events");
+check(first.created === 2, `created ${first.created} - the origin-marked item should not add a third`);
 
 // 2. Nothing changed at the source, so nothing should be written.
 const second = await runSync();
