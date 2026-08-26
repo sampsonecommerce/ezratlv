@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-25e";
+const BUILD_ID = "2026-08-26a";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -61,6 +61,29 @@ const OE = {
   gclid:     "text_mm6dreje",         // gclid
   consent:   "boolean_mm6d7ret",      // Marketing Approval
   sourceItem:"text_mm6jn3tz",         // Source Item - "<boardId>:<itemId>", set by the mirror sync
+};
+// What makes a committed date a *published* event rather than a merely blocked one. Added to the
+// Open Events board on 2026-08-26; every id below was read back from the live board, not guessed.
+// A private birthday and a public chef evening sit in the same committed group and are told apart
+// by nothing else, so PUB.publish is the entire safety mechanism: unticked means the site shows the
+// date as taken and says nothing whatsoever about it. Default-off, so a new booking cannot become
+// public by accident - only by somebody ticking a box.
+//
+// The mirror sync writes none of these: change_multiple_column_values only sets the keys it is
+// handed, so hand-written public copy survives every sync pass. It does not survive the source
+// event leaving its committed group, which deletes the mirror item outright.
+const PUB = {
+  publish:  "boolean_mm6k8swg",       // Publish to site (checkbox) - the flag
+  title:    "text_mm6kpbzk",          // Public title
+  subtitle: "text_mm6k9g72",          // Public subtitle
+  desc:     "long_text_mm6kwzwk",     // Public description
+  // Repo-relative image paths, comma separated, first one is the card image. Deliberately not a
+  // Monday file column: a file uploaded to Monday is served behind a Monday login, so the public
+  // site cannot render it.
+  images:   "text_mm6km603",          // Public images
+  link:     "link_mm6k9nqy",          // Public link (Instagram)
+  entry:    "color_mm6kapv3",         // Entry (status)
+  rounds:   "text_mm6ktfbq",          // Seating rounds - "19:00,19:30,20:00"
 };
 // Committed events from the two working boards are mirrored onto Open Events, money stripped, so
 // there is one money-free answer to "what is happening at Ezra and when". Mirrors live in
@@ -181,7 +204,12 @@ export default {
     const isCustom = d.leadType === "custom";
     const isPrivate = d.leadType === "private";
     const isNewsletter = d.leadType === "newsletter";
-    const isOpenEvents = d.leadType === "open_events" || d.board === "5102602771";
+    // A seat held at a published evening. It is an Open Events lead in every mechanical respect -
+    // same board, same New Leads group - and differs only in what the notes say and in never
+    // carrying a price. New Leads is deliberately not a committed group, so holding a seat at an
+    // evening cannot mark that evening's date unavailable to anyone else.
+    const isRsvp = d.leadType === "rsvp";
+    const isOpenEvents = d.leadType === "open_events" || isRsvp || d.board === "5102602771";
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
@@ -189,6 +217,15 @@ export default {
       "סוג פנייה: הרשמה לעדכונים על ערבים פתוחים (ניוזלטר)",
       `נושא: ${d.eventType || "-"}`,
       "★ לא ליד מכירות - בקשה לקבל עדכון על אירועים",
+    ].filter(Boolean).join("\n") : isRsvp ? [
+      "סוג פנייה: שריון מקום לערב פתוח (מעמוד האירועים)",
+      `האירוע: ${d.eventTitle || "-"}`,
+      `תאריך: ${d.date || "-"}`,
+      d.round ? `סבב ישיבה: ${d.round}` : "",
+      `סועדים: ${d.guests ?? "-"}`,
+      d.notes ? `הערות: ${d.notes}` : "",
+      `אישור דיוור שיווקי: ${d.consent ? "כן" : "לא"}`,
+      "★ שריון מקום - לחזור ללקוח ולאשר",
     ].filter(Boolean).join("\n") : isOpenEvents ? [
       "סוג פנייה: ליד מעמוד אירועים פתוחים (Open Events)",
       `סוג אירוע: ${d.eventType || "-"}`,
@@ -372,7 +409,9 @@ export default {
       }
     }
     // item name: company for ALL lead types; fall back to person if no company
-    const displayName = String(d.company || d.name || "ליד מהאתר");
+    const displayName = isRsvp
+      ? "שריון · " + String(d.name || "ללא שם")
+      : String(d.company || d.name || "ליד מהאתר");
     const variables = {
       board,
       group,
@@ -963,6 +1002,113 @@ async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
   }
 }
 
+// The published half of the feed: what is on at Ezra, for the public to read. Everything here is
+// content somebody typed into the Public * columns on purpose. Nothing is derived from a lead, a
+// name or a note, because those belong to customers - `/events` showed six invented weekday
+// templates before this, which was fiction but at least nobody's fiction in particular.
+//
+// Two rules this function exists to keep:
+//   1. Unticked publishes nothing. Not the title, not the notes, not the customer's name.
+//   2. A published event still holds its date on the calendar. Publishing changes how a taken
+//      evening is *described*, never whether it is taken.
+async function fetchPublicEvents(TOKEN) {
+  const ids = [PUB.publish, PUB.title, PUB.subtitle, PUB.desc, PUB.images, PUB.link,
+               PUB.entry, PUB.rounds, OE.date, OE.startHour, OE.endHour];
+  const ITEM_FIELDS = `
+        id
+        name
+        column_values(ids: ${JSON.stringify(ids)}) {
+          id
+          text
+          value
+          ... on DateValue { date }
+        }`;
+  const ask = async (query) => {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", "Authorization": TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    return r.json();
+  };
+  const first = `query { boards(ids: [${OPEN_EVENTS_BOARD}]) { items_page(limit: 100) { cursor items {${ITEM_FIELDS}
+  } } } }`;
+  const more = (cursor) => `query { next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) { cursor items {${ITEM_FIELDS}
+  } } }`;
+
+  const items = [];
+  try {
+    const out = await ask(first);
+    if (out.errors) {
+      console.error("public events read errors:", JSON.stringify(out.errors).slice(0, 300));
+      return null;
+    }
+    const page = out?.data?.boards?.[0]?.items_page;
+    if (!page) return null;
+    items.push(...(page.items || []));
+    // Same paging discipline as the availability read: items_page returns one page, and a board
+    // that outgrows 100 items would otherwise start dropping published evenings without a word.
+    let cursor = page.cursor || null;
+    for (let p = 0; cursor && p < 20; p++) {
+      const nxt = await ask(more(cursor));
+      if (nxt.errors) { console.error("public events page errors:", JSON.stringify(nxt.errors).slice(0, 300)); break; }
+      items.push(...(nxt?.data?.next_items_page?.items || []));
+      cursor = nxt?.data?.next_items_page?.cursor || null;
+    }
+  } catch (e) {
+    console.error("public events read failed:", e);
+    return null;
+  }
+
+  const events = [];
+  for (const it of items) {
+    const cv = {};
+    (it.column_values || []).forEach((c) => { cv[c.id] = c; });
+    let checked = false;
+    try { checked = JSON.parse(cv[PUB.publish]?.value || "{}").checked === true; } catch { checked = false; }
+    if (!checked) continue;
+
+    const date = (cv[OE.date]?.date || cv[OE.date]?.text || "").trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;   // an event with no date has nowhere to appear
+
+    const txt = (id) => (cv[id]?.text || "").trim();
+    const start = parseHourText(cv[OE.startHour]?.text) || "";
+    const end   = parseHourText(cv[OE.endHour]?.text) || "";
+    const rounds = txt(PUB.rounds).split(",").map((s) => s.trim()).filter((s) => /^\d{1,2}:\d{2}$/.test(s));
+    // Repo-relative only. An absolute URL here would let a board edit point the site's own <img>
+    // at any host on the internet, which is not a power a Monday column should have.
+    const images = txt(PUB.images).split(",").map((s) => s.trim())
+      .filter((s) => s && !/^[a-z]+:/i.test(s) && !s.startsWith("//") && !s.includes(".."));
+    let link = "", linkText = "";
+    try {
+      const raw = JSON.parse(cv[PUB.link]?.value || "{}");
+      const u = raw.url || txt(PUB.link);
+      // https only: this value becomes an href on a public page, and a board column should not be
+      // able to hand a visitor a javascript: or http: destination.
+      if (/^https:\/\//i.test(u)) { link = u; linkText = String(raw.text || "").trim(); }
+    } catch { link = ""; }
+
+    events.push({
+      date,
+      title: txt(PUB.title) || it.name,
+      subtitle: txt(PUB.subtitle),
+      desc: txt(PUB.desc),
+      images,
+      link,
+      linkText,
+      entry: txt(PUB.entry),
+      rounds,
+      // Doors: the first seating round if there is one, otherwise the event's start hour. A
+      // sit-down evening opens when the first table does, not when the venue's slot begins.
+      doors: rounds[0] || start,
+      start,
+      end,
+    });
+  }
+  events.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return events;
+}
+
 // Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
 // doesn't exist on type 'y'") and carries no board content, so a trimmed version is
 // safe to return publicly. Anything that looks like an id, address or number is dropped
@@ -1084,7 +1230,11 @@ async function availability(request, env, cors) {
     busy.push(...busyUnique);
     // degraded says "this feed is incomplete", so the page can tell an empty calendar from a
     // broken one. Without it, a failed read renders as a month of free dates.
-    const body = missing ? { booked, busy, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, build: BUILD_ID };
+    // Published events ride the same response the calendar already fetches: one request, one
+    // cache entry, and no window where the page knows a date is taken but not yet why. A failed
+    // read is an empty list, never a thrown request - the calendar is the part that must not break.
+    const published = (await fetchPublicEvents(TOKEN)) || [];
+    const body = missing ? { booked, busy, public: published, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, public: published, build: BUILD_ID };
     return new Response(JSON.stringify(body), {
       status: 200,
       headers: {

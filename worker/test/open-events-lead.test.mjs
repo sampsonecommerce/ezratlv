@@ -151,6 +151,47 @@ check((await stale.json()).ok === true, "stale-group lead was rejected");
 check(created?.landed === "group_mm6djw93",
   `stale "topics" lead landed in "${created?.landed}", not New Leads`);
 
+// A seat held at a published evening. Same board and same group as any other Open Events lead -
+// the difference is what the notes say, and that New Leads is not a committed group, so holding a
+// seat may never mark that evening's date unavailable to everyone else.
+created = null;
+const rsvp = await worker.fetch(
+  new Request("https://ezra-lead.test/", {
+    method: "POST",
+    headers: { "content-type": "application/json", origin: "https://ezratlv.com" },
+    body: JSON.stringify({
+      leadType: "rsvp",
+      name: "מיכל לוי",
+      phone: "0502223344",
+      guests: 4,
+      date: "2026-09-01",
+      round: "19:30",
+      eventTime: "ערב 19:30",
+      eventTitle: "ערב שף בעזרא · עידו וידר",
+      eventType: "אחר",
+    }),
+  }),
+  env,
+);
+check((await rsvp.json()).ok === true, "RSVP was rejected");
+check(created?.landed === "group_mm6djw93", `RSVP landed in "${created?.landed}", not New Leads`);
+if (created) {
+  const c = created.cols;
+  check(created.name === "שריון · מיכל לוי", `RSVP item name is ${JSON.stringify(created.name)}`);
+  check(c.date_mm6djw2v?.date === "2026-09-01", "RSVP date missing");
+  check(c.numeric_mm6d85m === "4", "RSVP party size missing");
+  check(c.phone_mm6dxgj2?.phone === "0502223344", "RSVP phone missing");
+  // "ערב 19:30" carries both: the label the board actually defines, and the round itself.
+  check(c.color_mm6dh5pe?.label === "ערב", `RSVP Time of event is ${JSON.stringify(c.color_mm6dh5pe)}`);
+  check(c.hour_mm6j2kcg?.hour === 19 && c.hour_mm6j2kcg?.minute === 30,
+    `RSVP seating round not filed on the hour column: ${JSON.stringify(c.hour_mm6j2kcg)}`);
+  const notes = String(c.long_text_mm6d2npw?.text || "");
+  check(notes.includes("שריון מקום לערב פתוח"), "RSVP notes do not say what this is");
+  check(notes.includes("ערב שף בעזרא"), "RSVP notes do not name the event");
+  check(notes.includes("19:30"), "RSVP notes do not carry the seating round");
+  check(!/₪|מחיר|עלות/.test(notes), "a reservation must never carry a price");
+}
+
 // The availability feed must not treat New Leads as a taken date.
 created = null;
 const avail = await worker.fetch(new Request("https://ezra-lead.test/"), env);

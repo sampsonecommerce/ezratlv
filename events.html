@@ -3595,6 +3595,48 @@
     }
     .rsvp-note { font-size: 0.92rem; color: var(--cream-dim); line-height: 1.65; margin: 0; }
 
+    /* ---- Published event: gallery, artist link, seat reservation ----
+       Only ever rendered for an event somebody ticked "Publish to site" for on the
+       Open Events board. A private booking reaches none of this. */
+    .modal-gallery {
+      display: flex; gap: 0.5rem; margin-block-start: 0.8rem;
+      overflow-x: auto; padding-block-end: 0.3rem; scrollbar-width: thin;
+    }
+    .modal-gallery button {
+      flex: 0 0 auto; width: 62px; aspect-ratio: 1; padding: 0;
+      border-radius: 10px; overflow: hidden; cursor: pointer;
+      border: 1.5px solid var(--line); background: none;
+      transition: border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+      opacity: 0.62;
+    }
+    .modal-gallery button:hover { opacity: 1; }
+    .modal-gallery button.is-active { border-color: var(--gold); opacity: 1; }
+    /* Square-cropping a portrait photo from the centre lands on somebody's chest. Event
+       photos put the subject in the upper half, so bias the crop upwards. */
+    .modal-gallery img { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; display: block; }
+
+    .modal-artist-link {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      margin-block-end: 1.3rem;
+    }
+
+    .rsvp-rounds { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-block: 0.7rem 1rem; }
+    /* An author `display: flex` beats the browser's own [hidden] rule, so setting .hidden = true
+       in JS left these on screen - which put the walk-in blurb underneath a reservation form
+       asking about the same evening. Say it explicitly for every flex box that toggles. */
+    .modal-gallery[hidden], .rsvp-rounds[hidden], .rsvp-box[hidden] { display: none; }
+    .rsvp-round {
+      padding: 0.5rem 0.95rem; border-radius: 999px; cursor: pointer;
+      border: 1.3px solid var(--line-bright); background: rgba(0,0,0,0.35);
+      color: var(--cream-dim); font: inherit; font-size: 0.9rem; font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .rsvp-round:hover { border-color: var(--gold); color: var(--cream); }
+    .rsvp-round.is-active { background: var(--gold); border-color: var(--gold); color: #17130e; }
+    .rsvp-msg { font-size: 0.87rem; margin-block-start: 0.7rem; line-height: 1.6; }
+    .rsvp-msg--err { color: #ff9270; }
+
     .notice-box {
       position: relative;
       width: min(420px, 100%);
@@ -4068,6 +4110,7 @@
     <symbol id="i-wine" viewBox="0 0 24 24"><path d="M7 3h10l-1 7a4 4 0 0 1-8 0L7 3Z"/><path d="M12 14v6M9 20h6"/></symbol>
     <symbol id="i-pen" viewBox="0 0 24 24"><path d="M15 3l6 6L8 22H2v-6L15 3Z"/><path d="M13 5l6 6"/></symbol>
     <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 8V5h18v3a3 3 0 0 0 0 6v3H3v-3a3 3 0 0 0 0-6Z"/><path d="M12 6v2M12 11v2M12 16v2"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1"/></symbol>
     <symbol id="i-radio" viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="13" rx="2"/><circle cx="8" cy="14.5" r="3.5"/><path d="M16 12h3M16 17h3M17 8 8 4"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
@@ -6439,11 +6482,41 @@
           </div>
           <h3 id="modalTitle">שם האירוע</h3>
           <p class="teder-lineup" id="modalLineup">ליינאפ ואמנים</p>
+
+          <!-- Extra photos of a published event. Hidden for the generic weekday nights,
+               which have one stock image and nothing more. -->
+          <div class="modal-gallery" id="modalGallery" hidden></div>
+
           <p class="modal-desc" id="modalDesc">פירוט האירוע...</p>
 
-          <!-- Info only. No seat reservation here: the evening is open to the
-               public, so the useful action is hearing about the next one. -->
-          <div class="rsvp-box">
+          <!-- The artist's or chef's own page, straight off the board. -->
+          <a class="btn btn--outline btn--sm modal-artist-link" id="modalArtistLink" hidden target="_blank" rel="noopener">
+            <svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg>
+            <span id="modalArtistLinkText">אינסטגרם</span>
+          </a>
+
+          <!-- Seat reservation. Shown only for an evening whose Entry on the board is
+               "בהזמנת מקום": a walk-in night must not ask anyone to book a table that does
+               not exist. Lands in New Leads on the Open Events board, which is deliberately
+               not a committed group - holding a seat cannot mark the evening's date
+               unavailable to everybody else. -->
+          <div class="rsvp-form" id="modalRsvpBox" hidden>
+            <h4 id="modalRsvpTitle">שריון מקום</h4>
+            <p class="rsvp-note" id="modalRsvpIntro">בחרו שעה והשאירו פרטים. נחזור אליכם לאישור.</p>
+            <div class="rsvp-rounds" id="modalRounds"></div>
+            <form id="modalRsvpForm" class="cf-form-grid">
+              <div class="cf-field"><label for="rsvpName">שם</label><input id="rsvpName" name="name" type="text" placeholder="השם שלכם" required /></div>
+              <div class="cf-field"><label for="rsvpPhone">טלפון</label><input id="rsvpPhone" name="phone" type="tel" placeholder="050-0000000" required /></div>
+              <div class="cf-field"><label for="rsvpGuests">כמה אתם</label><input id="rsvpGuests" name="guests" type="number" min="1" max="40" step="1" placeholder="2" required /></div>
+              <input type="text" id="rsvpHp" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; inset-inline-start:-9999px; width:1px; height:1px; opacity:0;" />
+              <button class="btn btn--fill btn--full" type="submit" id="rsvpSubmit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">שריון מקום</button>
+            </form>
+            <p class="rsvp-msg" id="modalRsvpMsg" hidden></p>
+          </div>
+
+          <!-- Info only. For a walk-in evening the useful action is hearing about the
+               next one, not booking a seat. -->
+          <div class="rsvp-box" id="modalInfoBox">
             <p class="rsvp-note" id="modalEntryNote"></p>
             <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" type="button">עדכנו אותי על ערבים כאלה</button>
           </div>
@@ -6786,6 +6859,29 @@
     })();
 
     // ============================================================
+    // Published events, shared across this whole script.
+    //
+    // Real evenings somebody ticked "Publish to site" for on the Open Events board, keyed by
+    // date and delivered by the same worker call the calendar already makes. Three separate
+    // renderers read it - the hero spotlight, the 30-day strip and the month grid - and they
+    // must agree, because a hero card announcing one thing above a day card announcing another
+    // is worse than either alone.
+    //
+    // Empty is the honest starting state, and the honest failure state: every renderer falls
+    // back to its weekday template, which says what a Tuesday at Ezra is usually like and
+    // claims nothing about this particular Tuesday.
+    // ============================================================
+    let ezraPublished = new Map();
+    const ezraPublishedSubscribers = [];
+    function onEzraPublished(fn) { ezraPublishedSubscribers.push(fn); if (ezraPublished.size) fn(); }
+    function setEzraPublished(list) {
+      ezraPublished = new Map((Array.isArray(list) ? list : [])
+        .filter((ev) => ev && ev.date)
+        .map((ev) => [ev.date, ev]));
+      ezraPublishedSubscribers.forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
+    }
+
+    // ============================================================
     // Notice + newsletter
     // A taken slot and a "tell me about events" click are both dead ends for
     // the enquiry form: one cannot be booked, the other is not an enquiry.
@@ -6968,7 +7064,11 @@
           });
 
           const theme = dayThemes[dow] || dayThemes[4];
-          const isClosedEvening = hasEveningEvent || (isBooked && !hasAfternoonEvent);
+          const published = ezraPublished.get(dateKey) || null;
+          // A published evening is booked exactly the way a private one is, so without this it
+          // renders as "אירוע סגור · שמור לאירוע פרטי" - which is how Moss Town and the chef
+          // evening were being announced on Instagram and hidden on our own page.
+          const isClosedEvening = !published && (hasEveningEvent || (isBooked && !hasAfternoonEvent));
 
           let title = theme.title;
           let lineup = theme.lineup;
@@ -6976,6 +7076,20 @@
           let img = theme.img;
           let badge = theme.badge;
           let badgeClass = theme.badgeClass;
+          let hours = theme.hours;
+
+          if (published) {
+            title = published.title || theme.title;
+            lineup = published.subtitle || theme.lineup;
+            desc = published.desc || theme.desc;
+            img = (published.images && published.images[0]) || theme.img;
+            badge = published.entry || 'פתוח לקהל';
+            // "בהזמנת מקום" is the one entry type that asks something of the visitor, so it
+            // keeps the RSVP styling. Everything else reads as an open door.
+            badgeClass = /הזמנ|כרטיס/.test(badge) ? 'sticker--rsvp' : 'sticker--free';
+            // Doors, not the venue's slot: a sit-down evening opens when the first table does.
+            if (published.doors) hours = published.end ? published.doors + ' - ' + published.end : published.doors;
+          }
 
           if (isClosedEvening) {
             title = 'אירוע סגור · שמור לאירוע פרטי';
@@ -6984,6 +7098,7 @@
             img = 'images/BAR.jpg';
             badge = 'סגור לאירוע פרטי';
             badgeClass = 'sticker--busy';
+            hours = theme.hours;
           }
 
           allDaysData.push({
@@ -7005,7 +7120,8 @@
             img: img,
             badge: badge,
             badgeClass: badgeClass,
-            hours: theme.hours
+            hours: hours,
+            published: published
           });
         }
 
@@ -7329,7 +7445,12 @@
           }
 
           const theme = dayThemes[dow] || dayThemes[4];
-          const isClosedEvening = hasEveningEvent;
+          // Same rule as the 30-day strip: a published evening is taken, but it is taken by
+          // something with a name. The month grid would otherwise contradict the card above it.
+          const published = ezraPublished.get(dateKey) || null;
+          const isClosedEvening = hasEveningEvent && !published;
+          const nightLabel = published ? (published.title || '').split('·')[0].trim()
+                           : theme.title.split('·')[0];
 
           // Build Cell
           const cell = document.createElement('div');
@@ -7348,9 +7469,9 @@
               </button>
 
               <!-- Night Slot -->
-              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : theme.title}">
+              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : 'month-cal-slot--open'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
                 <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
-                <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : theme.title.split('·')[0]}</span>
+                <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : nightLabel}</span>
               </button>
             </div>
           `;
@@ -7386,11 +7507,18 @@
                   `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או ערב אחר - הימים הפנויים מסומנים בירוק.`);
               } else {
                 if (typeof openEventModal === 'function') {
-                  openEventModal({
-                    ...theme,
-                    fullDateString: `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`,
-                    dateKey: dateKey
-                  });
+                  const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
+                  openEventModal(published ? {
+                    title: published.title || theme.title,
+                    lineup: published.subtitle || theme.lineup,
+                    desc: published.desc || theme.desc,
+                    img: (published.images && published.images[0]) || theme.img,
+                    badge: published.entry || 'פתוח לקהל',
+                    badgeClass: /הזמנ|כרטיס/.test(published.entry || '') ? 'sticker--rsvp' : 'sticker--free',
+                    fullDateString: when,
+                    dateKey: dateKey,
+                    published: published
+                  } : { ...theme, fullDateString: when, dateKey: dateKey });
                 }
               }
             });
@@ -7439,6 +7567,10 @@
               const arr = Array.isArray(j) ? j : (j.booked || j.dates || []);
               bookedDates = new Set(arr);
               busyWindows = Array.isArray(j.busy) ? j.busy : [];
+              // A published event is still a taken date - `booked` and `busy` above already
+              // say so, and nothing here removes it. What this changes is only how a taken
+              // evening is described: by name, instead of as a closed private event.
+              setEzraPublished(j.public);
             }
             generate30Days();
             renderGrid();
@@ -7520,15 +7652,77 @@
         }
       };
 
+      const galleryEl  = document.getElementById('modalGallery');
+      const artistLink = document.getElementById('modalArtistLink');
+      const artistText = document.getElementById('modalArtistLinkText');
+      const rsvpBox    = document.getElementById('modalRsvpBox');
+      const rsvpIntro  = document.getElementById('modalRsvpIntro');
+      const roundsEl   = document.getElementById('modalRounds');
+      const rsvpForm   = document.getElementById('modalRsvpForm');
+      const rsvpMsg    = document.getElementById('modalRsvpMsg');
+      const rsvpSubmit = document.getElementById('rsvpSubmit');
+      const infoBox    = document.getElementById('modalInfoBox');
+
+      // The published event currently open, so the reservation knows what it is booking.
+      let rsvpEvent = null;
+      let rsvpRound = '';
+
+      // The gallery swaps the poster in place rather than opening a lightbox: the modal is
+      // already a layer, and a second one on a phone is a trap with two close buttons.
+      function renderGallery(images) {
+        if (!galleryEl) return;
+        galleryEl.innerHTML = '';
+        if (!images || images.length < 2) { galleryEl.hidden = true; return; }
+        galleryEl.hidden = false;
+        images.forEach((src, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = i === 0 ? 'is-active' : '';
+          b.setAttribute('aria-label', `תמונה ${i + 1}`);
+          const im = document.createElement('img');
+          im.src = src; im.alt = ''; im.loading = 'lazy';
+          b.appendChild(im);
+          b.addEventListener('click', () => {
+            modalImg.src = src;
+            galleryEl.querySelectorAll('button').forEach((x) => x.classList.remove('is-active'));
+            b.classList.add('is-active');
+          });
+          galleryEl.appendChild(b);
+        });
+      }
+
+      function renderRounds(rounds) {
+        rsvpRound = '';
+        if (!roundsEl) return;
+        roundsEl.innerHTML = '';
+        if (!rounds || !rounds.length) { roundsEl.hidden = true; return; }
+        roundsEl.hidden = false;
+        rounds.forEach((t, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'rsvp-round' + (i === 0 ? ' is-active' : '');
+          b.textContent = t;
+          b.addEventListener('click', () => {
+            rsvpRound = t;
+            roundsEl.querySelectorAll('.rsvp-round').forEach((x) => x.classList.remove('is-active'));
+            b.classList.add('is-active');
+          });
+          roundsEl.appendChild(b);
+        });
+        rsvpRound = rounds[0];   // preselected, so the form submits without a second decision
+      }
+
       openEventModal = function(data) {
+        if (!modal) return;
+        const ev = (typeof data === 'string') ? (staticEvents[data] || staticEvents['1']) : data;
+        const pub = ev.published || null;
+
         const note = document.getElementById('modalEntryNote');
         if (note) {
-          note.textContent = (data.badge && data.badge.indexOf('חופשית') > -1)
+          note.textContent = (ev.badge && ev.badge.indexOf('חופשית') > -1)
             ? 'הכניסה חופשית, על בסיס מקום פנוי. אין צורך להירשם מראש.'
             : 'ערב פתוח לקהל. מומלץ להגיע מוקדם, המקומות מוגבלים.';
         }
-        if (!modal) return;
-        const ev = (typeof data === 'string') ? (staticEvents[data] || staticEvents['1']) : data;
 
         modalImg.src = ev.img;
         modalTitle.textContent = ev.title;
@@ -7538,9 +7732,43 @@
         modalBadge.className = `sticker ${ev.badgeClass}`;
         modalDateTag.textContent = ev.fullDateString || ev.date || '';
 
+        renderGallery(pub ? pub.images : null);
+
+        // https-only, enforced in the worker before it ever reaches here.
+        if (artistLink) {
+          if (pub && pub.link) {
+            artistLink.href = pub.link;
+            artistText.textContent = pub.linkText || 'הפרופיל שלהם באינסטגרם';
+            artistLink.hidden = false;
+          } else {
+            artistLink.hidden = true;
+            artistLink.removeAttribute('href');
+          }
+        }
+
+        // Reserve a seat only where the board says seats are reserved.
+        const wantsRsvp = !!(pub && /הזמנ|כרטיס/.test(pub.entry || ''));
+        rsvpEvent = wantsRsvp ? Object.assign({}, pub, { fullDateString: ev.fullDateString }) : null;
+        if (rsvpBox) rsvpBox.hidden = !wantsRsvp;
+        if (infoBox) infoBox.hidden = wantsRsvp;
+        if (wantsRsvp) {
+          renderRounds(pub.rounds);
+          if (rsvpIntro) {
+            rsvpIntro.hidden = false;
+            rsvpIntro.textContent = (pub.rounds && pub.rounds.length)
+              ? 'כדי שלכולם יהיה מקום סביב השולחן פתחנו סבבים. בחרו שעה, השאירו פרטים, ונחזור אליכם לאישור.'
+              : 'השאירו פרטים ונחזור אליכם לאישור המקום.';
+          }
+          if (rsvpForm) rsvpForm.hidden = false;
+          if (rsvpMsg) { rsvpMsg.hidden = true; rsvpMsg.textContent = ''; rsvpMsg.classList.remove('rsvp-msg--err'); }
+          if (rsvpSubmit) { rsvpSubmit.disabled = false; rsvpSubmit.textContent = 'שריון מקום'; }
+        }
+
         if (ev.isClosedEvening) {
           if (modalRsvp) modalRsvp.style.display = 'none';
           if (modalPrivateBox) modalPrivateBox.style.display = 'block';
+          if (rsvpBox) rsvpBox.hidden = true;
+          if (infoBox) infoBox.hidden = true;
         } else {
           if (modalRsvp) modalRsvp.style.display = 'block';
           if (modalPrivateBox) modalPrivateBox.style.display = 'none';
@@ -7549,6 +7777,68 @@
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
       };
+
+      // Reservation. Goes to the same worker every other form on this page uses, as leadType
+      // "rsvp" -> Open Events board, New Leads group. Never a price, never a contract.
+      if (rsvpForm) {
+        rsvpForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (!rsvpEvent) return;
+          if (document.getElementById('rsvpHp')?.value) return;   // honeypot: bots fill it, people cannot see it
+          const name   = document.getElementById('rsvpName').value.trim();
+          const phone  = document.getElementById('rsvpPhone').value.trim();
+          const guests = document.getElementById('rsvpGuests').value.trim();
+          if (!name || !phone || !guests) return;
+
+          const show = (text, isError) => {
+            if (!rsvpMsg) return;
+            rsvpMsg.hidden = false;
+            rsvpMsg.textContent = text;
+            rsvpMsg.classList.toggle('rsvp-msg--err', !!isError);
+          };
+
+          rsvpSubmit.disabled = true;
+          rsvpSubmit.textContent = 'שולח...';
+          const q = new URLSearchParams(window.location.search);
+          try {
+            const r = await fetch((window.EZRA_LEAD_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev'), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                leadType: 'rsvp',
+                name, phone,
+                guests: Number(guests),
+                date: rsvpEvent.date,
+                round: rsvpRound,
+                // The worker reads the hour out of this and files the round on the item, while
+                // "ערב" is what the board's Time of event column actually has a label for.
+                eventTime: rsvpRound ? `ערב ${rsvpRound}` : 'ערב',
+                eventTitle: rsvpEvent.title,
+                eventType: 'אחר',
+                utm_source: q.get('utm_source') || '',
+                utm_campaign: q.get('utm_campaign') || '',
+                utm_content: q.get('utm_content') || '',
+                utm_term: q.get('utm_term') || '',
+                gclid: q.get('gclid') || '',
+              }),
+            });
+            const out = await r.json().catch(() => ({}));
+            if (!r.ok || out.ok === false) throw new Error('save failed');
+            rsvpForm.hidden = true;
+            if (roundsEl) roundsEl.hidden = true;
+            if (rsvpIntro) rsvpIntro.hidden = true;
+            show(rsvpRound
+              ? `שמרנו לכם מקום ל-${rsvpRound}. נחזור אליכם בהודעה לאישור.`
+              : 'קיבלנו את הבקשה. נחזור אליכם בהודעה לאישור.', false);
+          } catch (err) {
+            // The seat is not held until somebody at Ezra confirms it, so a failed send must
+            // not read as success. Hand over the WhatsApp route rather than a dead end.
+            rsvpSubmit.disabled = false;
+            rsvpSubmit.textContent = 'שריון מקום';
+            show('לא הצלחנו לשלוח כרגע. אפשר לכתוב לנו בוואטסאפ ל-050-9499241 ונשמור לכם מקום.', true);
+          }
+        });
+      }
 
       function closeModal() {
         if (!modal) return;
@@ -7619,7 +7909,11 @@
           return `${prefix} ${dateFormatted}`;
         }
 
-        const spotlightEvents = [
+        // Fallback only. Each entry describes the kind of evening a given weekday usually is
+        // at Ezra, dated to the next occurrence of that weekday - true as a pattern, but not a
+        // claim about what is actually booked on that date. The moment the board has published
+        // events, the real ones replace this list wholesale. See buildSpotlight below.
+        const fallbackSpotlight = [
           {
             id: 'sunday-live',
             dow: 0,
@@ -7698,18 +7992,61 @@
         const DURATION = 5000;
         const TICK = 50;
 
-        // Render Slides
-        slidesContainer.innerHTML = spotlightEvents.map((ev, i) => `
-          <div class="hero-slider__slide ${i === 0 ? 'is-active' : ''}" data-index="${i}">
-            <img class="hero-slider__img" src="${ev.img}" alt="${ev.title}" loading="${i === 0 ? 'eager' : 'lazy'}" />
-            <div class="hero-slider__overlay"></div>
-          </div>
-        `).join('');
+        // The list actually on screen: real published events when the board has any, the weekday
+        // templates otherwise. This is the top of the page, so it is the first thing that would
+        // contradict the day cards below it if the two read different sources.
+        let spotlightEvents = fallbackSpotlight;
 
-        // Render Pagination Squares
-        dotsContainer.innerHTML = spotlightEvents.map((_, i) => `
-          <button class="hero-slider__dot ${i === 0 ? 'is-active' : ''}" type="button" data-index="${i}" aria-label="מעבר לאירוע ${i + 1}"></button>
-        `).join('');
+        const heroDaysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+        const heroPad = (n) => String(n).padStart(2, '0');
+
+        function buildSpotlight() {
+          // Today's own evening still counts - somebody reading this at 18:00 wants to know what
+          // is on tonight, and the date has not passed until the date has passed.
+          const now = new Date();
+          const todayKey = `${now.getFullYear()}-${heroPad(now.getMonth() + 1)}-${heroPad(now.getDate())}`;
+          const live = [...ezraPublished.values()]
+            .filter((ev) => ev.date >= todayKey)
+            .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+            .slice(0, 5)
+            .map((ev) => {
+              const [y, m, d] = ev.date.split('-').map(Number);
+              const when = new Date(y, m - 1, d);
+              const rsvp = /הזמנ|כרטיס/.test(ev.entry || '');
+              return {
+                datePill: `יום ${heroDaysHe[when.getDay()]} ${heroPad(d)}.${heroPad(m)}`,
+                timePill: ev.doors || ev.start || '',
+                badgePill: ev.entry || 'פתוח לקהל',
+                badgeClass: rsvp ? 'sticker--rsvp' : 'sticker--free',
+                pillClass: rsvp ? 'hero-card__pill--rsvp' : 'hero-card__pill--free',
+                title: ev.title,
+                lineup: ev.subtitle || '',
+                desc: ev.desc || '',
+                img: (ev.images && ev.images[0]) || 'images/BAR.jpg',
+                fullDateString: `יום ${heroDaysHe[when.getDay()]} ${heroPad(d)}.${heroPad(m)}`
+                  + (ev.doors ? ` · ${ev.doors}` : ''),
+                published: ev,
+              };
+            });
+          spotlightEvents = live.length ? live : fallbackSpotlight;
+        }
+
+        function renderSlides() {
+          slidesContainer.innerHTML = spotlightEvents.map((ev, i) => `
+            <div class="hero-slider__slide ${i === 0 ? 'is-active' : ''}" data-index="${i}">
+              <img class="hero-slider__img" src="${ev.img}" alt="${ev.title}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+              <div class="hero-slider__overlay"></div>
+            </div>
+          `).join('');
+
+          dotsContainer.innerHTML = spotlightEvents.map((_, i) => `
+            <button class="hero-slider__dot ${i === 0 ? 'is-active' : ''}" type="button" data-index="${i}" aria-label="מעבר לאירוע ${i + 1}"></button>
+          `).join('');
+
+          currentIndex = 0;
+          updateCardContent(spotlightEvents[0]);
+          resetProgressTimer();
+        }
 
         function updateCardContent(ev) {
           cardMeta.innerHTML = `
@@ -7805,8 +8142,13 @@
           });
         }
 
-        updateCardContent(spotlightEvents[0]);
+        renderSlides();
         startAutoPlay();
+
+        // The feed lands a moment after first paint, and again on every refresh. Rebuilding
+        // from scratch is cheap here (at most five slides) and keeps the hero honest if an
+        // event is unpublished or its copy edited on the board mid-session.
+        onEzraPublished(() => { buildSpotlight(); renderSlides(); });
       })();
     })();
 
