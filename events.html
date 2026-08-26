@@ -76,26 +76,9 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pliant:wght@600;700&family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* English on this page renders in Google Sans; Hebrew stays in Heebo.
-       Ordering the family list is not enough: Google Sans ships a Hebrew subset,
-       so listing it first would take the Hebrew too. The face is declared here
-       with the Latin unicode-range only, so Hebrew never matches it and falls
-       through to Heebo on its own. Google serves all four weights from one
-       variable file, so one face covers 400-700. The URL is version-pinned
-       (v70); if Google revises it the face stops matching and Latin falls back
-       to Inter, which is what this page used before. */
-    @font-face {
-      font-family: 'Google Sans';
-      font-style: normal;
-      font-weight: 400 700;
-      font-display: swap;
-      src: url(https://fonts.gstatic.com/s/googlesans/v70/4UasrENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RPjIUvbQoi-E.woff2) format('woff2');
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-    }
-
     /* ============================================================
        DESIGN TOKENS & TEL AVIV NIGHTLIFE AESTHETICS
     ============================================================ */
@@ -131,7 +114,7 @@
          only Latin headings pick up the serif. */
       --font-serif:   'Cormorant Garamond', 'Heebo', serif;
       --font-display: 'Cormorant Garamond', 'Heebo', serif;
-      --font-body:    'Google Sans', 'Inter', 'Heebo', system-ui, sans-serif;
+      --font-body:    'Inter', 'Heebo', system-ui, sans-serif;
       --font-num:     'Pliant', 'Heebo', sans-serif;
 
       --section-pad:      clamp(2.5rem, 6vw, 4.5rem);
@@ -145,7 +128,7 @@
       background: var(--bg);
       color: var(--cream);
       font-family: var(--font-body);
-      font-weight: 400;
+      font-weight: 300;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -154,9 +137,9 @@
     }
     h1, h2, h3, h4 {
       font-family: var(--font-display);
-      font-weight: 800;
+      font-weight: 500;
       line-height: 1.15;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
@@ -408,7 +391,7 @@
       .nav__menu-cta--book {
         background: var(--gold);
         color: var(--bg);
-        font-weight: 700;
+        font-weight: 600;
       }
       .nav__scrim {
         display: block;
@@ -435,7 +418,7 @@
       justify-content: center;
       gap: 0.5rem;
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 500;
       padding: 0.8rem 1.8rem;
       border-radius: 50px;
       transition: all 0.3s var(--ease);
@@ -446,10 +429,10 @@
     }
     .btn--outline { border: 1.5px solid var(--gold); color: var(--gold); background: transparent; }
     .btn--outline:hover { background: var(--gold); color: var(--bg); transform: translateY(-2px); }
-    .btn--fill { background: var(--gold); color: var(--bg); border: 1.5px solid var(--gold); font-weight: 700; }
+    .btn--fill { background: var(--gold); color: var(--bg); border: 1.5px solid var(--gold); font-weight: 600; }
     .btn--fill:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,154,60,0.35); }
     .btn--sm { font-size: 0.84rem; padding: 0.55rem 1.25rem; }
-    .btn--green { background: var(--green); color: #071c10; border: 1.5px solid var(--green); font-weight: 700; }
+    .btn--green { background: var(--green); color: #071c10; border: 1.5px solid var(--green); font-weight: 600; }
     .btn--green:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(52,211,153,0.35); }
 
     .sticker {
@@ -459,7 +442,7 @@
       padding: 0.3rem 0.75rem;
       border-radius: 6px;
       font-size: 0.75rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
@@ -469,8 +452,8 @@
     .sticker--live,
     .sticker--food,
     .sticker--listen { background: var(--gold-soft); color: var(--gold-light); border: 1px solid var(--line); }
-    .sticker--free    { background: var(--green); color: #061e12; font-weight: 900; }
-    .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 900; }
+    .sticker--free    { background: var(--green); color: #061e12; font-weight: 700; }
+    .sticker--rsvp    { background: var(--gold-light); color: #181202; font-weight: 700; }
     /* A recurring format, not a particular evening: quieter than an announced event on purpose. */
     /* The hero renders nothing until the board has answered. Painting the weekday formats first
        and swapping them for the real evening a moment later reads as the page changing its mind -
@@ -482,7 +465,7 @@
     .hero-slider__card .hero-slider__card-body,
     .hero-slider__card .hero-slider__dots { transition: opacity .28s ease; }
     .fmt-card[role="button"] { cursor: pointer; }
-    .sticker--format  { background: rgba(255,255,255,.14); color: #fff; font-weight: 800; }
+    .sticker--format  { background: rgba(255,255,255,.14); color: #fff; font-weight: 700; }
 
     /* TICKER MARQUEE */
     .ticker-strip {
@@ -525,7 +508,7 @@
     .sec-head .eyebrow {
       display: inline-block;
       font-size: 0.78rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.22em;
       color: var(--gold);
       text-transform: uppercase;
@@ -597,7 +580,7 @@
     }
     .hero-events__title {
       font-size: clamp(2.2rem, 5.2vw, 3.8rem);
-      font-weight: 900;
+      font-weight: 600;
       line-height: 1.12;
       margin: 0 0 0.5rem 0;
       color: var(--cream);
@@ -730,7 +713,7 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(218, 175, 95, 0.35);
       font-size: 0.74rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.5px;
       color: var(--gold-light);
       text-transform: uppercase;
@@ -863,17 +846,17 @@
       color: #bbf7d0;
       border-color: rgba(34, 197, 94, 0.75);
       box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
-      font-weight: 800;
+      font-weight: 700;
     }
     .hero-card__pill--tomorrow {
       background: rgba(234, 179, 8, 0.18);
       color: #fef08a;
       border-color: rgba(234, 179, 8, 0.55);
-      font-weight: 800;
+      font-weight: 700;
     }
     .hero-slider__card-title {
       font-size: clamp(1.25rem, 2.4vw, 1.6rem);
-      font-weight: 900;
+      font-weight: 600;
       color: #ffffff;
       margin: 0;
       line-height: 1.25;
@@ -905,7 +888,7 @@
       padding: 0.55rem 1.25rem;
       border-radius: 8px;
       font-size: 0.84rem;
-      font-weight: 800;
+      font-weight: 600;
       background: linear-gradient(135deg, #f5d98a 0%, #c49a3c 100%);
       color: #120e0a;
       border: none;
@@ -980,7 +963,7 @@
     }
     .schedule-top__info h3 {
       font-size: 1.65rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
       margin-block-end: 0.35rem;
     }
@@ -988,26 +971,6 @@
       font-size: 0.9rem;
       color: var(--cream-dim);
     }
-    .schedule-source-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.45rem 1rem;
-      border-radius: 50px;
-      background: rgba(52, 211, 153, 0.1);
-      border: 1px solid rgba(52, 211, 153, 0.35);
-      color: var(--green);
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-    .schedule-source-badge__dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-    }
-
     /* Schedule Navigation & Week Tabs */
     .schedule-nav-bar {
       display: flex;
@@ -1050,7 +1013,7 @@
       color: var(--bg);
       background: var(--gold);
       border-color: var(--gold);
-      font-weight: 800;
+      font-weight: 700;
       box-shadow: 0 0 18px rgba(196, 154, 60, 0.35);
     }
     .schedule-nav-arrows {
@@ -1284,7 +1247,7 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--cream);
       font-size: 0.76rem;
-      font-weight: 800;
+      font-weight: 700;
       padding: 0.25rem 0.65rem;
       border-radius: 50px;
       letter-spacing: 0.02em;
@@ -1317,7 +1280,7 @@
     .time-card__badge--today {
       background: var(--gold);
       color: #0b0907;
-      font-weight: 900;
+      font-weight: 700;
       border: 1px solid var(--gold-light);
       box-shadow: 0 0 14px rgba(196, 154, 60, 0.5);
     }
@@ -1344,7 +1307,7 @@
     }
     .time-card__title {
       font-size: 0.98rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
       line-height: 1.3;
       margin: 0;
@@ -1397,6 +1360,17 @@
     }
     .slot-row__time-icon {
       font-size: 0.78rem;
+    }
+    .slot-row__when {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      text-align: start;
+    }
+    .slot-row__hours {
+      font-size: 0.62rem;
+      font-weight: 500;
+      opacity: 0.75;
     }
     .slot-row__badge {
       display: inline-flex;
@@ -1815,7 +1789,7 @@
     .fmt-card__body { padding: 1.05rem 1.15rem 1.15rem; display: flex; flex-direction: column; flex: 1; }
     .fmt-card__title {
       display: flex; align-items: center; gap: 0.5rem;
-      font-size: 1.08rem; font-weight: 700; color: var(--cream); line-height: 1.3;
+      font-size: 1.08rem; font-weight: 600; color: var(--cream); line-height: 1.3;
       margin-block-end: 0.35rem;
     }
     .fmt-card__title .ico { color: var(--gold); }
@@ -1923,14 +1897,14 @@
     }
     .vinyl-label__brand {
       font-size: 0.72rem;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.14em;
       line-height: 1;
       margin-block-end: 0.15rem;
     }
     .vinyl-label__sub {
       font-size: 0.42rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.08em;
       opacity: 0.85;
       text-transform: uppercase;
@@ -2050,7 +2024,7 @@
     }
     .flyer-card__title {
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
       margin-block-end: 0.3rem;
       line-height: 1.3;
@@ -2084,7 +2058,7 @@
     .past-more-title {
       font-family: var(--font-serif);
       font-size: 1.25rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--cream);
     }
     .past-more-desc {
@@ -2843,7 +2817,7 @@
     .month-cal-btn svg { width: 15px; height: 15px; }
     .month-cal-title {
       font-size: clamp(1.05rem, 1.8vw, 1.3rem);
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
       min-width: 145px;
       text-align: center;
@@ -2855,7 +2829,7 @@
       border: 1px solid var(--gold);
       color: var(--gold-light);
       font-size: 0.74rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.25s var(--ease);
     }
@@ -2945,12 +2919,12 @@
     }
     .month-cal-date-num {
       font-size: 0.78rem;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--cream);
     }
     .month-cal-today-tag {
       font-size: 0.58rem;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--gold);
       background: rgba(196,154,60,0.15);
       padding: 0.08rem 0.35rem;
@@ -3175,7 +3149,7 @@
     }
     .collab-item-title {
       font-size: 0.92rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
     }
     .collab-item-sub {
@@ -3225,7 +3199,7 @@
       border: none;
       color: var(--cream);
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       display: flex;
@@ -3324,7 +3298,7 @@
     .modal-poster img { width: 100%; height: 100%; object-fit: cover; }
     .modal-body h3 {
       font-size: 1.8rem;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--cream);
       margin-block-end: 0.3rem;
     }
@@ -3341,7 +3315,7 @@
     }
     .rsvp-form h4 {
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--gold-light);
       margin-block-end: 0.8rem;
     }
@@ -3466,6 +3440,17 @@
       outline: none;
       border-color: var(--gold);
       background: rgba(196,154,60,0.06);
+    }
+    /* Chrome's UA stylesheet forces direction:ltr on tel/email/number inputs,
+       which drops the value and placeholder to the far left of this RTL form.
+       Keep LTR direction (digit and @ order must not flip) but pin the text to
+       the right edge so these fields sit with their Hebrew labels. text-align
+       must be the physical `right`: with direction:ltr, `end` means left. */
+    .cf-field input[type="tel"],
+    .cf-field input[type="email"],
+    .cf-field input[type="number"] {
+      direction: ltr;
+      text-align: right;
     }
     .cf-field--row {
       display: grid;
@@ -3634,7 +3619,7 @@
     .cal__day.is-selected {
       background: var(--gold) !important;
       color: var(--bg) !important;
-      font-weight: 900;
+      font-weight: 700;
       box-shadow: 0 0 12px rgba(196,154,60,0.6);
     }
     .cal__day.is-past {
@@ -4067,10 +4052,6 @@
               <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
               <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
               <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
-            </div>
-            <div class="schedule-source-badge">
-              <span class="schedule-source-badge__dot"></span>
-              <span id="scheduleStatusBadge">סנכרון זמינות חי</span>
             </div>
           </div>
 
@@ -5083,7 +5064,7 @@
       <div class="sec-head center">
         <span class="eyebrow">Interactive Monthly Calendar</span>
         <h2>לוח אירועים וזמינות חופשי</h2>
-        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (12:00-18:00) וערב (18:00-02:00). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
+        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (<span class="num">12:00-18:00</span>) וערב (<span class="num">18:00-02:00</span>). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
         <div class="cal-stage">
@@ -6176,7 +6157,7 @@
             <div class="rsvp-rounds" id="modalRounds"></div>
             <form id="modalRsvpForm" class="cf-form-grid">
               <div class="cf-field"><label for="rsvpName">שם</label><input id="rsvpName" name="name" type="text" placeholder="השם שלכם" required /></div>
-              <div class="cf-field"><label for="rsvpPhone">טלפון</label><input id="rsvpPhone" name="phone" type="tel" placeholder="050-0000000" required /></div>
+              <div class="cf-field"><label for="rsvpPhone">טלפון</label><input id="rsvpPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
               <div class="cf-field"><label for="rsvpGuests">כמה אתם</label><input id="rsvpGuests" name="guests" type="number" min="1" max="40" step="1" placeholder="2" required /></div>
               <input type="text" id="rsvpHp" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; inset-inline-start:-9999px; width:1px; height:1px; opacity:0;" />
               <button class="btn btn--fill btn--full" type="submit" id="rsvpSubmit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">שריון מקום</button>
@@ -6192,7 +6173,7 @@
           </div>
 
           <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.3rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 18px; text-align: center;">
-            <h4 style="color: var(--gold-light); font-size: 1.1rem; font-weight: 800; margin-block-end: 0.4rem;">המקום סגור הערב לאירוע פרטי</h4>
+            <h4 style="color: var(--gold-light); font-size: 1.1rem; font-weight: 600; margin-block-end: 0.4rem;">המקום סגור הערב לאירוע פרטי</h4>
             <p style="font-size: 0.88rem; color: var(--cream-dim); margin-block-end: 1.1rem; line-height: 1.6;">מעוניינים לחגוג יום הולדת, חתונה אינטימית או אירוע חברה בעזרא? נשמח להתאים לכם אירוע בלתי נשכח באחד התאריכים הפנויים.</p>
             <div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;">
               <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%A1%D7%92%D7%99%D7%A8%D7%AA%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99" target="_blank" rel="noopener">
@@ -6222,7 +6203,7 @@
         <p class="notice-body" style="text-align: start;">משאירים פרטים ומקבלים הודעה כשנפתחת הרשמה לערבים הפתוחים. בלי ספאם, רק מתי ומה.</p>
         <form id="nlForm" class="cf-form-grid" style="margin-block-start: 1.2rem;">
           <div class="cf-field"><label for="nlName">שם</label><input id="nlName" name="name" type="text" placeholder="השם שלכם" required /></div>
-          <div class="cf-field"><label for="nlPhone">טלפון</label><input id="nlPhone" name="phone" type="tel" placeholder="050-0000000" required /></div>
+          <div class="cf-field"><label for="nlPhone">טלפון</label><input id="nlPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
           <input type="hidden" id="nlTopic" name="topic" />
           <input type="hidden" id="nlInterest" name="interest" />
           <button class="btn btn--fill btn--full" type="submit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">עדכנו אותי</button>
@@ -6269,7 +6250,7 @@
             </div>
             <div class="cf-field">
               <label for="cfPhone">טלפון נייד *</label>
-              <input type="tel" id="cfPhone" name="phone" placeholder="050-0000000" required />
+              <input type="tel" id="cfPhone" name="phone" placeholder="050-1234567" required />
             </div>
           </div>
 
@@ -6819,18 +6800,18 @@
 
           const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="הצהריים סגורים לאירוע"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span>צהריים (12:00-18:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="הצהריים סגורים לאירוע"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>צהריים</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>צהריים</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           // Three states, not two. "Not closed" is not the same as "open to the public": on a
           // night with nothing on the board and no recurring format the room simply is not open,
           // and the green "פתוח לקהל" row was announcing a public evening that does not exist.
           const eveningIsPublic = !!item.published || !!EZRA_FORMATS[item.dow];
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : eveningIsPublic
-            ? `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>${item.published ? `פתוח לקהל (${openHour})` : 'פתוח לקהל'}</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים ושריון הערב"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span>ערב (18:00-02:00)</span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
+            ? `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>${item.published ? `פתוח לקהל (${openHour})` : 'פתוח לקהל'}</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים ושריון הערב"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
