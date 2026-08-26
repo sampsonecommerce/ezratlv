@@ -6474,11 +6474,14 @@
         img: 'images/FOOD ENVIRONMENT.jpg',
       },
     };
-    // What a night with no format and no published event is: available, and nothing more.
+    // A night with no format and nothing on the board is CLOSED, not an open salon. Sundays and
+    // Tuesdays have recurring formats and weekends carry private events; the rest of the week the
+    // room is simply not open unless somebody books it. Said gently: no event tonight, and the
+    // date can be yours.
     const EZRA_NO_FORMAT = {
-      name: 'הסלון של עזרא',
-      lineup: '',
-      desc: 'אין ערב ציבורי שמוכרז לתאריך הזה. החלל פנוי ואפשר לסגור אותו לאירוע פרטי - השאירו פרטים ונחזור אליכם.',
+      name: 'אין אירוע הערב',
+      lineup: 'עזרא נח בין ערב לערב',
+      desc: 'לא מתוכנן ערב ציבורי בתאריך הזה. רוצים את עזרא לעצמכם? אפשר לסגור את החלל לאירוע פרטי, יום הולדת או ערב חברה - השאירו פרטים ונחזור אליכם.',
       img: 'images/BAR.jpg',
     };
     let ezraPublished = new Map();
@@ -6622,7 +6625,7 @@
           let img = fmt.img;
           // A format is not an instance, so it gets no entry badge and no hours. Those are facts
           // about a particular evening and only the board knows them.
-          let badge = EZRA_FORMATS[dow] ? 'פורמט קבוע' : 'פנוי לאירוע פרטי';
+          let badge = EZRA_FORMATS[dow] ? 'פורמט קבוע' : 'התאריך פנוי להזמנה';
           let badgeClass = EZRA_FORMATS[dow] ? 'sticker--format' : 'sticker--free';
           let hours = '';
 
@@ -6680,6 +6683,12 @@
             liveText.innerHTML = `<strong>הערב:</strong> המקום סגור לאירוע פרטי`;
             const strip0 = document.getElementById('heroLiveStatus');
             if (strip0) strip0.classList.remove('is-open'), strip0.classList.add('is-closed');
+          } else if (!t0.published && !EZRA_FORMATS[t0.dow]) {
+            // Nothing on the board and no recurring format: the room is closed tonight. Gentle -
+            // an invitation to book the date, not a shut door.
+            liveText.innerHTML = `<strong>הערב:</strong> אין אירוע · אפשר לסגור את עזרא לאירוע פרטי`;
+            const strip2 = document.getElementById('heroLiveStatus');
+            if (strip2) strip2.classList.remove('is-open'), strip2.classList.add('is-closed');
           } else {
             const openHour = (t0.hours || '20:00').split(' - ')[0].split(' ')[0];
             liveText.innerHTML = `<strong>הערב:</strong> פתוח לקהל מ-${openHour} · ${t0.title.split('·')[0]}`;
