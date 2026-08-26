@@ -152,7 +152,8 @@ const runSync = async () => {
     new Request("https://ezra-lead.test/?sync=1", { headers: { "x-ezra-calc-secret": "test-secret" } }),
     env,
   );
-  return r.json();
+  // The endpoint returns both passes now; this test is about the mirror one.
+  return (await r.json()).mirror;
 };
 
 const fails = [];
