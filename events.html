@@ -839,10 +839,10 @@
       border-color: rgba(34, 197, 94, 0.6);
     }
     .hero-card__pill--today {
-      background: rgba(220, 38, 38, 0.24);
-      color: #fecaca;
-      border-color: rgba(239, 68, 68, 0.7);
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+      background: rgba(34, 197, 94, 0.24);
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.75);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
       font-weight: 800;
     }
     .hero-card__pill--tomorrow {
@@ -7645,7 +7645,7 @@
           let datePillClass = '';
 
           if (diff === 0) {
-            prefix = `🔴 הערב · ${baseDay}`;
+            prefix = `🟢 הערב · ${baseDay}`;
             datePillClass = 'hero-card__pill--today';
           } else if (diff === 1) {
             prefix = `מחר · ${baseDay}`;
