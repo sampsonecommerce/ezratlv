@@ -52,12 +52,20 @@ const COLUMNS = [
 const KNOWN_COLUMNS = new Set(COLUMNS.map((c) => c.id));
 const KNOWN_GROUPS = new Set(GROUPS.map((g) => g.id));
 
-let created = null;
+let created = null, typed = null, typeCalls = 0, breakTypeCall = false;
 globalThis.fetch = async (url, opts) => {
   const J = (o) => new Response(JSON.stringify(o), { headers: { "content-type": "application/json" } });
   if (!String(url).includes("api.monday.com")) return J({});   // Meta CAPI etc.
   const body = JSON.parse(opts.body);
   const q = body.query || "";
+
+  if (q.includes("change_column_value")) {
+    typeCalls++;
+    const v = body.variables || {};
+    if (breakTypeCall) return J({ errors: [{ message: "simulated failure" }] });
+    typed = { board: v.board, item: v.item, col: v.col, value: JSON.parse(v.value) };
+    return J({ data: { change_column_value: { id: v.item } } });
+  }
 
   if (q.includes("create_item")) {
     const v = body.variables || {};
@@ -114,8 +122,16 @@ if (created) {
     `lead landed in "${created.landed}", not New Leads (group_mm6djw93)`);
   check(c.color_mm6d8eqs?.label === "New Lead",
     `Status is ${JSON.stringify(c.color_mm6d8eqs)}, expected New Lead`);
-  check(c.color_mm6dn79a?.label === "אירוע חברה",
-    `Event type is ${JSON.stringify(c.color_mm6dn79a)}, expected אירוע חברה`);
+  // The Event type is deliberately NOT part of create_item. A Monday "when status changes to X"
+  // trigger does not fire for a value that arrives at creation, and the two automations that hand
+  // a music lead to Moshe are that shape - so a type written here reaches the board owned by
+  // nobody. It has to arrive as a change instead.
+  check(c.color_mm6dn79a === undefined,
+    `Event type was written at creation (${JSON.stringify(c.color_mm6dn79a)}) - the routing automations will not fire`);
+  check(typed?.col === "color_mm6dn79a" && typed?.value?.label === "אירוע חברה",
+    `Event type not set by a follow-up change: ${JSON.stringify(typed)}`);
+  check(typed?.item === "999", `Event type set on item ${JSON.stringify(typed?.item)}, expected the one just created`);
+  check(out.eventType === "set", `response reports eventType ${JSON.stringify(out.eventType)}`);
   check(c.color_mm6dh5pe?.label === "ערב",
     `Time of event is ${JSON.stringify(c.color_mm6dh5pe)}, expected ערב`);
   check(c.phone_mm6dxgj2?.phone === "0501234567", "phone missing");
@@ -191,6 +207,24 @@ if (created) {
   check(notes.includes("19:30"), "RSVP notes do not carry the seating round");
   check(!/₪|מחיר|עלות/.test(notes), "a reservation must never carry a price");
 }
+
+// The follow-up is best-effort by design: the item already exists, and the customer's own wording
+// is in the notes blob. A lead must never be reported as failed because a second call did.
+created = null; typed = null; typeCalls = 0; breakTypeCall = true;
+const brokenType = await worker.fetch(
+  new Request("https://ezra-lead.test/", {
+    method: "POST",
+    headers: { "content-type": "application/json", origin: "https://ezratlv.com" },
+    body: JSON.stringify({ ...LEAD, eventType: "הרצאות" }),
+  }),
+  env,
+);
+const brokenOut = await brokenType.json();
+check(brokenOut.ok === true, `lead failed because the Event type call did: ${JSON.stringify(brokenOut)}`);
+check(brokenOut.id === "999", "the created item id was lost");
+check(brokenOut.eventType === "failed", `response should say the type was not set, got ${JSON.stringify(brokenOut.eventType)}`);
+check(typeCalls === 2, `Event type was attempted ${typeCalls} time(s), expected 2`);
+breakTypeCall = false;
 
 // The availability feed must not treat New Leads as a taken date.
 created = null;
