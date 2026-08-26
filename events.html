@@ -838,6 +838,19 @@
       color: #86efac;
       border-color: rgba(34, 197, 94, 0.6);
     }
+    .hero-card__pill--today {
+      background: rgba(34, 197, 94, 0.24);
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.75);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
+      font-weight: 800;
+    }
+    .hero-card__pill--tomorrow {
+      background: rgba(234, 179, 8, 0.18);
+      color: #fef08a;
+      border-color: rgba(234, 179, 8, 0.55);
+      font-weight: 800;
+    }
     .hero-slider__card-title {
       font-size: clamp(1.25rem, 2.4vw, 1.6rem);
       font-weight: 900;
@@ -7910,7 +7923,7 @@
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
-        function getUpcomingDateString(dayOfWeek, customPrefix) {
+        function getUpcomingDateInfo(dayOfWeek, customPrefix) {
           const now = new Date();
           const d = new Date(now);
           const currentDow = now.getDay();
@@ -7919,19 +7932,31 @@
           const padNum = (n) => String(n).padStart(2, '0');
           const dateFormatted = `${padNum(d.getDate())}.${padNum(d.getMonth() + 1)}`;
           const daysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-          const prefix = customPrefix || (dayOfWeek === 6 ? 'מוצ״ש' : `יום ${daysHe[dayOfWeek]}`);
-          return `${prefix} ${dateFormatted}`;
+          const baseDay = customPrefix || (dayOfWeek === 6 ? 'מוצ״ש' : `יום ${daysHe[dayOfWeek]}`);
+
+          let prefix = baseDay;
+          let datePillClass = '';
+
+          if (diff === 0) {
+            prefix = `🟢 הערב · ${baseDay}`;
+            datePillClass = 'hero-card__pill--today';
+          } else if (diff === 1) {
+            prefix = `מחר · ${baseDay}`;
+            datePillClass = 'hero-card__pill--tomorrow';
+          }
+
+          return {
+            diff,
+            datePill: `${prefix} ${dateFormatted}`,
+            datePillClass
+          };
         }
 
-        // Fallback only. Each entry describes the kind of evening a given weekday usually is
-        // at Ezra, dated to the next occurrence of that weekday - true as a pattern, but not a
-        // claim about what is actually booked on that date. The moment the board has published
-        // events, the real ones replace this list wholesale. See buildSpotlight below.
-        const fallbackSpotlight = [
+        const eventsConfig = [
           {
             id: 'sunday-live',
             dow: 0,
-            datePill: getUpcomingDateString(0, 'יום ראשון'),
+            customPrefix: 'יום ראשון',
             timePill: '20:00',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7939,13 +7964,12 @@
             title: 'מוס טאון · הופעת בכורה בתל אביב',
             lineup: 'Moss Town · פסיכדליה אינסטרומנטלית, גרוב, רוק וג\'אז',
             desc: 'מוס טאון (Moss Town) מגיעים לסלון של עזרא להופעת בכורה מחשמלת בתל אביב! הרכב פסיכדליה אינסטרומנטלית, גרוב עמוק, מקצבי סבנטיז ורוק-ג\'אז לצד תפריט יין טבעי וקוקטיילים.',
-            img: 'images/MOMENT 1.jpg',
-            get fullDateString() { return this.datePill; }
+            img: 'images/MOMENT 1.jpg'
           },
           {
             id: 'tuesday-chef',
             dow: 2,
-            datePill: getUpcomingDateString(2, 'יום שלישי'),
+            customPrefix: 'יום שלישי',
             timePill: '19:30 & 22:00',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7953,13 +7977,12 @@
             title: 'Fire & Dough · פופ-אפ שף מהטאבון',
             lineup: 'שף אורח מהטאבון & קוקטיילים מותאמים אישית',
             desc: 'ערב קולינרי מיוחד: תפריט ספיישלים ייחודי מהטאבון עם מנות גחלים, דגים נאים, לחמי מחמצת וקוקטיילים שנרקחו במיוחד לערב זה.',
-            img: 'images/FOOD ENVIRONMENT.jpg',
-            get fullDateString() { return this.datePill; }
+            img: 'images/FOOD ENVIRONMENT.jpg'
           },
           {
             id: 'wednesday-listening',
             dow: 3,
-            datePill: getUpcomingDateString(3, 'יום רביעי'),
+            customPrefix: 'יום רביעי',
             timePill: '20:30',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7967,13 +7990,12 @@
             title: 'Night Sessions · השמעות אלבומים & Hi-Fi',
             lineup: 'האזנה מרוכזת במערכת הסאונד האנלוגית של עזרא',
             desc: 'חוויית האזנה עמוקה לאלבומים שלמים בפורמט ויניל מקורי במערכת הסאונד המותאמת אישית של עזרא. תאורה עמומה, משקאות מותאמים וסאונד צלול.',
-            img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg'
           },
           {
             id: 'thursday-groove',
             dow: 4,
-            datePill: getUpcomingDateString(4, 'יום חמישי'),
+            customPrefix: 'יום חמישי',
             timePill: '21:00',
             badgePill: 'כניסה חופשית',
             badgeClass: 'sticker--free',
@@ -7981,13 +8003,12 @@
             title: 'Groove & Grapes · סשן פאנק & סול ויניל',
             lineup: 'DJ Amir Peled & Special Guests · תקליטים מקוריים',
             desc: 'סשן תקליטים אנלוגי מוקפד מתקליטי 70s-80s מקוריים, יין טבעי ומנות חמות מהטאבון. האווירה חופשית, וייב של סלון תל אביבי אינטימי.',
-            img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg'
           },
           {
             id: 'saturday-jazz',
             dow: 6,
-            datePill: getUpcomingDateString(6, 'מוצ״ש'),
+            customPrefix: 'מוצ״ש',
             timePill: '20:30',
             badgePill: 'מומלץ להזמין מקום',
             badgeClass: 'sticker--rsvp',
@@ -7995,10 +8016,24 @@
             title: 'Florentin Jazz Hang · טריו ג\'אז חי על הבר',
             lineup: 'פסנתר, קונטרבס ותופים · סשן אלתורים אינטימי',
             desc: 'סשן ג\'אז חי, אלתורים חמים וגרוב משוחרר לצד קוקטיילים מדויקים ואווירת ספיקאיזי ניו-יורקי בלב פלורנטין.',
-            img: 'images/vibe-cocktail.jpg',
-            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
+            img: 'images/vibe-cocktail.jpg'
           }
         ];
+
+        function getUpcomingFallbackSpotlight() {
+          return eventsConfig.map(cfg => {
+            const dateInfo = getUpcomingDateInfo(cfg.dow, cfg.customPrefix);
+            return {
+              ...cfg,
+              diff: dateInfo.diff,
+              datePill: dateInfo.datePill,
+              datePillClass: dateInfo.datePillClass,
+              get fullDateString() { return this.datePill; }
+            };
+          }).sort((a, b) => a.diff - b.diff);
+        }
+
+        let spotlightEvents = getUpcomingFallbackSpotlight();
 
         let currentIndex = 0;
         let slideInterval = null;
@@ -8006,20 +8041,13 @@
         const DURATION = 5000;
         const TICK = 50;
 
-        // The list actually on screen: real published events when the board has any, the weekday
-        // templates otherwise. This is the top of the page, so it is the first thing that would
-        // contradict the day cards below it if the two read different sources.
-        let spotlightEvents = fallbackSpotlight;
-
         const heroDaysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
         const heroPad = (n) => String(n).padStart(2, '0');
 
         function buildSpotlight() {
-          // Today's own evening still counts - somebody reading this at 18:00 wants to know what
-          // is on tonight, and the date has not passed until the date has passed.
           const now = new Date();
           const todayKey = `${now.getFullYear()}-${heroPad(now.getMonth() + 1)}-${heroPad(now.getDate())}`;
-          const live = [...ezraPublished.values()]
+          const live = (typeof ezraPublished !== 'undefined' ? [...ezraPublished.values()] : [])
             .filter((ev) => ev.date >= todayKey)
             .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
             .slice(0, 5)
@@ -8027,23 +8055,36 @@
               const [y, m, d] = ev.date.split('-').map(Number);
               const when = new Date(y, m - 1, d);
               const rsvp = /הזמנ|כרטיס/.test(ev.entry || '');
+              const diff = Math.round((new Date(y, m - 1, d).setHours(0,0,0,0) - new Date().setHours(0,0,0,0)) / (1000 * 60 * 60 * 24));
+              const baseDay = `יום ${heroDaysHe[when.getDay()]}`;
+              let prefix = baseDay;
+              let datePillClass = '';
+              if (diff === 0) {
+                prefix = `🟢 הערב · ${baseDay}`;
+                datePillClass = 'hero-card__pill--today';
+              } else if (diff === 1) {
+                prefix = `מחר · ${baseDay}`;
+                datePillClass = 'hero-card__pill--tomorrow';
+              }
+              const datePill = `${prefix} ${heroPad(d)}.${heroPad(m)}`;
               return {
-                datePill: `יום ${heroDaysHe[when.getDay()]} ${heroPad(d)}.${heroPad(m)}`,
+                diff,
+                datePill,
+                datePillClass,
                 timePill: ev.doors || ev.start || '',
-                badgePill: ev.entry || 'פתוח לקהל',
-                badge: ev.entry || 'פתוח לקהל',
+                badgePill: ev.entry || 'כניסה חופשית',
+                badge: ev.entry || 'כניסה חופשית',
                 badgeClass: rsvp ? 'sticker--rsvp' : 'sticker--free',
                 pillClass: rsvp ? 'hero-card__pill--rsvp' : 'hero-card__pill--free',
                 title: ev.title,
                 lineup: ev.subtitle || '',
                 desc: ev.desc || '',
                 img: (ev.images && ev.images[0]) || 'images/BAR.jpg',
-                fullDateString: `יום ${heroDaysHe[when.getDay()]} ${heroPad(d)}.${heroPad(m)}`
-                  + (ev.doors ? ` · ${ev.doors}` : ''),
+                fullDateString: datePill + (ev.doors ? ` · ${ev.doors}` : ''),
                 published: ev,
               };
             });
-          spotlightEvents = live.length ? live : fallbackSpotlight;
+          spotlightEvents = live.length ? live : getUpcomingFallbackSpotlight();
         }
 
         function renderSlides() {
@@ -8065,7 +8106,7 @@
 
         function updateCardContent(ev) {
           cardMeta.innerHTML = `
-            <span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
+            <span class="hero-card__pill ${ev.datePillClass || ''}"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
             <span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-clock"/></svg>${ev.timePill}</span>
             <span class="hero-card__pill ${ev.pillClass || ''}">${ev.badgePill}</span>
           `;
