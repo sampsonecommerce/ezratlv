@@ -474,28 +474,35 @@
 
     /* TICKER MARQUEE */
     .ticker-strip {
-      background: #14100b;
-      border-block: 1px solid var(--line);
+      display: flex;
       overflow: hidden;
       white-space: nowrap;
+      user-select: none;
+      background: #14100b;
+      border-block: 1px solid var(--line);
       padding-block: 0.65rem;
       position: relative;
       z-index: 5;
     }
-    .ticker-track {
-      display: inline-flex;
+    .ticker-group {
+      display: flex;
+      flex-shrink: 0;
       align-items: center;
+      justify-content: space-around;
+      min-width: 100%;
       gap: 1.8rem;
-      animation: tickerMove 28s linear infinite;
+      padding-inline-end: 1.8rem;
+      animation: tickerScroll 28s linear infinite;
       font-size: 0.84rem;
       font-weight: 700;
       letter-spacing: 0.06em;
       color: var(--cream);
+      will-change: transform;
     }
-    .ticker-track span.gold { color: var(--gold); }
-    @keyframes tickerMove {
+    .ticker-group span.gold { color: var(--gold); }
+    @keyframes tickerScroll {
       from { transform: translateX(0); }
-      to   { transform: translateX(50%); }
+      to   { transform: translateX(100%); }
     }
 
     section { padding-block: var(--section-pad); position: relative; }
@@ -4204,7 +4211,7 @@
 
   <!-- TICKER MARQUEE -->
   <div class="ticker-strip" aria-hidden="true">
-    <div class="ticker-track">
+    <div class="ticker-group">
       <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
@@ -4215,6 +4222,8 @@
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> כניסה חופשית על בסיס מקום פנוי</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+    </div>
+    <div class="ticker-group" aria-hidden="true">
       <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
@@ -4222,6 +4231,8 @@
       <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט ויין טבעי</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
+      <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> כניסה חופשית על בסיס מקום פנוי</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
     </div>
   </div>
