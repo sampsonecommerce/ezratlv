@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-26a";
+const BUILD_ID = "2026-08-26b";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -102,6 +102,8 @@ const SRC = {
   guests:    "numeric_mm1qj01x",      // Guest Count
   guestsAlt: "number0kzol2wl",        // Estimated number of guests
   notes:     "long_textlwbyhlq0",     // Additional notes or special requests
+  origin:    "text_mm6ktd3a",         // Source Item on Events Form - "5102602771:<itemId>" when the
+                                      // item was promoted from an Open Events lead (see below)
 };
 // Belt and braces on top of the allow-list above: drop any notes line that talks about money.
 // Hebrew inflects, and a substring match on the singular does not cover the plural: "העלויות"
@@ -812,6 +814,10 @@ async function syncMirror(env) {
   for (const boardId of [AVAIL_BOARD, COMPANY_BOARD]) {
     for (const it of await fetchItems(boardId, TOKEN, srcColumns)) {
       if (!isCommittedGroup(it.groupTitle, it.groupId, boardId)) continue;
+      // An item promoted from an Open Events lead carries its origin in Source Item. Mirroring it
+      // back would put the same event on Open Events twice - once as the lead that started it,
+      // once as a mirror of its own promoted copy. The lead is the original; skip the copy.
+      if ((it.cv[SRC.origin]?.text || "").trim().startsWith(OPEN_EVENTS_BOARD + ":")) continue;
       const f = mirrorFields(it, labels);
       if (!f.date) continue;   // an event with no date cannot hold a slot on a calendar
       desired.set(`${boardId}:${it.id}`, f);
