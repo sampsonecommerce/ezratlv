@@ -6488,8 +6488,8 @@
     // room is simply not open unless somebody books it. Said gently: no event tonight, and the
     // date can be yours.
     const EZRA_NO_FORMAT = {
-      name: 'אין אירוע הערב',
-      lineup: 'עזרא נח בין ערב לערב',
+      name: 'פנוי לאירוע פרטי',
+      lineup: 'אין ערב ציבורי בתאריך הזה',
       desc: 'לא מתוכנן ערב ציבורי בתאריך הזה. רוצים את עזרא לעצמכם? אפשר לסגור את החלל לאירוע פרטי, יום הולדת או ערב חברה - השאירו פרטים ונחזור אליכם.',
       img: 'images/BAR.jpg',
     };
@@ -6695,7 +6695,7 @@
           } else if (!t0.published && !EZRA_FORMATS[t0.dow]) {
             // Nothing on the board and no recurring format: the room is closed tonight. Gentle -
             // an invitation to book the date, not a shut door.
-            liveText.innerHTML = `<strong>הערב:</strong> אין אירוע · אפשר לסגור את עזרא לאירוע פרטי`;
+            liveText.innerHTML = `<strong>הערב:</strong> פנוי לאירוע פרטי`;
             const strip2 = document.getElementById('heroLiveStatus');
             if (strip2) strip2.classList.remove('is-open'), strip2.classList.add('is-closed');
           } else {
