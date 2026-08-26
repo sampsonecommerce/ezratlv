@@ -47,6 +47,12 @@ jobs:
       - name: Mirror sync test
         run: node worker/test/mirror-sync.test.mjs
 
+      # Gate. Promotion creates items on the sales board on a cron. Its marker is
+      # the only thing stopping the mirror sync copying each promoted item back
+      # onto Open Events, so that assertion is not allowed to regress.
+      - name: Promotion test
+        run: node worker/test/promotion.test.mjs
+
       # Gate. The published-events feed decides what of a customer's booking the public
       # internet gets to read. One unticked checkbox is the whole difference between a
       # blocked date and a named evening, so that rule is not allowed to regress - nor is

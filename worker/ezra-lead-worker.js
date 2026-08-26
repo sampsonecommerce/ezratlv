@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-26b";
+const BUILD_ID = "2026-08-26c";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -105,6 +105,48 @@ const SRC = {
   origin:    "text_mm6ktd3a",         // Source Item on Events Form - "5102602771:<itemId>" when the
                                       // item was promoted from an Open Events lead (see below)
 };
+// ---------------------------------------------------------------------------------------------
+// Promotion: an Open Events lead that becomes real is copied onto Events Form, the sales pipeline
+// of record, so Eylam and the sales manager see it coming. Music leads are worked by Moshe entirely
+// on Open Events and would otherwise never appear there.
+//
+// This lives in the worker rather than in a Monday automation on purpose. The automation route was
+// attempted first and abandoned on 2026-08-26: the one-shot builder times out on the create-item
+// block, and the workflow expert reports success while leaving the item-name field in a broken
+// state and the column map bound to the wrong thing. A promotion that silently writes an unnamed
+// item with no provenance marker is the one failure mode that must not ship - it loops.
+//
+// Commitment is a STATUS, never a payment. An invited show closes with no money attached and is
+// still a real evening holding a slot, which is exactly what Moshe books.
+const PROMOTE_STATUSES = {
+  "Proposal Sent": "group_mm187fg9",   // Events Form -> Proposal Sent
+  "Pre Payment":   "group_mm1fz3kg",   // Events Form -> Pre Payment
+  "Closed Deal":   "group_mm18mks7",   // Events Form -> Closed Deals
+};
+// Events Form column ids the promotion writes. SRC above is the read map for the same board; this
+// is the write map, and they are deliberately separate - reading a column is not permission to
+// write it.
+const EF = {
+  date:      "date5bab58wj",
+  startHour: "hour_mm1q610q",
+  endHour:   "hour_mm1qa44s",
+  eventType: "single_selecta6erdt9",
+  timeOf:    "single_select943s5p9",
+  guests:    "numeric_mm1qj01x",
+  phone:     "phone0zyibnut",
+  email:     "emailj9eufer1",
+  notes:     "long_textlwbyhlq0",
+  status:    "color_mm18ym70",
+  origin:    "text_mm6ktd3a",          // Source Item - the loop guard
+};
+// Setting the promoted copy's Status is what fires Events Form automation 1717403286, which is the
+// account's one guarded route onto the Ivchu operations board. It ALSO fires the five duplicate
+// automations created on 2026-08-20 that each write a "🔒 אירוע סגור" item onto Open Events - so
+// until four of those five are switched off, promoting with a status attached litters the board
+// with five phantom items per deal. Flip this to true the moment they are gone; nothing else needs
+// to change. Until then a human moving the promoted item's status does the same job by hand.
+const PROMOTE_SETS_STATUS = false;
+
 // Belt and braces on top of the allow-list above: drop any notes line that talks about money.
 // Hebrew inflects, and a substring match on the singular does not cover the plural: "העלויות"
 // does not contain "עלות" (ע-ל-ו-י-ו-ת against ע-ל-ו-ת), which is how "אשמח לדעת מה העלויות"
@@ -151,7 +193,13 @@ export default {
   // every request, so a missed run leaves the board stale, never the site wrong.
   async scheduled(event, env, ctx) {
     ctx.waitUntil(
-      syncMirror(env)
+      // Promote first: a lead that just became real should reach the pipeline before the mirror
+      // pass reads Events Form, so its copy is seen and skipped in the same run rather than the
+      // next one.
+      promoteLeads(env)
+        .then((r) => console.log("promotion:", JSON.stringify(r)))
+        .catch((e) => console.error("promotion failed:", e))
+        .then(() => syncMirror(env))
         .then((r) => console.log("mirror sync:", JSON.stringify(r)))
         .catch((e) => console.error("mirror sync failed:", e)),
     );
@@ -174,7 +222,8 @@ export default {
       // result names source item ids. Used to verify a deploy without waiting for the schedule.
       if (params.get("sync") === "1") {
         if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401, cors);
-        return json(await syncMirror(env), 200, cors);
+        const promotion = await promoteLeads(env);
+        return json({ promotion, mirror: await syncMirror(env) }, 200, cors);
       }
       return availability(request, env, cors);
     }
@@ -789,6 +838,89 @@ async function mondayMutate(query, variables, TOKEN) {
   const out = await r.json();
   if (out.errors) throw new Error(JSON.stringify(out.errors).slice(0, 300));
   return out.data;
+}
+
+// Copy an Open Events lead onto Events Form once it reaches a committed status. Idempotent by
+// reading back what is already there: every promoted copy carries "<openEventsBoard>:<itemId>" in
+// Events Form's Source Item, so a lead that already has one is skipped. No extra column on Open
+// Events, and no state kept anywhere but the boards themselves.
+async function promoteLeads(env) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { ok: false, error: "MONDAY_TOKEN is not set on this deployment" };
+
+  const openSchema = await boardSchema(OPEN_EVENTS_BOARD, TOKEN);
+  const formSchema = await boardSchema(AVAIL_BOARD, TOKEN);
+  if (!openSchema || !formSchema) return { ok: false, error: "could not read both board schemas" };
+  if (!formSchema.columns.some((c) => c.id === EF.origin)) {
+    // Without the marker every promoted copy would be mirrored straight back onto Open Events.
+    // Refuse rather than create a loop.
+    return { ok: false, error: `Events Form has no "${EF.origin}" column - refusing to promote` };
+  }
+  const labelsOf = (schema, id) => {
+    try { return Object.values(JSON.parse(schema.columns.find((c) => c.id === id)?.settings_str || "{}").labels || {}); }
+    catch { return []; }
+  };
+  const formLabels = {
+    eventType: labelsOf(formSchema, EF.eventType),
+    timeOf:    labelsOf(formSchema, EF.timeOf),
+    status:    labelsOf(formSchema, EF.status),
+  };
+
+  // Already promoted, read from the target board rather than remembered.
+  const promoted = new Set();
+  for (const it of await fetchItems(AVAIL_BOARD, TOKEN, [EF.origin])) {
+    const marker = (it.cv[EF.origin]?.text || "").trim();
+    if (marker) promoted.add(marker);
+  }
+
+  const openColumns = [OE.status, OE.date, OE.startHour, OE.endHour, OE.eventType,
+                       OE.timeOf, OE.guests, OE.phone, OE.email, OE.notes];
+  const out = { ok: true, considered: 0, promoted: 0, skipped: 0, failed: [] };
+
+  const CREATE = `mutation ($board: ID!, $group: String!, $name: String!, $cols: JSON!) {
+    create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $cols, create_labels_if_missing: false) { id }
+  }`;
+
+  for (const it of await fetchItems(OPEN_EVENTS_BOARD, TOKEN, openColumns)) {
+    const status = (it.cv[OE.status]?.text || "").trim();
+    const group = PROMOTE_STATUSES[status];
+    if (!group) continue;                       // not a committed status
+    out.considered++;
+    const key = `${OPEN_EVENTS_BOARD}:${it.id}`;
+    if (promoted.has(key)) { out.skipped++; continue; }
+
+    const t = (id) => (it.cv[id]?.text || "").trim();
+    const cols = { [EF.origin]: key };
+    const date = (it.cv[OE.date]?.date || t(OE.date) || "").trim();
+    if (date) cols[EF.date] = { date };
+    const sh = hourValue(t(OE.startHour)), eh = hourValue(t(OE.endHour));
+    if (sh) cols[EF.startHour] = sh;
+    if (eh) cols[EF.endHour] = eh;
+    if (t(OE.guests)) cols[EF.guests] = t(OE.guests);
+    if (t(OE.phone)) cols[EF.phone] = { phone: t(OE.phone), countryShortName: "IL" };
+    if (t(OE.email)) cols[EF.email] = { email: t(OE.email), text: t(OE.email) };
+    if (t(OE.notes)) cols[EF.notes] = { text: t(OE.notes) };
+    // Labels are checked against Events Form's own settings: create_labels_if_missing is false, so
+    // an unrecognised label fails the whole create and the lead never reaches the pipeline.
+    if (formLabels.eventType.includes(t(OE.eventType))) cols[EF.eventType] = { label: t(OE.eventType) };
+    if (formLabels.timeOf.includes(t(OE.timeOf))) cols[EF.timeOf] = { label: t(OE.timeOf) };
+    if (PROMOTE_SETS_STATUS && formLabels.status.includes(status)) cols[EF.status] = { label: status };
+
+    try {
+      await mondayMutate(CREATE, {
+        board: AVAIL_BOARD,
+        group: formSchema.groups.includes(group) ? group : null,
+        name: (it.name || "אירוע").slice(0, 230),
+        cols: JSON.stringify(cols),
+      }, TOKEN);
+      promoted.add(key);
+      out.promoted++;
+    } catch (e) {
+      console.error(`promote ${key} failed:`, e);
+      out.failed.push(key);
+    }
+  }
+  return out;
 }
 
 async function syncMirror(env) {
