@@ -47,6 +47,13 @@ jobs:
       - name: Mirror sync test
         run: node worker/test/mirror-sync.test.mjs
 
+      # Gate. The published-events feed decides what of a customer's booking the public
+      # internet gets to read. One unticked checkbox is the whole difference between a
+      # blocked date and a named evening, so that rule is not allowed to regress - nor is
+      # the rule that publishing an evening never frees its date.
+      - name: Published events feed test
+        run: node worker/test/public-events.test.mjs
+
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
