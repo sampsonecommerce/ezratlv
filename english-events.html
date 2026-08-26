@@ -418,28 +418,35 @@
 
     /* TICKER MARQUEE */
     .ticker-strip {
-      background: #14100b;
-      border-block: 1px solid var(--line);
+      display: flex;
       overflow: hidden;
       white-space: nowrap;
+      user-select: none;
+      background: #14100b;
+      border-block: 1px solid var(--line);
       padding-block: 0.65rem;
       position: relative;
       z-index: 5;
     }
-    .ticker-track {
-      display: inline-flex;
+    .ticker-group {
+      display: flex;
+      flex-shrink: 0;
       align-items: center;
+      justify-content: space-around;
+      min-width: 100%;
       gap: 1.8rem;
-      animation: tickerMoveEn 28s linear infinite;
+      padding-inline-end: 1.8rem;
+      animation: tickerScrollEn 28s linear infinite;
       font-size: 0.84rem;
       font-weight: 700;
       letter-spacing: 0.06em;
       color: var(--cream);
+      will-change: transform;
     }
-    .ticker-track span.gold { color: var(--gold); }
-    @keyframes tickerMoveEn {
+    .ticker-group span.gold { color: var(--gold); }
+    @keyframes tickerScrollEn {
       from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      to   { transform: translateX(-100%); }
     }
 
     section { padding-block: var(--section-pad); position: relative; }
@@ -4140,24 +4147,28 @@
 
   <!-- TICKER MARQUEE -->
   <div class="ticker-strip" aria-hidden="true">
-    <div class="ticker-track">
+    <div class="ticker-group">
       <span>🔴 FLORENTIN TEL AVIV</span>
       <span>✦</span>
-      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI & RARE VINYL</span>
+      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI &amp; RARE VINYL</span>
       <span>✦</span>
-      <span>🔥 WOOD-FIRED CHEF POP-UPS & NATURAL WINE</span>
+      <span>🔥 WOOD-FIRED CHEF POP-UPS &amp; NATURAL WINE</span>
       <span>✦</span>
-      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
+      <span>🎧 VINYL NIGHTS &amp; LIVE SESSIONS</span>
       <span>✦</span>
       <span>🎟️ FREE ENTRY ON A FIRST-COME BASIS</span>
       <span>✦</span>
+    </div>
+    <div class="ticker-group" aria-hidden="true">
       <span>🔴 FLORENTIN TEL AVIV</span>
       <span>✦</span>
-      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI & RARE VINYL</span>
+      <span>📻 EZRA SOUND SYSTEM · ANALOG HI-FI &amp; RARE VINYL</span>
       <span>✦</span>
-      <span>🔥 WOOD-FIRED CHEF POP-UPS & NATURAL WINE</span>
+      <span>🔥 WOOD-FIRED CHEF POP-UPS &amp; NATURAL WINE</span>
       <span>✦</span>
-      <span>🎧 VINYL NIGHTS & LIVE SESSIONS</span>
+      <span>🎧 VINYL NIGHTS &amp; LIVE SESSIONS</span>
+      <span>✦</span>
+      <span>🎟️ FREE ENTRY ON A FIRST-COME BASIS</span>
       <span>✦</span>
     </div>
   </div>
@@ -4769,7 +4780,7 @@
                 </g>
               </svg>
             </div>
-            <span class="fmt-card__flag">Reservation Recommended</span>
+            <span class="fmt-card__flag fmt-card__flag--free">Free Entry</span>
           </div>
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>Live Music & Acoustic Sessions</h3>
