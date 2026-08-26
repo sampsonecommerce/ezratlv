@@ -562,55 +562,36 @@
       max-width: 980px;
       margin-inline: auto;
       text-align: center;
-    }
-    .hero-events h1 {
-      font-size: clamp(2.6rem, 6.2vw, 4.8rem);
-      font-weight: 900;
-      line-height: 1.08;
-      margin-block-end: 1.4rem;
-      color: var(--cream);
-      text-shadow: 0 4px 35px rgba(0,0,0,0.8);
-    }
-    .hero-events h1 span.gold { color: var(--gold-light); }
-    .hero-events p.lead {
-      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-      color: var(--cream-dim);
-      max-width: 60ch;
-      margin-inline: auto;
-      margin-block-end: 2.2rem;
-      line-height: 1.7;
-    }
-    .hero-ctas {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-block-end: 2.4rem;
     }
-
-    /* Live Today Quick Status Banner */
-    .today-status-strip {
+    .hero-events__eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 0.9rem;
-      padding: 0.75rem 1.6rem;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--line-bright);
-      font-size: 0.92rem;
-      color: var(--cream);
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--gold-light);
+      background: rgba(196, 154, 60, 0.12);
+      border: 1px solid rgba(196, 154, 60, 0.35);
+      padding: 0.32rem 1.1rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
-    .today-status-strip strong { color: var(--gold-light); font-weight: 700; }
-    /* The strip carries tonight's state: green when the doors are open to the
-       public, red when the night is booked. Colour lives on the clock and the
-       border, so it reads without a second flashing element above it. */
-    .today-status-strip .status-clock { color: var(--gold); transition: color 0.3s var(--ease); }
-    .today-status-strip.is-open  { border-color: var(--green-border); }
-    .today-status-strip.is-open  .status-clock { color: var(--green); }
-    .today-status-strip.is-closed { border-color: var(--red-border); }
-    .today-status-strip.is-closed .status-clock { color: var(--red); }
+    .hero-events__title {
+      font-size: clamp(2.2rem, 5.2vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.12;
+      margin: 0 0 0.5rem 0;
+      color: var(--cream);
+      text-shadow: 0 4px 35px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.8);
+    }
+    .hero-events__title span.gold { color: var(--gold-light); }
 
     /* ============================================================
        1B. HERO UPCOMING EVENTS SPOTLIGHT CARD (TEDER STYLE)
@@ -618,10 +599,37 @@
     .hero-slider {
       max-width: 620px;
       width: 100%;
-      margin: 2.2rem auto 0;
+      margin: 1.6rem auto 0;
       position: relative;
       z-index: 4;
       text-align: right;
+    }
+    .hero-slider__scroll-cta {
+      margin-top: 1.1rem;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-slider__scroll-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--cream-dim);
+      text-decoration: none;
+      padding: 0.4rem 1.1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+    }
+    .hero-slider__scroll-link:hover {
+      color: var(--gold-light);
+      border-color: rgba(218, 175, 95, 0.5);
+      background: rgba(196, 154, 60, 0.12);
+      transform: translateY(2px);
     }
     .hero-slider__card {
       position: relative;
@@ -4141,17 +4149,8 @@
     </video>
     <div class="hero-events__overlay"></div>
     <div class="wrap hero-events__inner">
-      <h1>מה קורה בעזרא<br /><span class="gold">תקליטים, טאבון ותרבות לילה</span></h1>
-      <p class="lead">
-        סשנים של תקליטי ויניל נדירים, השמעות טרום-בכורה לאלבומים, פופ-אפ שפים מהטאבון, הופעות ג'אז חיות ויין טבעי בבר אינטימי בלב פלורנטין.
-      </p>
-      <div class="hero-ctas">
-        <a class="btn btn--outline" href="#schedule">הלוח השבועי וזמני פתיחה</a>
-      </div>
-      <div class="today-status-strip" id="heroLiveStatus">
-        <svg class="status-clock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span id="heroLiveText">בודק סטטוס להערב...</span>
-      </div>
+      <div class="hero-events__eyebrow">מה קורה בעזרא</div>
+      <h1 class="hero-events__title"><span class="gold">תקליטים, טאבון ותרבות לילה</span></h1>
 
       <!-- ============================================================
            HERO UPCOMING EVENTS SPOTLIGHT CARD (TEDER STYLE)
@@ -4181,7 +4180,7 @@
           <!-- Card Content Body -->
           <div class="hero-slider__card-body">
             <div class="hero-slider__card-meta" id="heroCardMeta"></div>
-            <h3 class="hero-slider__card-title" id="heroCardTitle"></h3>
+            <h2 class="hero-slider__card-title" id="heroCardTitle"></h2>
             <p class="hero-slider__card-lineup" id="heroCardLineup"></p>
             <div class="hero-slider__card-actions">
               <button class="hero-slider__card-btn" id="heroCardCtaBtn" type="button">
@@ -4196,6 +4195,14 @@
           <div class="hero-slider__progress">
             <div class="hero-slider__progress-bar" id="heroSliderProgressBar"></div>
           </div>
+        </div>
+
+        <!-- Sleek Link to Full Schedule Below Slider -->
+        <div class="hero-slider__scroll-cta">
+          <a href="#schedule" class="hero-slider__scroll-link">
+            <span>ללוח האירועים המלא וזמני פתיחה</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </a>
         </div>
       </div>
     </div>
