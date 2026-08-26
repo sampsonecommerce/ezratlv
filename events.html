@@ -1424,6 +1424,11 @@
       display: inline-flex;
       align-items: center;
       gap: 0.28rem;
+      /* Same fix as .hero-card__pill: this inherited body's 1.65 line-height,
+         padding a 12px glyph into an ~18px line box on top of the declared
+         padding. The neighboring .slot-row__time has no background, so the
+         same slack there was invisible - only a boxed pill shows it. */
+      line-height: 1.3;
       padding: 0.16rem 0.45rem;
       border-radius: 6px;
       font-size: 0.68rem;
@@ -7512,35 +7517,6 @@
         const todayFlag = document.getElementById('heroTodayFlag');
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
-
-        function getUpcomingDateInfo(dayOfWeek, customPrefix) {
-          const now = new Date();
-          const d = new Date(now);
-          const currentDow = now.getDay();
-          let diff = (dayOfWeek - currentDow + 7) % 7;
-          d.setDate(now.getDate() + diff);
-          const padNum = (n) => String(n).padStart(2, '0');
-          const dateFormatted = `${padNum(d.getDate())}.${padNum(d.getMonth() + 1)}`;
-          const daysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-          const baseDay = customPrefix || (dayOfWeek === 6 ? 'מוצ״ש' : `יום ${daysHe[dayOfWeek]}`);
-
-          let prefix = baseDay;
-          let datePillClass = '';
-
-          if (diff === 0) {
-            // The flag straddling the card already says today; the pill just carries the date.
-            datePillClass = 'hero-card__pill--today';
-          } else if (diff === 1) {
-            prefix = `מחר · ${baseDay}`;
-            datePillClass = 'hero-card__pill--tomorrow';
-          }
-
-          return {
-            diff,
-            datePill: `${prefix} ${dateFormatted}`,
-            datePillClass
-          };
-        }
 
         // Fallback for when the board has published nothing upcoming. These are FORMATS, so they
         // carry a weekday ("ימי ראשון") rather than a date, and no time and no act name - a hero
