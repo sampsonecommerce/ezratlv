@@ -7529,10 +7529,24 @@
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
+        function getUpcomingDateStringEn(dayOfWeek, customPrefix) {
+          const now = new Date();
+          const d = new Date(now);
+          const currentDow = now.getDay();
+          let diff = (dayOfWeek - currentDow + 7) % 7;
+          d.setDate(now.getDate() + diff);
+          const padNum = (n) => String(n).padStart(2, '0');
+          const dateFormatted = `${padNum(d.getDate())}.${padNum(d.getMonth() + 1)}`;
+          const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const prefix = customPrefix || daysEn[dayOfWeek];
+          return `${prefix} ${dateFormatted}`;
+        }
+
         const spotlightEvents = [
           {
             id: 'sunday-live',
-            datePill: 'This Sunday',
+            dow: 0,
+            datePill: getUpcomingDateStringEn(0, 'Sunday'),
             timePill: '20:30',
             badgePill: 'RSVP Recommended',
             badgeClass: 'sticker--rsvp',
@@ -7541,11 +7555,12 @@
             lineup: 'Live Original Sets & Acoustic Sessions',
             desc: 'An intimate live music session at Ezra: original singer-songwriter ensembles, acoustic soundscapes, dimmed lighting and signature cocktails.',
             img: 'images/MOMENT 1.jpg',
-            fullDateString: 'This Sunday · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'tuesday-chef',
-            datePill: 'Tuesday',
+            dow: 2,
+            datePill: getUpcomingDateStringEn(2, 'Tuesday'),
             timePill: '19:30 & 22:00',
             badgePill: 'RSVP Required',
             badgeClass: 'sticker--rsvp',
@@ -7554,11 +7569,12 @@
             lineup: 'Guest Chef & Tailored Botanical Cocktails',
             desc: 'A one-night special wood-fired menu: warm sourdough with spiced butters, fresh crudo, charred seasonal vegetables and craft cocktails.',
             img: 'images/FOOD ENVIRONMENT.jpg',
-            fullDateString: 'Tuesday · 19:30 / 22:00'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'wednesday-listening',
-            datePill: 'Wednesday',
+            dow: 3,
+            datePill: getUpcomingDateStringEn(3, 'Wednesday'),
             timePill: '20:30',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7567,11 +7583,12 @@
             lineup: 'Deep Listening on Ezra\'s Custom Analog System',
             desc: 'An immersive listening session with full albums played on original vinyl records over our custom analog sound system with dimmed lights and signature drinks.',
             img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-            fullDateString: 'Wednesday · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'thursday-groove',
-            datePill: 'Thursday',
+            dow: 4,
+            datePill: getUpcomingDateStringEn(4, 'Thursday'),
             timePill: '21:00',
             badgePill: 'Free Entry',
             badgeClass: 'sticker--free',
@@ -7580,11 +7597,12 @@
             lineup: 'DJ Amir Peled & Special Guests · Original Pressings',
             desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and sourdough dishes from the wood oven.',
             img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-            fullDateString: 'Thursday · 21:00'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           },
           {
             id: 'saturday-jazz',
-            datePill: 'Saturday',
+            dow: 6,
+            datePill: getUpcomingDateStringEn(6, 'Saturday'),
             timePill: '20:30',
             badgePill: 'RSVP Recommended',
             badgeClass: 'sticker--rsvp',
@@ -7593,7 +7611,7 @@
             lineup: 'Piano, Double Bass & Drums · Intimate Live Improvisation',
             desc: 'Warm acoustic jazz, rhythmic improvisation and a relaxed speakeasy vibe alongside classic cocktails.',
             img: 'images/vibe-cocktail.jpg',
-            fullDateString: 'Saturday · 20:30'
+            get fullDateString() { return `${this.datePill} · ${this.timePill}`; }
           }
         ];
 
