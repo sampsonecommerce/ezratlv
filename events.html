@@ -819,7 +819,11 @@
     .hero-card__pill {
       display: inline-flex;
       align-items: center;
-      padding: 0.24rem 0.68rem;
+      /* The pill inherits body's 1.65 line-height, which padded every one of these
+         to roughly 21px of box around a 12px glyph. Set it here so the pill is
+         sized by its text, not by paragraph leading. */
+      line-height: 1.3;
+      padding: 0.2rem 0.58rem;
       border-radius: 6px;
       font-size: 0.78rem;
       font-weight: 700;
@@ -828,7 +832,7 @@
       -webkit-backdrop-filter: blur(8px);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.22);
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
     .hero-card__pill--rsvp {
@@ -836,17 +840,61 @@
       color: var(--gold-light);
       border-color: rgba(218, 175, 95, 0.6);
     }
+    /* One green on this card: var(--green), rgb(52,211,153). Only the opacity
+       changes between the flag, these pills and the card border. */
     .hero-card__pill--free {
       background: rgba(6, 30, 18, 0.85);
-      color: #86efac;
-      border-color: rgba(34, 197, 94, 0.6);
+      color: var(--green);
+      border-color: rgba(52, 211, 153, 0.55);
     }
     .hero-card__pill--today {
-      background: rgba(34, 197, 94, 0.24);
-      color: #bbf7d0;
-      border-color: rgba(34, 197, 94, 0.75);
-      box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
+      background: rgba(6, 30, 18, 0.85);
+      color: var(--green);
+      border-color: rgba(52, 211, 153, 0.8);
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.35);
       font-weight: 700;
+    }
+    /* Straddles the card's top border, so "tonight" is legible before the card
+       is read. The card itself is overflow:hidden, so this hangs off .hero-slider
+       instead and is toggled from updateCardContent. */
+    .hero-slider__today-flag {
+      position: absolute;
+      top: 0;
+      inset-inline-start: 1.5rem;
+      transform: translateY(-52%);
+      z-index: 8;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      background: var(--green);
+      color: #06210f;
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55), 0 0 18px rgba(52, 211, 153, 0.45);
+    }
+    /* display is set above, so the hidden attribute needs this to win. */
+    .hero-slider__today-flag[hidden] { display: none; }
+    .hero-slider__today-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #06210f;
+      animation: heroTodayPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes heroTodayPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero-slider__card.is-today {
+      border-color: rgba(52, 211, 153, 0.7);
+      box-shadow: 0 20px 50px -10px rgba(0,0,0,0.85), 0 0 30px rgba(52, 211, 153, 0.28);
+    }
+    .hero-slider__card.is-today:hover {
+      border-color: rgba(52, 211, 153, 0.9);
+      box-shadow: 0 24px 60px -8px rgba(0,0,0,0.92), 0 0 38px rgba(52, 211, 153, 0.4);
     }
     .hero-card__pill--tomorrow {
       background: rgba(234, 179, 8, 0.18);
@@ -2536,6 +2584,7 @@
         animation: none !important;
       }
       .anim-sax-note, .anim-pizza-flour { opacity: 0.6; }
+      .hero-slider__today-dot { animation: none !important; }
     }
 
     .map-container {
@@ -3954,6 +4003,10 @@
         <button class="hero-slider__nav hero-slider__nav--left" id="heroSliderLeft" type="button" aria-label="האירוע הקודם">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
+
+        <div class="hero-slider__today-flag" id="heroTodayFlag" hidden>
+          <span class="hero-slider__today-dot"></span>היום בעזרא
+        </div>
 
         <div class="hero-slider__card is-awaiting-board" id="heroSliderCard" role="button" tabindex="0" aria-label="לפרטים מלאים ושריון מקום">
           <!-- Background Slides Track (Directly in Card) -->
@@ -7456,6 +7509,7 @@
         const cardCta = document.getElementById('heroCardCtaBtn');
         const cardBox = document.getElementById('heroSliderCard');
         const progressBar = document.getElementById('heroSliderProgressBar');
+        const todayFlag = document.getElementById('heroTodayFlag');
         const prevBtn = document.getElementById('heroSliderLeft') || document.getElementById('heroSliderPrev');
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
@@ -7474,7 +7528,7 @@
           let datePillClass = '';
 
           if (diff === 0) {
-            prefix = `🟢 הערב · ${baseDay}`;
+            // The flag straddling the card already says today; the pill just carries the date.
             datePillClass = 'hero-card__pill--today';
           } else if (diff === 1) {
             prefix = `מחר · ${baseDay}`;
@@ -7500,7 +7554,9 @@
           return Object.keys(FORMAT_DAYS_HE).map((dow) => {
             const fmt = EZRA_FORMATS[dow];
             return {
+              // Weekday, not a day offset - do not read this as "how far away".
               diff: Number(dow),
+              isToday: false,
               datePill: FORMAT_DAYS_HE[dow],
               datePillClass: '',
               timePill: '',          // a format has no hour
@@ -7544,7 +7600,7 @@
               let prefix = baseDay;
               let datePillClass = '';
               if (diff === 0) {
-                prefix = `🟢 הערב · ${baseDay}`;
+                // The flag straddling the card already says today; the pill just carries the date.
                 datePillClass = 'hero-card__pill--today';
               } else if (diff === 1) {
                 prefix = `מחר · ${baseDay}`;
@@ -7553,6 +7609,7 @@
               const datePill = `${prefix} ${heroPad(d)}.${heroPad(m)}`;
               return {
                 diff,
+                isToday: diff === 0,
                 datePill,
                 datePillClass,
                 timePill: ev.doors || ev.start || '',
@@ -7590,12 +7647,14 @@
 
         function updateCardContent(ev) {
           cardMeta.innerHTML = `
-            <span class="hero-card__pill ${ev.datePillClass || ''}"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-calendar"/></svg>${ev.datePill}</span>
-            ${ev.timePill ? `<span class="hero-card__pill"><svg class="ico" aria-hidden="true" style="width:12px;height:12px;margin-inline-end:4px;"><use href="#i-clock"/></svg>${ev.timePill}</span>` : ''}
+            <span class="hero-card__pill ${ev.datePillClass || ''}">${ev.datePill}</span>
+            ${ev.timePill ? `<span class="hero-card__pill">${ev.timePill}</span>` : ''}
             ${ev.badgePill ? `<span class="hero-card__pill ${ev.pillClass || ''}">${ev.badgePill}</span>` : ''}
           `;
           cardTitle.textContent = ev.title;
           cardLineup.textContent = ev.lineup;
+          if (todayFlag) todayFlag.hidden = !ev.isToday;
+          if (cardBox) cardBox.classList.toggle('is-today', !!ev.isToday);
         }
 
         function goToSlide(index) {
