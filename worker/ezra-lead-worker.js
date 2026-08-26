@@ -817,7 +817,9 @@ async function syncMirror(env) {
       // An item promoted from an Open Events lead carries its origin in Source Item. Mirroring it
       // back would put the same event on Open Events twice - once as the lead that started it,
       // once as a mirror of its own promoted copy. The lead is the original; skip the copy.
-      if ((it.cv[SRC.origin]?.text || "").trim().startsWith(OPEN_EVENTS_BOARD + ":")) continue;
+      // ANY non-empty value skips: the column exists solely for this marker, and the Monday UI's
+      // create-item recipe may only manage a bare item id rather than the "5102602771:<id>" form.
+      if ((it.cv[SRC.origin]?.text || "").trim()) continue;
       const f = mirrorFields(it, labels);
       if (!f.date) continue;   // an event with no date cannot hold a slot on a calendar
       desired.set(`${boardId}:${it.id}`, f);
