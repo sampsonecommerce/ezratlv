@@ -3033,39 +3033,39 @@
       text-overflow: ellipsis;
       max-width: 100%;
     }
-    /* Slot States */
+    /* Slot States in Monthly Calendar Grid */
+    .month-cal-slot--open {
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.3);
+      color: #6ee7b7;
+    }
+    .month-cal-slot--open:hover {
+      background: rgba(52, 211, 153, 0.16);
+      border-color: #34d399;
+    }
+    .month-cal-slot--open .month-cal-slot-time { color: #34d399; }
+
     .month-cal-slot--free {
-      background: rgba(196,154,60,0.1);
-      border-color: rgba(196,154,60,0.35);
+      background: rgba(196, 154, 60, 0.08);
+      border-color: rgba(196, 154, 60, 0.3);
       color: var(--gold-light);
     }
     .month-cal-slot--free:hover {
-      background: rgba(74,222,128,0.12);
-      border-color: rgba(74,222,128,0.5);
-    }
-    .month-cal-slot--free .month-cal-slot-time { color: #86efac; }
-
-    .month-cal-slot--open {
-      background: rgba(52,211,153,0.1);
-      border-color: rgba(52,211,153,0.35);
-      color: #34d399;
-    }
-    .month-cal-slot--open:hover {
-      background: rgba(196,154,60,0.2);
+      background: rgba(196, 154, 60, 0.16);
       border-color: var(--gold);
     }
-    .month-cal-slot--open .month-cal-slot-time { color: var(--gold); }
+    .month-cal-slot--free .month-cal-slot-time { color: var(--gold); }
 
     .month-cal-slot--busy {
-      background: rgba(239,68,68,0.06);
-      border-color: rgba(239,68,68,0.25);
+      background: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.25);
       color: #fca5a5;
     }
     .month-cal-slot--busy:hover {
-      background: rgba(239,68,68,0.12);
-      border-color: rgba(239,68,68,0.5);
+      background: rgba(239, 68, 68, 0.14);
+      border-color: #ef4444;
     }
-    .month-cal-slot--busy .month-cal-slot-time { color: #fca5a5; }
+    .month-cal-slot--busy .month-cal-slot-time { color: #f87171; }
 
     @media (max-width: 900px) {
       .month-cal-grid {
@@ -4107,9 +4107,9 @@
               <p id="scheduleSubhead">חודש קדימה · לחצו על אירוע לפרטים מלאים, ליינאפ ושריון מקום</p>
             </div>
             <div class="month-cal-legend schedule-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</span>
             </div>
           </div>
 
@@ -5178,9 +5178,9 @@
             </div>
 
             <div class="month-cal-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> אירוע פרטי / תפוס</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</span>
             </div>
           </div>
 
@@ -6914,7 +6914,7 @@
             afternoonBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
               showNotice('הצהריים האלה כבר תפוסים',
-                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או יום אחר שמסומן בירוק.`);
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או תאריך אחר שמסומן כפנוי לאירוע.`);
             });
           }
 
@@ -6923,7 +6923,7 @@
             eveningBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
               showNotice('הערב הזה כבר שמור',
-                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או תאריך אחר שמסומן כפנוי לאירוע.`);
             });
           }
 
@@ -7145,7 +7145,7 @@
               // invited people to request a slot that was already gone.
               if (hasAfternoonEvent) {
                 showNotice('הצהריים האלה כבר תפוסים',
-                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או יום אחר שמסומן בירוק - ונשמח לתכנן אתכם.`);
+                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או תאריך אחר שמסומן כפנוי - ונשמח לתכנן אתכם.`);
                 return;
               }
               if (typeof openContactModal === 'function') {
@@ -7164,7 +7164,7 @@
               e.stopPropagation();
               if (isClosedEvening) {
                 showNotice('הערב הזה כבר שמור',
-                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או ערב אחר - הימים הפנויים מסומנים בירוק.`);
+                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או ערב אחר - התאריכים הפנויים מסומנים בצהוב.`);
               } else {
                 if (typeof openEventModal === 'function') {
                   const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;

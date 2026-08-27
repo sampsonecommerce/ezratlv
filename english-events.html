@@ -3178,8 +3178,8 @@
       height: 7px;
       border-radius: 50%;
     }
-    .month-cal-legend-dot--free { background: #4ade80; box-shadow: 0 0 5px rgba(74,222,128,0.5); }
-    .month-cal-legend-dot--open { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
+    .month-cal-legend-dot--open { background: #34d399; box-shadow: 0 0 5px rgba(52,211,153,0.5); }
+    .month-cal-legend-dot--free { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
     .month-cal-legend-dot--busy { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.5); }
 
     /* Days of Week Header */
@@ -3298,39 +3298,39 @@
       text-overflow: ellipsis;
       max-width: 100%;
     }
-    /* Slot States */
-    .month-cal-slot--free {
-      background: rgba(74,222,128,0.06);
-      border-color: rgba(74,222,128,0.25);
-      color: #86efac;
-    }
-    .month-cal-slot--free:hover {
-      background: rgba(74,222,128,0.12);
-      border-color: rgba(74,222,128,0.5);
-    }
-    .month-cal-slot--free .month-cal-slot-time { color: #86efac; }
-
+    /* Slot States in Monthly Calendar Grid */
     .month-cal-slot--open {
-      background: rgba(196,154,60,0.1);
-      border-color: rgba(196,154,60,0.35);
-      color: var(--gold-light);
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.3);
+      color: #6ee7b7;
     }
     .month-cal-slot--open:hover {
-      background: rgba(196,154,60,0.2);
+      background: rgba(52, 211, 153, 0.16);
+      border-color: #34d399;
+    }
+    .month-cal-slot--open .month-cal-slot-time { color: #34d399; }
+
+    .month-cal-slot--free {
+      background: rgba(196, 154, 60, 0.08);
+      border-color: rgba(196, 154, 60, 0.3);
+      color: var(--gold-light);
+    }
+    .month-cal-slot--free:hover {
+      background: rgba(196, 154, 60, 0.16);
       border-color: var(--gold);
     }
-    .month-cal-slot--open .month-cal-slot-time { color: var(--gold); }
+    .month-cal-slot--free .month-cal-slot-time { color: var(--gold); }
 
     .month-cal-slot--busy {
-      background: rgba(239,68,68,0.06);
-      border-color: rgba(239,68,68,0.25);
+      background: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.25);
       color: #fca5a5;
     }
     .month-cal-slot--busy:hover {
-      background: rgba(239,68,68,0.12);
-      border-color: rgba(239,68,68,0.5);
+      background: rgba(239, 68, 68, 0.14);
+      border-color: #ef4444;
     }
-    .month-cal-slot--busy .month-cal-slot-time { color: #fca5a5; }
+    .month-cal-slot--busy .month-cal-slot-time { color: #f87171; }
 
     @media (max-width: 900px) {
       .month-cal-grid {
@@ -4217,8 +4217,8 @@
               <p id="scheduleSubhead">1 Month Schedule · Click any event for full details, lineup & RSVP</p>
             </div>
             <div class="month-cal-legend schedule-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>Afternoon Available</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>Open Evening</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>Open to Public</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>Available for Events</span>
               <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>Private Event / Booked</span>
             </div>
             <div class="schedule-source-badge">
@@ -5402,9 +5402,9 @@
             </div>
 
             <div class="month-cal-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>☀️ Afternoon Free for Events</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>🌙 Open Public Night</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>🌙 Private Event / Booked</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>Open to Public</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>Available for Events</span>
+              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>Private Event / Booked</span>
             </div>
           </div>
 
