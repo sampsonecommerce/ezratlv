@@ -3436,10 +3436,12 @@
     /* Days of Week Header */
     .month-cal-weekdays {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
       margin-block-end: 6px;
       text-align: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     .month-cal-weekday {
       font-size: 0.75rem;
@@ -3447,13 +3449,18 @@
       color: var(--gold);
       padding: 0.35rem 0;
       letter-spacing: 0.05em;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Grid of Days */
     .month-cal-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .month-cal-cell {
       background: #16120c;
@@ -3461,11 +3468,15 @@
       border-radius: 11px;
       padding: 6px;
       min-height: 98px;
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       gap: 4px;
       transition: all 0.25s var(--ease);
       position: relative;
+      overflow: hidden;
     }
     .month-cal-cell.is-empty {
       background: transparent;
@@ -3486,6 +3497,7 @@
       align-items: center;
       justify-content: space-between;
       padding-block-end: 2px;
+      min-width: 0;
     }
     .month-cal-date-num {
       font-size: 0.78rem;
@@ -3508,6 +3520,8 @@
       flex-direction: column;
       gap: 3px;
       flex: 1;
+      min-width: 0;
+      width: 100%;
     }
     .month-cal-slot {
       display: flex;
@@ -3525,6 +3539,9 @@
       transition: all 0.2s var(--ease);
       user-select: none;
       width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     .month-cal-slot:hover {
       transform: translateY(-1px);
@@ -3537,6 +3554,11 @@
       font-size: 0.6rem;
       font-weight: 700;
       color: var(--cream-faint);
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .month-cal-slot-status {
       font-weight: 600;
@@ -3548,6 +3570,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+      min-width: 0;
     }
     /* Slot States in Monthly Calendar Grid */
     .month-cal-slot--open {
@@ -3585,9 +3608,9 @@
 
     @media (max-width: 768px) {
       .month-cal-container {
-        padding: 0.65rem 0.35rem;
-        overflow: hidden;
+        padding: 0.5rem 0.25rem;
         width: 100%;
+        box-sizing: border-box;
         border-radius: 16px;
       }
       .month-cal-head {
@@ -3617,37 +3640,47 @@
       }
       .month-cal-weekdays {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 2px;
         width: 100%;
-        overflow: hidden;
+        box-sizing: border-box;
         margin-block-end: 3px;
       }
       .month-cal-weekday {
-        font-size: 0.68rem;
+        font-size: 0.64rem;
+        font-weight: 700;
         padding: 2px 0;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .month-cal-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 2px;
         width: 100%;
-        overflow: hidden;
+        box-sizing: border-box;
         padding-block-end: 0;
       }
       .month-cal-cell {
-        min-height: 72px;
+        min-width: 0;
+        min-height: 62px;
         padding: 2px 1px;
         border-radius: 6px;
         gap: 2px;
+        box-sizing: border-box;
+        overflow: hidden;
       }
       .month-cal-cell-head {
-        padding-inline: 1px;
+        padding-inline: 0;
         justify-content: center;
       }
       .month-cal-date-num {
         font-size: 0.72rem;
         line-height: 1;
+        font-weight: 800;
+        text-align: center;
       }
       .month-cal-today-tag {
         display: none;
@@ -3658,29 +3691,52 @@
         box-shadow: 0 0 8px rgba(196,154,60,0.25);
       }
       .month-cal-slots {
+        min-width: 0;
+        width: 100%;
         gap: 2px;
       }
       .month-cal-slot {
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
         padding: 2px 1px;
-        font-size: 0.52rem;
         border-radius: 4px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
         text-align: center;
+        font-size: 0.48rem;
         line-height: 1.1;
+        overflow: hidden;
       }
       .month-cal-slot-time {
-        font-size: 0.5rem;
+        min-width: 0;
+        width: 100%;
+        font-size: 0.45rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
         justify-content: center;
         gap: 1px;
         line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .month-cal-slot-time svg {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
+        flex-shrink: 0;
       }
       .month-cal-slot-status {
-        font-size: 0.53rem;
-        max-width: 100%;
+        min-width: 0;
+        width: 100%;
+        font-size: 0.48rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         text-align: center;
         justify-content: center;
         line-height: 1.1;
