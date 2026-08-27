@@ -2448,37 +2448,35 @@
       filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.9));
     }
 
-    /* 36s Total Loop (9s per vehicle):
-       - Every vehicle pulls up and stops right at the Abarbanel 38 station platform
-       - Waits for 1.3s (passenger boarding)
-       - Accelerates into tunnel
-       - Exits right smoothly without stopping
+    /* 24s Total Loop (6s per vehicle with zero dead-time):
+       - As soon as one vehicle finishes exiting right, the next vehicle immediately enters from left!
+       - Every vehicle enters left, stops for 1.2s at Abarbanel 38 station, and glides into right tunnel.
     */
     .transit-vehicle--bus {
       width: 135px;
-      animation: transitBusAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation: transitBusAcrossScreen 24s cubic-bezier(0.35, 0, 0.25, 1) infinite;
       animation-delay: 0s;
     }
 
     .transit-vehicle--train {
       width: 560px;
-      animation: transitTrainAcrossScreen 36s linear infinite;
-      animation-delay: 9s;
+      animation: transitTrainAcrossScreen 24s linear infinite;
+      animation-delay: 6s;
     }
 
     .transit-vehicle--car {
       width: 120px;
-      animation: transitCarAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-      animation-delay: 18s;
+      animation: transitCarAcrossScreen 24s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 12s;
     }
 
     .transit-vehicle--ufo {
       width: 130px;
-      animation: transitUfoAcrossScreen 36s cubic-bezier(0.35, 0, 0.25, 1) infinite;
-      animation-delay: 27s;
+      animation: transitUfoAcrossScreen 24s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+      animation-delay: 18s;
     }
 
-    /* Bus Animation: 0% to 25% (9s) */
+    /* Bus Animation: 0% to 25% (6s) */
     @keyframes transitBusAcrossScreen {
       0% {
         left: -190px;
@@ -2488,20 +2486,20 @@
         opacity: 1;
       }
       /* Stops at Abarbanel 38 Station Platform */
-      4.8% {
+      5.5% {
         left: var(--transit-stop-left);
         opacity: 1;
       }
-      8.0% {
+      10.5% {
         left: var(--transit-stop-left);
         opacity: 1;
       }
       /* Continuous, steady glide across the tunnel and all the way off screen right */
-      23.0% {
+      22.5% {
         left: calc(100% + 190px);
         opacity: 1;
       }
-      24.2% {
+      23.8% {
         left: calc(100% + 220px);
         opacity: 0;
       }
@@ -2511,7 +2509,7 @@
       }
     }
 
-    /* Multi-Carriage Train Animation: 0% to 25% (9s) */
+    /* Multi-Carriage Train Animation: 0% to 25% (6s) */
     @keyframes transitTrainAcrossScreen {
       0% {
         left: -600px;
@@ -2521,20 +2519,20 @@
         opacity: 1;
       }
       /* Front locomotive stops at Abarbanel 38 station platform */
-      4.8% {
+      5.5% {
         left: calc(var(--transit-stop-left) - 380px);
         opacity: 1;
       }
-      8.0% {
+      10.5% {
         left: calc(var(--transit-stop-left) - 380px);
         opacity: 1;
       }
       /* Continuous smooth glide through tunnel and exits off screen right without stopping! */
-      23.5% {
+      22.5% {
         left: calc(100% + 600px);
         opacity: 1;
       }
-      24.2% {
+      23.8% {
         left: calc(100% + 620px);
         opacity: 0;
       }
@@ -2544,7 +2542,7 @@
       }
     }
 
-    /* Taxi / Car Animation: 0% to 25% (9s) */
+    /* Taxi / Car Animation: 0% to 25% (6s) */
     @keyframes transitCarAcrossScreen {
       0% {
         left: -180px;
@@ -2554,20 +2552,20 @@
         opacity: 1;
       }
       /* Stops at Abarbanel 38 station platform */
-      4.8% {
+      5.5% {
         left: var(--transit-stop-left);
         opacity: 1;
       }
-      8.0% {
+      10.5% {
         left: var(--transit-stop-left);
         opacity: 1;
       }
       /* Continuous smooth glide past buildings to right screen edge */
-      23.0% {
+      22.5% {
         left: calc(100% + 180px);
         opacity: 1;
       }
-      24.2% {
+      23.8% {
         left: calc(100% + 200px);
         opacity: 0;
       }
@@ -2577,7 +2575,7 @@
       }
     }
 
-    /* UFO Hovering Animation: 0% to 25% (9s) */
+    /* UFO Hovering Animation: 0% to 25% (6s) */
     @keyframes transitUfoAcrossScreen {
       0% {
         left: -180px;
@@ -2591,22 +2589,22 @@
         transform: translateY(-50%) translateY(-12px);
       }
       /* Hovers over Abarbanel 38 station */
-      4.8% {
+      5.5% {
         left: var(--transit-stop-left);
         transform: translateY(-50%) translateY(2px);
         opacity: 1;
       }
-      8.0% {
+      10.5% {
         left: var(--transit-stop-left);
         transform: translateY(-50%) translateY(-8px);
         opacity: 1;
       }
-      23.0% {
+      22.5% {
         left: calc(100% + 180px);
         transform: translateY(-50%) translateY(0px);
         opacity: 1;
       }
-      24.2% {
+      23.8% {
         left: calc(100% + 200px);
         opacity: 0;
       }
