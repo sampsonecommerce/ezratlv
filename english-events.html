@@ -3906,17 +3906,20 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 1.2rem 1rem;
-      transition: all 0.3s var(--ease);
+      transition: all 0.35s var(--ease);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.6rem;
+      cursor: pointer;
+      user-select: none;
     }
-    .collab-item:hover {
-      background: rgba(196,154,60,0.08);
+    .collab-item:hover,
+    .collab-item.is-active {
+      background: rgba(196,154,60,0.12);
       border-color: var(--gold);
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 22px rgba(196,154,60,0.32), 0 10px 25px -5px rgba(0,0,0,0.5);
     }
     .collab-item-ico {
       width: 46px;
@@ -3929,17 +3932,26 @@
       justify-content: center;
       color: var(--gold-light);
       font-size: 1.3rem;
-      transition: all 0.3s var(--ease);
+      transition: all 0.35s var(--ease);
+      flex-shrink: 0;
     }
-    .collab-item:hover .collab-item-ico {
+    .collab-item:hover .collab-item-ico,
+    .collab-item.is-active .collab-item-ico {
       background: var(--gold);
+      border-color: var(--gold);
       color: #110e0a;
       transform: scale(1.08);
+      box-shadow: 0 0 14px rgba(245,217,138,0.45);
     }
     .collab-item-title {
       font-size: 0.92rem;
       font-weight: 800;
       color: var(--cream);
+      transition: color 0.35s var(--ease);
+    }
+    .collab-item:hover .collab-item-title,
+    .collab-item.is-active .collab-item-title {
+      color: #ffffff;
     }
     .collab-item-sub {
       font-size: 0.76rem;
@@ -3959,6 +3971,9 @@
         text-align: start;
         padding: 0.9rem 1rem;
         gap: 0.9rem;
+      }
+      .collab-item.is-active {
+        transform: translateY(-2px);
       }
     }
 
@@ -6763,21 +6778,21 @@
         </p>
 
         <!-- 3 Minimalist Category Cards -->
-        <div class="collab-grid">
+        <div class="collab-grid" id="collabGrid">
           <div class="collab-item">
-            <div class="collab-item-ico">🍕</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg></div>
             <div class="collab-item-title">Food &amp; Wood-Oven</div>
             <div class="collab-item-sub">Guest Chefs · Food Pop-ups · Seasonal Specials</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🎧</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg></div>
             <div class="collab-item-title">Vinyl &amp; Music</div>
             <div class="collab-item-sub">All-Vinyl DJ Sets · Album Listening · Live Sessions</div>
           </div>
           <div class="collab-item">
-            <div class="collab-item-ico">🍸</div>
+            <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg></div>
             <div class="collab-item-title">Wine &amp; Mixology</div>
-            <div class="collab-item-sub">Natural Wine Salons · Boutique Wineries · Bar Takeovers</div>
+            <div class="collab-item-sub">Wine Salons · Boutique Wineries · Bar Takeovers</div>
           </div>
         </div>
 
@@ -8601,6 +8616,78 @@
               userInteracted = true;
               stop();
               activatePill(idx);
+              setTimeout(() => {
+                userInteracted = false;
+                start();
+              }, 7000);
+            });
+          });
+        })();
+
+        // Collab Cards Sequential Highlight Animation (Identical to Location Pills Cycle, keeping original icons)
+        (function initCollabCardsCycle() {
+          const collabGrid = document.getElementById('collabGrid');
+          if (!collabGrid) return;
+          const items = collabGrid.querySelectorAll('.collab-item');
+          if (items.length === 0) return;
+
+          let currentIndex = 0;
+          let cycleTimer = null;
+          let userInteracted = false;
+
+          function activateItem(idx) {
+            items.forEach((item, i) => {
+              if (idx === 'all') {
+                item.classList.add('is-active');
+              } else {
+                item.classList.toggle('is-active', i === idx);
+              }
+            });
+          }
+
+          function tick() {
+            if (userInteracted) return;
+            if (currentIndex < items.length) {
+              activateItem(currentIndex);
+              currentIndex++;
+            } else {
+              activateItem('all');
+              currentIndex = 0;
+            }
+          }
+
+          function start() {
+            if (cycleTimer) return;
+            tick();
+            cycleTimer = setInterval(tick, 2500);
+          }
+
+          function stop() {
+            if (cycleTimer) {
+              clearInterval(cycleTimer);
+              cycleTimer = null;
+            }
+          }
+
+          if ('IntersectionObserver' in window) {
+            const collabObs = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) start();
+                else stop();
+              });
+            }, { threshold: 0.15 });
+            const collabSection = document.getElementById('collab');
+            if (collabSection) collabObs.observe(collabSection);
+          } else {
+            start();
+          }
+
+          // Allow manual click to highlight immediately and pause loop for 7s
+          items.forEach((item, idx) => {
+            item.addEventListener('click', () => {
+              userInteracted = true;
+              stop();
+              activateItem(idx);
               setTimeout(() => {
                 userInteracted = false;
                 start();
