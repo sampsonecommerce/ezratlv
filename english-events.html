@@ -975,7 +975,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       margin-block-end: 2rem;
       padding: 0.6rem 0.9rem;
       background: rgba(255, 255, 255, 0.025);
@@ -986,7 +986,16 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      padding-block: 2px;
+    }
+    .schedule-weeks-tabs::-webkit-scrollbar {
+      display: none;
     }
     .week-tab-btn {
       display: inline-flex;
@@ -1002,6 +1011,9 @@
       cursor: pointer;
       transition: all 0.25s var(--ease);
       font-family: inherit;
+      white-space: nowrap;
+      flex-shrink: 0;
+      scroll-snap-align: start;
     }
     .week-tab-btn:hover {
       color: var(--cream);
@@ -1018,6 +1030,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-shrink: 0;
     }
     .nav-arrow-btn {
       display: inline-flex;
@@ -1034,12 +1047,47 @@
       cursor: pointer;
       transition: all 0.2s var(--ease);
       font-family: inherit;
+      white-space: nowrap;
     }
     .nav-arrow-btn:hover:not(:disabled) {
       background: var(--gold);
       color: var(--bg);
       border-color: var(--gold);
       box-shadow: 0 0 16px rgba(196, 154, 60, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .schedule-nav-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+        padding: 0.5rem;
+        border-radius: 20px;
+        margin-block-end: 1.25rem;
+      }
+      .schedule-weeks-tabs {
+        width: 100%;
+        gap: 0.4rem;
+        padding-inline: 2px;
+        padding-block: 2px 4px;
+      }
+      .week-tab-btn {
+        font-size: 0.8rem;
+        padding: 0.45rem 0.95rem;
+      }
+      .schedule-nav-arrows {
+        justify-content: center;
+        width: 100%;
+        gap: 0.5rem;
+        padding-top: 0.35rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .nav-arrow-btn {
+        flex: 1;
+        max-width: 140px;
+        justify-content: center;
+        padding: 0.45rem 0.8rem;
+      }
     }
     /* Schedule Slider Container */
     .schedule-slider-wrap {
@@ -7078,7 +7126,11 @@
         if (!weekTabs) return;
         weekTabs.querySelectorAll('.week-tab-btn').forEach(btn => {
           const w = parseInt(btn.getAttribute('data-week'), 10);
-          btn.classList.toggle('is-active', w === currentView);
+          const isActive = w === currentView;
+          btn.classList.toggle('is-active', isActive);
+          if (isActive) {
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
         });
       }
 
