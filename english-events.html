@@ -7470,7 +7470,6 @@
       const monthCalToday = document.getElementById('monthCalToday');
 
       const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       let calViewYear = today.getFullYear();
       let calViewMonth = today.getMonth();
 
@@ -8485,6 +8484,9 @@
             document.body.classList.remove('modal-open');
           }
         });
+      }
+    })();
+
     // Format Cards Mobile Slider sync
     (function initFormatSlider() {
       const grid = document.getElementById('eventsList');
