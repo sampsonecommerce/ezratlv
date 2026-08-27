@@ -1552,11 +1552,120 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem;
     }
+    .fmt-slider-nav {
+      display: none;
+    }
     @media (max-width: 990px) {
       .fmt-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     }
-    @media (max-width: 600px) {
-      .fmt-grid { grid-template-columns: 1fr; gap: 1rem; }
+    @media (max-width: 768px) {
+      .fmt-grid {
+        display: flex;
+        grid-template-columns: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.85rem;
+        padding-inline: 1rem;
+        padding-block: 0.35rem 0.75rem;
+        margin-inline: -1rem;
+        scrollbar-width: none;
+      }
+      .fmt-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .fmt-card {
+        flex: 0 0 78vw;
+        max-width: 295px;
+        scroll-snap-align: center;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.85);
+      }
+      .fmt-card__media {
+        aspect-ratio: 16 / 10.5;
+      }
+      .fmt-card__body {
+        padding: 0.95rem 1rem 1.15rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+      .fmt-card__title {
+        font-size: 1.02rem;
+        gap: 0.4rem;
+        margin-block-end: 0.25rem;
+      }
+      .fmt-card__when {
+        font-size: 0.78rem;
+        margin-block-end: 0.35rem;
+      }
+      .fmt-card__lineup {
+        font-size: 0.82rem;
+        line-height: 1.45;
+        margin-block-end: 0.8rem;
+      }
+      .fmt-card__actions {
+        margin-top: auto;
+        gap: 0.4rem;
+        flex-direction: column;
+      }
+      .fmt-card__link {
+        font-size: 0.8rem;
+        padding: 0.45rem 0.85rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--line);
+        border-radius: 50px;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+      }
+      .fmt-card__link:hover {
+        background: var(--gold);
+        color: var(--bg);
+        border-color: var(--gold);
+      }
+      .fmt-card__link--ghost {
+        background: transparent;
+        border-color: transparent;
+      }
+      .fmt-slider-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        margin-block-start: 0.75rem;
+      }
+      .fmt-slider-dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .fmt-slider-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s var(--ease);
+        cursor: pointer;
+      }
+      .fmt-slider-dot.is-active {
+        width: 22px;
+        border-radius: 10px;
+        background: var(--gold);
+        box-shadow: 0 0 10px rgba(196, 154, 60, 0.5);
+      }
+      .fmt-slider-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--cream-dim);
+        opacity: 0.75;
+      }
     }
     .fmt-card {
       display: flex;
@@ -5246,6 +5355,21 @@
           </div>
         </article>
       </div>
+
+      <div class="fmt-slider-nav" id="fmtSliderNav" aria-hidden="true">
+        <div class="fmt-slider-dots" id="fmtSliderDots">
+          <span class="fmt-slider-dot is-active" data-idx="0"></span>
+          <span class="fmt-slider-dot" data-idx="1"></span>
+          <span class="fmt-slider-dot" data-idx="2"></span>
+          <span class="fmt-slider-dot" data-idx="3"></span>
+          <span class="fmt-slider-dot" data-idx="4"></span>
+          <span class="fmt-slider-dot" data-idx="5"></span>
+        </div>
+        <div class="fmt-slider-hint">
+          <span>החליקו לצפייה בכל 6 הפורמטים</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5M6 17l5-5-5-5"/></svg>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -8352,6 +8476,49 @@
           const isOpen = item.classList.contains('is-open');
           document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('is-open'));
           if (!isOpen) item.classList.add('is-open');
+        });
+    // Format Cards Mobile Slider sync
+    (function initFormatSlider() {
+      const grid = document.getElementById('eventsList');
+      const dotsContainer = document.getElementById('fmtSliderDots');
+      if (!grid || !dotsContainer) return;
+
+      const dots = dotsContainer.querySelectorAll('.fmt-slider-dot');
+      const cards = grid.querySelectorAll('.fmt-card');
+      if (cards.length === 0 || dots.length === 0) return;
+
+      let scrollTimeout;
+      function updateActiveDot() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const gridRect = grid.getBoundingClientRect();
+          const gridCenter = gridRect.left + gridRect.width / 2;
+          let closestIdx = 0;
+          let minDistance = Infinity;
+
+          cards.forEach((card, idx) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const dist = Math.abs(gridCenter - cardCenter);
+            if (dist < minDistance) {
+              minDistance = dist;
+              closestIdx = idx;
+            }
+          });
+
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle('is-active', idx === closestIdx);
+          });
+        }, 30);
+      }
+
+      grid.addEventListener('scroll', updateActiveDot, { passive: true });
+
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+          if (cards[idx]) {
+            cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
         });
       });
     })();
