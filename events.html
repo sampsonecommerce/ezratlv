@@ -49,7 +49,7 @@
   </script>
 
   <title>מה קורה בעזרא | לוח אירועים, תקליטים ופופ-אפים בפלורנטין</title>
-  <meta name="description" content="מה קורה השבוע בעזרא פלורנטין: ערבי תקליטים, השמעות אלבומים, פופ-אפ שפים מהטאבון, הופעות חיות ויין טבעי. לוח זמנים חי מסונכרן בזמן אמת." />
+  <meta name="description" content="מה קורה השבוע בעזרא פלורנטין: ערבי תקליטים, השמעות אלבומים, פופ-אפ שפים מהטאבון, הופעות חיות וערבי יין. לוח זמנים חי מסונכרן בזמן אמת." />
   <!-- Not linked from the site nav and kept out of the sitemap: this page is
        staged, not launched. Remove this tag and re-add the sitemap entry in the
        same commit that puts the nav button back. -->
@@ -123,7 +123,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { overflow-anchor: none; scroll-behavior: smooth; }
+    html { overflow-anchor: none; }
     body {
       background: var(--bg);
       color: var(--cream);
@@ -2892,14 +2892,17 @@
       border-radius: 100px;
       font-size: 0.88rem;
       font-weight: 500;
-      color: var(--cream);
-      background: rgba(196,154,60,0.07);
+      color: var(--cream-dim);
+      background: rgba(196,154,60,0.06);
       border: 1px solid var(--line);
-      transition: border-color 0.4s var(--ease), background 0.4s var(--ease), transform 0.3s var(--ease);
+      transition: all 0.35s var(--ease);
+      cursor: pointer;
+      user-select: none;
     }
     .pill:hover {
       transform: translateY(-2px);
       border-color: var(--gold);
+      color: var(--cream);
     }
     .pill__check {
       width: 0;
@@ -2909,11 +2912,15 @@
       opacity: 0;
       transform: scale(0.4);
       margin-inline-end: 0;
-      transition: opacity 0.4s var(--ease), transform 0.45s var(--ease), width 0.4s var(--ease), margin-inline-end 0.4s var(--ease);
+      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease), width 0.35s var(--ease), margin-inline-end 0.35s var(--ease);
     }
     .pill.is-checked {
-      border-color: rgba(196,154,60,0.5);
-      background: rgba(196,154,60,0.13);
+      border-color: var(--gold);
+      background: rgba(196,154,60,0.18);
+      color: var(--cream);
+      box-shadow: 0 0 20px rgba(196,154,60,0.35);
+      transform: translateY(-2px);
+      font-weight: 600;
     }
     .pill.is-checked .pill__check {
       width: 18px;
@@ -4146,7 +4153,7 @@
           "name": "מה מגישים לאכול ולשתות?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין טבעי ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים."
+            "text": "אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים."
           }
         },
         {
@@ -4376,7 +4383,7 @@
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט ויין טבעי</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט וערבי יין</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
@@ -4388,7 +4395,7 @@
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט ויין טבעי</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט וערבי יין</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
@@ -5112,7 +5119,7 @@
                 <rect x="35" y="176" width="290" height="18" rx="4.5" fill="#17110a" stroke="url(#wineGoldGrad)" stroke-width="1.5"/>
                 <line x1="45" y1="180" x2="315" y2="180" stroke="#c49a3c" stroke-width="0.8" opacity="0.4"/>
 
-                <!-- Tilted Natural Wine Bottle -->
+                <!-- Tilted Wine Bottle -->
                 <g transform="translate(64, 42) rotate(38)">
                   <!-- Dark Glass Bottle Body -->
                   <rect x="0" y="24" width="28" height="70" rx="5" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
@@ -5120,14 +5127,14 @@
                   <path d="M 0 24 L 7 10 L 7 0 L 21 0 L 21 10 L 28 24 Z" fill="#120a06" stroke="url(#wineGoldGrad)" stroke-width="1.6"/>
                   <rect x="7" y="0" width="14" height="6" rx="1" fill="#be123c"/>
                   
-                  <!-- Minimalist Organic Wine Label -->
+                  <!-- Minimalist Wine Label -->
                   <rect x="3" y="36" width="22" height="38" rx="2" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8"/>
                   <line x1="5" y1="46" x2="23" y2="46" stroke="#120a06" stroke-width="1.2"/>
                   <line x1="5" y1="53" x2="19" y2="53" stroke="#120a06" stroke-width="0.8"/>
-                  <text x="14" y="65" fill="#be123c" font-size="4.5" font-weight="900" text-anchor="middle">NATUR</text>
+                  <text x="14" y="65" fill="#be123c" font-size="4.5" font-weight="900" text-anchor="middle">EZRA</text>
                 </g>
 
-                <!-- Flowing Stream of Ruby Natural Wine -->
+                <!-- Flowing Stream of Ruby Wine -->
                 <path class="anim-wine-stream" d="M 126 84 Q 140 100 144 125" stroke="url(#wineRedGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
 
                 <!-- Central Bordeaux Crystal Wine Glass -->
@@ -5185,12 +5192,12 @@
             <span class="fmt-card__flag">בקרוב</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>ערבי יין טבעי ומיקסולוגיה</h3>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>ערבי יין ומיקסולוגיה</h3>
             <p class="fmt-card__when">סלון אלכוהול ויין · מ-19:00</p>
-            <p class="fmt-card__lineup">יקבי בוטיק מקומיים · יינות טבעיים מהעולם · קוקטיילים עונתיים</p>
+            <p class="fmt-card__lineup">יקבי בוטיק מקומיים · יינות מובחרים מהארץ והעולם · קוקטיילים עונתיים</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי יין טבעי ומיקסולוגיה" data-interest="wine" type="button">עדכנו אותי על הערב הבא</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי יין ומיקסולוגיה" data-interest="wine" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -5577,7 +5584,7 @@
       <div class="sound-box">
         <div class="sound-text">
           <span class="eyebrow">הסאונד והוייב</span>
-          <h3>Ezra Sound System · סאונד אנלוגי, טאבון ויין טבעי</h3>
+          <h3>Ezra Sound System · סאונד אנלוגי, טאבון ויין משובח</h3>
           <p>
             עזרא הוא בר פרטי בפלורנטין שנפתח בערבים מסוימים גם לקהל הרחב. בנינו מקום שנעים לשבת בו: אקוסטיקה שעובדת, תאורה שלא מסנוורת, ואוכל שיוצא מהטאבון לאורך כל הערב. בערבים הפתוחים מתארחים אצלנו תקליטנים, שפים ומוזיקאים, והכניסה בדרך כלל חופשית.
           </p>
@@ -6378,7 +6385,7 @@
           <div class="collab-item">
             <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg></div>
             <div class="collab-item-title">יין ומיקסולוגיה</div>
-            <div class="collab-item-sub">ערבי יין טבעי · יקבי בוטיק · השקות קוקטיילים</div>
+            <div class="collab-item-sub">ערבי יין · יקבי בוטיק · השקות קוקטיילים</div>
           </div>
         </div>
 
@@ -6420,7 +6427,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין טבעי ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים.
+            אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים.
           </div>
         </div>
         <div class="faq-item">
@@ -8514,23 +8521,79 @@
           obs.observe(el);
         });
 
-        // Location Pills Animation
-        const locPills = document.querySelectorAll('#locationPills .pill');
-        if (locPills.length > 0) {
-          const locObs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                locPills.forEach((p, i) => setTimeout(() => p.classList.add('is-checked'), i * 300));
-                locObs.unobserve(entry.target);
+        // Location Pills Sequential Highlight Animation
+        (function initLocationPillsCycle() {
+          const pillsContainer = document.getElementById('locationPills');
+          if (!pillsContainer) return;
+          const pills = pillsContainer.querySelectorAll('.pill');
+          if (pills.length === 0) return;
+
+          let currentIndex = 0;
+          let cycleTimer = null;
+          let userInteracted = false;
+
+          function activatePill(idx) {
+            pills.forEach((p, i) => {
+              if (idx === 'all') {
+                p.classList.add('is-checked');
+              } else {
+                p.classList.toggle('is-checked', i === idx);
               }
             });
-          }, { threshold: 0.15 });
-          const locSection = document.getElementById('location');
-          if (locSection) locObs.observe(locSection);
-        }
+          }
+
+          function tick() {
+            if (userInteracted) return;
+            if (currentIndex < pills.length) {
+              activatePill(currentIndex);
+              currentIndex++;
+            } else {
+              activatePill('all');
+              currentIndex = 0;
+            }
+          }
+
+          function start() {
+            if (cycleTimer) return;
+            tick();
+            cycleTimer = setInterval(tick, 2500);
+          }
+
+          function stop() {
+            if (cycleTimer) {
+              clearInterval(cycleTimer);
+              cycleTimer = null;
+            }
+          }
+
+          if ('IntersectionObserver' in window) {
+            const locObs = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) start();
+                else stop();
+              });
+            }, { threshold: 0.15 });
+            const locSection = document.getElementById('location');
+            if (locSection) locObs.observe(locSection);
+          } else {
+            start();
+          }
+
+          // Allow manual click to highlight immediately and pause loop
+          pills.forEach((p, idx) => {
+            p.addEventListener('click', () => {
+              userInteracted = true;
+              stop();
+              activatePill(idx);
+              setTimeout(() => {
+                userInteracted = false;
+                start();
+              }, 7000);
+            });
+          });
+        })();
       } else {
         reveals.forEach(el => el.classList.add('is-revealed'));
-        document.querySelectorAll('#locationPills .pill').forEach(p => p.classList.add('is-checked'));
       }
     }
     document.addEventListener('DOMContentLoaded', initScrollAnimations);

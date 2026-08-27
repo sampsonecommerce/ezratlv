@@ -49,7 +49,7 @@
   </script>
 
   <title>What's Happening at Ezra | Public Events, Vinyl & Pop-Ups in Florentin</title>
-  <meta name="description" content="What's on this week at Ezra Florentin: vinyl DJ sessions, album listening parties, tabun oven guest chef pop-ups, live jazz and natural wine. Live synced schedule." />
+  <meta name="description" content="What's on this week at Ezra Florentin: vinyl DJ sessions, album listening parties, tabun oven guest chef pop-ups, live jazz and curated wine nights. Live synced schedule." />
   <!-- Not linked from the site nav and kept out of the sitemap: this page is
        staged, not launched. Remove this tag and re-add the sitemap entry in the
        same commit that puts the nav button back. -->
@@ -113,7 +113,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { overflow-anchor: none; scroll-behavior: smooth; }
+    html { overflow-anchor: none; -webkit-overflow-scrolling: touch; }
     body {
       background: var(--bg);
       color: var(--cream);
@@ -3295,14 +3295,17 @@
       border-radius: 100px;
       font-size: 0.88rem;
       font-weight: 500;
-      color: var(--cream);
-      background: rgba(196,154,60,0.07);
+      color: var(--cream-dim);
+      background: rgba(196,154,60,0.06);
       border: 1px solid var(--line);
-      transition: border-color 0.4s var(--ease), background 0.4s var(--ease), transform 0.3s var(--ease);
+      transition: all 0.35s var(--ease);
+      cursor: pointer;
+      user-select: none;
     }
     .pill:hover {
       transform: translateY(-2px);
       border-color: var(--gold);
+      color: var(--cream);
     }
     .pill__check {
       width: 0;
@@ -3312,11 +3315,15 @@
       opacity: 0;
       transform: scale(0.4);
       margin-inline-end: 0;
-      transition: opacity 0.4s var(--ease), transform 0.45s var(--ease), width 0.4s var(--ease), margin-inline-end 0.4s var(--ease);
+      transition: opacity 0.35s var(--ease), transform 0.4s var(--ease), width 0.35s var(--ease), margin-inline-end 0.35s var(--ease);
     }
     .pill.is-checked {
-      border-color: rgba(196,154,60,0.5);
-      background: rgba(196,154,60,0.13);
+      border-color: var(--gold);
+      background: rgba(196,154,60,0.18);
+      color: var(--cream);
+      box-shadow: 0 0 20px rgba(196,154,60,0.35);
+      transform: translateY(-2px);
+      font-weight: 600;
     }
     .pill.is-checked .pill__check {
       width: 18px;
@@ -4520,7 +4527,7 @@
         <span class="eyebrow">Weekly Schedule · What's On</span>
         <h2>Weekly Opening Hours & Nights</h2>
         <p>
-          Check when we're open to the public for vinyl sessions, natural wine and wood-fired dishes, and when the venue is held for a private gathering.
+          Check when we're open to the public for vinyl sessions, fine wine and wood-fired dishes, and when the venue is held for a private gathering.
         </p>
       </div>
 
@@ -5384,12 +5391,12 @@
             <span class="fmt-card__flag">Coming Soon</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>Natural Wine & Mixology</h3>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>Wine Nights & Mixology</h3>
             <p class="fmt-card__when">Wine & Cocktail Lounge · From 19:00</p>
-            <p class="fmt-card__lineup">Local Boutique Wineries · Natural Wines · Seasonal Craft Cocktails</p>
+            <p class="fmt-card__lineup">Local Boutique Wineries · Curated Global Vintages · Seasonal Craft Cocktails</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="Natural Wine & Mixology" type="button">Leave Details</button>
+              <button class="fmt-card__link fmt-card__link--ghost js-open-contact" data-event-type="Wine Nights & Mixology" type="button">Leave Details</button>
             </div>
           </div>
         </article>
@@ -7145,7 +7152,7 @@
         0: {
           title: 'Moss Town · Tel Aviv Debut Live Show',
           lineup: 'Moss Town · Instrumental Psychedelia, Groove & Rock-Jazz',
-          desc: 'Moss Town live at Ezra\'s salon for a debut Tel Aviv concert! Instrumental psychedelia, heavy groove, vintage 70s rhythms and rock-jazz with natural wine and signature cocktails.',
+          desc: 'Moss Town live at Ezra\'s salon for a debut Tel Aviv concert! Instrumental psychedelia, heavy groove, vintage 70s rhythms and rock-jazz with fine wine and signature cocktails.',
           img: 'images/MOMENT 1.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
@@ -7153,8 +7160,8 @@
         },
         1: {
           title: 'Wine & Vinyl Lounge · Ambient Listening',
-          lineup: 'Natural & Boutique Wines by the Glass · Ambient Vinyl',
-          desc: 'A relaxed evening at Ezra\'s analog listening bar: a curated selection of natural wines, hot sourdough dishes from the stone oven, and warm vinyl grooves.',
+          lineup: 'Curated Boutique Wines by the Glass · Ambient Vinyl',
+          desc: 'A relaxed evening at Ezra\'s analog listening bar: a curated selection of fine wines, hot sourdough dishes from the stone oven, and warm vinyl grooves.',
           img: 'images/vibe-cocktail.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
@@ -7181,7 +7188,7 @@
         4: {
           title: 'Groove & Grapes · Rare Funk & Soul Vinyl',
           lineup: 'DJ Amir Peled & Special Guests · Original Pressings',
-          desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and sourdough dishes from the wood oven.',
+          desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with fine wine and sourdough dishes from the wood oven.',
           img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
           badge: 'Free Entry',
           badgeClass: 'sticker--free',
@@ -8474,23 +8481,79 @@
           obs.observe(el);
         });
 
-        // Location Pills Animation
-        const locPills = document.querySelectorAll('#locationPills .pill');
-        if (locPills.length > 0) {
-          const locObs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                locPills.forEach((p, i) => setTimeout(() => p.classList.add('is-checked'), i * 300));
-                locObs.unobserve(entry.target);
+        // Location Pills Sequential Highlight Animation
+        (function initLocationPillsCycle() {
+          const pillsContainer = document.getElementById('locationPills');
+          if (!pillsContainer) return;
+          const pills = pillsContainer.querySelectorAll('.pill');
+          if (pills.length === 0) return;
+
+          let currentIndex = 0;
+          let cycleTimer = null;
+          let userInteracted = false;
+
+          function activatePill(idx) {
+            pills.forEach((p, i) => {
+              if (idx === 'all') {
+                p.classList.add('is-checked');
+              } else {
+                p.classList.toggle('is-checked', i === idx);
               }
             });
-          }, { threshold: 0.15 });
-          const locSection = document.getElementById('location');
-          if (locSection) locObs.observe(locSection);
-        }
+          }
+
+          function tick() {
+            if (userInteracted) return;
+            if (currentIndex < pills.length) {
+              activatePill(currentIndex);
+              currentIndex++;
+            } else {
+              activatePill('all');
+              currentIndex = 0;
+            }
+          }
+
+          function start() {
+            if (cycleTimer) return;
+            tick();
+            cycleTimer = setInterval(tick, 2500);
+          }
+
+          function stop() {
+            if (cycleTimer) {
+              clearInterval(cycleTimer);
+              cycleTimer = null;
+            }
+          }
+
+          if ('IntersectionObserver' in window) {
+            const locObs = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) start();
+                else stop();
+              });
+            }, { threshold: 0.15 });
+            const locSection = document.getElementById('location');
+            if (locSection) locObs.observe(locSection);
+          } else {
+            start();
+          }
+
+          // Allow manual click to highlight immediately and pause loop
+          pills.forEach((p, idx) => {
+            p.addEventListener('click', () => {
+              userInteracted = true;
+              stop();
+              activatePill(idx);
+              setTimeout(() => {
+                userInteracted = false;
+                start();
+              }, 7000);
+            });
+          });
+        })();
       } else {
         reveals.forEach(el => el.classList.add('is-revealed'));
-        document.querySelectorAll('#locationPills .pill').forEach(p => p.classList.add('is-checked'));
       }
     }
     document.addEventListener('DOMContentLoaded', initScrollAnimations);
