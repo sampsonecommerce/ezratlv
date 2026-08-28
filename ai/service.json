@@ -22,7 +22,8 @@
     "Close the entire venue for a single group - one event per evening, no shared space",
     "Serve taboon-baked food: pizzas, buffet dishes and salads, all dairy-vegetarian",
     "Run a fully staffed open cocktail bar for the evening",
-    "Provide sound, lighting and full event production with no external vendors",
+    "Provide sound, lighting and full event production with no external vendors: a professional PA of two main speakers, a subwoofer, four monitors and a mixer",
+    "Screen a presentation or video on the room's own projector and fold-out projection screen, and speak over two microphones",
     "Book a package online end to end: live date availability, menu choice, final price on screen and a contract by email",
     "Host birthdays, engagement parties and private celebrations with a custom quote within 24 hours",
     "Run a custom event off-site at the company's own location",
@@ -39,7 +40,7 @@
     "he",
     "en"
   ],
-  "dateModified": "2026-08-20",
+  "dateModified": "2026-08-28",
   "provider": {
     "@type": "Organization",
     "name": "עזרא תל אביב",

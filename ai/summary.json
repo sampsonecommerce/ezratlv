@@ -8,7 +8,7 @@
   "description": "מרחב אירועים פרטי ובר פרטי בפלורנטין, תל אביב. אירוע אחד בערב - כל החלל שייך לקבוצה אחת בלבד, עד 50 אורחים. הכל כלול: אוכל מהטאבון, בר קוקטיילים פתוח, סאונד, תאורה והפקה מלאה.",
   "description_en": "Exclusive private event space and private bar in Florentin, Tel Aviv. One event per evening - the entire space belongs to a single group, up to 50 guests. All-inclusive: taboon/chef food, open cocktail bar, sound, lighting and full production.",
   "inLanguage": ["he", "en"],
-  "dateModified": "2026-08-10",
+  "dateModified": "2026-08-28",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "אברבנאל 38",
@@ -62,7 +62,9 @@
     "included": [
       "taboon and chef food",
       "open cocktail bar",
-      "sound system",
+      "sound system: two main speakers, subwoofer, four monitors and a mixer",
+      "projector and fold-out projection screen (no wall-mounted TV)",
+      "two microphones",
       "lighting",
       "full event production"
     ],
