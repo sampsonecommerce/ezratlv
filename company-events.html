@@ -6098,6 +6098,10 @@
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
         if (resumeTok) window.openV2();
         else if (plan) window.openV2(plan);
+        // #talk deep link: opens the contact form directly, like /#book on the home page - for
+        // DM/ad links (e.g. /company-events?utm_source=instagram#talk). Runs after the utm/gclid
+        // cookies above are set, so the lead the form sends still carries the attribution.
+        else if (location.hash === '#talk') window.openV2Talk();
       })();
       // Esc closes too
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
