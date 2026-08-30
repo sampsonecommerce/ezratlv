@@ -1,4 +1,4 @@
-// Past-events archive renderer for events.html / english-events.html.
+// Past-events archive renderer for open-events.html / english-events.html.
 // Fetches /api/past-events (served from the "Ezra Events - Site Archive" monday
 // board) and rebuilds the #pastSliderTrack cards from it. The hardcoded cards in
 // the HTML stay as the fallback: if the fetch fails, returns nothing, or the API
