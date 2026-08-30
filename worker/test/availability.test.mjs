@@ -67,6 +67,10 @@ globalThis.fetch = async (_u, opts) => {
         { id: "date5bab58wj", type: "date", text: "2026-09-19", date: "2026-09-19" },
         { id: "text_mm2km76j", type: "text", text: "צהריים (12:00 - 17:00)" },
       ]},
+      // Automation litter: a lock item with a date and no time columns must not block anything.
+      { id: "5", name: "🔒 אירוע סגור", group: { id: "g1" }, column_values: [
+        { id: "date5bab58wj", type: "date", text: "2026-09-20", date: "2026-09-20" },
+      ]},
     ] } }] } });
 };
 
@@ -90,6 +94,7 @@ const expect = {
   "2026-09-17": ["18:00-02:00"],          // timeOf "ערב"; free text mentioning צהריים must not widen it
   "2026-09-18": ["20:00-01:00"],          // Open Events hour column ids
   "2026-09-19": ["12:00-17:00"],          // Start-End text on the Events Form column
+  "2026-09-20": [],                       // 🔒 lock litter: skipped entirely
 };
 for (const [date, want] of Object.entries(expect)) {
   const got = slotsOf(date);
@@ -97,5 +102,9 @@ for (const [date, want] of Object.entries(expect)) {
     console.error(`FAIL: ${date} busy slots ${JSON.stringify(got)}, expected ${JSON.stringify(want)}`);
     process.exit(1);
   }
+}
+if (body.booked.includes("2026-09-20")) {
+  console.error("FAIL: 🔒 lock litter still marks its date as booked");
+  process.exit(1);
 }
 console.log("PASS: availability returns", body.booked.length, "booked date(s), build", body.build);
