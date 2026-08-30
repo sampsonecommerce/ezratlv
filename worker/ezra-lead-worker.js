@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-26d";
+const BUILD_ID = "2026-08-30a";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1366,6 +1366,12 @@ async function availability(request, env, cors) {
         if (!isCommittedGroup(g.title, g.id, b.id)) continue;
 
         for (const it of (g.items_page?.items || [])) {
+          // The five duplicate automations from 2026-08-20 each write a "🔒 אירוע סגור" item onto
+          // Open Events when a deal's status fires (see PROMOTE_SETS_STATUS). Those items carry a
+          // date and no time columns, so each one re-blocked its whole day on top of the real
+          // booking, which already blocks its own slot. Litter, not data - skip it.
+          if ((it.name || "").includes("🔒")) continue;
+
           const cv = {};
           let discoveredDate = null;
 
