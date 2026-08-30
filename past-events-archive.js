@@ -46,7 +46,9 @@
     return article;
   }
 
-  fetch("/api/past-events")
+  // The live origin is GitHub Pages (static only), so this endpoint lives on the
+  // ezra-lead worker alongside the availability feed, not under /api/.
+  fetch("https://ezra-lead.yeheli.workers.dev/?pastEvents=1")
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
       var events = data && data[lang];
