@@ -1462,6 +1462,10 @@
       font-size: 0.72rem;
       font-weight: 700;
       color: var(--cream-dim);
+      /* The badge is nowrap, so a wide one (e.g. "פתוח לקהל (20:00)") used to squeeze
+         this column until the hours broke mid-range. The time slot must never wrap:
+         it keeps its width and the badge clips instead. */
+      flex-shrink: 0;
     }
     .slot-row__time-icon {
       font-size: 0.78rem;
@@ -1476,6 +1480,7 @@
       font-size: 0.62rem;
       font-weight: 500;
       opacity: 0.75;
+      white-space: nowrap;
     }
     .slot-row__badge {
       display: inline-flex;
@@ -1491,6 +1496,10 @@
       font-size: 0.68rem;
       font-weight: 700;
       white-space: nowrap;
+      /* When the row is narrower than time + badge, the badge is the side that
+         gives way (the time column is flex-shrink: 0). */
+      min-width: 0;
+      overflow: hidden;
       transition: all 0.2s var(--ease);
     }
     .slot-row__dot {
