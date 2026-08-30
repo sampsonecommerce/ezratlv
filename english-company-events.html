@@ -3282,10 +3282,10 @@
         <div class="divider divider--center"></div>
       </div>
       <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto;line-height:1.85;text-align:center">
-        A company of 20 to 50 people falls between the cracks: too small for a hall,
-        too big for a restaurant. Ezra is built for exactly this size - a private bar
-        closed for one evening for your company alone, with food, bar and production
-        included in one per-person price.
+        A company of 20 to 50 people? Ezra is exactly for you. Big enough to celebrate
+        properly, yet intimate enough to keep everyone together. The whole place is
+        yours for one evening, with a full cocktail bar, dishes made for sharing and
+        top-grade sound, with transparent pricing across 3 packages.
       </p>
     </div>
   </section>
@@ -6163,6 +6163,10 @@
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
         if (resumeTok) window.openV2();
         else if (plan) window.openV2(plan);
+        // #talk deep link: opens the contact form directly, like /#book on the home page - for
+        // DM/ad links (e.g. /english-company-events?utm_source=instagram#talk). Runs after the
+        // utm/gclid cookies above are set, so the lead the form sends still carries the attribution.
+        else if (location.hash === '#talk') window.openV2Talk();
       })();
     })();
   </script>
