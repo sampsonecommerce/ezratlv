@@ -7025,7 +7025,7 @@
                next one, not booking a seat. -->
           <div class="rsvp-box" id="modalInfoBox">
             <p class="rsvp-note" id="modalEntryNote"></p>
-            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" data-interest="open_events" type="button">עדכנו אותי על ערבים כאלה</button>
+            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" data-interest="open_events" type="button" id="modalInfoBtn">עדכנו אותי על ערבים כאלה</button>
           </div>
 
           <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.3rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 18px; text-align: center;">
@@ -7386,15 +7386,17 @@
     // A weekday absent from this map has no public format, and the page claims nothing about it.
     const EZRA_FORMATS = {
       0: {
-        name: 'ערב מוזיקה',
-        lineup: 'הופעה חיה או סט ויניל',
-        desc: 'ימי ראשון בעזרא הם ערבי מוזיקה - לפעמים הופעה חיה, לפעמים סט ויניל. מי מנגן משתנה משבוע לשבוע; כשיש ערב מסוים בתאריך הזה הוא יופיע כאן.',
+        name: 'מוזיקה חיה וסשנים אקוסטיים',
+        shortName: 'ערב מוזיקה',
+        lineup: 'התוכנית מתעדכנת שבוע מראש',
+        desc: 'ימי ראשון בעזרא מוקדשים למוזיקה חיה, הופעות אינטימיות וסטים נדירים על גבי תקליטי ויניל. התוכנית המלאה, האמנים והליינאפ מתפרסמים כשבוע לפני האירוע.',
         img: 'images/MOMENT 1.jpg',
       },
       2: {
-        name: 'פופ-אפ שף',
-        lineup: 'שף אורח',
-        desc: 'ימי שלישי הם ערבי פופ-אפ שף - שף אורח משתלט על הטאבון לערב אחד. השף והתפריט משתנים; כשיש ערב מסוים בתאריך הזה הוא יופיע כאן.',
+        name: 'פופ-אפ שפים וערבי טאבון',
+        shortName: 'פופ-אפ שף',
+        lineup: 'התוכנית מתעדכנת שבוע מראש',
+        desc: 'ימי שלישי בעזרא מוקדשים לקולינריה משובחת מהטאבון הלוהט עם שפים אורחים ותפריטים מתחלפים. התוכנית המלאה, השף האורח והתפריט המדויק מתפרסמים כשבוע לפני האירוע.',
         img: 'images/FOOD ENVIRONMENT.jpg',
       },
     };
@@ -7993,7 +7995,7 @@
           // A published evening is named; a format night is named by its format; a night with
           // neither is simply free, and says so in the same words as the noon slot beside it.
           const nightLabel = published ? (published.title || '').split('·')[0].trim()
-                           : EZRA_FORMATS[dow] ? fmt.name
+                           : EZRA_FORMATS[dow] ? (fmt.shortName || fmt.name)
                            : 'פנוי לאירוע';
 
           // Build Cell
@@ -8049,10 +8051,10 @@
               if (isClosedEvening) {
                 showNotice('הערב הזה כבר שמור',
                   `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או ערב אחר - התאריכים הפנויים מסומנים בצהוב.`);
-              } else {
+              } else if (published) {
                 if (typeof openEventModal === 'function') {
                   const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
-                  openEventModal(published ? {
+                  openEventModal({
                     title: published.title || fmt.name,
                     lineup: published.subtitle || fmt.lineup,
                     desc: published.desc || fmt.desc,
@@ -8062,7 +8064,31 @@
                     fullDateString: when,
                     dateKey: dateKey,
                     published: published
-                  } : { ...theme, fullDateString: when, dateKey: dateKey });
+                  });
+                }
+              } else if (EZRA_FORMATS[dow]) {
+                if (typeof openEventModal === 'function') {
+                  const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
+                  openEventModal({
+                    title: fmt.name,
+                    lineup: 'התוכנית מתעדכנת שבוע מראש',
+                    desc: fmt.desc,
+                    img: fmt.img,
+                    badge: 'פתוח לקהל',
+                    badgeClass: 'sticker--free',
+                    fullDateString: when,
+                    dateKey: dateKey,
+                    isConceptOnly: true,
+                    published: null
+                  });
+                }
+              } else {
+                if (typeof openContactModal === 'function') {
+                  openContactModal({
+                    date: dateKey,
+                    slot: 'ערב (18:00-02:00)',
+                    eventType: 'אירוע פרטי'
+                  });
                 }
               }
             });
@@ -8285,11 +8311,27 @@
         const ev = data;
         const pub = ev.published || null;
 
+        const isConcept = !pub && !ev.isClosedEvening;
         const note = document.getElementById('modalEntryNote');
         if (note) {
-          note.textContent = (ev.badge && ev.badge.indexOf('חופשית') > -1)
-            ? 'הכניסה חופשית, על בסיס מקום פנוי. אין צורך להירשם מראש.'
-            : 'ערב פתוח לקהל. מומלץ להגיע מוקדם, המקומות מוגבלים.';
+          if (isConcept) {
+            note.innerHTML = `<span style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--gold-light); font-weight:600; font-size:0.95rem; margin-block-end:0.35rem;"><svg class="ico" aria-hidden="true" style="width:16px; height:16px; flex-shrink:0;"><use href="#i-calendar"/></svg> התוכנית והליינאפ מתעדכנים שבוע מראש</span><br><span style="color:var(--cream-dim); font-size:0.86rem; line-height:1.5; display:block;">אנחנו סוגרים את השפים, המוזיקאים והתפריטים המדויקים כשבוע לפני כל אירוע. השאירו פרטים כדי לקבל עדכון ראשונים ברגע שההרשמה נפתחת.</span>`;
+          } else if (ev.badge && ev.badge.indexOf('חופשית') > -1) {
+            note.textContent = 'הכניסה חופשית, על בסיס מקום פנוי. אין צורך להירשם מראש.';
+          } else {
+            note.textContent = 'ערב פתוח לקהל. מומלץ להגיע מוקדם, המקומות מוגבלים.';
+          }
+        }
+
+        const infoBtn = document.getElementById('modalInfoBtn');
+        if (infoBtn) {
+          if (isConcept) {
+            infoBtn.textContent = 'עדכנו אותי כשהליינאפ יתפרסם';
+            infoBtn.setAttribute('data-topic', ev.title || 'ערבים פתוחים');
+          } else {
+            infoBtn.textContent = 'עדכנו אותי על ערבים כאלה';
+            infoBtn.setAttribute('data-topic', 'ערבים פתוחים');
+          }
         }
 
         modalImg.src = ev.img;
