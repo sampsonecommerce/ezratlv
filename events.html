@@ -3347,7 +3347,7 @@
     .month-cal-legend {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.45rem;
       flex-wrap: wrap;
       font-size: 0.74rem;
       color: var(--cream-dim);
@@ -3355,20 +3355,96 @@
     .month-cal-legend-item {
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
+      gap: 0.35rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 8px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--line);
+      color: var(--cream-dim);
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s var(--ease);
+    }
+    .month-cal-legend-item:hover {
+      background: rgba(196,154,60,0.08);
+      border-color: rgba(196,154,60,0.45);
+      color: var(--cream);
+      transform: translateY(-1px);
+    }
+    .month-cal-legend-item.is-active {
+      background: rgba(196,154,60,0.18);
+      border-color: var(--gold);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(196,154,60,0.25);
     }
     .month-cal-legend-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
-    .month-cal-legend-dot--free { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
+    .month-cal-legend-dot--all { background: #e2e8f0; box-shadow: 0 0 5px rgba(226,232,240,0.6); }
     .month-cal-legend-dot--open { background: #34d399; box-shadow: 0 0 5px rgba(52,211,153,0.5); }
+    .month-cal-legend-dot--free { background: #c49a3c; box-shadow: 0 0 5px rgba(196,154,60,0.5); }
     .month-cal-legend-dot--busy { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.5); }
+
+    /* Highlighting & Dimming on Month Calendar Grid */
+    .month-cal-grid[data-active-filter="open"] .month-cal-slot:not(.month-cal-slot--open),
+    .month-cal-grid[data-active-filter="free"] .month-cal-slot:not(.month-cal-slot--free),
+    .month-cal-grid[data-active-filter="busy"] .month-cal-slot:not(.month-cal-slot--busy) {
+      opacity: 0.18;
+      filter: grayscale(85%);
+      transform: scale(0.96);
+    }
+    .month-cal-grid[data-active-filter="open"] .month-cal-slot.month-cal-slot--open {
+      opacity: 1;
+      transform: scale(1.03);
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.45);
+      border-color: #34d399;
+      font-weight: 700;
+      z-index: 2;
+    }
+    .month-cal-grid[data-active-filter="free"] .month-cal-slot.month-cal-slot--free {
+      opacity: 1;
+      transform: scale(1.03);
+      box-shadow: 0 0 14px rgba(196, 154, 60, 0.45);
+      border-color: var(--gold);
+      font-weight: 700;
+      z-index: 2;
+    }
+    .month-cal-grid[data-active-filter="busy"] .month-cal-slot.month-cal-slot--busy {
+      opacity: 1;
+      transform: scale(1.03);
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
+      border-color: #ef4444;
+      font-weight: 700;
+      z-index: 2;
+    }
+
+    /* Highlighting & Dimming on Timeline Grid (Section 2) */
+    .timeline-grid[data-active-filter="open"] .slot-row:not(.slot-row--open),
+    .timeline-grid[data-active-filter="free"] .slot-row:not(.slot-row--free):not(.slot-row--day-free),
+    .timeline-grid[data-active-filter="busy"] .slot-row:not(.slot-row--busy) {
+      opacity: 0.22;
+      filter: grayscale(80%);
+    }
+    .timeline-grid[data-active-filter="open"] .slot-row.slot-row--open {
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
+      border-color: #34d399;
+    }
+    .timeline-grid[data-active-filter="free"] .slot-row.slot-row--free,
+    .timeline-grid[data-active-filter="free"] .slot-row.slot-row--day-free {
+      box-shadow: 0 0 12px rgba(196, 154, 60, 0.4);
+      border-color: var(--gold);
+    }
+    .timeline-grid[data-active-filter="busy"] .slot-row.slot-row--busy {
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+      border-color: #ef4444;
+    }
 
     /* Days of Week Header */
     .month-cal-weekdays {
@@ -4701,10 +4777,11 @@
               <h3 id="scheduleHeading">לוח אירועים וימי פתיחה</h3>
               <p id="scheduleSubhead">חודש קדימה · לחצו על אירוע לפרטים מלאים, ליינאפ ושריון מקום</p>
             </div>
-            <div class="month-cal-legend schedule-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</span>
+            <div class="month-cal-legend schedule-legend" id="schedLegend">
+              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>כל התאריכים</button>
+              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</button>
+              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</button>
+              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</button>
             </div>
           </div>
 
@@ -5787,10 +5864,11 @@
               <button class="month-cal-today-btn" id="monthCalToday" type="button">היום</button>
             </div>
 
-            <div class="month-cal-legend">
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</span>
-              <span class="month-cal-legend-item"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</span>
+            <div class="month-cal-legend" id="monthCalLegend">
+              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>כל התאריכים</button>
+              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</button>
+              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</button>
+              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</button>
             </div>
           </div>
 
@@ -7848,12 +7926,18 @@
       const monthsHe = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
       let calViewYear = today.getFullYear();
       let calViewMonth = today.getMonth();
+      let activeMonthCalFilter = 'all';
 
       function renderMonthCalendar() {
         if (!monthCalGrid || !monthCalTitle) return;
         monthCalTitle.textContent = `${monthsHe[calViewMonth]} ${calViewYear}`;
 
         monthCalGrid.innerHTML = '';
+        if (activeMonthCalFilter && activeMonthCalFilter !== 'all') {
+          monthCalGrid.setAttribute('data-active-filter', activeMonthCalFilter);
+        } else {
+          monthCalGrid.removeAttribute('data-active-filter');
+        }
 
         const firstDay = new Date(calViewYear, calViewMonth, 1).getDay();
         const daysInMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
@@ -8005,6 +8089,65 @@
           calViewYear = today.getFullYear();
           calViewMonth = today.getMonth();
           renderMonthCalendar();
+        });
+      }
+
+      // Legend Filter Handlers for Month Calendar (Section 3B)
+      const monthCalLegend = document.getElementById('monthCalLegend');
+      function applyMonthCalFilter(filter) {
+        activeMonthCalFilter = filter;
+        if (monthCalLegend) {
+          monthCalLegend.querySelectorAll('.month-cal-legend-item').forEach(btn => {
+            const isMatch = btn.getAttribute('data-filter') === filter;
+            btn.classList.toggle('is-active', isMatch);
+            btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+          });
+        }
+        if (monthCalGrid) {
+          if (filter === 'all') {
+            monthCalGrid.removeAttribute('data-active-filter');
+          } else {
+            monthCalGrid.setAttribute('data-active-filter', filter);
+          }
+        }
+      }
+
+      if (monthCalLegend) {
+        monthCalLegend.querySelectorAll('.month-cal-legend-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-filter') || 'all';
+            applyMonthCalFilter(filter);
+          });
+        });
+      }
+
+      // Legend Filter Handlers for Weekly / 30-Day Timeline (Section 2)
+      const schedLegend = document.getElementById('schedLegend');
+      let activeSchedFilter = 'all';
+      function applySchedFilter(filter) {
+        activeSchedFilter = filter;
+        if (schedLegend) {
+          schedLegend.querySelectorAll('.month-cal-legend-item').forEach(btn => {
+            const isMatch = btn.getAttribute('data-filter') === filter;
+            btn.classList.toggle('is-active', isMatch);
+            btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+          });
+        }
+        if (weekGrid) {
+          if (filter === 'all') {
+            weekGrid.removeAttribute('data-active-filter');
+          } else {
+            weekGrid.setAttribute('data-active-filter', filter);
+          }
+        }
+      }
+
+      if (schedLegend) {
+        schedLegend.querySelectorAll('.month-cal-legend-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-filter') || 'all';
+            applySchedFilter(filter);
+          });
         });
       }
 
