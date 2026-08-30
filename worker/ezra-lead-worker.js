@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-30c";
+const BUILD_ID = "2026-08-30d";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1799,6 +1799,10 @@ async function pastEventsFeed(env, cors) {
     return json({ he: [], en: [], degraded: true, where: "graphql", reason, build: BUILD_ID }, 200, cors);
   }
   const items = data?.data?.boards?.[0]?.items_page?.items || [];
+  // Filter accounting, reported whenever the feed comes out empty. boards=0 with
+  // no GraphQL error means the token cannot see the board at all - monday returns
+  // an empty boards list for a board outside the token's reach, not an error.
+  const seen = { boards: (data?.data?.boards || []).length, items: items.length, wrongGroup: 0, notPublished: 0, noImage: 0 };
 
   const linkUrl = (cv) => {
     if (!cv || !cv.value) return null;
@@ -1812,12 +1816,12 @@ async function pastEventsFeed(env, cors) {
   const he = [];
   const en = [];
   for (const item of items) {
-    if (item.group?.id !== PAST_GROUP_ID) continue;
+    if (item.group?.id !== PAST_GROUP_ID) { seen.wrongGroup++; continue; }
     const c = {};
     for (const cv of item.column_values || []) c[cv.id] = cv;
-    if (c[PAST_COL.publish]?.text !== PAST_PUBLISHED_LABEL) continue;
+    if (c[PAST_COL.publish]?.text !== PAST_PUBLISHED_LABEL) { seen.notPublished++; continue; }
     const asset = item.assets?.[0];
-    if (!asset) continue; // no image, no card
+    if (!asset) { seen.noImage++; continue; } // no image, no card
     const date = c[PAST_COL.date]?.text || null;
     const base = {
       id: item.id,
@@ -1839,7 +1843,9 @@ async function pastEventsFeed(env, cors) {
   he.sort(byDateDesc);
   en.sort(byDateDesc);
 
-  const res = new Response(JSON.stringify({ he, en }), {
+  const body = { he, en, build: BUILD_ID };
+  if (!he.length && !en.length) body.seen = seen;
+  const res = new Response(JSON.stringify(body), {
     status: 200,
     headers: {
       "content-type": "application/json; charset=utf-8",
