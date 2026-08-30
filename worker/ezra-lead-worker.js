@@ -175,6 +175,13 @@ const DATE_COL = "date5bab58wj";           // event-date column (same id on both
 const HOUR_START_COL = "hour_mm1q610q";
 const HOUR_END_COL   = "hour_mm1qa44s";
 const TIME_COL = "text_mm4t1h0s";          // "Start-End (Text)" column, e.g. "13:00-18:00" (fallback)
+// The Open Events board keeps the same facts under its own column ids (see OE below). The
+// availability feed reads all three boards, so every lookup must try both id sets - reading only
+// the source-board ids is how mirror items used to fall through to the worst-case full-day guess.
+const HOUR_COLS_START = [HOUR_START_COL, "hour_mm6j2kcg"];
+const HOUR_COLS_END   = [HOUR_END_COL,   "hour_mm6d1kst"];
+const SLOT_TEXT_COLS  = [TIME_COL, "text_mm2km76j", "text_mm6d8r2y"]; // Company / Events Form / Open Events
+const TIMEOF_COLS     = ["single_select943s5p9", "color_mm6dh5pe"];   // "Time of event" on source boards / Open Events
 const AVAIL_BOARD = "5092854682";          // Events Form
 const AVAIL_GROUPS = ["group_mm18mks7", "group_mm1fz3kg", "group_mm187fg9"]; // Closed Deals, Pre Payment, Proposal Sent
 const COMPANY_AVAIL_GROUPS = [GRP_IN_AGREEMENT, GRP_AGREEMENT];               // In Agreement Process, Agreement Sent
@@ -1361,36 +1368,45 @@ async function availability(request, env, cors) {
         for (const it of (g.items_page?.items || [])) {
           const cv = {};
           let discoveredDate = null;
-          let timeSlotText = "";
 
           (it.column_values || []).forEach((c) => {
             cv[c.id] = c;
             if (!discoveredDate) {
               discoveredDate = normalizeDate(c.date, c.text);
             }
-            const txt = (c.text || "").toLowerCase();
-            if (txt.includes("צהריים") || txt.includes("ערב") || txt.includes("גמיש") || txt.includes("בוקר") || txt.includes(":")) {
-              timeSlotText += " " + txt;
-            }
           });
 
           const date = normalizeDate(cv[DATE_COL]?.date, cv[DATE_COL]?.text) || discoveredDate;
           if (!date) continue;
 
-          let start = parseHourText(cv[HOUR_START_COL]?.text);
-          let end = parseHourText(cv[HOUR_END_COL]?.text);
+          // Time source, strictly by column id and in priority order. This used to also scan a
+          // concatenation of every column whose text held a keyword or a colon - notes, links,
+          // status labels - which is how an evening booking whose notes mentioned "צהריים" became
+          // a full closed day, and how "19:30 ... 18:00" fragments from unrelated columns were
+          // glued into an inverted 19:30-18:00 slot.
+          let start = null, end = null;
+          for (const id of HOUR_COLS_START) { start = parseHourText(cv[id]?.text); if (start) break; }
+          for (const id of HOUR_COLS_END)   { end = parseHourText(cv[id]?.text);   if (end) break; }
           if (!start || !end) {
-            const m = TIME_RANGE_RE.exec(cv[TIME_COL]?.text || timeSlotText);
-            if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; }
+            for (const id of SLOT_TEXT_COLS) {
+              const m = TIME_RANGE_RE.exec(cv[id]?.text || "");
+              if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; break; }
+            }
           }
 
           if (!start || !end) {
-            if (timeSlotText.includes("צהריים") && !timeSlotText.includes("ערב")) {
+            // Only the dedicated "Time of event" columns decide the keyword fallback. Free text
+            // (notes, event names) must not - it flips real slots to the full-day guess.
+            let timeOf = "";
+            for (const id of TIMEOF_COLS) { if (cv[id]?.text) { timeOf = cv[id].text; break; } }
+            if (timeOf.includes("צהריים")) {
               start = "12:00"; end = "18:00";
-            } else if (timeSlotText.includes("ערב") && !timeSlotText.includes("צהריים")) {
+            } else if (timeOf.includes("ערב")) {
               start = "18:00"; end = "02:00";
+            } else if (timeOf.includes("בוקר")) {
+              start = "09:00"; end = "12:00";
             } else {
-              // Both afternoon & evening booked (full day)
+              // גמיש, or no time at all: the safe reading is a full closed day.
               busy.push({ date, start: "12:00", end: "18:00" });
               start = "18:00"; end = "02:00";
             }
