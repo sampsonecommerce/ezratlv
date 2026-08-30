@@ -2865,6 +2865,20 @@
       const pillValue  = (id) => { const a = document.querySelector('#' + id + ' .cf-pill.active'); return a ? a.dataset.val : ''; };
       const pillValues = (id) => Array.from(document.querySelectorAll('#' + id + ' .cf-pill.active')).map(p => p.dataset.val);
 
+      // ?type= preselects the event-type pill, so a DM/ad link (e.g. /english-index?type=birthday#book)
+      // lands on a form already set to what the person asked about. Unknown value = default pill,
+      // never an error. The data-val values stay Hebrew on this page too - they are what Monday stores.
+      (function () {
+        const TYPE_MAP = { birthday: 'יום הולדת', bachelor: 'מסיבת רווקים/ רווקות', engagement: 'אירוסין', farewell: 'מסיבת פרידה', party: 'מסיבה', other: 'אחר' };
+        const want = TYPE_MAP[(new URLSearchParams(location.search).get('type') || '').toLowerCase()];
+        if (!want) return;
+        const group = document.getElementById('cfpType');
+        const btn = group && group.querySelector('.cf-pill[data-val="' + want + '"]');
+        if (!btn) return;
+        group.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+      })();
+
       const pfConsentEl = document.getElementById('pfConsent');
       if (pfConsentEl) pfConsentEl.addEventListener('change', () => {
         if (!pfConsentEl.checked) return;

@@ -143,7 +143,11 @@
 
     /* NAVIGATION */
     /* ============================================================
-       NAVIGATION BAR (100% IDENTICAL SIZING ACROSS ALL PAGES)
+       NAVIGATION BAR
+       This page deliberately diverges from the shared nav: it carries more items than any other
+       page (four anchor links + the section switcher + CTA), so the three section pills are one
+       segmented control here and the drawer breakpoint is 1140px instead of 720px. Mirrors
+       events.html exactly.
     ============================================================ */
     .nav {
       position: fixed;
@@ -197,42 +201,45 @@
       gap: 0.85rem;
       flex-wrap: nowrap;
     }
-    .nav__pill {
+    /* The three site sections as one segmented switcher. Three separate pills plus seven anchor
+       links overflowed the row and clipped the logo; one compact control holds the same choice. */
+    .nav__seg {
+      display: inline-flex;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: 50px;
+      overflow: hidden;
+      background: rgba(196, 154, 60, 0.05);
+    }
+    .nav__seg a {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 0.45rem 1.05rem;
-      border-radius: 50px;
-      font-size: 0.84rem;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
       line-height: 1;
       color: var(--cream-dim) !important;
-      border: 1px solid var(--line);
-      background: rgba(196, 154, 60, 0.05);
-      transition: all 0.25s var(--ease);
       white-space: nowrap;
+      transition: color 0.25s var(--ease), background 0.25s var(--ease);
     }
-    .nav__pill:hover {
+    .nav__seg a + a { border-inline-start: 1px solid var(--line); }
+    .nav__seg a::after { display: none !important; }
+    .nav__seg a:hover {
       color: var(--cream) !important;
-      border-color: var(--gold);
       background: rgba(196, 154, 60, 0.12);
-      transform: translateY(-1px);
     }
-    .nav__pill.is-active {
+    .nav__seg a.is-active {
       color: var(--gold-light) !important;
-      border: 1.2px solid var(--gold) !important;
-      background: rgba(196, 154, 60, 0.2) !important;
-      box-shadow: 0 0 14px rgba(196, 154, 60, 0.25);
-      transform: translateY(-1px);
+      background: rgba(196, 154, 60, 0.2);
     }
     .nav__cta {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.5rem 1.25rem;
+      padding: 0.5rem 1.15rem;
       border-radius: 50px;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 600;
       line-height: 1;
       color: var(--bg) !important;
@@ -246,7 +253,7 @@
     }
     .nav__cta:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(196,154,60,0.45); }
     .nav__lang {
-      display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600;
       letter-spacing: 0.03em; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 50px;
       padding: 0.38rem 0.72rem; line-height: 1; transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
     }
@@ -259,11 +266,13 @@
       100% { background-position: 100% 50%; }
     }
 
-    /* Mobile Nav */
+    /* Mobile Nav. The breakpoint is 1140px, not 720px: below it the full row - logo, four anchor
+       links, the section switcher, the CTA - no longer fits, and a wrapped or clipped nav is worse
+       than the drawer. */
     .nav__burger { display: none; }
     .nav__menu, .nav__scrim { display: none; }
 
-    @media (max-width: 720px) {
+    @media (max-width: 1140px) {
       .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; }
       .nav.scrolled { padding-block: 0.7rem; }
       .nav__links, .nav__actions { display: none; }
@@ -4532,13 +4541,13 @@
 
     <a href="english-index" class="nav__logo"><img src="images/logo.png" alt="Ezra" /></a>
 
+    <!-- Four anchors only, mirroring events.html: Sound, Archive and Collaborate stay in the
+         mobile drawer and the footer. Seven links in one row is what overflowed and clipped
+         the logo. -->
     <div class="nav__links">
       <a href="#schedule">This Week</a>
       <a href="#events">Upcoming Events</a>
-      <a href="#soundsystem">Sound & Vibe</a>
-      <a href="#archive">Archive</a>
       <a href="#location">Location</a>
-      <a href="#collab">Collaborate</a>
       <a href="#faq">FAQ</a>
     </div>
 
@@ -4548,9 +4557,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         HE
       </a>
-      <a class="nav__pill" href="english-index">Private Events</a>
-      <a class="nav__pill" href="english-company-events">Company Events</a>
-      <a class="nav__pill is-active" href="english-events">Public Events</a>
+      <nav class="nav__seg" aria-label="Site sections">
+        <a href="english-index" aria-label="Private events">Private</a>
+        <a href="english-company-events" aria-label="Company events">Company</a>
+        <a class="is-active" href="english-events" aria-label="Public events" aria-current="page">Public</a>
+      </nav>
       <a class="nav__cta" href="#schedule">Events Calendar</a>
     </div>
 
