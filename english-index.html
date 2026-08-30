@@ -271,7 +271,7 @@
     .nav__burger      { display: none; }
     .nav__menu, .nav__scrim { display: none; }
 
-    @media (max-width: 720px) {
+    @media (max-width: 1080px) {
       .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; }
       .nav.scrolled { padding-block: 0.7rem; }
       .nav__links, .nav__actions { display: none; }
@@ -1839,6 +1839,19 @@
   </script>
   <!-- Lead endpoint: blank = same-origin /api/submit-lead. -->
   <script>window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";</script>
+
+  <style>
+    /* Section switcher (private / company / open) - same control as open-events.html,
+       so the three site sections are switchable from every main page. */
+    .nav__seg { display: inline-flex; align-items: stretch; border: 1px solid var(--line); border-radius: 50px; overflow: hidden; background: rgba(196, 154, 60, 0.05); }
+    .nav__seg a { display: inline-flex; align-items: center; padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: 600; line-height: 1; color: var(--cream-dim) !important; white-space: nowrap; transition: color 0.25s var(--ease), background 0.25s var(--ease); }
+    .nav__seg a + a { border-inline-start: 1px solid var(--line); }
+    .nav__seg a::after { display: none !important; }
+    .nav__seg a:hover { color: var(--cream) !important; background: rgba(196, 154, 60, 0.12); }
+    .nav__seg a.is-active { color: var(--gold-light) !important; background: rgba(196, 154, 60, 0.2); }
+    .nav__menu-cta--pill { border: 1px solid var(--line); color: var(--cream-dim); background: rgba(196, 154, 60, 0.05); }
+    .nav__menu-cta--pill.is-active { border: 1.2px solid var(--gold); color: var(--gold-light); background: rgba(196, 154, 60, 0.2); }
+  </style>
 </head>
 <body>
 
@@ -1868,7 +1881,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         HE
       </a>
-      <a class="nav__corp" href="english-company-events">Company events</a>
+      <nav class="nav__seg" aria-label="Switch site section">
+        <a class="is-active" href="english-index" aria-label="Private Events" aria-current="page">Private</a>
+        <a href="english-company-events" aria-label="Company Events">Company</a>
+        <a href="english-events" aria-label="Open Events">Open</a>
+      </nav>
       <a class="nav__cta" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
     </div>
 
@@ -1882,7 +1899,9 @@
       <a class="nav__menu-link" href="#gallery">Gallery</a>
       <a class="nav__menu-link" href="/" hreflang="he">Hebrew / HE</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--corp" href="english-company-events">Company events</a>
+        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="english-index">Private Events</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="english-company-events">Company Events</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="english-events">Open Events</a>
         <a class="nav__menu-cta nav__menu-cta--book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">Check availability</a>
       </div>
     </div>
