@@ -355,7 +355,10 @@
         border-inline-start: 1px solid var(--line);
         padding: 5rem 1.8rem 2rem;
         z-index: 100;
-        transform: translateX(-100%);
+        /* The drawer is anchored to the RIGHT (inset-inline-end in LTR). The hidden
+           state must slide it off its own edge: +100%, not the RTL page's -100%,
+           which parked it as a visible strip over the page's left side on mobile. */
+        transform: translateX(100%);
         transition: transform 0.35s var(--ease);
         overflow-y: auto;
       }
