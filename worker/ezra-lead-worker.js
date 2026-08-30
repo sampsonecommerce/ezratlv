@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-30a";
+const BUILD_ID = "2026-08-30b";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -225,6 +225,12 @@ export default {
       if (resume) return getDraft(resume, env, cors);   // public: restore a saved draft by opaque token
       const leadId = params.get("leadById");
       if (leadId) return leadById(leadId, request, env, cors);
+      // Past-events archive for the events pages (public, cached). The Pages Functions that were
+      // written for this first never ran: the live origin is GitHub Pages, so functions/ is inert
+      // and this worker is where site endpoints actually live.
+      if (params.get("pastEvents") === "1") return pastEventsFeed(env, cors);
+      const imageAsset = params.get("eventImage");
+      if (imageAsset) return eventImageProxy(imageAsset, env, cors);
       // Manual mirror run, same code the cron calls. Secret-gated: it writes to a board, and its
       // result names source item ids. Used to verify a deploy without waiting for the schedule.
       if (params.get("sync") === "1") {
@@ -1714,4 +1720,164 @@ async function sendMetaCapi(d, ip, ua, env) {
   const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ data: [event] }) });
   const out = await r.json().catch(() => ({}));
   if (out.error) console.error("Meta CAPI error:", JSON.stringify(out.error));
+}
+
+// ---------------------------------------------------------------------------
+// Past-events archive for events.html / english-events.html.
+// Served from the "Open Events Schedule + Archive" board: a Closed Deal on Open
+// Events lands there for content, and when its date passes an automation moves
+// it to the אירועי עבר group - the only group this feed reads. Contract:
+//   - only items in PAST_GROUP_ID whose "פרסום לאתר" status is "פורסם באתר"
+//   - an item with no image file is skipped (no photo/poster, no card)
+//   - an item with no English title is skipped from the `en` list only
+// Image URLs point back at this worker (?eventImage=<assetId>) because monday
+// asset URLs are signed and expire.
+const SCHEDULE_BOARD = "5103189386";
+const PAST_GROUP_ID = "group_mm6qsdzy"; // אירועי עבר
+const PAST_COL = {
+  date: "date_mm6qf10d",         // תאריך האירוע
+  startTime: "hour_mm6qkm9x",    // Start Time
+  endTime: "hour_mm6q583v",      // End Time
+  type: "color_mm6qqvht",        // סוג ערב: the 6 site format cards + אחר
+  descHe: "long_text_mm6qtxhj",  // תיאור לאתר (עברית)
+  titleEn: "text_mm6qpsjd",      // Title (EN)
+  descEn: "long_text_mm6qkkby",  // Description (EN)
+  instagram: "link_mm6qx5r9",    // פוסט אינסטגרם
+  artistLink: "link_mm6q76f3",   // קישור אמן
+  publish: "color_mm6q8g2v",     // פרסום לאתר (gate)
+};
+const PAST_PUBLISHED_LABEL = "פורסם באתר";
+// Badge class on the card, keyed by the "סוג ערב" label. Only three sticker
+// classes exist in the pages' CSS today; other formats render without a badge.
+const PAST_TYPE_BADGE = {
+  "השמעות אלבומים וסלון תקליטים": "sticker--vinyl",
+  "מוזיקה חיה וסשנים אקוסטיים": "sticker--live",
+  "פופ-אפ שפים וערבי טאבון": "sticker--food",
+};
+const PAST_CACHE_SECONDS = 300;
+
+async function pastEventsFeed(env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return json({ he: [], en: [], degraded: true }, 200, cors);
+
+  const cache = caches.default;
+  const cacheKey = new Request("https://ezra-lead.yeheli.workers.dev/?pastEvents=1");
+  const hit = await cache.match(cacheKey);
+  if (hit) {
+    const res = new Response(hit.body, hit);
+    Object.entries(cors).forEach(([k, v]) => res.headers.set(k, v));
+    return res;
+  }
+
+  const query = `query ($boardId: [ID!]) {
+    boards(ids: $boardId) {
+      items_page(limit: 100) {
+        items {
+          id
+          name
+          group { id }
+          column_values(ids: ${JSON.stringify(Object.values(PAST_COL))}) { id text value }
+          assets { id }
+        }
+      }
+    }
+  }`;
+  const r = await fetch("https://api.monday.com/v2", {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: TOKEN },
+    body: JSON.stringify({ query, variables: { boardId: [SCHEDULE_BOARD] } }),
+  });
+  if (!r.ok) return json({ he: [], en: [], degraded: true }, 200, cors);
+  const data = await r.json().catch(() => ({}));
+  const items = data?.data?.boards?.[0]?.items_page?.items || [];
+
+  const linkUrl = (cv) => {
+    if (!cv || !cv.value) return null;
+    try { return JSON.parse(cv.value).url || null; } catch { return null; }
+  };
+  const displayDate = (iso) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+    return m ? `${m[3]}.${m[2]}.${m[1]}` : null;
+  };
+
+  const he = [];
+  const en = [];
+  for (const item of items) {
+    if (item.group?.id !== PAST_GROUP_ID) continue;
+    const c = {};
+    for (const cv of item.column_values || []) c[cv.id] = cv;
+    if (c[PAST_COL.publish]?.text !== PAST_PUBLISHED_LABEL) continue;
+    const asset = item.assets?.[0];
+    if (!asset) continue; // no image, no card
+    const date = c[PAST_COL.date]?.text || null;
+    const base = {
+      id: item.id,
+      date,
+      dateDisplay: displayDate(date),
+      startTime: c[PAST_COL.startTime]?.text || null,
+      endTime: c[PAST_COL.endTime]?.text || null,
+      type: c[PAST_COL.type]?.text || null,
+      badgeClass: PAST_TYPE_BADGE[c[PAST_COL.type]?.text] || null,
+      image: `https://ezra-lead.yeheli.workers.dev/?eventImage=${asset.id}`,
+      instagram: linkUrl(c[PAST_COL.instagram]),
+      artistLink: linkUrl(c[PAST_COL.artistLink]),
+    };
+    he.push({ ...base, title: item.name, description: c[PAST_COL.descHe]?.text || "" });
+    const titleEn = c[PAST_COL.titleEn]?.text;
+    if (titleEn) en.push({ ...base, title: titleEn, description: c[PAST_COL.descEn]?.text || "" });
+  }
+  const byDateDesc = (a, b) => (b.date || "").localeCompare(a.date || "");
+  he.sort(byDateDesc);
+  en.sort(byDateDesc);
+
+  const res = new Response(JSON.stringify({ he, en }), {
+    status: 200,
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "Cache-Control": `public, max-age=60, s-maxage=${PAST_CACHE_SECONDS}`,
+      ...cors,
+    },
+  });
+  await cache.put(cacheKey, res.clone());
+  return res;
+}
+
+// Proxies one monday asset (the card image) so the site gets a stable public
+// URL; a fresh signed URL is resolved per cache fill, bytes cached a day.
+async function eventImageProxy(assetId, env, cors) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return new Response("not configured", { status: 503, headers: cors });
+  if (!/^\d+$/.test(assetId)) return new Response("bad id", { status: 400, headers: cors });
+
+  const cache = caches.default;
+  const cacheKey = new Request(`https://ezra-lead.yeheli.workers.dev/?eventImage=${assetId}`);
+  const hit = await cache.match(cacheKey);
+  if (hit) return hit;
+
+  const r = await fetch("https://api.monday.com/v2", {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: TOKEN },
+    body: JSON.stringify({
+      query: "query ($ids: [ID!]!) { assets(ids: $ids) { public_url } }",
+      variables: { ids: [assetId] },
+    }),
+  });
+  if (!r.ok) return new Response("upstream", { status: 502, headers: cors });
+  const data = await r.json().catch(() => ({}));
+  const url = data?.data?.assets?.[0]?.public_url;
+  if (!url) return new Response("not found", { status: 404, headers: cors });
+
+  const img = await fetch(url);
+  if (!img.ok) return new Response("not found", { status: 404, headers: cors });
+
+  const res = new Response(img.body, {
+    status: 200,
+    headers: {
+      "content-type": img.headers.get("content-type") || "image/jpeg",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400",
+      ...cors,
+    },
+  });
+  await cache.put(cacheKey, res.clone());
+  return res;
 }
