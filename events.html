@@ -2340,158 +2340,19 @@
       margin-block-start: 0.15rem;
     }
 
-    /* 6th Card: "Click for More" / Explore Past Archive */
-    .past-slide-card--more {
-      background: linear-gradient(145deg, #1a140d 0%, #120d08 100%);
-      border: 1.5px dashed rgba(196, 154, 60, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 280px;
-    }
-    .past-slide-card--more:hover {
-      border-style: solid;
-      border-color: var(--gold-light);
-      background: linear-gradient(145deg, #241b10 0%, #17110a 100%);
-    }
-    .past-slide-card__more-content {
-      padding: 1.8rem 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.65rem;
-    }
-    .past-slide-card__more-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: rgba(196, 154, 60, 0.12);
-      border: 1px solid var(--gold);
-      color: var(--gold-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-block-end: 0.3rem;
-      transition: transform 0.3s var(--ease), background 0.3s var(--ease);
-    }
-    .past-slide-card--more:hover .past-slide-card__more-icon {
-      transform: scale(1.1) rotate(6deg);
-      background: var(--gold);
-      color: #110e0a;
-    }
-    .past-slide-card__more-title {
-      font-family: var(--font-body);
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--cream);
-    }
-    .past-slide-card__more-sub {
-      font-size: 0.82rem;
-      color: var(--cream-dim);
-      line-height: 1.45;
-      max-width: 220px;
-    }
-    .past-slide-card__more-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.82rem;
+    /* The artist's own site, on a card that names an act. Sits under the description rather
+       than wrapping the card: only some evenings have a link, and a card that is a link on
+       one slide and inert on the next reads as broken. */
+    .past-slide-card__link {
+      display: inline-block;
+      margin-block-start: 0.5rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--gold-light);
-      margin-block-start: 0.3rem;
+      border-block-end: 1px solid rgba(196, 154, 60, 0.45);
+      transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
     }
-
-    /* Archive Gallery Modal */
-    .archive-gallery-box {
-      width: min(94vw, 980px);
-      max-height: 90vh;
-      overflow-y: auto;
-      background: #14100b;
-      border: 1px solid var(--line-bright);
-      border-radius: 24px;
-      padding: clamp(1.4rem, 3vw, 2.2rem);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
-      position: relative;
-    }
-    .archive-gallery-head {
-      margin-block-end: 1.5rem;
-      padding-block-end: 1rem;
-      border-block-end: 1px solid var(--line);
-      text-align: start;
-    }
-    .archive-gallery-title {
-      font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-      font-weight: 800;
-      color: var(--cream);
-      margin-block: 0.2rem 0.4rem;
-    }
-    .archive-gallery-desc {
-      font-size: 0.88rem;
-      color: var(--cream-dim);
-    }
-    .archive-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .archive-gallery-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      border: 1px solid var(--line);
-      background: #1a140d;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
-    }
-    .archive-gallery-item:hover {
-      transform: translateY(-3px) scale(1.02);
-      border-color: var(--gold);
-    }
-    .archive-gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s var(--ease);
-    }
-    .archive-gallery-item:hover img {
-      transform: scale(1.08);
-    }
-    .archive-gallery-overlay {
-      position: absolute;
-      inset-inline: 0;
-      bottom: 0;
-      padding: 0.6rem 0.75rem;
-      background: linear-gradient(0deg, rgba(14,10,7,0.95) 0%, rgba(14,10,7,0.7) 60%, transparent 100%);
-      color: var(--cream);
-      text-align: start;
-    }
-    .archive-gallery-tag {
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-      margin-block-end: 0.15rem;
-    }
-    .archive-gallery-overlay h4 {
-      font-size: 0.84rem;
-      font-weight: 700;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 0;
-      color: var(--cream);
-    }
-    .archive-gallery-overlay p {
-      font-size: 0.72rem;
-      color: var(--cream-dim);
-      margin: 0.1rem 0 0 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .past-slide-card__link:hover { color: var(--cream); border-block-end-color: var(--gold); }
 
     /* ============================================================
        5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE (SPACED & BEAUTIFULLY ARRANGED)
@@ -5978,95 +5839,71 @@
       <div class="sec-head center">
         <span class="eyebrow">אירועים שהיו</span>
         <h2>מה כבר היה כאן</h2>
-        <p>הערבים האחרונים שהתקיימו בעזרא, עם מי ניגן, מה הוגש וכמה אנשים היו. זה הקצב שאנחנו עובדים בו.</p>
+        <p>הערבים הפתוחים שכבר התקיימו בעזרא, עם מי ניגן ומה היה. זה הקצב שאנחנו עובדים בו.</p>
       </div>
 
-      <!-- Past Events Horizontal Slider (5 authentic event cards + 6th 'לחצו לעוד' card) -->
+      <!-- Past Events Horizontal Slider. Four real evenings, newest first. Every fact here comes
+           from the evening itself or from the poster we published for it - act, date, door time,
+           entry. Nothing is inferred: no guest counts, no menu, no atmosphere we did not have a
+           source for. An evening with no photo and no poster does not go in. -->
       <div class="past-slider-wrap">
         <button class="past-slider-arrow past-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="אירועים קודמים">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         
         <div class="past-slider-track" id="pastSliderTrack">
-          <!-- Slide 1 -->
-          <article class="past-slide-card js-open-archive" data-index="0">
+          <!-- 25.08.2026 - Vinyl Night. Act names, hour and free entry are all off our own poster. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
+              <img src="images/events/vinyl-night-brazilian.jpg" alt="כרזת Vinyl Night עם Ofekniv & Shovav בעזרא" loading="lazy" />
               <span class="past-slide-card__tag">ערב תקליטים</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">14.08.2026</div>
-              <h4 class="past-slide-card__title">Rare Disco & Funk Night</h4>
-              <p class="past-slide-card__desc">סט משלושה תקליטנים על ויניל בלבד, דיסקו ופאנק מקוריים לצד סאוורים מיוחדים.</p>
+              <div class="past-slide-card__date">25.08.2026</div>
+              <h4 class="past-slide-card__title">Vinyl Night · Ofekniv &amp; Shovav</h4>
+              <p class="past-slide-card__desc">שני ארגזים של סלקשן ברזילאי, פאנקי, ברייקי ופסיכדלי - הכל על ויניל, בכניסה חופשית.</p>
             </div>
           </article>
 
-          <!-- Slide 2 -->
-          <article class="past-slide-card js-open-archive" data-index="1">
+          <!-- 19.08.2026 - the first record night. Photo from the evening itself. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-              <span class="past-slide-card__tag">פופ-אפ שף</span>
+              <img src="images/events/reggae-record-night.jpg" alt="תקליטן משמיע ויניל בערב התקליטים הראשון בעזרא" loading="lazy" />
+              <span class="past-slide-card__tag">ערב תקליטים</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">07.08.2026</div>
-              <h4 class="past-slide-card__title">Napoli in Florentin</h4>
-              <p class="past-slide-card__desc">פיצות שף פריכות מהטאבון, בצק מחמצת שתסס 48 שעות ובירה קרה מהחבית.</p>
+              <div class="past-slide-card__date">19.08.2026</div>
+              <h4 class="past-slide-card__title">ערב התקליטים הראשון · רגאיי</h4>
+              <p class="past-slide-card__desc">ערב התקליטים הראשון שעשינו בעזרא. חברים שלנו הביאו סלקשן רגאיי והשמיעו אותו מהתחלה ועד הסוף.</p>
             </div>
           </article>
 
-          <!-- Slide 3 -->
-          <article class="past-slide-card js-open-archive" data-index="2">
+          <!-- 11.08.2026 - Liav Bilya. liavbilya.com is the artist's own site. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-              <span class="past-slide-card__tag">ערב בר ומיקסולוגיה</span>
+              <img src="images/events/liav-bilya.jpg" alt="עטיפת ליאב ביליה - הכל בלא גמור" loading="lazy" />
+              <span class="past-slide-card__tag">הופעה חיה</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">30.07.2026</div>
-              <h4 class="past-slide-card__title">Cocktails & Soul</h4>
-              <p class="past-slide-card__desc">השקת תפריט קוקטיילים עונתי, טעימות מודרכות ומוזיקת סול על פטיפון.</p>
+              <div class="past-slide-card__date">11.08.2026</div>
+              <h4 class="past-slide-card__title">ליאב ביליה</h4>
+              <p class="past-slide-card__desc">הופעה חיה של ליאב ביליה בחלל של עזרא.</p>
+              <a class="past-slide-card__link" href="https://liavbilya.com" target="_blank" rel="noopener">liavbilya.com</a>
             </div>
           </article>
 
-          <!-- Slide 4 -->
-          <article class="past-slide-card js-open-archive" data-index="3">
+          <!-- 09.08.2026 - Lenge Lenge. Door time is off our own poster. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-              <span class="past-slide-card__tag">השמעת אלבום</span>
+              <img src="images/events/lenge-lenge.jpg" alt="כרזת ההופעה של Lenge Lenge בעזרא" loading="lazy" />
+              <span class="past-slide-card__tag">הופעה חיה</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">21.07.2026</div>
-              <h4 class="past-slide-card__title">Indie Premiere Session</h4>
-              <p class="past-slide-card__desc">השמעה מוקדמת של אלבום אינדי לפני היציאה, בליווי שיחה אינטימית עם היוצרים.</p>
+              <div class="past-slide-card__date">09.08.2026</div>
+              <h4 class="past-slide-card__title">Lenge Lenge</h4>
+              <p class="past-slide-card__desc">ההופעה השנייה של להקת אנדרגראונד תל אביבית חדשה, אחרי הבכורה בשוק הפשפשים. דלתות ב-20:00.</p>
             </div>
           </article>
-
-          <!-- Slide 5 -->
-          <article class="past-slide-card js-open-archive" data-index="4">
-            <div class="past-slide-card__img">
-              <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
-              <span class="past-slide-card__tag">מוזיקה חיה</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">12.07.2026</div>
-              <h4 class="past-slide-card__title">Acoustic Speakeasy Jam</h4>
-              <p class="past-slide-card__desc">טריו ג'אז וסשן אקוסטי חי לאור נרות, עם אירוח אמנים בהפתעה.</p>
-            </div>
-          </article>
-
-          <!-- Slide 6: Dedicated 'לחצו לעוד' Card -->
-          <div class="past-slide-card past-slide-card--more js-open-archive" data-index="all" role="button" tabindex="0">
-            <div class="past-slide-card__more-content">
-              <div class="past-slide-card__more-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              </div>
-              <h4 class="past-slide-card__more-title">לכל אירועי העבר</h4>
-              <p class="past-slide-card__more-sub">לחצו לפתיחת גלריית האירועים והכרזות המלאה של עזרא</p>
-              <span class="past-slide-card__more-btn">
-                <span>צפייה בגלריה המלאה</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-              </span>
-            </div>
-          </div>
         </div>
 
         <button class="past-slider-arrow past-slider-arrow--next" id="pastSliderNext" type="button" aria-label="אירועים הבאים">
@@ -7211,86 +7048,6 @@
             <span>המשך שיחה בוואטסאפ</span>
           </a>
           <button class="btn btn--outline" id="cfDoneClose" type="button">סגירה</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       8C. PAST EVENTS FULL GALLERY MODAL (גלריית אירועי עבר)
-  ============================================================ -->
-  <div class="modal-scrim" id="archiveGalleryModal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="archive-gallery-box">
-      <button class="modal-close" id="archiveGalleryClose" type="button" aria-label="סגירת גלריה"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
-      <div class="archive-gallery-head">
-        <span class="eyebrow">ארכיון עזרא</span>
-        <h3 class="archive-gallery-title">גלריית אירועים והפקות עבר</h3>
-        <p class="archive-gallery-desc">הצצה לערבים, הופעות, סטים והפקות קולינריות שהתקיימו בחלל של עזרא בפלורנטין.</p>
-      </div>
-      <div class="archive-gallery-grid">
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">14.08.2026</span>
-            <h4>Rare Disco & Funk Night</h4>
-            <p>ערב תקליטים · דיסקו ופאנק</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">07.08.2026</span>
-            <h4>Napoli in Florentin</h4>
-            <p>פופ-אפ שף · פיצות טאבון</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">30.07.2026</span>
-            <h4>Cocktails & Soul</h4>
-            <p>סלון מיקסולוגיה · מוזיקת סול</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">21.07.2026</span>
-            <h4>Indie Premiere Session</h4>
-            <p>השמעת אלבום ויניל ושיחה</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">12.07.2026</span>
-            <h4>Acoustic Speakeasy Jam</h4>
-            <p>טריו ג'אז וסשן אקוסטי חי</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g02.jpg" alt="ערב יין וגבינות" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">04.07.2026</span>
-            <h4>ערב יין בוטיק</h4>
-            <p>יין משובח וגבינות מיוחדות</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g03.jpg" alt="שירה מדוברת וביטים" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">26.06.2026</span>
-            <h4>שירה מדוברת וביטים</h4>
-            <p>מיקרופון פתוח וספוקן וורד</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/BAR.jpg" alt="מפגש אספני תקליטים" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">18.06.2026</span>
-            <h4>מפגש אספני תקליטים</h4>
-            <p>החלפות ויניל וסטים נדירים</p>
-          </div>
         </div>
       </div>
     </div>
@@ -9385,8 +9142,6 @@
       const pastTrack = document.getElementById('pastSliderTrack');
       const pastPrev = document.getElementById('pastSliderPrev');
       const pastNext = document.getElementById('pastSliderNext');
-      const archiveModal = document.getElementById('archiveGalleryModal');
-      const archiveClose = document.getElementById('archiveGalleryClose');
 
       if (pastTrack && pastPrev) {
         pastPrev.addEventListener('click', () => {
@@ -9402,31 +9157,6 @@
         });
       }
 
-      document.querySelectorAll('.js-open-archive').forEach(el => {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (archiveModal) {
-            archiveModal.classList.add('is-open');
-            archiveModal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('modal-open');
-          }
-        });
-      });
-
-      if (archiveClose && archiveModal) {
-        archiveClose.addEventListener('click', () => {
-          archiveModal.classList.remove('is-open');
-          archiveModal.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('modal-open');
-        });
-        archiveModal.addEventListener('click', (e) => {
-          if (e.target === archiveModal) {
-            archiveModal.classList.remove('is-open');
-            archiveModal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('modal-open');
-          }
-        });
-      }
     })();
 
   </script>

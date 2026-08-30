@@ -2318,161 +2318,19 @@
       margin-block-start: 0.15rem;
     }
 
-    /* 6th Card: "Click for More" / Explore Past Archive */
-    .past-slide-card--more {
-      background: linear-gradient(145deg, #1a140d 0%, #120d08 100%);
-      border: 1.5px dashed rgba(196, 154, 60, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 280px;
-    }
-    .past-slide-card--more:hover {
-      border-style: solid;
-      border-color: var(--gold-light);
-      background: linear-gradient(145deg, #241b10 0%, #17110a 100%);
-    }
-    .past-slide-card__more-inner {
-      padding: 1.8rem 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.65rem;
-    }
-    .past-more-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: rgba(196, 154, 60, 0.12);
-      border: 1px solid var(--gold);
-      color: var(--gold-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-block-end: 0.3rem;
-      transition: transform 0.3s var(--ease), background 0.3s var(--ease);
-    }
-    .past-slide-card--more:hover .past-more-icon {
-      transform: scale(1.1) rotate(6deg);
-      background: var(--gold);
-      color: #110e0a;
-    }
-    .past-more-icon svg { width: 24px; height: 24px; }
-    .past-more-badge {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .past-more-title {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--cream);
-    }
-    .past-more-desc {
-      font-size: 0.82rem;
-      color: var(--cream-dim);
-      line-height: 1.45;
-      max-width: 220px;
-    }
-    .past-more-btn {
+    /* The artist's own site, on a card that names an act. Sits under the description rather
+       than wrapping the card: only some evenings have a link, and a card that is a link on
+       one slide and inert on the next reads as broken. */
+    .past-slide-card__link {
+      display: inline-block;
       margin-block-start: 0.5rem;
-      pointer-events: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      border-block-end: 1px solid rgba(196, 154, 60, 0.45);
+      transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
     }
-
-    /* Archive Gallery Modal */
-    .archive-gallery-box {
-      width: min(94vw, 980px);
-      max-height: 90vh;
-      overflow-y: auto;
-      background: #14100b;
-      border: 1px solid var(--line-bright);
-      border-radius: 24px;
-      padding: clamp(1.4rem, 3vw, 2.2rem);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
-      position: relative;
-    }
-    .archive-gallery-head {
-      margin-block-end: 1.5rem;
-      padding-block-end: 1rem;
-      border-block-end: 1px solid var(--line);
-      text-align: start;
-    }
-    .archive-gallery-title {
-      font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-      font-weight: 800;
-      color: var(--cream);
-      margin-block: 0.2rem 0.4rem;
-    }
-    .archive-gallery-desc {
-      font-size: 0.88rem;
-      color: var(--cream-dim);
-    }
-    .archive-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .archive-gallery-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 4 / 3;
-      border: 1px solid var(--line);
-      background: #1a140d;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
-    }
-    .archive-gallery-item:hover {
-      transform: translateY(-3px) scale(1.02);
-      border-color: var(--gold);
-    }
-    .archive-gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s var(--ease);
-    }
-    .archive-gallery-item:hover img {
-      transform: scale(1.08);
-    }
-    .archive-gallery-overlay {
-      position: absolute;
-      inset-inline: 0;
-      bottom: 0;
-      padding: 0.6rem 0.75rem;
-      background: linear-gradient(0deg, rgba(14,10,7,0.95) 0%, rgba(14,10,7,0.7) 60%, transparent 100%);
-      color: var(--cream);
-      text-align: start;
-    }
-    .archive-gallery-tag {
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-      margin-block-end: 0.15rem;
-    }
-    .archive-gallery-overlay h4 {
-      font-size: 0.84rem;
-      font-weight: 700;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 0;
-      color: var(--cream);
-    }
-    .archive-gallery-overlay p {
-      font-size: 0.72rem;
-      color: var(--cream-dim);
-      margin: 0.1rem 0 0 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .past-slide-card__link:hover { color: var(--cream); border-block-end-color: var(--gold); }
 
     /* ============================================================
        5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE (SPACED & CUTE)
@@ -6000,95 +5858,71 @@
       <div class="sec-head center">
         <span class="eyebrow">Past Flyers & Memories</span>
         <h2>Events Archive</h2>
-        <p>A glimpse into past vinyl nights, chef takeovers and gatherings at Ezra.</p>
+        <p>The public evenings we have already held at Ezra - who played and what it was.</p>
       </div>
 
-      <!-- Past Events Horizontal Slider (5 authentic event cards + 6th 'Click for More' card) -->
+      <!-- Past Events Horizontal Slider. Four real evenings, newest first. Every fact here comes
+           from the evening itself or from the poster we published for it - act, date, door time,
+           entry. Nothing is inferred: no guest counts, no menu, no atmosphere we did not have a
+           source for. An evening with no photo and no poster does not go in. -->
       <div class="past-slider-wrap">
         <button class="sched-slider-arrow sched-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="Previous events">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         
         <div class="past-slider-track" id="pastSliderTrack">
-          <!-- Slide 1 -->
-          <article class="past-slide-card js-open-archive" data-index="0">
+          <!-- 25.08.2026 - Vinyl Night. Act names, hour and free entry are all off our own poster. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
+              <img src="images/events/vinyl-night-brazilian.jpg" alt="Vinyl Night poster with Ofekniv &amp; Shovav at Ezra" loading="lazy" />
               <span class="past-slide-card__tag">Vinyl Night</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">14.08.2026</div>
-              <h4 class="past-slide-card__title">Rare Disco & Funk Night</h4>
-              <p class="past-slide-card__desc">A 3-DJ set on vinyl only, original disco and funk pressings paired with signature sours.</p>
+              <div class="past-slide-card__date">25.08.2026</div>
+              <h4 class="past-slide-card__title">Vinyl Night · Ofekniv &amp; Shovav</h4>
+              <p class="past-slide-card__desc">Two crates of Brazilian, funky, breaky and psychedelic selection - all on vinyl, free entry.</p>
             </div>
           </article>
 
-          <!-- Slide 2 -->
-          <article class="past-slide-card js-open-archive" data-index="1">
+          <!-- 19.08.2026 - the first record night. Photo from the evening itself. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-              <span class="past-slide-card__tag">Chef Pop-up</span>
+              <img src="images/events/reggae-record-night.jpg" alt="A DJ playing vinyl at Ezra's first record night" loading="lazy" />
+              <span class="past-slide-card__tag">Vinyl Night</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">07.08.2026</div>
-              <h4 class="past-slide-card__title">Napoli in Florentin</h4>
-              <p class="past-slide-card__desc">Crispy wood-fired sourdough pizzas fermented for 48 hours and cold craft beer on tap.</p>
+              <div class="past-slide-card__date">19.08.2026</div>
+              <h4 class="past-slide-card__title">Our First Record Night · Reggae</h4>
+              <p class="past-slide-card__desc">The first record night we held at Ezra. Friends of ours brought a reggae selection and played it end to end.</p>
             </div>
           </article>
 
-          <!-- Slide 3 -->
-          <article class="past-slide-card js-open-archive" data-index="2">
+          <!-- 11.08.2026 - Liav Bilya. liavbilya.com is the artist's own site. -->
+          <article class="past-slide-card">
             <div class="past-slide-card__img">
-              <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-              <span class="past-slide-card__tag">Mixology Night</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">30.07.2026</div>
-              <h4 class="past-slide-card__title">Cocktails & Soul</h4>
-              <p class="past-slide-card__desc">Seasonal craft cocktail launch, guided spirit tastings and analog soul on turntable.</p>
-            </div>
-          </article>
-
-          <!-- Slide 4 -->
-          <article class="past-slide-card js-open-archive" data-index="3">
-            <div class="past-slide-card__img">
-              <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-              <span class="past-slide-card__tag">Album Premiere</span>
-            </div>
-            <div class="past-slide-card__body">
-              <div class="past-slide-card__date">21.07.2026</div>
-              <h4 class="past-slide-card__title">Indie Premiere Session</h4>
-              <p class="past-slide-card__desc">Exclusive pre-release vinyl listening of a new indie album, followed by an intimate Q&A.</p>
-            </div>
-          </article>
-
-          <!-- Slide 5 -->
-          <article class="past-slide-card js-open-archive" data-index="4">
-            <div class="past-slide-card__img">
-              <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
+              <img src="images/events/liav-bilya.jpg" alt="Liav Bilya cover artwork" loading="lazy" />
               <span class="past-slide-card__tag">Live Music</span>
             </div>
             <div class="past-slide-card__body">
-              <div class="past-slide-card__date">12.07.2026</div>
-              <h4 class="past-slide-card__title">Acoustic Speakeasy Jam</h4>
-              <p class="past-slide-card__desc">Candlelit jazz trio and live acoustic jam session with surprise guest appearances.</p>
+              <div class="past-slide-card__date">11.08.2026</div>
+              <h4 class="past-slide-card__title">Liav Bilya</h4>
+              <p class="past-slide-card__desc">A live show by Liav Bilya in the Ezra space.</p>
+              <a class="past-slide-card__link" href="https://liavbilya.com" target="_blank" rel="noopener">liavbilya.com</a>
             </div>
           </article>
 
-          <!-- Slide 6: Dedicated 'Click for More' Card -->
-          <div class="past-slide-card past-slide-card--more js-open-archive" data-index="all" role="button" tabindex="0">
-            <div class="past-slide-card__more-content">
-              <div class="past-slide-card__more-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              </div>
-              <h4 class="past-slide-card__more-title">All Past Events</h4>
-              <p class="past-slide-card__more-sub">Click to open Ezra's complete photo and flyer archive</p>
-              <span class="past-slide-card__more-btn">
-                <span>View Full Gallery</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-              </span>
+          <!-- 09.08.2026 - Lenge Lenge. Door time is off our own poster. -->
+          <article class="past-slide-card">
+            <div class="past-slide-card__img">
+              <img src="images/events/lenge-lenge.jpg" alt="Lenge Lenge show poster at Ezra" loading="lazy" />
+              <span class="past-slide-card__tag">Live Music</span>
             </div>
-          </div>
+            <div class="past-slide-card__body">
+              <div class="past-slide-card__date">09.08.2026</div>
+              <h4 class="past-slide-card__title">Lenge Lenge</h4>
+              <p class="past-slide-card__desc">The second show by a new Tel Aviv underground band, after their debut at the Jaffa flea market. Doors at 20:00.</p>
+            </div>
+          </article>
         </div>
 
         <button class="sched-slider-arrow sched-slider-arrow--next" id="pastSliderNext" type="button" aria-label="Next events">
@@ -7120,84 +6954,6 @@
             <span>Continue on WhatsApp</span>
           </a>
           <button class="btn btn--outline" id="cfDoneClose" type="button">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 8C. PAST EVENTS FULL GALLERY MODAL (ARCHIVE) -->
-  <div class="modal-scrim" id="archiveGalleryModal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="archive-gallery-box">
-      <button class="modal-close" id="archiveGalleryClose" type="button" aria-label="Close gallery"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
-      <div class="archive-gallery-head">
-        <span class="eyebrow">Ezra Archive</span>
-        <h3 class="archive-gallery-title">Past Events & Productions Gallery</h3>
-        <p class="archive-gallery-desc">A curated look at past vinyl nights, live performances, DJ sets and culinary pop-ups held at Ezra in Florentin.</p>
-      </div>
-      <div class="archive-gallery-grid">
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g01.jpg" alt="Rare Disco & Funk Night" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">14.08.2026</span>
-            <h4>Rare Disco & Funk Night</h4>
-            <p>Vinyl Night · Disco & Funk</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/FOOD CLOSE UP.jpg" alt="Napoli in Florentin" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">07.08.2026</span>
-            <h4>Napoli in Florentin</h4>
-            <p>Chef Pop-up · Wood-Fired Pizza</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MAKING COCKTAILS.jpg" alt="Cocktails & Soul" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">30.07.2026</span>
-            <h4>Cocktails & Soul</h4>
-            <p>Mixology Lounge · Soul Music</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/MOMENT 2.jpg" alt="Indie Premiere Session" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">21.07.2026</span>
-            <h4>Indie Premiere Session</h4>
-            <p>Vinyl Album Premiere & Q&A</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g04.jpg" alt="Acoustic Speakeasy Jam" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">12.07.2026</span>
-            <h4>Acoustic Speakeasy Jam</h4>
-            <p>Jazz Trio & Live Acoustic Jam</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g02.jpg" alt="Natural Wine Salon" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">04.07.2026</span>
-            <h4>Natural Wine Salon</h4>
-            <p>Natural Wine & Boutique Cheeses</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/gallery/g03.jpg" alt="Poetry & Beats" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">26.06.2026</span>
-            <h4>Poetry & Beats</h4>
-            <p>Open Mic & Spoken Word</p>
-          </div>
-        </div>
-        <div class="archive-gallery-item">
-          <img src="images/BAR.jpg" alt="Vinyl Collectors Meet" loading="lazy" />
-          <div class="archive-gallery-overlay">
-            <span class="archive-gallery-tag">18.06.2026</span>
-            <h4>Vinyl Collectors Meet</h4>
-            <p>Vinyl Swap & Resident DJs</p>
-          </div>
         </div>
       </div>
     </div>
@@ -8876,8 +8632,6 @@
       const pastTrack = document.getElementById('pastSliderTrack');
       const pastPrev = document.getElementById('pastSliderPrev');
       const pastNext = document.getElementById('pastSliderNext');
-      const archiveModal = document.getElementById('archiveGalleryModal');
-      const archiveClose = document.getElementById('archiveGalleryClose');
 
       if (pastTrack && pastPrev) {
         pastPrev.addEventListener('click', () => {
@@ -8893,31 +8647,6 @@
         });
       }
 
-      document.querySelectorAll('.js-open-archive').forEach(el => {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (archiveModal) {
-            archiveModal.classList.add('is-open');
-            archiveModal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('modal-open');
-          }
-        });
-      });
-
-      if (archiveClose && archiveModal) {
-        archiveClose.addEventListener('click', () => {
-          archiveModal.classList.remove('is-open');
-          archiveModal.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('modal-open');
-        });
-        archiveModal.addEventListener('click', (e) => {
-          if (e.target === archiveModal) {
-            archiveModal.classList.remove('is-open');
-            archiveModal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('modal-open');
-          }
-        });
-      }
     })();
 
     // Format Cards Mobile Slider sync
