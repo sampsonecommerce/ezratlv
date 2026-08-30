@@ -2318,20 +2318,6 @@
       margin-block-start: 0.15rem;
     }
 
-    /* The artist's own site, on a card that names an act. Sits under the description rather
-       than wrapping the card: only some evenings have a link, and a card that is a link on
-       one slide and inert on the next reads as broken. */
-    .past-slide-card__link {
-      display: inline-block;
-      margin-block-start: 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      border-block-end: 1px solid rgba(196, 154, 60, 0.45);
-      transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
-    }
-    .past-slide-card__link:hover { color: var(--cream); border-block-end-color: var(--gold); }
-
     /* ============================================================
        5B. ARCHIVE DANCING CROWD & DISCO GROOVE STAGE (SPACED & CUTE)
     ============================================================ */
@@ -4047,6 +4033,19 @@
       margin-block-end: 0.3rem;
     }
     .modal-body .teder-lineup { margin-block-end: 0.8rem; }
+    .modal-artist-link {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      margin-block-end: 1.3rem;
+    }
+    /* An author `display: flex` beats the browser's own [hidden] rule, so setting .hidden = true
+       in JS would leave these on screen - an empty artist button under an evening that has no
+       link. Say it explicitly for every flex box that toggles. */
+    .modal-artist-link[hidden], .teder-lineup[hidden] { display: none; }
+    .rsvp-note {
+      font-size: 0.86rem;
+      color: var(--cream-dim);
+      line-height: 1.55;
+    }
     .modal-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-block-end: 1.2rem; }
     .modal-desc { font-size: 0.92rem; color: var(--cream-dim); line-height: 1.7; margin-block-end: 1.6rem; }
 
@@ -5872,7 +5871,9 @@
         
         <div class="past-slider-track" id="pastSliderTrack">
           <!-- 25.08.2026 - Vinyl Night. Act names, hour and free entry are all off our own poster. -->
-          <article class="past-slide-card">
+          <article class="past-slide-card js-open-past" role="button" tabindex="0"
+            aria-label="Event details: Vinyl Night · Ofekniv &amp; Shovav"
+            data-badge-class="sticker--vinyl">
             <div class="past-slide-card__img">
               <img src="images/events/vinyl-night-brazilian.jpg" alt="Vinyl Night poster with Ofekniv &amp; Shovav at Ezra" loading="lazy" />
               <span class="past-slide-card__tag">Vinyl Night</span>
@@ -5885,7 +5886,9 @@
           </article>
 
           <!-- 19.08.2026 - the first record night. Photo from the evening itself. -->
-          <article class="past-slide-card">
+          <article class="past-slide-card js-open-past" role="button" tabindex="0"
+            aria-label="Event details: Our First Record Night · Reggae"
+            data-badge-class="sticker--vinyl">
             <div class="past-slide-card__img">
               <img src="images/events/reggae-record-night.jpg" alt="A DJ playing vinyl at Ezra's first record night" loading="lazy" />
               <span class="past-slide-card__tag">Vinyl Night</span>
@@ -5898,7 +5901,10 @@
           </article>
 
           <!-- 11.08.2026 - Liav Bilya. liavbilya.com is the artist's own site. -->
-          <article class="past-slide-card">
+          <article class="past-slide-card js-open-past" role="button" tabindex="0"
+            aria-label="Event details: Liav Bilya"
+            data-badge-class="sticker--live"
+            data-link="https://liavbilya.com" data-link-text="liavbilya.com">
             <div class="past-slide-card__img">
               <img src="images/events/liav-bilya.jpg" alt="Liav Bilya cover artwork" loading="lazy" />
               <span class="past-slide-card__tag">Live Music</span>
@@ -5907,12 +5913,13 @@
               <div class="past-slide-card__date">11.08.2026</div>
               <h4 class="past-slide-card__title">Liav Bilya</h4>
               <p class="past-slide-card__desc">A live show by Liav Bilya in the Ezra space.</p>
-              <a class="past-slide-card__link" href="https://liavbilya.com" target="_blank" rel="noopener">liavbilya.com</a>
             </div>
           </article>
 
           <!-- 09.08.2026 - Lenge Lenge. Door time is off our own poster. -->
-          <article class="past-slide-card">
+          <article class="past-slide-card js-open-past" role="button" tabindex="0"
+            aria-label="Event details: Lenge Lenge"
+            data-badge-class="sticker--live">
             <div class="past-slide-card__img">
               <img src="images/events/lenge-lenge.jpg" alt="Lenge Lenge show poster at Ezra" loading="lazy" />
               <span class="past-slide-card__tag">Live Music</span>
@@ -6800,6 +6807,15 @@
           <h3 id="modalTitle">Event Title</h3>
           <p class="teder-lineup" id="modalLineup">Lineup & Artists</p>
           <p class="modal-desc" id="modalDesc">Description...</p>
+
+          <!-- The artist's own page, carried on the archive card that names them. -->
+          <a class="btn btn--outline btn--sm modal-artist-link" id="modalArtistLink" hidden target="_blank" rel="noopener">
+            <span id="modalArtistLinkText">Website</span>
+          </a>
+
+          <!-- Shown only for an evening that has already happened, so the modal never reads as
+               an invitation to something that is over. -->
+          <p class="rsvp-note" id="modalPastNote" hidden style="margin-block-start: 1rem;">This evening has already taken place.</p>
 
           <div class="rsvp-form" id="modalRsvp">
             <h4 id="rsvpTitle">Quick Table Reservation</h4>
@@ -7749,60 +7765,50 @@
       const rsvpForm = document.getElementById('rsvpFormEl');
       const modalRsvp = document.getElementById('modalRsvp');
       const modalPrivateBox = document.getElementById('modalPrivateBox');
+      const artistLink = document.getElementById('modalArtistLink');
+      const artistText = document.getElementById('modalArtistLinkText');
+      const pastNote = document.getElementById('modalPastNote');
       const toast = document.getElementById('toast');
-
-      const staticEvents = {
-        '1': {
-          title: 'Groove & Grapes · Rare Funk & Soul Vinyl Session',
-          lineup: 'On the decks: DJ Amir Peled & Special Guests',
-          desc: 'An analog vinyl journey through original 70s-80s soul, rare groove and afro-funk, paired with natural wines and hot sourdough dishes from the wood oven.',
-          img: 'images/Still 2025-04-02 154845_1.82.3 copy.jpg',
-          badge: 'Free Entry',
-          badgeClass: 'sticker--free',
-          fullDateString: 'Thu 20.08 · 21:00'
-        },
-        '2': {
-          title: 'Fire & Dough · Guest Chef Wood-Oven Pop-Up',
-          lineup: 'Guest Chef: Itay Lev (ex-Pera / HaBasta) & Tailored Cocktails',
-          desc: 'A one-night special menu: warm fermented sourdough with whipped spiced butters, crudo fish, ember-charred seasonal vegetables and botanical cocktails. Limited to 45 guests.',
-          img: 'images/FOOD ENVIRONMENT.jpg',
-          badge: 'RSVP Required',
-          badgeClass: 'sticker--rsvp',
-          fullDateString: 'Mon 24.08 · 19:30 / 22:00'
-        },
-        '3': {
-          title: 'Night Sessions · Exclusive Album Pre-Release',
-          lineup: 'Deep listening on Ezra\'s custom analog system + Artist Q&A',
-          desc: 'An intimate listening experience in high-fidelity analog sound with dimmed lights and signature drinks, followed by an open Q&A with the creators.',
-          img: 'images/Still 2025-04-02 154608_1.80.1 copy.jpg',
-          badge: 'Free Entry',
-          badgeClass: 'sticker--free',
-          fullDateString: 'Wed 26.08 · 20:30'
-        },
-        '4': {
-          title: 'Florentin Jazz Hang · Live Trio at the Bar',
-          lineup: 'Piano, Double Bass & Drums · Intimate Improvisation Session',
-          desc: 'Warm acoustic jazz, rhythmic improvisation and a relaxed speakeasy vibe alongside classic cocktails.',
-          img: 'images/MOMENT 1.jpg',
-          badge: 'RSVP Recommended',
-          badgeClass: 'sticker--rsvp',
-          fullDateString: 'Sat 29.08 · 21:00'
-        }
-      };
 
       openEventModal = function(data) {
         if (!modal) return;
-        const ev = (typeof data === 'string') ? (staticEvents[data] || staticEvents['1']) : data;
+        // Objects only. This used to accept a string id into a table of four invented evenings -
+        // one of them naming a chef and the two restaurants he had supposedly left - reachable
+        // through a `.js-modal-open` selector that matched nothing in the markup.
+        if (!data || typeof data !== 'object') return;
+        const ev = data;
+
+        // A past evening wants the photo, the copy and the artist's own link, and none of the
+        // RSVP machinery: there is nothing left to reserve.
+        const isPast = !!ev.isPast;
 
         modalImg.src = ev.img;
         modalTitle.textContent = ev.title;
-        modalLineup.textContent = ev.lineup;
+        // A past card has no separate lineup line; an empty <p> would still hold its margin.
+        modalLineup.textContent = ev.lineup || '';
+        modalLineup.hidden = !ev.lineup;
         modalDesc.textContent = ev.desc;
         modalBadge.textContent = ev.badge;
         modalBadge.className = `sticker ${ev.badgeClass}`;
         modalDateTag.textContent = ev.fullDateString || ev.date || '';
 
-        if (ev.isClosedEvening) {
+        if (artistLink) {
+          if (isPast && ev.link) {
+            artistLink.href = ev.link;
+            artistText.textContent = ev.linkText || "The artist's site";
+            artistLink.hidden = false;
+          } else {
+            artistLink.hidden = true;
+            artistLink.removeAttribute('href');
+          }
+        }
+
+        if (pastNote) pastNote.hidden = !isPast;
+
+        if (isPast) {
+          if (modalRsvp) modalRsvp.style.display = 'none';
+          if (modalPrivateBox) modalPrivateBox.style.display = 'none';
+        } else if (ev.isClosedEvening) {
           if (modalRsvp) modalRsvp.style.display = 'none';
           if (modalPrivateBox) modalPrivateBox.style.display = 'block';
         } else {
@@ -7819,13 +7825,6 @@
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
       }
-
-      document.querySelectorAll('.js-modal-open').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-event');
-          openEventModal(id);
-        });
-      });
 
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
@@ -8626,7 +8625,7 @@
     })();
 
     // ============================================================
-    // PAST EVENTS HORIZONTAL SLIDER & GALLERY MODAL
+    // PAST EVENTS HORIZONTAL SLIDER
     // ============================================================
     (function(){
       const pastTrack = document.getElementById('pastSliderTrack');
@@ -8646,6 +8645,32 @@
           pastTrack.scrollBy({ left: (cardW + 18), behavior: 'smooth' });
         });
       }
+
+      // A past card opens the same modal a published evening does. The card's own markup is the
+      // only source: there is no parallel table of past events to drift out of step with what the
+      // page shows, which is how the invented archive survived here for as long as it did.
+      const text = (card, sel) => card.querySelector(sel)?.textContent.trim() || '';
+      document.querySelectorAll('.js-open-past').forEach((card) => {
+        const open = () => {
+          if (typeof openEventModal !== 'function') return;
+          const img = card.querySelector('img');
+          openEventModal({
+            isPast: true,
+            img: img ? img.getAttribute('src') : '',
+            title: text(card, '.past-slide-card__title'),
+            desc: text(card, '.past-slide-card__desc'),
+            badge: text(card, '.past-slide-card__tag'),
+            badgeClass: card.dataset.badgeClass || 'sticker--vinyl',
+            fullDateString: text(card, '.past-slide-card__date'),
+            link: card.dataset.link || '',
+            linkText: card.dataset.linkText || '',
+          });
+        };
+        card.addEventListener('click', open);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+        });
+      });
 
     })();
 
