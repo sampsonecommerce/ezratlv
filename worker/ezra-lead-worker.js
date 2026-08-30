@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-30d";
+const BUILD_ID = "2026-08-30e";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1307,6 +1307,105 @@ async function fetchPublicEvents(TOKEN) {
   return events;
 }
 
+// The new home of upcoming-event content: the Open Events Schedule + Archive board.
+// A Closed Deal lands there, the content manager fills the public fields, and moving
+// the item to פורסם - אירועים קרובים with status פורסם באתר is what publishes it.
+// Same entry shape as fetchPublicEvents so the page cannot tell the sources apart;
+// the one difference is images - board file uploads served through ?eventImage=
+// instead of repo paths, so publishing an evening needs no commit.
+// The old Public * columns on Open Events still work (merged in the caller, this
+// board winning date+title collisions) until that layer is retired.
+const UPCOMING_GROUP_ID = "group_mm6qsztz"; // פורסם - אירועים קרובים
+const SCHED_UPCOMING_COL = {
+  date: "date_mm6qf10d",
+  startTime: "hour_mm6qkm9x",
+  endTime: "hour_mm6q583v",
+  desc: "long_text_mm6qtxhj",
+  subtitle: "text_mm6qvd9f",
+  entry: "color_mm6qe0mt",
+  rounds: "text_mm6qxv2z",
+  instagram: "link_mm6qx5r9",
+  artistLink: "link_mm6q76f3",
+  publish: "color_mm6q8g2v",
+};
+async function fetchScheduleUpcoming(TOKEN) {
+  const query = `query ($boardId: [ID!]) {
+    boards(ids: $boardId) {
+      items_page(limit: 100) {
+        items {
+          id
+          name
+          group { id }
+          column_values(ids: ${JSON.stringify(Object.values(SCHED_UPCOMING_COL))}) {
+            id
+            text
+            value
+            ... on DateValue { date }
+          }
+          assets { id }
+        }
+      }
+    }
+  }`;
+  try {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", Authorization: TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query, variables: { boardId: ["5103189386"] } }),
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    if (data.errors) {
+      console.error("schedule upcoming read errors:", JSON.stringify(data.errors).slice(0, 300));
+      return null;
+    }
+    const items = data?.data?.boards?.[0]?.items_page?.items || [];
+    const events = [];
+    for (const it of items) {
+      if (it.group?.id !== UPCOMING_GROUP_ID) continue;
+      const cv = {};
+      (it.column_values || []).forEach((c) => { cv[c.id] = c; });
+      if (cv[SCHED_UPCOMING_COL.publish]?.text !== "פורסם באתר") continue;
+      const date = (cv[SCHED_UPCOMING_COL.date]?.date || cv[SCHED_UPCOMING_COL.date]?.text || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue; // an event with no date has nowhere to appear
+
+      const txt = (id) => (cv[id]?.text || "").trim();
+      const start = parseHourText(cv[SCHED_UPCOMING_COL.startTime]?.text) || "";
+      const end   = parseHourText(cv[SCHED_UPCOMING_COL.endTime]?.text) || "";
+      const rounds = txt(SCHED_UPCOMING_COL.rounds).split(",").map((s) => s.trim()).filter((s) => /^\d{1,2}:\d{2}$/.test(s));
+      const images = (it.assets || []).map((a) => `https://ezra-lead.yeheli.workers.dev/?eventImage=${a.id}`);
+      // Link priority: the artist's own page, else the Instagram post. https only - same
+      // rule as the legacy columns, a board must not hand visitors javascript:/http: hrefs.
+      let link = "", linkText = "";
+      for (const colId of [SCHED_UPCOMING_COL.artistLink, SCHED_UPCOMING_COL.instagram]) {
+        try {
+          const raw = JSON.parse(cv[colId]?.value || "{}");
+          if (/^https:\/\//i.test(raw.url || "")) { link = raw.url; linkText = String(raw.text || "").trim(); break; }
+        } catch { /* next */ }
+      }
+
+      events.push({
+        date,
+        title: it.name,
+        subtitle: txt(SCHED_UPCOMING_COL.subtitle),
+        desc: txt(SCHED_UPCOMING_COL.desc),
+        images,
+        link,
+        linkText,
+        entry: txt(SCHED_UPCOMING_COL.entry),
+        rounds,
+        doors: rounds[0] || start,
+        start,
+        end,
+      });
+    }
+    return events;
+  } catch (e) {
+    console.error("schedule upcoming read failed:", e);
+    return null;
+  }
+}
+
 // Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
 // doesn't exist on type 'y'") and carries no board content, so a trimmed version is
 // safe to return publicly. Anything that looks like an id, address or number is dropped
@@ -1446,7 +1545,15 @@ async function availability(request, env, cors) {
     // Published events ride the same response the calendar already fetches: one request, one
     // cache entry, and no window where the page knows a date is taken but not yet why. A failed
     // read is an empty list, never a thrown request - the calendar is the part that must not break.
-    const published = (await fetchPublicEvents(TOKEN)) || [];
+    // Upcoming events come from both sources during the transition: the schedule
+    // board (the new home) and the legacy Public * columns on Open Events. On a
+    // date+title collision the schedule board wins, so migrating an evening never
+    // shows it twice.
+    const scheduled = (await fetchScheduleUpcoming(TOKEN)) || [];
+    const legacy = (await fetchPublicEvents(TOKEN)) || [];
+    const schedKeys = new Set(scheduled.map((e) => `${e.date}|${e.title}`));
+    const published = [...scheduled, ...legacy.filter((e) => !schedKeys.has(`${e.date}|${e.title}`))];
+    published.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
     const body = missing ? { booked, busy, public: published, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, public: published, build: BUILD_ID };
     return new Response(JSON.stringify(body), {
       status: 200,
