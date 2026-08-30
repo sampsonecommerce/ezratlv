@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-30b";
+const BUILD_ID = "2026-08-30c";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1787,8 +1787,17 @@ async function pastEventsFeed(env, cors) {
     headers: { "content-type": "application/json", Authorization: TOKEN },
     body: JSON.stringify({ query, variables: { boardId: [SCHEDULE_BOARD] } }),
   });
-  if (!r.ok) return json({ he: [], en: [], degraded: true }, 200, cors);
+  if (!r.ok) return json({ he: [], en: [], degraded: true, where: "http", status: r.status, build: BUILD_ID }, 200, cors);
   const data = await r.json().catch(() => ({}));
+  // A GraphQL-level error leaves data.data empty, which without this check is
+  // indistinguishable from a genuinely empty archive - the failure mode that hid
+  // the first broken deploy of this feed. Error messages name board/column ids
+  // at worst, all of which are already public in the page source.
+  if (data?.errors?.length || data?.error_message) {
+    const reason = (data.errors || [{ message: data.error_message }]).map((e) => e.message).join("; ").slice(0, 300);
+    console.error("pastEventsFeed graphql error:", reason);
+    return json({ he: [], en: [], degraded: true, where: "graphql", reason, build: BUILD_ID }, 200, cors);
+  }
   const items = data?.data?.boards?.[0]?.items_page?.items || [];
 
   const linkUrl = (cv) => {
