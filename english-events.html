@@ -9215,27 +9215,32 @@
       // A past card opens the same modal a published evening does. The card's own markup is the
       // only source: there is no parallel table of past events to drift out of step with what the
       // page shows, which is how the invented archive survived here for as long as it did.
+      // Bound by delegation, not per card: past-events-archive.js may replace the hardcoded
+      // cards with the monday-fed archive after load, and replaced cards must still open.
       const text = (card, sel) => card.querySelector(sel)?.textContent.trim() || '';
-      document.querySelectorAll('.js-open-past').forEach((card) => {
-        const open = () => {
-          if (typeof openEventModal !== 'function') return;
-          const img = card.querySelector('img');
-          openEventModal({
-            isPast: true,
-            img: img ? img.getAttribute('src') : '',
-            title: text(card, '.past-slide-card__title'),
-            desc: text(card, '.past-slide-card__desc'),
-            badge: text(card, '.past-slide-card__tag'),
-            badgeClass: card.dataset.badgeClass || 'sticker--vinyl',
-            fullDateString: text(card, '.past-slide-card__date'),
-            link: card.dataset.link || '',
-            linkText: card.dataset.linkText || '',
-          });
-        };
-        card.addEventListener('click', open);
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      const openPast = (card) => {
+        if (typeof openEventModal !== 'function') return;
+        const img = card.querySelector('img');
+        openEventModal({
+          isPast: true,
+          img: img ? img.getAttribute('src') : '',
+          title: text(card, '.past-slide-card__title'),
+          desc: text(card, '.past-slide-card__desc'),
+          badge: text(card, '.past-slide-card__tag'),
+          badgeClass: card.dataset.badgeClass || 'sticker--vinyl',
+          fullDateString: text(card, '.past-slide-card__date'),
+          link: card.dataset.link || '',
+          linkText: card.dataset.linkText || '',
         });
+      };
+      document.addEventListener('click', (e) => {
+        const card = e.target.closest('.js-open-past');
+        if (card) openPast(card);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const card = e.target.closest('.js-open-past');
+        if (card) { e.preventDefault(); openPast(card); }
       });
 
     })();
@@ -9281,5 +9286,10 @@
       }
     });
   </script>
+
+  <!-- Past-events archive: replaces the hardcoded slider cards with the live list from the
+       Open Events Schedule + Archive monday board (via /api/past-events). On any failure the
+       hardcoded cards above simply stay. -->
+  <script src="past-events-archive.js" data-lang="en" defer></script>
 </body>
 </html>
