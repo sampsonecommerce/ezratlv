@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-30e";
+const BUILD_ID = "2026-08-31a";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1327,6 +1327,7 @@ const SCHED_UPCOMING_COL = {
   instagram: "link_mm6qx5r9",
   artistLink: "link_mm6q76f3",
   publish: "color_mm6q8g2v",
+  type: "color_mm6qqvht", // סוג ערב - lets the page match an event to its format card
 };
 async function fetchScheduleUpcoming(TOKEN) {
   const query = `query ($boardId: [ID!]) {
@@ -1393,6 +1394,7 @@ async function fetchScheduleUpcoming(TOKEN) {
         link,
         linkText,
         entry: txt(SCHED_UPCOMING_COL.entry),
+        type: txt(SCHED_UPCOMING_COL.type),
         rounds,
         doors: rounds[0] || start,
         start,

@@ -4989,7 +4989,7 @@
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>Live Music Nights</h3>
             <p class="fmt-card__when">Sundays · Weekly Live Show</p>
-            <p class="fmt-card__when fmt-card__next">Today · Moss Town Live</p>
+            <p class="fmt-card__when fmt-card__next" hidden></p>
             <p class="fmt-card__lineup">Bands from Across the City · Shows in Collaboration with Us · A Different Style Every Week</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
@@ -5156,7 +5156,7 @@
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>Rotating Chef Pop-up</h3>
             <p class="fmt-card__when">Tuesdays · Culinary Pop-up</p>
-            <p class="fmt-card__when fmt-card__next">This Tuesday · Vegan Pop-up by Puccia Kitchen</p>
+            <p class="fmt-card__when fmt-card__next" hidden></p>
             <p class="fmt-card__lineup">Collabs with Chefs & Food Creators · Original Nights from Our Own Kitchen</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
@@ -5263,6 +5263,7 @@
           <div class="fmt-card__body">
             <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>Vinyl Sets on Analog Sound</h3>
             <p class="fmt-card__when">Rotating Night · Analog Sessions from 20:30</p>
+            <p class="fmt-card__when fmt-card__next" hidden></p>
             <p class="fmt-card__lineup">Our Own Vinyl Nights · Guest DJs · Intimate Analog Sound Like the Old Days</p>
             <div class="fmt-card__actions">
               <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
@@ -7190,6 +7191,57 @@
         .map((ev) => [ev.date, ev]));
       ezraPublishedSubscribers.forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
     }
+
+    // The green "next up" line on the format cards. Hardcoded copy went stale the
+    // morning after an event (same reasoning as the Hebrew page), so the
+    // line is driven by the same feed as the hero: the next published event of each
+    // category shows - today included - and a past event never does.
+    (function () {
+      var LABELS = {
+        'מוזיקה חיה וסשנים אקוסטיים': 'live', 'ערבי מוזיקה חיה': 'live',
+        'פופ-אפ שפים וערבי טאבון': 'food', 'פופ אפ שף מתחלף': 'food',
+        'השמעות אלבומים וסלון תקליטים': 'vinyl', 'תקלוט וייניל בסאונד אנלוגי': 'vinyl',
+        'בית התה של רום': 'tea', 'ערבי יין ומיקסולוגיה': 'wine', 'מיקרופון פתוח וספוקן וורד': 'openmic',
+      };
+      function categoryOf(ev) {
+        if (ev.type && LABELS[ev.type]) return LABELS[ev.type];
+        // Legacy Open Events items carry no type column; infer from the text.
+        var t = [ev.title, ev.subtitle, ev.desc].join(' ');
+        if (/שף|פופ.?אפ|טאבון|קולינר|chef|pop.?up/i.test(t)) return 'food';
+        if (/תקליט|ויניל|וייניל|תקלוט|אלבומ|vinyl|record/i.test(t)) return 'vinyl';
+        if (/הופע|לייב|להקה|מוזיקה חיה|ג'אם|live|band/i.test(t)) return 'live';
+        return null;
+      }
+      var DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      function whenText(dateStr) {
+        var now = new Date();
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var p = dateStr.split('-');
+        var d = new Date(+p[0], +p[1] - 1, +p[2]);
+        var diff = Math.round((d - today) / 86400000);
+        if (diff === 0) return 'Today';
+        if (diff === 1) return 'Tomorrow';
+        return DOW[d.getDay()] + ' ' + ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2);
+      }
+      function fill() {
+        var n = new Date();
+        var key = n.getFullYear() + '-' + ('0' + (n.getMonth() + 1)).slice(-2) + '-' + ('0' + n.getDate()).slice(-2);
+        var next = {};
+        Array.from(ezraPublished.values())
+          .filter(function (ev) { return ev.date >= key; })
+          .sort(function (a, b) { return a.date < b.date ? -1 : 1; })
+          .forEach(function (ev) { var c = categoryOf(ev); if (c && !next[c]) next[c] = ev; });
+        document.querySelectorAll('.fmt-card').forEach(function (card) {
+          var el = card.querySelector('.fmt-card__next');
+          if (!el) return;
+          var ev = next[card.getAttribute('data-category')];
+          if (!ev) { el.hidden = true; el.textContent = ''; return; }
+          el.textContent = whenText(ev.date) + ' · ' + ev.title.split('·')[0].trim();
+          el.hidden = false;
+        });
+      }
+      onEzraPublished(fill);
+    })();
 
     // ============================================================
     // Notice + newsletter
