@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,13 +48,13 @@
     window.EZRA_LEAD_ENDPOINT = "https://ezra-lead.yeheli.workers.dev/";
   </script>
 
-  <title>What's Happening at Ezra | Public Events, Vinyl &amp; Pop-Ups in Florentin</title>
-  <meta name="description" content="What's on this week at Ezra Florentin: vinyl DJ sessions, album listening parties, tabun oven guest chef pop-ups, live shows and wine nights. Live synced schedule." />
+  <title>מה קורה בעזרא | לוח אירועים, תקליטים ופופ-אפים בפלורנטין</title>
+  <meta name="description" content="מה קורה השבוע בעזרא פלורנטין: ערבי תקליטים, השמעות אלבומים, פופ-אפ שפים מהטאבון, הופעות חיות וערבי יין. לוח זמנים חי מסונכרן בזמן אמת." />
   <!-- Not linked from the site nav and kept out of the sitemap: this page is
        staged, not launched. Remove this tag and re-add the sitemap entry in the
        same commit that puts the nav button back. -->
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="canonical" href="https://ezratlv.com/english-events" />
+  <link rel="canonical" href="https://ezratlv.com/open-events" />
   <link rel="alternate" hreflang="he" href="https://ezratlv.com/open-events" />
   <link rel="alternate" hreflang="en" href="https://ezratlv.com/english-events" />
   <link rel="alternate" hreflang="x-default" href="https://ezratlv.com/open-events" />
@@ -65,13 +65,13 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="geo.region" content="IL-TA" />
-  <meta name="geo.placename" content="Florentin, Tel Aviv" />
+  <meta name="geo.placename" content="פלורנטין, תל אביב" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="What's Happening at Ezra | Events &amp; Culture in Florentin" />
-  <meta property="og:description" content="Vinyl nights, album listening parties, chef pop-ups from the wood-fired oven. Check open public nights vs private bookings in real time." />
+  <meta property="og:title" content="מה קורה בעזרא | לוח אירועים ותרבות בפלורנטין" />
+  <meta property="og:description" content="ערבי תקליטים, השמעות אלבומים, פופ-אפ שפים ואוכל מהטאבון. בדקו מתי פתוח לקהל הרחב ומתי יש אירוע סגור." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ezratlv.com/english-events" />
+  <meta property="og:url" content="https://ezratlv.com/open-events" />
   <meta property="og:image" content="https://ezratlv.com/images/BAR.jpg" />
 
   <!-- Fonts -->
@@ -355,10 +355,7 @@
         border-inline-start: 1px solid var(--line);
         padding: 5rem 1.8rem 2rem;
         z-index: 100;
-        /* The drawer is anchored to the RIGHT (inset-inline-end in LTR). The hidden
-           state must slide it off its own edge: +100%, not the RTL page's -100%,
-           which parked it as a visible strip over the page's left side on mobile. */
-        transform: translateX(100%);
+        transform: translateX(-100%);
         transition: transform 0.35s var(--ease);
         overflow-y: auto;
       }
@@ -469,7 +466,7 @@
     /* A recurring format, not a particular evening: quieter than an announced event on purpose. */
     /* The hero renders nothing until the board has answered. Painting the weekday formats first
        and swapping them for the real evening a moment later reads as the page changing its mind -
-       and the thing it briefly asserts ("Music Night · Sundays") is the least true version. The
+       and the thing it briefly asserts ("ערב מוזיקה · ימי ראשון") is the least true version. The
        frame and its photo stay, so nothing moves when the copy arrives. */
     .hero-slider__card.is-awaiting-board .hero-slider__card-body,
     .hero-slider__card.is-awaiting-board .hero-slider__dots,
@@ -1465,9 +1462,9 @@
       font-size: 0.72rem;
       font-weight: 700;
       color: var(--cream-dim);
-      /* The badge is nowrap, so a wide one used to squeeze this column until the
-         hours broke mid-range. The time slot must never wrap: it keeps its width
-         and the badge clips instead. */
+      /* The badge is nowrap, so a wide one (e.g. "פתוח לקהל (20:00)") used to squeeze
+         this column until the hours broke mid-range. The time slot must never wrap:
+         it keeps its width and the badge clips instead. */
       flex-shrink: 0;
     }
     .slot-row__time-icon {
@@ -1499,6 +1496,8 @@
       font-size: 0.68rem;
       font-weight: 700;
       white-space: nowrap;
+      /* When the row is narrower than time + badge, the badge is the side that
+         gives way (the time column is flex-shrink: 0). */
       min-width: 0;
       overflow: hidden;
       transition: all 0.2s var(--ease);
@@ -4146,7 +4145,7 @@
     .cal__slot-name { font-size: 0.86rem; font-weight: 500; }
     .cal__slot-time { font-size: 0.68rem; color: var(--cream-faint); }
     .cal__slot-state { font-size: 0.62rem; color: var(--red); min-height: 0.8em; }
-    .cal__slot:disabled .cal__slot-state::after { content: 'Booked'; }
+    .cal__slot:disabled .cal__slot-state::after { content: 'תפוס'; }
 
     .cal__legend-bar { display: inline-flex; gap: 2px; width: 18px; height: 3px; }
     .cal__legend-bar i { flex: 1; border-radius: 2px; background: var(--gold); opacity: 0.55; }
@@ -4343,10 +4342,10 @@
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://ezratlv.com/english-events",
-      "url": "https://ezratlv.com/english-events",
-      "name": "What's On at Ezra - Events Open to the Public",
-      "inLanguage": "en",
+      "@id": "https://ezratlv.com/open-events",
+      "url": "https://ezratlv.com/open-events",
+      "name": "מה קורה בעזרא - אירועים פתוחים לקהל",
+      "inLanguage": "he",
       "isPartOf": {
         "@id": "https://ezratlv.com/#website"
       },
@@ -4356,86 +4355,86 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "https://ezratlv.com/english-events#faq",
+      "@id": "https://ezratlv.com/open-events#faq",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How do I know if the bar is open tonight or booked for a private event?",
+          "name": "איך אני יודע אם המקום פתוח היום לקהל או סגור לאירוע פרטי?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The schedule on this page updates in real time against our own calendar. A night that is closed for a private event is marked in red, and an open night shows the opening time and the format we have planned. The bar at the top of the page also tells you what is on tonight."
+            "text": "הלוח בעמוד הזה מתעדכן בזמן אמת מול היומן שלנו. ערב שסגור לאירוע פרטי מסומן באדום, וערב פתוח מציג את שעת הפתיחה ואת הפורמט המתוכנן. גם הפס בראש העמוד מראה מה קורה הערב."
           }
         },
         {
           "@type": "Question",
-          "name": "What food and drinks do you serve?",
+          "name": "מה מגישים לאכול ולשתות?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Food comes out of the wood-fired oven all evening: pizzas, sourdough breads, seasonal plates and something to share in the middle of the table. Alongside it a full bar with cocktails, wine and beer. The menu is dairy and vegetarian, no meat and no seafood."
+            "text": "אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים."
           }
         },
         {
           "@type": "Question",
-          "name": "Is the food kosher?",
+          "name": "האוכל כשר?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The venue is not under kosher supervision. The whole menu is dairy and vegetarian, no meat and no seafood, but we do not hold a certificate and we will not present ourselves as kosher."
+            "text": "המקום אינו בהשגחת כשרות. התפריט כולו חלבי־צמחוני, בלי בשר ובלי פירות ים, אבל אנחנו לא מחזיקים תעודה ולא נציג את עצמנו ככשרים."
           }
         },
         {
           "@type": "Question",
-          "name": "Where are you located?",
+          "name": "איפה אתם יושבים?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Abarbanel 38, in the heart of Florentin, Tel Aviv, in the neighborhood's old industrial quarter."
+            "text": "אברבנאל 38, בלב פלורנטין בתל אביב, באזור התעשייה הישן של השכונה."
           }
         },
         {
           "@type": "Question",
-          "name": "Is there parking on site?",
+          "name": "יש חניה במקום?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "There is no private parking at Ezra. There are paid lots on the nearby streets, and in the evening you can usually find blue-and-white street parking in the area."
+            "text": "אין חניה פרטית בעזרא. יש חניונים בתשלום ברחובות הסמוכים, ובשעות הערב אפשר בדרך כלל למצוא חניה כחול־לבן בסביבה."
           }
         },
         {
           "@type": "Question",
-          "name": "How do I get there by public transport?",
+          "name": "איך מגיעים בתחבורה ציבורית?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The light rail Red Line stops at Salame and Eliphelet stations, a short walk away. In the evening it is the easiest way to get here, especially if you plan on drinking."
+            "text": "הרכבת הקלה, הקו האדום, עוצרת בתחנות סלמה ואליפלט במרחק הליכה קצרה. בשעות הערב זו הדרך הכי פשוטה להגיע, במיוחד אם מתכוונים לשתות."
           }
         },
         {
           "@type": "Question",
-          "name": "Is there a cover charge?",
+          "name": "הכניסה בתשלום?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Most open nights are free entry, on a first-come basis. For nights with live music or a special event we recommend leaving your details in advance so we can make sure there is room."
+            "text": "ברוב הערבים הפתוחים הכניסה חופשית, על בסיס מקום פנוי. בערבים עם הופעה חיה או אירוע מיוחד מומלץ להשאיר פרטים מראש כדי לוודא שיש מקום."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need to reserve a spot for an open night?",
+          "name": "צריך להזמין מקום מראש לערב פתוח?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Not required, but worth it. The space is intimate and seats go fast on busy nights, so if you are a group or coming for a particular night, leave your details and we will hold a spot for you."
+            "text": "לא חובה, אבל כדאי. החלל אינטימי והמקומות נגמרים בערבים עמוסים, אז אם אתם קבוצה או מגיעים לערב מסוים, השאירו פרטים ונשמור לכם מקום."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I book the whole place for a private event?",
+          "name": "אפשר לסגור את המקום לאירוע פרטי?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, and it is most of what we do. One event per evening, up to 50 guests, and the whole space closes for your group. All the event types and full details are on our event types page."
+            "text": "כן, וזה עיקר מה שאנחנו עושים. אירוע אחד בערב, עד 50 אורחים, והחלל כולו נסגר לקבוצה שלכם. כל סוגי האירועים והפרטים המלאים נמצאים בעמוד סוגי אירועים."
           }
         },
         {
           "@type": "Question",
-          "name": "How many people fit?",
+          "name": "כמה אנשים נכנסים?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Up to 50 guests. Most groups that book a private event with us are between 20 and 50 people, and that is the size the place was built for."
+            "text": "עד 50 אורחים. רוב הקבוצות שסוגרות אצלנו אירוע פרטי הן בין 20 ל־50 איש, וזה הגודל שהמקום נבנה בשבילו."
           }
         }
       ]
@@ -4475,51 +4474,51 @@
        NAVIGATION (WITH ALL 3 MAIN BUTTONS SIDE BY SIDE)
   ============================================================ -->
   <nav class="nav" id="nav">
-    <button class="nav__burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+    <button class="nav__burger" id="navBurger" type="button" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="navMenu">
       <span></span><span></span><span></span>
     </button>
 
-    <a href="english-index" class="nav__logo"><img src="images/logo.png" alt="Ezra" /></a>
+    <a href="/" class="nav__logo"><img src="images/logo.png" alt="עזרא" /></a>
 
-    <!-- Four anchors only. Sound, Archive and Collaborate stay in the mobile drawer and in the
-         footer: seven links in one row is what overflowed and clipped the logo. -->
+    <!-- Four anchors only. סאונד, ארכיון ויוזמים נשארים במגירת המובייל ובפוטר: שבעה קישורים
+         בשורה אחת הם מה שגלש ושבר את הלוגו. -->
     <div class="nav__links">
-      <a href="#schedule">This Week</a>
-      <a href="#events">Upcoming Events</a>
-      <a href="#location">Location</a>
-      <a href="#faq">FAQ</a>
+      <a href="#schedule">השבוע בעזרא</a>
+      <a href="#events">אירועים קרובים</a>
+      <a href="#location">דרכי הגעה</a>
+      <a href="#faq">שאלות נפוצות</a>
     </div>
 
     <!-- Desktop side-by-side buttons -->
     <div class="nav__actions">
-      <a class="nav__lang" href="open-events" hreflang="he" aria-label="Switch to Hebrew">
+      <a class="nav__lang" href="english-events" hreflang="en" aria-label="Switch to English">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         EN
       </a>
-      <nav class="nav__seg" aria-label="Site sections">
-        <a href="english-index" aria-label="Private events">Private</a>
-        <a href="english-company-events" aria-label="Company events">Company</a>
-        <a class="is-active" href="english-events" aria-label="Public events" aria-current="page">Public</a>
+      <nav class="nav__seg" aria-label="מעבר בין חלקי האתר">
+        <a href="/" aria-label="אירועים פרטיים">פרטיים</a>
+        <a href="company-events" aria-label="אירועי חברה">חברה</a>
+        <a class="is-active" href="open-events" aria-label="אירועים פתוחים" aria-current="page">פתוחים</a>
       </nav>
-      <a class="nav__cta" href="#schedule">Events Calendar</a>
+      <a class="nav__cta" href="#schedule">לוח אירועים</a>
     </div>
 
     <!-- Mobile Drawer Menu -->
     <div class="nav__scrim" id="navScrim"></div>
     <div class="nav__menu" id="navMenu">
-      <a class="nav__menu-link" href="#schedule">This Week at Ezra (Live Schedule)</a>
-      <a class="nav__menu-link" href="#events">Upcoming Events</a>
-      <a class="nav__menu-link" href="#soundsystem">Sound & Kitchen</a>
-      <a class="nav__menu-link" href="#archive">Past Flyers Archive</a>
-      <a class="nav__menu-link" href="#location">Location & Directions</a>
-      <a class="nav__menu-link" href="#collab">Host / Collaborate</a>
-      <a class="nav__menu-link" href="#faq">FAQ</a>
-      <a class="nav__menu-link" href="open-events" hreflang="he">עברית / HE</a>
+      <a class="nav__menu-link" href="#schedule">השבוע בעזרא (לוח חי)</a>
+      <a class="nav__menu-link" href="#events">אירועים קרובים</a>
+      <a class="nav__menu-link" href="#soundsystem">סאונד & טאבון</a>
+      <a class="nav__menu-link" href="#archive">ארכיון אירועי עבר</a>
+      <a class="nav__menu-link" href="#location">דרכי הגעה</a>
+      <a class="nav__menu-link" href="#collab">יוזמים אירוע / שת״פ</a>
+      <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
+      <a class="nav__menu-link" href="english-events" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--pill" href="english-index">Private Events</a>
-        <a class="nav__menu-cta nav__menu-cta--pill" href="english-company-events">Company Events</a>
-        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="english-events">Public Events</a>
-        <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full" href="#schedule">Events Calendar</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="/">אירועים פרטיים</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="company-events">אירועי חברה</a>
+        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="open-events">אירועים פתוחים</a>
+        <a class="nav__menu-cta nav__menu-cta--book nav__menu-cta--full" href="#schedule">ללוח האירועים</a>
       </div>
     </div>
   </nav>
@@ -4533,27 +4532,27 @@
     </video>
     <div class="hero-events__overlay"></div>
     <div class="wrap hero-events__inner">
-      <div class="hero-events__eyebrow">Open Nights · Florentin</div>
-      <h1 class="hero-events__title"><span class="gold">Everything Happening at Ezra, Updated Live</span></h1>
-      <p class="hero-events__sub">Music nights on Sundays, pop-up food nights on Tuesdays. Ezra is built around a warm, easy room, sound done properly, and food worth sharing with friends - we would love to host you.</p>
+      <div class="hero-events__eyebrow">אירועים פתוחים · פלורנטין</div>
+      <h1 class="hero-events__title"><span class="gold">כל מה שקורה בעזרא, מעודכן לייב</span></h1>
+      <p class="hero-events__sub">אירועי מוזיקה בימי ראשון, ואירועי פופ אפ עם אוכל בימי שלישי. העזרא מתמקד באווירה חמה ונעימה, סאונד ברמה גבוהה, ואוכל כיפי שאפשר לחלוק עם חברים - נשמח לארח אתכם.</p>
 
       <!-- ============================================================
            HERO UPCOMING EVENTS SPOTLIGHT CARD (TEDER STYLE)
       ============================================================ -->
-      <div class="hero-slider" id="heroEventsSlider" aria-label="Upcoming Events at Ezra">
+      <div class="hero-slider" id="heroEventsSlider" aria-label="אירועים קרובים בעזרא">
         <!-- Navigation Arrow Buttons (Properly Directed) -->
-        <button class="hero-slider__nav hero-slider__nav--right" id="heroSliderRight" type="button" aria-label="Next Event">
+        <button class="hero-slider__nav hero-slider__nav--right" id="heroSliderRight" type="button" aria-label="האירוע הבא">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </button>
-        <button class="hero-slider__nav hero-slider__nav--left" id="heroSliderLeft" type="button" aria-label="Previous Event">
+        <button class="hero-slider__nav hero-slider__nav--left" id="heroSliderLeft" type="button" aria-label="האירוע הקודם">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
         <div class="hero-slider__today-flag" id="heroTodayFlag" hidden>
-          <span class="hero-slider__today-dot"></span>Today at Ezra
+          <span class="hero-slider__today-dot"></span>היום בעזרא
         </div>
 
-        <div class="hero-slider__card is-awaiting-board" id="heroSliderCard" role="button" tabindex="0" aria-label="View Details & Reserve">
+        <div class="hero-slider__card is-awaiting-board" id="heroSliderCard" role="button" tabindex="0" aria-label="לפרטים מלאים ושריון מקום">
           <!-- Background Slides Track (Directly in Card) -->
           <div class="hero-slider__slides" id="heroSliderSlides"></div>
 
@@ -4561,9 +4560,9 @@
           <div class="hero-slider__top-bar">
             <div class="hero-slider__tag">
               <span class="hero-slider__tag-dot"></span>
-              <span>Upcoming Events at Ezra</span>
+              <span>אירועים קרובים בעזרא</span>
             </div>
-            <div class="hero-slider__dots" id="heroSliderDots" role="tablist" aria-label="Select Event"></div>
+            <div class="hero-slider__dots" id="heroSliderDots" role="tablist" aria-label="בחירת אירוע"></div>
           </div>
 
           <!-- Card Content Body -->
@@ -4573,10 +4572,10 @@
             <p class="hero-slider__card-lineup" id="heroCardLineup"></p>
             <div class="hero-slider__card-actions">
               <button class="hero-slider__card-btn" id="heroCardCtaBtn" type="button">
-                <span>Details & RSVP</span>
+                <span>לפרטים ושריון מקום</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               </button>
-              <span class="hero-slider__card-hint">Click for full event details</span>
+              <span class="hero-slider__card-hint">לחצו לפרטים מלאים</span>
             </div>
           </div>
 
@@ -4589,7 +4588,7 @@
         <!-- Sleek Link to Full Schedule Below Slider -->
         <div class="hero-slider__scroll-cta">
           <a href="#schedule" class="hero-slider__scroll-link">
-            <span>View Full Events Calendar & Hours</span>
+            <span>ללוח האירועים המלא וזמני פתיחה</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </a>
         </div>
@@ -4602,25 +4601,25 @@
     <div class="ticker-group">
       <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · ANALOG HI-FI &amp; RARE VINYL</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> BLAZING STONE OVEN &amp; WINE NIGHTS</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט וערבי יין</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> FREE ENTRY ON A FIRST-COME BASIS</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> כניסה חופשית על בסיס מקום פנוי</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
     </div>
     <div class="ticker-group" aria-hidden="true">
       <span><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> FLORENTIN TEL AVIV</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · ANALOG HI-FI &amp; RARE VINYL</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-radio"/></svg> EZRA SOUND SYSTEM · סאונד אנלוגי ותקליטים נדירים</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> BLAZING STONE OVEN &amp; WINE NIGHTS</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> טאבון אבן לוהט וערבי יין</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
       <span><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg> VINYL NIGHTS &amp; LIVE SESSIONS</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
-      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> FREE ENTRY ON A FIRST-COME BASIS</span>
+      <span><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> כניסה חופשית על בסיס מקום פנוי</span>
       <span><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg></span>
     </div>
   </div>
@@ -4631,10 +4630,10 @@
   <section class="section-soft" id="schedule">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Weekly Schedule · What's On</span>
-        <h2>Weekly Opening Hours & Nights</h2>
+        <span class="eyebrow">השבוע בעזרא</span>
+        <h2>לוח האירועים</h2>
         <p>
-          Check when we're open to the public for vinyl sessions, fine wine and wood-fired dishes, and when the venue is held for a private gathering.
+          בדקו מתי אנחנו פתוחים לקהל הרחב לערבי תקליטים, יין וטאבון, ומתי החלל סגור לאירוע פרטי.
         </p>
       </div>
 
@@ -4643,14 +4642,14 @@
         <div class="schedule-box">
           <div class="schedule-top">
             <div class="schedule-top__info">
-              <h3 id="scheduleHeading">Upcoming Nights & Opening Hours</h3>
-              <p id="scheduleSubhead">1 Month Schedule · Click any event for full details, lineup & RSVP</p>
+              <h3 id="scheduleHeading">לוח אירועים וימי פתיחה</h3>
+              <p id="scheduleSubhead">חודש קדימה · לחצו על אירוע לפרטים מלאים, ליינאפ ושריון מקום</p>
             </div>
             <div class="month-cal-legend schedule-legend" id="schedLegend">
-              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>All Dates</button>
-              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>Open to Public</button>
-              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>Available for Events</button>
-              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>Private Event / Booked</button>
+              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>כל התאריכים</button>
+              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</button>
+              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</button>
+              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</button>
             </div>
           </div>
 
@@ -4659,25 +4658,25 @@
               <!-- Rendered dynamically with exact dates by JS -->
             </div>
             <div class="schedule-nav-arrows">
-              <button class="nav-arrow-btn" id="prevWeekBtn" type="button" aria-label="Previous days">
+              <button class="nav-arrow-btn" id="prevWeekBtn" type="button" aria-label="ימים קודמים">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                <span>Prev</span>
+                <span>קודם</span>
               </button>
-              <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="Next days">
-                <span>Next</span>
+              <button class="nav-arrow-btn" id="nextWeekBtn" type="button" aria-label="ימים הבאים">
+                <span>הבא</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
             </div>
           </div>
 
           <div class="schedule-slider-wrap">
-            <button class="sched-slider-arrow sched-slider-arrow--prev" id="schedSliderPrev" type="button" aria-label="Previous events">
+            <button class="sched-slider-arrow sched-slider-arrow--prev" id="schedSliderPrev" type="button" aria-label="אירועים קודמים">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             </button>
             <div class="timeline-grid" id="weekGrid">
               <!-- Rendered dynamically with 30 visual day cards in single horizontal slider by JS -->
             </div>
-            <button class="sched-slider-arrow sched-slider-arrow--next" id="schedSliderNext" type="button" aria-label="Next events">
+            <button class="sched-slider-arrow sched-slider-arrow--next" id="schedSliderNext" type="button" aria-label="אירועים הבאים">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
@@ -4701,15 +4700,15 @@
   <section id="events" class="reveal">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Resident Concepts & Open Nights</span>
-        <h2>What Happens at Ezra on Open Nights</h2>
+        <span class="eyebrow">ערבים פתוחים</span>
+        <h2>הפורמטים הקבועים</h2>
         <p>
-          Ezra hosts a rotating lineup of open weekly concepts and signature formats open to the public. Select a concept below to explore its atmosphere, sound and cuisine, or leave your details to propose a night or a collaboration.
+          עזרא מארח מגוון פורמטים וקונספטים שבועיים פתוחים לקהל הרחב. בחרו פורמט כדי לגלות את האופי, המוזיקה והקולינריה, או השאירו פרטים ליזום ליין / אירוע משותף.
         </p>
       </div>
 
       <div class="fmt-grid" id="eventsList">
-        <!-- 1. Live Music Nights (guitar, saxophone, tambourine and double bass) -->
+        <!-- 1. ערבי מוזיקה חיה (עם גיטרה, סקסופון, טמבורין וקונטרבס) -->
         <article class="fmt-card" data-category="live">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -4984,21 +4983,21 @@
                 </g>
               </svg>
             </div>
-            <span class="fmt-card__flag fmt-card__flag--free">Free Entry</span>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>Live Music Nights</h3>
-            <p class="fmt-card__when">Sundays · Weekly Live Show</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>ערבי מוזיקה חיה</h3>
+            <p class="fmt-card__when">ימי ראשון · הופעה שבועית</p>
             <p class="fmt-card__when fmt-card__next" hidden></p>
-            <p class="fmt-card__lineup">Bands from Across the City · Shows in Collaboration with Us · A Different Style Every Week</p>
+            <p class="fmt-card__lineup">להקות מסגנונות שונים מכל העיר · הופעות בשיתוף איתנו · סגנון מתחלף מדי שבוע</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Live Music Nights" data-interest="music" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי מוזיקה חיה" data-interest="music" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
 
-        <!-- 2. Rotating Chef Pop-up -->
+        <!-- 2. פופ אפ שף מתחלף -->
         <article class="fmt-card" data-category="food">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -5151,21 +5150,21 @@
                 </g>
               </svg>
             </div>
-            <span class="fmt-card__flag fmt-card__flag--free">Free Entry</span>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>Rotating Chef Pop-up</h3>
-            <p class="fmt-card__when">Tuesdays · Culinary Pop-up</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>פופ אפ שף מתחלף</h3>
+            <p class="fmt-card__when">ימי שלישי · ערב קולינרי</p>
             <p class="fmt-card__when fmt-card__next" hidden></p>
-            <p class="fmt-card__lineup">Collabs with Chefs & Food Creators · Original Nights from Our Own Kitchen</p>
+            <p class="fmt-card__lineup">שיתופי פעולה עם שפים ויוצרי אוכל · וערבים מקוריים מהמטבח שלנו</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Rotating Chef Pop-up" data-interest="food" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="פופ אפ שף מתחלף" data-interest="food" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
 
-        <!-- 3. Vinyl Sets on Analog Sound (centered turntable, spinning record and an equalizer in the corner) -->
+        <!-- 3. תקלוט וייניל בסאונד אנלוגי (פטיפון ממורכז, תקליט מסתובב ואקוולייזר בפינה) -->
         <article class="fmt-card" data-category="vinyl">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -5258,21 +5257,21 @@
                 </g>
               </svg>
             </div>
-            <span class="fmt-card__flag fmt-card__flag--free">Free Entry</span>
+            <span class="fmt-card__flag fmt-card__flag--free">כניסה חופשית</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>Vinyl Sets on Analog Sound</h3>
-            <p class="fmt-card__when">Rotating Night · Analog Sessions from 20:30</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg>תקלוט וייניל בסאונד אנלוגי</h3>
+            <p class="fmt-card__when">ערב מתחלף · סשן אנלוגי מ-20:30</p>
             <p class="fmt-card__when fmt-card__next" hidden></p>
-            <p class="fmt-card__lineup">Our Own Vinyl Nights · Guest DJs · Intimate Analog Sound Like the Old Days</p>
+            <p class="fmt-card__lineup">ערבי הוויניל שלנו · די-ג'ייז מתארחים · אווירה אינטימית וסאונד אנלוגי כמו של פעם</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Vinyl Sets on Analog Sound" data-interest="vinyl" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="תקלוט וייניל בסאונד אנלוגי" data-interest="vinyl" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
 
-        <!-- 4. Rom's Tea House -->
+        <!-- 4. בית התה של רום -->
         <article class="fmt-card" data-category="tea">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -5400,20 +5399,20 @@
                 </g></g>
               </svg>
             </div>
-            <span class="fmt-card__flag">Coming Soon</span>
+            <span class="fmt-card__flag">בקרוב</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg>Rom's Tea House</h3>
-            <p class="fmt-card__when">Lounge Format · From 19:00 into the Night</p>
-            <p class="fmt-card__lineup">Rare Tea Infusions · Traditional Tea Rituals · Ambient World Music</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-cup"/></svg>בית התה של רום</h3>
+            <p class="fmt-card__when">פורמט סלון קבוע · מ-19:00 אל תוך הלילה</p>
+            <p class="fmt-card__lineup">חליטות נדירות · טקסי תה מסורתיים · מוזיקת עולם מרגיעה</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Rom's Tea House" data-interest="tea" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="בית התה של רום" data-interest="tea" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
 
-        <!-- 5. Natural Wine & Mixology -->
+        <!-- 5. ערבי יין טבעי ומיקסולוגיה -->
         <article class="fmt-card" data-category="wine">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -5520,20 +5519,20 @@
                 <text x="245" y="70" fill="#c49a3c" font-size="10" font-weight="900" opacity="0.8">✧</text>
               </svg>
             </div>
-            <span class="fmt-card__flag">Coming Soon</span>
+            <span class="fmt-card__flag">בקרוב</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>Wine Nights & Mixology</h3>
-            <p class="fmt-card__when">Wine & Cocktail Lounge · From 19:00</p>
-            <p class="fmt-card__lineup">Local Boutique Wineries · Curated Global Vintages · Seasonal Craft Cocktails</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg>ערבי יין ומיקסולוגיה</h3>
+            <p class="fmt-card__when">סלון אלכוהול ויין · מ-19:00</p>
+            <p class="fmt-card__lineup">יקבי בוטיק מקומיים · יינות מובחרים מהארץ והעולם · קוקטיילים עונתיים</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Wine Nights & Mixology" data-interest="wine" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="ערבי יין ומיקסולוגיה" data-interest="wine" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
 
-        <!-- 6. Open Mic & Spoken Word (symmetrical sound waves and a full, prominent quill) -->
+        <!-- 6. מיקרופון פתוח וספוקן וורד (גלי קול סימטריים ונוצה שלמה ובולטת) -->
         <article class="fmt-card" data-category="openmic">
           <div class="fmt-card__media">
             <div class="fmt-anim-scene" aria-hidden="true">
@@ -5642,15 +5641,15 @@
                 </g>
               </svg>
             </div>
-            <span class="fmt-card__flag">Coming Soon</span>
+            <span class="fmt-card__flag">בקרוב</span>
           </div>
           <div class="fmt-card__body">
-            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>Open Mic & Spoken Word</h3>
-            <p class="fmt-card__when">Open Stage for Creators · From 20:00</p>
-            <p class="fmt-card__lineup">Poets · Musicians · Writers · Stand-Up Sets & Intimate Texts</p>
+            <h3 class="fmt-card__title"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>מיקרופון פתוח וספוקן וורד</h3>
+            <p class="fmt-card__when">במה פתוחה ליוצרים · מ-20:00</p>
+            <p class="fmt-card__lineup">משוררים · מוזיקאים · כותבים · קטעי סטנדאפ וטקסטים אינטימיים</p>
             <div class="fmt-card__actions">
-              <a class="fmt-card__link" href="#schedule">Upcoming Dates</a>
-              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="Open Mic & Spoken Word" data-interest="spoken_word" type="button">Notify Me About the Next Night</button>
+              <a class="fmt-card__link" href="#schedule">לתאריכים הקרובים</a>
+              <button class="fmt-card__link fmt-card__link--ghost js-newsletter" data-topic="מיקרופון פתוח וספוקן וורד" data-interest="spoken_word" type="button">עדכנו אותי על הערב הבא</button>
             </div>
           </div>
         </article>
@@ -5667,7 +5666,7 @@
           <span class="fmt-slider-dot" data-idx="5"></span>
         </div>
         <div class="fmt-slider-hint">
-          <span>Swipe to explore all 6 formats</span>
+          <span>החליקו לצפייה בכל 6 הפורמטים</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5M6 17l5-5-5-5"/></svg>
         </div>
       </div>
@@ -5675,14 +5674,14 @@
   </section>
 
   <!-- ============================================================
-       3B. MONTHLY CALENDAR FREE-VIEW (HALF DAYS: AFTERNOON & EVENING)
+       3B. MONTHLY CALENDAR FREE-VIEW (חצאי ימים: בוקר-צהריים וערב)
   ============================================================ -->
   <section class="section-soft" id="calendar-view">
     <div class="wrap">
       <div class="sec-head center">
         <span class="eyebrow">Interactive Monthly Calendar</span>
-        <h2>Monthly Lineup & Availability</h2>
-        <p>Explore our full schedule by half-days - Afternoon (<span class="num">12:00-18:00</span>) and Evening (<span class="num">18:00-02:00</span>). Click any slot to view details, reserve a spot or book an event.</p>
+        <h2>לוח אירועים וזמינות חופשי</h2>
+        <p>צפו בלו״ז המלא לפי חצאי ימים - צהריים (<span class="num">12:00-18:00</span>) וערב (<span class="num">18:00-02:00</span>). לחצו על כל משבצת לקבלת פרטים, שריון מקום או תיאום אירוע.</p>
       </div>
 
         <div class="cal-stage">
@@ -5727,32 +5726,32 @@
         <div class="month-cal-container">
           <div class="month-cal-head">
             <div class="month-cal-nav">
-              <button class="month-cal-btn" id="monthCalPrev" type="button" aria-label="Previous Month">
+              <button class="month-cal-btn" id="monthCalPrev" type="button" aria-label="חודש קודם">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               </button>
-              <h3 class="month-cal-title" id="monthCalTitle">August 2026</h3>
-              <button class="month-cal-btn" id="monthCalNext" type="button" aria-label="Next Month">
+              <h3 class="month-cal-title" id="monthCalTitle">אוגוסט 2026</h3>
+              <button class="month-cal-btn" id="monthCalNext" type="button" aria-label="חודש הבא">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-              <button class="month-cal-today-btn" id="monthCalToday" type="button">Today</button>
+              <button class="month-cal-today-btn" id="monthCalToday" type="button">היום</button>
             </div>
 
             <div class="month-cal-legend" id="monthCalLegend">
-              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>All Dates</button>
-              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>Open to Public</button>
-              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>Available for Events</button>
-              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>Private Event / Booked</button>
+              <button class="month-cal-legend-item is-active" data-filter="all" type="button" aria-pressed="true"><span class="month-cal-legend-dot month-cal-legend-dot--all"></span>כל התאריכים</button>
+              <button class="month-cal-legend-item" data-filter="open" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--open"></span>פתוח לקהל</button>
+              <button class="month-cal-legend-item" data-filter="free" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--free"></span>פנוי לאירוע</button>
+              <button class="month-cal-legend-item" data-filter="busy" type="button" aria-pressed="false"><span class="month-cal-legend-dot month-cal-legend-dot--busy"></span>אירוע פרטי / תפוס</button>
             </div>
           </div>
 
           <div class="month-cal-weekdays">
-            <div class="month-cal-weekday">Sun</div>
-            <div class="month-cal-weekday">Mon</div>
-            <div class="month-cal-weekday">Tue</div>
-            <div class="month-cal-weekday">Wed</div>
-            <div class="month-cal-weekday">Thu</div>
-            <div class="month-cal-weekday">Fri</div>
-            <div class="month-cal-weekday">Sat</div>
+            <div class="month-cal-weekday">ראשון</div>
+            <div class="month-cal-weekday">שני</div>
+            <div class="month-cal-weekday">שלישי</div>
+            <div class="month-cal-weekday">רביעי</div>
+            <div class="month-cal-weekday">חמישי</div>
+            <div class="month-cal-weekday">שישי</div>
+            <div class="month-cal-weekday">שבת</div>
           </div>
 
           <div class="month-cal-grid" id="monthCalGrid">
@@ -5810,12 +5809,12 @@
     <div class="wrap">
       <div class="sound-box">
         <div class="sound-text">
-          <span class="eyebrow">The Sound & The Vibe</span>
-          <h3>Ezra Sound System · Analog Hi-Fi, Wood-Fire & Fine Wine</h3>
+          <span class="eyebrow">הסאונד והוייב</span>
+          <h3>Ezra Sound System · סאונד אנלוגי, טאבון ויין משובח</h3>
           <p>
-            Ezra is a private bar in Florentin that also opens to the public on certain evenings. We built a room that is good to sit in: acoustics that work, lighting that does not glare, and food coming out of the tabun all evening long. On the open nights we host DJs, chefs and musicians, and entry is usually free.
+            עזרא הוא בר פרטי בפלורנטין שנפתח בערבים מסוימים גם לקהל הרחב. בנינו מקום שנעים לשבת בו: אקוסטיקה שעובדת, תאורה שלא מסנוורת, ואוכל שיוצא מהטאבון לאורך כל הערב. בערבים הפתוחים מתארחים אצלנו תקליטנים, שפים ומוזיקאים, והכניסה בדרך כלל חופשית.
           </p>
-          <a class="btn btn--fill" href="#events">Check Upcoming Events</a>
+          <a class="btn btn--fill" href="#events">בדקו את האירועים הקרובים</a>
         </div>
         <div class="vinyl-visual">
           <div class="vinyl-disc">
@@ -5839,9 +5838,9 @@
   <section id="archive">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Past Events</span>
-        <h2>What's Already Happened Here</h2>
-        <p>The public evenings we have already held at Ezra - who played and what it was. This is the rhythm we work at.</p>
+        <span class="eyebrow">אירועים שהיו</span>
+        <h2>מה כבר היה כאן</h2>
+        <p>הערבים הפתוחים שכבר התקיימו בעזרא, עם מי ניגן ומה היה. זה הקצב שאנחנו עובדים בו.</p>
       </div>
 
       <!-- Past Events Horizontal Slider. Four real evenings, newest first. Every fact here comes
@@ -5849,74 +5848,74 @@
            entry. Nothing is inferred: no guest counts, no menu, no atmosphere we did not have a
            source for. An evening with no photo and no poster does not go in. -->
       <div class="past-slider-wrap">
-        <button class="past-slider-arrow past-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="Previous events">
+        <button class="past-slider-arrow past-slider-arrow--prev" id="pastSliderPrev" type="button" aria-label="אירועים קודמים">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         
         <div class="past-slider-track" id="pastSliderTrack">
           <!-- 25.08.2026 - Vinyl Night. Act names, hour and free entry are all off our own poster. -->
           <article class="past-slide-card js-open-past" role="button" tabindex="0"
-            aria-label="Event details: Vinyl Night · Ofekniv &amp; Shovav"
+            aria-label="פרטי הערב: Vinyl Night · Ofekniv &amp; Shovav"
             data-badge-class="sticker--vinyl">
             <div class="past-slide-card__img">
-              <img src="images/events/vinyl-night-brazilian.jpg" alt="Vinyl Night poster with Ofekniv & Shovav at Ezra" loading="lazy" />
-              <span class="past-slide-card__tag">Vinyl Night</span>
+              <img src="images/events/vinyl-night-brazilian.jpg" alt="כרזת Vinyl Night עם Ofekniv & Shovav בעזרא" loading="lazy" />
+              <span class="past-slide-card__tag">ערב תקליטים</span>
             </div>
             <div class="past-slide-card__body">
               <div class="past-slide-card__date">25.08.2026</div>
               <h4 class="past-slide-card__title">Vinyl Night · Ofekniv &amp; Shovav</h4>
-              <p class="past-slide-card__desc">Two crates of Brazilian, funky, breaky and psychedelic selection - all on vinyl, free entry.</p>
+              <p class="past-slide-card__desc">שני ארגזים של סלקשן ברזילאי, פאנקי, ברייקי ופסיכדלי - הכל על ויניל, בכניסה חופשית.</p>
             </div>
           </article>
 
           <!-- 19.08.2026 - the first record night. Photo from the evening itself. -->
           <article class="past-slide-card js-open-past" role="button" tabindex="0"
-            aria-label="Event details: Our First Record Night · Reggae"
+            aria-label="פרטי הערב: ערב התקליטים הראשון · רגאיי"
             data-badge-class="sticker--vinyl">
             <div class="past-slide-card__img">
-              <img src="images/events/reggae-record-night.jpg" alt="A DJ playing vinyl at Ezra's first record night" loading="lazy" />
-              <span class="past-slide-card__tag">Vinyl Night</span>
+              <img src="images/events/reggae-record-night.jpg" alt="תקליטן משמיע ויניל בערב התקליטים הראשון בעזרא" loading="lazy" />
+              <span class="past-slide-card__tag">ערב תקליטים</span>
             </div>
             <div class="past-slide-card__body">
               <div class="past-slide-card__date">19.08.2026</div>
-              <h4 class="past-slide-card__title">Our First Record Night · Reggae</h4>
-              <p class="past-slide-card__desc">The first record night we held at Ezra. Friends of ours brought a reggae selection and played it end to end.</p>
+              <h4 class="past-slide-card__title">ערב התקליטים הראשון · רגאיי</h4>
+              <p class="past-slide-card__desc">ערב התקליטים הראשון שעשינו בעזרא. חברים שלנו הביאו סלקשן רגאיי והשמיעו אותו מהתחלה ועד הסוף.</p>
             </div>
           </article>
 
           <!-- 11.08.2026 - Liav Bilya. liavbilya.com is the artist's own site. -->
           <article class="past-slide-card js-open-past" role="button" tabindex="0"
-            aria-label="Event details: Liav Bilya"
+            aria-label="פרטי הערב: ליאב ביליה"
             data-badge-class="sticker--live"
             data-link="https://liavbilya.com" data-link-text="liavbilya.com">
             <div class="past-slide-card__img">
-              <img src="images/events/liav-bilya.jpg" alt="Liav Bilya cover artwork - Hakol Belo Gamur" loading="lazy" />
-              <span class="past-slide-card__tag">Live Music</span>
+              <img src="images/events/liav-bilya.jpg" alt="עטיפת ליאב ביליה - הכל בלא גמור" loading="lazy" />
+              <span class="past-slide-card__tag">הופעה חיה</span>
             </div>
             <div class="past-slide-card__body">
               <div class="past-slide-card__date">11.08.2026</div>
-              <h4 class="past-slide-card__title">Liav Bilya</h4>
-              <p class="past-slide-card__desc">A live show by Liav Bilya in the Ezra space.</p>
+              <h4 class="past-slide-card__title">ליאב ביליה</h4>
+              <p class="past-slide-card__desc">הופעה חיה של ליאב ביליה בחלל של עזרא.</p>
             </div>
           </article>
 
           <!-- 09.08.2026 - Lenge Lenge. Door time is off our own poster. -->
           <article class="past-slide-card js-open-past" role="button" tabindex="0"
-            aria-label="Event details: Lenge Lenge"
+            aria-label="פרטי הערב: Lenge Lenge"
             data-badge-class="sticker--live">
             <div class="past-slide-card__img">
-              <img src="images/events/lenge-lenge.jpg" alt="Lenge Lenge show poster at Ezra" loading="lazy" />
-              <span class="past-slide-card__tag">Live Music</span>
+              <img src="images/events/lenge-lenge.jpg" alt="כרזת ההופעה של Lenge Lenge בעזרא" loading="lazy" />
+              <span class="past-slide-card__tag">הופעה חיה</span>
             </div>
             <div class="past-slide-card__body">
               <div class="past-slide-card__date">09.08.2026</div>
               <h4 class="past-slide-card__title">Lenge Lenge</h4>
-              <p class="past-slide-card__desc">The second show by a new Tel Aviv underground band, after their debut at the Jaffa flea market. Doors at 20:00.</p>
+              <p class="past-slide-card__desc">ההופעה השנייה של להקת אנדרגראונד תל אביבית חדשה, אחרי הבכורה בשוק הפשפשים. דלתות ב-20:00.</p>
             </div>
           </article>
         </div>
 
-        <button class="past-slider-arrow past-slider-arrow--next" id="pastSliderNext" type="button" aria-label="Next events">
+        <button class="past-slider-arrow past-slider-arrow--next" id="pastSliderNext" type="button" aria-label="אירועים הבאים">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
@@ -5924,7 +5923,7 @@
   </section>
 
   <!-- ============================================================
-       6. LOCATION & DIRECTIONS (HOW TO GET HERE) + TRANSIT TUNNEL TRACK
+       6. LOCATION & DIRECTIONS (דרכי הגעה) + TRANSIT TUNNEL TRACK
   ============================================================ -->
   <section class="location-section" id="location">
     <!-- Ambient Night Sky Backdrop with Drifting Clouds -->
@@ -6067,18 +6066,18 @@
           <path d="M 6 24 Q 6 10 24 10 L 118 10 Q 128 10 132 20 L 6 24 Z" fill="url(#shelterRoofGrad)" stroke="#fffbeb" stroke-width="1"/>
           <line x1="8" y1="22" x2="128" y2="22" stroke="#451a03" stroke-width="1.2"/>
 
-          <!-- Prominent Illuminated Station Sign: ABARBANEL 38 (Large, bold, high contrast!) -->
+          <!-- Prominent Illuminated Station Sign: אברבנאל 38 (Large, bold, high contrast!) -->
           <rect x="20" y="10" width="84" height="14" rx="2.5" fill="#0d0905" stroke="#f5d98a" stroke-width="1.2"/>
           <circle cx="28" cy="17" r="3.2" fill="#fde047"/>
           <text x="28" y="19" fill="#181109" font-size="4" font-weight="900" text-anchor="middle" font-family="sans-serif">🚏</text>
-          <text x="64" y="20.5" fill="#fef08a" font-size="7.5" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="0.5">ABARBANEL 38</text>
+          <text x="64" y="20.5" fill="#fef08a" font-size="7.5" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="0.5">אברבנאל 38</text>
 
           <!-- Backlit Electronic Transit Board: Lines 25, 125, 18, EZRA -->
           <rect x="22" y="32" width="34" height="20" rx="1.5" fill="#0a0704" stroke="#ca8a04" stroke-width="0.8"/>
           <text x="39" y="38.5" fill="#fde047" font-size="3.4" font-weight="900" font-family="sans-serif" text-anchor="middle">25 · 125 · 18</text>
-          <text x="39" y="45" fill="#38bdf8" font-size="3" font-weight="900" font-family="sans-serif" text-anchor="middle">EZRA SHUTTLE</text>
+          <text x="39" y="45" fill="#38bdf8" font-size="3" font-weight="900" font-family="sans-serif" text-anchor="middle">שאטל עזרא</text>
           <circle cx="27" cy="48.5" r="1.2" fill="#4ade80"/>
-          <text x="40" y="49.5" fill="#4ade80" font-size="2.6" font-weight="700" font-family="sans-serif">ON TIME</text>
+          <text x="40" y="49.5" fill="#4ade80" font-size="2.6" font-weight="700" font-family="sans-serif">בזמן</text>
 
           <!-- Waiting Bench with Silhouette Passenger -->
           <rect x="68" y="58" width="34" height="3" rx="1" fill="#c49a3c"/>
@@ -6194,7 +6193,7 @@
         </svg>
       </div>
 
-      <!-- 1. VINTAGE BUS (FLORENTIN VINTAGE BUS - EZRA 38 SHUTTLE) -->
+      <!-- 1. VINTAGE BUS (אוטובוס פלורנטין - EZRA 38 SHUTTLE) -->
       <div class="transit-vehicle-runner transit-vehicle--bus">
         <svg class="transit-vehicle-svg" viewBox="0 0 140 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -6271,7 +6270,7 @@
         </svg>
       </div>
 
-      <!-- 2. MULTI-CARRIAGE LIGHT RAIL TRAIN (MULTI-CARRIAGE LIGHT RAIL - 3 CARRIAGES WITH BELLOWS) -->
+      <!-- 2. MULTI-CARRIAGE LIGHT RAIL TRAIN (רכבת הקלה מרובת קרונות - 3 CARRIAGES WITH BELLOWS) -->
       <div class="transit-vehicle-runner transit-vehicle--train">
         <svg class="transit-vehicle-svg" viewBox="0 0 560 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -6420,7 +6419,7 @@
         </svg>
       </div>
 
-      <!-- 3. TEL AVIV TAXI / RETRO CAR (TEL AVIV TAXI / CAR) -->
+      <!-- 3. TEL AVIV TAXI / RETRO CAR (מונית תל אביבית / רכב) -->
       <div class="transit-vehicle-runner transit-vehicle--car">
         <svg class="transit-vehicle-svg" viewBox="0 0 130 54" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -6483,7 +6482,7 @@
         </svg>
       </div>
 
-      <!-- 4. RETRO SCI-FI UFO / SPACESHIP (RETRO SPACESHIP / EZRA UFO) -->
+      <!-- 4. RETRO SCI-FI UFO / SPACESHIP (חללית רטרו / עב"ם עזרא) -->
       <div class="transit-vehicle-runner transit-vehicle--ufo">
         <svg class="transit-vehicle-svg" viewBox="0 0 135 60" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -6572,9 +6571,9 @@
           <polygon points="20,-6 28,-6 29,-12 19,-12" fill="#1b1208" stroke="url(#portalGoldGrad)" stroke-width="0.8"/>
           <circle class="transit-signal-light" cx="24" cy="-9" r="3.6" fill="#ea580c"/>
 
-          <!-- Gold Inscription: TUNNEL -->
+          <!-- Gold Inscription: מנהרה -->
           <rect x="11" y="16" width="26" height="7" rx="1.5" fill="#0a0704" stroke="#f5d98a" stroke-width="0.7"/>
-          <text x="24" y="21.2" fill="#fef08a" font-size="3.6" font-weight="900" font-family="Heebo, sans-serif" text-anchor="middle" letter-spacing="0.5">TUNNEL</text>
+          <text x="24" y="21.2" fill="#fef08a" font-size="3.6" font-weight="900" font-family="Heebo, sans-serif" text-anchor="middle" letter-spacing="0.5">מנהרה</text>
         </svg>
       </div>
 
@@ -6600,9 +6599,9 @@
           <polygon points="20,-6 28,-6 29,-12 19,-12" fill="#1b1208" stroke="url(#portalGoldGrad)" stroke-width="0.8"/>
           <circle class="transit-signal-light" cx="24" cy="-9" r="3.6" fill="#ea580c"/>
 
-          <!-- Gold Inscription: EXIT -->
+          <!-- Gold Inscription: יציאה -->
           <rect x="11" y="16" width="26" height="7" rx="1.5" fill="#0a0704" stroke="#f5d98a" stroke-width="0.7"/>
-          <text x="24" y="21.2" fill="#fef08a" font-size="3.6" font-weight="900" font-family="Heebo, sans-serif" text-anchor="middle" letter-spacing="0.5">EXIT</text>
+          <text x="24" y="21.2" fill="#fef08a" font-size="3.6" font-weight="900" font-family="Heebo, sans-serif" text-anchor="middle" letter-spacing="0.5">יציאה</text>
         </svg>
       </div>
     </div>
@@ -6615,25 +6614,25 @@
         <span class="stats-frame__corner stats-frame__corner--br" aria-hidden="true"></span>
 
         <div class="sec-head center">
-          <span class="eyebrow">Location & Directions</span>
-          <h2>How to Get Here</h2>
+          <span class="eyebrow">דרכי הגעה</span>
+          <h2>איך מגיעים</h2>
           <p>
-            Abarbanel 38, Florentin, Tel Aviv · In the heart of the southern scene, easy to reach on foot, by car or public transit.
+            אברבנאל 38, פלורנטין, תל אביב · בלב הסצינה של דרום העיר, עם גישה נוחה ברגל, ברכב ובתחבורה ציבורית.
           </p>
         </div>
 
         <div class="pills-row" id="locationPills">
           <span class="pill">
             <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Abarbanel 38, Florentin
+            אברבנאל 38, פלורנטין
           </span>
           <span class="pill">
             <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            3 min walk from the Light Rail (Elifelet / Salame station)
+            3 דקות הליכה מהרכבת הקלה (תחנת אליפלט / סלמה)
           </span>
           <span class="pill">
             <svg class="pill__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Nearby Parking: Elifelet & Rabi Ravia Lots
+            חניונים קרובים: חניון אליפלט וחניון רבי רביע
           </span>
         </div>
 
@@ -6646,18 +6645,18 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Ezra Tel Aviv Location Map - Abarbanel 38, Florentin"
+            title="מפת מיקום עזרא תל אביב - אברבנאל 38, פלורנטין"
           ></iframe>
           <div class="map-nav">
-            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="Navigate with Google Maps">
+            <a class="map-nav__btn" href="https://www.google.com/maps/dir/?api=1&destination=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Google Maps">
               <span class="map-nav__ico"><img src="images/nav/google-maps.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Google Maps</span>
             </a>
-            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="Navigate with Waze">
+            <a class="map-nav__btn" href="https://waze.com/ul?q=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91&navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze">
               <span class="map-nav__ico"><img src="images/nav/waze.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Waze</span>
             </a>
-            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="Navigate with Moovit">
+            <a class="map-nav__btn" href="https://moovit.com/?to=%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%91%D7%A8%D7%91%D7%A0%D7%90%D7%9C%2038%2C%20%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91" target="_blank" rel="noopener" aria-label="ניווט ב-Moovit">
               <span class="map-nav__ico"><img src="images/nav/moovit.svg" alt="" width="32" height="32" loading="lazy" /></span>
               <span class="map-nav__lbl">Moovit</span>
             </a>
@@ -6675,39 +6674,39 @@
       <div class="collab-strip">
         <div class="collab-badge-pill">
           <span class="collab-badge-dot"></span>
-          Cultural, Music & Culinary Collaborations
+          יוזמות תרבות, מוזיקה וקולינריה
         </div>
 
-        <h3>Want to host an event, DJ or cook at Ezra?</h3>
+        <h3>רוצים ליזום אירוע, לתקלט או לבשל בעזרא?</h3>
         <p>
-          Ezra is an open home for artists, DJs, chefs and creators. We love connecting precise wood-oven cuisine, analog sound and good people.
+          עזרא הוא בית פתוח לאמנים, תקליטנים, שפים ויוצרים. אנחנו תמיד שמחים לחבר בין קולינריה מדויקת, סאונד אנלוגי ואנשים טובים.
         </p>
 
         <!-- 3 Minimalist Category Cards -->
         <div class="collab-grid" id="collabGrid">
           <div class="collab-item">
             <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg></div>
-            <div class="collab-item-title">Food & Wood-Oven</div>
-            <div class="collab-item-sub">Guest Chefs · Food Pop-ups · Wood-Oven Specials</div>
+            <div class="collab-item-title">קולינריה וטאבון</div>
+            <div class="collab-item-sub">שפים אורחים · פופ-אפים · ספיישלים מהטאבון</div>
           </div>
           <div class="collab-item">
             <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-headphones"/></svg></div>
-            <div class="collab-item-title">Vinyl & Music</div>
-            <div class="collab-item-sub">All-Vinyl DJ Sets · Album Listening · Live Sessions</div>
+            <div class="collab-item-title">מוזיקה ותקליטים</div>
+            <div class="collab-item-sub">סטים על ויניל · השמעות אלבומים · הופעות חיות</div>
           </div>
           <div class="collab-item">
             <div class="collab-item-ico"><svg class="ico" aria-hidden="true"><use href="#i-glass"/></svg></div>
-            <div class="collab-item-title">Wine & Mixology</div>
-            <div class="collab-item-sub">Wine Nights · Boutique Wineries · Cocktail Launches</div>
+            <div class="collab-item-title">יין ומיקסולוגיה</div>
+            <div class="collab-item-sub">ערבי יין · יקבי בוטיק · השקות קוקטיילים</div>
           </div>
         </div>
 
         <div class="collab-actions">
           <a class="btn btn--green" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%94%D7%A6%D7%99%D7%A2%20%D7%A9%D7%99%D7%AA%D7%95%D7%A3%20%D7%A4%D7%A2%D7%95%D7%9C%D7%94%20%D7%90%D7%95%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%91%D7%A2%D7%96%D7%A8%D7%90" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
-            Pitch an Event via WhatsApp
+            הצעת אירוע בוואטסאפ
           </a>
-          <button class="btn btn--outline js-open-contact" data-event-type="Event Proposal / Collab" type="button">Leave Details & We'll Be In Touch</button>
+          <button class="btn btn--outline js-open-contact" data-event-type="הצעת אירוע / שת״פ" type="button">השאירו פרטים ונחזור אליכם</button>
         </div>
       </div>
     </div>
@@ -6719,100 +6718,100 @@
   <section id="faq">
     <div class="wrap">
       <div class="sec-head center">
-        <span class="eyebrow">Questions & Answers</span>
-        <h2>Frequently Asked Questions</h2>
-        <p>Everything you need to know before visiting Ezra's public events.</p>
+        <span class="eyebrow">שאלות נפוצות</span>
+        <h2>שאלות נפוצות</h2>
+        <p>כל מה שצריך לדעת לקראת הגעה לאירועים פתוחים בעזרא.</p>
       </div>
 
       <div class="faq-list">
         <div class="faq-item is-open">
           <button class="faq-q" type="button">
-            <span>How do I know if the bar is open to the public tonight or booked for a private event?</span>
+            <span>איך אני יודע אם המקום פתוח היום לקהל או סגור לאירוע פרטי?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            The calendar on this page updates in real time against our own diary. A night booked for a private event is marked in red, and an open night shows the opening time and the planned format. The strip at the top of the page also shows what is on tonight.
+            הלוח בעמוד הזה מתעדכן בזמן אמת מול היומן שלנו. ערב שסגור לאירוע פרטי מסומן באדום, וערב פתוח מציג את שעת הפתיחה ואת הפורמט המתוכנן. גם הפס בראש העמוד מראה מה קורה הערב.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>What food and drinks do you serve?</span>
+            <span>מה מגישים לאכול ולשתות?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            Food coming out of the tabun all evening: pizzas, sourdough breads, seasonal dishes and something to share in the middle of the table. Alongside it, a full bar with cocktails, wine and beer. The menu is dairy and vegetarian, no meat and no seafood.
+            אוכל שיוצא מהטאבון לאורך הערב: פיצות, לחמי מחמצת, מנות עונתיות ומשהו לחלוק במרכז השולחן. לצידו בר מלא עם קוקטיילים, יין ובירה. התפריט חלבי־צמחוני, בלי בשר ובלי פירות ים.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Is the food kosher?</span>
+            <span>האוכל כשר?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            The place is not under kosher supervision. The menu is entirely dairy and vegetarian, no meat and no seafood, but we do not hold a certificate and we will not present ourselves as kosher.
+            המקום אינו בהשגחת כשרות. התפריט כולו חלבי־צמחוני, בלי בשר ובלי פירות ים, אבל אנחנו לא מחזיקים תעודה ולא נציג את עצמנו ככשרים.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Where are you located?</span>
+            <span>איפה אתם יושבים?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            Abarbanel 38, in the heart of Florentin in Tel Aviv, in the neighborhood's old industrial area.
+            אברבנאל 38, בלב פלורנטין בתל אביב, באזור התעשייה הישן של השכונה.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Is there parking on site?</span>
+            <span>יש חניה במקום?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            There is no private parking at Ezra. There are paid lots on the nearby streets, and in the evenings you can usually find blue-and-white street parking in the area.
+            אין חניה פרטית בעזרא. יש חניונים בתשלום ברחובות הסמוכים, ובשעות הערב אפשר בדרך כלל למצוא חניה כחול־לבן בסביבה.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>How do I get there by public transport?</span>
+            <span>איך מגיעים בתחבורה ציבורית?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            The Red Line light rail stops at Salame and Elifelet, both a short walk away. In the evening it is the easiest way to get here, especially if you plan on drinking.
+            הרכבת הקלה, הקו האדום, עוצרת בתחנות סלמה ואליפלט במרחק הליכה קצרה. בשעות הערב זו הדרך הכי פשוטה להגיע, במיוחד אם מתכוונים לשתות.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Is there a cover charge?</span>
+            <span>הכניסה בתשלום?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            On most open nights entry is free, on a first-come, first-served basis. For nights with a live show or a special event we recommend leaving your details in advance to make sure there is room.
+            ברוב הערבים הפתוחים הכניסה חופשית, על בסיס מקום פנוי. בערבים עם הופעה חיה או אירוע מיוחד מומלץ להשאיר פרטים מראש כדי לוודא שיש מקום.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Do I need to book ahead for an open night?</span>
+            <span>צריך להזמין מקום מראש לערב פתוח?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            Not required, but worth it. The space is intimate and seats go on busy nights, so if you are a group or coming for a specific night, leave your details and we will hold a spot for you.
+            לא חובה, אבל כדאי. החלל אינטימי והמקומות נגמרים בערבים עמוסים, אז אם אתם קבוצה או מגיעים לערב מסוים, השאירו פרטים ונשמור לכם מקום.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>Can I book the whole place for a private event?</span>
+            <span>אפשר לסגור את המקום לאירוע פרטי?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            Yes, and it is most of what we do. One event per night, up to 50 guests, and the entire space closes for your group. All the event types and the full details are on the event types page.
+            כן, וזה עיקר מה שאנחנו עושים. אירוע אחד בערב, עד 50 אורחים, והחלל כולו נסגר לקבוצה שלכם. כל סוגי האירועים והפרטים המלאים נמצאים בעמוד <a href="event-types">סוגי אירועים</a>.
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button">
-            <span>How many people fit?</span>
+            <span>כמה אנשים נכנסים?</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-a">
-            Up to 50 guests. Most groups who book a private event with us are between 20 and 50 people, and that is the size the place was built for.
+            עד 50 אורחים. רוב הקבוצות שסוגרות אצלנו אירוע פרטי הן בין 20 ל־50 איש, וזה הגודל שהמקום נבנה בשבילו.
           </div>
         </div>
       </div>
@@ -6824,53 +6823,53 @@
   ============================================================ -->
   <div class="modal-scrim" id="eventModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-box">
-      <button class="modal-close" id="modalClose" type="button" aria-label="Close modal"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <button class="modal-close" id="modalClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       <div class="modal-grid">
         <div class="modal-poster">
-          <img id="modalImg" src="images/BAR.jpg" alt="Event poster" />
+          <img id="modalImg" src="images/BAR.jpg" alt="פוסטר אירוע" />
         </div>
         <div class="modal-body">
           <div class="modal-tags" id="modalTags">
-            <span class="time-card__badge time-card__badge--free" id="modalBadge">Free Entry</span>
-            <span class="time-card__date-pill" id="modalDateTag">Thu 20.08</span>
+            <span class="time-card__badge time-card__badge--free" id="modalBadge">כניסה חופשית</span>
+            <span class="time-card__date-pill" id="modalDateTag">חמישי 20.08</span>
           </div>
-          <h3 id="modalTitle">Event Title</h3>
-          <p class="teder-lineup" id="modalLineup">Lineup & Artists</p>
+          <h3 id="modalTitle">שם האירוע</h3>
+          <p class="teder-lineup" id="modalLineup">ליינאפ ואמנים</p>
 
           <!-- Extra photos of a published event. Hidden for the generic weekday nights,
                which have one stock image and nothing more. -->
           <div class="modal-gallery" id="modalGallery" hidden></div>
 
-          <p class="modal-desc" id="modalDesc">Description...</p>
+          <p class="modal-desc" id="modalDesc">פירוט האירוע...</p>
 
           <!-- The artist's or chef's own page, straight off the board. -->
           <a class="btn btn--outline btn--sm modal-artist-link" id="modalArtistLink" hidden target="_blank" rel="noopener">
             <svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg>
-            <span id="modalArtistLinkText">Instagram</span>
+            <span id="modalArtistLinkText">אינסטגרם</span>
           </a>
 
           <!-- The menu we published for one specific evening. Opens the PDF in a new tab rather
                than replacing anything on the card: the poster and photos stay as they are. -->
           <a class="btn btn--outline btn--sm modal-artist-link" id="modalMenuLink" hidden target="_blank" rel="noopener">
             <svg class="ico" aria-hidden="true"><use href="#i-slice"/></svg>
-            <span id="modalMenuLinkText">View the menu</span>
+            <span id="modalMenuLinkText">לצפייה בתפריט</span>
           </a>
 
           <!-- Seat reservation. Shown only for an evening whose Entry on the board is
-               "By reservation": a walk-in night must not ask anyone to book a table that does
+               "בהזמנת מקום": a walk-in night must not ask anyone to book a table that does
                not exist. Lands in New Leads on the Open Events board, which is deliberately
                not a committed group - holding a seat cannot mark the evening's date
                unavailable to everybody else. -->
           <div class="rsvp-form" id="modalRsvpBox" hidden>
-            <h4 id="modalRsvpTitle">Reserve a Seat</h4>
-            <p class="rsvp-note" id="modalRsvpIntro">Pick a time and leave your details. We will get back to you to confirm.</p>
+            <h4 id="modalRsvpTitle">שריון מקום</h4>
+            <p class="rsvp-note" id="modalRsvpIntro">בחרו שעה והשאירו פרטים. נחזור אליכם לאישור.</p>
             <div class="rsvp-rounds" id="modalRounds"></div>
             <form id="modalRsvpForm" class="cf-form-grid">
-              <div class="cf-field"><label for="rsvpName">Name</label><input id="rsvpName" name="name" type="text" placeholder="Your name" required /></div>
-              <div class="cf-field"><label for="rsvpPhone">Phone</label><input id="rsvpPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
-              <div class="cf-field"><label for="rsvpGuests">How many of you</label><input id="rsvpGuests" name="guests" type="number" min="1" max="40" step="1" placeholder="2" required /></div>
+              <div class="cf-field"><label for="rsvpName">שם</label><input id="rsvpName" name="name" type="text" placeholder="השם שלכם" required /></div>
+              <div class="cf-field"><label for="rsvpPhone">טלפון</label><input id="rsvpPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
+              <div class="cf-field"><label for="rsvpGuests">כמה אתם</label><input id="rsvpGuests" name="guests" type="number" min="1" max="40" step="1" placeholder="2" required /></div>
               <input type="text" id="rsvpHp" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; inset-inline-start:-9999px; width:1px; height:1px; opacity:0;" />
-              <button class="btn btn--fill btn--full" type="submit" id="rsvpSubmit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">Reserve a Seat</button>
+              <button class="btn btn--fill btn--full" type="submit" id="rsvpSubmit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">שריון מקום</button>
             </form>
             <p class="rsvp-msg" id="modalRsvpMsg" hidden></p>
           </div>
@@ -6879,18 +6878,18 @@
                next one, not booking a seat. -->
           <div class="rsvp-box" id="modalInfoBox">
             <p class="rsvp-note" id="modalEntryNote"></p>
-            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" data-interest="open_events" type="button" id="modalInfoBtn">Notify me about nights like this</button>
+            <button class="btn btn--outline btn--sm js-newsletter" data-topic="ערבים פתוחים" data-interest="open_events" type="button" id="modalInfoBtn">עדכנו אותי על ערבים כאלה</button>
           </div>
 
           <div class="private-cta-box" id="modalPrivateBox" style="display:none; margin-block-start: 1rem; padding: 1.3rem; background: rgba(196,154,60,0.08); border: 1.2px solid var(--gold); border-radius: 18px; text-align: center;">
-            <h4 style="color: var(--gold-light); font-size: 1.1rem; font-weight: 600; margin-block-end: 0.4rem;">Closed for a Private Gathering Tonight</h4>
-            <p style="font-size: 0.88rem; color: var(--cream-dim); margin-block-end: 1.1rem; line-height: 1.6;">Looking to host a birthday, intimate wedding, or corporate event at Ezra? We would love to host your celebration on one of our available dates.</p>
+            <h4 style="color: var(--gold-light); font-size: 1.1rem; font-weight: 600; margin-block-end: 0.4rem;">המקום סגור הערב לאירוע פרטי</h4>
+            <p style="font-size: 0.88rem; color: var(--cream-dim); margin-block-end: 1.1rem; line-height: 1.6;">מעוניינים לחגוג יום הולדת, חתונה אינטימית או אירוע חברה בעזרא? נשמח להתאים לכם אירוע בלתי נשכח באחד התאריכים הפנויים.</p>
             <div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;">
-              <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=Hi%20Ezra%2C%20I%20am%20interested%20in%20booking%20a%20private%20event" target="_blank" rel="noopener">
+              <a class="btn btn--green btn--sm" id="modalPrivateWa" href="https://wa.me/972509499241?text=%D7%94%D7%99%D7%99%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%A1%D7%92%D7%99%D7%A8%D7%AA%20%D7%90%D7%99%D7%A8%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99" target="_blank" rel="noopener">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
-                <span>Check Dates on WhatsApp</span>
+                <span>בדיקת תאריכים בוואטסאפ</span>
               </a>
-              <button class="btn btn--outline btn--sm js-open-contact" data-event-type="אירוע פרטי" type="button">Leave Details & We'll Be In Touch</button>
+              <button class="btn btn--outline btn--sm js-open-contact" data-event-type="אירוע פרטי" type="button">השאירו פרטים ונחזור אליכם</button>
             </div>
           </div>
         </div>
@@ -6906,22 +6905,22 @@
        "what happens here" wants to hear about the next one, not book a venue. -->
   <div class="modal-scrim" id="newsletterModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="notice-box" style="text-align: start;">
-      <button class="modal-close" id="nlClose" type="button" aria-label="Close modal"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <button class="modal-close" id="nlClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       <div id="nlWrap">
         <span class="eyebrow" id="nlTopicLabel" hidden></span>
-        <h3 class="notice-title" style="text-align: start;">Want us to tell you about the next night?</h3>
-        <p class="notice-body" style="text-align: start;">Leave your details and we'll message you when signups open for the public nights. No spam, just when and what.</p>
+        <h3 class="notice-title" style="text-align: start;">שנעדכן אתכם על הערב הבא?</h3>
+        <p class="notice-body" style="text-align: start;">משאירים פרטים ומקבלים הודעה כשנפתחת הרשמה לערבים הפתוחים. בלי ספאם, רק מתי ומה.</p>
         <form id="nlForm" class="cf-form-grid" style="margin-block-start: 1.2rem;">
-          <div class="cf-field"><label for="nlName">Name</label><input id="nlName" name="name" type="text" placeholder="Your name" required /></div>
-          <div class="cf-field"><label for="nlPhone">Phone</label><input id="nlPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
+          <div class="cf-field"><label for="nlName">שם</label><input id="nlName" name="name" type="text" placeholder="השם שלכם" required /></div>
+          <div class="cf-field"><label for="nlPhone">טלפון</label><input id="nlPhone" name="phone" type="tel" placeholder="050-1234567" required /></div>
           <input type="hidden" id="nlTopic" name="topic" />
           <input type="hidden" id="nlInterest" name="interest" />
-          <button class="btn btn--fill btn--full" type="submit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">Notify Me</button>
+          <button class="btn btn--fill btn--full" type="submit" style="margin-block-start: 0.4rem; padding: 0.85rem; font-weight: 500;">עדכנו אותי</button>
         </form>
       </div>
       <div id="nlDone" class="cf-done" hidden>
-        <h3>You're on the list</h3>
-        <p style="color: var(--cream-dim); font-size: 0.95rem;">We'll let you know as soon as the next night is set.</p>
+        <h3>נרשמתם</h3>
+        <p style="color: var(--cream-dim); font-size: 0.95rem;">נעדכן אתכם ברגע שנקבע הערב הבא.</p>
       </div>
     </div>
   </div>
@@ -6930,119 +6929,119 @@
        explanation instead of a form the visitor cannot complete. -->
   <div class="modal-scrim" id="noticeModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="notice-box">
-      <button class="modal-close" id="noticeClose" type="button" aria-label="Close modal"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <button class="modal-close" id="noticeClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       <h3 class="notice-title" id="noticeTitle"></h3>
       <p class="notice-body" id="noticeBody"></p>
       <div class="notice-actions">
-        <button class="btn btn--outline btn--sm" id="noticeDismiss" type="button">Choose Another Date</button>
+        <button class="btn btn--outline btn--sm" id="noticeDismiss" type="button">לבחור תאריך אחר</button>
       </div>
     </div>
   </div>
 
   <div class="modal-scrim" id="contactModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="contact-modal-box">
-      <button class="modal-close" id="contactModalClose" type="button" aria-label="Close modal"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <button class="modal-close" id="contactModalClose" type="button" aria-label="סגירת חלון"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       
       <div id="contactFormWrap">
         <div class="cf-head">
-          <span class="eyebrow">Date Booking</span>
-          <h3 class="cf-title">Leave Details & We'll Be In Touch</h3>
+          <span class="eyebrow">שריון תאריך</span>
+          <h3 class="cf-title">השאירו פרטים ונחזור אליכם</h3>
           <p class="cf-sub">
-            Planning a private celebration, birthday, intimate wedding or concept night at Ezra? Fill in your details and our team will get back to you within 24 hours.
+            תכנון אירוע פרטי, יום הולדת, חתונה אינטימית או יוזמת תוכן בעזרא. ממלאים את הפרטים ונציג יחזור אליכם תוך 24 שעות.
           </p>
         </div>
 
         <form id="contactFormEl" class="cf-form-grid">
           <div class="cf-field--row">
             <div class="cf-field">
-              <label for="cfName">Full Name *</label>
-              <input type="text" id="cfName" name="name" placeholder="John Doe" required />
+              <label for="cfName">שם מלא *</label>
+              <input type="text" id="cfName" name="name" placeholder="ישראל ישראלי" required />
             </div>
             <div class="cf-field">
-              <label for="cfPhone">Phone Number *</label>
+              <label for="cfPhone">טלפון נייד *</label>
               <input type="tel" id="cfPhone" name="phone" placeholder="050-1234567" required />
             </div>
           </div>
 
           <div class="cf-field--row">
             <div class="cf-field">
-              <label for="cfEmail">Email Address</label>
+              <label for="cfEmail">אימייל</label>
               <input type="email" id="cfEmail" name="email" placeholder="name@example.com" />
             </div>
             <div class="cf-field">
-              <label for="cfGuests">Estimated Guests</label>
+              <label for="cfGuests">מספר אורחים משוער</label>
               <input type="number" id="cfGuests" name="guests" placeholder="10-50" min="1" max="80" />
             </div>
           </div>
 
           <div class="cf-field">
-            <label>Event Type / Inquiry</label>
+            <label>סוג האירוע / הפנייה</label>
             <div class="cf-pills" id="cfEventTypePills">
-              <button type="button" class="cf-pill is-active" data-val="אירוע פרטי">Private Event / Birthday</button>
-              <button type="button" class="cf-pill" data-val="יוזמת תוכן / ערב פתוח">Concept Night / Open Night</button>
-              <button type="button" class="cf-pill" data-val="אירוע חברה">Company & Team Event</button>
-              <button type="button" class="cf-pill" data-val="פופ אפ אוכל">Food Pop-Up</button>
-              <button type="button" class="cf-pill" data-val="הופעה">Live Show</button>
-              <button type="button" class="cf-pill" data-val="אחר">Other</button>
+              <button type="button" class="cf-pill is-active" data-val="אירוע פרטי">אירוע פרטי / יום הולדת</button>
+              <button type="button" class="cf-pill" data-val="יוזמת תוכן / ערב פתוח">יוזמת תוכן / ערב פתוח</button>
+              <button type="button" class="cf-pill" data-val="אירוע חברה">אירוע חברה וצוות</button>
+              <button type="button" class="cf-pill" data-val="פופ אפ אוכל">פופ אפ אוכל</button>
+              <button type="button" class="cf-pill" data-val="הופעה">הופעה</button>
+              <button type="button" class="cf-pill" data-val="אחר">אחר</button>
             </div>
             <input type="hidden" id="cfEventType" name="eventType" value="אירוע פרטי" />
           </div>
 
           <!-- Interactive Date Picker & Availability Calendar -->
           <div class="cf-field">
-            <label>Preferred Date (Live Availability Calendar)</label>
+            <label>תאריך מבוקש (לוח זמינות חי)</label>
             <button type="button" class="cf-datebtn is-empty" id="cfDateBtn" aria-expanded="false">
-              <span id="cfDateLabel">Select a date from calendar</span>
+              <span id="cfDateLabel">בחרו תאריך מהלוח</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </button>
             <input type="hidden" id="cfDate" name="date" />
 
             <div class="cf-cal" id="cfCal" hidden>
               <div class="cal__head">
-                <button type="button" class="cal__nav" id="cfCalPrev" aria-label="Previous month">
+                <button type="button" class="cal__nav" id="cfCalPrev" aria-label="חודש קודם">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
                 <div class="cal__month" id="cfCalMonth"></div>
-                <button type="button" class="cal__nav" id="cfCalNext" aria-label="Next month">
+                <button type="button" class="cal__nav" id="cfCalNext" aria-label="חודש הבא">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
                 </button>
               </div>
               <div class="cal__grid" id="cfCalGrid"></div>
               <div class="cal__slots" id="cfCalSlots" aria-live="polite">
-                <p class="cal__slots-hint" id="cfSlotsHint">Select a date to see which times are available</p>
+                <p class="cal__slots-hint" id="cfSlotsHint">בחרו תאריך כדי לראות אילו שעות פנויות</p>
                 <div class="cal__slots-row" id="cfSlotsRow" hidden>
                   <button type="button" class="cal__slot" data-slot="afternoon" data-val="צהריים (12:00-18:00)">
-                    <span class="cal__slot-name">Afternoon</span>
+                    <span class="cal__slot-name">צהריים</span>
                     <span class="cal__slot-time num">12:00-18:00</span>
                     <span class="cal__slot-state"></span>
                   </button>
                   <button type="button" class="cal__slot" data-slot="evening" data-val="ערב (18:00-02:00)">
-                    <span class="cal__slot-name">Evening</span>
+                    <span class="cal__slot-name">ערב</span>
                     <span class="cal__slot-time num">18:00-02:00</span>
                     <span class="cal__slot-state"></span>
                   </button>
                   <button type="button" class="cal__slot" data-slot="any" data-val="גמיש">
-                    <span class="cal__slot-name">Flexible</span>
-                    <span class="cal__slot-time">Any time that works</span>
+                    <span class="cal__slot-name">גמיש</span>
+                    <span class="cal__slot-time">כל שעה שתתאים</span>
                     <span class="cal__slot-state"></span>
                   </button>
                 </div>
               </div>
               <input type="hidden" id="cfSlot" name="slot" value="" />
               <div class="cal__legend">
-                <div class="cal__legend-item"><span class="cal__legend-bar"><i></i><i></i></span><span>Afternoon / Evening</span></div>
-                <div class="cal__legend-item"><span class="cal__legend-bar"><i class="taken"></i><i></i></span><span>Part of the day is taken</span></div>
+                <div class="cal__legend-item"><span class="cal__legend-bar"><i></i><i></i></span><span>צהריים / ערב</span></div>
+                <div class="cal__legend-item"><span class="cal__legend-bar"><i class="taken"></i><i></i></span><span>חלק מהיום תפוס</span></div>
               </div>
             </div>
           </div>
 
           <div class="cf-field">
-            <label for="cfNotes">Additional Details / Notes</label>
-            <textarea id="cfNotes" name="notes" rows="2" placeholder="Tell us a bit about your event idea..."></textarea>
+            <label for="cfNotes">פרטים נוספים / הערות</label>
+            <textarea id="cfNotes" name="notes" rows="2" placeholder="ספרו לנו קצת על האירוע או הבקשה שלכם..."></textarea>
           </div>
 
           <button class="btn btn--fill btn--full" id="cfSubmitBtn" type="submit" style="margin-block-start: 0.5rem; padding: 0.85rem; font-weight: 500;">
-            <span>Submit & Hold Date</span>
+            <span>שליחת פרטים ושריון תאריך</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </form>
@@ -7055,23 +7054,23 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </div>
-        <h3 id="cfDoneTitle">Thank You! Details Received</h3>
+        <h3 id="cfDoneTitle">תודה! הפרטים התקבלו בעזרא</h3>
         <p id="cfDoneDesc">
-          Your inquiry has been successfully registered on our events board. We'll be in touch within 24 hours to coordinate all details.
+          הפנייה שלך נרשמה בהצלחה בלוח האירועים שלנו. נחזור אליך בהקדם (תוך 24 שעות) לתיאום כל הפרטים.
         </p>
         <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;">
           <a class="btn btn--green" id="cfDoneWa" href="https://wa.me/972509499241" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
-            <span>Continue on WhatsApp</span>
+            <span>המשך שיחה בוואטסאפ</span>
           </a>
-          <button class="btn btn--outline" id="cfDoneClose" type="button">Close</button>
+          <button class="btn btn--outline" id="cfDoneClose" type="button">סגירה</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Toast Message -->
-  <div class="toast" id="toast">Sent successfully!</div>
+  <div class="toast" id="toast">ההודעה נשלחה בהצלחה!</div>
 
   <!-- ============================================================
        FOOTER
@@ -7079,29 +7078,31 @@
   <footer class="footer">
     <div class="wrap">
       <div class="footer__inner">
-        <a href="english-index" class="footer__logo"><img src="images/logo.png" alt="Ezra Tel Aviv" /></a>
+        <a href="/" class="footer__logo"><img src="images/logo.png" alt="עזרא תל אביב" /></a>
         <nav class="footer__nav">
-          <a href="english-index">Private Events</a>
-          <a href="english-company-events">Company Events</a>
-          <a href="english-events">Public Events</a>
-          <a href="#schedule">Weekly Schedule</a>
-          <a href="#collab">Collaborations</a>
+          <a href="/">אירועים פרטיים</a>
+          <a href="company-events">אירועי חברה</a>
+          <a href="open-events">אירועים פתוחים</a>
+          <a href="#schedule">לוח שבועי</a>
+          <a href="#collab">שיתופי פעולה</a>
         </nav>
         <div class="footer__social">
-          <a href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="Instagram">
+          <a href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener" aria-label="אינסטגרם">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
-          <a href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <a href="https://wa.me/972509499241" target="_blank" rel="noopener" aria-label="וואטסאפ">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.122.554 4.115 1.523 5.845l-1.603 5.86 6.007-1.575c1.67.915 3.585 1.438 5.62 1.438 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
           </a>
         </div>
       </div>
       <div class="footer__bottom">
-        <div>Ezra Tel Aviv © 2026 · Abarbanel 38, Florentin, Tel Aviv</div>
+        <div>עזרא תל אביב © 2026 · אברבנאל 38, פלורנטין, תל אביב</div>
         <div class="footer__legal">
-          <a href="english-accessibility">Accessibility Statement</a>
-          <a href="english-privacy">Privacy Policy</a>
-          <a href="english-terms">Terms of Service</a>
+          <a href="accessibility">הצהרת נגישות</a>
+          <a href="about">אודות</a>
+      <a href="contact">יצירת קשר</a>
+      <a href="privacy">מדיניות פרטיות</a>
+          <a href="terms">תקנון ותנאי שימוש</a>
         </div>
       </div>
     </div>
@@ -7158,17 +7159,17 @@
     // A weekday absent from this map has no public format, and the page claims nothing about it.
     const EZRA_FORMATS = {
       0: {
-        name: 'Live Music Nights',
-        shortName: 'Music Night',
-        lineup: 'Program announced a week ahead',
-        desc: 'Sundays at Ezra are for live music, intimate shows and rare vinyl sets. The full program, the artists and the lineup go up about a week before the night.',
+        name: 'ערבי מוזיקה חיה',
+        shortName: 'ערב מוזיקה',
+        lineup: 'התוכנית מתעדכנת שבוע מראש',
+        desc: 'ימי ראשון בעזרא מוקדשים למוזיקה חיה, הופעות אינטימיות וסטים נדירים על גבי תקליטי ויניל. התוכנית המלאה, האמנים והליינאפ מתפרסמים כשבוע לפני האירוע.',
         img: 'images/MOMENT 1.jpg',
       },
       2: {
-        name: 'Rotating Chef Pop-up',
-        shortName: 'Chef Pop-Up',
-        lineup: 'Program announced a week ahead',
-        desc: 'Tuesdays at Ezra are for great cooking straight out of the hot stone oven, with guest chefs and menus that change every time. The full program, the guest chef and the exact menu go up about a week before the night.',
+        name: 'פופ אפ שף מתחלף',
+        shortName: 'פופ-אפ שף',
+        lineup: 'התוכנית מתעדכנת שבוע מראש',
+        desc: 'ימי שלישי בעזרא מוקדשים לקולינריה משובחת מהטאבון הלוהט עם שפים אורחים ותפריטים מתחלפים. התוכנית המלאה, השף האורח והתפריט המדויק מתפרסמים כשבוע לפני האירוע.',
         img: 'images/FOOD ENVIRONMENT.jpg',
       },
     };
@@ -7177,9 +7178,9 @@
     // room is simply not open unless somebody books it. Said gently: no event tonight, and the
     // date can be yours.
     const EZRA_NO_FORMAT = {
-      name: 'Available for a private event',
-      lineup: 'No public night on this date',
-      desc: 'No public night is planned for this date. Want Ezra to yourselves? You can close the space for a private event, a birthday or a team night - leave your details and we will get back to you.',
+      name: 'פנוי לאירוע פרטי',
+      lineup: 'אין ערב ציבורי בתאריך הזה',
+      desc: 'לא מתוכנן ערב ציבורי בתאריך הזה. רוצים את עזרא לעצמכם? אפשר לסגור את החלל לאירוע פרטי, יום הולדת או ערב חברה - השאירו פרטים ונחזור אליכם.',
       img: 'images/BAR.jpg',
     };
     let ezraPublished = new Map();
@@ -7193,7 +7194,7 @@
     }
 
     // The green "next up" line on the format cards. Hardcoded copy went stale the
-    // morning after an event (same reasoning as the Hebrew page), so the
+    // morning after an event (Moss Town was advertised as "today" a day late), so the
     // line is driven by the same feed as the hero: the next published event of each
     // category shows - today included - and a past event never does.
     (function () {
@@ -7212,16 +7213,16 @@
         if (/הופע|לייב|להקה|מוזיקה חיה|ג'אם|live|band/i.test(t)) return 'live';
         return null;
       }
-      var DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      var DOW = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
       function whenText(dateStr) {
         var now = new Date();
         var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         var p = dateStr.split('-');
         var d = new Date(+p[0], +p[1] - 1, +p[2]);
         var diff = Math.round((d - today) / 86400000);
-        if (diff === 0) return 'Today';
-        if (diff === 1) return 'Tomorrow';
-        return DOW[d.getDay()] + ' ' + ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2);
+        if (diff === 0) return 'היום';
+        if (diff === 1) return 'מחר';
+        return 'יום ' + DOW[d.getDay()] + ' ' + ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2);
       }
       function fill() {
         var n = new Date();
@@ -7266,7 +7267,7 @@
     })();
 
     // The whole format card is the target, not just the small ghost button inside it. Somebody
-    // reading "Live Music" and wanting to hear about the next one aims at the card.
+    // reading "מוזיקה חיה" and wanting to hear about the next one aims at the card.
     function ezraOpenNewsletterFrom(el) {
       if (typeof openNewsletter !== 'function') return;
       openNewsletter(el.getAttribute('data-topic') || '', el.getAttribute('data-interest') || '');
@@ -7275,7 +7276,7 @@
       const btn = node.closest('.js-newsletter');
       if (btn) return btn;
       const card = node.closest('.fmt-card');
-      // "Upcoming dates" is a real link to the schedule and must keep working.
+      // "לתאריכים הקרובים" is a real link to the schedule and must keep working.
       if (!card || node.closest('a')) return null;
       return card.querySelector('.js-newsletter');
     }
@@ -7300,7 +7301,7 @@
         if (!card.querySelector('.js-newsletter')) return;
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
-        card.setAttribute('aria-label', 'Notify me about ' + (card.querySelector('.fmt-card__title')?.textContent || '').trim());
+        card.setAttribute('aria-label', 'עדכנו אותי על ' + (card.querySelector('.fmt-card__title')?.textContent || '').trim());
       });
     });
 
@@ -7339,9 +7340,7 @@
             name: document.getElementById('nlName').value || '',
             phone: document.getElementById('nlPhone').value || '',
             eventType: topic || 'עדכונים על ערבים פתוחים',
-            // Board-facing text stays Hebrew - the team reads the board in Hebrew - but it says
-            // the lead came from the English page, because the reply has to go back in English.
-            notes: 'הרשמה לעדכונים על אירועים פתוחים לקהל (מהאתר באנגלית)'
+            notes: 'הרשמה לעדכונים על אירועים פתוחים לקהל'
               + (topic ? '\nמעוניין/ת ב: ' + topic : ''),
             pageUrl: location.href,
             // Which card they signed up from is the whole point: somebody who asked about music
@@ -7374,7 +7373,7 @@
       const prevWeekBtn = document.getElementById('prevWeekBtn');
       const nextWeekBtn = document.getElementById('nextWeekBtn');
 
-      const daysHe = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const daysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
       const pad = n => String(n).padStart(2, '0');
       const today = new Date();
 
@@ -7410,7 +7409,7 @@
           const fmt = EZRA_FORMATS[dow] || EZRA_NO_FORMAT;
           const published = ezraPublished.get(dateKey) || null;
           // A published evening is booked exactly the way a private one is, so without this it
-          // renders as "Closed event · Reserved for a private event" - which is how Moss Town and the chef
+          // renders as "אירוע סגור · שמור לאירוע פרטי" - which is how Moss Town and the chef
           // evening were being announced on Instagram and hidden on our own page.
           const isClosedEvening = !published && (hasEveningEvent || (isBooked && !hasAfternoonEvent));
 
@@ -7420,7 +7419,7 @@
           let img = fmt.img;
           // A format is not an instance, so it gets no entry badge and no hours. Those are facts
           // about a particular evening and only the board knows them.
-          let badge = EZRA_FORMATS[dow] ? 'Regular Format' : 'Date available to book';
+          let badge = EZRA_FORMATS[dow] ? 'פורמט קבוע' : 'התאריך פנוי להזמנה';
           let badgeClass = EZRA_FORMATS[dow] ? 'sticker--format' : 'sticker--free';
           let hours = '';
 
@@ -7429,8 +7428,8 @@
             lineup = published.subtitle || fmt.lineup;
             desc = published.desc || fmt.desc;
             img = (published.images && published.images[0]) || fmt.img;
-            badge = published.entry || 'Open to the public';
-            // "By reservation" is the one entry type that asks something of the visitor, so it
+            badge = published.entry || 'פתוח לקהל';
+            // "בהזמנת מקום" is the one entry type that asks something of the visitor, so it
             // keeps the RSVP styling. Everything else reads as an open door.
             badgeClass = /הזמנ|כרטיס/.test(badge) ? 'sticker--rsvp' : 'sticker--free';
             // Doors, not the venue's slot: a sit-down evening opens when the first table does.
@@ -7438,11 +7437,11 @@
           }
 
           if (isClosedEvening) {
-            title = 'Private Event · Reserved Gathering';
-            lineup = 'Venue held exclusively for private guests';
-            desc = 'The venue is closed tonight for an exclusive private gathering. Thinking of booking Ezra for a private event, a birthday or a company night? Leave your details and we will get back to you with everything.';
+            title = 'אירוע סגור · שמור לאירוע פרטי';
+            lineup = 'החלל סגור לאורחי האירוע בלבד';
+            desc = 'המקום סגור הערב לאירוע פרטי אקסקלוסיבי. מעוניינים לסגור את עזרא לאירוע פרטי, יום הולדת או אירוע חברה? השאירו פרטים ונחזור אליכם עם כל המידע.';
             img = 'images/BAR.jpg';
-            badge = 'Private Event';
+            badge = 'סגור לאירוע פרטי';
             badgeClass = 'sticker--busy';
             hours = '';
           }
@@ -7455,7 +7454,7 @@
             dow: dow,
             dayName: daysHe[dow],
             dateFormatted: `${pad(d.getDate())}.${pad(d.getMonth()+1)}`,
-            fullDateString: `${daysHe[dow]} ${pad(d.getDate())}.${pad(d.getMonth()+1)}`,
+            fullDateString: `יום ${daysHe[dow]} ${pad(d.getDate())}.${pad(d.getMonth()+1)}`,
             isToday: isToday,
             hasAfternoonEvent: hasAfternoonEvent,
             hasEveningEvent: hasEveningEvent,
@@ -7475,18 +7474,18 @@
         if (liveText && allDaysData[0]) {
           const t0 = allDaysData[0];
           if (t0.isClosedEvening) {
-            liveText.innerHTML = `<strong>Tonight:</strong> Closed for Private Event`;
+            liveText.innerHTML = `<strong>הערב:</strong> המקום סגור לאירוע פרטי`;
             const strip0 = document.getElementById('heroLiveStatus');
             if (strip0) strip0.classList.remove('is-open'), strip0.classList.add('is-closed');
           } else if (!t0.published && !EZRA_FORMATS[t0.dow]) {
             // Nothing on the board and no recurring format: the room is closed tonight. Gentle -
             // an invitation to book the date, not a shut door.
-            liveText.innerHTML = `<strong>Tonight:</strong> Available for a private event`;
+            liveText.innerHTML = `<strong>הערב:</strong> פנוי לאירוע פרטי`;
             const strip2 = document.getElementById('heroLiveStatus');
             if (strip2) strip2.classList.remove('is-open'), strip2.classList.add('is-closed');
           } else {
             const openHour = (t0.hours || '20:00').split(' - ')[0].split(' ')[0];
-            liveText.innerHTML = `<strong>Tonight:</strong> Open to public from ${openHour} · ${t0.title.split('·')[0]}`;
+            liveText.innerHTML = `<strong>הערב:</strong> פתוח לקהל מ-${openHour} · ${t0.title.split('·')[0]}`;
             const strip1 = document.getElementById('heroLiveStatus');
             if (strip1) strip1.classList.remove('is-closed'), strip1.classList.add('is-open');
           }
@@ -7498,10 +7497,10 @@
         weekTabs.innerHTML = '';
 
         const weekRanges = [
-          { idx: 0, label: `This Week (${allDaysData[0].dateFormatted} - ${allDaysData[6].dateFormatted})` },
-          { idx: 1, label: `Week 2 (${allDaysData[7].dateFormatted} - ${allDaysData[13].dateFormatted})` },
-          { idx: 2, label: `Week 3 (${allDaysData[14].dateFormatted} - ${allDaysData[20].dateFormatted})` },
-          { idx: 3, label: `Week 4 (${allDaysData[21].dateFormatted} - ${allDaysData[27].dateFormatted})` }
+          { idx: 0, label: `השבוע (${allDaysData[0].dateFormatted} - ${allDaysData[6].dateFormatted})` },
+          { idx: 1, label: `שבוע 2 (${allDaysData[7].dateFormatted} - ${allDaysData[13].dateFormatted})` },
+          { idx: 2, label: `שבוע 3 (${allDaysData[14].dateFormatted} - ${allDaysData[20].dateFormatted})` },
+          { idx: 3, label: `שבוע 4 (${allDaysData[21].dateFormatted} - ${allDaysData[27].dateFormatted})` }
         ];
 
         weekRanges.forEach(w => {
@@ -7559,23 +7558,23 @@
 
           let badgeHtml = `<span class="time-card__badge time-card__badge--${item.badgeClass.replace('sticker--', '')}">${item.badge}</span>`;
           if (item.isToday) {
-            badgeHtml = `<span class="time-card__badge time-card__badge--today"><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg> TONIGHT</span>`;
+            badgeHtml = `<span class="time-card__badge time-card__badge--today"><svg class="ico ico--fill" aria-hidden="true"><use href="#i-spark"/></svg> הערב בעזרא</span>`;
           }
 
           const isAfternoonFree = !item.hasAfternoonEvent;
           let afternoonRow = item.hasAfternoonEvent
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="Afternoon closed for event"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>Afternoon</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event / Booked</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="Click to book or hold afternoon"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>Afternoon</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Available <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="notice-afternoon" title="הצהריים סגורים לאירוע"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>צהריים</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-afternoon" title="לחצו להשארת פרטים ושריון צהריים"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="slot-row__when"><span>צהריים</span><span class="slot-row__hours num">12:00-18:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           // Three states, not two. "Not closed" is not the same as "open to the public": on a
           // night with nothing on the board and no recurring format the room simply is not open,
-          // and the green "Open to the public" row was announcing a public evening that does not exist.
+          // and the green "פתוח לקהל" row was announcing a public evening that does not exist.
           const eveningIsPublic = !!item.published || !!EZRA_FORMATS[item.dow];
           let eveningRow = item.isClosedEvening
-            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="Evening closed for private event"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>Evening</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Private Event / Booked</span></div>`
+            ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : eveningIsPublic
-            ? `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="Click for details and RSVP"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>Evening</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>${item.published ? `Public (${openHour})` : 'Public'}</span></div>`
-            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-evening" title="Click to book or hold this evening"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>Evening</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>Available <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
+            ? `<div class="slot-row slot-row--open slot-row--clickable" data-action="rsvp-evening" title="לחצו לפרטי הערב ושריון מקום"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>${item.published ? `פתוח לקהל (${openHour})` : 'פתוח לקהל'}</span></div>`
+            : `<div class="slot-row slot-row--day-free slot-row--clickable" data-action="contact-evening" title="לחצו להשארת פרטים ושריון הערב"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg></span></div>`;
 
           card.innerHTML = `
             <div class="time-card__img-wrap">
@@ -7597,7 +7596,7 @@
                 ${eveningRow}
               </div>
               <div class="time-card__footer">
-                <span>${item.isClosedEvening ? 'Private Event Details' : 'Details & RSVP'}</span>
+                <span>${item.isClosedEvening ? 'פרטים על אירועים פרטיים' : 'לפרטים ושריון מקום'}</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </div>
             </div>
@@ -7618,8 +7617,8 @@
           if (afternoonBusyEl) {
             afternoonBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
-              showNotice('This Afternoon is Already Booked',
-                `On ${item.dateFormatted}, a private event is already scheduled in the afternoon. Feel free to choose the evening slot on this date, or another date marked as available.`);
+              showNotice('הצהריים האלה כבר תפוסים',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או תאריך אחר שמסומן כפנוי לאירוע.`);
             });
           }
 
@@ -7627,8 +7626,8 @@
           if (eveningBusyEl) {
             eveningBusyEl.addEventListener('click', (e) => {
               e.stopPropagation();
-              showNotice('This Evening is Already Reserved',
-                `On ${item.dateFormatted}, Ezra is reserved for a private gathering in the evening. Feel free to choose the afternoon slot on this date, or another date marked as available.`);
+              showNotice('הערב הזה כבר שמור',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או תאריך אחר שמסומן כפנוי לאירוע.`);
             });
           }
 
@@ -7644,8 +7643,8 @@
 
           card.addEventListener('click', () => {
             if (item.isClosedEvening) {
-              showNotice('This Evening is Already Reserved',
-                `On ${item.dateFormatted}, Ezra is reserved for a private gathering in the evening. Feel free to choose the afternoon slot on this date, or another day marked in green.`);
+              showNotice('הערב הזה כבר שמור',
+                `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
             } else {
               if (typeof openEventModal === 'function') {
                 openEventModal(item);
@@ -7657,8 +7656,8 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               if (item.isClosedEvening) {
-                showNotice('This Evening is Already Reserved',
-                  `On ${item.dateFormatted}, Ezra is reserved for a private gathering in the evening. Feel free to choose the afternoon slot on this date, or another day marked in green.`);
+                showNotice('הערב הזה כבר שמור',
+                  `ב-${item.dateFormatted} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או יום אחר שמסומן בירוק.`);
               } else {
                 if (typeof openEventModal === 'function') openEventModal(item);
               }
@@ -7760,7 +7759,7 @@
       const monthCalNext = document.getElementById('monthCalNext');
       const monthCalToday = document.getElementById('monthCalToday');
 
-      const monthsHe = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthsHe = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
       let calViewYear = today.getFullYear();
       let calViewMonth = today.getMonth();
       let activeMonthCalFilter = 'all';
@@ -7821,7 +7820,7 @@
           // neither is simply free, and says so in the same words as the noon slot beside it.
           const nightLabel = published ? (published.title || '').split('·')[0].trim()
                            : EZRA_FORMATS[dow] ? (fmt.shortName || fmt.name)
-                           : 'Available';
+                           : 'פנוי לאירוע';
 
           // Build Cell
           const cell = document.createElement('div');
@@ -7830,19 +7829,19 @@
           cell.innerHTML = `
             <div class="month-cal-cell-head">
               <span class="month-cal-date-num">${d}</span>
-              ${isToday ? '<span class="month-cal-today-tag">Today</span>' : ''}
+              ${isToday ? '<span class="month-cal-today-tag">היום</span>' : ''}
             </div>
             <div class="month-cal-slots">
               <!-- Noon Slot -->
-              <button type="button" class="month-cal-slot ${hasAfternoonEvent ? 'month-cal-slot--busy' : 'month-cal-slot--free'}" data-slot="noon" aria-label="${d} ${monthsHe[calViewMonth]} Afternoon: ${hasAfternoonEvent ? 'Booked' : 'Available for Event'}">
-                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> Afternoon</span>
-                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'Private Event' : 'Available <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>'}</span>
+              <button type="button" class="month-cal-slot ${hasAfternoonEvent ? 'month-cal-slot--busy' : 'month-cal-slot--free'}" data-slot="noon" aria-label="${d} ${monthsHe[calViewMonth]} צהריים: ${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע'}">
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg> צהריים</span>
+                <span class="month-cal-slot-status">${hasAfternoonEvent ? 'סגור לאירוע' : 'פנוי לאירוע <svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>'}</span>
               </button>
 
               <!-- Night Slot -->
-              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : (published || EZRA_FORMATS[dow]) ? 'month-cal-slot--open' : 'month-cal-slot--free'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} Evening: ${isClosedEvening ? 'Private Event' : nightLabel}">
-                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> Evening</span>
-                <span class="month-cal-slot-status">${isClosedEvening ? 'Private Event' : nightLabel}</span>
+              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : (published || EZRA_FORMATS[dow]) ? 'month-cal-slot--open' : 'month-cal-slot--free'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
+                <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
+                <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : nightLabel}</span>
               </button>
             </div>
           `;
@@ -7855,8 +7854,8 @@
               // Red means taken. It used to open the enquiry form anyway, which
               // invited people to request a slot that was already gone.
               if (hasAfternoonEvent) {
-                showNotice('This Afternoon is Already Booked',
-                  `On ${pad(d)}.${pad(calViewMonth+1)}, a private event is already scheduled in the afternoon. Feel free to choose the evening slot on this date, or another date marked as available - we would love to plan it with you.`);
+                showNotice('הצהריים האלה כבר תפוסים',
+                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע בשעות הצהריים. אפשר לבחור את שעות הערב באותו יום, או תאריך אחר שמסומן כפנוי - ונשמח לתכנן אתכם.`);
                 return;
               }
               if (typeof openContactModal === 'function') {
@@ -7874,17 +7873,17 @@
             nightBtn.addEventListener('click', (e) => {
               e.stopPropagation();
               if (isClosedEvening) {
-                showNotice('This Evening is Already Reserved',
-                  `On ${pad(d)}.${pad(calViewMonth+1)}, Ezra is reserved for a private gathering in the evening. Feel free to choose the afternoon slot on this date, or another evening - available dates are marked in yellow.`);
+                showNotice('הערב הזה כבר שמור',
+                  `ב-${pad(d)}.${pad(calViewMonth+1)} כבר מתקיים אצלנו אירוע פרטי בערב. אפשר לבחור את שעות הצהריים באותו יום, או ערב אחר - התאריכים הפנויים מסומנים בצהוב.`);
               } else if (published) {
                 if (typeof openEventModal === 'function') {
-                  const when = `${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
+                  const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
                   openEventModal({
                     title: published.title || fmt.name,
                     lineup: published.subtitle || fmt.lineup,
                     desc: published.desc || fmt.desc,
                     img: (published.images && published.images[0]) || fmt.img,
-                    badge: published.entry || 'Open to the Public',
+                    badge: published.entry || 'פתוח לקהל',
                     badgeClass: /הזמנ|כרטיס/.test(published.entry || '') ? 'sticker--rsvp' : 'sticker--free',
                     fullDateString: when,
                     dateKey: dateKey,
@@ -7893,13 +7892,13 @@
                 }
               } else if (EZRA_FORMATS[dow]) {
                 if (typeof openEventModal === 'function') {
-                  const when = `${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
+                  const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
                   openEventModal({
                     title: fmt.name,
-                    lineup: 'The lineup is confirmed a week ahead',
+                    lineup: 'התוכנית מתעדכנת שבוע מראש',
                     desc: fmt.desc,
                     img: fmt.img,
-                    badge: 'Open to the Public',
+                    badge: 'פתוח לקהל',
                     badgeClass: 'sticker--free',
                     fullDateString: when,
                     dateKey: dateKey,
@@ -8096,7 +8095,7 @@
           const b = document.createElement('button');
           b.type = 'button';
           b.className = i === 0 ? 'is-active' : '';
-          b.setAttribute('aria-label', `Image ${i + 1}`);
+          b.setAttribute('aria-label', `תמונה ${i + 1}`);
           const im = document.createElement('img');
           im.src = src; im.alt = ''; im.loading = 'lazy';
           b.appendChild(im);
@@ -8137,7 +8136,7 @@
       // Not a board field yet. A "Public menu" column on Open Events plus a worker read is the
       // right home for this, and is what should replace this map the next time a menu is needed.
       const EVENT_MENUS = {
-        '2026-09-01': { url: 'menus/puccia-x-ezra-2026-09-01.pdf', match: 'וידר', label: 'View the menu for this evening' },
+        '2026-09-01': { url: 'menus/puccia-x-ezra-2026-09-01.pdf', match: 'וידר', label: 'לצפייה בתפריט הערב' },
       };
 
       openEventModal = function(data) {
@@ -8156,26 +8155,26 @@
         const note = document.getElementById('modalEntryNote');
         if (note) {
           if (isPast) {
-            note.textContent = 'This evening has already happened. Leave your details and we will tell you about the next ones.';
+            note.textContent = 'הערב הזה כבר היה. השאירו פרטים ונעדכן אתכם על הבאים.';
           } else if (isConcept) {
-            note.innerHTML = `<span style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--gold-light); font-weight:600; font-size:0.95rem; margin-block-end:0.35rem;"><svg class="ico" aria-hidden="true" style="width:16px; height:16px; flex-shrink:0;"><use href="#i-calendar"/></svg> The program and lineup are confirmed a week ahead</span><br><span style="color:var(--cream-dim); font-size:0.86rem; line-height:1.5; display:block;">We lock in the chefs, the musicians and the exact menus about a week before each event. Leave your details to be the first to hear the moment sign-ups open.</span>`;
-          } else if (ev.badge && /חופשית|free/i.test(ev.badge)) {
-            note.textContent = 'Free entry, subject to availability. No need to sign up in advance.';
+            note.innerHTML = `<span style="display:inline-flex; align-items:center; gap:0.4rem; color:var(--gold-light); font-weight:600; font-size:0.95rem; margin-block-end:0.35rem;"><svg class="ico" aria-hidden="true" style="width:16px; height:16px; flex-shrink:0;"><use href="#i-calendar"/></svg> התוכנית והליינאפ מתעדכנים שבוע מראש</span><br><span style="color:var(--cream-dim); font-size:0.86rem; line-height:1.5; display:block;">אנחנו סוגרים את השפים, המוזיקאים והתפריטים המדויקים כשבוע לפני כל אירוע. השאירו פרטים כדי לקבל עדכון ראשונים ברגע שההרשמה נפתחת.</span>`;
+          } else if (ev.badge && ev.badge.indexOf('חופשית') > -1) {
+            note.textContent = 'הכניסה חופשית, על בסיס מקום פנוי. אין צורך להירשם מראש.';
           } else {
-            note.textContent = 'An evening open to the public. Come early, seats are limited.';
+            note.textContent = 'ערב פתוח לקהל. מומלץ להגיע מוקדם, המקומות מוגבלים.';
           }
         }
 
         const infoBtn = document.getElementById('modalInfoBtn');
         if (infoBtn) {
           if (isPast) {
-            infoBtn.textContent = 'Tell me about evenings like this';
+            infoBtn.textContent = 'עדכנו אותי על ערבים כאלה';
             infoBtn.setAttribute('data-topic', ev.badge || 'ערבים פתוחים');
           } else if (isConcept) {
-            infoBtn.textContent = 'Tell me when the lineup is out';
+            infoBtn.textContent = 'עדכנו אותי כשהליינאפ יתפרסם';
             infoBtn.setAttribute('data-topic', ev.title || 'ערבים פתוחים');
           } else {
-            infoBtn.textContent = 'Tell me about evenings like this';
+            infoBtn.textContent = 'עדכנו אותי על ערבים כאלה';
             infoBtn.setAttribute('data-topic', 'ערבים פתוחים');
           }
         }
@@ -8202,8 +8201,8 @@
           if (link) {
             artistLink.href = link;
             artistText.textContent = isPast
-              ? (ev.linkText || "The artist's site")
-              : (pub.linkText || 'Their Instagram profile');
+              ? (ev.linkText || 'האתר של האמן')
+              : (pub.linkText || 'הפרופיל שלהם באינסטגרם');
             // The icon is Instagram only when the link is. Anything else gets the music glyph
             // rather than announcing a profile that is not there.
             const icon = artistLink.querySelector('use');
@@ -8222,7 +8221,7 @@
           const belongs = !!menu && (!menu.match || (pub.title || '').includes(menu.match));
           if (belongs) {
             menuLink.href = menu.url;
-            if (menuLinkText) menuLinkText.textContent = menu.label || 'View the menu';
+            if (menuLinkText) menuLinkText.textContent = menu.label || 'לצפייה בתפריט';
             menuLink.hidden = false;
           } else {
             menuLink.hidden = true;
@@ -8240,12 +8239,12 @@
           if (rsvpIntro) {
             rsvpIntro.hidden = false;
             rsvpIntro.textContent = (pub.rounds && pub.rounds.length)
-              ? 'So everyone gets a place at the table, we run seatings. Pick a time, leave your details, and we will come back to confirm.'
-              : 'Leave your details and we will come back to confirm your spot.';
+              ? 'כדי שלכולם יהיה מקום סביב השולחן פתחנו סבבים. בחרו שעה, השאירו פרטים, ונחזור אליכם לאישור.'
+              : 'השאירו פרטים ונחזור אליכם לאישור המקום.';
           }
           if (rsvpForm) rsvpForm.hidden = false;
           if (rsvpMsg) { rsvpMsg.hidden = true; rsvpMsg.textContent = ''; rsvpMsg.classList.remove('rsvp-msg--err'); }
-          if (rsvpSubmit) { rsvpSubmit.disabled = false; rsvpSubmit.textContent = 'Reserve a Spot'; }
+          if (rsvpSubmit) { rsvpSubmit.disabled = false; rsvpSubmit.textContent = 'שריון מקום'; }
         }
 
         if (isPast) {
@@ -8289,7 +8288,7 @@
           };
 
           rsvpSubmit.disabled = true;
-          rsvpSubmit.textContent = 'Sending...';
+          rsvpSubmit.textContent = 'שולח...';
           const q = new URLSearchParams(window.location.search);
           try {
             const r = await fetch((window.EZRA_LEAD_ENDPOINT || 'https://ezra-lead.yeheli.workers.dev'), {
@@ -8319,14 +8318,14 @@
             if (roundsEl) roundsEl.hidden = true;
             if (rsvpIntro) rsvpIntro.hidden = true;
             show(rsvpRound
-              ? `We have you down for ${rsvpRound}. We will message you to confirm.`
-              : 'We got your request. We will message you to confirm.', false);
+              ? `שמרנו לכם מקום ל-${rsvpRound}. נחזור אליכם בהודעה לאישור.`
+              : 'קיבלנו את הבקשה. נחזור אליכם בהודעה לאישור.', false);
           } catch (err) {
             // The seat is not held until somebody at Ezra confirms it, so a failed send must
             // not read as success. Hand over the WhatsApp route rather than a dead end.
             rsvpSubmit.disabled = false;
-            rsvpSubmit.textContent = 'Reserve a Spot';
-            show('We could not send that just now. Message us on WhatsApp at 050-9499241 and we will hold a spot for you.', true);
+            rsvpSubmit.textContent = 'שריון מקום';
+            show('לא הצלחנו לשלוח כרגע. אפשר לכתוב לנו בוואטסאפ ל-050-9499241 ונשמור לכם מקום.', true);
           }
         });
       }
@@ -8356,7 +8355,7 @@
             navigator.share({ title, url }).catch(() => {});
           } else {
             navigator.clipboard.writeText(url).then(() => {
-              showToast('Link copied to clipboard!');
+              showToast('הקישור הועתק ללוח!');
             });
           }
         });
@@ -8382,12 +8381,12 @@
         const nextBtn = document.getElementById('heroSliderRight') || document.getElementById('heroSliderNext');
 
         // Fallback for when the board has published nothing upcoming. These are FORMATS, so they
-        // carry a weekday ("Sundays") rather than a date, and no time and no act name - a hero
+        // carry a weekday ("ימי ראשון") rather than a date, and no time and no act name - a hero
         // card is the most believed thing on the page, and a date pill on a format is a claim
         // about an evening nobody has booked yet. The five hardcoded slides that used to live
         // here each carried a real upcoming date, and one of them announced Moss Town every
         // Sunday for ever.
-        const FORMAT_DAYS_HE = { 0: 'Sundays', 2: 'Tuesdays' };
+        const FORMAT_DAYS_HE = { 0: 'ימי ראשון', 2: 'ימי שלישי' };
 
         function getUpcomingFallbackSpotlight() {
           return Object.keys(FORMAT_DAYS_HE).map((dow) => {
@@ -8399,8 +8398,8 @@
               datePill: FORMAT_DAYS_HE[dow],
               datePillClass: '',
               timePill: '',          // a format has no hour
-              badgePill: 'Regular Format',
-              badge: 'Regular Format',
+              badgePill: 'פורמט קבוע',
+              badge: 'פורמט קבוע',
               badgeClass: 'sticker--format',
               pillClass: '',
               title: fmt.name,
@@ -8420,7 +8419,7 @@
         const DURATION = 5000;
         const TICK = 50;
 
-        const heroDaysHe = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const heroDaysHe = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
         const heroPad = (n) => String(n).padStart(2, '0');
 
         function buildSpotlight() {
@@ -8435,14 +8434,14 @@
               const when = new Date(y, m - 1, d);
               const rsvp = /הזמנ|כרטיס/.test(ev.entry || '');
               const diff = Math.round((new Date(y, m - 1, d).setHours(0,0,0,0) - new Date().setHours(0,0,0,0)) / (1000 * 60 * 60 * 24));
-              const baseDay = `${heroDaysHe[when.getDay()]}`;
+              const baseDay = `יום ${heroDaysHe[when.getDay()]}`;
               let prefix = baseDay;
               let datePillClass = '';
               if (diff === 0) {
                 // The flag straddling the card already says today; the pill just carries the date.
                 datePillClass = 'hero-card__pill--today';
               } else if (diff === 1) {
-                prefix = `Tomorrow · ${baseDay}`;
+                prefix = `מחר · ${baseDay}`;
                 datePillClass = 'hero-card__pill--tomorrow';
               }
               const datePill = `${prefix} ${heroPad(d)}.${heroPad(m)}`;
@@ -8452,8 +8451,8 @@
                 datePill,
                 datePillClass,
                 timePill: ev.doors || ev.start || '',
-                badgePill: ev.entry || 'Free Entry',
-                badge: ev.entry || 'Free Entry',
+                badgePill: ev.entry || 'כניסה חופשית',
+                badge: ev.entry || 'כניסה חופשית',
                 badgeClass: rsvp ? 'sticker--rsvp' : 'sticker--free',
                 pillClass: rsvp ? 'hero-card__pill--rsvp' : 'hero-card__pill--free',
                 title: ev.title,
@@ -8476,7 +8475,7 @@
           `).join('');
 
           dotsContainer.innerHTML = spotlightEvents.map((_, i) => `
-            <button class="hero-slider__dot ${i === 0 ? 'is-active' : ''}" type="button" data-index="${i}" aria-label="Go to event ${i + 1}"></button>
+            <button class="hero-slider__dot ${i === 0 ? 'is-active' : ''}" type="button" data-index="${i}" aria-label="מעבר לאירוע ${i + 1}"></button>
           `).join('');
 
           currentIndex = 0;
@@ -8627,8 +8626,8 @@
       const submitBtn = document.getElementById('cfSubmitBtn');
       const doneWa = document.getElementById('cfDoneWa');
 
-      const monthsHe = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const dowsHe = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+      const monthsHe = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+      const dowsHe = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
       const pad = n => String(n).padStart(2, '0');
 
       let viewDate = new Date();
@@ -8777,13 +8776,13 @@
             btn.disabled = true;
           } else if (fullyBooked) {
             btn.classList.add('is-booked');
-            btn.title = 'Fully booked';
+            btn.title = 'כל היום תפוס';
           } else {
-            btn.title = rec.afternoon ? 'Afternoon booked, evening free'
-                      : rec.evening   ? 'Evening booked, afternoon free'
-                      : 'Available to book';
+            btn.title = rec.afternoon ? 'הצהריים תפוסים, הערב פנוי'
+                      : rec.evening   ? 'הערב תפוס, הצהריים פנויים'
+                      : 'פנוי לשריון';
             btn.addEventListener('click', () => {
-              selectDate(dayKey, `${monthsHe[month]} ${d}, ${year}`);
+              selectDate(dayKey, `${d} ב${monthsHe[month]} ${year}`);
             });
           }
 
@@ -8876,7 +8875,7 @@
             const m = parseInt(parts[1], 10) - 1;
             const d = parseInt(parts[2], 10);
             viewDate = new Date(y, m, d);
-            selectDate(opts.date, `${monthsHe[m]} ${d}, ${y}`);
+            selectDate(opts.date, `${d} ב${monthsHe[m]} ${y}`);
           }
         }
 
@@ -8957,7 +8956,7 @@
           e.preventDefault();
           if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span>Sending...</span>`;
+            submitBtn.innerHTML = `<span>שולח...</span>`;
           }
 
           const payload = {
@@ -8994,10 +8993,10 @@
           if (!saved) {
             if (submitBtn) {
               submitBtn.disabled = false;
-              submitBtn.innerHTML = `<span>Submit & Hold Date</span>`;
+              submitBtn.innerHTML = `<span>שליחת פרטים ושריון תאריך</span>`;
             }
-            showNotice('We could not send your details',
-              'Something got stuck on our end. Your details are still on screen, so you can try again in a moment - or just message us on WhatsApp and we will sort it out there.');
+            showNotice('לא הצלחנו לשלוח את הפרטים',
+              'משהו נתקע אצלנו בדרך. הפרטים נשארו במסך, אפשר לנסות שוב עוד רגע - או פשוט לשלוח לנו הודעה בוואטסאפ ונסגור את זה שם.');
             return;
           }
 
@@ -9012,12 +9011,12 @@
 
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `<span>Submit & Hold Date</span>`;
+            submitBtn.innerHTML = `<span>שליחת פרטים ושריון תאריך</span>`;
           }
 
           // Update WA link on success
           if (doneWa) {
-            const text = `Hi Ezra, I just left my details on your website about ${payload.eventType} on ${payload.date || 'flexible'}.\nName: ${payload.name}\nPhone: ${payload.phone}`;
+            const text = `היי עזרא, השארתי כרגע פרטים באתר בנוגע ל${payload.eventType} בתאריך ${payload.date || 'גמיש'}.\nשם: ${payload.name}\nטלפון: ${payload.phone}`;
             doneWa.href = `https://wa.me/972509499241?text=${encodeURIComponent(text)}`;
           }
 
@@ -9356,6 +9355,6 @@
   <!-- Past-events archive: replaces the hardcoded slider cards with the live list from the
        Open Events Schedule + Archive monday board (via /api/past-events). On any failure the
        hardcoded cards above simply stay. -->
-  <script src="past-events-archive.js" data-lang="en" defer></script>
+  <script src="past-events-archive.js" data-lang="he" defer></script>
 </body>
 </html>

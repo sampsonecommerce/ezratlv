@@ -488,6 +488,11 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .talk-slot.is-selected{border-color:var(--gold);background:rgba(196,154,60,.18)}
   .talk-slot.is-taken{opacity:.35;text-decoration:line-through;cursor:default}
   .talk__form .bfield{max-width:none;margin:0}
+  /* choice pills on the fresh talk form - same look as the home page's #book form */
+  .cf-pills{display:flex;flex-wrap:wrap;gap:.5rem}
+  .cf-pill{padding:.6rem 1rem;min-height:44px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--cream-dim);font:inherit;font-size:.86rem;cursor:pointer;transition:all .2s var(--ease)}
+  .cf-pill:hover{border-color:var(--gold);color:var(--cream)}
+  .cf-pill.active{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:600}
   /* save / exit overlays: sit on top of the wizard, wizard stays visible blurred behind */
   .ovl{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
     background:rgba(10,8,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1rem}
@@ -511,7 +516,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   /* ── confirmation ── */
   /* confirmation: focal animated green check + clear mail CTA, secondary copy tucked as fine print */
-  .done{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
+  /* centered via a flex parent (.body.is-done), not min-height:100% - iOS Safari resolves a
+     percentage min-height against the flex-sized .body as 0, which top-aligned the whole screen */
+  .body.is-done{display:flex;flex-direction:column}
+  .done{max-width:420px;margin:auto;display:flex;flex-direction:column;
     align-items:center;justify-content:center;text-align:center;gap:.05rem;padding-block:1.2rem}
   .done__badge{position:relative;width:78px;height:78px;border-radius:50%;margin-block-end:1.1rem;
     display:flex;align-items:center;justify-content:center;
@@ -1613,6 +1621,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   /* ═══════ STEP 7 · confirmation ═══════ */
   function step7(){
     setFoot(null,null,null,false,false);   // confirmation: no CTA and no talk prompt
+    body.classList.add('is-done');
     body.innerHTML =
       '<div class="done">'+
         '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
@@ -1703,16 +1712,28 @@ fbq('init','2174553826420246');fbq('track','PageView');
         '<div><b>אתם יוצאים מתהליך ההזמנה העצמית</b>'+
         '<span>בלי התחייבות. נשמור את מה שכבר מילאתם, ומנהל המכירות יחזור אליכם לתיאום אישי של האירוע.</span></div>'+
       '</div>';
+    // fresh talk form mirrors the home page's #book form: type pills, guests, date, time window,
+    // callback-time pills - minus the age ranges, with company-event categories instead
+    const typeHTML = isFresh ?
+      '<div class="bfield"><label>סוג האירוע</label>'+
+        '<div class="cf-pills" id="tkType" role="group" aria-label="סוג האירוע">'+
+          ['Happy Hour','גיבוש צוות','אופסייט','סוף רבעון','ערב חברה','אחר']
+            .map(v=>'<button type="button" class="cf-pill" data-val="'+v+'">'+v+'</button>').join('')+
+        '</div></div>' : '';
     const eventHTML = isFresh ?
-      '<div class="talk__event">'+
-        '<div class="talk__event-h">פרטי האירוע (לא חובה)</div>'+
-        '<div class="bfield"><label>כמות אורחים</label><input type="number" id="tkGuests" inputmode="numeric" min="1" placeholder="כמה תהיו?" /></div>'+
-        '<div class="bfield"><label>תאריך</label>'+
+        '<div class="bfield"><label>מספר אורחים</label><input type="number" id="tkGuests" inputmode="numeric" min="1" placeholder="לדוגמה 30" /></div>'+
+        '<div class="bfield"><label>תאריך האירוע המבוקש</label>'+
           '<button type="button" class="talk-datebtn" id="tkDateBtn">בחרו תאריך</button>'+
           '<div class="talk-cal" id="tkCal" hidden></div>'+
         '</div>'+
-        '<div class="bfield" id="tkSlotWrap" hidden><label>חלון זמן</label><div class="talk-slots" id="tkSlots"></div></div>'+
-      '</div>' : '';
+        '<div class="bfield" id="tkSlotWrap" hidden><label>שעת האירוע</label><div class="talk-slots" id="tkSlots"></div></div>' : '';
+    const callbackHTML = isFresh ?
+      '<div class="bfield"><label>מתי נוח שנחזור אליכם?</label>'+
+        '<div class="cf-pills" id="tkCallback" role="group" aria-label="זמן נוח לחזרה">'+
+          '<button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">בוקר · 9:00-12:00</button>'+
+          '<button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">צהריים · 12:00-17:00</button>'+
+          '<button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">גמיש / בכל זמן</button>'+
+        '</div></div>' : '';
     body.innerHTML =
       '<div class="talk">'+ noteHTML +
         '<h2 class="steptitle">נחזור אליכם</h2>'+
@@ -1726,8 +1747,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
             '<div class="bfield"><label>אימייל</label><input type="email" id="tkEmail" inputmode="email" autocomplete="email" /></div>'+
             '<div class="bfield"><label>חברה (לא חובה)</label><input type="text" id="tkCompany" autocomplete="organization" /></div>'+
           '</div>'+
-          '<div class="bfield"><label>משהו שכדאי שנדע? (לא חובה)</label><textarea id="tkNotes" rows="2"></textarea></div>'+
+          typeHTML +
           eventHTML +
+          callbackHTML +
+          '<div class="bfield"><label>משהו שחשוב שנדע? (לא חובה)</label><textarea id="tkNotes" rows="2" placeholder="אופי האירוע, בקשות מיוחדות, צרכים תזונתיים..."></textarea></div>'+
           '<input type="text" id="tkHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
           '<label class="check" id="tkConsentRow"><input type="checkbox" id="tkConsent" /><span><b>אישור קבלת דיוור</b>'+
             'אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span></label>'+
@@ -1743,6 +1766,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
       if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
     }));
     if(isFresh) wireTalkEvent();
+    // pill groups (fresh form only): single-select, stored on state and folded into the lead notes at submit
+    if(isFresh) [['tkType','eventType'],['tkCallback','callbackTime']].forEach(([id,skey])=>{
+      const group=$(id); if(!group) return;
+      if(state[skey]){ const cur=group.querySelector('.cf-pill[data-val="'+state[skey]+'"]'); if(cur) cur.classList.add('active'); }
+      group.addEventListener('click',e=>{
+        const btn=e.target.closest('.cf-pill'); if(!btn) return;
+        group.querySelectorAll('.cf-pill').forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active'); state[skey]=btn.dataset.val;
+      });
+    });
     const cc=$('tkConsent');
     if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('tkConsentErr'),r=$('tkConsentRow');
       if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
@@ -1772,7 +1805,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
       (e||r||c).scrollIntoView({behavior:'smooth',block:'center'});
       return;
     }
-    state.notes=$('tkNotes').value;
+    // the type/callback pills ride inside notes: the worker maps unknown Monday labels with
+    // create_labels_if_missing:false, so new keys on the payload could fail the whole lead
+    const _extra=[
+      state.eventType    ? 'סוג אירוע: '+state.eventType : '',
+      state.callbackTime ? 'זמן נוח לחזרה: '+state.callbackTime : '',
+    ].filter(Boolean).join('\n');
+    state.notes=[$('tkNotes').value,_extra].filter(Boolean).join('\n');
     submitLead(true);          // callback lead (guards a missing plan/date)
     // callback = a real qualified lead too → parent fires the same Ads conversion (no /confirmation URL)
     if(window.parent!==window){ try{ window.parent.postMessage({ezra:'lead'},'*'); }catch(e){} }
@@ -1783,7 +1822,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     setFoot(null,null,null,false,false);
     $('progTxt').textContent='סיום';
     [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
+    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd'); body.classList.add('is-done');
     body.innerHTML =
       '<div class="done">'+
         '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+

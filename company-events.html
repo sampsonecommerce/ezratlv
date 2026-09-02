@@ -91,6 +91,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="geo.region" content="IL-TA" />
   <meta name="geo.placename" content="פלורנטין, תל אביב" />
 
@@ -292,7 +293,7 @@
     .nav__burger      { display: none; }
     .nav__menu, .nav__scrim { display: none; }
 
-    @media (max-width: 720px) {
+    @media (max-width: 1080px) {
       .nav { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; }
       .nav.scrolled { padding-block: 0.7rem; }
       .nav__links, .nav__actions { display: none; }
@@ -2824,6 +2825,19 @@
     ]
   }
   </script>
+
+  <style>
+    /* Section switcher (private / company / open) - same control as open-events.html,
+       so the three site sections are switchable from every main page. */
+    .nav__seg { display: inline-flex; align-items: stretch; border: 1px solid var(--line); border-radius: 50px; overflow: hidden; background: rgba(196, 154, 60, 0.05); }
+    .nav__seg a { display: inline-flex; align-items: center; padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: 600; line-height: 1; color: var(--cream-dim) !important; white-space: nowrap; transition: color 0.25s var(--ease), background 0.25s var(--ease); }
+    .nav__seg a + a { border-inline-start: 1px solid var(--line); }
+    .nav__seg a::after { display: none !important; }
+    .nav__seg a:hover { color: var(--cream) !important; background: rgba(196, 154, 60, 0.12); }
+    .nav__seg a.is-active { color: var(--gold-light) !important; background: rgba(196, 154, 60, 0.2); }
+    .nav__menu-cta--pill { border: 1px solid var(--line); color: var(--cream-dim); background: rgba(196, 154, 60, 0.05); }
+    .nav__menu-cta--pill.is-active { border: 1.2px solid var(--gold); color: var(--gold-light); background: rgba(196, 154, 60, 0.2); }
+  </style>
 </head>
 <body>
 
@@ -2854,7 +2868,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
         EN
       </a>
-      <a class="nav__corp" href="/">אירועים פרטיים</a>
+      <nav class="nav__seg" aria-label="מעבר בין חלקי האתר">
+        <a href="/" aria-label="אירועים פרטיים">פרטיים</a>
+        <a class="is-active" href="company-events" aria-label="אירועי חברה" aria-current="page">חברה</a>
+        <a href="open-events" aria-label="אירועים פתוחים">פתוחים</a>
+      </nav>
       <a class="nav__cta js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
     </div>
 
@@ -2869,7 +2887,9 @@
       <a class="nav__menu-link" href="#faq">שאלות נפוצות</a>
       <a class="nav__menu-link" href="english-company-events" hreflang="en">English / EN</a>
       <div class="nav__menu-ctas">
-        <a class="nav__menu-cta nav__menu-cta--corp" href="/">אירועים פרטיים</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="/">אירועים פרטיים</a>
+        <a class="nav__menu-cta nav__menu-cta--pill is-active" href="company-events">אירועי חברה</a>
+        <a class="nav__menu-cta nav__menu-cta--pill" href="open-events">אירועים פתוחים</a>
         <a class="nav__menu-cta nav__menu-cta--book js-book" href="https://wkf.ms/4lkjldJ?utm_source=Website&utm_campaign=cta_button" target="_blank" rel="noopener">לבחירת חבילה</a>
       </div>
     </div>
@@ -3399,9 +3419,10 @@
         <div class="divider divider--center"></div>
       </div>
       <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto 1.2rem;line-height:1.85;text-align:center">
-        חברה של 20 עד 50 איש נופלת בין הכיסאות: קטנה מדי לאולם, גדולה מדי למסעדה.
-        עזרא בנוי בדיוק לגודל הזה - בר פרטי שנסגר לערב אחד עבור החברה שלכם בלבד,
-        עם אוכל, בר והפקה כלולים במחיר אחד לאדם.
+        חברה של 20 עד 50 איש? עזרא הוא בדיוק בשבילכם. מספיק גדול כדי לחגוג כמו
+        שצריך, אבל עדיין מספיק אינטימי כדי שכולם יהיו יחד. המקום כולו שלכם לערב
+        אחד, עם בר קוקטיילים מלא, מנות שכיף לחלוק וסאונד ברמה גבוהה, עם מחירים
+        שקופים מ-3 חבילות.
       </p>
       <p class="reveal" style="color:var(--cream-dim);max-width:62ch;margin:0 auto;line-height:1.85;text-align:center">
         מתלבטים על הפורמט? יש לנו עמודים עם כל הפרטים על
@@ -6097,6 +6118,10 @@
         const plan = PACKAGE_TO_PLAN[(qs.get('package') || '').toLowerCase()];
         if (resumeTok) window.openV2();
         else if (plan) window.openV2(plan);
+        // #talk deep link: opens the contact form directly, like /#book on the home page - for
+        // DM/ad links (e.g. /company-events?utm_source=instagram#talk). Runs after the utm/gclid
+        // cookies above are set, so the lead the form sends still carries the attribution.
+        else if (location.hash === '#talk') window.openV2Talk();
       })();
       // Esc closes too
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) window.closeV2(); });
