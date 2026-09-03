@@ -177,6 +177,31 @@
     .shots img { width: 100%; height: 260px; object-fit: cover; }
     .shots figcaption { font-size: 13px; color: var(--cream-faint); padding: 10px 14px; }
 
+    /* ---------- Instagram strip ---------- */
+    .ig-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 38px; align-items: flex-start; }
+    .ig-card {
+      position: relative; border-radius: 16px; overflow: hidden;
+      background: #fff;                     /* Instagram's own embed is a light card; own that */
+      border: 1px solid rgba(240,235,224,0.12);
+      flex: 0 1 320px; max-width: 360px;
+    }
+    /* 640px is a starting height only. Instagram's embed measures itself and posts its real
+       height to the parent; the script below listens for that and sets it. */
+    .ig-card iframe { display: block; width: 100%; height: 640px; border: 0; }
+    /* Consent placeholder: shown instead of the iframe for visitors who chose essential-only
+       cookies, so no request reaches Meta until they ask for it. */
+    .ig-hold {
+      background: var(--bg-soft); min-height: 240px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 28px 24px;
+    }
+    .ig-hold p { font-size: 14.5px; color: var(--cream-dim); max-width: 34ch; }
+    .ig-hold button {
+      font: inherit; font-size: 15px; cursor: pointer; color: var(--cream);
+      background: transparent; border: 1px solid rgba(240,235,224,0.28);
+      border-radius: 999px; padding: 11px 24px;
+    }
+    .ig-hold button:hover { border-color: var(--gold); color: var(--gold-light); }
+
     .shows { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 38px; }
     @media (max-width: 900px) { .shows { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px) { .shows { grid-template-columns: 1fr; } }
@@ -396,6 +421,15 @@
     <div class="xlinks"><a href="open-events">לראות מה קורה בעזרא עכשיו</a></div>
   </section>
 
+  <!-- Instagram. Specific posts, chosen by hand - see IG_POSTS near the bottom of this file.
+       With that list empty the whole section stays hidden, so the page never shows an empty shelf. -->
+  <section id="ig" hidden>
+    <h2>מהאינסטגרם</h2>
+    <p class="lead">כמה פוסטים מהערבים שהיו כאן.</p>
+    <div class="ig-strip" id="igStrip"></div>
+    <div class="xlinks"><a href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener"><span dir="ltr">@ezratlv</span></a></div>
+  </section>
+
   <section id="how">
     <h2>איך זה עובד</h2>
     <div class="steps">
@@ -535,6 +569,109 @@
     </div>
     עזרא תל אביב © 2026 - כל הזכויות שמורות
   </footer>
+
+  <!-- ============================================================
+       Instagram strip. Official embed iframes, so there is no API, no token and no third-party
+       widget: each post is named by its own URL and Instagram renders it. Reels play in place.
+
+       TO CHANGE WHICH POSTS SHOW: edit IG_POSTS below. Paste the post's own link - the /p/,
+       /reel/ or /tv/ URL, with or without a query string. Order here is the order on the page.
+       Leave the list empty and the section does not render at all.
+
+       Only PUBLIC posts embed. A private or deleted post renders as an empty Instagram card,
+       which is why this list is short and hand-checked rather than an automatic feed.
+
+       Nothing is requested from Meta for a visitor who chose essential-only cookies: they get a
+       button, and the embed loads only if they press it.
+  ============================================================ -->
+  <script>
+    (function () {
+      var IG_POSTS = [
+        // "https://www.instagram.com/reel/XXXXXXXXXXX/",
+        // "https://www.instagram.com/p/XXXXXXXXXXX/",
+      ];
+
+      var section = document.getElementById('ig');
+      var strip = document.getElementById('igStrip');
+      if (!section || !strip) return;
+
+      // A shortcode, not a whole URL, is what the embed endpoint takes - and anything that does
+      // not look like one is dropped rather than pasted into an iframe src.
+      var parsed = IG_POSTS.map(function (url) {
+        var m = /instagram\.com\/(p|reel|reels|tv)\/([A-Za-z0-9_-]{5,32})/.exec(String(url || ''));
+        if (!m) return null;
+        return { kind: m[1] === 'reels' ? 'reel' : m[1], code: m[2] };
+      }).filter(Boolean);
+
+      if (!parsed.length) return;   // nothing to show: leave the section hidden
+      section.hidden = false;
+
+      var essentialOnly = (function () {
+        try { return localStorage.getItem('ezra_cookie_ok') === 'essential'; } catch (e) { return false; }
+      })();
+
+      function frame(card, post) {
+        var f = document.createElement('iframe');
+        f.src = 'https://www.instagram.com/' + post.kind + '/' + post.code + '/embed/captioned/';
+        f.loading = 'lazy';
+        f.title = 'פוסט של עזרא באינסטגרם';
+        f.setAttribute('allowtransparency', 'true');
+        f.setAttribute('allow', 'encrypted-media; picture-in-picture; clipboard-write');
+        f.setAttribute('scrolling', 'no');
+        card.textContent = '';
+        card.appendChild(f);
+        // A post that is private, deleted, or simply mistyped renders Instagram's "link may be
+        // broken" card and never measures itself - which would leave the starting height as a tall
+        // white slab on the page. Nothing measured by now means collapse it to the size of that
+        // message instead.
+        setTimeout(function () { if (!f.dataset.measured) f.style.height = '360px'; }, 4000);
+      }
+
+      // Instagram's embed measures its own content and posts the height to the parent. That is the
+      // only job embed.js does that a bare iframe cannot, so listen for it directly instead of
+      // pulling in a Meta script: a post with a long caption then gets its full height rather than
+      // being clipped at the starting one. If the message never arrives, the CSS height stands.
+      window.addEventListener('message', function (e) {
+        if (!/^https:\/\/(www\.)?instagram\.com$/.test(e.origin)) return;
+        var d = e.data;
+        try { if (typeof d === 'string') d = JSON.parse(d); } catch (_) { return; }
+        var h = d && d.details && Number(d.details.height);
+        if (!h || h < 120 || h > 2400) return;
+        var frames = strip.querySelectorAll('iframe');
+        for (var i = 0; i < frames.length; i++) {
+          if (frames[i].contentWindow === e.source) {
+            frames[i].style.height = Math.round(h) + 'px';
+            frames[i].dataset.measured = '1';
+            return;
+          }
+        }
+      });
+
+      parsed.forEach(function (post) {
+        var card = document.createElement('div');
+        card.className = 'ig-card';
+
+        if (essentialOnly) {
+          card.classList.add('ig-hold');
+          var p = document.createElement('p');
+          p.textContent = 'הפוסט מוטמע מאינסטגרם. בחרתם עוגיות הכרחיות בלבד, ולכן הוא לא נטען מעצמו.';
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = 'לטעינת הפוסט';
+          b.addEventListener('click', function () { card.classList.remove('ig-hold'); frame(card, post); });
+          var a = document.createElement('a');
+          a.href = 'https://www.instagram.com/' + post.kind + '/' + post.code + '/';
+          a.target = '_blank'; a.rel = 'noopener';
+          a.style.cssText = 'font-size:13.5px;color:var(--cream-faint)';
+          a.textContent = 'או לפתוח באינסטגרם';
+          card.appendChild(p); card.appendChild(b); card.appendChild(a);
+        } else {
+          frame(card, post);
+        }
+        strip.appendChild(card);
+      });
+    })();
+  </script>
 
   <!-- ============================================================
        Lead submit. Same worker, same failure contract as the events page:
