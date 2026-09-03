@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-08-31a";
+const BUILD_ID = "2026-09-02a";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -273,7 +273,14 @@ export default {
     // carrying a price. New Leads is deliberately not a committed group, so holding a seat at an
     // evening cannot mark that evening's date unavailable to anyone else.
     const isRsvp = d.leadType === "rsvp";
-    const isOpenEvents = d.leadType === "open_events" || isRsvp || d.board === "5102602771";
+    // A band or artist asking to play here, from /music-shows. Mechanically an Open Events lead -
+    // same board, same New Leads group - and the Event type is forced to "הופעה" here rather than
+    // trusted from the page, because that one label is the whole routing mechanism: Monday
+    // automation 1718742172 watches it and assigns Moshe, who books the music. A typo in the page
+    // would silently hand a music lead to nobody.
+    const isMusic = d.leadType === "music";
+    if (isMusic) d.eventType = "הופעה";
+    const isOpenEvents = d.leadType === "open_events" || isRsvp || isMusic || d.board === "5102602771";
     const isIncomplete = d.leadType === "incomplete";
     const timeLabel = d.menu === "evening" ? "ערב" : "צהריים";
     const ils = (n) => (n == null ? "" : n + " ₪");
@@ -281,6 +288,19 @@ export default {
       "סוג פנייה: הרשמה לעדכונים על ערבים פתוחים (ניוזלטר)",
       `נושא: ${d.eventType || "-"}`,
       "★ לא ליד מכירות - בקשה לקבל עדכון על אירועים",
+    ].filter(Boolean).join("\n") : isMusic ? [
+      "סוג פנייה: הרכב/אמן שמעוניין להופיע בעזרא (מעמוד /music-shows)",
+      `שם ההרכב/האמן: ${d.name || "-"}`,
+      `טלפון: ${d.phone || "-"}`,
+      d.spotify  ? `Spotify / Apple Music: ${d.spotify}` : "",
+      d.link     ? `אינסטגרם / אתר: ${d.link}` : "",
+      d.about    ? `על ההרכב: ${d.about}` : "",
+      d.style    ? `סגנון הופעה: ${d.style}` : "",
+      d.bringing ? `ציוד שהם מביאים: ${d.bringing}` : "",
+      d.needs    ? `ציוד שהם צריכים מאיתנו: ${d.needs}` : "",
+      `תאריך מבוקש: ${d.date || "לא צוין"}`,
+      d.notes    ? `שאלות נוספות: ${d.notes}` : "",
+      "★ פנייה מוזיקלית - לטיפול מושה",
     ].filter(Boolean).join("\n") : isRsvp ? [
       "סוג פנייה: שריון מקום לערב פתוח (מעמוד האירועים)",
       `האירוע: ${d.eventTitle || "-"}`,

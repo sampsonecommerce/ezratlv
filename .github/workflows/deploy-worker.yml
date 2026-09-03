@@ -40,6 +40,13 @@ jobs:
       - name: Open Events lead routing test
         run: node worker/test/open-events-lead.test.mjs
 
+      # Gate. A band enquiry from /music-shows routes to Moshe on one status label, set by a
+      # follow-up call because a Monday status trigger does not fire for a value that arrives
+      # inside create_item. Everything the board has no column for lives in the notes blob, so
+      # a dropped field there loses the useful half of the enquiry silently.
+      - name: Music lead routing test
+        run: node worker/test/music-lead.test.mjs
+
       # Gate. The mirror sync writes to and deletes from a live board on a cron,
       # so its ownership rule is not allowed to regress: it may only touch items
       # carrying a Source Item value. Runs against a stateful mock of all three
