@@ -139,7 +139,7 @@
   </script>
 
   <style>
-    /* ---------- page-specific: gear, shows, venue shots, form ---------- */
+    /* ---------- page-specific: gear, shows, Instagram, form ---------- */
     .note-band {
       max-width: 720px; margin: 0 auto; padding: 16px 22px;
       background: rgba(196,154,60,0.09); border: 1px solid rgba(196,154,60,0.4);
@@ -172,19 +172,42 @@
 
     /* Four show cards, so pin the column count instead of letting auto-fit land on three and
        leave a lone card orphaned on the second row. */
-    .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 38px; }
-    .shots figure { margin: 0; border-radius: 14px; overflow: hidden; background: var(--bg-soft); }
-    .shots img { width: 100%; height: 260px; object-fit: cover; }
-    .shots figcaption { font-size: 13px; color: var(--cream-faint); padding: 10px 14px; }
-
     /* ---------- Instagram strip ---------- */
-    .ig-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 38px; align-items: flex-start; }
+    .ig-wrap { position: relative; margin-top: 38px; }
+    .ig-strip {
+      display: flex; gap: 16px; align-items: flex-start;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      padding-block: 4px 8px; padding-inline: 2px;
+      scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch;
+    }
+    .ig-strip::-webkit-scrollbar { display: none; }
+    .ig-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(18, 13, 8, 0.92); border: 1.2px solid rgba(196, 154, 60, 0.45);
+      color: var(--gold-light); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 12;
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+      transition: opacity .25s, border-color .25s, background .25s;
+    }
+    .ig-arrow:hover:not([disabled]) { background: rgba(30, 20, 10, 0.98); border-color: var(--gold-light); }
+    .ig-arrow[disabled] { opacity: .25; cursor: default; }
+    /* RTL: the first card sits at the visual RIGHT, so that is where "back" belongs. */
+    .ig-arrow--start { right: -18px; }
+    .ig-arrow--end   { left: -18px; }
+    @media (max-width: 1100px) { .ig-arrow--start { right: 4px; } .ig-arrow--end { left: 4px; } }
+    /* Touch devices swipe the track itself; the arrows would only cover a card. */
+    @media (hover: none) { .ig-arrow { display: none; } }
     .ig-card {
       position: relative; border-radius: 16px; overflow: hidden;
       background: #fff;                     /* Instagram's own embed is a light card; own that */
       border: 1px solid rgba(240,235,224,0.12);
-      flex: 0 1 320px; max-width: 360px;
+      /* 'start', not 'center': mandatory snapping resolves on load, and a centre-aligned first
+         card makes the carousel open already scrolled, with card one hanging half off the edge. */
+      flex: 0 0 320px; scroll-snap-align: start;
     }
+    @media (max-width: 420px) { .ig-card { flex-basis: 84vw; } }
     /* 640px is a starting height only. Instagram's embed measures itself and posts its real
        height to the parent; the script below listens for that and sets it. */
     .ig-card iframe { display: block; width: 100%; height: 640px; border: 0; }
@@ -359,28 +382,6 @@
     <p class="lead" style="margin-top:32px;margin-bottom:0">משהו שאינו ברשימה - כתבו אותו בטופס, בשדה "איזה ציוד אתם צריכים מאיתנו".</p>
   </section>
 
-  <section id="venue" style="padding-top:24px">
-    <h2>איך זה נראה כאן</h2>
-    <div class="shots">
-      <figure>
-        <img src="images/events/reggae-record-night.jpg" alt="תקליטן משמיע ויניל בערב תקליטים בעזרא" loading="lazy" />
-        <figcaption>ערב תקליטים בחלל</figcaption>
-      </figure>
-      <figure>
-        <img src="images/gallery/g03.jpg" alt="קהל יושב וצופה בערב בעזרא" loading="lazy" />
-        <figcaption>הקהל יושב קרוב</figcaption>
-      </figure>
-      <figure>
-        <img src="images/gallery/g09.jpg" alt="רוקדים ליד הבר בעזרא" loading="lazy" />
-        <figcaption>ואחר כך עומד</figcaption>
-      </figure>
-      <figure>
-        <img src="images/BAR.jpg" alt="הבר בעזרא, פלורנטין תל אביב" loading="lazy" />
-        <figcaption>הבר, פתוח לאורך הערב</figcaption>
-      </figure>
-    </div>
-  </section>
-
   <section id="past">
     <h2>מי כבר ניגן כאן</h2>
     <p class="lead">הערבים האחרונים שהיו כאן.</p>
@@ -426,7 +427,15 @@
   <section id="ig" hidden>
     <h2>מהאינסטגרם</h2>
     <p class="lead">כמה פוסטים מהערבים שהיו כאן.</p>
-    <div class="ig-strip" id="igStrip"></div>
+    <div class="ig-wrap">
+      <button class="ig-arrow ig-arrow--start" id="igPrev" type="button" aria-label="הפוסטים הקודמים" aria-controls="igStrip" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <div class="ig-strip" id="igStrip" tabindex="0" role="region" aria-label="פוסטים מהאינסטגרם של עזרא"></div>
+      <button class="ig-arrow ig-arrow--end" id="igNext" type="button" aria-label="הפוסטים הבאים" aria-controls="igStrip" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+    </div>
     <div class="xlinks"><a href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener"><span dir="ltr">@ezratlv</span></a></div>
   </section>
 
@@ -632,13 +641,18 @@
         // broken" card and never measures itself - which would leave the starting height as a tall
         // white slab on the page. Nothing measured by now means collapse it to the size of that
         // message instead.
-        setTimeout(function () { if (!f.dataset.measured) f.style.height = '360px'; }, 4000);
+        setTimeout(function () {
+          if (f.dataset.measured) return;
+          f.style.height = tallest ? tallest + 'px' : '360px';
+          f.dataset.measured = '1';
+        }, 4000);
       }
 
       // Instagram's embed measures its own content and posts the height to the parent. That is the
       // only job embed.js does that a bare iframe cannot, so listen for it directly instead of
       // pulling in a Meta script: a post with a long caption then gets its full height rather than
       // being clipped at the starting one. If the message never arrives, the CSS height stands.
+      var tallest = 0;
       window.addEventListener('message', function (e) {
         if (!/^https:\/\/(www\.)?instagram\.com$/.test(e.origin)) return;
         var d = e.data;
@@ -648,8 +662,12 @@
         var frames = strip.querySelectorAll('iframe');
         for (var i = 0; i < frames.length; i++) {
           if (frames[i].contentWindow === e.source) {
-            frames[i].style.height = Math.round(h) + 'px';
             frames[i].dataset.measured = '1';
+            // Level the row. Posts measure to slightly different heights, and in a carousel a
+            // ragged bottom edge reads as broken rather than as variety - so every card takes the
+            // tallest measurement instead of its own. Levelling up, never down, so nothing clips.
+            tallest = Math.max(tallest, Math.round(h));
+            for (var j = 0; j < frames.length; j++) frames[j].style.height = tallest + 'px';
             return;
           }
         }
@@ -678,6 +696,46 @@
         }
         strip.appendChild(card);
       });
+
+      // Arrows. scrollBy's `left` is a PHYSICAL axis in every browser - positive is always
+      // visually rightward - so this needs no RTL special-casing, unlike anything that reads
+      // scrollLeft directly (whose sign for RTL differs between engines).
+      var prev = document.getElementById('igPrev');   // toward the first card: visually right
+      var next = document.getElementById('igNext');   // toward the last card:  visually left
+      if (!prev || !next) return;
+
+      var step = function () {
+        var card = strip.querySelector('.ig-card');
+        return (card ? card.offsetWidth : 320) + 16;
+      };
+
+      function sync() {
+        var max = strip.scrollWidth - strip.clientWidth;
+        if (max <= 4) { prev.hidden = true; next.hidden = true; return; }
+        prev.hidden = false; next.hidden = false;
+        // Math.abs, because a right-to-left track scrolls scrollLeft from 0 down to -max in
+        // current engines. The absolute value is the distance travelled either way.
+        var pos = Math.abs(strip.scrollLeft);
+        prev.disabled = pos <= 4;
+        next.disabled = pos >= max - 4;
+      }
+
+      // Re-sync from the click as well as from the scroll event. Relying on 'scroll' alone leaves
+      // the arrows showing the state of the PREVIOUS position whenever that event is late or
+      // coalesced - which is how a button that should have re-enabled stays greyed out and eats
+      // the next click.
+      function move(px) {
+        strip.scrollBy({ left: px, behavior: 'smooth' });
+        setTimeout(sync, 450);
+        setTimeout(sync, 900);
+      }
+      prev.addEventListener('click', function () { move(step()); });
+      next.addEventListener('click', function () { move(-step()); });
+      strip.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+      // Card heights settle as the embeds measure themselves, which changes scrollWidth.
+      setTimeout(sync, 800); setTimeout(sync, 3000); setTimeout(sync, 6000);
+      sync();
     })();
   </script>
 
