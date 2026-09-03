@@ -587,8 +587,13 @@
   <script>
     (function () {
       var IG_POSTS = [
-        // "https://www.instagram.com/reel/XXXXXXXXXXX/",
-        // "https://www.instagram.com/p/XXXXXXXXXXX/",
+        "https://www.instagram.com/p/DKRsUO6N2xO/",
+        "https://www.instagram.com/reel/Db5PtDBuNZu/",
+        "https://www.instagram.com/reel/C0pP4XhNwhZ/",
+        "https://www.instagram.com/reel/DCMKFv0AwNB/",
+        "https://www.instagram.com/reel/C-CsTwNAeOC/",
+        "https://www.instagram.com/reel/DB-ie0wNEMS/",
+        "https://www.instagram.com/reel/DBZLwmlg3BC/",
       ];
 
       var section = document.getElementById('ig');
@@ -612,7 +617,10 @@
 
       function frame(card, post) {
         var f = document.createElement('iframe');
-        f.src = 'https://www.instagram.com/' + post.kind + '/' + post.code + '/embed/captioned/';
+        // '/embed/', not '/embed/captioned/'. The captioned variant appends the full post text,
+        // which on these posts is a wall of Hebrew and hashtags - it roughly doubled each card's
+        // height and buried the footage, which is the only reason the strip is here.
+        f.src = 'https://www.instagram.com/' + post.kind + '/' + post.code + '/embed/';
         f.loading = 'lazy';
         f.title = 'פוסט של עזרא באינסטגרם';
         f.setAttribute('allowtransparency', 'true');
