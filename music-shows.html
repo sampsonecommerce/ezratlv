@@ -199,6 +199,15 @@
     @media (max-width: 1100px) { .ig-arrow--start { right: 4px; } .ig-arrow--end { left: 4px; } }
     /* Touch devices swipe the track itself; the arrows would only cover a card. */
     @media (hover: none) { .ig-arrow { display: none; } }
+    /* Position dots. On a phone the arrows are gone, so without these nothing on screen says the
+       row scrolls - the peeking card alone was being read as a crop. They also give the count. */
+    .ig-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+    .ig-dots button {
+      width: 7px; height: 7px; padding: 0; border-radius: 50%; cursor: pointer;
+      background: rgba(240, 235, 224, 0.28); border: 0;
+      transition: background .25s, width .25s, border-radius .25s;
+    }
+    .ig-dots button[aria-current="true"] { background: var(--gold); width: 20px; border-radius: 4px; }
     .ig-card {
       position: relative; border-radius: 16px; overflow: hidden;
       background: #fff;                     /* Instagram's own embed is a light card; own that */
@@ -207,7 +216,7 @@
          card makes the carousel open already scrolled, with card one hanging half off the edge. */
       flex: 0 0 320px; scroll-snap-align: start;
     }
-    @media (max-width: 420px) { .ig-card { flex-basis: 84vw; } }
+    @media (max-width: 700px) { .ig-card { flex-basis: 78%; } }
     /* 640px is a starting height only. Instagram's embed measures itself and posts its real
        height to the parent; the script below listens for that and sets it. */
     .ig-card iframe { display: block; width: 100%; height: 640px; border: 0; }
@@ -423,6 +432,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
       </button>
     </div>
+    <div class="ig-dots" id="igDots" role="tablist" aria-label="מעבר בין הפוסטים"></div>
     <div class="xlinks"><a href="https://www.instagram.com/ezratlv" target="_blank" rel="noopener"><span dir="ltr">@ezratlv</span></a></div>
   </section>
 
@@ -671,7 +681,39 @@
       // scrollLeft directly (whose sign for RTL differs between engines).
       var prev = document.getElementById('igPrev');   // toward the first card: visually right
       var next = document.getElementById('igNext');   // toward the last card:  visually left
-      if (!prev || !next) return;
+      var dotsBox = document.getElementById('igDots');
+      if (!prev || !next || !dotsBox) return;
+
+      var cards = [].slice.call(strip.querySelectorAll('.ig-card'));
+      var dots = cards.map(function (card, i) {
+        var d = document.createElement('button');
+        d.type = 'button';
+        d.setAttribute('role', 'tab');
+        d.setAttribute('aria-label', 'פוסט ' + (i + 1) + ' מתוך ' + cards.length);
+        // block:'nearest' so moving the row sideways never yanks the page up or down.
+        d.addEventListener('click', function () {
+          card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsBox.appendChild(d);
+        return d;
+      });
+
+      // The leading card, not the centred one. With three cards on screen, "nearest the centre of
+      // the track" lit the MIDDLE dot while the row was still at its start, which reads as the
+      // carousel already being one step in. First card that is substantially in view instead -
+      // and DOM order is visual order here, since in RTL the first card sits at the right.
+      // Rectangles rather than scroll offsets, so this needs no direction special-casing.
+      function activeIndex() {
+        var t = strip.getBoundingClientRect();
+        var best = 0, bestSeen = -1;
+        for (var i = 0; i < cards.length; i++) {
+          var r = cards[i].getBoundingClientRect();
+          var seen = Math.min(r.right, t.right) - Math.max(r.left, t.left);
+          if (seen >= r.width * 0.6) return i;          // leading card, good enough
+          if (seen > bestSeen) { bestSeen = seen; best = i; }
+        }
+        return best;
+      }
 
       var step = function () {
         var card = strip.querySelector('.ig-card');
@@ -680,8 +722,11 @@
 
       function sync() {
         var max = strip.scrollWidth - strip.clientWidth;
-        if (max <= 4) { prev.hidden = true; next.hidden = true; return; }
-        prev.hidden = false; next.hidden = false;
+        var atEnd = max > 4 && Math.abs(strip.scrollLeft) >= max - 4;
+        var act = atEnd ? cards.length - 1 : activeIndex();
+        dots.forEach(function (d, i) { d.setAttribute('aria-current', i === act ? 'true' : 'false'); });
+        if (max <= 4) { prev.hidden = true; next.hidden = true; dotsBox.hidden = true; return; }
+        prev.hidden = false; next.hidden = false; dotsBox.hidden = false;
         // Math.abs, because a right-to-left track scrolls scrollLeft from 0 down to -max in
         // current engines. The absolute value is the distance travelled either way.
         var pos = Math.abs(strip.scrollLeft);
