@@ -7179,7 +7179,7 @@
     // date can be yours.
     const EZRA_NO_FORMAT = {
       name: 'פנוי לאירוע פרטי',
-      lineup: 'אין ערב ציבורי בתאריך הזה',
+      lineup: 'התאריך פנוי לשריון אירוע',
       desc: 'לא מתוכנן ערב ציבורי בתאריך הזה. רוצים את עזרא לעצמכם? אפשר לסגור את החלל לאירוע פרטי, יום הולדת או ערב חברה - השאירו פרטים ונחזור אליכם.',
       img: 'images/BAR.jpg',
     };
@@ -7425,7 +7425,7 @@
 
           if (published) {
             title = published.title || fmt.name;
-            lineup = published.subtitle || fmt.lineup;
+            lineup = published.subtitle || published.lineup || (published.entry ? (published.entry.indexOf('חופשית') > -1 ? 'ערב פתוח לקהל הרחב · כניסה חופשית' : published.entry) : (EZRA_FORMATS[dow] ? fmt.lineup : 'ערב פתוח לקהל הרחב'));
             desc = published.desc || fmt.desc;
             img = (published.images && published.images[0]) || fmt.img;
             badge = published.entry || 'פתוח לקהל';
@@ -7880,7 +7880,7 @@
                   const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
                   openEventModal({
                     title: published.title || fmt.name,
-                    lineup: published.subtitle || fmt.lineup,
+                    lineup: published.subtitle || published.lineup || (published.entry ? (published.entry.indexOf('חופשית') > -1 ? 'ערב פתוח לקהל הרחב · כניסה חופשית' : published.entry) : (EZRA_FORMATS[dow] ? fmt.lineup : 'ערב פתוח לקהל הרחב')),
                     desc: published.desc || fmt.desc,
                     img: (published.images && published.images[0]) || fmt.img,
                     badge: published.entry || 'פתוח לקהל',
@@ -8182,8 +8182,14 @@
         modalImg.src = ev.img;
         modalTitle.textContent = ev.title;
         // A past card has no separate lineup line; an empty <p> would still hold its margin.
-        modalLineup.textContent = ev.lineup || '';
-        modalLineup.hidden = !ev.lineup;
+        if (pub) {
+          const pubLineup = pub.subtitle || pub.lineup || (ev.lineup && ev.lineup.indexOf('אין ערב') === -1 ? ev.lineup : null) || (pub.entry ? (pub.entry.indexOf('חופשית') > -1 ? 'ערב פתוח לקהל הרחב · כניסה חופשית' : pub.entry) : 'ערב פתוח לקהל הרחב');
+          modalLineup.textContent = pubLineup;
+          modalLineup.hidden = false;
+        } else {
+          modalLineup.textContent = ev.lineup || '';
+          modalLineup.hidden = !ev.lineup;
+        }
         modalDesc.textContent = ev.desc;
         // The hero slider names this field badgePill and the day cards name it badge. The
         // modal is opened from both, and reading only one of them left every hero-opened
