@@ -159,6 +159,9 @@ const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement
 const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
 const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
 const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packages (In Agreement Process)
+// A completed builder request is a request for an offer, not a booking: it lands here and no
+// contract automation fires until a human has called. (Soft builder, 2026-09.)
+const GRP_ESTIMATE = "group_mm6y3fvd";       // Estimate Requested
 // Saved wizard drafts (resume-link feature): items land in a dedicated group on the company board.
 const DRAFTS_GROUP    = "group_mm5eq9a9";
 const DRAFT_STATE_COL = "long_text_mm5eajcn"; // Long Text — full wizard-state JSON blob
@@ -469,7 +472,7 @@ export default {
                 : isPrivate ? PRIVATE_GROUP
                 : isCustom ? GRP_CUSTOM
                 : isIncomplete ? DRAFTS_GROUP
-                : GRP_IN_AGREEMENT;
+                : GRP_ESTIMATE;
     // A column ID belongs to a board, not to this worker. The map above was written against the
     // Events Form and Company Events boards; Open Events is a separate board with its own IDs, and
     // create_item rejects the whole mutation if it is handed even one ID the board does not have -
