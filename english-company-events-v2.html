@@ -106,6 +106,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
   .foot__alert.on{display:block;animation:alertShake .4s var(--ease)}
   @keyframes alertShake{0%,100%{transform:translateX(0)}25%{transform:translateX(5px)}50%{transform:translateX(-5px)}75%{transform:translateX(3px)}}
   .foot__btns{display:flex;align-items:stretch;gap:.6rem}
+  /* running estimate: visible from the first step so the price is never a surprise on step 5 */
+  .foot__est{font-size:.82rem;color:var(--cream-dim);text-align:center;margin:0 0 .45rem;line-height:1.4}
+  .foot__est .num{color:var(--gold-light);font-weight:600}
+  .foot__est[hidden]{display:none}
+  .linkbtn{background:none;border:0;padding:0;color:var(--gold);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .linkbtn:hover{color:var(--gold-light)}
+  .bhint{font-size:.8rem;color:var(--cream-dim);margin:.1rem 0 .8rem;line-height:1.5}
+  .ovl__input{width:100%;padding:.75rem .9rem;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);color:var(--cream);font:inherit;font-size:1rem;margin:0 0 .7rem}
+  .ovl__input:focus{outline:none;border-color:var(--gold)}
+  .ovl__input.is-err{border-color:#e0736f}
+  .receipt__note{font-size:.72rem;color:var(--cream-dim);text-align:center;margin-block-start:.5rem;line-height:1.45}
   .go--back{flex:1;background:transparent;border:1px solid var(--line);border-radius:12px;color:var(--cream);
     font-weight:600;font-size:.98rem;padding:.78rem 0;cursor:pointer}
   .go--back:hover{border-color:var(--gold);color:var(--gold-light)}
@@ -645,6 +656,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
   <div class="foot" id="foot" hidden>
     <div class="foot__main" id="footMain">
       <div class="foot__alert" id="footAlert" role="alert"></div>
+      <div class="foot__est" id="footEst" hidden></div>
       <div class="foot__btns">
         <button class="go--back" id="backBtn2" type="button">Back</button>
         <button class="go" id="goBtn" type="button">Continue</button>
@@ -666,7 +678,19 @@ fbq('init','2174553826420246');fbq('track','PageView');
     name:'', company:'', phone:'', email:'', address:'' };
   let step = 1, lastStep = 0;
   let inTalk = false, talkFromStep = 1;   // the abandon / "leave your details" screen (not a numbered step)
-  let inChooser = false;                  // the three-card chooser (not a numbered step)
+  let inChooser = false;                  // kept for the render() reset; the chooser screen itself is gone
+  // Step ORDER by step id, no renumbering: plan, guests, menu, add-ons, date, details. The step ids
+  // stay what the draft state, GA4 names and the resume flow already know; only navigation and the
+  // progress counter follow this list. Price is known from the guests step on, the date comes last
+  // and is optional - Clarity showed the old date+slot gate on step 2 as the first big drop.
+  const ORDER=[1,5,3,4,2,6];
+  const posOf=n=>ORDER.indexOf(n)+1;
+  const nextOf=n=>ORDER[ORDER.indexOf(n)+1]||7;
+  const prevOf=n=>ORDER[ORDER.indexOf(n)-1]||1;
+  // Clarity custom events: the funnel this change is measured by. The iframe has its own Clarity tag;
+  // fall back to the parent's when the iframe one is not there.
+  const track=n=>{ try{ const c=window.clarity||(window.parent!==window&&window.parent.clarity); if(c) c('event',n); }catch(e){} };
+  let sending=false;
 
   // ── autosave: ALWAYS on, every field change and every step render writes the draft ──
   const SAVE_KEY='ezraProto2';
@@ -675,7 +699,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     menu:state.menu, addons:state.addons, foodNotes:state.foodNotes, notes:state.notes,
     name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address, step }; }
   function saveProgress(){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(collectState())); }catch(e){} }
-  function saveMaybe(){ saveProgress(); }
+  function saveMaybe(){ saveProgress(); updateEst(); }
   function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
   // ── cross-device resume: POST the draft to the worker, which returns a link keyed by an opaque token.
   // draftId+token are stashed so repeat saves update the same Monday item instead of piling up duplicates.
@@ -871,15 +895,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
   // funnel measurement: GA4 event names per step so the booking wizard shows a real drop-off funnel
   const STEP_NAMES={1:'plan',2:'date_time',3:'menu',4:'addons',5:'guests',6:'details',7:'confirmation'};
   function setProgress(n){
-    $('progTxt').innerHTML = n<=6 ? ('Step <span class="num">'+n+'</span> of <span class="num">6</span>') : 'Done';
-    [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on',i<Math.min(n,6)));
+    const p=posOf(n);
+    $('progTxt').innerHTML = n<=6 ? ('Step <span class="num">'+p+'</span> of <span class="num">6</span>') : 'Done';
+    [...$('progDots').children].forEach((d,i)=>d.classList.toggle('on',i<Math.min(p,6)));
   }
   function render(n){
     inTalk = false;                      // any numbered-step render leaves the abandon screen
     inChooser = false;                   // ...and the chooser
     markReq = null;                      // each step wires its own missing-fields highlighter
     stopBubbles();                       // halt the coupe fizz when leaving a step
-    const dir = n>=lastStep ? 'anim-fwd' : 'anim-back';
+    const dir = posOf(n)>=posOf(lastStep) ? 'anim-fwd' : 'anim-back';
     lastStep = step; step = n;
     setProgress(n);
     body.className = 'body';           // reset scroll + animation
@@ -889,6 +914,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     STEPS[n]();
     ensureScrollCue(body);            // every scrollable wizard page shows the scroll cue
     saveMaybe();
+    track('ce_step_'+n);
     // one GA4 event per step entry → build the wizard drop-off funnel (step 1 → confirmation)
     if(window.gtag) gtag('event','wizard_step',{step_number:n,step_name:(STEP_NAMES[n]||('step_'+n))});
   }
@@ -901,7 +927,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     foot.hidden = !hasCta && !showTalk;            // footer stays visible if there's a CTA or the talk prompt
     $('talkBtn').hidden = !showTalk;
     const main = $('footMain'); if (main) main.hidden = !hasCta;
-    backBtn2.hidden = !(hasCta && (step>1 || inTalk));   // nothing behind step 1
+    backBtn2.hidden = !(hasCta && (posOf(step)>1 || inTalk));   // nothing behind the first step
     if (hasCta){
       goBtn.textContent = label;
       setGoOff(!!disabled);
@@ -937,12 +963,29 @@ fbq('init','2174553826420246');fbq('track','PageView');
     if(goBtn.classList.contains('is-off')){ nudgeGo(); return; }
     if(goHandler) goHandler();
   });
+  // in-step text links (rendered inside body.innerHTML) + keep the estimate fresh after any tap
+  body.addEventListener('click',e=>{
+    if(e.target.closest('#skipDate')){ render(nextOf(2)); return; }
+    if(e.target.closest('#guestsTalk')){ openTalk(step); return; }
+    if(e.target.closest('#detTalk')){ openTalk(6); return; }
+    setTimeout(updateEst,0);
+  });
+  function updateEst(){
+    const el=$('footEst'); if(!el) return;
+    if(!state.plan||step>=7||inTalk){ el.hidden=true; return; }
+    const g=Number(state.guests)||0;
+    const out=g&&(g<20||g>50);
+    el.innerHTML = out
+      ? 'Over 50 or under 20 guests? We will price it on a call'
+      : 'Estimate about <span class="num">'+fmt(totals().total)+'</span> · not binding';
+    el.hidden=false;
+  }
   // talk prompt (footer) → leave-your-details / abandon screen, carrying anything already entered
   $('talkBtn').href = WA_URL;   // real anchor: reliable inside the iframe, unlike window.open
   $('talkBtn').addEventListener('click', ()=>{ waOpen('footer_step_'+step); });
   backBtn2.addEventListener('click', ()=>{
     if(inTalk){ inTalk=false; render(talkFromStep); return; }   // back out of the abandon screen → resume where they were
-    if(step>1 && step<=6) render(step-1);
+    if(posOf(step)>1 && step<=6) render(prevOf(step));
   });
   // ── save + exit overlays ──
   let finished = false;                  // set once booked / callback sent - exit needs no warning then
@@ -984,13 +1027,39 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   $('saveBtn').addEventListener('click', openSave);
   // X → recommend saving first (wizard stays blurred behind); confirmation screens exit directly
+  const SOFT_ID_KEY='ezraSoftId';
+  const esc=v=>String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   $('exitBtn').addEventListener('click', ()=>{
     if(finished || step>=7){ doExit(); return; }
+    if(!state.plan){
+      const o=showOvl(
+        '<div class="ovl__title">Before you go</div>'+
+        '<p class="ovl__txt">You can save what you filled in and come back any time.</p>'+
+        '<button class="ovl__btn ovl__btn--gold" id="ovlSave" type="button">Save</button>'+
+        '<button class="ovl__btn ovl__btn--ghost" id="ovlExit" type="button">Leave</button>');
+      o.querySelector('#ovlSave').addEventListener('click',()=>{ closeOvl(); openSave(); });
+      o.querySelector('#ovlExit').addEventListener('click',()=>{ closeOvl(); doExit(); });
+      return;
+    }
+    // a plan is picked: the estimate is worth something to them. One field, no form.
     const o=showOvl(
       '<div class="ovl__title">Before you go</div>'+
-      '<p class="ovl__txt">We recommend saving what you\'ve filled in so far, so you don\'t lose your details.<br>(You can return to the process at any stage)</p>'+
-      '<button class="ovl__btn ovl__btn--gold" id="ovlSave" type="button">Save</button>'+
-      '<button class="ovl__btn ovl__btn--ghost" id="ovlExit" type="button">Exit without saving</button>');
+      '<p class="ovl__txt">Want the estimate on WhatsApp? Leave a number and we will send it. No commitment.</p>'+
+      '<input class="ovl__input" id="ovlPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+972 50 000 0000" value="'+esc(state.phone)+'" />'+
+      '<button class="ovl__btn ovl__btn--gold" id="ovlSend" type="button">Send me the estimate</button>'+
+      '<button class="ovl__btn ovl__btn--ghost" id="ovlSave" type="button">Save and come back later</button>'+
+      '<button class="ovl__btn ovl__btn--ghost" id="ovlExit" type="button">Leave</button>');
+    const ph=o.querySelector('#ovlPhone');
+    o.querySelector('#ovlSend').addEventListener('click',()=>{
+      const v=ph.value.trim();
+      if(v.replace(/\D/g,'').length<9){ ph.classList.add('is-err'); ph.focus(); return; }
+      state.phone=v; saveMaybe();
+      track('ce_exit_capture');
+      // keepalive inside submitLead: the request survives the popup closing right after
+      submitLead(true,{quiet:true,softNote:'ביקש/ה לקבל את ההערכה בוואטסאפ (יציאה מהבילדר, אתר באנגלית)'}).catch(()=>{});
+      closeOvl(); doExit();
+    });
+    ph.addEventListener('input',()=>ph.classList.remove('is-err'));
     o.querySelector('#ovlSave').addEventListener('click',()=>{ closeOvl(); openSave(); });
     o.querySelector('#ovlExit').addEventListener('click',()=>{ closeOvl(); doExit(); });
   });
@@ -999,8 +1068,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
   function step1(){
     setFoot(null);
     body.innerHTML =
-      '<h2 class="steptitle">Choose a package</h2>'+
-      '<p class="stepsub">Each package differs in event length and menu</p>'+
+      '<h2 class="steptitle">Choose a starting point</h2>'+
+      '<p class="stepsub">Each package differs in event length and menu. Guests, menu and date come next, and the price updates as you go</p>'+
       '<div class="plans">'+Object.keys(E.PLANS).map(k=>{
         const p=E.PLANS[k];
         return '<button type="button" class="plan'+(state.plan===k?' on':'')+'" data-plan="'+k+'">'+
@@ -1011,66 +1080,21 @@ fbq('init','2174553826420246');fbq('track','PageView');
     body.querySelectorAll('.plan').forEach(b=>b.addEventListener('click',()=>{
       if(state.plan!==b.dataset.plan) state.slot=null;
       state.plan=b.dataset.plan;
-      render(2);
+      render(nextOf(1));
     }));
   }
 
-  /* ═══════ CHOOSER · first screen on any package click: build alone / call me / WhatsApp ═══════ */
+  /* ═══════ WhatsApp tap signal (footer pill, exit overlay) ═══════ */
   function waOpen(source){
     if(window.gtag) gtag('event','whatsapp_click',{source:source});
     // custom Meta event only - never Lead/WizardStart, so ad optimization stays booking-intent
     if(window.fbq) fbq('trackCustom','WhatsAppClick',{source:source,language:'en'});
   }
-  function chooser(opts){
-    opts=opts||{};
-    inChooser=true; inTalk=false;
-    stopBubbles();
-    $('progTxt').textContent='Getting started';
-    [...$('progDots').children].forEach(d=>d.classList.remove('on'));
-    body.className='body'; body.scrollTop=0; void body.offsetWidth; body.classList.add('anim-fwd');
-    setFoot(null,'',null,false,false);   // the cards ARE the choice; no footer CTA, no WhatsApp pill here
-    if(window.gtag) gtag('event','wizard_chooser_view',{});
-    body.innerHTML =
-      '<h2 class="steptitle">How would you like to start?</h2>'+
-      '<p class="stepsub">Pick a path, you can change it at any stage</p>'+
-      '<div class="chz">'+
-        '<button type="button" class="chz__card" id="chzSelf">'+
-          '<span class="chz__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="21" y1="4" x2="14" y2="4"/><circle cx="10" cy="4" r="2"/><line x1="6" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><circle cx="8" cy="12" r="2"/><line x1="6" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><circle cx="12" cy="20" r="2"/><line x1="6" y1="20" x2="3" y2="20"/></svg></span>'+
-          '<span class="chz__tx"><span class="chz__t">Build the event myself</span><span class="chz__s">Package, date and menu in minutes</span></span>'+
-          '<span class="chz__ar" aria-hidden="true">&#8250;</span>'+
-        '</button>'+
-        '<button type="button" class="chz__card" id="chzCall">'+
-          '<span class="chz__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>'+
-          '<span class="chz__tx"><span class="chz__t">Call me back</span><span class="chz__s">Leave your name and phone, we\'ll call</span></span>'+
-          '<span class="chz__ar" aria-hidden="true">&#8250;</span>'+
-        '</button>'+
-        '<a class="chz__card chz__card--wa" id="chzWa" href="'+WA_URL+'" target="_blank" rel="noopener">'+
-          '<span class="chz__ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></span>'+
-          '<span class="chz__tx"><span class="chz__t">Talk to us on WhatsApp</span><span class="chz__s">Fast reply, no forms</span></span>'+
-          '<span class="chz__ar" aria-hidden="true">&#8250;</span>'+
-        '</a>'+
-      '</div>';
-    $('chzSelf').addEventListener('click',()=>{
-      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'self'});
-      proceed(opts);   // straight into the build; details are collected at the end
-    });
-    $('chzCall').addEventListener('click',()=>{
-      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'callback'});
-      openTalk(1,false,true);
-    });
-    $('chzWa').addEventListener('click',()=>{
-      if(window.gtag) gtag('event','wizard_chooser_choice',{choice:'whatsapp'});
-      waOpen('chooser');
-    });
-    ensureScrollCue(body);
-  }
-
-  /* ═══════ PROCEED · after contact capture, straight into the build (no gate screen) ═══════ */
-  // The callback path lives in the footer talk button now, so there is no two-choice fork here.
+  /* ═══════ PROCEED · straight into the build ═══════ */
   function proceed(opts){
     opts=opts||{};
     if(opts.resume){ hydrate(opts.resume); return; }               // in-progress booking wins
-    if(opts.plan && E.PLANS[opts.plan]){ state.plan=opts.plan; render(2); return; }  // picked plan -> date/time
+    if(opts.plan && E.PLANS[opts.plan]){ state.plan=opts.plan; render(nextOf(1)); return; }  // picked plan -> guests
     render(1);                                                     // no plan yet -> pick one
   }
 
@@ -1097,9 +1121,10 @@ fbq('init','2174553826420246');fbq('track','PageView');
   }
   function step2(){
     calExpanded=false;
-    setFoot('Continue','Pick a free day, then a time slot',()=>render(3),!(state.date&&state.slot));
+    setFoot('Continue to details','A preferred date and time. Flexible? You can skip this',()=>render(nextOf(2)),false);
     body.innerHTML =
-      '<h2 class="steptitle">Choose a date and time</h2>'+
+      '<h2 class="steptitle">Roughly when?</h2>'+
+      '<p class="stepsub">A preferred date and time, so we can check availability. Not decided yet? <button type="button" class="linkbtn" id="skipDate">Skip for now</button></p>'+
       '<div class="when__strip" id="whenStrip"><b id="stripDate"></b><button type="button" id="stripEdit">Change</button></div>'+
       '<div class="when">'+
         '<div class="when__cal">'+
@@ -1186,12 +1211,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
     });
     updateGo2();
   }
-  function updateGo2(){ if(step===2) setGoOff(!(state.date&&state.slot)); }
+  function updateGo2(){ /* the date step no longer gates: a preferred date is enough, none is fine too */ }
 
   /* ═══════ STEP 3 · the menu step (closing-process styling: day/eve cards + notes) ═══════ */
   function step3(){
-    if(!state.menu) state.menu = parseInt(state.slot,10)>=17 ? 'evening':'day';
-    setFoot('Continue','',()=>{ state.foodNotes=$('bfFoodNotes').value; render(4); }, false);
+    if(!state.menu) state.menu = state.slot ? (parseInt(state.slot,10)>=17 ? 'evening':'day') : 'evening';
+    setFoot('Continue','',()=>{ state.foodNotes=$('bfFoodNotes').value; render(nextOf(3)); }, false);
     body.innerHTML =
       '<div class="menu3">'+
         '<div class="menu3__band">'+
@@ -1245,7 +1270,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
 
   /* ═══════ STEP 4 · add-ons only ═══════ */
   function step4(){
-    setFoot('Continue','',()=>render(5),false);
+    setFoot('Continue','',()=>render(nextOf(4)),false);
     const addonRows=E.ADDONS.filter(addonApplies).map(a=>
       '<button type="button" class="addon'+(state.addons[a.id]?' is-on':'')+'" data-id="'+a.id+'" aria-pressed="'+(!!state.addons[a.id])+'">'+
         '<span class="addon__box">'+CHECK_SVG+'</span>'+
@@ -1389,12 +1414,13 @@ fbq('init','2174553826420246');fbq('track','PageView');
     el.innerHTML=rows.map(r=>'<div class="cd-row"><span class="cd-v">'+r[1]+'</span><span class="cd-k">'+r[0]+'</span></div>').join('');
   }
   function step5(){
-    setFoot('Continue to details','',()=>render(6),false);
+    if(!state.menu) state.menu='evening';   // menu comes after guests now; evening is the common case
+    setFoot('Continue','',()=>render(nextOf(5)),false);
     body.innerHTML =
       '<h2 class="steptitle">Number of guests</h2>'+
       '<p class="stepsub">Drag the slider or type a number - the quantities and price update together</p>'+
       '<div class="calc-zone-wrap">'+
-        '<p class="calc-mininfo">'+ICON_INFO+'<span>Minimum booking - 20 guests</span></p>'+
+        '<p class="calc-mininfo">'+ICON_INFO+'<span>Packages are sized for 20 to 50 guests. Otherwise, <button type="button" class="linkbtn" id="guestsTalk">we can build something custom</button></span></p>'+
         '<div class="calc-details" id="calcDetails"></div>'+
         '<div class="calc-zone">'+
           '<div class="menu-seg" id="calcMenuToggle" role="tablist" aria-label="Menu selection">'+
@@ -1404,7 +1430,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
           '<div class="calc-zone__pills" id="foodAmounts"></div>'+
           '<input type="range" id="gr" class="book-range" min="20" max="50" step="1" value="'+state.guests+'" aria-label="Number of guests" />'+
           '<div class="calc-value__line">'+
-            '<span class="guest-edit"><input id="gv" type="number" inputmode="numeric" min="20" max="50" value="'+state.guests+'" aria-label="Number of guests" /><span>guests</span></span>'+
+            '<span class="guest-edit"><input id="gv" type="number" inputmode="numeric" min="1" value="'+state.guests+'" aria-label="Number of guests" /><span>guests</span></span>'+
             '<span class="calc-value__coupe" aria-hidden="true">'+COUPE+'</span>'+
             '<span class="calc-value__total" id="coupeTot"></span>'+
           '</div>'+
@@ -1420,9 +1446,12 @@ fbq('init','2174553826420246');fbq('track','PageView');
     });
     const gr=$('gr'), gv=$('gv');
     gr.addEventListener('input',()=>{state.guests=+gr.value;gv.value=gr.value;refreshCalc();saveMaybe();});
-    const commitGv=()=>{let n=parseInt(gv.value,10);if(isNaN(n))n=20;n=Math.min(50,Math.max(20,n));
-      state.guests=n;gv.value=n;gr.value=n;refreshCalc();saveMaybe();};
-    gv.addEventListener('input',()=>{const n=parseInt(gv.value,10);if(!isNaN(n)){state.guests=Math.min(50,Math.max(20,n));gr.value=state.guests;refreshCalc();}});
+    // no silent clamp: a number outside 20-50 stays, the estimate switches to "by call" and the
+    // talk link above is the path. The slider itself still spans the package range.
+    const clampSlider=n=>Math.min(50,Math.max(20,n));
+    const commitGv=()=>{let n=parseInt(gv.value,10);if(isNaN(n)||n<1)n=20;
+      state.guests=n;gv.value=n;gr.value=clampSlider(n);refreshCalc();saveMaybe();};
+    gv.addEventListener('input',()=>{const n=parseInt(gv.value,10);if(!isNaN(n)&&n>=1){state.guests=n;gr.value=clampSlider(n);refreshCalc();saveMaybe();}});
     gv.addEventListener('blur',commitGv);
     gv.addEventListener('keydown',e=>{if(e.key==='Enter'){commitGv();gv.blur();}});
     $('foodAmounts').addEventListener('click',e=>{
@@ -1444,7 +1473,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
     renderCalcDetails();
     renderFoodPills();
     const tot=$('coupeTot');
-    if(tot) tot.innerHTML=fmt(totals().total);
+    if(tot){ const g=Number(state.guests)||0; tot.innerHTML=(g<20||g>50)?'<small>Price by call</small>':fmt(totals().total); }
     updateCoupe();
     checkScrollCue(body);   // pill expand/collapse + guest-count changes affect content height
   }
@@ -1461,7 +1490,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
   const _cookie=n=>{const m=document.cookie.match(new RegExp('(^|;)\\s*'+n+'=\\s*([^;]+)'));return m?m.pop():'';};
   // build the SAME lead payload the live company-events.html sends, then POST to the worker (Monday + CAPI)
   // isCallback = the lead came from the "leave your details / talk to us" path (may have no plan/date yet)
-  function submitLead(isCallback){
+  function submitLead(isCallback, opts){
+    opts=opts||{};
     const plan=state.plan?E.PLANS[state.plan]:null, ph=plan?plan.perHead:0, gg=state.guests;
     const sel=plan?selectedAddons():[], addOns=plan?addonsTotal(gg):0, base=ph*gg, gross=base+addOns;
     const _pd=promoDiscount(gross), total=_pd.net;   // estTotal + reported value = net (what they actually pay)
@@ -1472,7 +1502,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       estTotalGross:gross, discount:_pd.amount, promoApplied:_pd.active,
       addons:sel.map(a=>a.id), addonLabels:sel.map(a=>HE_ADDON_LABEL[a.id]||a.label),
       name:state.name, company:state.company, phone:state.phone, email:state.email, address:state.address,
-      notes:state.notes, menu:state.menu||'', foodNotes:state.foodNotes,
+      notes:[state.notes,opts.softNote||''].filter(Boolean).join('\n'), menu:state.menu||'', foodNotes:state.foodNotes,
       foodMenuText:plan?E.buildFoodText(state.plan,state.menu,gg,state.foodNotes):'',
       barLabel:BAR_LABEL[state.plan]||'', djLabel:DJ_LABEL[state.plan]||'',
       packageLabel:PKG_LABEL[state.plan]||'',
@@ -1499,11 +1529,43 @@ fbq('init','2174553826420246');fbq('track','PageView');
     data.gclid=_ck('ezra_gclid')||_utm.get('gclid')||'';   // Google click id → offline-conversion match key
     const eventId='lead-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);
     data.eventId=eventId; data.pageUrl=location.href; data.fbp=_cookie('_fbp'); data.fbc=_cookie('_fbc');
-    fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
-    if(window.fbq) fbq('track','Lead',{value:total||0,currency:'ILS'},{eventID:eventId});
-    if(window.gtag) gtag('event','generate_lead',{value:total||0,currency:'ILS',transaction_id:eventId});
-    clearSave(); finished=true;   // booked - no draft to resume
-    try{ const _did=localStorage.getItem(DRAFT_ID_KEY); if(_did) fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'clearDraft',draftId:_did})}).catch(()=>{}); localStorage.removeItem(DRAFT_ID_KEY); localStorage.removeItem(DRAFT_TOKEN_KEY); }catch(e){}
+    // Honest submit: await the answer, keep the request alive past the popup closing, and report
+    // success only on ok. The old fire-and-forget showed a confirmation for requests that died in
+    // flight. quiet = a soft lead (exit capture / autosave): no pixels, no draft clearing.
+    const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),15000);
+    return fetch((window.EZRA_LEAD_ENDPOINT||'/api/submit-lead'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data),keepalive:true,signal:ctrl.signal})
+      .then(r=>r.json().catch(()=>({})).then(j=>({ok:r.ok&&j.ok!==false,id:j.id||null})))
+      .catch(()=>({ok:false,id:null}))
+      .then(res=>{
+        clearTimeout(timer);
+        if(opts.quiet) return res;
+        if(!res.ok){ track('ce_fail'); return res; }
+        if(window.fbq) fbq('track','Lead',{value:total||0,currency:'ILS'},{eventID:eventId});
+        if(window.gtag) gtag('event','generate_lead',{value:total||0,currency:'ILS',transaction_id:eventId});
+        track('ce_success');
+        clearSave(); finished=true;   // sent - no draft to resume
+        try{ const _did=localStorage.getItem(DRAFT_ID_KEY); if(_did) fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'clearDraft',draftId:_did})}).catch(()=>{}); localStorage.removeItem(DRAFT_ID_KEY); localStorage.removeItem(DRAFT_TOKEN_KEY); }catch(e){}
+        // the autosaved soft lead from the details step is superseded by this request: delete it so
+        // sales never follows up twice on one person
+        try{ const _sid=sessionStorage.getItem(SOFT_ID_KEY); if(_sid){ fetch(draftEndpoint(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'clearDraft',draftId:_sid}),keepalive:true}).catch(()=>{}); sessionStorage.removeItem(SOFT_ID_KEY); } }catch(e){}
+        return res;
+      });
+  }
+  // Soft lead once name and a contact are typed on the details step: posted once per tab, 2.5 s
+  // after the last keystroke, deleted again by a completed request (see submitLead).
+  let softTimer=null, softPending=false;
+  function scheduleSoft(){
+    clearTimeout(softTimer);
+    softTimer=setTimeout(()=>{
+      let have=''; try{ have=sessionStorage.getItem(SOFT_ID_KEY)||''; }catch(e){}
+      if(have||softPending||finished||sending) return;
+      if(!(String(state.name).trim()&&(String(state.phone).trim()||String(state.email).trim()))) return;
+      softPending=true;
+      submitLead(true,{quiet:true,softNote:'מילא/ה פרטים בבילדר ועדיין לא שלח/ה בקשה (נשמר אוטומטית, אתר באנגלית)'}).then(r=>{
+        softPending=false;
+        if(r.ok&&r.id){ try{ sessionStorage.setItem(SOFT_ID_KEY,String(r.id)); }catch(e){} track('ce_soft_autosave'); }
+      });
+    },2500);
   }
   // Digital paper receipt (perforated header, dotted-leader rows, per-dish detail, add-on math lines,
   // total) - the design explicitly asked to bring back for this step. Pure display; submitLead()'s
@@ -1535,7 +1597,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       return subRow(a.label,v);
     };
     return '<span class="receipt__bar"></span>'+
-      '<div class="receipt__head"><span class="receipt__brand">Ezra Tel Aviv</span><span class="receipt__ref">'+(ref?'#'+ref:'Order summary')+'</span></div>'+
+      '<div class="receipt__head"><span class="receipt__brand">Ezra Tel Aviv</span><span class="receipt__ref">'+(ref?'#'+ref:'Price estimate')+'</span></div>'+
       '<div class="receipt__perf"></div>'+
       row('Package',plan.label)+row('Guests',gg+' guests')+
       row('Date',state.date?humanDate(state.date):'-')+row('Time window',state.slot||'-')+
@@ -1549,65 +1611,67 @@ fbq('init','2174553826420246');fbq('track','PageView');
         ? '<div class="receipt__addhead">Add-ons</div>'+sel.map(addonLine).join('')
         : subRow('Add-ons','None'))+
       (function(){var d=promoDiscount(total);return (d.active?subRow('July 10% off','-'+fmt(d.amount)):'')+
-        '<div class="receipt__total"><span class="receipt__k">Final price</span><span class="receipt__sum">'+fmt(d.active?d.net:total)+'</span></div>';})();
+        '<div class="receipt__total"><span class="receipt__k">Estimate</span><span class="receipt__sum">'+fmt(d.active?d.net:total)+'</span></div>'+
+        '<div class="receipt__note">Not binding. The final offer follows a short call.</div>';})();
   }
   function step6(){
-    setFoot('Send request','',()=>{   // terms line lives under the form (.legal); no need to repeat it in the footer
-      // consent is mandatory: block the send + flag it if unchecked
-      const c=$('fConsent');
-      if(!c || !c.checked){
-        const err=$('consentErr'), row=$('consentRow');
-        if(err) err.hidden=false; if(row) row.classList.add('check--err');
-        (err||row||c).scrollIntoView({behavior:'smooth',block:'center'});
-        return;
-      }
-      state.notes=$('fNotes').value; submitLead(); render(7);
-      if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
-    },true,true);   // step 6 = the details step; keep the WhatsApp button here so they can still switch to a chat
+    setFoot('Send me an offer','',()=>{
+      if(sending) return;
+      state.notes=$('fNotes').value;
+      sending=true; goBtn.textContent='Sending...'; goBtn.disabled=true; backBtn2.disabled=true;
+      track('ce_submit');
+      submitLead(false).then(r=>{
+        sending=false; goBtn.disabled=false; backBtn2.disabled=false;
+        if(!r.ok){
+          goBtn.textContent='Send me an offer';
+          footAlert.textContent='Sending failed. Try again, or message us on WhatsApp';
+          footAlert.classList.remove('on'); void footAlert.offsetWidth; footAlert.classList.add('on');
+          return;
+        }
+        render(7);
+        if(window.parent!==window){ try{ window.parent.postMessage({ezra:'confirmed',value:totals().total},'*'); }catch(e){} }
+      });
+    },true,true);   // keep the WhatsApp pill here so they can still switch to a chat
     body.innerHTML =
-      '<h2 class="steptitle">Your details</h2>'+
-      '<p class="stepsub">We\'ll send you a proposal and a contract for digital signature</p>'+
+      '<h2 class="steptitle">Almost done</h2>'+
+      '<p class="stepsub">Leave your details and we will send an offer based on what you chose. No commitment.</p>'+
       '<div class="details">'+
         '<div class="details__form" id="detForm">'+
           '<div class="frow">'+
             '<div class="bfield"><label>Full name</label><input type="text" id="fName" autocomplete="name" /></div>'+
-            '<div class="bfield"><label>Company</label><input type="text" id="fCompany" autocomplete="organization" /></div>'+
+            '<div class="bfield"><label>Company (optional)</label><input type="text" id="fCompany" autocomplete="organization" /></div>'+
           '</div>'+
           '<div class="frow">'+
             '<div class="bfield"><label>Phone</label><input type="tel" id="fPhone" inputmode="tel" autocomplete="tel" /></div>'+
             '<div class="bfield"><label>Email</label><input type="email" id="fEmail" inputmode="email" autocomplete="email" /></div>'+
           '</div>'+
-          '<div class="bfield"><label>Address</label><input type="text" id="fAddress" autocomplete="street-address" /></div>'+
+          '<p class="bhint">A phone or an email is enough, whichever suits you.</p>'+
           '<div class="bfield"><label>Anything we should know? (optional)</label><textarea id="fNotes" rows="2"></textarea></div>'+
           '<input type="text" id="fHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
-          '<label class="check"><input type="checkbox" id="fWantsCall" /><span><b>I\'d like to speak with the sales manager before signing</b>'+
-            'Please note: checking this will take you out of the booking process. We\'ll keep the details you entered and get back to you for a personal call.</span></label>'+
-          '<label class="check" id="consentRow"><input type="checkbox" id="fConsent" /><span><b>Marketing consent</b>'+
-            'I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can unsubscribe at any time.</span></label>'+
-          '<div class="consent-err" id="consentErr" hidden>Please accept marketing consent to continue.</div>'+
+          '<label class="check" id="consentRow"><input type="checkbox" id="fConsent" /><span><b>Marketing consent (optional)</b>'+
+            'I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span></label>'+
+          '<p class="bhint">Prefer to talk before we send an offer? <button type="button" class="linkbtn" id="detTalk">Talk to us</button></p>'+
         '</div>'+
         '<div class="details__rcpt"><div class="receipt" id="detR">'+receiptPaperHTML(null)+'</div></div>'+
       '</div>'+
-      '<div class="legal">By submitting the form I accept the terms of use and privacy policy.</div>';
+      '<div class="legal">By submitting this form I agree to the Terms of Use and Privacy Policy.</div>';
     body.classList.add('is-details');   // make .body a flex column so the two panels fill + scroll like step 5
     // prefill from state (so save/restore + back keep what was typed)
-    const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fAddress:'address',fNotes:'notes'};
+    const map={fName:'name',fCompany:'company',fPhone:'phone',fEmail:'email',fNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
-    const req=['fName','fPhone','fEmail'].map(id=>$(id));
-    const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
-    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
+    // required: a name and one way to reach them. Company, notes and consent are optional.
+    const ready=()=>!!(String(state.name).trim()&&(String(state.phone).trim()||String(state.email).trim()));
+    const validate=()=>{setGoOff(!ready());};
+    markReq=()=>{
+      const nb=$('fName').closest('.bfield'); if(nb) nb.classList.toggle('bfield--err',!String(state.name).trim());
+      const miss=!(String(state.phone).trim()||String(state.email).trim());
+      ['fPhone','fEmail'].forEach(id=>{const b=$(id).closest('.bfield'); if(b) b.classList.toggle('bfield--err',miss);});
+    };
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
-      const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       if(map[el.id]) state[map[el.id]]=el.value;
-      validate(); saveMaybe();
+      if(el.value.trim()){ const _b=el.closest('.bfield'); if(_b) _b.classList.remove('bfield--err'); }
+      validate(); saveMaybe(); scheduleSoft();
     }));
-    // clear the consent error once they tick it
-    const cc=$('fConsent');
-    if(cc) cc.addEventListener('change',()=>{ if(cc.checked){ const e=$('consentErr'),r=$('consentRow');
-      if(e) e.hidden=true; if(r) r.classList.remove('check--err'); } });
-    // "talk to sales before signing" = leave the booking flow → the abandon screen (which shows the disclaimer)
-    const wc=$('fWantsCall');
-    if(wc) wc.addEventListener('change',()=>{ if(wc.checked){ wc.checked=false; openTalk(6); } });
     validate();
     // scroll-cue on each column (shows only if that panel actually overflows); equal-height columns → arrows align
     ensureScrollCue($('detForm'));
@@ -1620,17 +1684,17 @@ fbq('init','2174553826420246');fbq('track','PageView');
     body.innerHTML =
       '<div class="done">'+
         '<div class="done__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
-        '<div class="dt">Your request has been received</div>'+
-        '<div class="hero">A contract has been emailed to you</div>'+
-        '<a class="done__cta" href="mailto:" aria-label="Open your email app">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>'+
-          'Take me to my email'+
+        '<div class="dt">Got it, thank you!</div>'+
+        '<div class="hero">Your offer is on its way</div>'+
+        '<p class="done__play">We will get back to you with a full offer within one business day, based on what you chose here.</p>'+
+        '<a class="done__cta" href="'+WA_URL+'" target="_blank" rel="noopener" id="doneWa">'+
+          '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>'+
+          'Want it faster? Message us on WhatsApp'+
         '</a>'+
-        '<p class="done__play">The contract is already waiting in your inbox - all that\'s left is to sign :)</p>'+
-        '<div class="done__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16h.01"/></svg>'+
-          '<span>Please note: the contract we sent is valid for 24 hours only. Without a signed contract, we can\'t hold the time slot that was promised.</span></div>'+
-        '<p class="done__fine">We\'ll get back to you within 24 hours to confirm the final details and collect a deposit. The email may take a few moments to arrive.</p>'+
+        '<div class="done__note">'+TALK_INFO+
+          '<span>No commitment. Holding the date and the contract come only after we talk and you approve the offer.</span></div>'+
       '</div>';
+    const dw=$('doneWa'); if(dw) dw.addEventListener('click',()=>waOpen('confirmation'));
   }
 
   /* ═══════ TALK · leave-your-details (abandon the self-serve flow, talk to sales) ═══════ */
@@ -1704,8 +1768,8 @@ fbq('init','2174553826420246');fbq('track','PageView');
     setFoot('Send details','', submitTalk, true, false);   // no talk-prompt on the talk screen itself
     const noteHTML = isFresh ? '' :
       '<div class="talk__note">'+TALK_INFO+
-        '<div><b>You\'re leaving the self-service booking process</b>'+
-        '<span>No commitment. We\'ll keep what you already filled in, and the sales manager will get back to you to arrange the event personally.</span></div>'+
+        '<div><b>We will call you back shortly</b>'+
+        '<span>No commitment. We kept what you already chose, and we will shape the offer together.</span></div>'+
       '</div>';
     const eventHTML = isFresh ?
       '<div class="talk__event">'+
@@ -1730,18 +1794,23 @@ fbq('init','2174553826420246');fbq('track','PageView');
             '<div class="bfield"><label>Email</label><input type="email" id="tkEmail" inputmode="email" autocomplete="email" /></div>'+
             '<div class="bfield"><label>Company (optional)</label><input type="text" id="tkCompany" autocomplete="organization" /></div>'+
           '</div>'+
+          '<p class="bhint">A phone or an email is enough, whichever suits you.</p>'+
           '<div class="bfield"><label>Anything we should know? (optional)</label><textarea id="tkNotes" rows="2"></textarea></div>'+
           eventHTML +
           '<input type="text" id="tkHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />'+
-          '<label class="check" id="tkConsentRow"><input type="checkbox" id="tkConsent" /><span><b>Marketing consent</b>'+
+          '<label class="check" id="tkConsentRow"><input type="checkbox" id="tkConsent" /><span><b>Marketing consent (optional)</b>'+
             'I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can unsubscribe at any time.</span></label>'+
           '<div class="consent-err" id="tkConsentErr" hidden>Please accept marketing consent to continue.</div>'+
         '</div>';
     const map={tkName:'name',tkPhone:'phone',tkEmail:'email',tkCompany:'company',tkNotes:'notes'};
     Object.keys(map).forEach(id=>{const el=$(id);if(el)el.value=state[map[id]]||'';});
-    const req=['tkName','tkPhone','tkEmail'].map(id=>$(id));
-    const validate=()=>{setGoOff(!req.every(el=>el.value.trim()));};
-    markReq=()=>{req.forEach(el=>{const b=el.closest('.bfield'); if(b) b.classList.toggle('bfield--err',!el.value.trim());});};
+    const tkReady=()=>!!($('tkName').value.trim()&&($('tkPhone').value.trim()||$('tkEmail').value.trim()));
+    const validate=()=>{setGoOff(!tkReady());};
+    markReq=()=>{
+      const nb=$('tkName').closest('.bfield'); if(nb) nb.classList.toggle('bfield--err',!$('tkName').value.trim());
+      const miss=!($('tkPhone').value.trim()||$('tkEmail').value.trim());
+      ['tkPhone','tkEmail'].forEach(id=>{const b=$(id).closest('.bfield'); if(b) b.classList.toggle('bfield--err',miss);});
+    };
     body.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',()=>{
       const _b=el.closest('.bfield'); if(_b&&el.value.trim()) _b.classList.remove('bfield--err');
       if(map[el.id]) state[map[el.id]]=el.value; validate(); saveMaybe();
@@ -1758,6 +1827,7 @@ fbq('init','2174553826420246');fbq('track','PageView');
       setFoot('Save details','', submitTalk, true, false);
     }
     validate();
+    updateEst();
     ensureScrollCue(body);
   }
   function submitTalk(){
@@ -1769,19 +1839,23 @@ fbq('init','2174553826420246');fbq('track','PageView');
       showSaveLink();
       return;
     }
-    const c=$('tkConsent');
-    if(!c || !c.checked){
-      const e=$('tkConsentErr'), r=$('tkConsentRow');
-      if(e) e.hidden=false; if(r) r.classList.add('check--err');
-      (e||r||c).scrollIntoView({behavior:'smooth',block:'center'});
-      return;
-    }
+    if(sending) return;
     state.notes=$('tkNotes').value;
-    submitLead(true);          // callback lead (guards a missing plan/date)
-    // callback = a real qualified lead too → parent fires the same Ads conversion (no /confirmation URL)
-    if(window.parent!==window){ try{ window.parent.postMessage({ezra:'lead'},'*'); }catch(e){} }
-    inTalk=false;
-    callbackDone();
+    sending=true; goBtn.textContent='Sending...'; goBtn.disabled=true;
+    submitLead(true).then(r=>{          // callback lead (guards a missing plan/date)
+      sending=false; goBtn.disabled=false;
+      if(!r.ok){
+        goBtn.textContent='Send details';
+        footAlert.textContent='Sending failed. Try again, or message us on WhatsApp';
+        footAlert.classList.remove('on'); void footAlert.offsetWidth; footAlert.classList.add('on');
+        $('talkBtn').hidden=false;
+        return;
+      }
+      // callback = a real qualified lead too → parent fires the same Ads conversion (no /confirmation URL)
+      if(window.parent!==window){ try{ window.parent.postMessage({ezra:'lead'},'*'); }catch(e){} }
+      inTalk=false;
+      callbackDone();
+    });
   }
   function callbackDone(){
     setFoot(null,null,null,false,false);
@@ -1836,17 +1910,16 @@ fbq('init','2174553826420246');fbq('track','PageView');
     const hasProgress = s && (s.plan || s.name || s.phone || s.email || (s.step && s.step>1));
     const q=new URLSearchParams(location.search);
     const pplan=q.get('plan');
-    // A real click on a package CTA/card (?gate=1) OR an ad ?plan= deep-link both start with the
-    // contact capture, then go straight into the build. Contact is skipped once we already know
-    // (draft carries name+phone), so a returning visitor is never asked twice.
-    if(q.get('gate')==='1' || (pplan && E.PLANS[pplan])){
-      if(hasProgress) hydrate0(s);   // preload a saved session so 'build my own' resumes it
-      const opts={ plan:pplan, resume:hasProgress?s:null };
-      chooser(opts); return;   // every package click starts on the three-card chooser
+    track('ce_open');
+    // A package card click or an ad ?plan= deep-link: preselect the plan and go straight to the
+    // guests step, where the estimate appears. The talk door lives on the page, not in a gate here.
+    if(pplan && E.PLANS[pplan]){
+      if(hasProgress) hydrate0(s);   // keep whatever they already filled in
+      if(state.plan!==pplan) state.slot=null;
+      state.plan=pplan; render(nextOf(1)); return;
     }
-    // resume links stay frictionless - they already are that lead
     if(hasProgress){ hydrate(s); return; }
-    chooser({}); return;
+    render(1);
   })();
 })();
 </script>

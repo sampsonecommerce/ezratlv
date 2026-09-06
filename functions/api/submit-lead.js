@@ -16,6 +16,9 @@ const GRP_AGREEMENT = "group_mm187fg9";   // completed booking flow -> Agreement
 const GRP_CUSTOM    = "group_mm4rwdcv";   // custom 450+ consultation -> Custom Package Inquiry (450+)
 const GRP_FOLLOWUP  = "group_mm4rtvy5";   // abandoned / "talk to us" -> Packages (Asked For Follow Up!)
 const GRP_IN_AGREEMENT = "group_mm18zcww"; // completed package booking -> Packages (In Agreement Process)
+// A completed builder request is a request for an offer, not a booking: it lands here and no
+// contract automation fires until a human has called. (Soft builder, 2026-09.)
+const GRP_ESTIMATE = "group_mm6y3fvd";       // Estimate Requested
 // Availability for the on-site calendar merges two boards: committed events on the Events Form
 // calendar (Closed Deals / Pre Payment / Proposal Sent), plus dates just held by a completed
 // website booking on the Company Events Form board (In Agreement Process → Agreement Sent, 24h).
@@ -343,7 +346,7 @@ export async function onRequestPost({ request, env }) {
               : isPrivate ? PRIVATE_GROUP
               : isCustom ? GRP_CUSTOM
               : isIncomplete ? GRP_FOLLOWUP
-              : GRP_IN_AGREEMENT;
+              : GRP_ESTIMATE;
   // item name: company for ALL lead types; fall back to person if no company
   const displayName = String(d.company || d.name || "ליד מהאתר");
   const variables = {
