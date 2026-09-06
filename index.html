@@ -2922,11 +2922,13 @@
             <div class="book-field">
               <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
               <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
-                <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">עד 24</button>
-                <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
+                <!-- finer between 18 and 40 (where it matters for the offer), one bucket above. data-val = board labels. -->
+                <button type="button" class="cf-pill" data-val="מתחת ל 18">עד 18</button>
+                <button type="button" class="cf-pill" data-val="18-21">18-21</button>
+                <button type="button" class="cf-pill" data-val="22-26">22-26</button>
+                <button type="button" class="cf-pill" data-val="27- 30">27-30</button>
                 <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
-                <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
-                <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
+                <button type="button" class="cf-pill" data-val="40 - 50,50 - 60,60 +">40+</button>
               </div>
             </div>
             <div class="book-field">
