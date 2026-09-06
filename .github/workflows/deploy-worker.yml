@@ -47,6 +47,13 @@ jobs:
       - name: Music lead routing test
         run: node worker/test/music-lead.test.mjs
 
+      # Gate. The homepage private-event form's contract with the worker: a lead with phone OR
+      # email is stored without an empty Monday value in the other column, a lead with neither is
+      # refused with 400 (never silently dropped), and a lead with no UTM gets its Traffic Source
+      # from the referrer the page sends. Two leads were lost on 2026-09-06 behind a success screen.
+      - name: Private lead contract test
+        run: node worker/test/private-lead.test.mjs
+
       # Gate. The mirror sync writes to and deletes from a live board on a cron,
       # so its ownership rule is not allowed to regress: it may only touch items
       # carrying a Source Item value. Runs against a stateful mock of all three
