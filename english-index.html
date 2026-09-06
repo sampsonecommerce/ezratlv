@@ -2717,7 +2717,8 @@
     .pf-progress span.is-done, .pf-progress span.is-on { background: var(--gold); }
     .pf-page { border: 0; padding: 0; margin: 0; min-width: 0; }
     .pf-page[hidden] { display: none; }
-    .pf-legend { display: block; font-family: var(--font-serif); font-size: 1.3rem; color: var(--cream); margin: 0 0 0.9rem; padding: 0; line-height: 1.2; }
+    /* body font, not the serif: the serif has no Hebrew glyphs, so the step titles fell back to a system face */
+    .pf-legend { display: block; font-family: var(--font-body); font-weight: 600; font-size: 1.2rem; color: var(--cream); margin: 0 0 0.9rem; padding: 0; line-height: 1.25; }
     .pf-legend small { display: block; font-family: var(--font-body); font-size: 0.82rem; color: var(--cream-dim); margin-block-start: 0.3rem; line-height: 1.5; }
     .pf-contact-switch { align-self: flex-start; background: none; border: 0; padding: 0.35rem 0; color: var(--gold); font: inherit; font-size: 0.8rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
     .pf-contact-switch:hover { color: var(--gold-light); }
@@ -2841,11 +2842,13 @@
             <div class="book-field">
               <label>Age range of attendees <span class="cf-hint">(you can choose several)</span></label>
               <div class="cf-pills" id="cfpAge" role="group" aria-label="Age range" data-multi="1">
-                <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">Up to 24</button>
-                <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
+                <!-- finer between 18 and 40 (where it matters for the offer), one bucket above. data-val = board labels. -->
+                <button type="button" class="cf-pill" data-val="מתחת ל 18">Under 18</button>
+                <button type="button" class="cf-pill" data-val="18-21">18-21</button>
+                <button type="button" class="cf-pill" data-val="22-26">22-26</button>
+                <button type="button" class="cf-pill" data-val="27- 30">27-30</button>
                 <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
-                <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
-                <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
+                <button type="button" class="cf-pill" data-val="40 - 50,50 - 60,60 +">40+</button>
               </div>
             </div>
             <div class="book-field">
