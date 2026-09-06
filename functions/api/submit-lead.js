@@ -185,6 +185,13 @@ export async function onRequestPost({ request, env }) {
   // honeypot: real users never fill the hidden field; bots do -> drop silently
   if (d.hp) return json({ ok: true, dropped: true }, 200);
 
+  // A private lead needs one way to reach the person. The page asks for phone by default
+  // with an email switch, so exactly one may be empty - but not both.
+  if (d.leadType === "private" && !String(d.phone || "").trim() && !String(d.email || "").trim()) {
+    return json({ ok: false, error: "phone or email required" }, 400);
+  }
+  d.utm_source = deriveSource(d);
+
   // Meta CAPI: server-side Lead event, deduped with the browser pixel via event_id.
   const ip = request.headers.get("CF-Connecting-IP") || (request.headers.get("x-forwarded-for") || "").split(",")[0].trim();
   const ua = request.headers.get("user-agent") || "";
@@ -262,12 +269,11 @@ export async function onRequestPost({ request, env }) {
     d.utm_content  ? `קבוצת מודעות / אדסט: ${d.utm_content}` : "",
     d.utm_term     ? `מודעה / מילת מפתח: ${d.utm_term}` : "",
     d.gclid        ? `gclid: ${d.gclid}` : "",   // month-2 offline-conversion upload key
+    d.referrer !== undefined ? `הפניה מ: ${d.referrer || "ישיר"}` : "",
   ].filter(Boolean);
   if (atto.length) notes += "\n— שיוך מקור —\n" + atto.join("\n");
 
   const cols = {
-    emailj9eufer1:         { email: d.email || "", text: d.email || "" },
-    phone0zyibnut:         { phone: String(d.phone || ""), countryShortName: "IL" },
     single_selecta6erdt9:  { label: d.eventType || (isOpenEvents ? "אירוע פתוח" : "אירוע חברה") },
     number0kzol2wl:        String(d.guests ?? ""),
     numeric_mm1qj01x:      String(d.guests ?? ""),
@@ -275,6 +281,10 @@ export async function onRequestPost({ request, env }) {
     short_textgjnrhjdi:    d.utm_source || "",
     color_mm18ym70:        { label: "New Lead" },
   };
+  // An empty email/phone value is not "no value" to Monday - it is a malformed one. Write the
+  // column only when there is something to write.
+  if (String(d.email || "").trim()) cols.emailj9eufer1 = { email: String(d.email).trim(), text: String(d.email).trim() };
+  if (String(d.phone || "").trim()) cols.phone0zyibnut = { phone: String(d.phone).trim(), countryShortName: "IL" };
   const isPackage = !d.leadType;   // website booking lead (no leadType)
   // Summary blob: company board -> Lead Summary (long_text_mm4t4fjb); private board lacks that
   // column, so keep the blob in long_textlwbyhlq0 there (private path unchanged).
@@ -372,6 +382,27 @@ export async function onRequestPost({ request, env }) {
     console.error("submit-lead failed:", e);
     return json({ ok: false, error: String(e) }, 502);
   }
+}
+
+
+// Traffic Source for a lead that carried no UTM. The page falls back to "website" when the URL has
+// no utm_source, which made a Google-organic lead and a WhatsApp-shared link look identical on the
+// board. The page now also sends document.referrer (captured on first load); when it does, name
+// the origin. A payload with no `referrer` key is an old cached page - leave what it sent.
+function deriveSource(d) {
+  const sent = String(d.utm_source || "").trim();
+  if (sent && sent !== "website") return sent;
+  if (d.referrer === undefined || d.referrer === null) return sent || "website";
+  let host = "";
+  try { host = new URL(String(d.referrer)).hostname.toLowerCase().replace(/^(www|l|m|lm)\./, ""); } catch {}
+  if (!host) return "direct";
+  if (/(^|\.)ezratlv\.com$/.test(host)) return "website";
+  if (/(^|\.)google\./.test(host)) return "google_organic";
+  if (/(^|\.)bing\.com$/.test(host)) return "bing_organic";
+  if (/(^|\.)instagram\.com$/.test(host)) return "instagram";
+  if (/(^|\.)(facebook|fb)\.com$/.test(host)) return "facebook";
+  if (/(^|\.)whatsapp\.com$/.test(host)) return "whatsapp";
+  return host;
 }
 
 function json(obj, status) {

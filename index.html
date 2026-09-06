@@ -2733,6 +2733,9 @@
   </script>
   <!-- ============================================================
        PRIVATE-EVENT LEAD POPUP (replaces the wkf.ms WorkForm)
+       Same questions, three short steps, one contact field, a footer that never scrolls away,
+       and a success screen that is shown only after the lead is stored.
+       See openspec/changes/improve-private-form-mobile.
   ============================================================ -->
   <style>
     .book-modal { position: fixed; inset: 0; z-index: 1100; display: flex; padding: clamp(0.75rem, 3vw, 2.5rem); background: rgba(8,6,4,0.55); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.35s var(--ease); }
@@ -2740,32 +2743,45 @@
     .book-modal[hidden] { display: none; }
     .book-modal__panel { position: relative; margin: auto; width: 100%; max-width: 540px; max-height: 100%; display: flex; flex-direction: column; background: linear-gradient(170deg, #1b150f, #120e0a); border: 1px solid rgba(196,154,60,0.25); border-radius: 24px; overflow: hidden; box-shadow: 0 30px 90px rgba(0,0,0,0.65); transform: scale(0.97); transition: transform 0.35s var(--ease); }
     .book-modal.open .book-modal__panel { transform: scale(1); }
+    /* Phones: a full-height sheet with one scroller. The card-in-a-card layout put ~1450px of form
+       inside a ~670px nested scroll box, and the Instagram webview handles that badly: stuck
+       scroll, rage taps, the send button never in view (Clarity, 2026-09-06). */
+    @media (max-width: 600px) {
+      .book-modal { padding: 0; }
+      .book-modal__panel { max-width: none; height: 100%; max-height: none; border-radius: 0; border: 0; }
+    }
+    /* the cookie banner sat right over the consent row and the send button */
+    body.pf-open .cookie-bar { display: none; }
+    /* the Enable accessibility trigger sat over the footer's Back/Next buttons on a phone */
+    body.pf-open #enable-toolbar-trigger, body.pf-open #ezra-acc-hide { display: none !important; }
 
     .book-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .book-field[hidden] { display: none; }   /* display:flex would otherwise beat the hidden attribute */
     .book-field label { font-size: 0.82rem; color: var(--cream-dim); font-weight: 500; }
-    .book-field input, .book-field textarea { width: 100%; padding: 0.75rem 0.9rem; border-radius: 11px; border: 1px solid var(--line); background: rgba(0,0,0,0.25); color: var(--cream); font-family: var(--font-body); font-size: 0.95rem; transition: border-color 0.25s var(--ease); }
+    .book-field input, .book-field textarea { width: 100%; padding: 0.8rem 0.9rem; border-radius: 11px; border: 1px solid var(--line); background: rgba(0,0,0,0.25); color: var(--cream); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.25s var(--ease); }
     .book-field input:focus, .book-field textarea:focus { outline: none; border-color: var(--gold); }
-    .book-field input[type="date"] { color-scheme: dark; -webkit-appearance: none; appearance: none; min-width: 0; }
+    .book-field input[type="date"] { color-scheme: dark; -webkit-appearance: none; appearance: none; min-width: 0; min-height: 48px; }
     /* iOS renders the date value with its own centered metrics -> in a narrow RTL box it looked
-       off-center and clipped. Pin the value to the start (right) edge like every other field. */
-    .book-field input[type="date"]::-webkit-date-and-time-value { text-align: right; margin: 0; }
+       off-center and clipped. Pin the value to the start edge like every other field. */
+    .book-field input[type="date"]::-webkit-date-and-time-value { text-align: start; margin: 0; }
     /* the closed-state calendar icon renders near-black by default (invisible on a dark field) - invert it */
     .book-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); cursor: pointer; }
     /* native date inputs can't take a placeholder - overlay a hint that hides once a date is chosen */
     .date-wrap { position: relative; }
-    .date-hint { position: absolute; inset-inline-start: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--cream-faint); font-size: 0.95rem; pointer-events: none; }
+    .date-hint { position: absolute; inset-inline-start: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--cream-faint); font-size: 1rem; pointer-events: none; }
     .date-hint[hidden] { display: none; }
-    .book-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-    @media (max-width: 460px) { .book-field--row { grid-template-columns: 1fr; } }
 
     .cf-panel { max-width: 520px; }
-    .cf-close { position: absolute; top: 14px; left: 14px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--cream-dim); cursor: pointer; transition: all 0.2s var(--ease); }
+    .cf-close { position: absolute; top: 14px; inset-inline-end: 14px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--cream-dim); cursor: pointer; transition: all 0.2s var(--ease); }
+    /* inline-end: left of the RTL page, right of the English one - clear of the heading either way */
     .cf-close:hover { color: var(--cream); border-color: var(--gold); }
     .cf-close svg { width: 17px; height: 17px; }
-    /* overflow-y alone makes overflow-x compute to auto too (spec), which let the whole panel be
-       dragged side to side on mobile - same root cause fixed earlier in company-events-v2 */
-    .cf-scroll { overflow-y: auto; overflow-x: hidden; padding: clamp(1.6rem, 5vw, 2.4rem); }
-    .cf-head { margin-block-end: 1.4rem; }
+    /* the one and only scroller. overflow-y alone makes overflow-x compute to auto too (spec), which
+       let the whole panel be dragged side to side on mobile. overscroll-behavior stops the scroll
+       chaining to the page behind the sheet. */
+    .cf-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: clamp(1.4rem, 5vw, 2.4rem); }
+    .cf-head { margin-block-end: 1.1rem; }
+    .cf-head[hidden] { display: none; }
     .cf-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 4.5vw, 2rem); color: var(--cream); margin: 0.5rem 0 0.5rem; line-height: 1.15; }
     .cf-sub { color: var(--cream-dim); line-height: 1.6; font-size: 0.95rem; margin: 0; }
     .cf-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -2773,12 +2789,32 @@
     .cf-pill:hover { border-color: var(--gold); color: var(--cream); }
     .cf-pill.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 600; }
     #privateForm .book-field { margin-block-end: 1rem; }
+    #privateForm[hidden] { display: none; }
     .cf-hint { font-size: 0.72rem; color: var(--cream-faint); font-weight: 400; }
-    .cf-done { text-align: center; padding: 1.5rem 0.5rem 1rem; }
-    .cf-done__icon { width: 60px; height: 60px; margin: 0 auto 1.1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
-    .cf-done__icon svg { width: 28px; height: 28px; }
-    .cf-done h3 { font-family: var(--font-serif); font-size: 1.6rem; color: var(--cream); margin: 0 0 0.5rem; }
-    .cf-done p { color: var(--cream-dim); line-height: 1.6; margin: 0 0 1.5rem; }
+
+    /* steps */
+    .pf-progress { display: flex; gap: 6px; margin-block-end: 1rem; }
+    .pf-progress span { flex: 1; height: 4px; border-radius: 999px; background: rgba(255,255,255,0.1); transition: background 0.3s var(--ease); }
+    .pf-progress span.is-done, .pf-progress span.is-on { background: var(--gold); }
+    .pf-page { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .pf-page[hidden] { display: none; }
+    .pf-legend { display: block; font-family: var(--font-serif); font-size: 1.3rem; color: var(--cream); margin: 0 0 0.9rem; padding: 0; line-height: 1.2; }
+    .pf-legend small { display: block; font-family: var(--font-body); font-size: 0.82rem; color: var(--cream-dim); margin-block-start: 0.3rem; line-height: 1.5; }
+    .pf-contact-switch { align-self: flex-start; background: none; border: 0; padding: 0.35rem 0; color: var(--gold); font: inherit; font-size: 0.8rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .pf-contact-switch:hover { color: var(--gold-light); }
+    /* inline errors replace the native "required" bubbles, which the Instagram webview does not show */
+    .book-field.is-invalid input, .book-field.is-invalid textarea { border-color: #e0736f; outline: 1px solid rgba(224,115,111,0.6); outline-offset: 2px; }
+    .pf-err { color: #e0736f; font-size: 0.76rem; margin-block-start: 0.35rem; }
+    .pf-err[hidden] { display: none; }
+    /* footer lives outside the scroller: Back / Next / Send are on screen on every step */
+    .pf-foot { display: flex; align-items: center; gap: 0.7rem; padding: 0.85rem clamp(1.4rem, 5vw, 2.4rem); padding-block-end: max(0.85rem, env(safe-area-inset-bottom)); border-block-start: 1px solid var(--line); background: #120e0a; }
+    .pf-foot[hidden] { display: none; }
+    .pf-foot .btn { margin: 0; }
+    .pf-foot__next { flex: 1; min-height: 48px; }
+    .pf-foot__next[disabled] { opacity: 0.7; cursor: progress; }
+    .pf-foot__back { min-height: 48px; padding-inline: 1rem; }
+    .pf-foot__back[hidden] { display: none; }
+    .pf-foot__count { font-size: 0.78rem; color: var(--cream-faint); min-width: 2.4em; text-align: center; font-variant-numeric: tabular-nums; }
 
     .book-check { display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer; padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid var(--line); background: rgba(196,154,60,0.05); transition: border-color 0.25s var(--ease), background 0.25s var(--ease); }
     .book-check:hover { border-color: rgba(196,154,60,0.4); }
@@ -2793,19 +2829,19 @@
     .book-check--sm input { width: 15px; height: 15px; }
     .book-check--sm .book-check__text { gap: 0.1rem; }
     .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
-    /* mandatory-consent error state: same red flag used across the site's forms */
-    .book-check--err { outline: 1px solid rgba(224,115,111,0.6); outline-offset: 4px; border-radius: 8px; }
-    .book-check--err .book-check__text b { color: #e0736f; }
-    .book-check--err input { accent-color: #e0736f; }
-    .book-consent-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.5rem; }
-    .book-consent-err[hidden] { display: none; }
-    /* guest-count over the 60 cap: same red flag, but live as they type - not a silent fail at submit */
-    .book-field--err input { outline: 1px solid rgba(224,115,111,0.6); outline-offset: 2px; border-radius: 8px; }
-    .book-field-err { color: #e0736f; font-size: 0.74rem; margin-block-start: 0.35rem; }
-    .book-field-err[hidden] { display: none; }
     .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
     .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
     .book-terms a:hover { color: var(--gold-light); }
+
+    .cf-done { text-align: center; padding: 1.5rem 0.5rem 1rem; }
+    .cf-done[hidden] { display: none; }
+    .cf-done__icon { width: 60px; height: 60px; margin: 0 auto 1.1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); font-family: var(--font-serif); font-size: 1.8rem; }
+    .cf-done__icon svg { width: 28px; height: 28px; }
+    .cf-done__icon--fail { background: rgba(224,115,111,0.12); color: #e0736f; border-color: rgba(224,115,111,0.4); }
+    .cf-done h3 { font-family: var(--font-serif); font-size: 1.6rem; color: var(--cream); margin: 0 0 0.5rem; }
+    .cf-done p { color: var(--cream-dim); line-height: 1.6; margin: 0 0 1.5rem; }
+    .cf-done__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .cf-done__actions .btn { margin: 0; }
   </style>
 
   <div class="book-modal" id="privateModal" role="dialog" aria-modal="true" aria-label="בדיקת זמינות לאירוע פרטי" hidden>
@@ -2813,92 +2849,109 @@
       <button class="cf-close" id="privateClose" type="button" aria-label="סגירה">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
-      <div class="cf-scroll">
-        <div class="cf-head">
+      <div class="cf-scroll" id="privateScroll">
+        <div class="cf-head" id="privateHead">
           <span class="label">בדיקת זמינות</span>
           <h3 class="cf-title">נשמח לחגוג איתכם</h3>
-          <p class="cf-sub">השאירו פרטים ונחזור אליכם לבדוק זמינות לתאריך שלכם ולבנות הצעה שמתאימה בדיוק לאירוע.</p>
+          <p class="cf-sub">שלושה שלבים קצרים, ונחזור אליכם לבדוק זמינות ולבנות הצעה שמתאימה בדיוק לאירוע.</p>
         </div>
 
-        <form class="book-form" id="privateForm">
-          <div class="book-field--row">
-            <div class="book-field"><label for="pfName">שם מלא</label><input id="pfName" type="text" autocomplete="name" required /></div>
-            <div class="book-field"><label for="pfPhone">טלפון</label><input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
-          </div>
-          <div class="book-field--row">
-            <div class="book-field"><label for="pfEmail">אימייל</label><input id="pfEmail" type="email" inputmode="email" autocomplete="email" required /></div>
-            <div class="book-field" id="pfGuestsRow"><label for="pfGuests">מספר אורחים</label><input id="pfGuests" type="number" inputmode="numeric" min="1" max="60" placeholder="לדוגמה 30" required />
-              <div class="book-field-err" id="pfGuestsErr" hidden>העזרא יכול להכיל עד 60 אורחים.</div>
+        <form class="book-form" id="privateForm" novalidate>
+          <div class="pf-progress" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
+
+          <fieldset class="pf-page" data-step="1">
+            <legend class="pf-legend">מי חוגגים?</legend>
+            <div class="book-field" id="pfNameRow">
+              <label for="pfName">שם מלא</label>
+              <input id="pfName" type="text" autocomplete="name" enterkeyhint="next" />
+              <div class="pf-err" hidden>איך קוראים לכם?</div>
             </div>
-          </div>
-
-          <div class="book-field">
-            <label>סוג האירוע</label>
-            <div class="cf-pills" id="cfpType" role="group" aria-label="סוג האירוע">
-              <button type="button" class="cf-pill active" data-val="יום הולדת">יום הולדת</button>
-              <button type="button" class="cf-pill" data-val="מסיבת רווקים/ רווקות">רווקים/רווקות</button>
-              <button type="button" class="cf-pill" data-val="אירוסין">אירוסין</button>
-              <button type="button" class="cf-pill" data-val="מסיבת פרידה">מסיבת פרידה</button>
-              <button type="button" class="cf-pill" data-val="מסיבה">מסיבה</button>
-              <button type="button" class="cf-pill" data-val="אחר">אחר</button>
+            <div class="book-field" id="pfPhoneRow">
+              <label for="pfPhone">טלפון</label>
+              <input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="050-0000000" enterkeyhint="next" />
+              <div class="pf-err" hidden>צריך מספר טלפון תקין כדי שנוכל לחזור אליכם.</div>
+              <button type="button" class="pf-contact-switch" id="pfSwitchEmail">מעדיפים שנחזור באימייל?</button>
             </div>
-          </div>
-
-          <div class="book-field">
-            <label for="pfDate">תאריך האירוע המבוקש</label>
-            <div class="date-wrap">
-              <input id="pfDate" type="date" required />
-              <span class="date-hint" id="pfDateHint">בחרו תאריך</span>
+            <div class="book-field" id="pfEmailRow" hidden>
+              <label for="pfEmail">אימייל</label>
+              <input id="pfEmail" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" enterkeyhint="next" />
+              <div class="pf-err" hidden>כתובת האימייל לא נראית תקינה.</div>
+              <button type="button" class="pf-contact-switch" id="pfSwitchPhone">חזרה לטלפון</button>
             </div>
-          </div>
-
-          <div class="book-field">
-            <label>שעת האירוע</label>
-            <div class="cf-pills" id="cfpTime" role="group" aria-label="שעת האירוע">
-              <button type="button" class="cf-pill" data-val="בוקר">בוקר</button>
-              <button type="button" class="cf-pill" data-val="צהריים">צהריים</button>
-              <button type="button" class="cf-pill" data-val="ערב">ערב</button>
-              <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+            <div class="book-field">
+              <label>סוג האירוע</label>
+              <div class="cf-pills" id="cfpType" role="group" aria-label="סוג האירוע">
+                <button type="button" class="cf-pill active" data-val="יום הולדת">יום הולדת</button>
+                <button type="button" class="cf-pill" data-val="מסיבת רווקים/ רווקות">רווקים/רווקות</button>
+                <button type="button" class="cf-pill" data-val="אירוסין">אירוסין</button>
+                <button type="button" class="cf-pill" data-val="מסיבת פרידה">מסיבת פרידה</button>
+                <button type="button" class="cf-pill" data-val="מסיבה">מסיבה</button>
+                <button type="button" class="cf-pill" data-val="אחר">אחר</button>
+              </div>
             </div>
-          </div>
+          </fieldset>
 
-          <div class="book-field">
-            <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
-            <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
-              <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">עד 24</button>
-              <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
-              <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
-              <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
-              <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
+          <fieldset class="pf-page" data-step="2" hidden>
+            <legend class="pf-legend">מתי ובאיזה גודל?</legend>
+            <div class="book-field" id="pfDateRow">
+              <label for="pfDate">תאריך האירוע המבוקש <span class="cf-hint">(אם אתם גמישים, התאריך המועדף)</span></label>
+              <div class="date-wrap">
+                <input id="pfDate" type="date" />
+                <span class="date-hint" id="pfDateHint">בחרו תאריך</span>
+              </div>
+              <div class="pf-err" hidden>בחרו תאריך עתידי.</div>
             </div>
-          </div>
-
-          <div class="book-field">
-            <label>מתי נוח שנחזור אליכם?</label>
-            <div class="cf-pills" id="cfpCall" role="group" aria-label="זמן נוח לחזרה">
-              <button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">בוקר · 9:00-12:00</button>
-              <button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">צהריים · 12:00-17:00</button>
-              <button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">גמיש / בכל זמן</button>
+            <div class="book-field">
+              <label>שעת האירוע</label>
+              <div class="cf-pills" id="cfpTime" role="group" aria-label="שעת האירוע">
+                <button type="button" class="cf-pill" data-val="בוקר">בוקר</button>
+                <button type="button" class="cf-pill" data-val="צהריים">צהריים</button>
+                <button type="button" class="cf-pill" data-val="ערב">ערב</button>
+                <button type="button" class="cf-pill" data-val="גמיש">גמיש</button>
+              </div>
             </div>
-          </div>
+            <div class="book-field" id="pfGuestsRow">
+              <label for="pfGuests">מספר אורחים משוער</label>
+              <input id="pfGuests" type="number" inputmode="numeric" min="1" max="60" placeholder="לדוגמה 30" enterkeyhint="next" />
+              <div class="pf-err" id="pfGuestsErr" hidden>העזרא מכיל עד 60 אורחים.</div>
+            </div>
+          </fieldset>
 
-          <div class="book-field">
-            <label for="pfNotes">משהו שחשוב שנדע? (לא חובה)</label>
-            <textarea id="pfNotes" rows="2" placeholder="אופי האירוע, בקשות מיוחדות, צרכים תזונתיים..."></textarea>
-          </div>
-
-          <label class="book-check book-check--sm" for="pfConsent" id="pfConsentRow">
-            <input type="checkbox" id="pfConsent" />
-            <span class="book-check__text">
-              <b>אישור קבלת דיוור</b>
-              <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
-            </span>
-          </label>
-          <div class="book-consent-err" id="pfConsentErr" hidden>יש לאשר קבלת דיוור כדי להמשיך.</div>
-
-          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="company_url" id="pfHp" tabindex="-1" autocomplete="off" /></div>
-          <button class="btn btn--fill" id="privateSubmit" type="submit" style="width: 100%; margin-block-start: 1.5rem;">שליחת הבקשה</button>
-          <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+          <fieldset class="pf-page" data-step="3" hidden>
+            <legend class="pf-legend">עוד כמה פרטים <small>הכול כאן לא חובה, אבל עוזר לנו להכין הצעה מדויקת.</small></legend>
+            <div class="book-field">
+              <label>טווח גילאי המשתתפים <span class="cf-hint">(אפשר לבחור כמה)</span></label>
+              <div class="cf-pills" id="cfpAge" role="group" aria-label="טווח גילאים" data-multi="1">
+                <button type="button" class="cf-pill" data-val="מתחת ל 18,18-21,22-26">עד 24</button>
+                <button type="button" class="cf-pill" data-val="27- 30">25-30</button>
+                <button type="button" class="cf-pill" data-val="30 - 40">31-40</button>
+                <button type="button" class="cf-pill" data-val="40 - 50">41-50</button>
+                <button type="button" class="cf-pill" data-val="50 - 60,60 +">51+</button>
+              </div>
+            </div>
+            <div class="book-field">
+              <label>מתי נוח שנחזור אליכם?</label>
+              <div class="cf-pills" id="cfpCall" role="group" aria-label="זמן נוח לחזרה">
+                <button type="button" class="cf-pill" data-val="בוקר (09:00 -12:00)">בוקר · 9:00-12:00</button>
+                <button type="button" class="cf-pill" data-val="צהריים (12:00 - 17:00)">צהריים · 12:00-17:00</button>
+                <button type="button" class="cf-pill" data-val="בכל זמן במהלך היום">גמיש / בכל זמן</button>
+              </div>
+            </div>
+            <div class="book-field">
+              <label for="pfNotes">משהו שחשוב שנדע? <span class="cf-hint">(לא חובה)</span></label>
+              <textarea id="pfNotes" rows="2" placeholder="אופי האירוע, בקשות מיוחדות, צרכים תזונתיים..."></textarea>
+            </div>
+            <label class="book-check book-check--sm" for="pfConsent" id="pfConsentRow">
+              <input type="checkbox" id="pfConsent" />
+              <span class="book-check__text">
+                <b>אישור קבלת דיוור <span class="cf-hint">(לא חובה)</span></b>
+                <span>אני מאשר/ת קבלת עדכונים, מבצעים ותכנים שיווקיים מעזרא בדוא״ל וב-SMS. ניתן להסיר בכל עת.</span>
+              </span>
+            </label>
+            <!-- honeypot. Named "fax" rather than anything iOS contact autofill might recognise and fill. -->
+            <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>אל תמלאו שדה זה</label><input type="text" name="fax" id="pfHp" tabindex="-1" autocomplete="off" /></div>
+            <p class="book-terms">בשליחת הטופס אני מאשר/ת את <a href="terms" target="_blank" rel="noopener">תנאי השימוש</a> ו<a href="privacy" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</p>
+          </fieldset>
         </form>
 
         <div class="cf-done" id="privateDone" hidden>
@@ -2909,6 +2962,22 @@
           <p>נחזור אליכם בהקדם לבדוק זמינות ולתאם את כל הפרטים.</p>
           <button type="button" class="btn btn--outline" id="privateDoneClose">סגירה</button>
         </div>
+
+        <div class="cf-done" id="privateFail" hidden>
+          <div class="cf-done__icon cf-done__icon--fail" aria-hidden="true">!</div>
+          <h3>הבקשה לא נשלחה</h3>
+          <p>נראה שהחיבור נפל באמצע. הפרטים שמילאתם שמורים, אפשר לנסות שוב או לשלוח לנו בוואטסאפ.</p>
+          <div class="cf-done__actions">
+            <button type="button" class="btn btn--fill" id="privateRetry">נסו שוב</button>
+            <a class="btn btn--outline" id="privateFailWa" href="https://wa.me/972509499241" target="_blank" rel="noopener">לשלוח בוואטסאפ</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-foot" id="privateFoot">
+        <button type="button" class="btn btn--outline pf-foot__back" id="pfBack" hidden>חזרה</button>
+        <button type="submit" form="privateForm" class="btn btn--fill pf-foot__next" id="privateSubmit">המשך</button>
+        <span class="pf-foot__count" id="pfCount" aria-live="polite">1/3</span>
       </div>
     </div>
   </div>
@@ -2917,24 +2986,55 @@
     (function () {
       const modal = document.getElementById('privateModal');
       if (!modal) return;
-      const form = document.getElementById('privateForm');
-      const done = document.getElementById('privateDone');
-      let lastFocus = null;
+      const $ = (id) => document.getElementById(id);
+      const form = $('privateForm'), scroller = $('privateScroll'), head = $('privateHead');
+      const done = $('privateDone'), fail = $('privateFail'), foot = $('privateFoot');
+      const nextBtn = $('privateSubmit'), backBtn = $('pfBack'), countEl = $('pfCount');
+      const pages = Array.from(form.querySelectorAll('.pf-page'));
+      const bars = Array.from(form.querySelectorAll('.pf-progress span'));
+      const LAST = pages.length;
+      const T = { next: 'המשך', send: 'שליחת הבקשה', sending: 'שולחים...' };
+      let step = 1, lastFocus = null, sending = false;
+      // Clarity custom events: the funnel this change is measured by (pf_open -> pf_success).
+      const track = (n) => { try { if (window.clarity) window.clarity('event', n); } catch (e) {} };
 
+      function showStep(n, focusFirst) {
+        step = n;
+        pages.forEach(p => { p.hidden = Number(p.dataset.step) !== n; });
+        bars.forEach((b, i) => { b.classList.toggle('is-done', i < n - 1); b.classList.toggle('is-on', i === n - 1); });
+        backBtn.hidden = n === 1;
+        nextBtn.textContent = n === LAST ? T.send : T.next;
+        countEl.textContent = n + '/' + LAST;
+        scroller.scrollTop = 0;
+        if (focusFirst) {
+          const f = Array.from(pages[n - 1].querySelectorAll('input, textarea')).find(el => !el.closest('[hidden]') && el.type !== 'checkbox');
+          if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) {} }, 80);
+        }
+        if (n === 2) track('pf_step2');
+        if (n === 3) track('pf_step3');
+      }
+      function showPanel(which) {   // 'form' | 'done' | 'fail'
+        form.hidden = which !== 'form'; head.hidden = which !== 'form'; foot.hidden = which !== 'form';
+        done.hidden = which !== 'done'; fail.hidden = which !== 'fail';
+        scroller.scrollTop = 0;
+      }
       function open() {
         lastFocus = document.activeElement;
         modal.hidden = false;
         void modal.offsetWidth;
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('pf-open');
         // #book in the address bar -> shareable/copyable link straight to this form
         if (location.hash !== '#book') history.pushState(null, '', location.pathname + location.search + '#book');
-        const first = document.getElementById('pfName');
-        if (first) setTimeout(() => first.focus(), 80);
+        showPanel('form');
+        showStep(step, true);   // a visitor who closed mid-way comes back to the step they were on
+        track('pf_open');
       }
       function close() {
         modal.classList.remove('open');
         document.body.style.overflow = '';
+        document.body.classList.remove('pf-open');
         setTimeout(() => { modal.hidden = true; }, 350);
         if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
         if (location.hash === '#book') history.pushState(null, '', location.pathname + location.search);
@@ -2943,9 +3043,10 @@
       // Every old "לבדיקת זמינות" CTA (the wkf.ms links) now opens this popup.
       document.querySelectorAll('a[href^="https://wkf.ms"]').forEach(el =>
         el.addEventListener('click', e => { e.preventDefault(); open(); }));
-      document.getElementById('privateClose').addEventListener('click', close);
-      const dClose = document.getElementById('privateDoneClose');
-      if (dClose) dClose.addEventListener('click', close);
+      $('privateClose').addEventListener('click', close);
+      $('privateDoneClose').addEventListener('click', close);
+      $('privateRetry').addEventListener('click', () => { showPanel('form'); showStep(LAST, false); });
+      backBtn.addEventListener('click', () => { if (step > 1) showStep(step - 1, false); });
       modal.addEventListener('click', e => { if (e.target === modal) close(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
 
@@ -2964,70 +3065,115 @@
       });
       const pillValue  = (id) => { const a = document.querySelector('#' + id + ' .cf-pill.active'); return a ? a.dataset.val : ''; };
       const pillValues = (id) => Array.from(document.querySelectorAll('#' + id + ' .cf-pill.active')).map(p => p.dataset.val);
+      function resetPills() {
+        modal.querySelectorAll('.cf-pills').forEach(g => g.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('active')));
+        const first = document.querySelector('#cfpType .cf-pill'); if (first) first.classList.add('active');
+      }
 
       // ?type= preselects the event-type pill, so a DM/ad link (e.g. /?type=birthday#book) lands
       // on a form already set to what the person asked about. Unknown value = default pill, never an error.
+      // The data-val values stay Hebrew on every page - they are what Monday stores.
       (function () {
         const TYPE_MAP = { birthday: 'יום הולדת', bachelor: 'מסיבת רווקים/ רווקות', engagement: 'אירוסין', farewell: 'מסיבת פרידה', party: 'מסיבה', other: 'אחר' };
         const want = TYPE_MAP[(new URLSearchParams(location.search).get('type') || '').toLowerCase()];
         if (!want) return;
-        const group = document.getElementById('cfpType');
+        const group = $('cfpType');
         const btn = group && group.querySelector('.cf-pill[data-val="' + want + '"]');
         if (!btn) return;
         group.querySelectorAll('.cf-pill').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
       })();
 
-      const pfConsentEl = document.getElementById('pfConsent');
-      if (pfConsentEl) pfConsentEl.addEventListener('change', () => {
-        if (!pfConsentEl.checked) return;
-        const err = document.getElementById('pfConsentErr'), row = document.getElementById('pfConsentRow');
-        if (err) err.hidden = true; if (row) row.classList.remove('book-check--err');
+      // one contact field: phone by default, email on request. The hidden one is cleared and skipped.
+      const nameRow = $('pfNameRow'), phoneRow = $('pfPhoneRow'), emailRow = $('pfEmailRow'), dateRow = $('pfDateRow'), guestsRow = $('pfGuestsRow');
+      const pfName = $('pfName'), pfPhone = $('pfPhone'), pfEmail = $('pfEmail'), pfDate = $('pfDate'), pfGuests = $('pfGuests');
+      let contact = 'phone';
+      function setContact(mode) {
+        contact = mode;
+        phoneRow.hidden = mode !== 'phone';
+        emailRow.hidden = mode !== 'email';
+        if (mode === 'phone') pfEmail.value = ''; else pfPhone.value = '';
+        setErr(phoneRow, false); setErr(emailRow, false);
+        const f = mode === 'phone' ? pfPhone : pfEmail;
+        setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) {} }, 40);
+      }
+      $('pfSwitchEmail').addEventListener('click', () => setContact('email'));
+      $('pfSwitchPhone').addEventListener('click', () => setContact('phone'));
+
+      // inline errors. The Instagram/Facebook webview does not reliably show native "required"
+      // bubbles, so a tap on Send with an empty field read as a dead click. Every rule is ours.
+      function setErr(row, on, msg) {
+        row.classList.toggle('is-invalid', !!on);
+        const e = row.querySelector('.pf-err');
+        if (e) { if (msg) e.textContent = msg; e.hidden = !on; }
+        const inp = row.querySelector('input, textarea');
+        if (inp) inp.setAttribute('aria-invalid', on ? 'true' : 'false');
+      }
+      [nameRow, phoneRow, emailRow, dateRow, guestsRow].forEach(row => {
+        const inp = row.querySelector('input'); if (!inp) return;
+        inp.addEventListener('input', () => setErr(row, false));
+        inp.addEventListener('change', () => setErr(row, false));
       });
+      const phoneOk = (v) => String(v || '').replace(/\D/g, '').length >= 9;
+      const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+      pfDate.min = todayISO();
+      function validate(n) {
+        let bad = null;
+        const flag = (row, el, msg) => { setErr(row, true, msg); if (!bad) bad = el; };
+        if (n === 1) {
+          if (!pfName.value.trim()) flag(nameRow, pfName);
+          if (contact === 'phone') { if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone); }
+          else if (!pfEmail.value.trim() || !pfEmail.validity.valid) flag(emailRow, pfEmail);
+        }
+        if (n === 2) {
+          if (!pfDate.value || pfDate.value < todayISO()) flag(dateRow, pfDate);
+          const g = Number(pfGuests.value);
+          if (!pfGuests.value.trim() || !(g >= 1)) flag(guestsRow, pfGuests, 'כמה אורחים בערך? מספר משוער מספיק.');
+          else if (g > 60) flag(guestsRow, pfGuests, 'העזרא מכיל עד 60 אורחים.');
+        }
+        if (bad) {
+          bad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          try { bad.focus({ preventScroll: true }); } catch (e) {}
+          return false;
+        }
+        return true;
+      }
+      // guest cap, live as they type - not a silent fail at Next
+      pfGuests.addEventListener('input', () => { if (Number(pfGuests.value) > 60) setErr(guestsRow, true, 'העזרא מכיל עד 60 אורחים.'); });
+      // native date inputs can't take a placeholder - overlay a hint that hides once a date is chosen
+      const pfDateHint = $('pfDateHint');
+      const syncDateHint = () => { pfDateHint.hidden = !!pfDate.value; };
+      syncDateHint(); pfDate.addEventListener('input', syncDateHint); pfDate.addEventListener('change', syncDateHint);
 
-      // guest count over the 60-guest cap: flag the moment they type it, not after the whole form is filled
-      const pfGuestsEl = document.getElementById('pfGuests');
-      const guestsOverCap = () => Number(pfGuestsEl.value) > 60;
-      const setGuestsErr = (on) => {
-        const err = document.getElementById('pfGuestsErr'), row = document.getElementById('pfGuestsRow');
-        if (err) err.hidden = !on; if (row) row.classList.toggle('book-field--err', on);
-      };
-      if (pfGuestsEl) pfGuestsEl.addEventListener('input', () => setGuestsErr(guestsOverCap()));
+      // Where this visitor came from, captured once per tab so in-site navigation does not overwrite
+      // the outside origin. The worker turns it into a Traffic Source when the URL carried no UTM.
+      let REF = '';
+      try {
+        REF = sessionStorage.getItem('ezra_ref');
+        if (REF === null) { REF = document.referrer || ''; sessionStorage.setItem('ezra_ref', REF); }
+      } catch (e) { REF = document.referrer || ''; }
 
-      // date field has no native placeholder -> show a "choose a date" hint until a value is picked
-      const pfDateEl = document.getElementById('pfDate'), pfDateHint = document.getElementById('pfDateHint');
-      const syncDateHint = () => { if (pfDateHint) pfDateHint.hidden = !!pfDateEl.value; };
-      if (pfDateEl) { syncDateHint(); pfDateEl.addEventListener('input', syncDateHint); pfDateEl.addEventListener('change', syncDateHint); }
-
-      form.addEventListener('submit', e => {
+      form.addEventListener('submit', async e => {
         e.preventDefault();
-        if (!pfConsentEl || !pfConsentEl.checked) {
-          const err = document.getElementById('pfConsentErr'), row = document.getElementById('pfConsentRow');
-          if (err) err.hidden = false; if (row) row.classList.add('book-check--err');
-          (err || row || pfConsentEl).scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-        if (pfGuestsEl && guestsOverCap()) {
-          setGuestsErr(true);
-          pfGuestsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          pfGuestsEl.focus();
-          return;
-        }
-        const guests = document.getElementById('pfGuests').value.trim();
+        if (sending) return;
+        if (!validate(step)) return;
+        if (step < LAST) { showStep(step + 1, true); return; }
+
+        const guests = pfGuests.value.trim();
         const data = {
           leadType: 'private',
-          name:    document.getElementById('pfName').value.trim(),
-          phone:   document.getElementById('pfPhone').value.trim(),
-          email:   document.getElementById('pfEmail').value.trim(),
+          name:    pfName.value.trim(),
+          phone:   contact === 'phone' ? pfPhone.value.trim() : '',
+          email:   contact === 'email' ? pfEmail.value.trim() : '',
           guests:  guests ? Number(guests) : '',
           eventType:    pillValue('cfpType'),
-          date:    document.getElementById('pfDate').value,     // YYYY-MM-DD
+          date:    pfDate.value,     // YYYY-MM-DD
           eventTime:    pillValue('cfpTime'),
           ageRanges:    pillValues('cfpAge').flatMap(v => v.split(',')),   // each bucket expands to its exact board labels
           callbackTime: pillValue('cfpCall'),
-          notes:   document.getElementById('pfNotes').value.trim(),
-          consent: document.getElementById('pfConsent').checked,
-          hp:      document.getElementById('pfHp').value,   // honeypot
+          notes:   $('pfNotes').value.trim(),
+          consent: $('pfConsent').checked,
+          hp:      $('pfHp').value,   // honeypot
         };
         const _utm = new URLSearchParams(location.search);
         const _cookie = (n) => { const m = document.cookie.match(new RegExp('(^|;)\\s*' + n + '=\\s*([^;]+)')); return m ? decodeURIComponent(m.pop()) : ''; };
@@ -3038,16 +3184,44 @@
         data.utm_content  = _utm.get('utm_content')  || _cookie('ezra_utm_content')  || '';
         data.utm_term     = _utm.get('utm_term')     || _cookie('ezra_utm_term')     || '';
         data.gclid        = _utm.get('gclid')        || _cookie('ezra_gclid')        || '';
+        data.referrer = REF;
         const eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
         data.eventId = eventId;
         data.pageUrl = location.href;
         data.fbp = _cookie('_fbp');
         data.fbc = _cookie('_fbc');
-        fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).catch(() => {});
-        if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
-        if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
-        form.hidden = true;
-        if (done) done.hidden = false;
+
+        // Honest submit. The old code fired the request and showed "thanks" at once; when the
+        // Instagram webview closed a second later the request died in flight and the lead was
+        // gone with a success screen on top of it. Await the answer, keep the request alive past
+        // unload, and show success only on ok. Anything else: retry + WhatsApp.
+        sending = true; nextBtn.disabled = true; backBtn.disabled = true;
+        nextBtn.textContent = T.sending;
+        track('pf_submit');
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        try {
+          const r = await fetch((window.EZRA_LEAD_ENDPOINT || '/api/submit-lead'), {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data), keepalive: true, signal: ctrl.signal,
+          });
+          const out = await r.json().catch(() => ({}));
+          if (!r.ok || out.ok === false) throw new Error(out.error ? JSON.stringify(out.error) : ('HTTP ' + r.status));
+          if (window.fbq) fbq('track', 'Lead', { value: 0, currency: 'ILS' }, { eventID: eventId });
+          if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
+          track('pf_success');
+          showPanel('done');
+          form.reset(); resetPills(); setContact('phone'); syncDateHint(); step = 1;
+        } catch (err) {
+          track('pf_fail');
+          const msg = 'היי, ניסיתי להשאיר פרטים באתר ולא הלך. ' + (data.name ? 'שם: ' + data.name + '. ' : '') + 'אירוע: ' + (data.eventType || '') + (data.date ? ' בתאריך ' + data.date : '') + (data.guests ? ', כ-' + data.guests + ' אורחים' : '') + '. ' + (data.phone ? 'טלפון: ' + data.phone : 'אימייל: ' + data.email);
+          $('privateFailWa').href = 'https://wa.me/972509499241?text=' + encodeURIComponent(msg);
+          showPanel('fail');
+        } finally {
+          clearTimeout(timer);
+          sending = false; nextBtn.disabled = false; backBtn.disabled = false;
+          nextBtn.textContent = step === LAST ? T.send : T.next;
+        }
       });
     })();
   </script>
