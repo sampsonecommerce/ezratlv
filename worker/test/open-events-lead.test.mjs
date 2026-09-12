@@ -134,7 +134,7 @@ if (created) {
   check(out.eventType === "set", `response reports eventType ${JSON.stringify(out.eventType)}`);
   check(c.color_mm6dh5pe?.label === "ערב",
     `Time of event is ${JSON.stringify(c.color_mm6dh5pe)}, expected ערב`);
-  check(c.phone_mm6dxgj2?.phone === "0501234567", "phone missing");
+  check(c.phone_mm6dxgj2?.phone === "050-1234567", "phone missing or not in the one shape");
   check(c.email_mm6dwhjs?.email === "dana@example.com", "email missing");
   check(c.date_mm6djw2v?.date === "2026-11-20", "requested date missing");
   check(c.numeric_mm6d85m === "40", "guest count missing");
@@ -196,7 +196,7 @@ if (created) {
   check(created.name === "שריון · מיכל לוי", `RSVP item name is ${JSON.stringify(created.name)}`);
   check(c.date_mm6djw2v?.date === "2026-09-01", "RSVP date missing");
   check(c.numeric_mm6d85m === "4", "RSVP party size missing");
-  check(c.phone_mm6dxgj2?.phone === "0502223344", "RSVP phone missing");
+  check(c.phone_mm6dxgj2?.phone === "050-2223344", "RSVP phone missing or not in the one shape");
   // "ערב 19:30" carries both: the label the board actually defines, and the round itself.
   check(c.color_mm6dh5pe?.label === "ערב", `RSVP Time of event is ${JSON.stringify(c.color_mm6dh5pe)}`);
   check(c.hour_mm6j2kcg?.hour === 19 && c.hour_mm6j2kcg?.minute === 30,

@@ -2788,7 +2788,7 @@
             </div>
             <div class="book-field" id="pfPhoneRow">
               <label for="pfPhone">Phone</label>
-              <input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+972 50 000 0000" enterkeyhint="next" />
+              <input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" data-phone-hint="none" placeholder="+972 50 000 0000" enterkeyhint="next" />
               <div class="pf-err" hidden>We need a valid phone number to get back to you.</div>
               <button type="button" class="pf-contact-switch" id="pfSwitchEmail">Prefer we reply by email?</button>
             </div>
@@ -3036,7 +3036,11 @@
         inp.addEventListener('input', () => setErr(row, false));
         inp.addEventListener('change', () => setErr(row, false));
       });
-      const phoneOk = (v) => String(v || '').replace(/\D/g, '').length >= 9;
+      // il-phone.js holds the rule (Israeli shape, or +international). Fallback if it did not load.
+      const phoneOk = (v) => window.EzraPhone ? window.EzraPhone.isValid(v) : String(v || '').replace(/\D/g, '').length >= 9;
+      const phoneMsg0 = phoneRow.querySelector('.pf-err').textContent;
+      const phoneMsg = () => (pfPhone.value.trim() && window.EzraPhone) ? window.EzraPhone.message() : phoneMsg0;
+      pfPhone.addEventListener('blur', () => { if (pfPhone.value.trim() && !phoneOk(pfPhone.value)) setErr(phoneRow, true, phoneMsg()); });
       const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
       pfDate.min = todayISO();
       function validate(n) {
@@ -3044,7 +3048,7 @@
         const flag = (row, el, msg) => { setErr(row, true, msg); if (!bad) bad = el; };
         if (n === 1) {
           if (!pfName.value.trim()) flag(nameRow, pfName);
-          if (contact === 'phone') { if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone); }
+          if (contact === 'phone') { if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone, phoneMsg()); }
           else if (!pfEmail.value.trim() || !pfEmail.validity.valid) flag(emailRow, pfEmail);
         }
         if (n === 2) {
@@ -3363,5 +3367,6 @@
       });
     })();
   </script>
+<script src="/il-phone.js" defer></script>
 </body>
 </html>

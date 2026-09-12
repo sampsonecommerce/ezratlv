@@ -54,6 +54,12 @@ jobs:
       - name: Private lead contract test
         run: node worker/test/private-lead.test.mjs
 
+      # Gate. Every form field now refuses a number that is not Israeli; the worker stores the
+      # same one shape (050-1234567) whatever an old page or a direct POST sends, and never
+      # refuses a lead over its phone.
+      - name: Phone normalisation test
+        run: node worker/test/phone-normalize.test.mjs
+
       # Gate. The mirror sync writes to and deletes from a live board on a cron,
       # so its ownership rule is not allowed to regress: it may only touch items
       # carrying a Source Item value. Runs against a stateful mock of all three

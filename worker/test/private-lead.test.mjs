@@ -95,7 +95,7 @@ async function run(payload) { created = null; const r = await post(payload); ret
   check(status === 200 && out.ok === true, `phone-only lead rejected: ${status} ${JSON.stringify(out)}`);
   check(created?.board === "5092854682", `landed on board ${created?.board}, expected the Private Events board`);
   check(created?.group === "group_mm18zcww", `landed in ${created?.group}, expected New Leads`);
-  check(created?.cols.phone0zyibnut?.phone === "0501234567", "phone column not written");
+  check(created?.cols.phone0zyibnut?.phone === "050-1234567", `phone column not written in the one shape: ${JSON.stringify(created?.cols.phone0zyibnut)}`);
   check(created?.cols.emailj9eufer1 === undefined, `empty email was written: ${JSON.stringify(created?.cols.emailj9eufer1)}`);
   check(created?.cols.short_textgjnrhjdi === "google_organic", `Traffic Source is ${JSON.stringify(created?.cols.short_textgjnrhjdi)}, expected google_organic`);
   check(created?.cols.boolean_mm4nqth1 === undefined, "Marketing Approval was written for an unticked consent");

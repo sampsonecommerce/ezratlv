@@ -122,7 +122,7 @@ if (created) {
     `music lead landed in "${created.landed}", not New Leads (group_mm6djw93)`);
   check(created.name === "להקת בדיקה", `item name is ${JSON.stringify(created.name)}, expected the band name`);
   check(c.color_mm6d8eqs?.label === "New Lead", `Status is ${JSON.stringify(c.color_mm6d8eqs)}, expected New Lead`);
-  check(c.phone_mm6dxgj2?.phone === "0531234567", "phone missing");
+  check(c.phone_mm6dxgj2?.phone === "053-1234567", "phone missing or not in the one shape");
   check(c.date_mm6djw2v?.date === "2026-10-11", "requested date missing");
   check(c.text_mm6da5k0 === "music_shows_page", "Traffic Source not written");
 
