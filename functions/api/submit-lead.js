@@ -177,9 +177,28 @@ export async function onRequestGet({ request, env }) {
   }
 }
 
+// One shape for a phone number before it reaches Monday or the CAPI hash. The page already refuses
+// a number that is not Israeli (il-phone.js, same rule); this covers an old cached page or a direct
+// POST. Not a gate: a number this cannot read is stored as typed - a lead with an odd phone is
+// still a lead. A foreign number typed with + keeps its + and digits.
+function normalizeIlPhone(raw) {
+  const s = String(raw ?? "").trim();
+  if (!s) return "";
+  let d = s.replace(/\D/g, "");
+  if (!d) return s;
+  if (s.startsWith("+") && !d.startsWith("972")) return "+" + d;
+  if (d.startsWith("00972")) d = "0" + d.slice(5);
+  else if (d.startsWith("972")) d = "0" + d.slice(3);
+  if (d.startsWith("00")) d = d.slice(1);                                   // "+972 052..." keeps its 0
+  if (d[0] !== "0" && (d.length === 9 || d.length === 8)) d = "0" + d;      // leading 0 dropped
+  const m = /^(05\d|07[2-9])(\d{7})$/.exec(d) || /^(0[23489])(\d{7})$/.exec(d);
+  return m ? `${m[1]}-${m[2]}` : s;
+}
+
 export async function onRequestPost({ request, env }) {
   let d;
   try { d = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400); }
+  if (d && d.phone) d.phone = normalizeIlPhone(d.phone);
 
   // Private calculator write-back: complete an existing lead in place (secret-gated, fill-only,
   // no group/status change, no contract, never runs CAPI). Company board only.
