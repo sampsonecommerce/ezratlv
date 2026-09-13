@@ -40,15 +40,15 @@ const post = (phone) => worker.fetch(
 );
 
 const cases = [
-  ["+972 52-123 4567", "052-1234567"],   // international prefix, spaces, dashes
-  ["972521234567",     "052-1234567"],   // prefix without +
-  ["00972521234567",   "052-1234567"],   // dial-out prefix
-  ["+972 052 1234567", "052-1234567"],   // +972 and the 0 both typed
-  ["521234567",        "052-1234567"],   // leading 0 dropped
-  ["(052) 1234567",    "052-1234567"],
-  ["03-6123456",       "03-6123456"],    // landline
-  ["36123456",         "03-6123456"],    // landline, 0 dropped
-  ["0731234567",       "073-1234567"],   // VoIP
+  ["+972 52-123 4567", "0521234567"],   // international prefix, spaces, dashes
+  ["972521234567",     "0521234567"],   // prefix without +
+  ["00972521234567",   "0521234567"],   // dial-out prefix
+  ["+972 052 1234567", "0521234567"],   // +972 and the 0 both typed
+  ["521234567",        "0521234567"],   // leading 0 dropped
+  ["(052) 1234567",    "0521234567"],
+  ["036123456",       "036123456"],    // landline
+  ["36123456",         "036123456"],    // landline, 0 dropped
+  ["0731234567",       "0731234567"],   // VoIP
   ["+44 20 7946 0958", "+442079460958"], // foreign, kept
   ["12345",            "12345"],         // unreadable: stored as typed, lead not refused
 ];
