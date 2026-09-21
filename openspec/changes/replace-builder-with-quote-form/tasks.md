@@ -10,7 +10,8 @@
 - [x] 2.2 Homepage bar cards open the availability form
 - [x] 2.3 Cookie bar hidden while a form is open (both pages)
 - [x] 3.1 Local check at 375px and desktop: open, preselect from card and ?package=, failure state, success state with a stubbed endpoint, payload shape
-- [ ] 3.2 English mirror (english-company-events.html)
-- [ ] 3.3 Cloudflare redirect rule for /company-events/quote
+- [x] 3.2 English mirror (english-company-events.html)
+- [x] 3.3 404.html rescues /quote, /wizard and /confirmation on a direct hit; `_redirects` records the intended rule
+- [ ] 3.3b Add the Cloudflare Redirect Rule for /company-events/quote and /english-company-events/quote (dashboard, Yeheli)
 - [ ] 3.4 One real submit on production, confirm the Monday item and the Ads conversion
-- [ ] 3.5 Meta: any audience or custom conversion built on WizardStart moves to QuoteOpen
+- [x] 3.5 Meta: dropped. The company events campaign is paused, so WizardStart no longer fires and nothing needs remapping

@@ -52,5 +52,17 @@
       and structured service data at <a href="/ai/service.json">/ai/service.json</a>.
       This response is a genuine HTTP 404 - the path does not exist.</p>
   </main>
+  <script>
+    /* Funnel-URL rescue. The booking flow moves the address bar with pushState to
+       /company-events/quote (and /confirmation), paths that exist only in the browser. Cloudflare
+       Redirect Rules catch a direct hit or a refresh at the edge, but a path added after those
+       rules were written lands here instead, on GitHub Pages' own 404. Send it back to the real
+       page rather than showing a dead end. Once the matching rule exists this never runs. */
+    (function () {
+      var m = /^\/(english-)?company-events\/(quote|wizard|confirmation)\/?$/.exec(location.pathname);
+      if (m) { location.replace('/' + (m[1] || '') + 'company-events' + location.search); return; }
+      if (/^\/iruvei-hevra(\.html)?\/?$/.test(location.pathname)) location.replace('/company-events' + location.search);
+    })();
+  </script>
 </body>
 </html>
