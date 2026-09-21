@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="facebook-domain-verification" content="hufz56eax9hrpcj0fgd6se3nsms6hc" />
+  <!-- Cookie choice, read before any tracker loads. a = analytics (GA4, Clarity), m = marketing
+       (Meta Pixel, Google Ads). Default is on; consent.js draws the notice and the settings panel. -->
+  <script>
+  window.ezraConsent=(function(){try{var c=JSON.parse(localStorage.getItem('ezra_consent')||'null');if(c&&typeof c==='object')return{a:c.a?1:0,m:c.m?1:0};if(localStorage.getItem('ezra_cookie_ok')==='essential')return{a:0,m:0};}catch(e){}return{a:1,m:1};})();
+  </script>
   <!-- Meta Pixel -->
   <script>
+  if(window.ezraConsent.m)
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -14,21 +20,23 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '2174553826420246');
-  fbq('track', 'PageView');
+  if(window.fbq){fbq('init', '2174553826420246');
+  fbq('track', 'PageView');}
   </script>
   <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2174553826420246&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
 
   <!-- Google tag (gtag.js) - GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-95JJX7T6CY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-95JJX7T6CY');
-    gtag('config', 'AW-18310736783');   /* Google Ads (remarketing); shares gtag.js loaded above */
+    if (window.ezraConsent.a || window.ezraConsent.m) {
+      (function(){var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id='+(window.ezraConsent.a?'G-95JJX7T6CY':'AW-18310736783');document.head.appendChild(g);})();
+      gtag('js', new Date());
+      if (window.ezraConsent.a) gtag('config', 'G-95JJX7T6CY');
+      if (window.ezraConsent.m) gtag('config', 'AW-18310736783');   /* Google Ads (remarketing + conversions) */
+    }
   </script>
   <!-- Hero height freeze - see the note inside. -->
   <script>
@@ -71,7 +79,7 @@
   <!-- Microsoft Clarity (heatmaps + session recordings) -->
   <script type="text/javascript">
     // skip Clarity entirely for visitors who chose essential-only cookies
-    if ((function(){ try { return localStorage.getItem("ezra_cookie_ok"); } catch(e) { return null; } })() !== "essential")
+    if (window.ezraConsent.a)
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -3298,59 +3306,6 @@
   </script>
 
   <!-- Cookie consent banner -->
-  <div class="cookie-bar" id="cookieBar" role="region" aria-label="Cookie notice" hidden>
-    <p class="cookie-bar__text">We use cookies and Microsoft Clarity so the site works properly, to analyze usage and personalize content and ads. Continued browsing means you consent. <a href="english-privacy">Cookie policy</a></p>
-    <button type="button" class="cookie-bar__btn cookie-bar__btn--ghost" id="cookieEssential">Essential only</button>
-    <button type="button" class="cookie-bar__btn" id="cookieOk">Accept all</button>
-    <button type="button" class="cookie-bar__x" id="cookieX" aria-label="Close">&#10005;</button>
-  </div>
-  <style>
-    .cookie-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 9000;
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.8rem 1.4rem;
-      padding: 0.9rem clamp(1rem, 4vw, 2rem); background: rgba(15,13,11,0.96);
-      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-      border-block-start: 1px solid rgba(196,154,60,0.35); box-shadow: 0 -10px 30px -12px rgba(0,0,0,0.6);
-      font-family: 'Heebo', system-ui, sans-serif; transform: translateY(115%); transition: transform .5s cubic-bezier(.22,1,.36,1); }
-    .cookie-bar.show { transform: translateY(0); }
-    .cookie-bar__text { margin: 0; color: #d8cfbf; font-size: 0.85rem; line-height: 1.55; max-width: 62ch; text-align: center; }
-    .cookie-bar__text a { color: #f5d98a; text-decoration: underline; }
-    .cookie-bar__btn { cursor: pointer; border: 0; border-radius: 50px; padding: 0.6rem 1.6rem;
-      font: inherit; font-weight: 600; font-size: 0.85rem; color: #1a140c;
-      background: linear-gradient(110deg, #c49a3c, #f5d98a); transition: filter .25s ease; }
-    .cookie-bar__btn:hover { filter: brightness(1.07); }
-    .cookie-bar__btn--ghost { background: transparent; border: 1px solid rgba(240,235,224,0.3); color: #d8cfbf; font-weight: 500; }
-    .cookie-bar__btn--ghost:hover { filter: none; border-color: rgba(240,235,224,0.55); color: #f0ebe0; }
-    /* plain X in the normal button row (not an absolute overlay), so it can never sit on top of
-       the text when it wraps on mobile - it just wraps down with the buttons instead. */
-    .cookie-bar__x { flex: none; width: 28px; height: 28px; border: 0; border-radius: 0; background: transparent;
-      color: #fff; font-size: 1rem; font-weight: 700; line-height: 1; cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center; opacity: 0.85; }
-    .cookie-bar__x:hover { opacity: 1; }
-    @media (prefers-reduced-motion: reduce) { .cookie-bar { transition: none; } }
-  </style>
-  <script>
-    (function () {
-      var KEY = 'ezra_cookie_ok';
-      // '1' = accepted all, 'essential' = necessary only. Either way the banner stays gone.
-      try { var v = localStorage.getItem(KEY); if (v === '1' || v === 'essential') return; } catch (e) {}
-      var bar = document.getElementById('cookieBar'); if (!bar) return;
-      bar.hidden = false;
-      requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('show'); }); });
-      function closeBar() {
-        bar.classList.remove('show');
-        setTimeout(function () { bar.hidden = true; }, 500);
-      }
-      function remember(val) { try { localStorage.setItem(KEY, val); } catch (e) {} closeBar(); }
-      document.getElementById('cookieOk').addEventListener('click', function () { remember('1'); });
-      document.getElementById('cookieEssential').addEventListener('click', function () {
-        // stop the Clarity instance already running on this page; later loads skip it entirely
-        try { if (window.clarity) window.clarity('stop'); } catch (e) {}
-        remember('essential');
-      });
-      // X = dismiss without choosing, so the banner returns on the next visit
-      document.getElementById('cookieX').addEventListener('click', closeBar);
-    })();
-  </script>
   <!-- local/static preview: clean URLs (no .html) navigate even without a server rewrite; no-op on the live clean-URL site -->
   <script>
     (function () {
@@ -3368,5 +3323,6 @@
     })();
   </script>
 <script src="/il-phone.js" defer></script>
+<script src="/consent.js" defer></script>
 </body>
 </html>

@@ -6,17 +6,19 @@
 <meta name="robots" content="noindex, nofollow" />
 <title>Ezra · Company Events · Booking</title>
 <!-- Meta Pixel (same id as the live page) -->
+<script>window.ezraConsent=(function(){try{var c=JSON.parse(localStorage.getItem('ezra_consent')||'null');if(c&&typeof c==='object')return{a:c.a?1:0,m:c.m?1:0};if(localStorage.getItem('ezra_cookie_ok')==='essential')return{a:0,m:0};}catch(e){}return{a:1,m:1};})();</script>
 <script>
+if(window.ezraConsent.m)
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2174553826420246');fbq('track','PageView');
+if(window.fbq){fbq('init','2174553826420246');fbq('track','PageView');}
 </script>
 <!-- GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-95JJX7T6CY"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-95JJX7T6CY');</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}if(window.ezraConsent.a){(function(){var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id=G-95JJX7T6CY';document.head.appendChild(g);})();gtag('js',new Date());gtag('config','G-95JJX7T6CY');}</script>
 <!-- Microsoft Clarity (records the booking wizard itself; the parent page's tag can't see inside this iframe) -->
 <script type="text/javascript">
+  if (window.ezraConsent.a)
   (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
       t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;

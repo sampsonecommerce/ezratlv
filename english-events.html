@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="facebook-domain-verification" content="hufz56eax9hrpcj0fgd6se3nsms6hc" />
 
+  <!-- Cookie choice, read before any tracker loads. a = analytics (GA4, Clarity), m = marketing
+       (Meta Pixel, Google Ads). Default is on; consent.js draws the notice and the settings panel. -->
+  <script>
+  window.ezraConsent=(function(){try{var c=JSON.parse(localStorage.getItem('ezra_consent')||'null');if(c&&typeof c==='object')return{a:c.a?1:0,m:c.m?1:0};if(localStorage.getItem('ezra_cookie_ok')==='essential')return{a:0,m:0};}catch(e){}return{a:1,m:1};})();
+  </script>
   <!-- Meta Pixel -->
   <script>
+  if(window.ezraConsent.m)
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -15,26 +21,28 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '2174553826420246');
-  fbq('track', 'PageView');
+  if(window.fbq){fbq('init', '2174553826420246');
+  fbq('track', 'PageView');}
   </script>
   <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2174553826420246&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
 
   <!-- Google tag (gtag.js) - GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-95JJX7T6CY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-95JJX7T6CY');
-    gtag('config', 'AW-18310736783');
+    if (window.ezraConsent.a || window.ezraConsent.m) {
+      (function(){var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id='+(window.ezraConsent.a?'G-95JJX7T6CY':'AW-18310736783');document.head.appendChild(g);})();
+      gtag('js', new Date());
+      if (window.ezraConsent.a) gtag('config', 'G-95JJX7T6CY');
+      if (window.ezraConsent.m) gtag('config', 'AW-18310736783');   /* Google Ads (remarketing + conversions) */
+    }
   </script>
 
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
-    if ((function(){ try { return localStorage.getItem("ezra_cookie_ok"); } catch(e) { return null; } })() !== "essential")
+    if (window.ezraConsent.a)
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -9358,5 +9366,6 @@
        hardcoded cards above simply stay. -->
   <script src="past-events-archive.js" data-lang="en" defer></script>
 <script src="/il-phone.js" defer></script>
+<script src="/consent.js" defer></script>
 </body>
 </html>
