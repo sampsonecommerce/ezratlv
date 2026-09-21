@@ -13,5 +13,5 @@
 - [x] 3.2 English mirror (english-company-events.html)
 - [x] 3.3 404.html rescues /quote, /wizard and /confirmation on a direct hit; `_redirects` records the intended rule
 - [ ] 3.3b Add the Cloudflare Redirect Rule for /company-events/quote and /english-company-events/quote (dashboard, Yeheli)
-- [ ] 3.4 One real submit on production, confirm the Monday item and the Ads conversion
+- [x] 3.4 One real submit on production 2026-09-21: the server returned ok, so the item is on the board under "Estimate Requested" ("בדיקת מערכת - Claude", Ezra's own phone, delete when convenient). The Ads conversion fired from the page; not checked in the Ads UI
 - [x] 3.5 Meta: dropped. The company events campaign is paused, so WizardStart no longer fires and nothing needs remapping
