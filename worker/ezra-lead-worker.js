@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-09-23a";
+const BUILD_ID = "2026-09-23b";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -2155,12 +2155,77 @@ async function pastEventsFeed(env, cors) {
   return res;
 }
 
-// Proxies one monday asset (the card image) so the site gets a stable public
-// URL; a fresh signed URL is resolved per cache fill, bytes cached a day.
+// Which monday files the proxy may serve. The token behind it reads every board - signed proposals
+// and prepayment confirmations on Open Events and Events Form included - and asset ids are plain
+// numbers, so an unrestricted proxy was a public download link for any customer document. Only
+// files something public actually uses are served:
+//   - files on schedule-board items whose אתר reads פורסם באתר (the site's cards, upcoming and past);
+//   - files on the post subitems of items whose אישור תוכן reads מאושר (Buffer fetches these when
+//     a scheduled post goes out, which can be days after approval).
+// The set is rebuilt at most every 5 minutes, so newly approved media can take that long to become
+// reachable, and unpublished media stops being served within the same window.
+const SCHED_WEBSITE_COL = "color_mm6q8g2v";   // אתר
+const SCHED_WEBSITE_LIVE = "פורסם באתר";
+const SCHED_APPROVAL_COL = "color_mm7fr9sh";  // אישור תוכן
+const SCHED_APPROVED = "מאושר";
+const SERVABLE_TTL_MS = 5 * 60 * 1000;
+let _servable = { at: 0, ids: null };
+async function servableAssetIds(TOKEN) {
+  if (_servable.ids && Date.now() - _servable.at < SERVABLE_TTL_MS) return _servable.ids;
+  const FIELDS = `
+        column_values(ids: ${JSON.stringify([SCHED_WEBSITE_COL, SCHED_APPROVAL_COL])}) { id text }
+        assets { id }
+        subitems { assets { id } }`;
+  const ask = async (query) => {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", Authorization: TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    const out = await r.json();
+    if (out.errors) throw new Error(JSON.stringify(out.errors).slice(0, 300));
+    return out.data;
+  };
+  const first = await ask(`query { boards(ids: [${SCHEDULE_BOARD}]) { items_page(limit: 100) { cursor items {${FIELDS}
+      } } } }`);
+  const page = first?.boards?.[0]?.items_page;
+  const items = [...(page?.items || [])];
+  let cursor = page?.cursor || null;
+  for (let i = 0; cursor && i < 20; i++) {
+    const more = await ask(`query { next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) { cursor items {${FIELDS}
+      } } }`);
+    items.push(...(more?.next_items_page?.items || []));
+    cursor = more?.next_items_page?.cursor || null;
+  }
+  const ids = new Set();
+  for (const it of items) {
+    const text = (id) => (it.column_values || []).find((c) => c.id === id)?.text || "";
+    if (text(SCHED_WEBSITE_COL) === SCHED_WEBSITE_LIVE) {
+      for (const a of (it.assets || [])) ids.add(String(a.id));
+    }
+    if (text(SCHED_APPROVAL_COL) === SCHED_APPROVED) {
+      for (const sub of (it.subitems || [])) for (const a of (sub.assets || [])) ids.add(String(a.id));
+    }
+  }
+  _servable = { at: Date.now(), ids };
+  return ids;
+}
+
+// Proxies one monday asset (a card image, or a scheduled post's media) so the site and Buffer get
+// a stable public URL; a fresh signed URL is resolved per cache fill, bytes cached a day. The
+// allow-list is checked before the cache, so a file that stops being public is refused even if
+// its bytes are still cached.
 async function eventImageProxy(assetId, env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return new Response("not configured", { status: 503, headers: cors });
   if (!/^\d+$/.test(assetId)) return new Response("bad id", { status: 400, headers: cors });
+  let servable;
+  try { servable = await servableAssetIds(TOKEN); }
+  catch (e) {
+    console.error("servable assets read failed:", e);
+    return new Response("upstream", { status: 502, headers: cors });
+  }
+  if (!servable.has(assetId)) return new Response("not found", { status: 404, headers: cors });
 
   const cache = caches.default;
   const cacheKey = new Request(`https://ezra-lead.yeheli.workers.dev/?eventImage=${assetId}`);
