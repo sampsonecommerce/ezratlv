@@ -1175,6 +1175,12 @@ async function syncMirror(env) {
 // private homepage lead was blocking its own requested date on the public calendar.
 function isCommittedGroup(title, id, boardId) {
   const t = (title || "").toLowerCase();
+  // "Future Events (Not Closed, date is too far)" exists on all three boards and holds leads that
+  // are explicitly not closed - but its title contains "closed", so every dated lead in it blocked
+  // its date on the public calendar and was mirrored onto Open Events as taken. Found 2026-09-23:
+  // nine dated leads on Events Form, among them 2026-11-01, 2026-11-03 and 2026-12-31. A title that
+  // says "not closed" is never a booking.
+  if (t.includes("not closed")) return false;
   if (t.includes("תפוס") ||
       t.includes("סגור") ||
       t.includes("closed") ||

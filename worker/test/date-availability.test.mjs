@@ -9,6 +9,7 @@
 //   4. a lead with no date reads לא נבדק; a past lead and a committed item are never written
 //   5. running again writes nothing - the pass is idempotent
 //   6. if any board cannot be read, every judged lead reads לא נבדק, never פנוי
+//   7. a group titled "Not Closed" books nothing, on the board or on the site calendar
 //
 //   node worker/test/date-availability.test.mjs
 import worker from "../ezra-lead-worker.js";
@@ -45,8 +46,15 @@ const NEW = ["group_mm6djw93", "New Leads"];
 const OE_CLOSED = ["group_mm6dvqnj", "Closed Deals"];
 const DB = {
   [FORM]: {
-    groups: [{ id: "group_mm18zcww", title: "New Leads" }, { id: "group_mm18mks7", title: "Closed Deals" }],
-    items: [booking("111", "יום הולדת", "group_mm18mks7", "Closed Deals", "2030-11-20", "18:00", "02:00")],
+    groups: [
+      { id: "group_mm18zcww", title: "New Leads" }, { id: "group_mm18mks7", title: "Closed Deals" },
+      { id: "group_mm1qxbex", title: "Future Events (Not Closed, date is too far)" },
+    ],
+    items: [
+      booking("111", "יום הולדת", "group_mm18mks7", "Closed Deals", "2030-11-20", "18:00", "02:00"),
+      // Not closed, whatever its title's keywords say. It must not block a date anywhere.
+      booking("112", "ליד רחוק", "group_mm1qxbex", "Future Events (Not Closed, date is too far)", "2030-11-25", "18:00", "02:00"),
+    ],
   },
   [COMPANY]: { groups: [{ id: "group_mm18mks7", title: "Closed Deals" }], items: [] },
   [OPEN]: {
@@ -63,6 +71,7 @@ const DB = {
       lead("F", "long past", ...NEW, "2020-01-01", "20:00", "23:00"),
       lead("G", "committed open event", ...OE_CLOSED, "2030-11-22", "19:00", "23:00"),
       lead("H", "history", "group_mm6drn0q", "Past Events", "2030-11-20", "20:00", "23:00"),
+      lead("I", "same evening as a lead that is not closed", ...NEW, "2030-11-25", "20:00", "23:00"),
     ],
   },
 };
@@ -123,7 +132,13 @@ check(label("E") === "לא נבדק", `E (no date) reads ${label("E")}`);
 check(label("F") === undefined, `F (past) was written: ${label("F")}`);
 check(label("G") === undefined, `G (committed) was written: ${label("G")} - it would clash with itself`);
 check(label("H") === undefined, `H (Past Events) was written: ${label("H")}`);
-check(first.judged === 5 && first.written === 5, `first pass judged/wrote ${first.judged}/${first.written}, expected 5/5`);
+check(label("I") === "פנוי", `I (same evening as a Future Events lead that is not closed) reads ${label("I")}`);
+check(first.judged === 6 && first.written === 6, `first pass judged/wrote ${first.judged}/${first.written}, expected 6/6`);
+
+// The site calendar reads the same rule: a lead that is not closed does not book its date there either.
+const feed = await (await worker.fetch(new Request("https://ezra-lead.test/"), env)).json();
+check(feed.booked.includes("2030-11-20"), `the private booking is missing from the site feed: ${JSON.stringify(feed.booked)}`);
+check(!feed.booked.includes("2030-11-25"), "a Future Events (Not Closed) lead books its date on the site calendar");
 check(writes.every((w) => w.col === AVAIL), "wrote a column other than זמינות תאריך");
 
 // 5. Nothing changed, so nothing is written.
@@ -135,7 +150,7 @@ check(second.written === 0 && writes.length === 0, `second pass wrote ${writes.l
 failBoard = FORM;
 const third = await run();
 check(third.complete === false, `a failed board read was reported complete: ${JSON.stringify(third)}`);
-for (const id of ["A", "B", "C", "D", "E"]) {
+for (const id of ["A", "B", "C", "D", "E", "I"]) {
   check(label(id) === "לא נבדק", `${id} reads ${label(id)} after a failed read, expected לא נבדק`);
 }
 failBoard = null;
