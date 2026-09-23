@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-09-23b";
+const BUILD_ID = "2026-09-23c";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -237,9 +237,9 @@ export default {
         .catch((e) => console.error("mirror sync failed:", e))
         // Last, and on its own catch: a failed mirror pass must not leave every lead's
         // זמינות תאריך stale, and a failed availability pass must not look like a mirror failure.
-        .then(() => syncDateAvailability(env))
-        .then((r) => console.log("date availability:", JSON.stringify(r)))
-        .catch((e) => console.error("date availability failed:", e)),
+        .then(() => availabilityPasses(env))
+        .then((r) => console.log("availability passes:", JSON.stringify(r)))
+        .catch((e) => console.error("availability passes failed:", e)),
     );
   },
 
@@ -268,7 +268,7 @@ export default {
         if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401, cors);
         const promotion = await promoteLeads(env);
         const mirror = await syncMirror(env);
-        return json({ promotion, mirror, dateAvailability: await syncDateAvailability(env) }, 200, cors);
+        return json({ promotion, mirror, ...(await availabilityPasses(env)) }, 200, cors);
       }
       return availability(request, env, cors);
     }
@@ -1658,9 +1658,9 @@ function todayInIsrael(now = new Date()) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem" }).format(now);
 }
 
-async function syncDateAvailability(env) {
-  const TOKEN = env.MONDAY_TOKEN;
-  if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
+// One read of the three lead boards for the cron's availability passes, so זמינות תאריך and
+// the placeholder pass judge the same snapshot.
+async function readBusy(TOKEN) {
   const reasons = [];
   const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
   const boards = [];
@@ -1668,14 +1668,30 @@ async function syncDateAvailability(env) {
     const b = await fetchBoardAvailability(id, TOKEN, null, reasons);
     if (b) boards.push(b);
   }
-  const complete = boards.length === ids.length;
-  const { busy } = collectBusy(boards);
+  return { ...collectBusy(boards), complete: boards.length === ids.length, reason: reasons[0] };
+}
+
+// The cron's availability work: זמינות תאריך on open leads, then placeholders that have been
+// overtaken. One board read serves both.
+async function availabilityPasses(env) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
+  const snapshot = await readBusy(TOKEN);
+  const dateAvailability = await syncDateAvailability(env, snapshot);
+  const placeholders = await yieldPlaceholders(env, snapshot);
+  return { dateAvailability, placeholders };
+}
+
+async function syncDateAvailability(env, snapshot) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
+  const { busy, complete, reason } = snapshot || await readBusy(TOKEN);
   const leads = await fetchItems(OPEN_EVENTS_BOARD, TOKEN,
     [OE.date, OE.startHour, OE.endHour, OE.slotText, OE.timeOf, OE_AVAIL_COL]);
   const today = todayInIsrael();
   const SET = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
     change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols) { id } }`;
-  const out = { complete, judged: 0, written: 0, failed: 0, ...(complete ? {} : { reason: reasons[0] || "unknown" }) };
+  const out = { complete, judged: 0, written: 0, failed: 0, ...(complete ? {} : { reason: reason || "unknown" }) };
   for (const it of leads) {
     if (it.groupId === OE_PAST_GROUP) continue;
     if (isCommittedGroup(it.groupTitle, it.groupId, OPEN_EVENTS_BOARD)) continue;
@@ -2153,6 +2169,58 @@ async function pastEventsFeed(env, cors) {
   });
   await cache.put(cacheKey, res.clone());
   return res;
+}
+
+// ── Placeholders give way ─────────────────────────────────────────────────────────────────────
+// Tuesday and Wednesday are always shown as open nights, before anything is booked for them: a
+// schedule item with סוג פריט = שומר מקום and no Source Item. Decided 2026-09-23: private events
+// outrank placeholders (not confirmed open events), so a placeholder never blocks a date - the
+// calendar does not read the schedule board at all - and when anything committed lands on its
+// evening, this pass cancels it. אישור תוכן becomes בוטל (Make then pulls its social posts) and אתר
+// becomes לא לפרסם (the site stops showing it on the next feed read). The update says what kind of
+// booking took the night and never whose it was: the schedule board is shared with a guest.
+// A partial board read can only miss a clash, never invent one, so this runs on any snapshot.
+const SCHED_KIND_COL = "color_mm7fd9hh";     // סוג פריט
+const SCHED_PLACEHOLDER = "שומר מקום";
+const SCHED_CANCELLED = "בוטל";
+const SCHED_WEBSITE_OFF = "לא לפרסם";
+
+async function yieldPlaceholders(env, snapshot) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
+  const { busy } = snapshot || await readBusy(TOKEN);
+  const items = await fetchItems(SCHEDULE_BOARD, TOKEN, [SCHED_KIND_COL, "color_mm7fr9sh", "date_mm6qf10d",
+    SCHED_UPCOMING_COL.startTime, SCHED_UPCOMING_COL.endTime]);
+  const today = todayInIsrael();
+  const SET = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
+    change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols) { id } }`;
+  const NOTE = `mutation ($item: ID!, $body: String!) { create_update(item_id: $item, body: $body) { id } }`;
+  const out = { placeholders: 0, cancelled: 0, failed: 0 };
+  for (const it of items) {
+    if ((it.cv[SCHED_KIND_COL]?.text || "") !== SCHED_PLACEHOLDER) continue;
+    if ((it.cv["color_mm7fr9sh"]?.text || "") === SCHED_CANCELLED) continue;
+    const date = normalizeAvailDate(it.cv["date_mm6qf10d"]?.date, it.cv["date_mm6qf10d"]?.text);
+    if (!date || date < today) continue;
+    out.placeholders++;
+    // A placeholder is an evening unless someone gave it hours.
+    const start = parseHourText(it.cv[SCHED_UPCOMING_COL.startTime]?.text) || "18:00";
+    const end = parseHourText(it.cv[SCHED_UPCOMING_COL.endTime]?.text) || "02:00";
+    const [ps, pe] = slotRange(date, start, end);
+    const clash = busy.find((b) => { const [s, e] = slotRange(b.date, b.start, b.end); return ps < e && s < pe; });
+    if (!clash) continue;
+    const by = isPrivateSlot(clash) ? "אירוע פרטי" : "אירוע פתוח שאושר";
+    try {
+      await mondayMutate(SET, { board: SCHEDULE_BOARD, item: it.id,
+        cols: JSON.stringify({ color_mm7fr9sh: { label: SCHED_CANCELLED }, [SCHED_WEBSITE_COL]: { label: SCHED_WEBSITE_OFF } }) }, TOKEN);
+      await mondayMutate(NOTE, { item: it.id,
+        body: `בוטל אוטומטית: ${by} נסגר על הערב הזה (${clash.date}, ${clash.start}-${clash.end}). ערבי שומר מקום מפנים את מקומם לכל אירוע שנסגר.` }, TOKEN);
+      out.cancelled++;
+    } catch (e) {
+      out.failed++;
+      console.error(`placeholder ${it.id} failed:`, e);
+    }
+  }
+  return out;
 }
 
 // Which monday files the proxy may serve. The token behind it reads every board - signed proposals
