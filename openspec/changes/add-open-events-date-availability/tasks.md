@@ -18,3 +18,10 @@
 
 - [ ] 3.1 PR reviewed and merged by Yeheli
 - [ ] 3.2 Live `build` reads `2026-09-23b`; `זמינות תאריך` filled on open leads within 15 minutes; past-events images still load
+
+## 4. Follow-up: placeholders give way (2026-09-23)
+
+- [x] 4.1 `readBusy()` shared by `syncDateAvailability()` and `yieldPlaceholders()` through `availabilityPasses()`
+- [x] 4.2 `yieldPlaceholders()`: cancel overtaken placeholders, one update, no customer names
+- [x] 4.3 `placeholder-yield.test.mjs` as a CI gate; `BUILD_ID` 2026-09-23c
+- [ ] 4.4 Merged; live `build` reads `2026-09-23c`

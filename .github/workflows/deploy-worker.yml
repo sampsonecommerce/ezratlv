@@ -80,6 +80,12 @@ jobs:
       - name: Image proxy allow-list test
         run: node worker/test/image-proxy.test.mjs
 
+      # Gate. A Tuesday/Wednesday placeholder never blocks a date and gives way to anything that
+      # closes on its evening. The pass writes to a board a guest reads, so it must cancel once,
+      # say what kind of booking took the night, and never name the customer.
+      - name: Placeholder yield test
+        run: node worker/test/placeholder-yield.test.mjs
+
       # Gate. Promotion creates items on the sales board on a cron. Its marker is
       # the only thing stopping the mirror sync copying each promoted item back
       # onto Open Events, so that assertion is not allowed to regress.
