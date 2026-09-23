@@ -67,6 +67,19 @@ jobs:
       - name: Mirror sync test
         run: node worker/test/mirror-sync.test.mjs
 
+      # Gate. זמינות תאריך is a lock: the Open Events board refuses to close a lead that is not
+      # פנוי. A wrong פנוי lets a double booking through, so the rules that decide it - overlap
+      # across midnight, private over open, never פנוי when a board could not be read - are not
+      # allowed to regress.
+      - name: Date availability test
+        run: node worker/test/date-availability.test.mjs
+
+      # Gate. ?eventImage= is a public download link backed by a token that reads every board,
+      # signed proposals included. It may serve only published card images and approved post
+      # media, and must refuse everything else before asking monday for a download URL.
+      - name: Image proxy allow-list test
+        run: node worker/test/image-proxy.test.mjs
+
       # Gate. Promotion creates items on the sales board on a cron. Its marker is
       # the only thing stopping the mirror sync copying each promoted item back
       # onto Open Events, so that assertion is not allowed to regress.

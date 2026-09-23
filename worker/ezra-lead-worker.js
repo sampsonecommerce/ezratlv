@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-09-02a";
+const BUILD_ID = "2026-09-23b";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -234,7 +234,12 @@ export default {
         .catch((e) => console.error("promotion failed:", e))
         .then(() => syncMirror(env))
         .then((r) => console.log("mirror sync:", JSON.stringify(r)))
-        .catch((e) => console.error("mirror sync failed:", e)),
+        .catch((e) => console.error("mirror sync failed:", e))
+        // Last, and on its own catch: a failed mirror pass must not leave every lead's
+        // זמינות תאריך stale, and a failed availability pass must not look like a mirror failure.
+        .then(() => syncDateAvailability(env))
+        .then((r) => console.log("date availability:", JSON.stringify(r)))
+        .catch((e) => console.error("date availability failed:", e)),
     );
   },
 
@@ -262,7 +267,8 @@ export default {
       if (params.get("sync") === "1") {
         if (!calcAuthorized(request, env)) return json({ ok: false, error: "unauthorized" }, 401, cors);
         const promotion = await promoteLeads(env);
-        return json({ promotion, mirror: await syncMirror(env) }, 200, cors);
+        const mirror = await syncMirror(env);
+        return json({ promotion, mirror, dateAvailability: await syncDateAvailability(env) }, 200, cors);
       }
       return availability(request, env, cors);
     }
@@ -1169,6 +1175,12 @@ async function syncMirror(env) {
 // private homepage lead was blocking its own requested date on the public calendar.
 function isCommittedGroup(title, id, boardId) {
   const t = (title || "").toLowerCase();
+  // "Future Events (Not Closed, date is too far)" exists on all three boards and holds leads that
+  // are explicitly not closed - but its title contains "closed", so every dated lead in it blocked
+  // its date on the public calendar and was mirrored onto Open Events as taken. Found 2026-09-23:
+  // nine dated leads on Events Form, among them 2026-11-01, 2026-11-03 and 2026-12-31. A title that
+  // says "not closed" is never a booking.
+  if (t.includes("not closed")) return false;
   if (t.includes("תפוס") ||
       t.includes("סגור") ||
       t.includes("closed") ||
@@ -1511,6 +1523,178 @@ function sanitizeMondayError(errors) {
     .slice(0, 140) || "unknown error";
 }
 
+// "YYYY-MM-DD" from a date column's value or rendered text, or null.
+function normalizeAvailDate(val, text) {
+  if (val && /^\d{4}-\d{2}-\d{2}$/.test(String(val).trim())) return String(val).trim();
+  if (text) {
+    const t = String(text).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
+    const d = new Date(t);
+    if (!isNaN(d.getTime())) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+  }
+  return null;
+}
+
+// The slot(s) one item occupies, from its cells keyed by column id. Strictly by column id and in
+// priority order. This used to also scan a concatenation of every column whose text held a keyword
+// or a colon - notes, links, status labels - which is how an evening booking whose notes mentioned
+// "צהריים" became a full closed day, and how "19:30 ... 18:00" fragments from unrelated columns were
+// glued into an inverted 19:30-18:00 slot.
+function itemSlots(cv) {
+  let start = null, end = null;
+  for (const id of HOUR_COLS_START) { start = parseHourText(cv[id]?.text); if (start) break; }
+  for (const id of HOUR_COLS_END)   { end = parseHourText(cv[id]?.text);   if (end) break; }
+  if (!start || !end) {
+    for (const id of SLOT_TEXT_COLS) {
+      const m = TIME_RANGE_RE.exec(cv[id]?.text || "");
+      if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; break; }
+    }
+  }
+  if (start && end) return [{ start, end }];
+  // Only the dedicated "Time of event" columns decide the keyword fallback. Free text
+  // (notes, event names) must not - it flips real slots to the full-day guess.
+  let timeOf = "";
+  for (const id of TIMEOF_COLS) { if (cv[id]?.text) { timeOf = cv[id].text; break; } }
+  if (timeOf.includes("צהריים")) return [{ start: "12:00", end: "18:00" }];
+  if (timeOf.includes("ערב"))    return [{ start: "18:00", end: "02:00" }];
+  if (timeOf.includes("בוקר"))   return [{ start: "09:00", end: "12:00" }];
+  // גמיש, or no time at all: the safe reading is a full closed day.
+  return [{ start: "12:00", end: "18:00" }, { start: "18:00", end: "02:00" }];
+}
+
+// The one reading of "which slots are taken", shared by the site calendar (availability) and the
+// זמינות תאריך column on Open Events (syncDateAvailability). Two copies of this would let the board
+// tell a lead its date is free while the site shows it taken. Each slot keeps where it came from,
+// so a lead can be told whether the clash is a private booking or another open event.
+function collectBusy(boards) {
+  const busy = [];
+  const bookedSet = new Set();
+  for (const b of boards) {
+    for (const g of (b.groups || [])) {
+      // Every board is filtered to its booked groups. The Open Events board used to be exempt
+      // from this - every group counted, New Leads included - so a single inbound enquiry marked
+      // its own requested date unavailable to everyone else the moment it arrived.
+      if (!isCommittedGroup(g.title, g.id, b.id)) continue;
+      for (const it of (g.items_page?.items || [])) {
+        // The duplicate automations from 2026-08-20 each wrote a "🔒 אירוע סגור" item onto Open
+        // Events when a deal's status fired (turned off 2026-09-23; the items remain until deleted).
+        // They carry a date and no time columns, so each one re-blocked its whole day on top of the
+        // real booking, which already blocks its own slot. Litter, not data - skip it.
+        if ((it.name || "").includes("🔒")) continue;
+        const cv = {};
+        let discoveredDate = null;
+        (it.column_values || []).forEach((c) => {
+          cv[c.id] = c;
+          if (!discoveredDate) discoveredDate = normalizeAvailDate(c.date, c.text);
+        });
+        const date = normalizeAvailDate(cv[DATE_COL]?.date, cv[DATE_COL]?.text) || discoveredDate;
+        if (!date) continue;
+        for (const { start, end } of itemSlots(cv)) {
+          busy.push({ date, start, end, boardId: String(b.id), itemId: String(it.id), groupId: g.id });
+        }
+        bookedSet.add(date);
+      }
+    }
+  }
+  return { busy, bookedSet };
+}
+
+// ── זמינות תאריך on Open Events ──────────────────────────────────────────────────────────────
+// Tells whoever works an open-event lead whether its date and hours are already taken, from the
+// same collectBusy the site calendar reads (hub change add-open-events-content-pipeline). The board
+// never holds copies of other boards' bookings for this: the answer is one status on the lead.
+//
+// Only open leads are judged. An item in a committed group is itself a booking and would clash
+// with itself; Past Events is history. Written only when the value changes, so a quiet board costs
+// reads and no writes. If any board could not be read, every judged lead gets לא נבדק, never פנוי:
+// the board's automations refuse to close a lead that is not פנוי, so a lead can never be closed on
+// a date nobody could check. Board automations also reset the column to לא נבדק the moment a date
+// or hour changes, so a stale פנוי cannot outlive the date it was computed for.
+const OE_AVAIL_COL = "color_mm7frjv4";      // זמינות תאריך (status), created 2026-09-23
+const OE_PAST_GROUP = "group_mm6drn0q";     // Past Events
+const AVAIL_LABEL = {
+  free: "פנוי",
+  privateTaken: "תפוס - פרטי",
+  openTaken: "תפוס - פתוח",
+  unchecked: "לא נבדק",
+};
+
+// Minutes since 1970-01-01 for a board date and "HH:MM". A slot whose end is not after its start
+// runs past midnight (18:00-02:00), so it ends on the next day.
+function slotRange(date, start, end) {
+  const [y, mo, d] = date.split("-").map(Number);
+  const day = Date.UTC(y, mo - 1, d) / 60000;
+  const mins = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const s = day + mins(start);
+  let e = day + mins(end);
+  if (e <= s) e += 1440;
+  return [s, e];
+}
+
+// A private or company booking outranks another open event: it is the clash that cannot be moved
+// by talking to our own artist. Open Events items in the mirror group are copies of private
+// bookings, so they count as private while that group still exists.
+function isPrivateSlot(slot) {
+  return slot.boardId !== OPEN_EVENTS_BOARD || slot.groupId === MIRROR_GROUP;
+}
+
+function judgeLead(lead, busy) {
+  const mine = itemSlots(lead.cv).map(({ start, end }) => slotRange(lead.date, start, end));
+  let openClash = false;
+  for (const slot of busy) {
+    if (slot.boardId === OPEN_EVENTS_BOARD && slot.itemId === String(lead.id)) continue;
+    const [s, e] = slotRange(slot.date, slot.start, slot.end);
+    if (!mine.some(([ms, me]) => ms < e && s < me)) continue;
+    if (isPrivateSlot(slot)) return AVAIL_LABEL.privateTaken;
+    openClash = true;
+  }
+  return openClash ? AVAIL_LABEL.openTaken : AVAIL_LABEL.free;
+}
+
+function todayInIsrael(now = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem" }).format(now);
+}
+
+async function syncDateAvailability(env) {
+  const TOKEN = env.MONDAY_TOKEN;
+  if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
+  const reasons = [];
+  const ids = [AVAIL_BOARD, COMPANY_BOARD, OPEN_EVENTS_BOARD];
+  const boards = [];
+  for (const id of ids) {
+    const b = await fetchBoardAvailability(id, TOKEN, null, reasons);
+    if (b) boards.push(b);
+  }
+  const complete = boards.length === ids.length;
+  const { busy } = collectBusy(boards);
+  const leads = await fetchItems(OPEN_EVENTS_BOARD, TOKEN,
+    [OE.date, OE.startHour, OE.endHour, OE.slotText, OE.timeOf, OE_AVAIL_COL]);
+  const today = todayInIsrael();
+  const SET = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
+    change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols) { id } }`;
+  const out = { complete, judged: 0, written: 0, failed: 0, ...(complete ? {} : { reason: reasons[0] || "unknown" }) };
+  for (const it of leads) {
+    if (it.groupId === OE_PAST_GROUP) continue;
+    if (isCommittedGroup(it.groupTitle, it.groupId, OPEN_EVENTS_BOARD)) continue;
+    const date = normalizeAvailDate(it.cv[OE.date]?.date, it.cv[OE.date]?.text);
+    if (date && date < today) continue;   // a past date is history, not a decision
+    out.judged++;
+    const target = (!date || !complete) ? AVAIL_LABEL.unchecked : judgeLead({ id: it.id, date, cv: it.cv }, busy);
+    if ((it.cv[OE_AVAIL_COL]?.text || "") === target) continue;
+    try {
+      await mondayMutate(SET, { board: OPEN_EVENTS_BOARD, item: it.id, cols: JSON.stringify({ [OE_AVAIL_COL]: { label: target } }) }, TOKEN);
+      out.written++;
+    } catch (e) {
+      out.failed++;
+      console.error(`date availability ${it.id} failed:`, e);
+    }
+  }
+  return out;
+}
+
 async function availability(request, env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return json({ booked: [], busy: [], degraded: true, reason: "MONDAY_TOKEN is not set on this deployment", where: "env", build: BUILD_ID }, 200, cors);
@@ -1533,88 +1717,8 @@ async function availability(request, env, cors) {
       console.error("availability: no board could be read; returning an empty feed.");
       return json({ booked: [], busy: [], degraded: true, reason: reasons[0] || "unknown", where: "all-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) }, 200, cors);
     }
-    const busy = [];
-    const bookedSet = new Set();
-
-    const normalizeDate = (val, text) => {
-      if (val && /^\d{4}-\d{2}-\d{2}$/.test(String(val).trim())) return String(val).trim();
-      if (text) {
-        const t = String(text).trim();
-        if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
-        const d = new Date(t);
-        if (!isNaN(d.getTime())) {
-          const pad = (n) => String(n).padStart(2, "0");
-          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-        }
-      }
-      return null;
-    };
-
-    for (const b of boards) {
-      for (const g of (b.groups || [])) {
-        // Every board is filtered to its booked groups. The Open Events board used to be exempt
-        // from this - every group counted, New Leads included - so a single inbound enquiry marked
-        // its own requested date unavailable to everyone else the moment it arrived.
-        if (!isCommittedGroup(g.title, g.id, b.id)) continue;
-
-        for (const it of (g.items_page?.items || [])) {
-          // The five duplicate automations from 2026-08-20 each write a "🔒 אירוע סגור" item onto
-          // Open Events when a deal's status fires (see PROMOTE_SETS_STATUS). Those items carry a
-          // date and no time columns, so each one re-blocked its whole day on top of the real
-          // booking, which already blocks its own slot. Litter, not data - skip it.
-          if ((it.name || "").includes("🔒")) continue;
-
-          const cv = {};
-          let discoveredDate = null;
-
-          (it.column_values || []).forEach((c) => {
-            cv[c.id] = c;
-            if (!discoveredDate) {
-              discoveredDate = normalizeDate(c.date, c.text);
-            }
-          });
-
-          const date = normalizeDate(cv[DATE_COL]?.date, cv[DATE_COL]?.text) || discoveredDate;
-          if (!date) continue;
-
-          // Time source, strictly by column id and in priority order. This used to also scan a
-          // concatenation of every column whose text held a keyword or a colon - notes, links,
-          // status labels - which is how an evening booking whose notes mentioned "צהריים" became
-          // a full closed day, and how "19:30 ... 18:00" fragments from unrelated columns were
-          // glued into an inverted 19:30-18:00 slot.
-          let start = null, end = null;
-          for (const id of HOUR_COLS_START) { start = parseHourText(cv[id]?.text); if (start) break; }
-          for (const id of HOUR_COLS_END)   { end = parseHourText(cv[id]?.text);   if (end) break; }
-          if (!start || !end) {
-            for (const id of SLOT_TEXT_COLS) {
-              const m = TIME_RANGE_RE.exec(cv[id]?.text || "");
-              if (m) { start = m[1].padStart(2, "0") + ":" + m[2]; end = m[3].padStart(2, "0") + ":" + m[4]; break; }
-            }
-          }
-
-          if (!start || !end) {
-            // Only the dedicated "Time of event" columns decide the keyword fallback. Free text
-            // (notes, event names) must not - it flips real slots to the full-day guess.
-            let timeOf = "";
-            for (const id of TIMEOF_COLS) { if (cv[id]?.text) { timeOf = cv[id].text; break; } }
-            if (timeOf.includes("צהריים")) {
-              start = "12:00"; end = "18:00";
-            } else if (timeOf.includes("ערב")) {
-              start = "18:00"; end = "02:00";
-            } else if (timeOf.includes("בוקר")) {
-              start = "09:00"; end = "12:00";
-            } else {
-              // גמיש, or no time at all: the safe reading is a full closed day.
-              busy.push({ date, start: "12:00", end: "18:00" });
-              start = "18:00"; end = "02:00";
-            }
-          }
-
-          busy.push({ date, start, end });
-          bookedSet.add(date);
-        }
-      }
-    }
+    const { busy: slots, bookedSet } = collectBusy(boards);
+    const busy = slots.map(({ date, start, end }) => ({ date, start, end }));
     const booked = Array.from(bookedSet);
     // A committed event and its Open Events mirror are the same booking read twice. `booked` is a
     // Set so dates are unaffected, but `busy` would carry the slot twice over.
@@ -2051,12 +2155,77 @@ async function pastEventsFeed(env, cors) {
   return res;
 }
 
-// Proxies one monday asset (the card image) so the site gets a stable public
-// URL; a fresh signed URL is resolved per cache fill, bytes cached a day.
+// Which monday files the proxy may serve. The token behind it reads every board - signed proposals
+// and prepayment confirmations on Open Events and Events Form included - and asset ids are plain
+// numbers, so an unrestricted proxy was a public download link for any customer document. Only
+// files something public actually uses are served:
+//   - files on schedule-board items whose אתר reads פורסם באתר (the site's cards, upcoming and past);
+//   - files on the post subitems of items whose אישור תוכן reads מאושר (Buffer fetches these when
+//     a scheduled post goes out, which can be days after approval).
+// The set is rebuilt at most every 5 minutes, so newly approved media can take that long to become
+// reachable, and unpublished media stops being served within the same window.
+const SCHED_WEBSITE_COL = "color_mm6q8g2v";   // אתר
+const SCHED_WEBSITE_LIVE = "פורסם באתר";
+const SCHED_APPROVAL_COL = "color_mm7fr9sh";  // אישור תוכן
+const SCHED_APPROVED = "מאושר";
+const SERVABLE_TTL_MS = 5 * 60 * 1000;
+let _servable = { at: 0, ids: null };
+async function servableAssetIds(TOKEN) {
+  if (_servable.ids && Date.now() - _servable.at < SERVABLE_TTL_MS) return _servable.ids;
+  const FIELDS = `
+        column_values(ids: ${JSON.stringify([SCHED_WEBSITE_COL, SCHED_APPROVAL_COL])}) { id text }
+        assets { id }
+        subitems { assets { id } }`;
+  const ask = async (query) => {
+    const r = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "content-type": "application/json", Authorization: TOKEN, "API-Version": "2024-01" },
+      body: JSON.stringify({ query }),
+    });
+    const out = await r.json();
+    if (out.errors) throw new Error(JSON.stringify(out.errors).slice(0, 300));
+    return out.data;
+  };
+  const first = await ask(`query { boards(ids: [${SCHEDULE_BOARD}]) { items_page(limit: 100) { cursor items {${FIELDS}
+      } } } }`);
+  const page = first?.boards?.[0]?.items_page;
+  const items = [...(page?.items || [])];
+  let cursor = page?.cursor || null;
+  for (let i = 0; cursor && i < 20; i++) {
+    const more = await ask(`query { next_items_page(limit: 100, cursor: ${JSON.stringify(cursor)}) { cursor items {${FIELDS}
+      } } }`);
+    items.push(...(more?.next_items_page?.items || []));
+    cursor = more?.next_items_page?.cursor || null;
+  }
+  const ids = new Set();
+  for (const it of items) {
+    const text = (id) => (it.column_values || []).find((c) => c.id === id)?.text || "";
+    if (text(SCHED_WEBSITE_COL) === SCHED_WEBSITE_LIVE) {
+      for (const a of (it.assets || [])) ids.add(String(a.id));
+    }
+    if (text(SCHED_APPROVAL_COL) === SCHED_APPROVED) {
+      for (const sub of (it.subitems || [])) for (const a of (sub.assets || [])) ids.add(String(a.id));
+    }
+  }
+  _servable = { at: Date.now(), ids };
+  return ids;
+}
+
+// Proxies one monday asset (a card image, or a scheduled post's media) so the site and Buffer get
+// a stable public URL; a fresh signed URL is resolved per cache fill, bytes cached a day. The
+// allow-list is checked before the cache, so a file that stops being public is refused even if
+// its bytes are still cached.
 async function eventImageProxy(assetId, env, cors) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return new Response("not configured", { status: 503, headers: cors });
   if (!/^\d+$/.test(assetId)) return new Response("bad id", { status: 400, headers: cors });
+  let servable;
+  try { servable = await servableAssetIds(TOKEN); }
+  catch (e) {
+    console.error("servable assets read failed:", e);
+    return new Response("upstream", { status: 502, headers: cors });
+  }
+  if (!servable.has(assetId)) return new Response("not found", { status: 404, headers: cors });
 
   const cache = caches.default;
   const cacheKey = new Request(`https://ezra-lead.yeheli.workers.dev/?eventImage=${assetId}`);
