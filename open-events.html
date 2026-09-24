@@ -7192,6 +7192,30 @@
       img: 'images/BAR.jpg',
     };
     let ezraPublished = new Map();
+    // Confirmed open evenings whose content is not published yet: the worker's `openEvenings`,
+    // one entry per schedule-board event (not placeholder, not cancelled) with only its date, night
+    // type and hours. The date is taken - `booked` and `busy` still say so, and private customers
+    // cannot book it - but it is taken by an evening open to the public, so it must never render
+    // as closed for a private event. The type picks the card; the details arrive when it publishes.
+    let ezraOpenEvenings = new Map();
+    const EZRA_OPEN_TYPES = {
+      'השמעות אלבומים וסלון תקליטים': { name: 'ערב תקליטים', img: 'images/events/reggae-record-night.jpg' },
+      'מוזיקה חיה וסשנים אקוסטיים': { name: 'ערב מוזיקה חיה', img: 'images/MOMENT 1.jpg' },
+      'פופ-אפ שפים וערבי טאבון': { name: 'פופ אפ שף', img: 'images/FOOD ENVIRONMENT.jpg' },
+      'ערבי יין ומיקסולוגיה': { name: 'ערב יין ומיקסולוגיה', img: 'images/COCKTAIL 1.jpg' },
+      'בית התה של רום': { name: 'בית התה של רום', img: 'images/BAR.jpg' },
+      'מיקרופון פתוח וספוקן וורד': { name: 'ערב מיקרופון פתוח', img: 'images/MOMENT 2.jpg' },
+    };
+    const EZRA_OPEN_COPY = { lineup: 'פרטים מלאים בקרוב', desc: 'ערב פתוח לקהל בעזרא. הליינאפ והפרטים המלאים יתפרסמו כאן בקרוב - השאירו פרטים ונעדכן אתכם ברגע שהם עולים.', badge: 'פתוח לקהל' };
+    function ezraOpenCard(ev, dow) {
+      const t = EZRA_OPEN_TYPES[ev && ev.type];
+      if (t) return { title: t.name, img: t.img };
+      const f = EZRA_FORMATS[dow];
+      return { title: f ? f.name : 'ערב פתוח לקהל', img: f ? f.img : 'images/vibe-people.jpg' };
+    }
+    function ezraOpenHours(ev) {
+      return ev && ev.start ? (ev.end ? ev.start + ' - ' + ev.end : ev.start) : '';
+    }
     const ezraPublishedSubscribers = [];
     function onEzraPublished(fn) { ezraPublishedSubscribers.push(fn); if (ezraPublished.size) fn(); }
     function setEzraPublished(list) {
@@ -7419,7 +7443,8 @@
           // A published evening is booked exactly the way a private one is, so without this it
           // renders as "אירוע סגור · שמור לאירוע פרטי" - which is how Moss Town and the chef
           // evening were being announced on Instagram and hidden on our own page.
-          const isClosedEvening = !published && (hasEveningEvent || (isBooked && !hasAfternoonEvent));
+          const confirmedOpen = published ? null : (ezraOpenEvenings.get(dateKey) || null);
+          const isClosedEvening = !published && !confirmedOpen && (hasEveningEvent || (isBooked && !hasAfternoonEvent));
 
           let title = fmt.name;
           let lineup = fmt.lineup;
@@ -7442,6 +7467,17 @@
             badgeClass = /הזמנ|כרטיס/.test(badge) ? 'sticker--rsvp' : 'sticker--free';
             // Doors, not the venue's slot: a sit-down evening opens when the first table does.
             if (published.doors) hours = published.end ? published.doors + ' - ' + published.end : published.doors;
+          }
+
+          if (confirmedOpen) {
+            const card = ezraOpenCard(confirmedOpen, dow);
+            title = card.title;
+            lineup = EZRA_OPEN_COPY.lineup;
+            desc = EZRA_OPEN_COPY.desc;
+            img = card.img;
+            badge = EZRA_OPEN_COPY.badge;
+            badgeClass = 'sticker--free';
+            hours = ezraOpenHours(confirmedOpen);
           }
 
           if (isClosedEvening) {
@@ -7467,6 +7503,7 @@
             hasAfternoonEvent: hasAfternoonEvent,
             hasEveningEvent: hasEveningEvent,
             isClosedEvening: isClosedEvening,
+            confirmedOpen: confirmedOpen,
             title: title,
             lineup: lineup,
             desc: desc,
@@ -7485,7 +7522,7 @@
             liveText.innerHTML = `<strong>הערב:</strong> המקום סגור לאירוע פרטי`;
             const strip0 = document.getElementById('heroLiveStatus');
             if (strip0) strip0.classList.remove('is-open'), strip0.classList.add('is-closed');
-          } else if (!t0.published && !EZRA_FORMATS[t0.dow]) {
+          } else if (!t0.published && !t0.confirmedOpen && !EZRA_FORMATS[t0.dow]) {
             // Nothing on the board and no recurring format: the room is closed tonight. Gentle -
             // an invitation to book the date, not a shut door.
             liveText.innerHTML = `<strong>הערב:</strong> פנוי לאירוע פרטי`;
@@ -7577,7 +7614,7 @@
           // Three states, not two. "Not closed" is not the same as "open to the public": on a
           // night with nothing on the board and no recurring format the room simply is not open,
           // and the green "פתוח לקהל" row was announcing a public evening that does not exist.
-          const eveningIsPublic = !!item.published || !!EZRA_FORMATS[item.dow];
+          const eveningIsPublic = !!item.published || !!item.confirmedOpen || !!EZRA_FORMATS[item.dow];
           let eveningRow = item.isClosedEvening
             ? `<div class="slot-row slot-row--busy slot-row--clickable" data-action="contact-evening" title="הערב סגור לאירוע פרטי"><div class="slot-row__time"><span class="slot-row__time-icon"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="slot-row__when"><span>ערב</span><span class="slot-row__hours num">18:00-02:00</span></span></div><span class="slot-row__badge"><span class="slot-row__dot"></span>אירוע פרטי / תפוס</span></div>`
             : eveningIsPublic
@@ -7823,10 +7860,12 @@
           // Same rule as the 30-day strip: a published evening is taken, but it is taken by
           // something with a name. The month grid would otherwise contradict the card above it.
           const published = ezraPublished.get(dateKey) || null;
-          const isClosedEvening = hasEveningEvent && !published;
+          const confirmedOpen = published ? null : (ezraOpenEvenings.get(dateKey) || null);
+          const isClosedEvening = hasEveningEvent && !published && !confirmedOpen;
           // A published evening is named; a format night is named by its format; a night with
           // neither is simply free, and says so in the same words as the noon slot beside it.
           const nightLabel = published ? (published.title || '').split('·')[0].trim()
+                           : confirmedOpen ? ezraOpenCard(confirmedOpen, dow).title
                            : EZRA_FORMATS[dow] ? (fmt.shortName || fmt.name)
                            : 'פנוי לאירוע';
 
@@ -7847,7 +7886,7 @@
               </button>
 
               <!-- Night Slot -->
-              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : (published || EZRA_FORMATS[dow]) ? 'month-cal-slot--open' : 'month-cal-slot--free'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
+              <button type="button" class="month-cal-slot ${isClosedEvening ? 'month-cal-slot--busy' : (published || confirmedOpen || EZRA_FORMATS[dow]) ? 'month-cal-slot--open' : 'month-cal-slot--free'}" data-slot="night" aria-label="${d} ${monthsHe[calViewMonth]} ערב: ${isClosedEvening ? 'אירוע פרטי' : nightLabel}">
                 <span class="month-cal-slot-time"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg> ערב</span>
                 <span class="month-cal-slot-status">${isClosedEvening ? 'שמור לאירוע' : nightLabel}</span>
               </button>
@@ -7896,6 +7935,23 @@
                     fullDateString: when,
                     dateKey: dateKey,
                     published: published
+                  });
+                }
+              } else if (confirmedOpen) {
+                if (typeof openEventModal === 'function') {
+                  const card = ezraOpenCard(confirmedOpen, dow);
+                  const when = `יום ${daysHe[dow]} ${pad(d)}.${pad(calViewMonth+1)}`;
+                  openEventModal({
+                    title: card.title,
+                    lineup: EZRA_OPEN_COPY.lineup,
+                    desc: EZRA_OPEN_COPY.desc,
+                    img: card.img,
+                    badge: EZRA_OPEN_COPY.badge,
+                    badgeClass: 'sticker--free',
+                    fullDateString: when,
+                    dateKey: dateKey,
+                    isConceptOnly: true,
+                    published: null
                   });
                 }
               } else if (EZRA_FORMATS[dow]) {
@@ -8031,6 +8087,8 @@
               // A published event is still a taken date - `booked` and `busy` above already
               // say so, and nothing here removes it. What this changes is only how a taken
               // evening is described: by name, instead of as a closed private event.
+              ezraOpenEvenings = new Map((Array.isArray(j.openEvenings) ? j.openEvenings : [])
+                .filter((e) => e && e.date).map((e) => [e.date, e]));
               setEzraPublished(j.public);
             }
             generate30Days();

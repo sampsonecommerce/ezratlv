@@ -99,6 +99,12 @@ jobs:
       - name: Published events feed test
         run: node worker/test/public-events.test.mjs
 
+      # Gate. A closed open event is booked like a private one; `openEvenings` is what keeps the page
+      # from announcing it as closed. It must list real events only and never carry an item name,
+      # and listing an evening must never free its date.
+      - name: Open evenings feed test
+        run: node worker/test/open-evenings.test.mjs
+
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:

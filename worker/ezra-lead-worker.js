@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-09-23c";
+const BUILD_ID = "2026-09-24a";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -1505,6 +1505,40 @@ async function fetchScheduleUpcoming(TOKEN) {
   }
 }
 
+// Open evenings that are confirmed but not yet published. A closed open event is booked like a
+// private one (the promotion copies it onto Events Form), so between Closed Deal and the day its
+// content goes live the page could only call the evening "closed for a private event" - the
+// opposite of the truth. Every schedule item that is a real event (סוג פריט = אירוע, not a
+// placeholder) and is not cancelled marks its date as open to the public.
+// Only the date, the night type and the hours leave the board: item names are internal working
+// titles ("TEST - ...", a customer's name) and are never public until the item is published.
+async function fetchConfirmedOpenEvenings(TOKEN) {
+  try {
+    const items = await fetchItems(SCHEDULE_BOARD, TOKEN, [SCHED_KIND_COL, "color_mm7fr9sh", "date_mm6qf10d",
+      SCHED_UPCOMING_COL.startTime, SCHED_UPCOMING_COL.endTime, SCHED_UPCOMING_COL.type]);
+    const today = todayInIsrael();
+    const out = [];
+    for (const it of items) {
+      if (it.groupId === PAST_GROUP_ID) continue;
+      if ((it.cv[SCHED_KIND_COL]?.text || "") !== SCHED_EVENT) continue;
+      if ((it.cv["color_mm7fr9sh"]?.text || "") === SCHED_CANCELLED) continue;
+      const date = normalizeAvailDate(it.cv["date_mm6qf10d"]?.date, it.cv["date_mm6qf10d"]?.text);
+      if (!date || date < today) continue;
+      out.push({
+        date,
+        type: (it.cv[SCHED_UPCOMING_COL.type]?.text || "").trim(),
+        start: parseHourText(it.cv[SCHED_UPCOMING_COL.startTime]?.text) || "",
+        end: parseHourText(it.cv[SCHED_UPCOMING_COL.endTime]?.text) || "",
+      });
+    }
+    out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    return out;
+  } catch (e) {
+    console.error("confirmed open evenings read failed:", e);
+    return null;
+  }
+}
+
 // Monday's own error text names the cause ("Complexity budget exhausted", "Field 'x'
 // doesn't exist on type 'y'") and carries no board content, so a trimmed version is
 // safe to return publicly. Anything that looks like an id, address or number is dropped
@@ -1757,11 +1791,12 @@ async function availability(request, env, cors) {
     // date+title collision the schedule board wins, so migrating an evening never
     // shows it twice.
     const scheduled = (await fetchScheduleUpcoming(TOKEN)) || [];
+    const openEvenings = (await fetchConfirmedOpenEvenings(TOKEN)) || [];
     const legacy = (await fetchPublicEvents(TOKEN)) || [];
     const schedKeys = new Set(scheduled.map((e) => `${e.date}|${e.title}`));
     const published = [...scheduled, ...legacy.filter((e) => !schedKeys.has(`${e.date}|${e.title}`))];
     published.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
-    const body = missing ? { booked, busy, public: published, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, public: published, build: BUILD_ID };
+    const body = missing ? { booked, busy, public: published, openEvenings, degraded: true, reason: reasons[0] || "unknown", where: "some-boards", build: BUILD_ID, ...(diag ? { errors: diag } : {}) } : { booked, busy, public: published, openEvenings, build: BUILD_ID };
     return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
@@ -2182,6 +2217,7 @@ async function pastEventsFeed(env, cors) {
 // A partial board read can only miss a clash, never invent one, so this runs on any snapshot.
 const SCHED_KIND_COL = "color_mm7fd9hh";     // סוג פריט
 const SCHED_PLACEHOLDER = "שומר מקום";
+const SCHED_EVENT = "אירוע";
 const SCHED_CANCELLED = "בוטל";
 const SCHED_WEBSITE_OFF = "לא לפרסם";
 
