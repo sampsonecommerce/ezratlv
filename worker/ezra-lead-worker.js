@@ -22,7 +22,7 @@ const OPEN_EVENTS_BOARD = "5102602771";
 // Bump this in any commit that changes worker behaviour. It is returned on every response,
 // and the deploy workflow refuses to pass until the live worker reports this exact value —
 // so "is the deployed bundle the merged one?" is a question with an answer.
-const BUILD_ID = "2026-09-24a";
+const BUILD_ID = "2026-09-24b";
 // "topics" is Monday's default id for the first group of a brand-new board. It was assumed,
 // never checked, and exists on none of our three boards - so every Open Events lead failed the
 // group lookup and was filed into the board's top group, "תאריכים תפוסים". Verified 2026-08-25
@@ -243,9 +243,14 @@ export default {
     );
   },
 
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
     const cors = corsHeaders(origin);
+    // monday board webhooks: a lead, booking or schedule item changed, so re-run the availability
+    // passes now instead of at the next quarter hour. Checked before the lead form's POST parsing.
+    if (request.method === "POST" && new URL(request.url).searchParams.get("hook") === "monday") {
+      return mondayHook(request, env, ctx);
+    }
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     // GET = availability feed for the on-site calendar; OR ?leadById=<id> for the private calculator
@@ -1205,7 +1210,10 @@ function isCommittedGroup(title, id, boardId) {
 async function fetchBoardAvailability(boardId, TOKEN, diag, reasons) {
   const schema = await boardSchema(boardId, TOKEN);
   const wanted = (schema?.columns || [])
-    .filter((c) => c.type === "date" || c.type === "hour" || /שעה|שעות|סלוט|time|start|end/i.test(c.title || ""))
+    .filter((c) => c.type === "date" || c.type === "hour" || /שעה|שעות|סלוט|time|start|end/i.test(c.title || "")
+      // The promotion marker, so a closed Open Events lead can be judged without clashing with its
+      // own copy on Events Form. Never leaves the worker: the feed maps busy to date/start/end.
+      || c.id === EF.origin)
     .map((c) => c.id);
   const idsArg = wanted.length ? `(ids: ${JSON.stringify(wanted)})` : "";
   // items_page is asked for once per BOARD, not once per group. Nesting it under groups
@@ -1627,7 +1635,8 @@ function collectBusy(boards) {
         const date = normalizeAvailDate(cv[DATE_COL]?.date, cv[DATE_COL]?.text) || discoveredDate;
         if (!date) continue;
         for (const { start, end } of itemSlots(cv)) {
-          busy.push({ date, start, end, boardId: String(b.id), itemId: String(it.id), groupId: g.id });
+          busy.push({ date, start, end, boardId: String(b.id), itemId: String(it.id), groupId: g.id,
+            origin: (cv[EF.origin]?.text || "").trim() });
         }
         bookedSet.add(date);
       }
@@ -1672,6 +1681,9 @@ function slotRange(date, start, end) {
 // by talking to our own artist. Open Events items in the mirror group are copies of private
 // bookings, so they count as private while that group still exists.
 function isPrivateSlot(slot) {
+  // An open event promoted onto Events Form is still an open event: its marker says where it came
+  // from. Without this every closed open evening read as a private booking to the leads around it.
+  if (slot.origin && slot.origin.startsWith(`${OPEN_EVENTS_BOARD}:`)) return false;
   return slot.boardId !== OPEN_EVENTS_BOARD || slot.groupId === MIRROR_GROUP;
 }
 
@@ -1680,6 +1692,8 @@ function judgeLead(lead, busy) {
   let openClash = false;
   for (const slot of busy) {
     if (slot.boardId === OPEN_EVENTS_BOARD && slot.itemId === String(lead.id)) continue;
+    // Its own copy on Events Form, made by the promotion once the lead was committed.
+    if (slot.origin && slot.origin === `${OPEN_EVENTS_BOARD}:${lead.id}`) continue;
     const [s, e] = slotRange(slot.date, slot.start, slot.end);
     if (!mine.some(([ms, me]) => ms < e && s < me)) continue;
     if (isPrivateSlot(slot)) return AVAIL_LABEL.privateTaken;
@@ -1707,6 +1721,43 @@ async function readBusy(TOKEN) {
 
 // The cron's availability work: זמינות תאריך on open leads, then placeholders that have been
 // overtaken. One board read serves both.
+// ── monday webhooks ───────────────────────────────────────────────────────────────────────────
+// Registered on Open Events, Events Form, Company Events and the schedule board for the columns
+// and events that change what is taken: a new or deleted item, a status, a group move, a date or
+// hours change, סוג פריט and אישור תוכן. The payload is only a nudge: the passes re-read every
+// board and trust nothing in it, so the one thing a caller controls is WHEN a check runs. The
+// secret in the URL keeps that to monday. The 15-minute cron stays as the net for a lost webhook.
+//
+// Only the availability passes run here. Promotion creates items, and two webhooks landing
+// together could both see "no copy yet" and create two; it stays on the cron, alone.
+async function mondayHook(request, env, ctx) {
+  const plain = { "content-type": "application/json" };
+  const key = new URL(request.url).searchParams.get("key") || "";
+  if (!env.MONDAY_WEBHOOK_KEY) return new Response(JSON.stringify({ ok: false, error: "not configured" }), { status: 503, headers: plain });
+  if (!timingSafeEqual(key, env.MONDAY_WEBHOOK_KEY)) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: plain });
+  let body;
+  try { body = await request.json(); } catch { body = {}; }
+  // monday verifies a new webhook by posting a challenge and expecting it echoed back.
+  if (body && typeof body.challenge === "string") return new Response(JSON.stringify({ challenge: body.challenge }), { status: 200, headers: plain });
+  const ev = body?.event || {};
+  const work = availabilityPasses(env)
+    .then((r) => { console.log("webhook", ev.type || "?", ev.boardId || "?", JSON.stringify(r)); return r; })
+    .catch((e) => { console.error("webhook availability passes failed:", e); return { error: String(e) }; });
+  // Answer monday at once (it retries a slow webhook) and finish the passes in the background.
+  if (ctx && typeof ctx.waitUntil === "function") {
+    ctx.waitUntil(work);
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: plain });
+  }
+  return new Response(JSON.stringify({ ok: true, ...(await work) }), { status: 200, headers: plain });
+}
+
+function timingSafeEqual(a, b) {
+  const x = String(a), y = String(b);
+  let diff = x.length ^ y.length;
+  for (let i = 0; i < Math.max(x.length, y.length); i++) diff |= (x.charCodeAt(i) || 0) ^ (y.charCodeAt(i) || 0);
+  return diff === 0;
+}
+
 async function availabilityPasses(env) {
   const TOKEN = env.MONDAY_TOKEN;
   if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
@@ -1721,14 +1772,22 @@ async function syncDateAvailability(env, snapshot) {
   if (!TOKEN) return { skipped: "MONDAY_TOKEN is not set" };
   const { busy, complete, reason } = snapshot || await readBusy(TOKEN);
   const leads = await fetchItems(OPEN_EVENTS_BOARD, TOKEN,
-    [OE.date, OE.startHour, OE.endHour, OE.slotText, OE.timeOf, OE_AVAIL_COL]);
+    [OE.date, OE.startHour, OE.endHour, OE.slotText, OE.timeOf, OE_AVAIL_COL, OE.sourceItem]);
   const today = todayInIsrael();
   const SET = `mutation ($board: ID!, $item: ID!, $cols: JSON!) {
     change_multiple_column_values(board_id: $board, item_id: $item, column_values: $cols) { id } }`;
   const out = { complete, judged: 0, written: 0, failed: 0, ...(complete ? {} : { reason: reason || "unknown" }) };
   for (const it of leads) {
     if (it.groupId === OE_PAST_GROUP) continue;
-    if (isCommittedGroup(it.groupTitle, it.groupId, OPEN_EVENTS_BOARD)) continue;
+    if (isCommittedGroup(it.groupTitle, it.groupId, OPEN_EVENTS_BOARD)) {
+      // A committed lead is judged once, while it still reads לא נבדק: it was closed before the
+      // check reached it (a lead closed a minute after it arrived, 2026-09-24). The lock only sends
+      // back a taken date, and the handoff also fires when this pass writes פנוי. A lead already
+      // judged keeps its answer - it holds its slot now. Mirror copies are not leads.
+      if (it.groupId === MIRROR_GROUP || (it.cv[OE.sourceItem]?.text || "").trim()) continue;
+      const current = it.cv[OE_AVAIL_COL]?.text || "";
+      if (current && current !== AVAIL_LABEL.unchecked) continue;
+    }
     const date = normalizeAvailDate(it.cv[OE.date]?.date, it.cv[OE.date]?.text);
     if (date && date < today) continue;   // a past date is history, not a decision
     out.judged++;
