@@ -105,6 +105,11 @@ jobs:
       - name: Open evenings feed test
         run: node worker/test/open-evenings.test.mjs
 
+      # Gate. The webhook writes to boards on a public URL. It must refuse a call without the key,
+      # answer monday's challenge only with it, and run the availability passes and nothing else.
+      - name: Availability webhook test
+        run: node worker/test/availability-webhook.test.mjs
+
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:

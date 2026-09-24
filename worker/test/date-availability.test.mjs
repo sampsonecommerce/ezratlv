@@ -6,7 +6,9 @@
 //   1. an overlap with a private booking reads תפוס - פרטי, including across midnight
 //   2. an overlap with another committed open event reads תפוס - פתוח
 //   3. a lead that overlaps nothing reads פנוי
-//   4. a lead with no date reads לא נבדק; a past lead and a committed item are never written
+//   4. a lead with no date reads לא נבדק; a past lead is never written
+//   4b. a committed lead still reading לא נבדק is judged once, and never against its own copy on
+//       Events Form; a committed lead already judged keeps its answer
 //   5. running again writes nothing - the pass is idempotent
 //   6. if any board cannot be read, every judged lead reads לא נבדק, never פנוי
 //   7. a group titled "Not Closed" books nothing, on the board or on the site calendar
@@ -54,6 +56,10 @@ const DB = {
       booking("111", "יום הולדת", "group_mm18mks7", "Closed Deals", "2030-11-20", "18:00", "02:00"),
       // Not closed, whatever its title's keywords say. It must not block a date anywhere.
       booking("112", "ליד רחוק", "group_mm1qxbex", "Future Events (Not Closed, date is too far)", "2030-11-25", "18:00", "02:00"),
+      // G's own copy, made by the promotion. It is the same evening, not a clash, and it is an open
+      // event wherever it is filed - so D below still reads תפוס - פתוח, not פרטי.
+      { ...booking("113", "committed open event", "group_mm18mks7", "Closed Deals", "2030-11-22", "19:00", "23:00"),
+        cv: { ...booking("x", "", "", "", "2030-11-22", "19:00", "23:00").cv, text_mm6ktd3a: { text: "5102602771:G" } } },
     ],
   },
   [COMPANY]: { groups: [{ id: "group_mm18mks7", title: "Closed Deals" }], items: [] },
@@ -72,6 +78,9 @@ const DB = {
       lead("G", "committed open event", ...OE_CLOSED, "2030-11-22", "19:00", "23:00"),
       lead("H", "history", "group_mm6drn0q", "Past Events", "2030-11-20", "20:00", "23:00"),
       lead("I", "same evening as a lead that is not closed", ...NEW, "2030-11-25", "20:00", "23:00"),
+      // Closed and already judged: it holds its slot now, and a later booking must not flip it.
+      { ...lead("J", "closed and judged", ...OE_CLOSED, "2030-11-20", "20:00", "23:00"),
+        cv: { ...lead("x", "", ...NEW, "2030-11-20", "20:00", "23:00").cv, [AVAIL]: { text: "פנוי" } } },
     ],
   },
 };
@@ -130,10 +139,11 @@ check(label("C") === "תפוס - פרטי", `C (01:00 the morning after a privat
 check(label("D") === "תפוס - פתוח", `D (on our own committed open event) reads ${label("D")}`);
 check(label("E") === "לא נבדק", `E (no date) reads ${label("E")}`);
 check(label("F") === undefined, `F (past) was written: ${label("F")}`);
-check(label("G") === undefined, `G (committed) was written: ${label("G")} - it would clash with itself`);
+check(label("G") === "פנוי", `G (closed while still לא נבדק) reads ${label("G")} - it must not clash with its own copy`);
+check(label("J") === "פנוי", `J (closed and already judged) was rewritten to ${label("J")}`);
 check(label("H") === undefined, `H (Past Events) was written: ${label("H")}`);
 check(label("I") === "פנוי", `I (same evening as a Future Events lead that is not closed) reads ${label("I")}`);
-check(first.judged === 6 && first.written === 6, `first pass judged/wrote ${first.judged}/${first.written}, expected 6/6`);
+check(first.judged === 7 && first.written === 7, `first pass judged/wrote ${first.judged}/${first.written}, expected 7/7`);
 
 // The site calendar reads the same rule: a lead that is not closed does not book its date there either.
 const feed = await (await worker.fetch(new Request("https://ezra-lead.test/"), env)).json();
