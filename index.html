@@ -2746,7 +2746,7 @@
   </script>
   <!-- ============================================================
        PRIVATE-EVENT LEAD POPUP (replaces the wkf.ms WorkForm)
-       Same questions, three short steps, one contact field, a footer that never scrolls away,
+       Same questions, three short steps, phone and email side by side, a footer that never scrolls away,
        and a success screen that is shown only after the lead is stored.
        See openspec/changes/improve-private-form-mobile.
   ============================================================ -->
@@ -2814,8 +2814,6 @@
     /* body font, not the serif: the serif has no Hebrew glyphs, so the step titles fell back to a system face */
     .pf-legend { display: block; font-family: var(--font-body); font-weight: 600; font-size: 1.2rem; color: var(--cream); margin: 0 0 0.9rem; padding: 0; line-height: 1.25; }
     .pf-legend small { display: block; font-family: var(--font-body); font-size: 0.82rem; color: var(--cream-dim); margin-block-start: 0.3rem; line-height: 1.5; }
-    .pf-contact-switch { align-self: flex-start; background: none; border: 0; padding: 0.35rem 0; color: var(--gold); font: inherit; font-size: 0.8rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-    .pf-contact-switch:hover { color: var(--gold-light); }
     /* inline errors replace the native "required" bubbles, which the Instagram webview does not show */
     .book-field.is-invalid input, .book-field.is-invalid textarea { border-color: #e0736f; outline: 1px solid rgba(224,115,111,0.6); outline-offset: 2px; }
     .pf-err { color: #e0736f; font-size: 0.76rem; margin-block-start: 0.35rem; }
@@ -2884,13 +2882,11 @@
               <label for="pfPhone">טלפון</label>
               <input id="pfPhone" type="tel" inputmode="tel" autocomplete="tel" data-phone-hint="none" placeholder="050-0000000" enterkeyhint="next" />
               <div class="pf-err" hidden>צריך מספר טלפון תקין כדי שנוכל לחזור אליכם.</div>
-              <button type="button" class="pf-contact-switch" id="pfSwitchEmail">מעדיפים שנחזור באימייל?</button>
             </div>
-            <div class="book-field" id="pfEmailRow" hidden>
+            <div class="book-field" id="pfEmailRow">
               <label for="pfEmail">אימייל</label>
               <input id="pfEmail" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" enterkeyhint="next" />
               <div class="pf-err" hidden>כתובת האימייל לא נראית תקינה.</div>
-              <button type="button" class="pf-contact-switch" id="pfSwitchPhone">חזרה לטלפון</button>
             </div>
             <div class="book-field">
               <label>סוג האירוע</label>
@@ -3100,21 +3096,9 @@
         btn.classList.add('active');
       })();
 
-      // one contact field: phone by default, email on request. The hidden one is cleared and skipped.
+      // phone and email side by side: phone is required, email is optional but must be valid when filled.
       const nameRow = $('pfNameRow'), phoneRow = $('pfPhoneRow'), emailRow = $('pfEmailRow'), dateRow = $('pfDateRow'), guestsRow = $('pfGuestsRow');
       const pfName = $('pfName'), pfPhone = $('pfPhone'), pfEmail = $('pfEmail'), pfDate = $('pfDate'), pfGuests = $('pfGuests');
-      let contact = 'phone';
-      function setContact(mode) {
-        contact = mode;
-        phoneRow.hidden = mode !== 'phone';
-        emailRow.hidden = mode !== 'email';
-        if (mode === 'phone') pfEmail.value = ''; else pfPhone.value = '';
-        setErr(phoneRow, false); setErr(emailRow, false);
-        const f = mode === 'phone' ? pfPhone : pfEmail;
-        setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) {} }, 40);
-      }
-      $('pfSwitchEmail').addEventListener('click', () => setContact('email'));
-      $('pfSwitchPhone').addEventListener('click', () => setContact('phone'));
 
       // inline errors. The Instagram/Facebook webview does not reliably show native "required"
       // bubbles, so a tap on Send with an empty field read as a dead click. Every rule is ours.
@@ -3142,8 +3126,8 @@
         const flag = (row, el, msg) => { setErr(row, true, msg); if (!bad) bad = el; };
         if (n === 1) {
           if (!pfName.value.trim()) flag(nameRow, pfName);
-          if (contact === 'phone') { if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone, phoneMsg()); }
-          else if (!pfEmail.value.trim() || !pfEmail.validity.valid) flag(emailRow, pfEmail);
+          if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone, phoneMsg());
+          if (pfEmail.value.trim() && !pfEmail.validity.valid) flag(emailRow, pfEmail);
         }
         if (n === 2) {
           if (!pfDate.value || pfDate.value < todayISO()) flag(dateRow, pfDate);
@@ -3183,8 +3167,8 @@
         const data = {
           leadType: 'private',
           name:    pfName.value.trim(),
-          phone:   contact === 'phone' ? pfPhone.value.trim() : '',
-          email:   contact === 'email' ? pfEmail.value.trim() : '',
+          phone:   pfPhone.value.trim(),
+          email:   pfEmail.value.trim(),
           guests:  guests ? Number(guests) : '',
           eventType:    pillValue('cfpType'),
           date:    pfDate.value,     // YYYY-MM-DD
@@ -3231,7 +3215,7 @@
           if (window.gtag) gtag('event', 'generate_lead', { value: 0, currency: 'ILS', transaction_id: eventId });
           track('pf_success');
           showPanel('done');
-          form.reset(); resetPills(); setContact('phone'); syncDateHint(); step = 1;
+          form.reset(); resetPills(); syncDateHint(); step = 1;
         } catch (err) {
           track('pf_fail');
           const msg = 'היי, ניסיתי להשאיר פרטים באתר ולא הלך. ' + (data.name ? 'שם: ' + data.name + '. ' : '') + 'אירוע: ' + (data.eventType || '') + (data.date ? ' בתאריך ' + data.date : '') + (data.guests ? ', כ-' + data.guests + ' אורחים' : '') + '. ' + (data.phone ? 'טלפון: ' + data.phone : 'אימייל: ' + data.email);
