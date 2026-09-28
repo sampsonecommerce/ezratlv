@@ -2697,6 +2697,12 @@
     .date-wrap { position: relative; }
     .date-hint { position: absolute; inset-inline-start: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--cream-faint); font-size: 1rem; pointer-events: none; }
     .date-hint[hidden] { display: none; }
+    /* desktop browsers draw their own dd/mm/yyyy in the empty field, so the hint only doubled it and
+       sat on the calendar icon. Mouse users get the whole field as the picker button instead (see JS). */
+    @media (hover: hover) and (pointer: fine) {
+      .date-hint { display: none; }
+      .book-field input[type="date"] { cursor: pointer; }
+    }
 
     .cf-panel { max-width: 520px; }
     .cf-close { position: absolute; top: 14px; inset-inline-end: 14px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--cream-dim); cursor: pointer; transition: all 0.2s var(--ease); }
@@ -3062,6 +3068,11 @@
       const pfDateHint = $('pfDateHint');
       const syncDateHint = () => { pfDateHint.hidden = !!pfDate.value; };
       syncDateHint(); pfDate.addEventListener('input', syncDateHint); pfDate.addEventListener('change', syncDateHint);
+      // desktop Chrome/Safari open the calendar only from the small icon; a click on the field just
+      // selects the dd segment. Open it from anywhere in the field. Touch devices already do this.
+      if (window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        pfDate.addEventListener('click', () => { try { pfDate.showPicker(); } catch (e) {} });
+      }
 
       // Where this visitor came from, captured once per tab so in-site navigation does not overwrite
       // the outside origin. The worker turns it into a Traffic Source when the URL carried no UTM.
