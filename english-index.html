@@ -2761,6 +2761,8 @@
     .book-check--sm input { width: 15px; height: 15px; }
     .book-check--sm .book-check__text { gap: 0.1rem; }
     .book-check--sm .book-check__text b { font-size: 0.8rem; font-weight: 500; }
+    .book-check .pf-err { color: #e0736f; }   /* beats .book-check__text span */
+    .book-check.is-invalid input { outline: 2px solid #e0736f; outline-offset: 2px; }
     .book-terms { margin-block-start: 0.8rem; font-size: 0.72rem; color: var(--cream-faint); text-align: center; line-height: 1.5; }
     .book-terms a { color: var(--gold); text-decoration: none; border-block-end: 1px solid rgba(196,154,60,0.35); }
     .book-terms a:hover { color: var(--gold-light); }
@@ -2874,10 +2876,11 @@
               <textarea id="pfNotes" rows="2" placeholder="Event style, special requests, dietary needs..."></textarea>
             </div>
             <label class="book-check book-check--sm" for="pfConsent" id="pfConsentRow">
-              <input type="checkbox" id="pfConsent" />
+              <input type="checkbox" id="pfConsent" aria-required="true" />
               <span class="book-check__text">
-                <b>Marketing consent <span class="cf-hint">(optional)</span></b>
+                <b>Marketing consent</b>
                 <span>I agree to receive updates, offers and marketing content from Ezra by email and SMS. You can opt out at any time.</span>
+                <span class="pf-err" hidden>Please tick this box to send your request.</span>
               </span>
             </label>
             <!-- honeypot. Named "fax" rather than anything iOS contact autofill might recognise and fill. -->
@@ -3034,6 +3037,7 @@
         inp.addEventListener('input', () => setErr(row, false));
         inp.addEventListener('change', () => setErr(row, false));
       });
+      $('pfConsent').addEventListener('change', () => setErr($('pfConsentRow'), false));
       // il-phone.js holds the rule (Israeli shape, or +international). Fallback if it did not load.
       const phoneOk = (v) => window.EzraPhone ? window.EzraPhone.isValid(v) : String(v || '').replace(/\D/g, '').length >= 9;
       const phoneMsg0 = phoneRow.querySelector('.pf-err').textContent;
@@ -3049,6 +3053,7 @@
           if (!phoneOk(pfPhone.value)) flag(phoneRow, pfPhone, phoneMsg());
           if (pfEmail.value.trim() && !pfEmail.validity.valid) flag(emailRow, pfEmail);
         }
+        if (n === 3 && !$('pfConsent').checked) flag($('pfConsentRow'), $('pfConsent'));
         if (n === 2) {
           if (!pfDate.value || pfDate.value < todayISO()) flag(dateRow, pfDate);
           const g = Number(pfGuests.value);
