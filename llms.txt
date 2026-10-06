@@ -22,11 +22,11 @@ Ezra TLV is a private bar that opens only for your group that night. It is not a
 - [Home (English)](https://ezratlv.com/english-index): the same venue overview for English speakers.
 - [Company events (English)](https://ezratlv.com/english-company-events): packages and booking for English speakers.
 - [סוגי אירועים (event-types)](https://ezratlv.com/event-types): every event type the venue runs, the venue facts in one scannable block, and how to choose a small-event venue.
-- [ערב צוות בתל אביב (team-events)](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings and team dinners, up to 50.
+- [ערב צוות בתל אביב (team-events)](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings, team dinners and team-bonding, 20-50 guests, projector and two microphones in the room.
 - [אירוע עד 50 איש בתל אביב (events-up-to-50)](https://ezratlv.com/events-up-to-50): Events up to 50 guests (Hebrew): formats by group size, full exclusivity.
-- [מסיבת סיום הפקה בתל אביב (wrap-party)](https://ezratlv.com/wrap-party): Production wrap party (Hebrew): private venue for wrap parties, up to 50.
+- [מסיבת סיום צילום והפקה בתל אביב (wrap-party)](https://ezratlv.com/wrap-party): Shoot / production wrap party (Hebrew): private venue for wrap parties, 20-50 guests, no dress code, projector in the room.
 - [מסיבת רווקות בתל אביב (bachelorette-party)](https://ezratlv.com/bachelorette-party): Bachelorette party (Hebrew): the whole venue for one group of friends.
-- [הרמת כוסית והאפי אוור (happy-hour)](https://ezratlv.com/happy-hour): Happy hour / toast (Hebrew): the 3-hour short format, final per-person price.
+- [הרמת כוסית והאפי אוור (happy-hour)](https://ezratlv.com/happy-hour): Company toast / employee happy hour (Hebrew): the 3-hour short format, 20-50 guests, final per-person price.
 - [ימי הולדת (birthdays)](https://ezratlv.com/birthdays): Birthdays (Hebrew): the whole venue for one birthday group, up to 50.
 - [אודות (about)](https://ezratlv.com/about): what Ezra is, how one-event-per-evening works, capacity, what is in the room.
 - [יצירת קשר (contact)](https://ezratlv.com/contact): address, WhatsApp, phone, email, opening hours, getting there, accessibility.

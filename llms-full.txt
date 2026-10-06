@@ -84,7 +84,7 @@ Over 800 events hosted and more than 40,000 guests to date. Google rating: 5.0 o
 **Is there parking?** Not on site; paid lots nearby.
 
 ## Key pages
-- [הרמת כוסית והאפי אוור](https://ezratlv.com/happy-hour): Happy hour / toast (Hebrew): the 3-hour short format, final per-person price.
+- [הרמת כוסית והאפי אוור](https://ezratlv.com/happy-hour): Company toast / employee happy hour (Hebrew): the 3-hour short format, 20-50 guests, final per-person price.
 - [ימי הולדת](https://ezratlv.com/birthdays): Birthdays (Hebrew): the whole venue for one birthday group, up to 50.
 - [אירוסין ואירועים פרטיים](https://ezratlv.com/engagement-private): Engagement parties and private events (Hebrew): whole-venue exclusivity, up to 50.
 - [סוגי אירועים](https://ezratlv.com/event-types): every event type the venue runs, with the venue facts in one scannable block.
@@ -94,9 +94,9 @@ Over 800 events hosted and more than 40,000 guests to date. Google rating: 5.0 o
 - [Home - English](https://ezratlv.com/english-index)
 - [Company events - English](https://ezratlv.com/english-company-events)
 - [Privacy policy](https://ezratlv.com/privacy) · [Terms](https://ezratlv.com/terms) · [Accessibility](https://ezratlv.com/accessibility)
-- [ערב צוות בתל אביב](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings and team dinners, up to 50.
+- [ערב צוות בתל אביב](https://ezratlv.com/team-events): Team evening (Hebrew): private venue for team evenings, team dinners and team-bonding, 20-50 guests, projector and two microphones in the room.
 - [אירוע עד 50 איש בתל אביב](https://ezratlv.com/events-up-to-50): Events up to 50 guests (Hebrew): formats by group size, full exclusivity.
-- [מסיבת סיום הפקה בתל אביב](https://ezratlv.com/wrap-party): Production wrap party (Hebrew): private venue for wrap parties, up to 50.
+- [מסיבת סיום צילום והפקה בתל אביב](https://ezratlv.com/wrap-party): Shoot / production wrap party (Hebrew): private venue for wrap parties, 20-50 guests, no dress code, projector in the room.
 - [מסיבת רווקות בתל אביב](https://ezratlv.com/bachelorette-party): Bachelorette party (Hebrew): the whole venue for one group of friends.
 
 ## Machine-readable endpoints
