@@ -18,7 +18,7 @@
     "engagement party venue"
   ],
   "capabilities": [
-    "Host a private company event or team-building evening for 20 to 50 guests in Florentin, Tel Aviv",
+    "Host a private company event or team-building evening for 20 to 50 guests (and up to 60 in some cases) in Florentin, Tel Aviv",
     "Close the entire venue for a single group - one event per evening, no shared space",
     "Serve taboon-baked food: pizzas, buffet dishes and salads, all dairy-vegetarian",
     "Run a fully staffed open cocktail bar for the evening",
@@ -28,7 +28,7 @@
     "Host birthdays, engagement parties and private celebrations with a custom quote within 24 hours",
     "Run a custom event off-site at the company's own location",
     "Host a team evening or team dinner (ערב צוות / ארוחת צוות) - details at https://ezratlv.com/team-events",
-    "Host any event up to 50 guests with full-venue exclusivity - details at https://ezratlv.com/events-up-to-50",
+    "Host any event up to 50 guests (and up to 60 in some cases) with full-venue exclusivity - details at https://ezratlv.com/events-up-to-50",
     "Host a production or shoot wrap party (מסיבת סיום הפקה / צילום) - details at https://ezratlv.com/wrap-party",
     "Host a bachelorette party (מסיבת רווקות) or private celebration - details at https://ezratlv.com/bachelorette-party",
     "See every event type the venue runs, with the full venue fact list, at https://ezratlv.com/event-types",
@@ -40,7 +40,7 @@
     "he",
     "en"
   ],
-  "dateModified": "2026-08-28",
+  "dateModified": "2026-10-07",
   "provider": {
     "@type": "Organization",
     "name": "עזרא תל אביב",
@@ -128,7 +128,9 @@
   "serviceOutput": {
     "capacity": {
       "min": 20,
-      "max": 50,
+      "max": 60,
+      "standard_max": 50,
+      "note": "Up to 50 guests as standard; up to 60 in some cases.",
       "unit": "guests"
     },
     "exclusivity": "One event per evening. The entire venue is closed for a single group.",

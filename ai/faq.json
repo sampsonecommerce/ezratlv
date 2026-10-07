@@ -3,7 +3,7 @@
   "@type": "FAQPage",
   "url": "https://ezratlv.com/ai/faq.json",
   "inLanguage": ["he", "en"],
-  "dateModified": "2026-08-10",
+  "dateModified": "2026-10-07",
   "about": {
     "@type": "Organization",
     "name": "עזרא תל אביב",
@@ -11,7 +11,7 @@
     "url": "https://ezratlv.com"
   },
   "faqs": [
-    { "question": "How many guests can Ezra host?", "answer": "Up to 50 guests. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people." },
+    { "question": "How many guests can Ezra host?", "answer": "Up to 50 guests, and up to 60 in some cases. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people." },
     { "question": "What kinds of events take place at Ezra?", "answer": "Company events and team-building, birthdays, engagements and private parties. Over 800 events and 40,000 guests to date." },
     { "question": "How much does a company event at Ezra cost?", "answer": "Three packages at a final per-person price: Happy Hour at 275 ILS (3 hours, light buffet, wine and 2 beers), Department Bonding at 330 ILS (5 hours, rich buffet, full bar) and Premium Company Party at 450 ILS (5 hours, premium buffet, open cocktail bar, DJ). A custom track is also available." },
     { "question": "How much does a private event at Ezra cost?", "answer": "Pricing is built with you based on guest count and budget. Submit the form on the site and receive a tailored quote within 24 hours." },
@@ -29,8 +29,8 @@
       "name_en": "How many guests can Ezra host?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "עד 50 אורחים. אירוע אחד בערב, כל החלל שלכם בלבד. גודל קבוצה טיפוסי הוא 20 עד 50 איש.",
-        "text_en": "Up to 50 guests. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people."
+        "text": "עד 50 אורחים, ובמקרים מסוימים עד 60. אירוע אחד בערב, כל החלל שלכם בלבד. גודל קבוצה טיפוסי הוא 20 עד 50 איש.",
+        "text_en": "Up to 50 guests, and up to 60 in some cases. One event per evening - the entire space is yours alone. Typical group size is 20 to 50 people."
       }
     },
     {
